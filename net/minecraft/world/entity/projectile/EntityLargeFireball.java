@@ -13,23 +13,24 @@ import net.minecraft.world.phys.MovingObjectPositionEntity;
 
 public class EntityLargeFireball extends EntityFireballFireball {
 
-    public int yield = 1;
+    public int explosionPower = 1;
 
     public EntityLargeFireball(EntityTypes<? extends EntityLargeFireball> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public EntityLargeFireball(World world, EntityLiving entityliving, double d0, double d1, double d2) {
+    public EntityLargeFireball(World world, EntityLiving entityliving, double d0, double d1, double d2, int i) {
         super(EntityTypes.FIREBALL, entityliving, d0, d1, d2, world);
+        this.explosionPower = i;
     }
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (!this.world.isClientSide) {
-            boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
+        if (!this.level.isClientSide) {
+            boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
 
-            this.world.createExplosion((Entity) null, this.locX(), this.locY(), this.locZ(), (float) this.yield, flag, flag ? Explosion.Effect.DESTROY : Explosion.Effect.NONE);
+            this.level.createExplosion((Entity) null, this.locX(), this.locY(), this.locZ(), (float) this.explosionPower, flag, flag ? Explosion.Effect.DESTROY : Explosion.Effect.NONE);
             this.die();
         }
 
@@ -38,7 +39,7 @@ public class EntityLargeFireball extends EntityFireballFireball {
     @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         super.a(movingobjectpositionentity);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             Entity entity = movingobjectpositionentity.getEntity();
             Entity entity1 = this.getShooter();
 
@@ -53,14 +54,14 @@ public class EntityLargeFireball extends EntityFireballFireball {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("ExplosionPower", this.yield);
+        nbttagcompound.setByte("ExplosionPower", (byte) this.explosionPower);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("ExplosionPower", 99)) {
-            this.yield = nbttagcompound.getInt("ExplosionPower");
+            this.explosionPower = nbttagcompound.getByte("ExplosionPower");
         }
 
     }

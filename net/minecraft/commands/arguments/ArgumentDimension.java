@@ -22,10 +22,10 @@ import net.minecraft.world.level.World;
 
 public class ArgumentDimension implements ArgumentType<MinecraftKey> {
 
-    private static final Collection<String> a = (Collection) Stream.of(World.OVERWORLD, World.THE_NETHER).map((resourcekey) -> {
+    private static final Collection<String> EXAMPLES = (Collection) Stream.of(World.OVERWORLD, World.NETHER).map((resourcekey) -> {
         return resourcekey.a().toString();
     }).collect(Collectors.toList());
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.dimension.invalid", new Object[]{object});
     });
 
@@ -40,7 +40,7 @@ public class ArgumentDimension implements ArgumentType<MinecraftKey> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentDimension.a;
+        return ArgumentDimension.EXAMPLES;
     }
 
     public static ArgumentDimension a() {
@@ -49,11 +49,11 @@ public class ArgumentDimension implements ArgumentType<MinecraftKey> {
 
     public static WorldServer a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        ResourceKey<World> resourcekey = ResourceKey.a(IRegistry.L, minecraftkey);
+        ResourceKey<World> resourcekey = ResourceKey.a(IRegistry.DIMENSION_REGISTRY, minecraftkey);
         WorldServer worldserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getWorldServer(resourcekey);
 
         if (worldserver == null) {
-            throw ArgumentDimension.b.create(minecraftkey);
+            throw ArgumentDimension.ERROR_INVALID_VALUE.create(minecraftkey);
         } else {
             return worldserver;
         }

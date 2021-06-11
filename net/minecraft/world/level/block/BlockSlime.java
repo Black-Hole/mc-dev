@@ -1,11 +1,13 @@
 package net.minecraft.world.level.block;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.Vec3D;
 
 public class BlockSlime extends BlockHalfTransparent {
@@ -15,18 +17,18 @@ public class BlockSlime extends BlockHalfTransparent {
     }
 
     @Override
-    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        if (entity.bw()) {
-            super.fallOn(world, blockposition, entity, f);
+    public void fallOn(World world, IBlockData iblockdata, BlockPosition blockposition, Entity entity, float f) {
+        if (entity.bF()) {
+            super.fallOn(world, iblockdata, blockposition, entity, f);
         } else {
-            entity.b(f, 0.0F);
+            entity.a(f, 0.0F, DamageSource.FALL);
         }
 
     }
 
     @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
-        if (entity.bw()) {
+        if (entity.bF()) {
             super.a(iblockaccess, entity);
         } else {
             this.a(entity);
@@ -46,15 +48,15 @@ public class BlockSlime extends BlockHalfTransparent {
     }
 
     @Override
-    public void stepOn(World world, BlockPosition blockposition, Entity entity) {
+    public void stepOn(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
         double d0 = Math.abs(entity.getMot().y);
 
-        if (d0 < 0.1D && !entity.bv()) {
+        if (d0 < 0.1D && !entity.bE()) {
             double d1 = 0.4D + d0 * 0.2D;
 
             entity.setMot(entity.getMot().d(d1, 1.0D, d1));
         }
 
-        super.stepOn(world, blockposition, entity);
+        super.stepOn(world, blockposition, iblockdata, entity);
     }
 }

@@ -1,13 +1,11 @@
 package net.minecraft.commands.arguments.item;
 
-import com.google.common.collect.Maps;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import javax.annotation.Nullable;
@@ -19,83 +17,83 @@ import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.tags.Tags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.state.properties.IBlockState;
 
 public class ArgumentParserItemStack {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.item.tag.disallowed"));
-    public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    public static final SimpleCommandExceptionType ERROR_NO_TAGS_ALLOWED = new SimpleCommandExceptionType(new ChatMessage("argument.item.tag.disallowed"));
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_ITEM = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.item.id.invalid", new Object[]{object});
     });
-    private static final BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> c = (suggestionsbuilder, tags) -> {
+    private static final char SYNTAX_START_NBT = '{';
+    private static final char SYNTAX_TAG = '#';
+    private static final BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> SUGGEST_NOTHING = (suggestionsbuilder, tags) -> {
         return suggestionsbuilder.buildFuture();
     };
-    private final StringReader d;
-    private final boolean e;
-    private final Map<IBlockState<?>, Comparable<?>> f = Maps.newHashMap();
-    private Item g;
+    private final StringReader reader;
+    private final boolean forTesting;
+    private Item item;
     @Nullable
-    private NBTTagCompound h;
-    private MinecraftKey i = new MinecraftKey("");
-    private int j;
-    private BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> k;
+    private NBTTagCompound nbt;
+    private MinecraftKey tag = new MinecraftKey("");
+    private int tagCursor;
+    private BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> suggestions;
 
     public ArgumentParserItemStack(StringReader stringreader, boolean flag) {
-        this.k = ArgumentParserItemStack.c;
-        this.d = stringreader;
-        this.e = flag;
+        this.suggestions = ArgumentParserItemStack.SUGGEST_NOTHING;
+        this.reader = stringreader;
+        this.forTesting = flag;
     }
 
-    public Item b() {
-        return this.g;
+    public Item a() {
+        return this.item;
     }
 
     @Nullable
-    public NBTTagCompound c() {
-        return this.h;
+    public NBTTagCompound b() {
+        return this.nbt;
     }
 
-    public MinecraftKey d() {
-        return this.i;
+    public MinecraftKey c() {
+        return this.tag;
     }
 
-    public void e() throws CommandSyntaxException {
-        int i = this.d.getCursor();
-        MinecraftKey minecraftkey = MinecraftKey.a(this.d);
+    public void d() throws CommandSyntaxException {
+        int i = this.reader.getCursor();
+        MinecraftKey minecraftkey = MinecraftKey.a(this.reader);
 
-        this.g = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
-            this.d.setCursor(i);
-            return ArgumentParserItemStack.b.createWithContext(this.d, minecraftkey.toString());
+        this.item = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
+            this.reader.setCursor(i);
+            return ArgumentParserItemStack.ERROR_UNKNOWN_ITEM.createWithContext(this.reader, minecraftkey.toString());
         });
     }
 
+    public void e() throws CommandSyntaxException {
+        if (!this.forTesting) {
+            throw ArgumentParserItemStack.ERROR_NO_TAGS_ALLOWED.create();
+        } else {
+            this.suggestions = this::c;
+            this.reader.expect('#');
+            this.tagCursor = this.reader.getCursor();
+            this.tag = MinecraftKey.a(this.reader);
+        }
+    }
+
     public void f() throws CommandSyntaxException {
-        if (!this.e) {
-            throw ArgumentParserItemStack.a.create();
-        } else {
-            this.k = this::c;
-            this.d.expect('#');
-            this.j = this.d.getCursor();
-            this.i = MinecraftKey.a(this.d);
-        }
+        this.nbt = (new MojangsonParser(this.reader)).f();
     }
 
-    public void g() throws CommandSyntaxException {
-        this.h = (new MojangsonParser(this.d)).f();
-    }
-
-    public ArgumentParserItemStack h() throws CommandSyntaxException {
-        this.k = this::d;
-        if (this.d.canRead() && this.d.peek() == '#') {
-            this.f();
-        } else {
+    public ArgumentParserItemStack g() throws CommandSyntaxException {
+        this.suggestions = this::d;
+        if (this.reader.canRead() && this.reader.peek() == '#') {
             this.e();
-            this.k = this::b;
+        } else {
+            this.d();
+            this.suggestions = this::b;
         }
 
-        if (this.d.canRead() && this.d.peek() == '{') {
-            this.k = ArgumentParserItemStack.c;
-            this.g();
+        if (this.reader.canRead() && this.reader.peek() == '{') {
+            this.suggestions = ArgumentParserItemStack.SUGGEST_NOTHING;
+            this.f();
         }
 
         return this;
@@ -110,11 +108,11 @@ public class ArgumentParserItemStack {
     }
 
     private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
-        return ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder.createOffset(this.j));
+        return ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder.createOffset(this.tagCursor));
     }
 
     private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
-        if (this.e) {
+        if (this.forTesting) {
             ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder, String.valueOf('#'));
         }
 
@@ -122,6 +120,6 @@ public class ArgumentParserItemStack {
     }
 
     public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
-        return (CompletableFuture) this.k.apply(suggestionsbuilder.createOffset(this.d.getCursor()), tags);
+        return (CompletableFuture) this.suggestions.apply(suggestionsbuilder.createOffset(this.reader.getCursor()), tags);
     }
 }

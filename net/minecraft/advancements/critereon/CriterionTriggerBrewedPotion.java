@@ -11,13 +11,13 @@ import net.minecraft.world.item.alchemy.PotionRegistry;
 
 public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<CriterionTriggerBrewedPotion.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("brewed_potion");
+    static final MinecraftKey ID = new MinecraftKey("brewed_potion");
 
     public CriterionTriggerBrewedPotion() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerBrewedPotion.a;
+        return CriterionTriggerBrewedPotion.ID;
     }
 
     @Override
@@ -43,27 +43,27 @@ public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<Crite
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final PotionRegistry a;
+        private final PotionRegistry potion;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable PotionRegistry potionregistry) {
-            super(CriterionTriggerBrewedPotion.a, criterionconditionentity_b);
-            this.a = potionregistry;
+            super(CriterionTriggerBrewedPotion.ID, criterionconditionentity_b);
+            this.potion = potionregistry;
         }
 
         public static CriterionTriggerBrewedPotion.a c() {
-            return new CriterionTriggerBrewedPotion.a(CriterionConditionEntity.b.a, (PotionRegistry) null);
+            return new CriterionTriggerBrewedPotion.a(CriterionConditionEntity.b.ANY, (PotionRegistry) null);
         }
 
         public boolean a(PotionRegistry potionregistry) {
-            return this.a == null || this.a == potionregistry;
+            return this.potion == null || this.potion == potionregistry;
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            if (this.a != null) {
-                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.a).toString());
+            if (this.potion != null) {
+                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.potion).toString());
             }
 
             return jsonobject;

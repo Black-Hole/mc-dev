@@ -13,10 +13,12 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidTypes;
 import net.minecraft.world.level.material.Material;
 
 public class BlockSponge extends Block {
+
+    public static final int MAX_DEPTH = 6;
+    public static final int MAX_COUNT = 64;
 
     protected BlockSponge(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -64,7 +66,7 @@ public class BlockSponge extends Block {
                 Material material = iblockdata.getMaterial();
 
                 if (fluid.a((Tag) TagsFluid.WATER)) {
-                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).removeFluid(world, blockposition2, iblockdata) != FluidTypes.EMPTY) {
+                    if (iblockdata.getBlock() instanceof IFluidSource && !((IFluidSource) iblockdata.getBlock()).removeFluid(world, blockposition2, iblockdata).isEmpty()) {
                         ++i;
                         if (j < 6) {
                             queue.add(new Tuple<>(blockposition2, j + 1));
@@ -76,7 +78,7 @@ public class BlockSponge extends Block {
                             queue.add(new Tuple<>(blockposition2, j + 1));
                         }
                     } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
-                        TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? world.getTileEntity(blockposition2) : null;
+                        TileEntity tileentity = iblockdata.isTileEntity() ? world.getTileEntity(blockposition2) : null;
 
                         a(iblockdata, (GeneratorAccess) world, blockposition2, tileentity);
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);

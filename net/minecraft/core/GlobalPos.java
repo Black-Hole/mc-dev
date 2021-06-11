@@ -8,15 +8,15 @@ import net.minecraft.world.level.World;
 
 public final class GlobalPos {
 
-    public static final Codec<GlobalPos> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(World.f.fieldOf("dimension").forGetter(GlobalPos::getDimensionManager), BlockPosition.a.fieldOf("pos").forGetter(GlobalPos::getBlockPosition)).apply(instance, GlobalPos::create);
+    public static final Codec<GlobalPos> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(World.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(GlobalPos::getDimensionManager), BlockPosition.CODEC.fieldOf("pos").forGetter(GlobalPos::getBlockPosition)).apply(instance, GlobalPos::create);
     });
-    private final ResourceKey<World> dimensionManager;
-    private final BlockPosition blockPosition;
+    private final ResourceKey<World> dimension;
+    private final BlockPosition pos;
 
     private GlobalPos(ResourceKey<World> resourcekey, BlockPosition blockposition) {
-        this.dimensionManager = resourcekey;
-        this.blockPosition = blockposition;
+        this.dimension = resourcekey;
+        this.pos = blockposition;
     }
 
     public static GlobalPos create(ResourceKey<World> resourcekey, BlockPosition blockposition) {
@@ -24,11 +24,11 @@ public final class GlobalPos {
     }
 
     public ResourceKey<World> getDimensionManager() {
-        return this.dimensionManager;
+        return this.dimension;
     }
 
     public BlockPosition getBlockPosition() {
-        return this.blockPosition;
+        return this.pos;
     }
 
     public boolean equals(Object object) {
@@ -37,17 +37,17 @@ public final class GlobalPos {
         } else if (object != null && this.getClass() == object.getClass()) {
             GlobalPos globalpos = (GlobalPos) object;
 
-            return Objects.equals(this.dimensionManager, globalpos.dimensionManager) && Objects.equals(this.blockPosition, globalpos.blockPosition);
+            return Objects.equals(this.dimension, globalpos.dimension) && Objects.equals(this.pos, globalpos.pos);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{this.dimensionManager, this.blockPosition});
+        return Objects.hash(new Object[]{this.dimension, this.pos});
     }
 
     public String toString() {
-        return this.dimensionManager.toString() + " " + this.blockPosition;
+        return this.dimension + " " + this.pos;
     }
 }

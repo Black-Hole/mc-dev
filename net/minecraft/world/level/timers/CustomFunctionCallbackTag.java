@@ -10,21 +10,21 @@ import net.minecraft.tags.Tag;
 
 public class CustomFunctionCallbackTag implements CustomFunctionCallbackTimer<MinecraftServer> {
 
-    private final MinecraftKey a;
+    final MinecraftKey tagId;
 
     public CustomFunctionCallbackTag(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
+        this.tagId = minecraftkey;
     }
 
     public void a(MinecraftServer minecraftserver, CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue, long i) {
         CustomFunctionData customfunctiondata = minecraftserver.getFunctionData();
-        Tag<CustomFunction> tag = customfunctiondata.b(this.a);
+        Tag<CustomFunction> tag = customfunctiondata.b(this.tagId);
         Iterator iterator = tag.getTagged().iterator();
 
         while (iterator.hasNext()) {
             CustomFunction customfunction = (CustomFunction) iterator.next();
 
-            customfunctiondata.a(customfunction, customfunctiondata.e());
+            customfunctiondata.a(customfunction, customfunctiondata.d());
         }
 
     }
@@ -36,7 +36,7 @@ public class CustomFunctionCallbackTag implements CustomFunctionCallbackTimer<Mi
         }
 
         public void a(NBTTagCompound nbttagcompound, CustomFunctionCallbackTag customfunctioncallbacktag) {
-            nbttagcompound.setString("Name", customfunctioncallbacktag.a.toString());
+            nbttagcompound.setString("Name", customfunctioncallbacktag.tagId.toString());
         }
 
         @Override

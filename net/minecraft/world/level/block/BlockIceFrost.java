@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
@@ -16,11 +17,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateInteger;
 
 public class BlockIceFrost extends BlockIce {
 
-    public static final BlockStateInteger a = BlockProperties.ag;
+    public static final int MAX_AGE = 3;
+    public static final BlockStateInteger AGE = BlockProperties.AGE_3;
+    private static final int NEIGHBORS_TO_AGE = 4;
+    private static final int NEIGHBORS_TO_MELT = 2;
 
     public BlockIceFrost(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockIceFrost.AGE, 0));
     }
 
     @Override
@@ -30,7 +34,7 @@ public class BlockIceFrost extends BlockIce {
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if ((random.nextInt(3) == 0 || this.a(worldserver, blockposition, 4)) && worldserver.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b((IBlockAccess) worldserver, blockposition) && this.e(iblockdata, (World) worldserver, blockposition)) {
+        if ((random.nextInt(3) == 0 || this.a(worldserver, blockposition, 4)) && worldserver.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.AGE) - iblockdata.b((IBlockAccess) worldserver, blockposition) && this.e(iblockdata, worldserver, blockposition)) {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -41,7 +45,7 @@ public class BlockIceFrost extends BlockIce {
                 blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
                 IBlockData iblockdata1 = worldserver.getType(blockposition_mutableblockposition);
 
-                if (iblockdata1.a((Block) this) && !this.e(iblockdata1, (World) worldserver, blockposition_mutableblockposition)) {
+                if (iblockdata1.a((Block) this) && !this.e(iblockdata1, worldserver, blockposition_mutableblockposition)) {
                     worldserver.getBlockTickList().a(blockposition_mutableblockposition, this, MathHelper.nextInt(random, 20, 40));
                 }
             }
@@ -52,10 +56,10 @@ public class BlockIceFrost extends BlockIce {
     }
 
     private boolean e(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        int i = (Integer) iblockdata.get(BlockIceFrost.a);
+        int i = (Integer) iblockdata.get(BlockIceFrost.AGE);
 
         if (i < 3) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.a, i + 1), 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.AGE, i + 1), 2);
             return false;
         } else {
             this.melt(iblockdata, world, blockposition);
@@ -65,7 +69,7 @@ public class BlockIceFrost extends BlockIce {
 
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
-        if (block == this && this.a(world, blockposition, 2)) {
+        if (block.getBlockData().a((Block) this) && this.a(world, blockposition, 2)) {
             this.melt(iblockdata, world, blockposition);
         }
 
@@ -95,6 +99,11 @@ public class BlockIceFrost extends BlockIce {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockIceFrost.a);
+        blockstatelist_a.a(BlockIceFrost.AGE);
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return ItemStack.EMPTY;
     }
 }

@@ -25,7 +25,16 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public class DataConverterWorldGenSettingsBuilding extends DataFix {
 
-    private static final ImmutableMap<String, DataConverterWorldGenSettingsBuilding.a> a = ImmutableMap.builder().put("minecraft:village", new DataConverterWorldGenSettingsBuilding.a(32, 8, 10387312)).put("minecraft:desert_pyramid", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357617)).put("minecraft:igloo", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357618)).put("minecraft:jungle_pyramid", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357619)).put("minecraft:swamp_hut", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357620)).put("minecraft:pillager_outpost", new DataConverterWorldGenSettingsBuilding.a(32, 8, 165745296)).put("minecraft:monument", new DataConverterWorldGenSettingsBuilding.a(32, 5, 10387313)).put("minecraft:endcity", new DataConverterWorldGenSettingsBuilding.a(20, 11, 10387313)).put("minecraft:mansion", new DataConverterWorldGenSettingsBuilding.a(80, 20, 10387319)).build();
+    private static final String VILLAGE = "minecraft:village";
+    private static final String DESERT_PYRAMID = "minecraft:desert_pyramid";
+    private static final String IGLOO = "minecraft:igloo";
+    private static final String JUNGLE_TEMPLE = "minecraft:jungle_pyramid";
+    private static final String SWAMP_HUT = "minecraft:swamp_hut";
+    private static final String PILLAGER_OUTPOST = "minecraft:pillager_outpost";
+    private static final String END_CITY = "minecraft:endcity";
+    private static final String WOODLAND_MANSION = "minecraft:mansion";
+    private static final String OCEAN_MONUMENT = "minecraft:monument";
+    private static final ImmutableMap<String, DataConverterWorldGenSettingsBuilding.a> DEFAULTS = ImmutableMap.builder().put("minecraft:village", new DataConverterWorldGenSettingsBuilding.a(32, 8, 10387312)).put("minecraft:desert_pyramid", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357617)).put("minecraft:igloo", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357618)).put("minecraft:jungle_pyramid", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357619)).put("minecraft:swamp_hut", new DataConverterWorldGenSettingsBuilding.a(32, 8, 14357620)).put("minecraft:pillager_outpost", new DataConverterWorldGenSettingsBuilding.a(32, 8, 165745296)).put("minecraft:monument", new DataConverterWorldGenSettingsBuilding.a(32, 5, 10387313)).put("minecraft:endcity", new DataConverterWorldGenSettingsBuilding.a(20, 11, 10387313)).put("minecraft:mansion", new DataConverterWorldGenSettingsBuilding.a(80, 20, 10387319)).build();
 
     public DataConverterWorldGenSettingsBuilding(Schema schema) {
         super(schema, true);
@@ -93,7 +102,7 @@ public class DataConverterWorldGenSettingsBuilding extends DataFix {
                     OptionalDynamic<T> optionaldynamic = dynamic.get("generatorOptions");
                     Map<Dynamic<T>, Dynamic<T>> map = a(dynamicops, optionaldynamic);
 
-                    dynamic1 = dynamic.createMap(ImmutableMap.of(dynamic.createString("type"), dynamic.createString("minecraft:flat"), dynamic.createString("settings"), dynamic.createMap(ImmutableMap.of(dynamic.createString("structures"), dynamic.createMap(map), dynamic.createString("layers"), optionaldynamic.get("layers").result().orElseGet(() -> {
+                    dynamic1 = dynamic.createMap(ImmutableMap.of(dynamic.createString("type"), dynamic.createString("minecraft:flat"), dynamic.createString("settings"), dynamic.createMap(ImmutableMap.of(dynamic.createString("structures"), dynamic.createMap(map), dynamic.createString("layers"), (Dynamic) optionaldynamic.get("layers").result().orElseGet(() -> {
                         return dynamic.createList(Stream.of(dynamic.createMap(ImmutableMap.of(dynamic.createString("height"), dynamic.createInt(1), dynamic.createString("block"), dynamic.createString("minecraft:bedrock"))), dynamic.createMap(ImmutableMap.of(dynamic.createString("height"), dynamic.createInt(2), dynamic.createString("block"), dynamic.createString("minecraft:dirt"))), dynamic.createMap(ImmutableMap.of(dynamic.createString("height"), dynamic.createInt(1), dynamic.createString("block"), dynamic.createString("minecraft:grass_block")))));
                     }), dynamic.createString("biome"), dynamic.createString(optionaldynamic.get("biome").asString("minecraft:plains"))))));
                     break;
@@ -175,7 +184,7 @@ public class DataConverterWorldGenSettingsBuilding extends DataFix {
 
         if (!optionaldynamic.result().isPresent()) {
             mutableboolean.setTrue();
-            map.put("minecraft:village", DataConverterWorldGenSettingsBuilding.a.get("minecraft:village"));
+            map.put("minecraft:village", (DataConverterWorldGenSettingsBuilding.a) DataConverterWorldGenSettingsBuilding.DEFAULTS.get("minecraft:village"));
         }
 
         optionaldynamic.get("structures").flatMap(Dynamic::getMapValues).result().ifPresent((map1) -> {
@@ -286,10 +295,10 @@ public class DataConverterWorldGenSettingsBuilding extends DataFix {
                                     }
                                 case 1:
                                     if ("oceanmonument".equals(s)) {
-                                        DataConverterWorldGenSettingsBuilding.a dataconverterworldgensettingsbuilding_a = (DataConverterWorldGenSettingsBuilding.a) map.getOrDefault("minecraft:monument", DataConverterWorldGenSettingsBuilding.a.get("minecraft:monument"));
-                                        int i = a(s2, dataconverterworldgensettingsbuilding_a.c, 1);
+                                        DataConverterWorldGenSettingsBuilding.a dataconverterworldgensettingsbuilding_a = (DataConverterWorldGenSettingsBuilding.a) map.getOrDefault("minecraft:monument", (DataConverterWorldGenSettingsBuilding.a) DataConverterWorldGenSettingsBuilding.DEFAULTS.get("minecraft:monument"));
+                                        int i = a(s2, dataconverterworldgensettingsbuilding_a.separation, 1);
 
-                                        map.put("minecraft:monument", new DataConverterWorldGenSettingsBuilding.a(i, dataconverterworldgensettingsbuilding_a.c, dataconverterworldgensettingsbuilding_a.d));
+                                        map.put("minecraft:monument", new DataConverterWorldGenSettingsBuilding.a(i, dataconverterworldgensettingsbuilding_a.separation, dataconverterworldgensettingsbuilding_a.salt));
                                     }
 
                                     return;
@@ -329,35 +338,35 @@ public class DataConverterWorldGenSettingsBuilding extends DataFix {
     }
 
     private static void a(Map<String, DataConverterWorldGenSettingsBuilding.a> map, String s, String s1, int i) {
-        DataConverterWorldGenSettingsBuilding.a dataconverterworldgensettingsbuilding_a = (DataConverterWorldGenSettingsBuilding.a) map.getOrDefault(s, DataConverterWorldGenSettingsBuilding.a.get(s));
-        int j = a(s1, dataconverterworldgensettingsbuilding_a.b, i);
+        DataConverterWorldGenSettingsBuilding.a dataconverterworldgensettingsbuilding_a = (DataConverterWorldGenSettingsBuilding.a) map.getOrDefault(s, (DataConverterWorldGenSettingsBuilding.a) DataConverterWorldGenSettingsBuilding.DEFAULTS.get(s));
+        int j = a(s1, dataconverterworldgensettingsbuilding_a.spacing, i);
 
-        map.put(s, new DataConverterWorldGenSettingsBuilding.a(j, dataconverterworldgensettingsbuilding_a.c, dataconverterworldgensettingsbuilding_a.d));
+        map.put(s, new DataConverterWorldGenSettingsBuilding.a(j, dataconverterworldgensettingsbuilding_a.separation, dataconverterworldgensettingsbuilding_a.salt));
     }
 
-    static final class a {
+    private static final class a {
 
-        public static final Codec<DataConverterWorldGenSettingsBuilding.a> a = RecordCodecBuilder.create((instance) -> {
+        public static final Codec<DataConverterWorldGenSettingsBuilding.a> CODEC = RecordCodecBuilder.create((instance) -> {
             return instance.group(Codec.INT.fieldOf("spacing").forGetter((dataconverterworldgensettingsbuilding_a) -> {
-                return dataconverterworldgensettingsbuilding_a.b;
+                return dataconverterworldgensettingsbuilding_a.spacing;
             }), Codec.INT.fieldOf("separation").forGetter((dataconverterworldgensettingsbuilding_a) -> {
-                return dataconverterworldgensettingsbuilding_a.c;
+                return dataconverterworldgensettingsbuilding_a.separation;
             }), Codec.INT.fieldOf("salt").forGetter((dataconverterworldgensettingsbuilding_a) -> {
-                return dataconverterworldgensettingsbuilding_a.d;
+                return dataconverterworldgensettingsbuilding_a.salt;
             })).apply(instance, DataConverterWorldGenSettingsBuilding.a::new);
         });
-        private final int b;
-        private final int c;
-        private final int d;
+        final int spacing;
+        final int separation;
+        final int salt;
 
         public a(int i, int j, int k) {
-            this.b = i;
-            this.c = j;
-            this.d = k;
+            this.spacing = i;
+            this.separation = j;
+            this.salt = k;
         }
 
         public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-            return new Dynamic(dynamicops, DataConverterWorldGenSettingsBuilding.a.a.encodeStart(dynamicops, this).result().orElse(dynamicops.emptyMap()));
+            return new Dynamic(dynamicops, DataConverterWorldGenSettingsBuilding.a.CODEC.encodeStart(dynamicops, this).result().orElse(dynamicops.emptyMap()));
         }
     }
 }

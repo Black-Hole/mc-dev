@@ -9,21 +9,22 @@ import net.minecraft.util.MathHelper;
 
 public abstract class LightEngineGraph {
 
-    private final int a;
-    private final LongLinkedOpenHashSet[] b;
-    private final Long2ByteMap c;
-    private int d;
-    private volatile boolean e;
+    private static final int NO_COMPUTED_LEVEL = 255;
+    private final int levelCount;
+    private final LongLinkedOpenHashSet[] queues;
+    private final Long2ByteMap computedLevels;
+    private int firstQueuedLevel;
+    private volatile boolean hasWork;
 
     protected LightEngineGraph(int i, final int j, final int k) {
         if (i >= 254) {
             throw new IllegalArgumentException("Level count must be < 254.");
         } else {
-            this.a = i;
-            this.b = new LongLinkedOpenHashSet[i];
+            this.levelCount = i;
+            this.queues = new LongLinkedOpenHashSet[i];
 
             for (int l = 0; l < i; ++l) {
-                this.b[l] = new LongLinkedOpenHashSet(j, 0.5F) {
+                this.queues[l] = new LongLinkedOpenHashSet(j, 0.5F) {
                     protected void rehash(int i1) {
                         if (i1 > j) {
                             super.rehash(i1);
@@ -33,7 +34,7 @@ public abstract class LightEngineGraph {
                 };
             }
 
-            this.c = new Long2ByteOpenHashMap(k, 0.5F) {
+            this.computedLevels = new Long2ByteOpenHashMap(k, 0.5F) {
                 protected void rehash(int i1) {
                     if (i1 > k) {
                         super.rehash(i1);
@@ -41,8 +42,8 @@ public abstract class LightEngineGraph {
 
                 }
             };
-            this.c.defaultReturnValue((byte) -1);
-            this.d = i;
+            this.computedLevels.defaultReturnValue((byte) -1);
+            this.firstQueuedLevel = i;
         }
     }
 
@@ -53,21 +54,21 @@ public abstract class LightEngineGraph {
             k = j;
         }
 
-        if (k > this.a - 1) {
-            k = this.a - 1;
+        if (k > this.levelCount - 1) {
+            k = this.levelCount - 1;
         }
 
         return k;
     }
 
     private void a(int i) {
-        int j = this.d;
+        int j = this.firstQueuedLevel;
 
-        this.d = i;
+        this.firstQueuedLevel = i;
 
         for (int k = j + 1; k < i; ++k) {
-            if (!this.b[k].isEmpty()) {
-                this.d = k;
+            if (!this.queues[k].isEmpty()) {
+                this.firstQueuedLevel = k;
                 break;
             }
         }
@@ -75,21 +76,21 @@ public abstract class LightEngineGraph {
     }
 
     protected void e(long i) {
-        int j = this.c.get(i) & 255;
+        int j = this.computedLevels.get(i) & 255;
 
         if (j != 255) {
             int k = this.c(i);
             int l = this.a(k, j);
 
-            this.a(i, l, this.a, true);
-            this.e = this.d < this.a;
+            this.a(i, l, this.levelCount, true);
+            this.hasWork = this.firstQueuedLevel < this.levelCount;
         }
     }
 
     public void a(LongPredicate longpredicate) {
         LongArrayList longarraylist = new LongArrayList();
 
-        this.c.keySet().forEach((i) -> {
+        this.computedLevels.keySet().forEach((i) -> {
             if (longpredicate.test(i)) {
                 longarraylist.add(i);
             }
@@ -100,38 +101,38 @@ public abstract class LightEngineGraph {
 
     private void a(long i, int j, int k, boolean flag) {
         if (flag) {
-            this.c.remove(i);
+            this.computedLevels.remove(i);
         }
 
-        this.b[j].remove(i);
-        if (this.b[j].isEmpty() && this.d == j) {
+        this.queues[j].remove(i);
+        if (this.queues[j].isEmpty() && this.firstQueuedLevel == j) {
             this.a(k);
         }
 
     }
 
     private void a(long i, int j, int k) {
-        this.c.put(i, (byte) j);
-        this.b[k].add(i);
-        if (this.d > k) {
-            this.d = k;
+        this.computedLevels.put(i, (byte) j);
+        this.queues[k].add(i);
+        if (this.firstQueuedLevel > k) {
+            this.firstQueuedLevel = k;
         }
 
     }
 
     protected void f(long i) {
-        this.a(i, i, this.a - 1, false);
+        this.a(i, i, this.levelCount - 1, false);
     }
 
     protected void a(long i, long j, int k, boolean flag) {
-        this.a(i, j, k, this.c(j), this.c.get(j) & 255, flag);
-        this.e = this.d < this.a;
+        this.a(i, j, k, this.c(j), this.computedLevels.get(j) & 255, flag);
+        this.hasWork = this.firstQueuedLevel < this.levelCount;
     }
 
     private void a(long i, long j, int k, int l, int i1, boolean flag) {
         if (!this.a(j)) {
-            k = MathHelper.clamp(k, 0, this.a - 1);
-            l = MathHelper.clamp(l, 0, this.a - 1);
+            k = MathHelper.clamp(k, 0, this.levelCount - 1);
+            l = MathHelper.clamp(l, 0, this.levelCount - 1);
             boolean flag1;
 
             if (i1 == 255) {
@@ -146,7 +147,7 @@ public abstract class LightEngineGraph {
             if (flag) {
                 j1 = Math.min(i1, k);
             } else {
-                j1 = MathHelper.clamp(this.a(j, i, k), 0, this.a - 1);
+                j1 = MathHelper.clamp(this.a(j, i, k), 0, this.levelCount - 1);
             }
 
             int k1 = this.a(l, i1);
@@ -160,15 +161,15 @@ public abstract class LightEngineGraph {
 
                 this.a(j, j1, l1);
             } else if (!flag1) {
-                this.a(j, k1, this.a, true);
+                this.a(j, k1, this.levelCount, true);
             }
 
         }
     }
 
     protected final void b(long i, long j, int k, boolean flag) {
-        int l = this.c.get(j) & 255;
-        int i1 = MathHelper.clamp(this.b(i, j, k), 0, this.a - 1);
+        int l = this.computedLevels.get(j) & 255;
+        int i1 = MathHelper.clamp(this.b(i, j, k), 0, this.levelCount - 1);
 
         if (flag) {
             this.a(i, j, i1, this.c(j), l, true);
@@ -178,56 +179,56 @@ public abstract class LightEngineGraph {
 
             if (l == 255) {
                 flag1 = true;
-                j1 = MathHelper.clamp(this.c(j), 0, this.a - 1);
+                j1 = MathHelper.clamp(this.c(j), 0, this.levelCount - 1);
             } else {
                 j1 = l;
                 flag1 = false;
             }
 
             if (i1 == j1) {
-                this.a(i, j, this.a - 1, flag1 ? j1 : this.c(j), l, false);
+                this.a(i, j, this.levelCount - 1, flag1 ? j1 : this.c(j), l, false);
             }
         }
 
     }
 
     protected final boolean b() {
-        return this.e;
+        return this.hasWork;
     }
 
     protected final int b(int i) {
-        if (this.d >= this.a) {
+        if (this.firstQueuedLevel >= this.levelCount) {
             return i;
         } else {
-            while (this.d < this.a && i > 0) {
+            while (this.firstQueuedLevel < this.levelCount && i > 0) {
                 --i;
-                LongLinkedOpenHashSet longlinkedopenhashset = this.b[this.d];
+                LongLinkedOpenHashSet longlinkedopenhashset = this.queues[this.firstQueuedLevel];
                 long j = longlinkedopenhashset.removeFirstLong();
-                int k = MathHelper.clamp(this.c(j), 0, this.a - 1);
+                int k = MathHelper.clamp(this.c(j), 0, this.levelCount - 1);
 
                 if (longlinkedopenhashset.isEmpty()) {
-                    this.a(this.a);
+                    this.a(this.levelCount);
                 }
 
-                int l = this.c.remove(j) & 255;
+                int l = this.computedLevels.remove(j) & 255;
 
                 if (l < k) {
                     this.a(j, l);
                     this.a(j, l, true);
                 } else if (l > k) {
-                    this.a(j, l, this.a(this.a - 1, l));
-                    this.a(j, this.a - 1);
+                    this.a(j, l, this.a(this.levelCount - 1, l));
+                    this.a(j, this.levelCount - 1);
                     this.a(j, k, false);
                 }
             }
 
-            this.e = this.d < this.a;
+            this.hasWork = this.firstQueuedLevel < this.levelCount;
             return i;
         }
     }
 
     public int c() {
-        return this.c.size();
+        return this.computedLevels.size();
     }
 
     protected abstract boolean a(long i);

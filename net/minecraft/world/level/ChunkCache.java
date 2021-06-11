@@ -4,6 +4,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
+import net.minecraft.util.profiling.GameProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.TileEntity;
@@ -19,39 +21,39 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ChunkCache implements IBlockAccess, ICollisionAccess {
 
-    protected final int a;
-    protected final int b;
-    protected final IChunkAccess[][] c;
-    protected boolean d;
-    protected final World e;
+    protected final int centerX;
+    protected final int centerZ;
+    protected final IChunkAccess[][] chunks;
+    protected boolean allEmpty;
+    protected final World level;
 
     public ChunkCache(World world, BlockPosition blockposition, BlockPosition blockposition1) {
-        this.e = world;
-        this.a = blockposition.getX() >> 4;
-        this.b = blockposition.getZ() >> 4;
-        int i = blockposition1.getX() >> 4;
-        int j = blockposition1.getZ() >> 4;
+        this.level = world;
+        this.centerX = SectionPosition.a(blockposition.getX());
+        this.centerZ = SectionPosition.a(blockposition.getZ());
+        int i = SectionPosition.a(blockposition1.getX());
+        int j = SectionPosition.a(blockposition1.getZ());
 
-        this.c = new IChunkAccess[i - this.a + 1][j - this.b + 1];
+        this.chunks = new IChunkAccess[i - this.centerX + 1][j - this.centerZ + 1];
         IChunkProvider ichunkprovider = world.getChunkProvider();
 
-        this.d = true;
+        this.allEmpty = true;
 
         int k;
         int l;
 
-        for (k = this.a; k <= i; ++k) {
-            for (l = this.b; l <= j; ++l) {
-                this.c[k - this.a][l - this.b] = ichunkprovider.a(k, l);
+        for (k = this.centerX; k <= i; ++k) {
+            for (l = this.centerZ; l <= j; ++l) {
+                this.chunks[k - this.centerX][l - this.centerZ] = ichunkprovider.a(k, l);
             }
         }
 
-        for (k = blockposition.getX() >> 4; k <= blockposition1.getX() >> 4; ++k) {
-            for (l = blockposition.getZ() >> 4; l <= blockposition1.getZ() >> 4; ++l) {
-                IChunkAccess ichunkaccess = this.c[k - this.a][l - this.b];
+        for (k = SectionPosition.a(blockposition.getX()); k <= SectionPosition.a(blockposition1.getX()); ++k) {
+            for (l = SectionPosition.a(blockposition.getZ()); l <= SectionPosition.a(blockposition1.getZ()); ++l) {
+                IChunkAccess ichunkaccess = this.chunks[k - this.centerX][l - this.centerZ];
 
                 if (ichunkaccess != null && !ichunkaccess.a(blockposition.getY(), blockposition1.getY())) {
-                    this.d = false;
+                    this.allEmpty = false;
                     return;
                 }
             }
@@ -60,25 +62,25 @@ public class ChunkCache implements IBlockAccess, ICollisionAccess {
     }
 
     private IChunkAccess d(BlockPosition blockposition) {
-        return this.a(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        return this.a(SectionPosition.a(blockposition.getX()), SectionPosition.a(blockposition.getZ()));
     }
 
     private IChunkAccess a(int i, int j) {
-        int k = i - this.a;
-        int l = j - this.b;
+        int k = i - this.centerX;
+        int l = j - this.centerZ;
 
-        if (k >= 0 && k < this.c.length && l >= 0 && l < this.c[k].length) {
-            IChunkAccess ichunkaccess = this.c[k][l];
+        if (k >= 0 && k < this.chunks.length && l >= 0 && l < this.chunks[k].length) {
+            IChunkAccess ichunkaccess = this.chunks[k][l];
 
-            return (IChunkAccess) (ichunkaccess != null ? ichunkaccess : new ChunkEmpty(this.e, new ChunkCoordIntPair(i, j)));
+            return (IChunkAccess) (ichunkaccess != null ? ichunkaccess : new ChunkEmpty(this.level, new ChunkCoordIntPair(i, j)));
         } else {
-            return new ChunkEmpty(this.e, new ChunkCoordIntPair(i, j));
+            return new ChunkEmpty(this.level, new ChunkCoordIntPair(i, j));
         }
     }
 
     @Override
     public WorldBorder getWorldBorder() {
-        return this.e.getWorldBorder();
+        return this.level.getWorldBorder();
     }
 
     @Override
@@ -96,7 +98,7 @@ public class ChunkCache implements IBlockAccess, ICollisionAccess {
 
     @Override
     public IBlockData getType(BlockPosition blockposition) {
-        if (World.isOutsideWorld(blockposition)) {
+        if (this.isOutsideWorld(blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
             IChunkAccess ichunkaccess = this.d(blockposition);
@@ -117,12 +119,26 @@ public class ChunkCache implements IBlockAccess, ICollisionAccess {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        if (World.isOutsideWorld(blockposition)) {
+        if (this.isOutsideWorld(blockposition)) {
             return FluidTypes.EMPTY.h();
         } else {
             IChunkAccess ichunkaccess = this.d(blockposition);
 
             return ichunkaccess.getFluid(blockposition);
         }
+    }
+
+    @Override
+    public int getMinBuildHeight() {
+        return this.level.getMinBuildHeight();
+    }
+
+    @Override
+    public int getHeight() {
+        return this.level.getHeight();
+    }
+
+    public GameProfilerFiller a() {
+        return this.level.getMethodProfiler();
     }
 }

@@ -1,9 +1,7 @@
 package net.minecraft.network.protocol.game;
 
 import com.google.common.collect.Lists;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
@@ -14,52 +12,39 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class PacketPlayOutRecipeUpdate implements Packet<PacketListenerPlayOut> {
 
-    private List<IRecipe<?>> a;
-
-    public PacketPlayOutRecipeUpdate() {}
+    private final List<IRecipe<?>> recipes;
 
     public PacketPlayOutRecipeUpdate(Collection<IRecipe<?>> collection) {
-        this.a = Lists.newArrayList(collection);
+        this.recipes = Lists.newArrayList(collection);
+    }
+
+    public PacketPlayOutRecipeUpdate(PacketDataSerializer packetdataserializer) {
+        this.recipes = packetdataserializer.a(PacketPlayOutRecipeUpdate::b);
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Collection) this.recipes, PacketPlayOutRecipeUpdate::a);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = Lists.newArrayList();
-        int i = packetdataserializer.i();
-
-        for (int j = 0; j < i; ++j) {
-            this.a.add(c(packetdataserializer));
-        }
-
+    public List<IRecipe<?>> b() {
+        return this.recipes;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a.size());
-        Iterator iterator = this.a.iterator();
-
-        while (iterator.hasNext()) {
-            IRecipe<?> irecipe = (IRecipe) iterator.next();
-
-            a(irecipe, packetdataserializer);
-        }
-
-    }
-
-    public static IRecipe<?> c(PacketDataSerializer packetdataserializer) {
-        MinecraftKey minecraftkey = packetdataserializer.p();
-        MinecraftKey minecraftkey1 = packetdataserializer.p();
+    public static IRecipe<?> b(PacketDataSerializer packetdataserializer) {
+        MinecraftKey minecraftkey = packetdataserializer.q();
+        MinecraftKey minecraftkey1 = packetdataserializer.q();
 
         return ((RecipeSerializer) IRegistry.RECIPE_SERIALIZER.getOptional(minecraftkey).orElseThrow(() -> {
             return new IllegalArgumentException("Unknown recipe serializer " + minecraftkey);
         })).a(minecraftkey1, packetdataserializer);
     }
 
-    public static <T extends IRecipe<?>> void a(T t0, PacketDataSerializer packetdataserializer) {
+    public static <T extends IRecipe<?>> void a(PacketDataSerializer packetdataserializer, T t0) {
         packetdataserializer.a(IRegistry.RECIPE_SERIALIZER.getKey(t0.getRecipeSerializer()));
         packetdataserializer.a(t0.getKey());
         t0.getRecipeSerializer().a(packetdataserializer, t0);

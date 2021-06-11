@@ -19,24 +19,9 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
         return new ArgumentCriterionValue.a();
     }
 
-    public static class a implements ArgumentCriterionValue<CriterionConditionValue.FloatRange> {
-
-        private static final Collection<String> a = Arrays.asList("0..5.2", "0", "-5.4", "-100.76..", "..100");
-
-        public a() {}
-
-        public CriterionConditionValue.FloatRange parse(StringReader stringreader) throws CommandSyntaxException {
-            return CriterionConditionValue.FloatRange.a(stringreader);
-        }
-
-        public Collection<String> getExamples() {
-            return ArgumentCriterionValue.a.a;
-        }
-    }
-
     public static class b implements ArgumentCriterionValue<CriterionConditionValue.IntegerRange> {
 
-        private static final Collection<String> a = Arrays.asList("0..5", "0", "-5", "-100..", "..100");
+        private static final Collection<String> EXAMPLES = Arrays.asList("0..5", "0", "-5", "-100..", "..100");
 
         public b() {}
 
@@ -49,7 +34,26 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
         }
 
         public Collection<String> getExamples() {
-            return ArgumentCriterionValue.b.a;
+            return ArgumentCriterionValue.b.EXAMPLES;
+        }
+    }
+
+    public static class a implements ArgumentCriterionValue<CriterionConditionValue.DoubleRange> {
+
+        private static final Collection<String> EXAMPLES = Arrays.asList("0..5.2", "0", "-5.4", "-100.76..", "..100");
+
+        public a() {}
+
+        public static CriterionConditionValue.DoubleRange a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
+            return (CriterionConditionValue.DoubleRange) commandcontext.getArgument(s, CriterionConditionValue.DoubleRange.class);
+        }
+
+        public CriterionConditionValue.DoubleRange parse(StringReader stringreader) throws CommandSyntaxException {
+            return CriterionConditionValue.DoubleRange.a(stringreader);
+        }
+
+        public Collection<String> getExamples() {
+            return ArgumentCriterionValue.a.EXAMPLES;
         }
     }
 }

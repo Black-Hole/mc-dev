@@ -11,6 +11,9 @@ import net.minecraft.world.level.World;
 
 public interface IEntityAngerable {
 
+    String TAG_ANGER_TIME = "AngerTime";
+    String TAG_ANGRY_AT = "AngryAt";
+
     int getAnger();
 
     void setAnger(int i);
@@ -30,25 +33,27 @@ public interface IEntityAngerable {
 
     }
 
-    default void a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+    default void a(World world, NBTTagCompound nbttagcompound) {
         this.setAnger(nbttagcompound.getInt("AngerTime"));
-        if (!nbttagcompound.b("AngryAt")) {
-            this.setAngerTarget((UUID) null);
-        } else {
-            UUID uuid = nbttagcompound.a("AngryAt");
+        if (world instanceof WorldServer) {
+            if (!nbttagcompound.b("AngryAt")) {
+                this.setAngerTarget((UUID) null);
+            } else {
+                UUID uuid = nbttagcompound.a("AngryAt");
 
-            this.setAngerTarget(uuid);
-            Entity entity = worldserver.getEntity(uuid);
+                this.setAngerTarget(uuid);
+                Entity entity = ((WorldServer) world).getEntity(uuid);
 
-            if (entity != null) {
-                if (entity instanceof EntityInsentient) {
-                    this.setLastDamager((EntityInsentient) entity);
+                if (entity != null) {
+                    if (entity instanceof EntityInsentient) {
+                        this.setLastDamager((EntityInsentient) entity);
+                    }
+
+                    if (entity.getEntityType() == EntityTypes.PLAYER) {
+                        this.e((EntityHuman) entity);
+                    }
+
                 }
-
-                if (entity.getEntityType() == EntityTypes.PLAYER) {
-                    this.e((EntityHuman) entity);
-                }
-
             }
         }
     }
@@ -57,7 +62,7 @@ public interface IEntityAngerable {
         EntityLiving entityliving = this.getGoalTarget();
         UUID uuid = this.getAngerTarget();
 
-        if ((entityliving == null || entityliving.dl()) && uuid != null && worldserver.getEntity(uuid) instanceof EntityInsentient) {
+        if ((entityliving == null || entityliving.dV()) && uuid != null && worldserver.getEntity(uuid) instanceof EntityInsentient) {
             this.pacify();
         } else {
             if (entityliving != null && !Objects.equals(uuid, entityliving.getUniqueID())) {
@@ -76,26 +81,26 @@ public interface IEntityAngerable {
     }
 
     default boolean a_(EntityLiving entityliving) {
-        return !IEntitySelector.f.test(entityliving) ? false : (entityliving.getEntityType() == EntityTypes.PLAYER && this.a(entityliving.world) ? true : entityliving.getUniqueID().equals(this.getAngerTarget()));
+        return !this.c(entityliving) ? false : (entityliving.getEntityType() == EntityTypes.PLAYER && this.b(entityliving.level) ? true : entityliving.getUniqueID().equals(this.getAngerTarget()));
     }
 
-    default boolean a(World world) {
-        return world.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER) && this.isAngry() && this.getAngerTarget() == null;
+    default boolean b(World world) {
+        return world.getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER) && this.isAngry() && this.getAngerTarget() == null;
     }
 
     default boolean isAngry() {
         return this.getAnger() > 0;
     }
 
-    default void b(EntityHuman entityhuman) {
-        if (entityhuman.world.getGameRules().getBoolean(GameRules.FORGIVE_DEAD_PLAYERS)) {
+    default void a_(EntityHuman entityhuman) {
+        if (entityhuman.level.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS)) {
             if (entityhuman.getUniqueID().equals(this.getAngerTarget())) {
                 this.pacify();
             }
         }
     }
 
-    default void I_() {
+    default void H_() {
         this.pacify();
         this.anger();
     }
@@ -107,11 +112,16 @@ public interface IEntityAngerable {
         this.setAnger(0);
     }
 
+    @Nullable
+    EntityLiving getLastDamager();
+
     void setLastDamager(@Nullable EntityLiving entityliving);
 
     void e(@Nullable EntityHuman entityhuman);
 
     void setGoalTarget(@Nullable EntityLiving entityliving);
+
+    boolean c(EntityLiving entityliving);
 
     @Nullable
     EntityLiving getGoalTarget();

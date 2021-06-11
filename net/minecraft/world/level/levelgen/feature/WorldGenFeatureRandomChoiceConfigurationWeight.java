@@ -10,15 +10,15 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 
 public class WorldGenFeatureRandomChoiceConfigurationWeight {
 
-    public static final Codec<WorldGenFeatureRandomChoiceConfigurationWeight> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureConfigured.b.fieldOf("feature").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
-            return worldgenfeaturerandomchoiceconfigurationweight.b;
+    public static final Codec<WorldGenFeatureRandomChoiceConfigurationWeight> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureConfigured.CODEC.fieldOf("feature").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
+            return worldgenfeaturerandomchoiceconfigurationweight.feature;
         }), Codec.floatRange(0.0F, 1.0F).fieldOf("chance").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
-            return worldgenfeaturerandomchoiceconfigurationweight.c;
+            return worldgenfeaturerandomchoiceconfigurationweight.chance;
         })).apply(instance, WorldGenFeatureRandomChoiceConfigurationWeight::new);
     });
-    public final Supplier<WorldGenFeatureConfigured<?, ?>> b;
-    public final float c;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> feature;
+    public final float chance;
 
     public WorldGenFeatureRandomChoiceConfigurationWeight(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, float f) {
         this(() -> {
@@ -27,11 +27,11 @@ public class WorldGenFeatureRandomChoiceConfigurationWeight {
     }
 
     private WorldGenFeatureRandomChoiceConfigurationWeight(Supplier<WorldGenFeatureConfigured<?, ?>> supplier, float f) {
-        this.b = supplier;
-        this.c = f;
+        this.feature = supplier;
+        this.chance = f;
     }
 
     public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition) {
-        return ((WorldGenFeatureConfigured) this.b.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
+        return ((WorldGenFeatureConfigured) this.feature.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
     }
 }

@@ -28,47 +28,49 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class CommandAttribute {
 
-    private static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+    private static final SuggestionProvider<CommandListenerWrapper> AVAILABLE_ATTRIBUTES = (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.a((Iterable) IRegistry.ATTRIBUTE.keySet(), suggestionsbuilder);
     };
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_NOT_LIVING_ENTITY = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.attribute.failed.entity", new Object[]{object});
     });
-    private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final Dynamic2CommandExceptionType ERROR_NO_SUCH_ATTRIBUTE = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.attribute.failed.no_attribute", new Object[]{object, object1});
     });
-    private static final Dynamic3CommandExceptionType d = new Dynamic3CommandExceptionType((object, object1, object2) -> {
+    private static final Dynamic3CommandExceptionType ERROR_NO_SUCH_MODIFIER = new Dynamic3CommandExceptionType((object, object1, object2) -> {
         return new ChatMessage("commands.attribute.failed.no_modifier", new Object[]{object1, object, object2});
     });
-    private static final Dynamic3CommandExceptionType e = new Dynamic3CommandExceptionType((object, object1, object2) -> {
+    private static final Dynamic3CommandExceptionType ERROR_MODIFIER_ALREADY_PRESENT = new Dynamic3CommandExceptionType((object, object1, object2) -> {
         return new ChatMessage("commands.attribute.failed.modifier_already_present", new Object[]{object2, object1, object});
     });
+
+    public CommandAttribute() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("attribute").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.a()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("attribute", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAttribute.a).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("get").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), 1.0D);
+        })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.a()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("attribute", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAttribute.AVAILABLE_ATTRIBUTES).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("get").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), 1.0D);
         })).then(net.minecraft.commands.CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "scale"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "scale"));
         })))).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("base").then(net.minecraft.commands.CommandDispatcher.a("set").then(net.minecraft.commands.CommandDispatcher.a("value", (ArgumentType) DoubleArgumentType.doubleArg()).executes((commandcontext) -> {
-            return c((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "value"));
+            return c((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "value"));
         })))).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("get").executes((commandcontext) -> {
-            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), 1.0D);
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), 1.0D);
         })).then(net.minecraft.commands.CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).executes((commandcontext) -> {
-            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "scale"));
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), DoubleArgumentType.getDouble(commandcontext, "scale"));
         }))))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("modifier").then(net.minecraft.commands.CommandDispatcher.a("add").then(net.minecraft.commands.CommandDispatcher.a("uuid", (ArgumentType) ArgumentUUID.a()).then(net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("value", (ArgumentType) DoubleArgumentType.doubleArg()).then(net.minecraft.commands.CommandDispatcher.a("add").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.ADDITION);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.ADDITION);
         }))).then(net.minecraft.commands.CommandDispatcher.a("multiply").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.MULTIPLY_TOTAL);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.MULTIPLY_TOTAL);
         }))).then(net.minecraft.commands.CommandDispatcher.a("multiply_base").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.MULTIPLY_BASE);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), StringArgumentType.getString(commandcontext, "name"), DoubleArgumentType.getDouble(commandcontext, "value"), AttributeModifier.Operation.MULTIPLY_BASE);
         }))))))).then(net.minecraft.commands.CommandDispatcher.a("remove").then(net.minecraft.commands.CommandDispatcher.a("uuid", (ArgumentType) ArgumentUUID.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"));
         })))).then(net.minecraft.commands.CommandDispatcher.a("value").then(net.minecraft.commands.CommandDispatcher.a("get").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("uuid", (ArgumentType) ArgumentUUID.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), 1.0D);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), 1.0D);
         })).then(net.minecraft.commands.CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.d(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), DoubleArgumentType.getDouble(commandcontext, "scale"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.a(commandcontext, "target"), ArgumentMinecraftKeyRegistered.e(commandcontext, "attribute"), ArgumentUUID.a(commandcontext, "uuid"), DoubleArgumentType.getDouble(commandcontext, "scale"));
         })))))))));
     }
 
@@ -76,7 +78,7 @@ public class CommandAttribute {
         AttributeModifiable attributemodifiable = a(entity).getAttributeMap().a(attributebase);
 
         if (attributemodifiable == null) {
-            throw CommandAttribute.c.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()));
+            throw CommandAttribute.ERROR_NO_SUCH_ATTRIBUTE.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()));
         } else {
             return attributemodifiable;
         }
@@ -84,7 +86,7 @@ public class CommandAttribute {
 
     private static EntityLiving a(Entity entity) throws CommandSyntaxException {
         if (!(entity instanceof EntityLiving)) {
-            throw CommandAttribute.b.create(entity.getDisplayName());
+            throw CommandAttribute.ERROR_NOT_LIVING_ENTITY.create(entity.getDisplayName());
         } else {
             return (EntityLiving) entity;
         }
@@ -94,7 +96,7 @@ public class CommandAttribute {
         EntityLiving entityliving = a(entity);
 
         if (!entityliving.getAttributeMap().b(attributebase)) {
-            throw CommandAttribute.c.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()));
+            throw CommandAttribute.ERROR_NO_SUCH_ATTRIBUTE.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()));
         } else {
             return entityliving;
         }
@@ -121,7 +123,7 @@ public class CommandAttribute {
         AttributeMapBase attributemapbase = entityliving.getAttributeMap();
 
         if (!attributemapbase.a(attributebase, uuid)) {
-            throw CommandAttribute.d.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
+            throw CommandAttribute.ERROR_NO_SUCH_MODIFIER.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
         } else {
             double d1 = attributemapbase.b(attributebase, uuid);
 
@@ -141,7 +143,7 @@ public class CommandAttribute {
         AttributeModifier attributemodifier = new AttributeModifier(uuid, s, d0, attributemodifier_operation);
 
         if (attributemodifiable.a(attributemodifier)) {
-            throw CommandAttribute.e.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
+            throw CommandAttribute.ERROR_MODIFIER_ALREADY_PRESENT.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
         } else {
             attributemodifiable.addModifier(attributemodifier);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.attribute.modifier.add.success", new Object[]{uuid, new ChatMessage(attributebase.getName()), entity.getDisplayName()}), false);
@@ -156,7 +158,7 @@ public class CommandAttribute {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.attribute.modifier.remove.success", new Object[]{uuid, new ChatMessage(attributebase.getName()), entity.getDisplayName()}), false);
             return 1;
         } else {
-            throw CommandAttribute.d.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
+            throw CommandAttribute.ERROR_NO_SUCH_MODIFIER.create(entity.getDisplayName(), new ChatMessage(attributebase.getName()), uuid);
         }
     }
 }

@@ -6,18 +6,18 @@ public enum BlockPropertySlabType implements INamable {
 
     TOP("top"), BOTTOM("bottom"), DOUBLE("double");
 
-    private final String d;
+    private final String name;
 
     private BlockPropertySlabType(String s) {
-        this.d = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.d;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.d;
+        return this.name;
     }
 }

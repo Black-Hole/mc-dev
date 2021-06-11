@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration2;
 
-public class WorldGenDecoratorEmpty extends WorldGenDecoratorFeatureSimple<WorldGenFeatureEmptyConfiguration2> {
+public class WorldGenDecoratorEmpty extends WorldGenDecorator<WorldGenFeatureEmptyConfiguration2> {
 
     public WorldGenDecoratorEmpty(Codec<WorldGenFeatureEmptyConfiguration2> codec) {
         super(codec);
     }
 
-    public Stream<BlockPosition> a(Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
+    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
         return Stream.of(blockposition);
     }
 }

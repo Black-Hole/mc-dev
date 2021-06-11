@@ -2,31 +2,32 @@ package net.minecraft.world.level.levelgen;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ExtraCodecs;
 
 public class NoiseSlideSettings {
 
-    public static final Codec<NoiseSlideSettings> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("target").forGetter(NoiseSlideSettings::a), Codec.intRange(0, 256).fieldOf("size").forGetter(NoiseSlideSettings::b), Codec.INT.fieldOf("offset").forGetter(NoiseSlideSettings::c)).apply(instance, NoiseSlideSettings::new);
+    public static final Codec<NoiseSlideSettings> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codec.INT.fieldOf("target").forGetter(NoiseSlideSettings::a), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("size").forGetter(NoiseSlideSettings::b), Codec.INT.fieldOf("offset").forGetter(NoiseSlideSettings::c)).apply(instance, NoiseSlideSettings::new);
     });
-    private final int b;
-    private final int c;
-    private final int d;
+    private final int target;
+    private final int size;
+    private final int offset;
 
     public NoiseSlideSettings(int i, int j, int k) {
-        this.b = i;
-        this.c = j;
-        this.d = k;
+        this.target = i;
+        this.size = j;
+        this.offset = k;
     }
 
     public int a() {
-        return this.b;
+        return this.target;
     }
 
     public int b() {
-        return this.c;
+        return this.size;
     }
 
     public int c() {
-        return this.d;
+        return this.offset;
     }
 }

@@ -17,6 +17,8 @@ public class CommandReload {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    public CommandReload() {}
+
     public static void a(Collection<String> collection, CommandListenerWrapper commandlistenerwrapper) {
         commandlistenerwrapper.getServer().a(collection).exceptionally((throwable) -> {
             CommandReload.LOGGER.warn("Failed to execute reload", throwable);

@@ -61,29 +61,41 @@ import org.apache.logging.log4j.Logger;
 public class EnderDragonBattle {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Predicate<Entity> b = IEntitySelector.a.and(IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
-    public final BossBattleServer bossBattle;
-    public final WorldServer world;
+    private static final int MAX_TICKS_BEFORE_DRAGON_RESPAWN = 1200;
+    private static final int TIME_BETWEEN_CRYSTAL_SCANS = 100;
+    private static final int TIME_BETWEEN_PLAYER_SCANS = 20;
+    private static final int ARENA_SIZE_CHUNKS = 8;
+    public static final int ARENA_TICKET_LEVEL = 9;
+    private static final int GATEWAY_COUNT = 20;
+    private static final int GATEWAY_DISTANCE = 96;
+    public static final int DRAGON_SPAWN_Y = 128;
+    private static final Predicate<Entity> VALID_PLAYER = IEntitySelector.ENTITY_STILL_ALIVE.and(IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
+    public final BossBattleServer dragonEvent;
+    public final WorldServer level;
     private final List<Integer> gateways;
-    private final ShapeDetector f;
-    private int g;
-    private int h;
-    private int i;
-    private int j;
+    private final ShapeDetector exitPortalPattern;
+    private int ticksSinceDragonSeen;
+    private int crystalsAlive;
+    private int ticksSinceCrystalsScanned;
+    private int ticksSinceLastPlayerScan;
     private boolean dragonKilled;
     private boolean previouslyKilled;
     public UUID dragonUUID;
-    private boolean n;
-    public BlockPosition exitPortalLocation;
-    public EnumDragonRespawn respawnPhase;
-    private int q;
-    private List<EntityEnderCrystal> r;
+    private boolean needsStateScanning;
+    public BlockPosition portalLocation;
+    public EnumDragonRespawn respawnStage;
+    private int respawnTime;
+    private List<EntityEnderCrystal> respawnCrystals;
 
     public EnderDragonBattle(WorldServer worldserver, long i, NBTTagCompound nbttagcompound) {
-        this.bossBattle = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.minecraft.ender_dragon"), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).c(true);
+        this.dragonEvent = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.minecraft.ender_dragon"), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).setCreateFog(true);
         this.gateways = Lists.newArrayList();
-        this.n = true;
-        this.world = worldserver;
+        this.needsStateScanning = true;
+        this.level = worldserver;
+        if (nbttagcompound.hasKey("NeedsStateScanning")) {
+            this.needsStateScanning = nbttagcompound.getBoolean("NeedsStateScanning");
+        }
+
         if (nbttagcompound.hasKeyOfType("DragonKilled", 99)) {
             if (nbttagcompound.b("Dragon")) {
                 this.dragonUUID = nbttagcompound.a("Dragon");
@@ -92,11 +104,11 @@ public class EnderDragonBattle {
             this.dragonKilled = nbttagcompound.getBoolean("DragonKilled");
             this.previouslyKilled = nbttagcompound.getBoolean("PreviouslyKilled");
             if (nbttagcompound.getBoolean("IsRespawning")) {
-                this.respawnPhase = EnumDragonRespawn.START;
+                this.respawnStage = EnumDragonRespawn.START;
             }
 
             if (nbttagcompound.hasKeyOfType("ExitPortalLocation", 10)) {
-                this.exitPortalLocation = GameProfileSerializer.b(nbttagcompound.getCompound("ExitPortalLocation"));
+                this.portalLocation = GameProfileSerializer.b(nbttagcompound.getCompound("ExitPortalLocation"));
             }
         } else {
             this.dragonKilled = true;
@@ -114,20 +126,21 @@ public class EnderDragonBattle {
             Collections.shuffle(this.gateways, new Random(i));
         }
 
-        this.f = ShapeDetectorBuilder.a().a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("  ###  ", " #   # ", "#     #", "#  #  #", "#     #", " #   # ", "  ###  ").a("       ", "  ###  ", " ##### ", " ##### ", " ##### ", "  ###  ", "       ").a('#', ShapeDetectorBlock.a(BlockPredicate.a(Blocks.BEDROCK))).b();
+        this.exitPortalPattern = ShapeDetectorBuilder.a().a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("  ###  ", " #   # ", "#     #", "#  #  #", "#     #", " #   # ", "  ###  ").a("       ", "  ###  ", " ##### ", " ##### ", " ##### ", "  ###  ", "       ").a('#', ShapeDetectorBlock.a(BlockPredicate.a(Blocks.BEDROCK))).b();
     }
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
+        nbttagcompound.setBoolean("NeedsStateScanning", this.needsStateScanning);
         if (this.dragonUUID != null) {
             nbttagcompound.a("Dragon", this.dragonUUID);
         }
 
         nbttagcompound.setBoolean("DragonKilled", this.dragonKilled);
         nbttagcompound.setBoolean("PreviouslyKilled", this.previouslyKilled);
-        if (this.exitPortalLocation != null) {
-            nbttagcompound.set("ExitPortalLocation", GameProfileSerializer.a(this.exitPortalLocation));
+        if (this.portalLocation != null) {
+            nbttagcompound.set("ExitPortalLocation", GameProfileSerializer.a(this.portalLocation));
         }
 
         NBTTagList nbttaglist = new NBTTagList();
@@ -144,43 +157,43 @@ public class EnderDragonBattle {
     }
 
     public void b() {
-        this.bossBattle.setVisible(!this.dragonKilled);
-        if (++this.j >= 20) {
+        this.dragonEvent.setVisible(!this.dragonKilled);
+        if (++this.ticksSinceLastPlayerScan >= 20) {
             this.l();
-            this.j = 0;
+            this.ticksSinceLastPlayerScan = 0;
         }
 
-        if (!this.bossBattle.getPlayers().isEmpty()) {
-            this.world.getChunkProvider().addTicket(TicketType.DRAGON, new ChunkCoordIntPair(0, 0), 9, Unit.INSTANCE);
+        if (!this.dragonEvent.getPlayers().isEmpty()) {
+            this.level.getChunkProvider().addTicket(TicketType.DRAGON, new ChunkCoordIntPair(0, 0), 9, Unit.INSTANCE);
             boolean flag = this.k();
 
-            if (this.n && flag) {
+            if (this.needsStateScanning && flag) {
                 this.g();
-                this.n = false;
+                this.needsStateScanning = false;
             }
 
-            if (this.respawnPhase != null) {
-                if (this.r == null && flag) {
-                    this.respawnPhase = null;
+            if (this.respawnStage != null) {
+                if (this.respawnCrystals == null && flag) {
+                    this.respawnStage = null;
                     this.initiateRespawn();
                 }
 
-                this.respawnPhase.a(this.world, this, this.r, this.q++, this.exitPortalLocation);
+                this.respawnStage.a(this.level, this, this.respawnCrystals, this.respawnTime++, this.portalLocation);
             }
 
             if (!this.dragonKilled) {
-                if ((this.dragonUUID == null || ++this.g >= 1200) && flag) {
+                if ((this.dragonUUID == null || ++this.ticksSinceDragonSeen >= 1200) && flag) {
                     this.h();
-                    this.g = 0;
+                    this.ticksSinceDragonSeen = 0;
                 }
 
-                if (++this.i >= 100 && flag) {
+                if (++this.ticksSinceCrystalsScanned >= 100 && flag) {
                     this.m();
-                    this.i = 0;
+                    this.ticksSinceCrystalsScanned = 0;
                 }
             }
         } else {
-            this.world.getChunkProvider().removeTicket(TicketType.DRAGON, new ChunkCoordIntPair(0, 0), 9, Unit.INSTANCE);
+            this.level.getChunkProvider().removeTicket(TicketType.DRAGON, new ChunkCoordIntPair(0, 0), 9, Unit.INSTANCE);
         }
 
     }
@@ -200,7 +213,7 @@ public class EnderDragonBattle {
             }
         }
 
-        List<EntityEnderDragon> list = this.world.g();
+        List<? extends EntityEnderDragon> list = this.level.h();
 
         if (list.isEmpty()) {
             this.dragonKilled = true;
@@ -224,7 +237,7 @@ public class EnderDragonBattle {
     }
 
     private void h() {
-        List<EntityEnderDragon> list = this.world.g();
+        List<? extends EntityEnderDragon> list = this.level.h();
 
         if (list.isEmpty()) {
             EnderDragonBattle.LOGGER.debug("Haven't seen the dragon, respawning it");
@@ -237,23 +250,23 @@ public class EnderDragonBattle {
     }
 
     public void setRespawnPhase(EnumDragonRespawn enumdragonrespawn) {
-        if (this.respawnPhase == null) {
+        if (this.respawnStage == null) {
             throw new IllegalStateException("Dragon respawn isn't in progress, can't skip ahead in the animation.");
         } else {
-            this.q = 0;
+            this.respawnTime = 0;
             if (enumdragonrespawn == EnumDragonRespawn.END) {
-                this.respawnPhase = null;
+                this.respawnStage = null;
                 this.dragonKilled = false;
                 EntityEnderDragon entityenderdragon = this.o();
-                Iterator iterator = this.bossBattle.getPlayers().iterator();
+                Iterator iterator = this.dragonEvent.getPlayers().iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    CriterionTriggers.n.a(entityplayer, (Entity) entityenderdragon);
+                    CriterionTriggers.SUMMONED_ENTITY.a(entityplayer, (Entity) entityenderdragon);
                 }
             } else {
-                this.respawnPhase = enumdragonrespawn;
+                this.respawnStage = enumdragonrespawn;
             }
 
         }
@@ -265,7 +278,7 @@ public class EnderDragonBattle {
 
             label27:
             while (j <= 8) {
-                Chunk chunk = this.world.getChunkAt(i, j);
+                Chunk chunk = this.level.getChunkAt(i, j);
                 Iterator iterator = chunk.getTileEntities().values().iterator();
 
                 TileEntity tileentity;
@@ -293,20 +306,20 @@ public class EnderDragonBattle {
 
         for (i = -8; i <= 8; ++i) {
             for (j = -8; j <= 8; ++j) {
-                Chunk chunk = this.world.getChunkAt(i, j);
+                Chunk chunk = this.level.getChunkAt(i, j);
                 Iterator iterator = chunk.getTileEntities().values().iterator();
 
                 while (iterator.hasNext()) {
                     TileEntity tileentity = (TileEntity) iterator.next();
 
                     if (tileentity instanceof TileEntityEnderPortal) {
-                        ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.f.a(this.world, tileentity.getPosition());
+                        ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.exitPortalPattern.a(this.level, tileentity.getPosition());
 
                         if (shapedetector_shapedetectorcollection != null) {
                             BlockPosition blockposition = shapedetector_shapedetectorcollection.a(3, 3, 3).getPosition();
 
-                            if (this.exitPortalLocation == null && blockposition.getX() == 0 && blockposition.getZ() == 0) {
-                                this.exitPortalLocation = blockposition;
+                            if (this.portalLocation == null) {
+                                this.portalLocation = blockposition;
                             }
 
                             return shapedetector_shapedetectorcollection;
@@ -316,14 +329,14 @@ public class EnderDragonBattle {
             }
         }
 
-        i = this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a).getY();
+        i = this.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.END_PODIUM_LOCATION).getY();
 
-        for (j = i; j >= 0; --j) {
-            ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection1 = this.f.a(this.world, new BlockPosition(WorldGenEndTrophy.a.getX(), j, WorldGenEndTrophy.a.getZ()));
+        for (j = i; j >= this.level.getMinBuildHeight(); --j) {
+            ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection1 = this.exitPortalPattern.a(this.level, new BlockPosition(WorldGenEndTrophy.END_PODIUM_LOCATION.getX(), j, WorldGenEndTrophy.END_PODIUM_LOCATION.getZ()));
 
             if (shapedetector_shapedetectorcollection1 != null) {
-                if (this.exitPortalLocation == null) {
-                    this.exitPortalLocation = shapedetector_shapedetectorcollection1.a(3, 3, 3).getPosition();
+                if (this.portalLocation == null) {
+                    this.portalLocation = shapedetector_shapedetectorcollection1.a(3, 3, 3).getPosition();
                 }
 
                 return shapedetector_shapedetectorcollection1;
@@ -336,7 +349,7 @@ public class EnderDragonBattle {
     private boolean k() {
         for (int i = -8; i <= 8; ++i) {
             for (int j = 8; j <= 8; ++j) {
-                IChunkAccess ichunkaccess = this.world.getChunkAt(i, j, ChunkStatus.FULL, false);
+                IChunkAccess ichunkaccess = this.level.getChunkAt(i, j, ChunkStatus.FULL, false);
 
                 if (!(ichunkaccess instanceof Chunk)) {
                     return false;
@@ -355,16 +368,16 @@ public class EnderDragonBattle {
 
     private void l() {
         Set<EntityPlayer> set = Sets.newHashSet();
-        Iterator iterator = this.world.a(EnderDragonBattle.b).iterator();
+        Iterator iterator = this.level.a(EnderDragonBattle.VALID_PLAYER).iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            this.bossBattle.addPlayer(entityplayer);
+            this.dragonEvent.addPlayer(entityplayer);
             set.add(entityplayer);
         }
 
-        Set<EntityPlayer> set1 = Sets.newHashSet(this.bossBattle.getPlayers());
+        Set<EntityPlayer> set1 = Sets.newHashSet(this.dragonEvent.getPlayers());
 
         set1.removeAll(set);
         Iterator iterator1 = set1.iterator();
@@ -372,32 +385,32 @@ public class EnderDragonBattle {
         while (iterator1.hasNext()) {
             EntityPlayer entityplayer1 = (EntityPlayer) iterator1.next();
 
-            this.bossBattle.removePlayer(entityplayer1);
+            this.dragonEvent.removePlayer(entityplayer1);
         }
 
     }
 
     private void m() {
-        this.i = 0;
-        this.h = 0;
+        this.ticksSinceCrystalsScanned = 0;
+        this.crystalsAlive = 0;
 
         WorldGenEnder.Spike worldgenender_spike;
 
-        for (Iterator iterator = WorldGenEnder.a((GeneratorAccessSeed) this.world).iterator(); iterator.hasNext(); this.h += this.world.a(EntityEnderCrystal.class, worldgenender_spike.f()).size()) {
+        for (Iterator iterator = WorldGenEnder.a((GeneratorAccessSeed) this.level).iterator(); iterator.hasNext(); this.crystalsAlive += this.level.a(EntityEnderCrystal.class, worldgenender_spike.f()).size()) {
             worldgenender_spike = (WorldGenEnder.Spike) iterator.next();
         }
 
-        EnderDragonBattle.LOGGER.debug("Found {} end crystals still alive", this.h);
+        EnderDragonBattle.LOGGER.debug("Found {} end crystals still alive", this.crystalsAlive);
     }
 
     public void a(EntityEnderDragon entityenderdragon) {
         if (entityenderdragon.getUniqueID().equals(this.dragonUUID)) {
-            this.bossBattle.setProgress(0.0F);
-            this.bossBattle.setVisible(false);
+            this.dragonEvent.setProgress(0.0F);
+            this.dragonEvent.setVisible(false);
             this.generateExitPortal(true);
             this.n();
             if (!this.previouslyKilled) {
-                this.world.setTypeUpdate(this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a), Blocks.DRAGON_EGG.getBlockData());
+                this.level.setTypeUpdate(this.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.END_PODIUM_LOCATION), Blocks.DRAGON_EGG.getBlockData());
             }
 
             this.previouslyKilled = true;
@@ -417,58 +430,58 @@ public class EnderDragonBattle {
     }
 
     private void a(BlockPosition blockposition) {
-        this.world.triggerEffect(3000, blockposition, 0);
-        BiomeDecoratorGroups.END_GATEWAY_DELAYED.a(this.world, this.world.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
+        this.level.triggerEffect(3000, blockposition, 0);
+        BiomeDecoratorGroups.END_GATEWAY_DELAYED.a(this.level, this.level.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
     }
 
     public void generateExitPortal(boolean flag) {
         WorldGenEndTrophy worldgenendtrophy = new WorldGenEndTrophy(flag);
 
-        if (this.exitPortalLocation == null) {
-            for (this.exitPortalLocation = this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a).down(); this.world.getType(this.exitPortalLocation).a(Blocks.BEDROCK) && this.exitPortalLocation.getY() > this.world.getSeaLevel(); this.exitPortalLocation = this.exitPortalLocation.down()) {
+        if (this.portalLocation == null) {
+            for (this.portalLocation = this.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.END_PODIUM_LOCATION).down(); this.level.getType(this.portalLocation).a(Blocks.BEDROCK) && this.portalLocation.getY() > this.level.getSeaLevel(); this.portalLocation = this.portalLocation.down()) {
                 ;
             }
         }
 
-        worldgenendtrophy.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k).a(this.world, this.world.getChunkProvider().getChunkGenerator(), new Random(), this.exitPortalLocation);
+        worldgenendtrophy.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.NONE).a(this.level, this.level.getChunkProvider().getChunkGenerator(), new Random(), this.portalLocation);
     }
 
     private EntityEnderDragon o() {
-        this.world.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
-        EntityEnderDragon entityenderdragon = (EntityEnderDragon) EntityTypes.ENDER_DRAGON.a((World) this.world);
+        this.level.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
+        EntityEnderDragon entityenderdragon = (EntityEnderDragon) EntityTypes.ENDER_DRAGON.a((World) this.level);
 
         entityenderdragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
-        entityenderdragon.setPositionRotation(0.0D, 128.0D, 0.0D, this.world.random.nextFloat() * 360.0F, 0.0F);
-        this.world.addEntity(entityenderdragon);
+        entityenderdragon.setPositionRotation(0.0D, 128.0D, 0.0D, this.level.random.nextFloat() * 360.0F, 0.0F);
+        this.level.addEntity(entityenderdragon);
         this.dragonUUID = entityenderdragon.getUniqueID();
         return entityenderdragon;
     }
 
     public void b(EntityEnderDragon entityenderdragon) {
         if (entityenderdragon.getUniqueID().equals(this.dragonUUID)) {
-            this.bossBattle.setProgress(entityenderdragon.getHealth() / entityenderdragon.getMaxHealth());
-            this.g = 0;
+            this.dragonEvent.setProgress(entityenderdragon.getHealth() / entityenderdragon.getMaxHealth());
+            this.ticksSinceDragonSeen = 0;
             if (entityenderdragon.hasCustomName()) {
-                this.bossBattle.a(entityenderdragon.getScoreboardDisplayName());
+                this.dragonEvent.a(entityenderdragon.getScoreboardDisplayName());
             }
         }
 
     }
 
     public int c() {
-        return this.h;
+        return this.crystalsAlive;
     }
 
     public void a(EntityEnderCrystal entityendercrystal, DamageSource damagesource) {
-        if (this.respawnPhase != null && this.r.contains(entityendercrystal)) {
+        if (this.respawnStage != null && this.respawnCrystals.contains(entityendercrystal)) {
             EnderDragonBattle.LOGGER.debug("Aborting respawn sequence");
-            this.respawnPhase = null;
-            this.q = 0;
+            this.respawnStage = null;
+            this.respawnTime = 0;
             this.resetCrystals();
             this.generateExitPortal(true);
         } else {
             this.m();
-            Entity entity = this.world.getEntity(this.dragonUUID);
+            Entity entity = this.level.getEntity(this.dragonUUID);
 
             if (entity instanceof EntityEnderDragon) {
                 ((EntityEnderDragon) entity).a(entityendercrystal, entityendercrystal.getChunkCoordinates(), damagesource);
@@ -482,8 +495,8 @@ public class EnderDragonBattle {
     }
 
     public void initiateRespawn() {
-        if (this.dragonKilled && this.respawnPhase == null) {
-            BlockPosition blockposition = this.exitPortalLocation;
+        if (this.dragonKilled && this.respawnStage == null) {
+            BlockPosition blockposition = this.portalLocation;
 
             if (blockposition == null) {
                 EnderDragonBattle.LOGGER.debug("Tried to respawn, but need to find the portal first.");
@@ -493,10 +506,10 @@ public class EnderDragonBattle {
                     EnderDragonBattle.LOGGER.debug("Couldn't find a portal, so we made one.");
                     this.generateExitPortal(true);
                 } else {
-                    EnderDragonBattle.LOGGER.debug("Found the exit portal & temporarily using it.");
+                    EnderDragonBattle.LOGGER.debug("Found the exit portal & saved its location for next time.");
                 }
 
-                blockposition = this.exitPortalLocation;
+                blockposition = this.portalLocation;
             }
 
             List<EntityEnderCrystal> list = Lists.newArrayList();
@@ -505,7 +518,7 @@ public class EnderDragonBattle {
 
             while (iterator.hasNext()) {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
-                List<EntityEnderCrystal> list1 = this.world.a(EntityEnderCrystal.class, new AxisAlignedBB(blockposition1.shift(enumdirection, 2)));
+                List<EntityEnderCrystal> list1 = this.level.a(EntityEnderCrystal.class, new AxisAlignedBB(blockposition1.shift(enumdirection, 2)));
 
                 if (list1.isEmpty()) {
                     return;
@@ -521,35 +534,35 @@ public class EnderDragonBattle {
     }
 
     private void a(List<EntityEnderCrystal> list) {
-        if (this.dragonKilled && this.respawnPhase == null) {
+        if (this.dragonKilled && this.respawnStage == null) {
             for (ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.getExitPortalShape(); shapedetector_shapedetectorcollection != null; shapedetector_shapedetectorcollection = this.getExitPortalShape()) {
-                for (int i = 0; i < this.f.c(); ++i) {
-                    for (int j = 0; j < this.f.b(); ++j) {
-                        for (int k = 0; k < this.f.a(); ++k) {
+                for (int i = 0; i < this.exitPortalPattern.c(); ++i) {
+                    for (int j = 0; j < this.exitPortalPattern.b(); ++j) {
+                        for (int k = 0; k < this.exitPortalPattern.a(); ++k) {
                             ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(i, j, k);
 
                             if (shapedetectorblock.a().a(Blocks.BEDROCK) || shapedetectorblock.a().a(Blocks.END_PORTAL)) {
-                                this.world.setTypeUpdate(shapedetectorblock.getPosition(), Blocks.END_STONE.getBlockData());
+                                this.level.setTypeUpdate(shapedetectorblock.getPosition(), Blocks.END_STONE.getBlockData());
                             }
                         }
                     }
                 }
             }
 
-            this.respawnPhase = EnumDragonRespawn.START;
-            this.q = 0;
+            this.respawnStage = EnumDragonRespawn.START;
+            this.respawnTime = 0;
             this.generateExitPortal(false);
-            this.r = list;
+            this.respawnCrystals = list;
         }
 
     }
 
     public void resetCrystals() {
-        Iterator iterator = WorldGenEnder.a((GeneratorAccessSeed) this.world).iterator();
+        Iterator iterator = WorldGenEnder.a((GeneratorAccessSeed) this.level).iterator();
 
         while (iterator.hasNext()) {
             WorldGenEnder.Spike worldgenender_spike = (WorldGenEnder.Spike) iterator.next();
-            List<EntityEnderCrystal> list = this.world.a(EntityEnderCrystal.class, worldgenender_spike.f());
+            List<EntityEnderCrystal> list = this.level.a(EntityEnderCrystal.class, worldgenender_spike.f());
             Iterator iterator1 = list.iterator();
 
             while (iterator1.hasNext()) {

@@ -11,29 +11,29 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorCelebrateLocation<E extends EntityInsentient> extends Behavior<E> {
 
-    private final int b;
-    private final float c;
+    private final int closeEnoughDist;
+    private final float speedModifier;
 
     public BehaviorCelebrateLocation(int i, float f) {
         super(ImmutableMap.of(MemoryModuleType.CELEBRATE_LOCATION, MemoryStatus.VALUE_PRESENT, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
-        this.b = i;
-        this.c = f;
+        this.closeEnoughDist = i;
+        this.speedModifier = f;
     }
 
     protected void a(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         BlockPosition blockposition = a(entityinsentient);
-        boolean flag = blockposition.a((BaseBlockPosition) entityinsentient.getChunkCoordinates(), (double) this.b);
+        boolean flag = blockposition.a((BaseBlockPosition) entityinsentient.getChunkCoordinates(), (double) this.closeEnoughDist);
 
         if (!flag) {
-            BehaviorUtil.a(entityinsentient, a(entityinsentient, blockposition), this.c, this.b);
+            BehaviorUtil.a(entityinsentient, a(entityinsentient, blockposition), this.speedModifier, this.closeEnoughDist);
         }
 
     }
 
     private static BlockPosition a(EntityInsentient entityinsentient, BlockPosition blockposition) {
-        Random random = entityinsentient.world.random;
+        Random random = entityinsentient.level.random;
 
-        return blockposition.b(a(random), 0, a(random));
+        return blockposition.c(a(random), 0, a(random));
     }
 
     private static int a(Random random) {

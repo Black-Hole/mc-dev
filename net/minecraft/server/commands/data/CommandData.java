@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import net.minecraft.commands.CommandListenerWrapper;
@@ -34,36 +35,38 @@ import net.minecraft.util.MathHelper;
 
 public class CommandData {
 
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.data.merge.failed"));
-    private static final DynamicCommandExceptionType e = new DynamicCommandExceptionType((object) -> {
+    private static final SimpleCommandExceptionType ERROR_MERGE_UNCHANGED = new SimpleCommandExceptionType(new ChatMessage("commands.data.merge.failed"));
+    private static final DynamicCommandExceptionType ERROR_GET_NOT_NUMBER = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.get.invalid", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_GET_NON_EXISTENT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.get.unknown", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.data.get.multiple"));
-    private static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
+    private static final SimpleCommandExceptionType ERROR_MULTIPLE_TAGS = new SimpleCommandExceptionType(new ChatMessage("commands.data.get.multiple"));
+    private static final DynamicCommandExceptionType ERROR_EXPECTED_LIST = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.modify.expected_list", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType i = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_EXPECTED_OBJECT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.modify.expected_object", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType j = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_INVALID_INDEX = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.modify.invalid_index", new Object[]{object});
     });
-    public static final List<Function<String, CommandData.c>> a = ImmutableList.of(CommandDataAccessorEntity.a, CommandDataAccessorTile.a, CommandDataStorage.a);
-    public static final List<CommandData.c> b = (List) CommandData.a.stream().map((function) -> {
+    public static final List<Function<String, CommandData.c>> ALL_PROVIDERS = ImmutableList.of(CommandDataAccessorEntity.PROVIDER, CommandDataAccessorTile.PROVIDER, CommandDataStorage.PROVIDER);
+    public static final List<CommandData.c> TARGET_PROVIDERS = (List) CommandData.ALL_PROVIDERS.stream().map((function) -> {
         return (CommandData.c) function.apply("target");
     }).collect(ImmutableList.toImmutableList());
-    public static final List<CommandData.c> c = (List) CommandData.a.stream().map((function) -> {
+    public static final List<CommandData.c> SOURCE_PROVIDERS = (List) CommandData.ALL_PROVIDERS.stream().map((function) -> {
         return (CommandData.c) function.apply("source");
     }).collect(ImmutableList.toImmutableList());
+
+    public CommandData() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("data").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         });
-        Iterator iterator = CommandData.b.iterator();
+        Iterator iterator = CommandData.TARGET_PROVIDERS.iterator();
 
         while (iterator.hasNext()) {
             CommandData.c commanddata_c = (CommandData.c) iterator.next();
@@ -85,21 +88,21 @@ public class CommandData {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"));
                 }));
             }))).then(a((argumentbuilder, commanddata_b) -> {
-                argumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("insert").then(net.minecraft.commands.CommandDispatcher.a("index", (ArgumentType) IntegerArgumentType.integer()).then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_h, list) -> {
+                argumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("insert").then(net.minecraft.commands.CommandDispatcher.a("index", (ArgumentType) IntegerArgumentType.integer()).then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_g, list) -> {
                     int i = IntegerArgumentType.getInteger(commandcontext, "index");
 
-                    return a(i, nbttagcompound, argumentnbtkey_h, list);
-                })))).then(net.minecraft.commands.CommandDispatcher.a("prepend").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_h, list) -> {
-                    return a(0, nbttagcompound, argumentnbtkey_h, list);
-                }))).then(net.minecraft.commands.CommandDispatcher.a("append").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_h, list) -> {
-                    return a(-1, nbttagcompound, argumentnbtkey_h, list);
-                }))).then(net.minecraft.commands.CommandDispatcher.a("set").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_h, list) -> {
+                    return a(i, nbttagcompound, argumentnbtkey_g, list);
+                })))).then(net.minecraft.commands.CommandDispatcher.a("prepend").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_g, list) -> {
+                    return a(0, nbttagcompound, argumentnbtkey_g, list);
+                }))).then(net.minecraft.commands.CommandDispatcher.a("append").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_g, list) -> {
+                    return a(-1, nbttagcompound, argumentnbtkey_g, list);
+                }))).then(net.minecraft.commands.CommandDispatcher.a("set").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_g, list) -> {
                     NBTBase nbtbase = (NBTBase) Iterables.getLast(list);
 
-                    nbtbase.getClass();
-                    return argumentnbtkey_h.b(nbttagcompound, nbtbase::clone);
-                }))).then(net.minecraft.commands.CommandDispatcher.a("merge").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_h, list) -> {
-                    Collection<NBTBase> collection = argumentnbtkey_h.a((NBTBase) nbttagcompound, NBTTagCompound::new);
+                    Objects.requireNonNull(nbtbase);
+                    return argumentnbtkey_g.b(nbttagcompound, nbtbase::clone);
+                }))).then(net.minecraft.commands.CommandDispatcher.a("merge").then(commanddata_b.create((commandcontext, nbttagcompound, argumentnbtkey_g, list) -> {
+                    Collection<NBTBase> collection = argumentnbtkey_g.a((NBTBase) nbttagcompound, NBTTagCompound::new);
                     int i = 0;
 
                     NBTTagCompound nbttagcompound1;
@@ -109,7 +112,7 @@ public class CommandData {
                         NBTBase nbtbase = (NBTBase) iterator1.next();
 
                         if (!(nbtbase instanceof NBTTagCompound)) {
-                            throw CommandData.i.create(nbtbase);
+                            throw CommandData.ERROR_EXPECTED_OBJECT.create(nbtbase);
                         }
 
                         nbttagcompound1 = (NBTTagCompound) nbtbase;
@@ -120,7 +123,7 @@ public class CommandData {
                             NBTBase nbtbase1 = (NBTBase) iterator2.next();
 
                             if (!(nbtbase1 instanceof NBTTagCompound)) {
-                                throw CommandData.i.create(nbtbase1);
+                                throw CommandData.ERROR_EXPECTED_OBJECT.create(nbtbase1);
                             }
 
                             nbttagcompound1.a((NBTTagCompound) nbtbase1);
@@ -135,8 +138,8 @@ public class CommandData {
         commanddispatcher.register(literalargumentbuilder);
     }
 
-    private static int a(int i, NBTTagCompound nbttagcompound, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException {
-        Collection<NBTBase> collection = argumentnbtkey_h.a((NBTBase) nbttagcompound, NBTTagList::new);
+    private static int a(int i, NBTTagCompound nbttagcompound, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException {
+        Collection<NBTBase> collection = argumentnbtkey_g.a((NBTBase) nbttagcompound, NBTTagList::new);
         int j = 0;
 
         boolean flag;
@@ -145,7 +148,7 @@ public class CommandData {
             NBTBase nbtbase = (NBTBase) iterator.next();
 
             if (!(nbtbase instanceof NBTList)) {
-                throw CommandData.h.create(nbtbase);
+                throw CommandData.ERROR_EXPECTED_LIST.create(nbtbase);
             }
 
             flag = false;
@@ -162,7 +165,7 @@ public class CommandData {
                         flag = true;
                     }
                 } catch (IndexOutOfBoundsException indexoutofboundsexception) {
-                    throw CommandData.j.create(k);
+                    throw CommandData.ERROR_INVALID_INDEX.create(k);
                 }
             }
         }
@@ -172,14 +175,14 @@ public class CommandData {
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(BiConsumer<ArgumentBuilder<CommandListenerWrapper, ?>, CommandData.b> biconsumer) {
         LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = net.minecraft.commands.CommandDispatcher.a("modify");
-        Iterator iterator = CommandData.b.iterator();
+        Iterator iterator = CommandData.TARGET_PROVIDERS.iterator();
 
         while (iterator.hasNext()) {
             CommandData.c commanddata_c = (CommandData.c) iterator.next();
 
             commanddata_c.a(literalargumentbuilder, (argumentbuilder) -> {
                 ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder1 = net.minecraft.commands.CommandDispatcher.a("targetPath", (ArgumentType) ArgumentNBTKey.a());
-                Iterator iterator1 = CommandData.c.iterator();
+                Iterator iterator1 = CommandData.SOURCE_PROVIDERS.iterator();
 
                 while (iterator1.hasNext()) {
                     CommandData.c commanddata_c1 = (CommandData.c) iterator1.next();
@@ -192,8 +195,8 @@ public class CommandData {
                                 return a(commandcontext, commanddata_c, commanddata_a, list);
                             }).then(net.minecraft.commands.CommandDispatcher.a("sourcePath", (ArgumentType) ArgumentNBTKey.a()).executes((commandcontext) -> {
                                 CommandDataAccessor commanddataaccessor = commanddata_c1.a(commandcontext);
-                                ArgumentNBTKey.h argumentnbtkey_h = ArgumentNBTKey.a(commandcontext, "sourcePath");
-                                List<NBTBase> list = argumentnbtkey_h.a((NBTBase) commanddataaccessor.a());
+                                ArgumentNBTKey.g argumentnbtkey_g = ArgumentNBTKey.a(commandcontext, "sourcePath");
+                                List<NBTBase> list = argumentnbtkey_g.a((NBTBase) commanddataaccessor.a());
 
                                 return a(commandcontext, commanddata_c, commanddata_a, list);
                             }));
@@ -202,7 +205,7 @@ public class CommandData {
                 }
 
                 biconsumer.accept(argumentbuilder1, (commanddata_a) -> {
-                    return (LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("value").then(net.minecraft.commands.CommandDispatcher.a("value", (ArgumentType) ArgumentNBTBase.a()).executes((commandcontext) -> {
+                    return net.minecraft.commands.CommandDispatcher.a("value").then(net.minecraft.commands.CommandDispatcher.a("value", (ArgumentType) ArgumentNBTBase.a()).executes((commandcontext) -> {
                         List<NBTBase> list = Collections.singletonList(ArgumentNBTBase.a(commandcontext, "value"));
 
                         return a(commandcontext, commanddata_c, commanddata_a, list);
@@ -217,12 +220,12 @@ public class CommandData {
 
     private static int a(CommandContext<CommandListenerWrapper> commandcontext, CommandData.c commanddata_c, CommandData.a commanddata_a, List<NBTBase> list) throws CommandSyntaxException {
         CommandDataAccessor commanddataaccessor = commanddata_c.a(commandcontext);
-        ArgumentNBTKey.h argumentnbtkey_h = ArgumentNBTKey.a(commandcontext, "targetPath");
+        ArgumentNBTKey.g argumentnbtkey_g = ArgumentNBTKey.a(commandcontext, "targetPath");
         NBTTagCompound nbttagcompound = commanddataaccessor.a();
-        int i = commanddata_a.modify(commandcontext, nbttagcompound, argumentnbtkey_h, list);
+        int i = commanddata_a.modify(commandcontext, nbttagcompound, argumentnbtkey_g, list);
 
         if (i == 0) {
-            throw CommandData.d.create();
+            throw CommandData.ERROR_MERGE_UNCHANGED.create();
         } else {
             commanddataaccessor.a(nbttagcompound);
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(commanddataaccessor.b(), true);
@@ -230,12 +233,12 @@ public class CommandData {
         }
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h) throws CommandSyntaxException {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.g argumentnbtkey_g) throws CommandSyntaxException {
         NBTTagCompound nbttagcompound = commanddataaccessor.a();
-        int i = argumentnbtkey_h.c(nbttagcompound);
+        int i = argumentnbtkey_g.c(nbttagcompound);
 
         if (i == 0) {
-            throw CommandData.d.create();
+            throw CommandData.ERROR_MERGE_UNCHANGED.create();
         } else {
             commanddataaccessor.a(nbttagcompound);
             commandlistenerwrapper.sendMessage(commanddataaccessor.b(), true);
@@ -243,20 +246,20 @@ public class CommandData {
         }
     }
 
-    private static NBTBase a(ArgumentNBTKey.h argumentnbtkey_h, CommandDataAccessor commanddataaccessor) throws CommandSyntaxException {
-        Collection<NBTBase> collection = argumentnbtkey_h.a((NBTBase) commanddataaccessor.a());
+    private static NBTBase a(ArgumentNBTKey.g argumentnbtkey_g, CommandDataAccessor commanddataaccessor) throws CommandSyntaxException {
+        Collection<NBTBase> collection = argumentnbtkey_g.a((NBTBase) commanddataaccessor.a());
         Iterator<NBTBase> iterator = collection.iterator();
         NBTBase nbtbase = (NBTBase) iterator.next();
 
         if (iterator.hasNext()) {
-            throw CommandData.g.create();
+            throw CommandData.ERROR_MULTIPLE_TAGS.create();
         } else {
             return nbtbase;
         }
     }
 
-    private static int b(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h) throws CommandSyntaxException {
-        NBTBase nbtbase = a(argumentnbtkey_h, commanddataaccessor);
+    private static int b(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.g argumentnbtkey_g) throws CommandSyntaxException {
+        NBTBase nbtbase = a(argumentnbtkey_g, commanddataaccessor);
         int i;
 
         if (nbtbase instanceof NBTNumber) {
@@ -267,7 +270,7 @@ public class CommandData {
             i = ((NBTTagCompound) nbtbase).e();
         } else {
             if (!(nbtbase instanceof NBTTagString)) {
-                throw CommandData.f.create(argumentnbtkey_h.toString());
+                throw CommandData.ERROR_GET_NON_EXISTENT.create(argumentnbtkey_g.toString());
             }
 
             i = nbtbase.asString().length();
@@ -277,15 +280,15 @@ public class CommandData {
         return i;
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h, double d0) throws CommandSyntaxException {
-        NBTBase nbtbase = a(argumentnbtkey_h, commanddataaccessor);
+    private static int a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.g argumentnbtkey_g, double d0) throws CommandSyntaxException {
+        NBTBase nbtbase = a(argumentnbtkey_g, commanddataaccessor);
 
         if (!(nbtbase instanceof NBTNumber)) {
-            throw CommandData.e.create(argumentnbtkey_h.toString());
+            throw CommandData.ERROR_GET_NOT_NUMBER.create(argumentnbtkey_g.toString());
         } else {
             int i = MathHelper.floor(((NBTNumber) nbtbase).asDouble() * d0);
 
-            commandlistenerwrapper.sendMessage(commanddataaccessor.a(argumentnbtkey_h, d0, i), false);
+            commandlistenerwrapper.sendMessage(commanddataaccessor.a(argumentnbtkey_g, d0, i), false);
             return i;
         }
     }
@@ -300,7 +303,7 @@ public class CommandData {
         NBTTagCompound nbttagcompound2 = nbttagcompound1.clone().a(nbttagcompound);
 
         if (nbttagcompound1.equals(nbttagcompound2)) {
-            throw CommandData.d.create();
+            throw CommandData.ERROR_MERGE_UNCHANGED.create();
         } else {
             commanddataaccessor.a(nbttagcompound2);
             commandlistenerwrapper.sendMessage(commanddataaccessor.b(), true);
@@ -315,13 +318,13 @@ public class CommandData {
         ArgumentBuilder<CommandListenerWrapper, ?> a(ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, Function<ArgumentBuilder<CommandListenerWrapper, ?>, ArgumentBuilder<CommandListenerWrapper, ?>> function);
     }
 
-    interface b {
+    private interface a {
 
-        ArgumentBuilder<CommandListenerWrapper, ?> create(CommandData.a commanddata_a);
+        int modify(CommandContext<CommandListenerWrapper> commandcontext, NBTTagCompound nbttagcompound, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException;
     }
 
-    interface a {
+    private interface b {
 
-        int modify(CommandContext<CommandListenerWrapper> commandcontext, NBTTagCompound nbttagcompound, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException;
+        ArgumentBuilder<CommandListenerWrapper, ?> create(CommandData.a commanddata_a);
     }
 }

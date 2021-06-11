@@ -7,7 +7,7 @@ public class ItemBook extends Item {
     }
 
     @Override
-    public boolean f_(ItemStack itemstack) {
+    public boolean a(ItemStack itemstack) {
         return itemstack.getCount() == 1;
     }
 

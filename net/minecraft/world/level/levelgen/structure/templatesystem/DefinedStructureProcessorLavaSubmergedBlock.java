@@ -9,24 +9,24 @@ import net.minecraft.world.level.block.Blocks;
 
 public class DefinedStructureProcessorLavaSubmergedBlock extends DefinedStructureProcessor {
 
-    public static final Codec<DefinedStructureProcessorLavaSubmergedBlock> a = Codec.unit(() -> {
-        return DefinedStructureProcessorLavaSubmergedBlock.b;
+    public static final Codec<DefinedStructureProcessorLavaSubmergedBlock> CODEC = Codec.unit(() -> {
+        return DefinedStructureProcessorLavaSubmergedBlock.INSTANCE;
     });
-    public static final DefinedStructureProcessorLavaSubmergedBlock b = new DefinedStructureProcessorLavaSubmergedBlock();
+    public static final DefinedStructureProcessorLavaSubmergedBlock INSTANCE = new DefinedStructureProcessorLavaSubmergedBlock();
 
     public DefinedStructureProcessorLavaSubmergedBlock() {}
 
     @Nullable
     @Override
     public DefinedStructure.BlockInfo a(IWorldReader iworldreader, BlockPosition blockposition, BlockPosition blockposition1, DefinedStructure.BlockInfo definedstructure_blockinfo, DefinedStructure.BlockInfo definedstructure_blockinfo1, DefinedStructureInfo definedstructureinfo) {
-        BlockPosition blockposition2 = definedstructure_blockinfo1.a;
+        BlockPosition blockposition2 = definedstructure_blockinfo1.pos;
         boolean flag = iworldreader.getType(blockposition2).a(Blocks.LAVA);
 
-        return flag && !Block.a(definedstructure_blockinfo1.b.getShape(iworldreader, blockposition2)) ? new DefinedStructure.BlockInfo(blockposition2, Blocks.LAVA.getBlockData(), definedstructure_blockinfo1.c) : definedstructure_blockinfo1;
+        return flag && !Block.a(definedstructure_blockinfo1.state.getShape(iworldreader, blockposition2)) ? new DefinedStructure.BlockInfo(blockposition2, Blocks.LAVA.getBlockData(), definedstructure_blockinfo1.nbt) : definedstructure_blockinfo1;
     }
 
     @Override
     protected DefinedStructureStructureProcessorType<?> a() {
-        return DefinedStructureStructureProcessorType.i;
+        return DefinedStructureStructureProcessorType.LAVA_SUBMERGED_BLOCK;
     }
 }

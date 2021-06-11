@@ -1,24 +1,20 @@
 package net.minecraft.util;
 
+import com.google.common.base.Suppliers;
+import java.util.Objects;
 import java.util.function.Supplier;
 
+@Deprecated
 public class LazyInitVar<T> {
 
-    private Supplier<T> a;
-    private T b;
+    private final Supplier<T> factory;
 
     public LazyInitVar(Supplier<T> supplier) {
-        this.a = supplier;
+        Objects.requireNonNull(supplier);
+        this.factory = Suppliers.memoize(supplier::get);
     }
 
     public T a() {
-        Supplier<T> supplier = this.a;
-
-        if (supplier != null) {
-            this.b = supplier.get();
-            this.a = null;
-        }
-
-        return this.b;
+        return this.factory.get();
     }
 }

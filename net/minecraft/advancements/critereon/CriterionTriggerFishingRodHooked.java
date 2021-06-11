@@ -14,13 +14,13 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class CriterionTriggerFishingRodHooked extends CriterionTriggerAbstract<CriterionTriggerFishingRodHooked.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("fishing_rod_hooked");
+    static final MinecraftKey ID = new MinecraftKey("fishing_rod_hooked");
 
     public CriterionTriggerFishingRodHooked() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerFishingRodHooked.a;
+        return CriterionTriggerFishingRodHooked.ID;
     }
 
     @Override
@@ -42,35 +42,35 @@ public class CriterionTriggerFishingRodHooked extends CriterionTriggerAbstract<C
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
-        private final CriterionConditionEntity.b b;
-        private final CriterionConditionItem c;
+        private final CriterionConditionItem rod;
+        private final CriterionConditionEntity.b entity;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionItem criterionconditionitem1) {
-            super(CriterionTriggerFishingRodHooked.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
-            this.b = criterionconditionentity_b1;
-            this.c = criterionconditionitem1;
+            super(CriterionTriggerFishingRodHooked.ID, criterionconditionentity_b);
+            this.rod = criterionconditionitem;
+            this.entity = criterionconditionentity_b1;
+            this.item = criterionconditionitem1;
         }
 
         public static CriterionTriggerFishingRodHooked.a a(CriterionConditionItem criterionconditionitem, CriterionConditionEntity criterionconditionentity, CriterionConditionItem criterionconditionitem1) {
-            return new CriterionTriggerFishingRodHooked.a(CriterionConditionEntity.b.a, criterionconditionitem, CriterionConditionEntity.b.a(criterionconditionentity), criterionconditionitem1);
+            return new CriterionTriggerFishingRodHooked.a(CriterionConditionEntity.b.ANY, criterionconditionitem, CriterionConditionEntity.b.a(criterionconditionentity), criterionconditionitem1);
         }
 
         public boolean a(ItemStack itemstack, LootTableInfo loottableinfo, Collection<ItemStack> collection) {
-            if (!this.a.a(itemstack)) {
+            if (!this.rod.a(itemstack)) {
                 return false;
-            } else if (!this.b.a(loottableinfo)) {
+            } else if (!this.entity.a(loottableinfo)) {
                 return false;
             } else {
-                if (this.c != CriterionConditionItem.a) {
+                if (this.item != CriterionConditionItem.ANY) {
                     boolean flag = false;
                     Entity entity = (Entity) loottableinfo.getContextParameter(LootContextParameters.THIS_ENTITY);
 
                     if (entity instanceof EntityItem) {
                         EntityItem entityitem = (EntityItem) entity;
 
-                        if (this.c.a(entityitem.getItemStack())) {
+                        if (this.item.a(entityitem.getItemStack())) {
                             flag = true;
                         }
                     }
@@ -80,7 +80,7 @@ public class CriterionTriggerFishingRodHooked extends CriterionTriggerAbstract<C
                     while (iterator.hasNext()) {
                         ItemStack itemstack1 = (ItemStack) iterator.next();
 
-                        if (this.c.a(itemstack1)) {
+                        if (this.item.a(itemstack1)) {
                             flag = true;
                             break;
                         }
@@ -99,9 +99,9 @@ public class CriterionTriggerFishingRodHooked extends CriterionTriggerAbstract<C
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("rod", this.a.a());
-            jsonobject.add("entity", this.b.a(lootserializationcontext));
-            jsonobject.add("item", this.c.a());
+            jsonobject.add("rod", this.rod.a());
+            jsonobject.add("entity", this.entity.a(lootserializationcontext));
+            jsonobject.add("item", this.item.a());
             return jsonobject;
         }
     }

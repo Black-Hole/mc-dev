@@ -7,13 +7,13 @@ import net.minecraft.core.BlockPosition;
 
 public class SpawnerCreatureProbabilities {
 
-    private final List<SpawnerCreatureProbabilities.a> a = Lists.newArrayList();
+    private final List<SpawnerCreatureProbabilities.a> charges = Lists.newArrayList();
 
     public SpawnerCreatureProbabilities() {}
 
     public void a(BlockPosition blockposition, double d0) {
         if (d0 != 0.0D) {
-            this.a.add(new SpawnerCreatureProbabilities.a(blockposition, d0));
+            this.charges.add(new SpawnerCreatureProbabilities.a(blockposition, d0));
         }
 
     }
@@ -26,7 +26,7 @@ public class SpawnerCreatureProbabilities {
 
             SpawnerCreatureProbabilities.a spawnercreatureprobabilities_a;
 
-            for (Iterator iterator = this.a.iterator(); iterator.hasNext(); d1 += spawnercreatureprobabilities_a.a(blockposition)) {
+            for (Iterator iterator = this.charges.iterator(); iterator.hasNext(); d1 += spawnercreatureprobabilities_a.a(blockposition)) {
                 spawnercreatureprobabilities_a = (SpawnerCreatureProbabilities.a) iterator.next();
             }
 
@@ -34,20 +34,20 @@ public class SpawnerCreatureProbabilities {
         }
     }
 
-    static class a {
+    private static class a {
 
-        private final BlockPosition a;
-        private final double b;
+        private final BlockPosition pos;
+        private final double charge;
 
         public a(BlockPosition blockposition, double d0) {
-            this.a = blockposition;
-            this.b = d0;
+            this.pos = blockposition;
+            this.charge = d0;
         }
 
         public double a(BlockPosition blockposition) {
-            double d0 = this.a.j(blockposition);
+            double d0 = this.pos.j(blockposition);
 
-            return d0 == 0.0D ? Double.POSITIVE_INFINITY : this.b / Math.sqrt(d0);
+            return d0 == 0.0D ? Double.POSITIVE_INFINITY : this.charge / Math.sqrt(d0);
         }
     }
 }

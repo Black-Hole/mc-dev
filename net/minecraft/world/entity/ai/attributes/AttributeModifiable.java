@@ -19,57 +19,57 @@ import net.minecraft.nbt.NBTTagList;
 
 public class AttributeModifiable {
 
-    private final AttributeBase a;
-    private final Map<AttributeModifier.Operation, Set<AttributeModifier>> b = Maps.newEnumMap(AttributeModifier.Operation.class);
-    private final Map<UUID, AttributeModifier> c = new Object2ObjectArrayMap();
-    private final Set<AttributeModifier> d = new ObjectArraySet();
-    private double e;
-    private boolean f = true;
-    private double g;
-    private final Consumer<AttributeModifiable> h;
+    private final AttributeBase attribute;
+    private final Map<AttributeModifier.Operation, Set<AttributeModifier>> modifiersByOperation = Maps.newEnumMap(AttributeModifier.Operation.class);
+    private final Map<UUID, AttributeModifier> modifierById = new Object2ObjectArrayMap();
+    private final Set<AttributeModifier> permanentModifiers = new ObjectArraySet();
+    private double baseValue;
+    private boolean dirty = true;
+    private double cachedValue;
+    private final Consumer<AttributeModifiable> onDirty;
 
     public AttributeModifiable(AttributeBase attributebase, Consumer<AttributeModifiable> consumer) {
-        this.a = attributebase;
-        this.h = consumer;
-        this.e = attributebase.getDefault();
+        this.attribute = attributebase;
+        this.onDirty = consumer;
+        this.baseValue = attributebase.getDefault();
     }
 
     public AttributeBase getAttribute() {
-        return this.a;
+        return this.attribute;
     }
 
     public double getBaseValue() {
-        return this.e;
+        return this.baseValue;
     }
 
     public void setValue(double d0) {
-        if (d0 != this.e) {
-            this.e = d0;
+        if (d0 != this.baseValue) {
+            this.baseValue = d0;
             this.d();
         }
     }
 
     public Set<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation) {
-        return (Set) this.b.computeIfAbsent(attributemodifier_operation, (attributemodifier_operation1) -> {
+        return (Set) this.modifiersByOperation.computeIfAbsent(attributemodifier_operation, (attributemodifier_operation1) -> {
             return Sets.newHashSet();
         });
     }
 
     public Set<AttributeModifier> getModifiers() {
-        return ImmutableSet.copyOf(this.c.values());
+        return ImmutableSet.copyOf(this.modifierById.values());
     }
 
     @Nullable
     public AttributeModifier a(UUID uuid) {
-        return (AttributeModifier) this.c.get(uuid);
+        return (AttributeModifier) this.modifierById.get(uuid);
     }
 
     public boolean a(AttributeModifier attributemodifier) {
-        return this.c.get(attributemodifier.getUniqueId()) != null;
+        return this.modifierById.get(attributemodifier.getUniqueId()) != null;
     }
 
     private void e(AttributeModifier attributemodifier) {
-        AttributeModifier attributemodifier1 = (AttributeModifier) this.c.putIfAbsent(attributemodifier.getUniqueId(), attributemodifier);
+        AttributeModifier attributemodifier1 = (AttributeModifier) this.modifierById.putIfAbsent(attributemodifier.getUniqueId(), attributemodifier);
 
         if (attributemodifier1 != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
@@ -85,18 +85,18 @@ public class AttributeModifiable {
 
     public void addModifier(AttributeModifier attributemodifier) {
         this.e(attributemodifier);
-        this.d.add(attributemodifier);
+        this.permanentModifiers.add(attributemodifier);
     }
 
     protected void d() {
-        this.f = true;
-        this.h.accept(this);
+        this.dirty = true;
+        this.onDirty.accept(this);
     }
 
     public void removeModifier(AttributeModifier attributemodifier) {
         this.a(attributemodifier.getOperation()).remove(attributemodifier);
-        this.c.remove(attributemodifier.getUniqueId());
-        this.d.remove(attributemodifier);
+        this.modifierById.remove(attributemodifier.getUniqueId());
+        this.permanentModifiers.remove(attributemodifier);
         this.d();
     }
 
@@ -112,7 +112,7 @@ public class AttributeModifiable {
     public boolean c(UUID uuid) {
         AttributeModifier attributemodifier = this.a(uuid);
 
-        if (attributemodifier != null && this.d.contains(attributemodifier)) {
+        if (attributemodifier != null && this.permanentModifiers.contains(attributemodifier)) {
             this.removeModifier(attributemodifier);
             return true;
         } else {
@@ -120,13 +120,24 @@ public class AttributeModifiable {
         }
     }
 
-    public double getValue() {
-        if (this.f) {
-            this.g = this.h();
-            this.f = false;
+    public void e() {
+        Iterator iterator = this.getModifiers().iterator();
+
+        while (iterator.hasNext()) {
+            AttributeModifier attributemodifier = (AttributeModifier) iterator.next();
+
+            this.removeModifier(attributemodifier);
         }
 
-        return this.g;
+    }
+
+    public double getValue() {
+        if (this.dirty) {
+            this.cachedValue = this.h();
+            this.dirty = false;
+        }
+
+        return this.cachedValue;
     }
 
     private double h() {
@@ -151,21 +162,21 @@ public class AttributeModifiable {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
-        return this.a.a(d1);
+        return this.attribute.a(d1);
     }
 
     private Collection<AttributeModifier> b(AttributeModifier.Operation attributemodifier_operation) {
-        return (Collection) this.b.getOrDefault(attributemodifier_operation, Collections.emptySet());
+        return (Collection) this.modifiersByOperation.getOrDefault(attributemodifier_operation, Collections.emptySet());
     }
 
     public void a(AttributeModifiable attributemodifiable) {
-        this.e = attributemodifiable.e;
-        this.c.clear();
-        this.c.putAll(attributemodifiable.c);
-        this.d.clear();
-        this.d.addAll(attributemodifiable.d);
-        this.b.clear();
-        attributemodifiable.b.forEach((attributemodifier_operation, set) -> {
+        this.baseValue = attributemodifiable.baseValue;
+        this.modifierById.clear();
+        this.modifierById.putAll(attributemodifiable.modifierById);
+        this.permanentModifiers.clear();
+        this.permanentModifiers.addAll(attributemodifiable.permanentModifiers);
+        this.modifiersByOperation.clear();
+        attributemodifiable.modifiersByOperation.forEach((attributemodifier_operation, set) -> {
             this.a(attributemodifier_operation).addAll(set);
         });
         this.d();
@@ -174,11 +185,11 @@ public class AttributeModifiable {
     public NBTTagCompound g() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("Name", IRegistry.ATTRIBUTE.getKey(this.a).toString());
-        nbttagcompound.setDouble("Base", this.e);
-        if (!this.d.isEmpty()) {
+        nbttagcompound.setString("Name", IRegistry.ATTRIBUTE.getKey(this.attribute).toString());
+        nbttagcompound.setDouble("Base", this.baseValue);
+        if (!this.permanentModifiers.isEmpty()) {
             NBTTagList nbttaglist = new NBTTagList();
-            Iterator iterator = this.d.iterator();
+            Iterator iterator = this.permanentModifiers.iterator();
 
             while (iterator.hasNext()) {
                 AttributeModifier attributemodifier = (AttributeModifier) iterator.next();
@@ -193,7 +204,7 @@ public class AttributeModifiable {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.e = nbttagcompound.getDouble("Base");
+        this.baseValue = nbttagcompound.getDouble("Base");
         if (nbttagcompound.hasKeyOfType("Modifiers", 9)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Modifiers", 10);
 
@@ -201,9 +212,9 @@ public class AttributeModifiable {
                 AttributeModifier attributemodifier = AttributeModifier.a(nbttaglist.getCompound(i));
 
                 if (attributemodifier != null) {
-                    this.c.put(attributemodifier.getUniqueId(), attributemodifier);
+                    this.modifierById.put(attributemodifier.getUniqueId(), attributemodifier);
                     this.a(attributemodifier.getOperation()).add(attributemodifier);
-                    this.d.add(attributemodifier);
+                    this.permanentModifiers.add(attributemodifier);
                 }
             }
         }

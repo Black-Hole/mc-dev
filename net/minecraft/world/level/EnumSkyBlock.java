@@ -4,9 +4,9 @@ public enum EnumSkyBlock {
 
     SKY(15), BLOCK(0);
 
-    public final int c;
+    public final int surrounding;
 
     private EnumSkyBlock(int i) {
-        this.c = i;
+        this.surrounding = i;
     }
 }

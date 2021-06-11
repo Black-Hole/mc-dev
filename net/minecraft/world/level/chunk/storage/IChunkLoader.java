@@ -17,14 +17,14 @@ import net.minecraft.world.level.storage.WorldPersistentData;
 
 public class IChunkLoader implements AutoCloseable {
 
-    private final IOWorker a;
-    protected final DataFixer b;
+    private final IOWorker worker;
+    protected final DataFixer fixerUpper;
     @Nullable
-    private PersistentStructureLegacy c;
+    private PersistentStructureLegacy legacyStructureHandler;
 
     public IChunkLoader(File file, DataFixer datafixer, boolean flag) {
-        this.b = datafixer;
-        this.a = new IOWorker(file, flag, "chunk");
+        this.fixerUpper = datafixer;
+        this.worker = new IOWorker(file, flag, "chunk");
     }
 
     public NBTTagCompound getChunkData(ResourceKey<World> resourcekey, Supplier<WorldPersistentData> supplier, NBTTagCompound nbttagcompound) {
@@ -32,17 +32,17 @@ public class IChunkLoader implements AutoCloseable {
         boolean flag = true;
 
         if (i < 1493) {
-            nbttagcompound = GameProfileSerializer.a(this.b, DataFixTypes.CHUNK, nbttagcompound, i, 1493);
+            nbttagcompound = GameProfileSerializer.a(this.fixerUpper, DataFixTypes.CHUNK, nbttagcompound, i, 1493);
             if (nbttagcompound.getCompound("Level").getBoolean("hasLegacyStructureData")) {
-                if (this.c == null) {
-                    this.c = PersistentStructureLegacy.a(resourcekey, (WorldPersistentData) supplier.get());
+                if (this.legacyStructureHandler == null) {
+                    this.legacyStructureHandler = PersistentStructureLegacy.a(resourcekey, (WorldPersistentData) supplier.get());
                 }
 
-                nbttagcompound = this.c.a(nbttagcompound);
+                nbttagcompound = this.legacyStructureHandler.a(nbttagcompound);
             }
         }
 
-        nbttagcompound = GameProfileSerializer.a(this.b, DataFixTypes.CHUNK, nbttagcompound, Math.max(1493, i));
+        nbttagcompound = GameProfileSerializer.a(this.fixerUpper, DataFixTypes.CHUNK, nbttagcompound, Math.max(1493, i));
         if (i < SharedConstants.getGameVersion().getWorldVersion()) {
             nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
         }
@@ -56,22 +56,22 @@ public class IChunkLoader implements AutoCloseable {
 
     @Nullable
     public NBTTagCompound read(ChunkCoordIntPair chunkcoordintpair) throws IOException {
-        return this.a.a(chunkcoordintpair);
+        return this.worker.a(chunkcoordintpair);
     }
 
     public void a(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
-        this.a.a(chunkcoordintpair, nbttagcompound);
-        if (this.c != null) {
-            this.c.a(chunkcoordintpair.pair());
+        this.worker.a(chunkcoordintpair, nbttagcompound);
+        if (this.legacyStructureHandler != null) {
+            this.legacyStructureHandler.a(chunkcoordintpair.pair());
         }
 
     }
 
     public void i() {
-        this.a.a().join();
+        this.worker.a().join();
     }
 
     public void close() throws IOException {
-        this.a.close();
+        this.worker.close();
     }
 }

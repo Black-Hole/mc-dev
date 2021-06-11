@@ -34,14 +34,14 @@ public class Advancement {
     private final Advancement parent;
     private final AdvancementDisplay display;
     private final AdvancementRewards rewards;
-    private final MinecraftKey key;
+    private final MinecraftKey id;
     private final Map<String, Criterion> criteria;
     private final String[][] requirements;
     private final Set<Advancement> children = Sets.newLinkedHashSet();
     private final IChatBaseComponent chatComponent;
 
     public Advancement(MinecraftKey minecraftkey, @Nullable Advancement advancement, @Nullable AdvancementDisplay advancementdisplay, AdvancementRewards advancementrewards, Map<String, Criterion> map, String[][] astring) {
-        this.key = minecraftkey;
+        this.id = minecraftkey;
         this.display = advancementdisplay;
         this.criteria = ImmutableMap.copyOf(map);
         this.parent = advancement;
@@ -56,7 +56,7 @@ public class Advancement {
         } else {
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a();
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
-            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a(ichatbasecomponent.mutableCopy(), ChatModifier.a.setColor(enumchatformat)).c("\n").addSibling(advancementdisplay.b());
+            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a(ichatbasecomponent.mutableCopy(), ChatModifier.EMPTY.setColor(enumchatformat)).c("\n").addSibling(advancementdisplay.b());
             IChatMutableComponent ichatmutablecomponent1 = ichatbasecomponent.mutableCopy().format((chatmodifier) -> {
                 return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatmutablecomponent));
             });
@@ -85,7 +85,9 @@ public class Advancement {
     }
 
     public String toString() {
-        return "SimpleAdvancement{id=" + this.getName() + ", parent=" + (this.parent == null ? "null" : this.parent.getName()) + ", display=" + this.display + ", rewards=" + this.rewards + ", criteria=" + this.criteria + ", requirements=" + Arrays.deepToString(this.requirements) + '}';
+        MinecraftKey minecraftkey = this.getName();
+
+        return "SimpleAdvancement{id=" + minecraftkey + ", parent=" + (this.parent == null ? "null" : this.parent.getName()) + ", display=" + this.display + ", rewards=" + this.rewards + ", criteria=" + this.criteria + ", requirements=" + Arrays.deepToString(this.requirements) + "}";
     }
 
     public Iterable<Advancement> e() {
@@ -96,12 +98,16 @@ public class Advancement {
         return this.criteria;
     }
 
+    public int g() {
+        return this.requirements.length;
+    }
+
     public void a(Advancement advancement) {
         this.children.add(advancement);
     }
 
     public MinecraftKey getName() {
-        return this.key;
+        return this.id;
     }
 
     public boolean equals(Object object) {
@@ -112,12 +118,12 @@ public class Advancement {
         } else {
             Advancement advancement = (Advancement) object;
 
-            return this.key.equals(advancement.key);
+            return this.id.equals(advancement.id);
         }
     }
 
     public int hashCode() {
-        return this.key.hashCode();
+        return this.id.hashCode();
     }
 
     public String[][] i() {
@@ -130,29 +136,29 @@ public class Advancement {
 
     public static class SerializedAdvancement {
 
-        private MinecraftKey a;
-        private Advancement b;
-        private AdvancementDisplay c;
-        private AdvancementRewards d;
-        private Map<String, Criterion> e;
-        private String[][] f;
-        private AdvancementRequirements g;
+        private MinecraftKey parentId;
+        private Advancement parent;
+        private AdvancementDisplay display;
+        private AdvancementRewards rewards;
+        private Map<String, Criterion> criteria;
+        private String[][] requirements;
+        private AdvancementRequirements requirementsStrategy;
 
-        private SerializedAdvancement(@Nullable MinecraftKey minecraftkey, @Nullable AdvancementDisplay advancementdisplay, AdvancementRewards advancementrewards, Map<String, Criterion> map, String[][] astring) {
-            this.d = AdvancementRewards.a;
-            this.e = Maps.newLinkedHashMap();
-            this.g = AdvancementRequirements.AND;
-            this.a = minecraftkey;
-            this.c = advancementdisplay;
-            this.d = advancementrewards;
-            this.e = map;
-            this.f = astring;
+        SerializedAdvancement(@Nullable MinecraftKey minecraftkey, @Nullable AdvancementDisplay advancementdisplay, AdvancementRewards advancementrewards, Map<String, Criterion> map, String[][] astring) {
+            this.rewards = AdvancementRewards.EMPTY;
+            this.criteria = Maps.newLinkedHashMap();
+            this.requirementsStrategy = AdvancementRequirements.AND;
+            this.parentId = minecraftkey;
+            this.display = advancementdisplay;
+            this.rewards = advancementrewards;
+            this.criteria = map;
+            this.requirements = astring;
         }
 
         private SerializedAdvancement() {
-            this.d = AdvancementRewards.a;
-            this.e = Maps.newLinkedHashMap();
-            this.g = AdvancementRequirements.AND;
+            this.rewards = AdvancementRewards.EMPTY;
+            this.criteria = Maps.newLinkedHashMap();
+            this.requirementsStrategy = AdvancementRequirements.AND;
         }
 
         public static Advancement.SerializedAdvancement a() {
@@ -160,12 +166,12 @@ public class Advancement {
         }
 
         public Advancement.SerializedAdvancement a(Advancement advancement) {
-            this.b = advancement;
+            this.parent = advancement;
             return this;
         }
 
         public Advancement.SerializedAdvancement a(MinecraftKey minecraftkey) {
-            this.a = minecraftkey;
+            this.parentId = minecraftkey;
             return this;
         }
 
@@ -178,7 +184,7 @@ public class Advancement {
         }
 
         public Advancement.SerializedAdvancement a(AdvancementDisplay advancementdisplay) {
-            this.c = advancementdisplay;
+            this.display = advancementdisplay;
             return this;
         }
 
@@ -187,7 +193,7 @@ public class Advancement {
         }
 
         public Advancement.SerializedAdvancement a(AdvancementRewards advancementrewards) {
-            this.d = advancementrewards;
+            this.rewards = advancementrewards;
             return this;
         }
 
@@ -196,28 +202,33 @@ public class Advancement {
         }
 
         public Advancement.SerializedAdvancement a(String s, Criterion criterion) {
-            if (this.e.containsKey(s)) {
+            if (this.criteria.containsKey(s)) {
                 throw new IllegalArgumentException("Duplicate criterion " + s);
             } else {
-                this.e.put(s, criterion);
+                this.criteria.put(s, criterion);
                 return this;
             }
         }
 
         public Advancement.SerializedAdvancement a(AdvancementRequirements advancementrequirements) {
-            this.g = advancementrequirements;
+            this.requirementsStrategy = advancementrequirements;
+            return this;
+        }
+
+        public Advancement.SerializedAdvancement a(String[][] astring) {
+            this.requirements = astring;
             return this;
         }
 
         public boolean a(Function<MinecraftKey, Advancement> function) {
-            if (this.a == null) {
+            if (this.parentId == null) {
                 return true;
             } else {
-                if (this.b == null) {
-                    this.b = (Advancement) function.apply(this.a);
+                if (this.parent == null) {
+                    this.parent = (Advancement) function.apply(this.parentId);
                 }
 
-                return this.b != null;
+                return this.parent != null;
             }
         }
 
@@ -227,11 +238,11 @@ public class Advancement {
             })) {
                 throw new IllegalStateException("Tried to build incomplete advancement!");
             } else {
-                if (this.f == null) {
-                    this.f = this.g.createRequirements(this.e.keySet());
+                if (this.requirements == null) {
+                    this.requirements = this.requirementsStrategy.createRequirements(this.criteria.keySet());
                 }
 
-                return new Advancement(minecraftkey, this.b, this.c, this.d, this.e, this.f);
+                return new Advancement(minecraftkey, this.parent, this.display, this.rewards, this.criteria, this.requirements);
             }
         }
 
@@ -243,25 +254,25 @@ public class Advancement {
         }
 
         public JsonObject b() {
-            if (this.f == null) {
-                this.f = this.g.createRequirements(this.e.keySet());
+            if (this.requirements == null) {
+                this.requirements = this.requirementsStrategy.createRequirements(this.criteria.keySet());
             }
 
             JsonObject jsonobject = new JsonObject();
 
-            if (this.b != null) {
-                jsonobject.addProperty("parent", this.b.getName().toString());
-            } else if (this.a != null) {
-                jsonobject.addProperty("parent", this.a.toString());
+            if (this.parent != null) {
+                jsonobject.addProperty("parent", this.parent.getName().toString());
+            } else if (this.parentId != null) {
+                jsonobject.addProperty("parent", this.parentId.toString());
             }
 
-            if (this.c != null) {
-                jsonobject.add("display", this.c.k());
+            if (this.display != null) {
+                jsonobject.add("display", this.display.k());
             }
 
-            jsonobject.add("rewards", this.d.b());
+            jsonobject.add("rewards", this.rewards.b());
             JsonObject jsonobject1 = new JsonObject();
-            Iterator iterator = this.e.entrySet().iterator();
+            Iterator iterator = this.criteria.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Entry<String, Criterion> entry = (Entry) iterator.next();
@@ -271,7 +282,7 @@ public class Advancement {
 
             jsonobject.add("criteria", jsonobject1);
             JsonArray jsonarray = new JsonArray();
-            String[][] astring = this.f;
+            String[][] astring = this.requirements;
             int i = astring.length;
 
             for (int j = 0; j < i; ++j) {
@@ -294,23 +305,23 @@ public class Advancement {
         }
 
         public void a(PacketDataSerializer packetdataserializer) {
-            if (this.a == null) {
+            if (this.parentId == null) {
                 packetdataserializer.writeBoolean(false);
             } else {
                 packetdataserializer.writeBoolean(true);
-                packetdataserializer.a(this.a);
+                packetdataserializer.a(this.parentId);
             }
 
-            if (this.c == null) {
+            if (this.display == null) {
                 packetdataserializer.writeBoolean(false);
             } else {
                 packetdataserializer.writeBoolean(true);
-                this.c.a(packetdataserializer);
+                this.display.a(packetdataserializer);
             }
 
-            Criterion.a(this.e, packetdataserializer);
-            packetdataserializer.d(this.f.length);
-            String[][] astring = this.f;
+            Criterion.a(this.criteria, packetdataserializer);
+            packetdataserializer.d(this.requirements.length);
+            String[][] astring = this.requirements;
             int i = astring.length;
 
             for (int j = 0; j < i; ++j) {
@@ -330,13 +341,13 @@ public class Advancement {
         }
 
         public String toString() {
-            return "Task Advancement{parentId=" + this.a + ", display=" + this.c + ", rewards=" + this.d + ", criteria=" + this.e + ", requirements=" + Arrays.deepToString(this.f) + '}';
+            return "Task Advancement{parentId=" + this.parentId + ", display=" + this.display + ", rewards=" + this.rewards + ", criteria=" + this.criteria + ", requirements=" + Arrays.deepToString(this.requirements) + "}";
         }
 
         public static Advancement.SerializedAdvancement a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
             MinecraftKey minecraftkey = jsonobject.has("parent") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "parent")) : null;
             AdvancementDisplay advancementdisplay = jsonobject.has("display") ? AdvancementDisplay.a(ChatDeserializer.t(jsonobject, "display")) : null;
-            AdvancementRewards advancementrewards = jsonobject.has("rewards") ? AdvancementRewards.a(ChatDeserializer.t(jsonobject, "rewards")) : AdvancementRewards.a;
+            AdvancementRewards advancementrewards = jsonobject.has("rewards") ? AdvancementRewards.a(ChatDeserializer.t(jsonobject, "rewards")) : AdvancementRewards.EMPTY;
             Map<String, Criterion> map = Criterion.b(ChatDeserializer.t(jsonobject, "criteria"), lootdeserializationcontext);
 
             if (map.isEmpty()) {
@@ -428,24 +439,24 @@ public class Advancement {
         }
 
         public static Advancement.SerializedAdvancement b(PacketDataSerializer packetdataserializer) {
-            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.p() : null;
+            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.q() : null;
             AdvancementDisplay advancementdisplay = packetdataserializer.readBoolean() ? AdvancementDisplay.b(packetdataserializer) : null;
             Map<String, Criterion> map = Criterion.c(packetdataserializer);
-            String[][] astring = new String[packetdataserializer.i()][];
+            String[][] astring = new String[packetdataserializer.j()][];
 
             for (int i = 0; i < astring.length; ++i) {
-                astring[i] = new String[packetdataserializer.i()];
+                astring[i] = new String[packetdataserializer.j()];
 
                 for (int j = 0; j < astring[i].length; ++j) {
-                    astring[i][j] = packetdataserializer.e(32767);
+                    astring[i][j] = packetdataserializer.p();
                 }
             }
 
-            return new Advancement.SerializedAdvancement(minecraftkey, advancementdisplay, AdvancementRewards.a, map, astring);
+            return new Advancement.SerializedAdvancement(minecraftkey, advancementdisplay, AdvancementRewards.EMPTY, map, astring);
         }
 
         public Map<String, Criterion> c() {
-            return this.e;
+            return this.criteria;
         }
     }
 }

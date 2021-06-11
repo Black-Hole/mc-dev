@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class AxisAlignedBB {
 
+    private static final double EPSILON = 1.0E-7D;
     public final double minX;
     public final double minY;
     public final double minZ;
@@ -39,11 +40,35 @@ public class AxisAlignedBB {
     }
 
     public static AxisAlignedBB a(StructureBoundingBox structureboundingbox) {
-        return new AxisAlignedBB((double) structureboundingbox.a, (double) structureboundingbox.b, (double) structureboundingbox.c, (double) (structureboundingbox.d + 1), (double) (structureboundingbox.e + 1), (double) (structureboundingbox.f + 1));
+        return new AxisAlignedBB((double) structureboundingbox.g(), (double) structureboundingbox.h(), (double) structureboundingbox.i(), (double) (structureboundingbox.j() + 1), (double) (structureboundingbox.k() + 1), (double) (structureboundingbox.l() + 1));
     }
 
     public static AxisAlignedBB a(Vec3D vec3d) {
         return new AxisAlignedBB(vec3d.x, vec3d.y, vec3d.z, vec3d.x + 1.0D, vec3d.y + 1.0D, vec3d.z + 1.0D);
+    }
+
+    public AxisAlignedBB a(double d0) {
+        return new AxisAlignedBB(d0, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+    }
+
+    public AxisAlignedBB b(double d0) {
+        return new AxisAlignedBB(this.minX, d0, this.minZ, this.maxX, this.maxY, this.maxZ);
+    }
+
+    public AxisAlignedBB c(double d0) {
+        return new AxisAlignedBB(this.minX, this.minY, d0, this.maxX, this.maxY, this.maxZ);
+    }
+
+    public AxisAlignedBB d(double d0) {
+        return new AxisAlignedBB(this.minX, this.minY, this.minZ, d0, this.maxY, this.maxZ);
+    }
+
+    public AxisAlignedBB e(double d0) {
+        return new AxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, d0, this.maxZ);
+    }
+
+    public AxisAlignedBB f(double d0) {
+        return new AxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, d0);
     }
 
     public double a(EnumDirection.EnumAxis enumdirection_enumaxis) {
@@ -202,6 +227,10 @@ public class AxisAlignedBB {
         return this.minX < d3 && this.maxX > d0 && this.minY < d4 && this.maxY > d1 && this.minZ < d5 && this.maxZ > d2;
     }
 
+    public boolean a(Vec3D vec3d, Vec3D vec3d1) {
+        return this.a(Math.min(vec3d.x, vec3d1.x), Math.min(vec3d.y, vec3d1.y), Math.min(vec3d.z, vec3d1.z), Math.max(vec3d.x, vec3d1.x), Math.max(vec3d.y, vec3d1.y), Math.max(vec3d.z, vec3d1.z));
+    }
+
     public boolean d(Vec3D vec3d) {
         return this.e(vec3d.x, vec3d.y, vec3d.z);
     }
@@ -228,6 +257,10 @@ public class AxisAlignedBB {
 
     public double d() {
         return this.maxZ - this.minZ;
+    }
+
+    public AxisAlignedBB f(double d0, double d1, double d2) {
+        return this.grow(-d0, -d1, -d2);
     }
 
     public AxisAlignedBB shrink(double d0) {
@@ -314,11 +347,15 @@ public class AxisAlignedBB {
         return "AABB[" + this.minX + ", " + this.minY + ", " + this.minZ + "] -> [" + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
     }
 
+    public boolean e() {
+        return Double.isNaN(this.minX) || Double.isNaN(this.minY) || Double.isNaN(this.minZ) || Double.isNaN(this.maxX) || Double.isNaN(this.maxY) || Double.isNaN(this.maxZ);
+    }
+
     public Vec3D f() {
         return new Vec3D(MathHelper.d(0.5D, this.minX, this.maxX), MathHelper.d(0.5D, this.minY, this.maxY), MathHelper.d(0.5D, this.minZ, this.maxZ));
     }
 
-    public static AxisAlignedBB g(double d0, double d1, double d2) {
-        return new AxisAlignedBB(-d0 / 2.0D, -d1 / 2.0D, -d2 / 2.0D, d0 / 2.0D, d1 / 2.0D, d2 / 2.0D);
+    public static AxisAlignedBB a(Vec3D vec3d, double d0, double d1, double d2) {
+        return new AxisAlignedBB(vec3d.x - d0 / 2.0D, vec3d.y - d1 / 2.0D, vec3d.z - d2 / 2.0D, vec3d.x + d0 / 2.0D, vec3d.y + d1 / 2.0D, vec3d.z + d2 / 2.0D);
     }
 }

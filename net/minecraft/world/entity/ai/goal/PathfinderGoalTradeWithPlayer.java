@@ -7,37 +7,37 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
 
-    private final EntityVillagerAbstract a;
+    private final EntityVillagerAbstract mob;
 
     public PathfinderGoalTradeWithPlayer(EntityVillagerAbstract entityvillagerabstract) {
-        this.a = entityvillagerabstract;
+        this.mob = entityvillagerabstract;
         this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean a() {
-        if (!this.a.isAlive()) {
+        if (!this.mob.isAlive()) {
             return false;
-        } else if (this.a.isInWater()) {
+        } else if (this.mob.isInWater()) {
             return false;
-        } else if (!this.a.isOnGround()) {
+        } else if (!this.mob.isOnGround()) {
             return false;
-        } else if (this.a.velocityChanged) {
+        } else if (this.mob.hurtMarked) {
             return false;
         } else {
-            EntityHuman entityhuman = this.a.getTrader();
+            EntityHuman entityhuman = this.mob.getTrader();
 
-            return entityhuman == null ? false : (this.a.h((Entity) entityhuman) > 16.0D ? false : entityhuman.activeContainer != null);
+            return entityhuman == null ? false : (this.mob.f((Entity) entityhuman) > 16.0D ? false : entityhuman.containerMenu != null);
         }
     }
 
     @Override
     public void c() {
-        this.a.getNavigation().o();
+        this.mob.getNavigation().o();
     }
 
     @Override
     public void d() {
-        this.a.setTradingPlayer((EntityHuman) null);
+        this.mob.setTradingPlayer((EntityHuman) null);
     }
 }

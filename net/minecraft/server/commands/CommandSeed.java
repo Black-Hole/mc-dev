@@ -14,6 +14,8 @@ import net.minecraft.network.chat.IChatMutableComponent;
 
 public class CommandSeed {
 
+    public CommandSeed() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher, boolean flag) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
             return !flag || commandlistenerwrapper.hasPermission(2);

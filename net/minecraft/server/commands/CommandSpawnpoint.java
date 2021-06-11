@@ -19,6 +19,8 @@ import net.minecraft.world.level.World;
 
 public class CommandSpawnpoint {
 
+    public CommandSpawnpoint() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("spawnpoint").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);

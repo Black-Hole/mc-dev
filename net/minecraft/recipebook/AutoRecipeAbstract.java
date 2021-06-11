@@ -14,8 +14,8 @@ public interface AutoRecipeAbstract<T> {
         if (irecipe instanceof ShapedRecipes) {
             ShapedRecipes shapedrecipes = (ShapedRecipes) irecipe;
 
-            i1 = shapedrecipes.i();
-            j1 = shapedrecipes.j();
+            i1 = shapedrecipes.j();
+            j1 = shapedrecipes.k();
         }
 
         int k1 = 0;

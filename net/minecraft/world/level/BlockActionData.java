@@ -5,32 +5,32 @@ import net.minecraft.world.level.block.Block;
 
 public class BlockActionData {
 
-    private final BlockPosition a;
-    private final Block b;
-    private final int c;
-    private final int d;
+    private final BlockPosition pos;
+    private final Block block;
+    private final int paramA;
+    private final int paramB;
 
     public BlockActionData(BlockPosition blockposition, Block block, int i, int j) {
-        this.a = blockposition;
-        this.b = block;
-        this.c = i;
-        this.d = j;
+        this.pos = blockposition;
+        this.block = block;
+        this.paramA = i;
+        this.paramB = j;
     }
 
     public BlockPosition a() {
-        return this.a;
+        return this.pos;
     }
 
     public Block b() {
-        return this.b;
+        return this.block;
     }
 
     public int c() {
-        return this.c;
+        return this.paramA;
     }
 
     public int d() {
-        return this.d;
+        return this.paramB;
     }
 
     public boolean equals(Object object) {
@@ -39,20 +39,20 @@ public class BlockActionData {
         } else {
             BlockActionData blockactiondata = (BlockActionData) object;
 
-            return this.a.equals(blockactiondata.a) && this.c == blockactiondata.c && this.d == blockactiondata.d && this.b == blockactiondata.b;
+            return this.pos.equals(blockactiondata.pos) && this.paramA == blockactiondata.paramA && this.paramB == blockactiondata.paramB && this.block == blockactiondata.block;
         }
     }
 
     public int hashCode() {
-        int i = this.a.hashCode();
+        int i = this.pos.hashCode();
 
-        i = 31 * i + this.b.hashCode();
-        i = 31 * i + this.c;
-        i = 31 * i + this.d;
+        i = 31 * i + this.block.hashCode();
+        i = 31 * i + this.paramA;
+        i = 31 * i + this.paramB;
         return i;
     }
 
     public String toString() {
-        return "TE(" + this.a + ")," + this.c + "," + this.d + "," + this.b;
+        return "TE(" + this.pos + ")," + this.paramA + "," + this.paramB + "," + this.block;
     }
 }

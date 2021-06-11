@@ -4,29 +4,30 @@ import com.google.common.collect.Lists;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
+import net.minecraft.SystemUtils;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.CustomFunctionData;
 
 public class CustomFunction {
 
-    private final CustomFunction.c[] a;
-    private final MinecraftKey b;
+    private final CustomFunction.c[] entries;
+    final MinecraftKey id;
 
     public CustomFunction(MinecraftKey minecraftkey, CustomFunction.c[] acustomfunction_c) {
-        this.b = minecraftkey;
-        this.a = acustomfunction_c;
+        this.id = minecraftkey;
+        this.entries = acustomfunction_c;
     }
 
     public MinecraftKey a() {
-        return this.b;
+        return this.id;
     }
 
     public CustomFunction.c[] b() {
-        return this.a;
+        return this.entries;
     }
 
     public static CustomFunction a(MinecraftKey minecraftkey, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher, CommandListenerWrapper commandlistenerwrapper, List<String> list) {
@@ -66,91 +67,116 @@ public class CustomFunction {
         return new CustomFunction(minecraftkey, (CustomFunction.c[]) list1.toArray(new CustomFunction.c[0]));
     }
 
+    @FunctionalInterface
+    public interface c {
+
+        void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, Deque<CustomFunctionData.b> deque, int i, int j, @Nullable CustomFunctionData.c customfunctiondata_c) throws CommandSyntaxException;
+    }
+
+    public static class b implements CustomFunction.c {
+
+        private final ParseResults<CommandListenerWrapper> parse;
+
+        public b(ParseResults<CommandListenerWrapper> parseresults) {
+            this.parse = parseresults;
+        }
+
+        @Override
+        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, Deque<CustomFunctionData.b> deque, int i, int j, @Nullable CustomFunctionData.c customfunctiondata_c) throws CommandSyntaxException {
+            if (customfunctiondata_c != null) {
+                String s = this.parse.getReader().getString();
+
+                customfunctiondata_c.a(j, s);
+                int k = this.a(customfunctiondata, commandlistenerwrapper);
+
+                customfunctiondata_c.a(j, s, k);
+            } else {
+                this.a(customfunctiondata, commandlistenerwrapper);
+            }
+
+        }
+
+        private int a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
+            return customfunctiondata.getCommandDispatcher().execute(new ParseResults(this.parse.getContext().withSource(commandlistenerwrapper), this.parse.getReader(), this.parse.getExceptions()));
+        }
+
+        public String toString() {
+            return this.parse.getReader().getString();
+        }
+    }
+
     public static class a {
 
-        public static final CustomFunction.a a = new CustomFunction.a((MinecraftKey) null);
+        public static final CustomFunction.a NONE = new CustomFunction.a((MinecraftKey) null);
         @Nullable
-        private final MinecraftKey b;
-        private boolean c;
-        private Optional<CustomFunction> d = Optional.empty();
+        private final MinecraftKey id;
+        private boolean resolved;
+        private Optional<CustomFunction> function = Optional.empty();
 
         public a(@Nullable MinecraftKey minecraftkey) {
-            this.b = minecraftkey;
+            this.id = minecraftkey;
         }
 
         public a(CustomFunction customfunction) {
-            this.c = true;
-            this.b = null;
-            this.d = Optional.of(customfunction);
+            this.resolved = true;
+            this.id = null;
+            this.function = Optional.of(customfunction);
         }
 
         public Optional<CustomFunction> a(CustomFunctionData customfunctiondata) {
-            if (!this.c) {
-                if (this.b != null) {
-                    this.d = customfunctiondata.a(this.b);
+            if (!this.resolved) {
+                if (this.id != null) {
+                    this.function = customfunctiondata.a(this.id);
                 }
 
-                this.c = true;
+                this.resolved = true;
             }
 
-            return this.d;
+            return this.function;
         }
 
         @Nullable
         public MinecraftKey a() {
-            return (MinecraftKey) this.d.map((customfunction) -> {
-                return customfunction.b;
-            }).orElse(this.b);
+            return (MinecraftKey) this.function.map((customfunction) -> {
+                return customfunction.id;
+            }).orElse(this.id);
         }
     }
 
     public static class d implements CustomFunction.c {
 
-        private final CustomFunction.a a;
+        private final CustomFunction.a function;
 
         public d(CustomFunction customfunction) {
-            this.a = new CustomFunction.a(customfunction);
+            this.function = new CustomFunction.a(customfunction);
         }
 
         @Override
-        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
-            this.a.a(customfunctiondata).ifPresent((customfunction) -> {
+        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, Deque<CustomFunctionData.b> deque, int i, int j, @Nullable CustomFunctionData.c customfunctiondata_c) {
+            SystemUtils.a(this.function.a(customfunctiondata), (customfunction) -> {
                 CustomFunction.c[] acustomfunction_c = customfunction.b();
-                int j = i - arraydeque.size();
-                int k = Math.min(acustomfunction_c.length, j);
 
-                for (int l = k - 1; l >= 0; --l) {
-                    arraydeque.addFirst(new CustomFunctionData.a(customfunctiondata, commandlistenerwrapper, acustomfunction_c[l]));
+                if (customfunctiondata_c != null) {
+                    customfunctiondata_c.a(j, customfunction.a(), acustomfunction_c.length);
+                }
+
+                int k = i - deque.size();
+                int l = Math.min(acustomfunction_c.length, k);
+
+                for (int i1 = l - 1; i1 >= 0; --i1) {
+                    deque.addFirst(new CustomFunctionData.b(commandlistenerwrapper, j + 1, acustomfunction_c[i1]));
+                }
+
+            }, () -> {
+                if (customfunctiondata_c != null) {
+                    customfunctiondata_c.a(j, this.function.a(), -1);
                 }
 
             });
         }
 
         public String toString() {
-            return "function " + this.a.a();
+            return "function " + this.function.a();
         }
-    }
-
-    public static class b implements CustomFunction.c {
-
-        private final ParseResults<CommandListenerWrapper> a;
-
-        public b(ParseResults<CommandListenerWrapper> parseresults) {
-            this.a = parseresults;
-        }
-
-        @Override
-        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException {
-            customfunctiondata.getCommandDispatcher().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getReader(), this.a.getExceptions()));
-        }
-
-        public String toString() {
-            return this.a.getReader().getString();
-        }
-    }
-
-    public interface c {
-
-        void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException;
     }
 }

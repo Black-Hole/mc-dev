@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketDataSerializer;
@@ -8,31 +7,37 @@ import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutNBTQuery implements Packet<PacketListenerPlayOut> {
 
-    private int a;
+    private final int transactionId;
     @Nullable
-    private NBTTagCompound b;
-
-    public PacketPlayOutNBTQuery() {}
+    private final NBTTagCompound tag;
 
     public PacketPlayOutNBTQuery(int i, @Nullable NBTTagCompound nbttagcompound) {
-        this.a = i;
-        this.b = nbttagcompound;
+        this.transactionId = i;
+        this.tag = nbttagcompound;
+    }
+
+    public PacketPlayOutNBTQuery(PacketDataSerializer packetdataserializer) {
+        this.transactionId = packetdataserializer.j();
+        this.tag = packetdataserializer.m();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.l();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.a(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.transactionId);
+        packetdataserializer.a(this.tag);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.transactionId;
+    }
+
+    @Nullable
+    public NBTTagCompound c() {
+        return this.tag;
     }
 
     @Override

@@ -12,11 +12,11 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public abstract class DataConverterItemName extends DataFix {
 
-    private final String a;
+    private final String name;
 
     public DataConverterItemName(Schema schema, String s) {
         super(schema, false);
-        this.a = s;
+        this.name = s;
     }
 
     public TypeRewriteRule makeRule() {
@@ -25,7 +25,7 @@ public abstract class DataConverterItemName extends DataFix {
         if (!Objects.equals(this.getInputSchema().getType(DataConverterTypes.ITEM_NAME), type)) {
             throw new IllegalStateException("item name type is not what was expected.");
         } else {
-            return this.fixTypeEverywhere(this.a, type, (dynamicops) -> {
+            return this.fixTypeEverywhere(this.name, type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond(this::a);
                 };

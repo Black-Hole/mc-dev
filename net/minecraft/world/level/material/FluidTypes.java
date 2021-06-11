@@ -12,6 +12,8 @@ public class FluidTypes {
     public static final FluidTypeFlowing FLOWING_LAVA = (FluidTypeFlowing) a("flowing_lava", new FluidTypeLava.a());
     public static final FluidTypeFlowing LAVA = (FluidTypeFlowing) a("lava", new FluidTypeLava.b());
 
+    public FluidTypes() {}
+
     private static <T extends FluidType> T a(String s, T t0) {
         return (FluidType) IRegistry.a((IRegistry) IRegistry.FLUID, s, (Object) t0);
     }
@@ -26,7 +28,7 @@ public class FluidTypes {
             while (unmodifiableiterator.hasNext()) {
                 Fluid fluid = (Fluid) unmodifiableiterator.next();
 
-                FluidType.c.b(fluid);
+                FluidType.FLUID_STATE_REGISTRY.b(fluid);
             }
         }
 

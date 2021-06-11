@@ -6,11 +6,11 @@ public interface IMinecraftServer {
 
     DedicatedServerProperties getDedicatedServerProperties();
 
-    String h_();
+    String b();
 
-    int p();
+    int d();
 
-    String i_();
+    String q();
 
     String getVersion();
 

@@ -26,34 +26,36 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionUser;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 public class LootSelector {
 
-    private final LootEntryAbstract[] a;
-    private final LootItemCondition[] b;
-    private final Predicate<LootTableInfo> c;
-    private final LootItemFunction[] d;
-    private final BiFunction<ItemStack, LootTableInfo, ItemStack> e;
-    private final LootValue f;
-    private final LootValueBounds g;
+    final LootEntryAbstract[] entries;
+    final LootItemCondition[] conditions;
+    private final Predicate<LootTableInfo> compositeCondition;
+    final LootItemFunction[] functions;
+    private final BiFunction<ItemStack, LootTableInfo, ItemStack> compositeFunction;
+    final NumberProvider rolls;
+    final NumberProvider bonusRolls;
 
-    private LootSelector(LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction, LootValue lootvalue, LootValueBounds lootvaluebounds) {
-        this.a = alootentryabstract;
-        this.b = alootitemcondition;
-        this.c = LootItemConditions.a((Predicate[]) alootitemcondition);
-        this.d = alootitemfunction;
-        this.e = LootItemFunctions.a(alootitemfunction);
-        this.f = lootvalue;
-        this.g = lootvaluebounds;
+    LootSelector(LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction, NumberProvider numberprovider, NumberProvider numberprovider1) {
+        this.entries = alootentryabstract;
+        this.conditions = alootitemcondition;
+        this.compositeCondition = LootItemConditions.a((Predicate[]) alootitemcondition);
+        this.functions = alootitemfunction;
+        this.compositeFunction = LootItemFunctions.a(alootitemfunction);
+        this.rolls = numberprovider;
+        this.bonusRolls = numberprovider1;
     }
 
     private void b(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
         Random random = loottableinfo.a();
         List<LootEntry> list = Lists.newArrayList();
         MutableInt mutableint = new MutableInt();
-        LootEntryAbstract[] alootentryabstract = this.a;
+        LootEntryAbstract[] alootentryabstract = this.entries;
         int i = alootentryabstract.length;
 
         for (int j = 0; j < i; ++j) {
@@ -96,10 +98,9 @@ public class LootSelector {
     }
 
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        if (this.c.test(loottableinfo)) {
-            Consumer<ItemStack> consumer1 = LootItemFunction.a(this.e, consumer, loottableinfo);
-            Random random = loottableinfo.a();
-            int i = this.f.a(random) + MathHelper.d(this.g.b(random) * loottableinfo.getLuck());
+        if (this.compositeCondition.test(loottableinfo)) {
+            Consumer<ItemStack> consumer1 = LootItemFunction.a(this.compositeFunction, consumer, loottableinfo);
+            int i = this.rolls.a(loottableinfo) + MathHelper.d(this.bonusRolls.b(loottableinfo) * loottableinfo.getLuck());
 
             for (int j = 0; j < i; ++j) {
                 this.b(consumer1, loottableinfo);
@@ -111,22 +112,75 @@ public class LootSelector {
     public void a(LootCollector lootcollector) {
         int i;
 
-        for (i = 0; i < this.b.length; ++i) {
-            this.b[i].a(lootcollector.b(".condition[" + i + "]"));
+        for (i = 0; i < this.conditions.length; ++i) {
+            this.conditions[i].a(lootcollector.b(".condition[" + i + "]"));
         }
 
-        for (i = 0; i < this.d.length; ++i) {
-            this.d[i].a(lootcollector.b(".functions[" + i + "]"));
+        for (i = 0; i < this.functions.length; ++i) {
+            this.functions[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
-        for (i = 0; i < this.a.length; ++i) {
-            this.a[i].a(lootcollector.b(".entries[" + i + "]"));
+        for (i = 0; i < this.entries.length; ++i) {
+            this.entries[i].a(lootcollector.b(".entries[" + i + "]"));
         }
 
+        this.rolls.a(lootcollector.b(".rolls"));
+        this.bonusRolls.a(lootcollector.b(".bonusRolls"));
     }
 
     public static LootSelector.a a() {
         return new LootSelector.a();
+    }
+
+    public static class a implements LootItemFunctionUser<LootSelector.a>, LootItemConditionUser<LootSelector.a> {
+
+        private final List<LootEntryAbstract> entries = Lists.newArrayList();
+        private final List<LootItemCondition> conditions = Lists.newArrayList();
+        private final List<LootItemFunction> functions = Lists.newArrayList();
+        private NumberProvider rolls = ConstantValue.a(1.0F);
+        private NumberProvider bonusRolls = ConstantValue.a(0.0F);
+
+        public a() {}
+
+        public LootSelector.a a(NumberProvider numberprovider) {
+            this.rolls = numberprovider;
+            return this;
+        }
+
+        @Override
+        public LootSelector.a c() {
+            return this;
+        }
+
+        public LootSelector.a b(NumberProvider numberprovider) {
+            this.bonusRolls = numberprovider;
+            return this;
+        }
+
+        public LootSelector.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
+            this.entries.add(lootentryabstract_a.b());
+            return this;
+        }
+
+        @Override
+        public LootSelector.a b(LootItemCondition.a lootitemcondition_a) {
+            this.conditions.add(lootitemcondition_a.build());
+            return this;
+        }
+
+        @Override
+        public LootSelector.a b(LootItemFunction.a lootitemfunction_a) {
+            this.functions.add(lootitemfunction_a.b());
+            return this;
+        }
+
+        public LootSelector b() {
+            if (this.rolls == null) {
+                throw new IllegalArgumentException("Rolls not set");
+            } else {
+                return new LootSelector((LootEntryAbstract[]) this.entries.toArray(new LootEntryAbstract[0]), (LootItemCondition[]) this.conditions.toArray(new LootItemCondition[0]), (LootItemFunction[]) this.functions.toArray(new LootItemFunction[0]), this.rolls, this.bonusRolls);
+            }
+        }
     }
 
     public static class b implements JsonDeserializer<LootSelector>, JsonSerializer<LootSelector> {
@@ -138,76 +192,27 @@ public class LootSelector {
             LootEntryAbstract[] alootentryabstract = (LootEntryAbstract[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LootEntryAbstract[].class);
             LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class);
             LootItemFunction[] alootitemfunction = (LootItemFunction[]) ChatDeserializer.a(jsonobject, "functions", new LootItemFunction[0], jsondeserializationcontext, LootItemFunction[].class);
-            LootValue lootvalue = LootValueGenerators.a(jsonobject.get("rolls"), jsondeserializationcontext);
-            LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "bonus_rolls", new LootValueBounds(0.0F, 0.0F), jsondeserializationcontext, LootValueBounds.class);
+            NumberProvider numberprovider = (NumberProvider) ChatDeserializer.a(jsonobject, "rolls", jsondeserializationcontext, NumberProvider.class);
+            NumberProvider numberprovider1 = (NumberProvider) ChatDeserializer.a(jsonobject, "bonus_rolls", ConstantValue.a(0.0F), jsondeserializationcontext, NumberProvider.class);
 
-            return new LootSelector(alootentryabstract, alootitemcondition, alootitemfunction, lootvalue, lootvaluebounds);
+            return new LootSelector(alootentryabstract, alootitemcondition, alootitemfunction, numberprovider, numberprovider1);
         }
 
         public JsonElement serialize(LootSelector lootselector, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("rolls", LootValueGenerators.a(lootselector.f, jsonserializationcontext));
-            jsonobject.add("entries", jsonserializationcontext.serialize(lootselector.a));
-            if (lootselector.g.b() != 0.0F && lootselector.g.c() != 0.0F) {
-                jsonobject.add("bonus_rolls", jsonserializationcontext.serialize(lootselector.g));
+            jsonobject.add("rolls", jsonserializationcontext.serialize(lootselector.rolls));
+            jsonobject.add("bonus_rolls", jsonserializationcontext.serialize(lootselector.bonusRolls));
+            jsonobject.add("entries", jsonserializationcontext.serialize(lootselector.entries));
+            if (!ArrayUtils.isEmpty(lootselector.conditions)) {
+                jsonobject.add("conditions", jsonserializationcontext.serialize(lootselector.conditions));
             }
 
-            if (!ArrayUtils.isEmpty(lootselector.b)) {
-                jsonobject.add("conditions", jsonserializationcontext.serialize(lootselector.b));
-            }
-
-            if (!ArrayUtils.isEmpty(lootselector.d)) {
-                jsonobject.add("functions", jsonserializationcontext.serialize(lootselector.d));
+            if (!ArrayUtils.isEmpty(lootselector.functions)) {
+                jsonobject.add("functions", jsonserializationcontext.serialize(lootselector.functions));
             }
 
             return jsonobject;
-        }
-    }
-
-    public static class a implements LootItemFunctionUser<LootSelector.a>, LootItemConditionUser<LootSelector.a> {
-
-        private final List<LootEntryAbstract> a = Lists.newArrayList();
-        private final List<LootItemCondition> b = Lists.newArrayList();
-        private final List<LootItemFunction> c = Lists.newArrayList();
-        private LootValue d = new LootValueBounds(1.0F);
-        private LootValueBounds e = new LootValueBounds(0.0F, 0.0F);
-
-        public a() {}
-
-        public LootSelector.a a(LootValue lootvalue) {
-            this.d = lootvalue;
-            return this;
-        }
-
-        @Override
-        public LootSelector.a c() {
-            return this;
-        }
-
-        public LootSelector.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
-            this.a.add(lootentryabstract_a.b());
-            return this;
-        }
-
-        @Override
-        public LootSelector.a b(LootItemCondition.a lootitemcondition_a) {
-            this.b.add(lootitemcondition_a.build());
-            return this;
-        }
-
-        @Override
-        public LootSelector.a b(LootItemFunction.a lootitemfunction_a) {
-            this.c.add(lootitemfunction_a.b());
-            return this;
-        }
-
-        public LootSelector b() {
-            if (this.d == null) {
-                throw new IllegalArgumentException("Rolls not set");
-            } else {
-                return new LootSelector((LootEntryAbstract[]) this.a.toArray(new LootEntryAbstract[0]), (LootItemCondition[]) this.b.toArray(new LootItemCondition[0]), (LootItemFunction[]) this.c.toArray(new LootItemFunction[0]), this.d, this.e);
-            }
         }
     }
 }

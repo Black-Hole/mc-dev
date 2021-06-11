@@ -13,7 +13,10 @@ public enum GenLayerZoom implements AreaTransformer2 {
         }
     };
 
-    private GenLayerZoom() {}
+    private static final int ZOOM_BITS = 1;
+    private static final int ZOOM_MASK = 1;
+
+    GenLayerZoom() {}
 
     @Override
     public int a(int i) {

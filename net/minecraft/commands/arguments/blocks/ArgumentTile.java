@@ -14,7 +14,7 @@ import net.minecraft.tags.TagsBlock;
 
 public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
 
-    private static final Collection<String> a = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "foo{bar=baz}");
+    private static final Collection<String> EXAMPLES = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "foo{bar=baz}");
 
     public ArgumentTile() {}
 
@@ -48,6 +48,6 @@ public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentTile.a;
+        return ArgumentTile.EXAMPLES;
     }
 }

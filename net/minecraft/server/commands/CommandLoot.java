@@ -34,6 +34,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
@@ -48,36 +49,38 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CommandLoot {
 
-    public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+    public static final SuggestionProvider<CommandListenerWrapper> SUGGEST_LOOT_TABLE = (commandcontext, suggestionsbuilder) -> {
         LootTableRegistry loottableregistry = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getLootTableRegistry();
 
         return ICompletionProvider.a((Iterable) loottableregistry.a(), suggestionsbuilder);
     };
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_NO_HELD_ITEMS = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.drop.no_held_items", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_NO_LOOT_TABLE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.drop.no_loot_table", new Object[]{object});
     });
 
+    public CommandLoot() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
-        commanddispatcher.register((LiteralArgumentBuilder) a(net.minecraft.commands.CommandDispatcher.a("loot").requires((commandlistenerwrapper) -> {
+        commanddispatcher.register((LiteralArgumentBuilder) a((ArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("loot").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        }), (argumentbuilder, commandloot_b) -> {
-            return argumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("fish").then(net.minecraft.commands.CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.e(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ItemStack.b, commandloot_b);
+        })), (argumentbuilder, commandloot_b) -> {
+            return argumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("fish").then(net.minecraft.commands.CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.SUGGEST_LOOT_TABLE).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.f(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ItemStack.EMPTY, commandloot_b);
             })).then(net.minecraft.commands.CommandDispatcher.a("tool", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.e(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ArgumentItemStack.a(commandcontext, "tool").a(1, false), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.f(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ArgumentItemStack.a(commandcontext, "tool").a(1, false), commandloot_b);
             }))).then(net.minecraft.commands.CommandDispatcher.a("mainhand").executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.e(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.MAINHAND), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.f(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.MAINHAND), commandloot_b);
             }))).then(net.minecraft.commands.CommandDispatcher.a("offhand").executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.e(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.OFFHAND), commandloot_b);
-            }))))).then(net.minecraft.commands.CommandDispatcher.a("loot").then(net.minecraft.commands.CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.a).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.e(commandcontext, "loot_table"), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.f(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.OFFHAND), commandloot_b);
+            }))))).then(net.minecraft.commands.CommandDispatcher.a("loot").then(net.minecraft.commands.CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.SUGGEST_LOOT_TABLE).executes((commandcontext) -> {
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.f(commandcontext, "loot_table"), commandloot_b);
             }))).then(net.minecraft.commands.CommandDispatcher.a("kill").then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.a()).executes((commandcontext) -> {
                 return a(commandcontext, ArgumentEntity.a(commandcontext, "target"), commandloot_b);
             }))).then(net.minecraft.commands.CommandDispatcher.a("mine").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentPosition.a(commandcontext, "pos"), ItemStack.b, commandloot_b);
+                return a(commandcontext, ArgumentPosition.a(commandcontext, "pos"), ItemStack.EMPTY, commandloot_b);
             })).then(net.minecraft.commands.CommandDispatcher.a("tool", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
                 return a(commandcontext, ArgumentPosition.a(commandcontext, "pos"), ArgumentItemStack.a(commandcontext, "tool").a(1, false), commandloot_b);
             }))).then(net.minecraft.commands.CommandDispatcher.a("mainhand").executes((commandcontext) -> {
@@ -110,7 +113,7 @@ public class CommandLoot {
         TileEntity tileentity = commandlistenerwrapper.getWorld().getTileEntity(blockposition);
 
         if (!(tileentity instanceof IInventory)) {
-            throw CommandReplaceItem.a.create();
+            throw ItemCommands.ERROR_TARGET_NOT_A_CONTAINER.create(blockposition.getX(), blockposition.getY(), blockposition.getZ());
         } else {
             return (IInventory) tileentity;
         }
@@ -170,7 +173,7 @@ public class CommandLoot {
 
             for (int l = 0; l < j; ++l) {
                 int i1 = i + l;
-                ItemStack itemstack = l < list.size() ? (ItemStack) list.get(l) : ItemStack.b;
+                ItemStack itemstack = l < list.size() ? (ItemStack) list.get(l) : ItemStack.EMPTY;
 
                 if (iinventory.b(i1, itemstack)) {
                     iinventory.setItem(i1, itemstack);
@@ -181,12 +184,12 @@ public class CommandLoot {
             commandloot_a.accept(list1);
             return list1.size();
         } else {
-            throw CommandReplaceItem.b.create(i);
+            throw ItemCommands.ERROR_TARGET_INAPPLICABLE_SLOT.create(i);
         }
     }
 
     private static boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack.getItem() == itemstack1.getItem() && itemstack.getDamage() == itemstack1.getDamage() && itemstack.getCount() <= itemstack.getMaxStackSize() && Objects.equals(itemstack.getTag(), itemstack1.getTag());
+        return itemstack.a(itemstack1.getItem()) && itemstack.getDamage() == itemstack1.getDamage() && itemstack.getCount() <= itemstack.getMaxStackSize() && Objects.equals(itemstack.getTag(), itemstack1.getTag());
     }
 
     private static int a(Collection<EntityPlayer> collection, List<ItemStack> list, CommandLoot.a commandloot_a) throws CommandSyntaxException {
@@ -200,7 +203,7 @@ public class CommandLoot {
             while (iterator1.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator1.next();
 
-                if (entityplayer.inventory.pickup(itemstack.cloneItemStack())) {
+                if (entityplayer.getInventory().pickup(itemstack.cloneItemStack())) {
                     list1.add(itemstack);
                 }
             }
@@ -212,9 +215,10 @@ public class CommandLoot {
 
     private static void a(Entity entity, List<ItemStack> list, int i, int j, List<ItemStack> list1) {
         for (int k = 0; k < j; ++k) {
-            ItemStack itemstack = k < list.size() ? (ItemStack) list.get(k) : ItemStack.b;
+            ItemStack itemstack = k < list.size() ? (ItemStack) list.get(k) : ItemStack.EMPTY;
+            SlotAccess slotaccess = entity.k(i + k);
 
-            if (entity.a_(i + k, itemstack.cloneItemStack())) {
+            if (slotaccess != SlotAccess.NULL && slotaccess.a(itemstack.cloneItemStack())) {
                 list1.add(itemstack);
             }
         }
@@ -231,9 +235,8 @@ public class CommandLoot {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) entity;
 
-                entityplayer.defaultContainer.c();
                 a(entity, list, i, j, list1);
-                entityplayer.defaultContainer.c();
+                entityplayer.containerMenu.d();
             } else {
                 a(entity, list, i, j, list1);
             }
@@ -260,7 +263,7 @@ public class CommandLoot {
         if (list.size() == 1) {
             ItemStack itemstack = (ItemStack) list.get(0);
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single", new Object[]{itemstack.getCount(), itemstack.C()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single", new Object[]{itemstack.getCount(), itemstack.G()}), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple", new Object[]{list.size()}), false);
         }
@@ -271,7 +274,7 @@ public class CommandLoot {
         if (list.size() == 1) {
             ItemStack itemstack = (ItemStack) list.get(0);
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single_with_table", new Object[]{itemstack.getCount(), itemstack.C(), minecraftkey}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single_with_table", new Object[]{itemstack.getCount(), itemstack.G(), minecraftkey}), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple_with_table", new Object[]{list.size(), minecraftkey}), false);
         }
@@ -284,7 +287,7 @@ public class CommandLoot {
         if (entity instanceof EntityLiving) {
             return ((EntityLiving) entity).getEquipment(enumitemslot);
         } else {
-            throw CommandLoot.b.create(entity.getScoreboardDisplayName());
+            throw CommandLoot.ERROR_NO_HELD_ITEMS.create(entity.getScoreboardDisplayName());
         }
     }
 
@@ -303,9 +306,9 @@ public class CommandLoot {
 
     private static int a(CommandContext<CommandListenerWrapper> commandcontext, Entity entity, CommandLoot.b commandloot_b) throws CommandSyntaxException {
         if (!(entity instanceof EntityLiving)) {
-            throw CommandLoot.c.create(entity.getScoreboardDisplayName());
+            throw CommandLoot.ERROR_NO_LOOT_TABLE.create(entity.getScoreboardDisplayName());
         } else {
-            MinecraftKey minecraftkey = ((EntityLiving) entity).dp();
+            MinecraftKey minecraftkey = ((EntityLiving) entity).dZ();
             CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
             LootTableInfo.Builder loottableinfo_builder = new LootTableInfo.Builder(commandlistenerwrapper.getWorld());
             Entity entity1 = commandlistenerwrapper.getEntity();
@@ -353,19 +356,19 @@ public class CommandLoot {
     }
 
     @FunctionalInterface
-    interface c {
+    private interface c {
 
         ArgumentBuilder<CommandListenerWrapper, ?> construct(ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, CommandLoot.b commandloot_b);
     }
 
     @FunctionalInterface
-    interface b {
+    private interface b {
 
         int accept(CommandContext<CommandListenerWrapper> commandcontext, List<ItemStack> list, CommandLoot.a commandloot_a) throws CommandSyntaxException;
     }
 
     @FunctionalInterface
-    interface a {
+    private interface a {
 
         void accept(List<ItemStack> list) throws CommandSyntaxException;
     }

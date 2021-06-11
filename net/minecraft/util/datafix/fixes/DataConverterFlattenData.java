@@ -12,23 +12,26 @@ import org.apache.logging.log4j.Logger;
 public class DataConverterFlattenData {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Dynamic<?>[] b = new Dynamic[4096];
-    private static final Dynamic<?>[] c = new Dynamic[256];
-    private static final Object2IntMap<Dynamic<?>> d = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
+    private static final Dynamic<?>[] MAP = new Dynamic[4096];
+    private static final Dynamic<?>[] BLOCK_DEFAULTS = new Dynamic[256];
+    private static final Object2IntMap<Dynamic<?>> ID_BY_OLD = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
         object2intopenhashmap.defaultReturnValue(-1);
     });
-    private static final Object2IntMap<String> e = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
+    private static final Object2IntMap<String> ID_BY_OLD_NAME = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
         object2intopenhashmap.defaultReturnValue(-1);
     });
+    static final String FILTER_ME = "%%FILTER_ME%%";
+
+    public DataConverterFlattenData() {}
 
     public static void map(int i, String s, String... astring) {
         Dynamic<?> dynamic = b(s);
 
-        DataConverterFlattenData.b[i] = dynamic;
+        DataConverterFlattenData.MAP[i] = dynamic;
         int j = i >> 4;
 
-        if (DataConverterFlattenData.c[j] == null) {
-            DataConverterFlattenData.c[j] = dynamic;
+        if (DataConverterFlattenData.BLOCK_DEFAULTS[j] == null) {
+            DataConverterFlattenData.BLOCK_DEFAULTS[j] = dynamic;
         }
 
         String[] astring1 = astring;
@@ -39,26 +42,26 @@ public class DataConverterFlattenData {
             Dynamic<?> dynamic1 = b(s1);
             String s2 = dynamic1.get("Name").asString("");
 
-            DataConverterFlattenData.e.putIfAbsent(s2, i);
-            DataConverterFlattenData.d.put(dynamic1, i);
+            DataConverterFlattenData.ID_BY_OLD_NAME.putIfAbsent(s2, i);
+            DataConverterFlattenData.ID_BY_OLD.put(dynamic1, i);
         }
 
     }
 
-    private static void a() {
-        for (int i = 0; i < DataConverterFlattenData.b.length; ++i) {
-            if (DataConverterFlattenData.b[i] == null) {
-                DataConverterFlattenData.b[i] = DataConverterFlattenData.c[i >> 4];
+    private static void q() {
+        for (int i = 0; i < DataConverterFlattenData.MAP.length; ++i) {
+            if (DataConverterFlattenData.MAP[i] == null) {
+                DataConverterFlattenData.MAP[i] = DataConverterFlattenData.BLOCK_DEFAULTS[i >> 4];
             }
         }
 
     }
 
     public static Dynamic<?> a(Dynamic<?> dynamic) {
-        int i = DataConverterFlattenData.d.getInt(dynamic);
+        int i = DataConverterFlattenData.ID_BY_OLD.getInt(dynamic);
 
-        if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic<?> dynamic1 = DataConverterFlattenData.b[i];
+        if (i >= 0 && i < DataConverterFlattenData.MAP.length) {
+            Dynamic<?> dynamic1 = DataConverterFlattenData.MAP[i];
 
             return dynamic1 == null ? dynamic : dynamic1;
         } else {
@@ -67,10 +70,10 @@ public class DataConverterFlattenData {
     }
 
     public static String a(String s) {
-        int i = DataConverterFlattenData.e.getInt(s);
+        int i = DataConverterFlattenData.ID_BY_OLD_NAME.getInt(s);
 
-        if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic<?> dynamic = DataConverterFlattenData.b[i];
+        if (i >= 0 && i < DataConverterFlattenData.MAP.length) {
+            Dynamic<?> dynamic = DataConverterFlattenData.MAP[i];
 
             return dynamic == null ? s : dynamic.get("Name").asString("");
         } else {
@@ -79,8 +82,8 @@ public class DataConverterFlattenData {
     }
 
     public static String a(int i) {
-        if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic<?> dynamic = DataConverterFlattenData.b[i];
+        if (i >= 0 && i < DataConverterFlattenData.MAP.length) {
+            Dynamic<?> dynamic = DataConverterFlattenData.MAP[i];
 
             return dynamic == null ? "minecraft:air" : dynamic.get("Name").asString("");
         } else {
@@ -90,7 +93,7 @@ public class DataConverterFlattenData {
 
     public static Dynamic<?> b(String s) {
         try {
-            return new Dynamic(DynamicOpsNBT.a, MojangsonParser.parse(s.replace('\'', '"')));
+            return new Dynamic(DynamicOpsNBT.INSTANCE, MojangsonParser.parse(s.replace('\'', '"')));
         } catch (Exception exception) {
             DataConverterFlattenData.LOGGER.error("Parsing {}", s, exception);
             throw new RuntimeException(exception);
@@ -100,15 +103,14 @@ public class DataConverterFlattenData {
     public static Dynamic<?> b(int i) {
         Dynamic<?> dynamic = null;
 
-        if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            dynamic = DataConverterFlattenData.b[i];
+        if (i >= 0 && i < DataConverterFlattenData.MAP.length) {
+            dynamic = DataConverterFlattenData.MAP[i];
         }
 
-        return dynamic == null ? DataConverterFlattenData.b[0] : dynamic;
+        return dynamic == null ? DataConverterFlattenData.MAP[0] : dynamic;
     }
 
-    static {
-        DataConverterFlattenData.d.defaultReturnValue(-1);
+    static void a() {
         map(0, "{Name:'minecraft:air'}", "{Name:'minecraft:air'}");
         map(16, "{Name:'minecraft:stone'}", "{Name:'minecraft:stone',Properties:{variant:'stone'}}");
         map(17, "{Name:'minecraft:granite'}", "{Name:'minecraft:stone',Properties:{variant:'granite'}}");
@@ -210,6 +212,9 @@ public class DataConverterFlattenData {
         map(208, "{Name:'minecraft:gravel'}", "{Name:'minecraft:gravel'}");
         map(224, "{Name:'minecraft:gold_ore'}", "{Name:'minecraft:gold_ore'}");
         map(240, "{Name:'minecraft:iron_ore'}", "{Name:'minecraft:iron_ore'}");
+    }
+
+    static void b() {
         map(256, "{Name:'minecraft:coal_ore'}", "{Name:'minecraft:coal_ore'}");
         map(272, "{Name:'minecraft:oak_log',Properties:{axis:'y'}}", "{Name:'minecraft:log',Properties:{axis:'y',variant:'oak'}}");
         map(273, "{Name:'minecraft:spruce_log',Properties:{axis:'y'}}", "{Name:'minecraft:log',Properties:{axis:'y',variant:'spruce'}}");
@@ -316,6 +321,9 @@ public class DataConverterFlattenData {
         map(496, "{Name:'minecraft:dead_bush'}", "{Name:'minecraft:tallgrass',Properties:{type:'dead_bush'}}");
         map(497, "{Name:'minecraft:grass'}", "{Name:'minecraft:tallgrass',Properties:{type:'tall_grass'}}");
         map(498, "{Name:'minecraft:fern'}", "{Name:'minecraft:tallgrass',Properties:{type:'fern'}}");
+    }
+
+    static void c() {
         map(512, "{Name:'minecraft:dead_bush'}", "{Name:'minecraft:deadbush'}");
         map(528, "{Name:'minecraft:piston',Properties:{extended:'false',facing:'down'}}", "{Name:'minecraft:piston',Properties:{extended:'false',facing:'down'}}");
         map(529, "{Name:'minecraft:piston',Properties:{extended:'false',facing:'up'}}", "{Name:'minecraft:piston',Properties:{extended:'false',facing:'up'}}");
@@ -419,6 +427,9 @@ public class DataConverterFlattenData {
         map(736, "{Name:'minecraft:tnt',Properties:{unstable:'false'}}", "{Name:'minecraft:tnt',Properties:{explode:'false'}}");
         map(737, "{Name:'minecraft:tnt',Properties:{unstable:'true'}}", "{Name:'minecraft:tnt',Properties:{explode:'true'}}");
         map(752, "{Name:'minecraft:bookshelf'}", "{Name:'minecraft:bookshelf'}");
+    }
+
+    static void d() {
         map(768, "{Name:'minecraft:mossy_cobblestone'}", "{Name:'minecraft:mossy_cobblestone'}");
         map(784, "{Name:'minecraft:obsidian'}", "{Name:'minecraft:obsidian'}");
         map(801, "{Name:'minecraft:wall_torch',Properties:{facing:'east'}}", "{Name:'minecraft:torch',Properties:{facing:'east'}}");
@@ -514,6 +525,9 @@ public class DataConverterFlattenData {
         map(1021, "{Name:'minecraft:sign',Properties:{rotation:'13'}}", "{Name:'minecraft:standing_sign',Properties:{rotation:'13'}}");
         map(1022, "{Name:'minecraft:sign',Properties:{rotation:'14'}}", "{Name:'minecraft:standing_sign',Properties:{rotation:'14'}}");
         map(1023, "{Name:'minecraft:sign',Properties:{rotation:'15'}}", "{Name:'minecraft:standing_sign',Properties:{rotation:'15'}}");
+    }
+
+    static void e() {
         map(1024, "{Name:'minecraft:oak_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'true'}}");
         map(1025, "{Name:'minecraft:oak_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'true'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'true'}}");
         map(1026, "{Name:'minecraft:oak_door',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'true'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:wooden_door',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'true'}}");
@@ -625,6 +639,9 @@ public class DataConverterFlattenData {
         map(1254, "{Name:'minecraft:snow',Properties:{layers:'7'}}", "{Name:'minecraft:snow_layer',Properties:{layers:'7'}}");
         map(1255, "{Name:'minecraft:snow',Properties:{layers:'8'}}", "{Name:'minecraft:snow_layer',Properties:{layers:'8'}}");
         map(1264, "{Name:'minecraft:ice'}", "{Name:'minecraft:ice'}");
+    }
+
+    static void f() {
         map(1280, "{Name:'minecraft:snow_block'}", "{Name:'minecraft:snow'}");
         map(1296, "{Name:'minecraft:cactus',Properties:{age:'0'}}", "{Name:'minecraft:cactus',Properties:{age:'0'}}");
         map(1297, "{Name:'minecraft:cactus',Properties:{age:'1'}}", "{Name:'minecraft:cactus',Properties:{age:'1'}}");
@@ -730,6 +747,9 @@ public class DataConverterFlattenData {
         map(1533, "{Name:'minecraft:green_stained_glass'}", "{Name:'minecraft:stained_glass',Properties:{color:'green'}}");
         map(1534, "{Name:'minecraft:red_stained_glass'}", "{Name:'minecraft:stained_glass',Properties:{color:'red'}}");
         map(1535, "{Name:'minecraft:black_stained_glass'}", "{Name:'minecraft:stained_glass',Properties:{color:'black'}}");
+    }
+
+    static void g() {
         map(1536, "{Name:'minecraft:oak_trapdoor',Properties:{facing:'north',half:'bottom',open:'false'}}", "{Name:'minecraft:trapdoor',Properties:{facing:'north',half:'bottom',open:'false'}}");
         map(1537, "{Name:'minecraft:oak_trapdoor',Properties:{facing:'south',half:'bottom',open:'false'}}", "{Name:'minecraft:trapdoor',Properties:{facing:'south',half:'bottom',open:'false'}}");
         map(1538, "{Name:'minecraft:oak_trapdoor',Properties:{facing:'west',half:'bottom',open:'false'}}", "{Name:'minecraft:trapdoor',Properties:{facing:'west',half:'bottom',open:'false'}}");
@@ -857,6 +877,9 @@ public class DataConverterFlattenData {
         map(1751, "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'straight'}}", "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'inner_left'}}", "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'inner_right'}}", "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'outer_left'}}", "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'outer_right'}}", "{Name:'minecraft:stone_brick_stairs',Properties:{facing:'north',half:'top',shape:'straight'}}");
         map(1760, "{Name:'minecraft:mycelium',Properties:{snowy:'false'}}", "{Name:'minecraft:mycelium',Properties:{snowy:'false'}}", "{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
         map(1776, "{Name:'minecraft:lily_pad'}", "{Name:'minecraft:waterlily'}");
+    }
+
+    static void h() {
         map(1792, "{Name:'minecraft:nether_bricks'}", "{Name:'minecraft:nether_brick'}");
         map(1808, "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:nether_brick_fence',Properties:{east:'true',north:'true',south:'true',west:'true'}}");
         map(1824, "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'straight'}}", "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'inner_left'}}", "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'inner_right'}}", "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'outer_left'}}", "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'outer_right'}}", "{Name:'minecraft:nether_brick_stairs',Properties:{facing:'east',half:'bottom',shape:'straight'}}");
@@ -927,6 +950,9 @@ public class DataConverterFlattenData {
         map(2041, "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'west'}}", "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'west'}}");
         map(2042, "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'north'}}", "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'north'}}");
         map(2043, "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'east'}}", "{Name:'minecraft:cocoa',Properties:{age:'2',facing:'east'}}");
+    }
+
+    static void i() {
         map(2048, "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'straight'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'inner_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'inner_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'outer_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'outer_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'east',half:'bottom',shape:'straight'}}");
         map(2049, "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'straight'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'inner_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'inner_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'outer_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'outer_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'west',half:'bottom',shape:'straight'}}");
         map(2050, "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'straight'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'inner_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'inner_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'outer_left'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'outer_right'}}", "{Name:'minecraft:sandstone_stairs',Properties:{facing:'south',half:'bottom',shape:'straight'}}");
@@ -1055,6 +1081,9 @@ public class DataConverterFlattenData {
         map(2299, "{Name:'minecraft:oak_button',Properties:{face:'wall',facing:'south',powered:'true'}}", "{Name:'minecraft:wooden_button',Properties:{facing:'south',powered:'true'}}");
         map(2300, "{Name:'minecraft:oak_button',Properties:{face:'wall',facing:'north',powered:'true'}}", "{Name:'minecraft:wooden_button',Properties:{facing:'north',powered:'true'}}");
         map(2301, "{Name:'minecraft:oak_button',Properties:{face:'floor',facing:'north',powered:'true'}}", "{Name:'minecraft:wooden_button',Properties:{facing:'up',powered:'true'}}");
+    }
+
+    static void j() {
         map(2304, "{Name:'%%FILTER_ME%%',Properties:{facing:'down',nodrop:'false'}}", "{Name:'minecraft:skull',Properties:{facing:'down',nodrop:'false'}}");
         map(2305, "{Name:'%%FILTER_ME%%',Properties:{facing:'up',nodrop:'false'}}", "{Name:'minecraft:skull',Properties:{facing:'up',nodrop:'false'}}");
         map(2306, "{Name:'%%FILTER_ME%%',Properties:{facing:'north',nodrop:'false'}}", "{Name:'minecraft:skull',Properties:{facing:'north',nodrop:'false'}}");
@@ -1228,6 +1257,9 @@ public class DataConverterFlattenData {
         map(2557, "{Name:'minecraft:green_terracotta'}", "{Name:'minecraft:stained_hardened_clay',Properties:{color:'green'}}");
         map(2558, "{Name:'minecraft:red_terracotta'}", "{Name:'minecraft:stained_hardened_clay',Properties:{color:'red'}}");
         map(2559, "{Name:'minecraft:black_terracotta'}", "{Name:'minecraft:stained_hardened_clay',Properties:{color:'black'}}");
+    }
+
+    static void k() {
         map(2560, "{Name:'minecraft:white_stained_glass_pane',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'white',east:'true',north:'true',south:'true',west:'true'}}");
         map(2561, "{Name:'minecraft:orange_stained_glass_pane',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'orange',east:'true',north:'true',south:'true',west:'true'}}");
         map(2562, "{Name:'minecraft:magenta_stained_glass_pane',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:stained_glass_pane',Properties:{color:'magenta',east:'true',north:'true',south:'true',west:'true'}}");
@@ -1330,6 +1362,9 @@ public class DataConverterFlattenData {
         map(2809, "{Name:'minecraft:peony',Properties:{half:'upper'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'double_fern'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'double_grass'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'double_rose'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'paeonia'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'sunflower'}}", "{Name:'minecraft:double_plant',Properties:{facing:'west',half:'upper',variant:'syringa'}}");
         map(2810, "{Name:'minecraft:peony',Properties:{half:'upper'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'double_fern'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'double_grass'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'double_rose'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'paeonia'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'sunflower'}}", "{Name:'minecraft:double_plant',Properties:{facing:'north',half:'upper',variant:'syringa'}}");
         map(2811, "{Name:'minecraft:peony',Properties:{half:'upper'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'double_fern'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'double_grass'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'double_rose'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'paeonia'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'sunflower'}}", "{Name:'minecraft:double_plant',Properties:{facing:'east',half:'upper',variant:'syringa'}}");
+    }
+
+    static void l() {
         map(2816, "{Name:'minecraft:white_banner',Properties:{rotation:'0'}}", "{Name:'minecraft:standing_banner',Properties:{rotation:'0'}}");
         map(2817, "{Name:'minecraft:white_banner',Properties:{rotation:'1'}}", "{Name:'minecraft:standing_banner',Properties:{rotation:'1'}}");
         map(2818, "{Name:'minecraft:white_banner',Properties:{rotation:'2'}}", "{Name:'minecraft:standing_banner',Properties:{rotation:'2'}}");
@@ -1465,6 +1500,9 @@ public class DataConverterFlattenData {
         map(3024, "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:birch_fence',Properties:{east:'true',north:'true',south:'true',west:'true'}}");
         map(3040, "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:jungle_fence',Properties:{east:'true',north:'true',south:'true',west:'true'}}");
         map(3056, "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:dark_oak_fence',Properties:{east:'true',north:'true',south:'true',west:'true'}}");
+    }
+
+    static void m() {
         map(3072, "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'false',north:'true',south:'true',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'false',south:'false',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'false',south:'false',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'false',south:'true',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'false',south:'true',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'true',south:'false',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'true',south:'false',west:'true'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'true',south:'true',west:'false'}}", "{Name:'minecraft:acacia_fence',Properties:{east:'true',north:'true',south:'true',west:'true'}}");
         map(3088, "{Name:'minecraft:spruce_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'true'}}");
         map(3089, "{Name:'minecraft:spruce_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'true'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'false'}}", "{Name:'minecraft:spruce_door',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'true'}}");
@@ -1559,6 +1597,9 @@ public class DataConverterFlattenData {
         map(3313, "{Name:'minecraft:beetroots',Properties:{age:'1'}}", "{Name:'minecraft:beetroots',Properties:{age:'1'}}");
         map(3314, "{Name:'minecraft:beetroots',Properties:{age:'2'}}", "{Name:'minecraft:beetroots',Properties:{age:'2'}}");
         map(3315, "{Name:'minecraft:beetroots',Properties:{age:'3'}}", "{Name:'minecraft:beetroots',Properties:{age:'3'}}");
+    }
+
+    static void n() {
         map(3328, "{Name:'minecraft:grass_path'}", "{Name:'minecraft:grass_path'}");
         map(3344, "{Name:'minecraft:end_gateway'}", "{Name:'minecraft:end_gateway'}");
         map(3360, "{Name:'minecraft:repeating_command_block',Properties:{conditional:'false',facing:'down'}}", "{Name:'minecraft:repeating_command_block',Properties:{conditional:'false',facing:'down'}}");
@@ -1638,6 +1679,9 @@ public class DataConverterFlattenData {
         map(3571, "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'south'}}", "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'south'}}");
         map(3572, "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'west'}}", "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'west'}}");
         map(3573, "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'east'}}", "{Name:'minecraft:yellow_shulker_box',Properties:{facing:'east'}}");
+    }
+
+    static void o() {
         map(3584, "{Name:'minecraft:lime_shulker_box',Properties:{facing:'down'}}", "{Name:'minecraft:lime_shulker_box',Properties:{facing:'down'}}");
         map(3585, "{Name:'minecraft:lime_shulker_box',Properties:{facing:'up'}}", "{Name:'minecraft:lime_shulker_box',Properties:{facing:'up'}}");
         map(3586, "{Name:'minecraft:lime_shulker_box',Properties:{facing:'north'}}", "{Name:'minecraft:lime_shulker_box',Properties:{facing:'north'}}");
@@ -1724,6 +1768,9 @@ public class DataConverterFlattenData {
         map(3825, "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'west'}}", "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'west'}}");
         map(3826, "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'north'}}", "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'north'}}");
         map(3827, "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'east'}}", "{Name:'minecraft:yellow_glazed_terracotta',Properties:{facing:'east'}}");
+    }
+
+    static void p() {
         map(3840, "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'south'}}", "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'south'}}");
         map(3841, "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'west'}}", "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'west'}}");
         map(3842, "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'north'}}", "{Name:'minecraft:lime_glazed_terracotta',Properties:{facing:'north'}}");
@@ -1804,6 +1851,26 @@ public class DataConverterFlattenData {
         map(4081, "{Name:'minecraft:structure_block',Properties:{mode:'load'}}", "{Name:'minecraft:structure_block',Properties:{mode:'load'}}");
         map(4082, "{Name:'minecraft:structure_block',Properties:{mode:'corner'}}", "{Name:'minecraft:structure_block',Properties:{mode:'corner'}}");
         map(4083, "{Name:'minecraft:structure_block',Properties:{mode:'data'}}", "{Name:'minecraft:structure_block',Properties:{mode:'data'}}");
+        q();
+    }
+
+    static {
+        DataConverterFlattenData.ID_BY_OLD.defaultReturnValue(-1);
         a();
+        b();
+        c();
+        d();
+        e();
+        f();
+        g();
+        h();
+        i();
+        j();
+        k();
+        l();
+        m();
+        n();
+        o();
+        p();
     }
 }

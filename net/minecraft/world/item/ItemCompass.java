@@ -1,6 +1,7 @@
 package net.minecraft.world.item;
 
 import com.mojang.serialization.DataResult;
+import java.util.Objects;
 import java.util.Optional;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.DynamicOpsNBT;
@@ -23,6 +24,9 @@ import org.apache.logging.log4j.Logger;
 public class ItemCompass extends Item implements ItemVanishable {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    public static final String TAG_LODESTONE_POS = "LodestonePos";
+    public static final String TAG_LODESTONE_DIMENSION = "LodestoneDimension";
+    public static final String TAG_LODESTONE_TRACKED = "LodestoneTracked";
 
     public ItemCompass(Item.Info item_info) {
         super(item_info);
@@ -35,12 +39,12 @@ public class ItemCompass extends Item implements ItemVanishable {
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
-        return d(itemstack) || super.e(itemstack);
+    public boolean i(ItemStack itemstack) {
+        return d(itemstack) || super.i(itemstack);
     }
 
     public static Optional<ResourceKey<World>> a(NBTTagCompound nbttagcompound) {
-        return World.f.parse(DynamicOpsNBT.a, nbttagcompound.get("LodestoneDimension")).result();
+        return World.RESOURCE_KEY_CODEC.parse(DynamicOpsNBT.INSTANCE, nbttagcompound.get("LodestoneDimension")).result();
     }
 
     @Override
@@ -55,8 +59,12 @@ public class ItemCompass extends Item implements ItemVanishable {
 
                 Optional<ResourceKey<World>> optional = a(nbttagcompound);
 
-                if (optional.isPresent() && optional.get() == world.getDimensionKey() && nbttagcompound.hasKey("LodestonePos") && !((WorldServer) world).y().a(VillagePlaceType.w, GameProfileSerializer.b(nbttagcompound.getCompound("LodestonePos")))) {
-                    nbttagcompound.remove("LodestonePos");
+                if (optional.isPresent() && optional.get() == world.getDimensionKey() && nbttagcompound.hasKey("LodestonePos")) {
+                    BlockPosition blockposition = GameProfileSerializer.b(nbttagcompound.getCompound("LodestonePos"));
+
+                    if (!world.isValidLocation(blockposition) || !((WorldServer) world).A().a(VillagePlaceType.LODESTONE, blockposition)) {
+                        nbttagcompound.remove("LodestonePos");
+                    }
                 }
             }
 
@@ -71,10 +79,10 @@ public class ItemCompass extends Item implements ItemVanishable {
         if (!world.getType(blockposition).a(Blocks.LODESTONE)) {
             return super.a(itemactioncontext);
         } else {
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.LODESTONE_COMPASS_LOCK, SoundCategory.PLAYERS, 1.0F, 1.0F);
             EntityHuman entityhuman = itemactioncontext.getEntity();
             ItemStack itemstack = itemactioncontext.getItemStack();
-            boolean flag = !entityhuman.abilities.canInstantlyBuild && itemstack.getCount() == 1;
+            boolean flag = !entityhuman.getAbilities().instabuild && itemstack.getCount() == 1;
 
             if (flag) {
                 this.a(world.getDimensionKey(), blockposition, itemstack.getOrCreateTag());
@@ -83,12 +91,12 @@ public class ItemCompass extends Item implements ItemVanishable {
                 NBTTagCompound nbttagcompound = itemstack.hasTag() ? itemstack.getTag().clone() : new NBTTagCompound();
 
                 itemstack1.setTag(nbttagcompound);
-                if (!entityhuman.abilities.canInstantlyBuild) {
+                if (!entityhuman.getAbilities().instabuild) {
                     itemstack.subtract(1);
                 }
 
                 this.a(world.getDimensionKey(), blockposition, nbttagcompound);
-                if (!entityhuman.inventory.pickup(itemstack1)) {
+                if (!entityhuman.getInventory().pickup(itemstack1)) {
                     entityhuman.drop(itemstack1, false);
                 }
             }
@@ -99,10 +107,10 @@ public class ItemCompass extends Item implements ItemVanishable {
 
     private void a(ResourceKey<World> resourcekey, BlockPosition blockposition, NBTTagCompound nbttagcompound) {
         nbttagcompound.set("LodestonePos", GameProfileSerializer.a(blockposition));
-        DataResult dataresult = World.f.encodeStart(DynamicOpsNBT.a, resourcekey);
+        DataResult dataresult = World.RESOURCE_KEY_CODEC.encodeStart(DynamicOpsNBT.INSTANCE, resourcekey);
         Logger logger = ItemCompass.LOGGER;
 
-        logger.getClass();
+        Objects.requireNonNull(logger);
         dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
             nbttagcompound.set("LodestoneDimension", nbtbase);
         });
@@ -110,7 +118,7 @@ public class ItemCompass extends Item implements ItemVanishable {
     }
 
     @Override
-    public String f(ItemStack itemstack) {
-        return d(itemstack) ? "item.minecraft.lodestone_compass" : super.f(itemstack);
+    public String j(ItemStack itemstack) {
+        return d(itemstack) ? "item.minecraft.lodestone_compass" : super.j(itemstack);
     }
 }

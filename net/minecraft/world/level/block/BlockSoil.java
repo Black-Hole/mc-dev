@@ -28,12 +28,13 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockSoil extends Block {
 
-    public static final BlockStateInteger MOISTURE = BlockProperties.aw;
-    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    public static final BlockStateInteger MOISTURE = BlockProperties.MOISTURE;
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    public static final int MAX_MOISTURE = 7;
 
     protected BlockSoil(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockSoil.MOISTURE, 0));
     }
 
     @Override
@@ -58,13 +59,13 @@ public class BlockSoil extends Block {
     }
 
     @Override
-    public boolean c_(IBlockData iblockdata) {
+    public boolean g_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockSoil.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockSoil.SHAPE;
     }
 
     @Override
@@ -92,12 +93,12 @@ public class BlockSoil extends Block {
     }
 
     @Override
-    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
-            fade(world.getType(blockposition), world, blockposition);
+    public void fallOn(World world, IBlockData iblockdata, BlockPosition blockposition, Entity entity, float f) {
+        if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+            fade(iblockdata, world, blockposition);
         }
 
-        super.fallOn(world, blockposition, entity, f);
+        super.fallOn(world, iblockdata, blockposition, entity, f);
     }
 
     public static void fade(IBlockData iblockdata, World world, BlockPosition blockposition) {
@@ -111,7 +112,7 @@ public class BlockSoil extends Block {
     }
 
     private static boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        Iterator iterator = BlockPosition.a(blockposition.b(-4, 0, -4), blockposition.b(4, 1, 4)).iterator();
+        Iterator iterator = BlockPosition.a(blockposition.c(-4, 0, -4), blockposition.c(4, 1, 4)).iterator();
 
         BlockPosition blockposition1;
 

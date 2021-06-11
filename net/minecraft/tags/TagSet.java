@@ -9,15 +9,15 @@ import java.util.Set;
 
 public class TagSet<T> implements Tag<T> {
 
-    private final ImmutableList<T> b;
-    private final Set<T> c;
+    private final ImmutableList<T> valuesList;
+    private final Set<T> values;
     @VisibleForTesting
-    protected final Class<?> a;
+    protected final Class<?> closestCommonSuperType;
 
     protected TagSet(Set<T> set, Class<?> oclass) {
-        this.a = oclass;
-        this.c = set;
-        this.b = ImmutableList.copyOf(set);
+        this.closestCommonSuperType = oclass;
+        this.values = set;
+        this.valuesList = ImmutableList.copyOf(set);
     }
 
     public static <T> TagSet<T> a() {
@@ -30,12 +30,12 @@ public class TagSet<T> implements Tag<T> {
 
     @Override
     public boolean isTagged(T t0) {
-        return this.a.isInstance(t0) && this.c.contains(t0);
+        return this.closestCommonSuperType.isInstance(t0) && this.values.contains(t0);
     }
 
     @Override
     public List<T> getTagged() {
-        return this.b;
+        return this.valuesList;
     }
 
     private static <T> Class<?> c(Set<T> set) {

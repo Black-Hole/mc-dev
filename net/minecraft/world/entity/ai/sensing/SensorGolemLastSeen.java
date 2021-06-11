@@ -11,6 +11,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 
 public class SensorGolemLastSeen extends Sensor<EntityLiving> {
 
+    private static final int GOLEM_SCAN_RATE = 200;
+    private static final int MEMORY_TIME_TO_LIVE = 600;
+
     public SensorGolemLastSeen() {
         this(200);
     }
@@ -26,11 +29,11 @@ public class SensorGolemLastSeen extends Sensor<EntityLiving> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.MOBS);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_LIVING_ENTITIES);
     }
 
     public static void a(EntityLiving entityliving) {
-        Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.MOBS);
+        Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES);
 
         if (optional.isPresent()) {
             boolean flag = ((List) optional.get()).stream().anyMatch((entityliving1) -> {

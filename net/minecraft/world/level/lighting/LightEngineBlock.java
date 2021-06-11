@@ -14,20 +14,20 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageBlock.a, LightEngineStorageBlock> {
 
-    private static final EnumDirection[] e = EnumDirection.values();
-    private final BlockPosition.MutableBlockPosition f = new BlockPosition.MutableBlockPosition();
+    private static final EnumDirection[] DIRECTIONS = EnumDirection.values();
+    private final BlockPosition.MutableBlockPosition pos = new BlockPosition.MutableBlockPosition();
 
     public LightEngineBlock(ILightAccess ilightaccess) {
         super(ilightaccess, EnumSkyBlock.BLOCK, new LightEngineStorageBlock(ilightaccess));
     }
 
     private int d(long i) {
-        int j = BlockPosition.b(i);
-        int k = BlockPosition.c(i);
-        int l = BlockPosition.d(i);
-        IBlockAccess iblockaccess = this.a.c(j >> 4, l >> 4);
+        int j = BlockPosition.a(i);
+        int k = BlockPosition.b(i);
+        int l = BlockPosition.c(i);
+        IBlockAccess iblockaccess = this.chunkSource.c(SectionPosition.a(j), SectionPosition.a(l));
 
-        return iblockaccess != null ? iblockaccess.g(this.f.d(j, k, l)) : 0;
+        return iblockaccess != null ? iblockaccess.h(this.pos.d(j, k, l)) : 0;
     }
 
     @Override
@@ -39,9 +39,9 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
         } else if (k >= 15) {
             return k;
         } else {
-            int l = Integer.signum(BlockPosition.b(j) - BlockPosition.b(i));
-            int i1 = Integer.signum(BlockPosition.c(j) - BlockPosition.c(i));
-            int j1 = Integer.signum(BlockPosition.d(j) - BlockPosition.d(i));
+            int l = Integer.signum(BlockPosition.a(j) - BlockPosition.a(i));
+            int i1 = Integer.signum(BlockPosition.b(j) - BlockPosition.b(i));
+            int j1 = Integer.signum(BlockPosition.c(j) - BlockPosition.c(i));
             EnumDirection enumdirection = EnumDirection.a(l, i1, j1);
 
             if (enumdirection == null) {
@@ -66,7 +66,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
     @Override
     protected void a(long i, int j, boolean flag) {
         long k = SectionPosition.e(i);
-        EnumDirection[] aenumdirection = LightEngineBlock.e;
+        EnumDirection[] aenumdirection = LightEngineBlock.DIRECTIONS;
         int l = aenumdirection.length;
 
         for (int i1 = 0; i1 < l; ++i1) {
@@ -74,7 +74,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
             long j1 = BlockPosition.a(i, enumdirection);
             long k1 = SectionPosition.e(j1);
 
-            if (k == k1 || ((LightEngineStorageBlock) this.c).g(k1)) {
+            if (k == k1 || ((LightEngineStorageBlock) this.storage).g(k1)) {
                 this.b(i, j1, j, flag);
             }
         }
@@ -98,8 +98,8 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
         }
 
         long j1 = SectionPosition.e(i);
-        NibbleArray nibblearray = ((LightEngineStorageBlock) this.c).a(j1, true);
-        EnumDirection[] aenumdirection = LightEngineBlock.e;
+        NibbleArray nibblearray = ((LightEngineStorageBlock) this.storage).a(j1, true);
+        EnumDirection[] aenumdirection = LightEngineBlock.DIRECTIONS;
         int k1 = aenumdirection.length;
 
         for (int l1 = 0; l1 < k1; ++l1) {
@@ -113,7 +113,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
                 if (j1 == j2) {
                     nibblearray1 = nibblearray;
                 } else {
-                    nibblearray1 = ((LightEngineStorageBlock) this.c).a(j2, true);
+                    nibblearray1 = ((LightEngineStorageBlock) this.storage).a(j2, true);
                 }
 
                 if (nibblearray1 != null) {
@@ -135,7 +135,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
 
     @Override
     public void a(BlockPosition blockposition, int i) {
-        ((LightEngineStorageBlock) this.c).d();
+        ((LightEngineStorageBlock) this.storage).d();
         this.a(Long.MAX_VALUE, blockposition.asLong(), 15 - i, true);
     }
 }

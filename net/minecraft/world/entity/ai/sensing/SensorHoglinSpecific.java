@@ -22,7 +22,7 @@ public class SensorHoglinSpecific extends Sensor<EntityHoglin> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, new MemoryModuleType[0]);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, new MemoryModuleType[0]);
     }
 
     protected void a(WorldServer worldserver, EntityHoglin entityhoglin) {
@@ -32,7 +32,7 @@ public class SensorHoglinSpecific extends Sensor<EntityHoglin> {
         Optional<EntityPiglin> optional = Optional.empty();
         int i = 0;
         List<EntityHoglin> list = Lists.newArrayList();
-        List<EntityLiving> list1 = (List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).orElse(Lists.newArrayList());
+        List<EntityLiving> list1 = (List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(Lists.newArrayList());
         Iterator iterator = list1.iterator();
 
         while (iterator.hasNext()) {

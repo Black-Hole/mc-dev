@@ -8,11 +8,11 @@ import net.minecraft.world.entity.EntityLiving;
 
 public abstract class ItemProjectileWeapon extends Item {
 
-    public static final Predicate<ItemStack> a = (itemstack) -> {
-        return itemstack.getItem().a((Tag) TagsItem.ARROWS);
+    public static final Predicate<ItemStack> ARROW_ONLY = (itemstack) -> {
+        return itemstack.a((Tag) TagsItem.ARROWS);
     };
-    public static final Predicate<ItemStack> b = ItemProjectileWeapon.a.or((itemstack) -> {
-        return itemstack.getItem() == Items.FIREWORK_ROCKET;
+    public static final Predicate<ItemStack> ARROW_OR_FIREWORK = ItemProjectileWeapon.ARROW_ONLY.or((itemstack) -> {
+        return itemstack.a(Items.FIREWORK_ROCKET);
     });
 
     public ItemProjectileWeapon(Item.Info item_info) {
@@ -26,7 +26,7 @@ public abstract class ItemProjectileWeapon extends Item {
     public abstract Predicate<ItemStack> b();
 
     public static ItemStack a(EntityLiving entityliving, Predicate<ItemStack> predicate) {
-        return predicate.test(entityliving.b(EnumHand.OFF_HAND)) ? entityliving.b(EnumHand.OFF_HAND) : (predicate.test(entityliving.b(EnumHand.MAIN_HAND)) ? entityliving.b(EnumHand.MAIN_HAND) : ItemStack.b);
+        return predicate.test(entityliving.b(EnumHand.OFF_HAND)) ? entityliving.b(EnumHand.OFF_HAND) : (predicate.test(entityliving.b(EnumHand.MAIN_HAND)) ? entityliving.b(EnumHand.MAIN_HAND) : ItemStack.EMPTY);
     }
 
     @Override

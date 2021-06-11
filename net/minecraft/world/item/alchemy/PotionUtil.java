@@ -1,23 +1,37 @@
 package net.minecraft.world.item.alchemy;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import net.minecraft.EnumChatFormat;
 import net.minecraft.core.IRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.network.chat.IChatMutableComponent;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectList;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.entity.ai.attributes.AttributeBase;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
 public class PotionUtil {
 
-    private static final IChatMutableComponent a = (new ChatMessage("effect.none")).a(EnumChatFormat.GRAY);
+    public static final String TAG_CUSTOM_POTION_EFFECTS = "CustomPotionEffects";
+    public static final String TAG_CUSTOM_POTION_COLOR = "CustomPotionColor";
+    public static final String TAG_POTION = "Potion";
+    private static final int EMPTY_COLOR = 16253176;
+    private static final IChatBaseComponent NO_EFFECT = (new ChatMessage("effect.none")).a(EnumChatFormat.GRAY);
+
+    public PotionUtil() {}
 
     public static List<MobEffect> getEffects(ItemStack itemstack) {
         return a(itemstack.getTag());
@@ -150,5 +164,72 @@ public class PotionUtil {
             nbttagcompound.set("CustomPotionEffects", nbttaglist);
             return itemstack;
         }
+    }
+
+    public static void a(ItemStack itemstack, List<IChatBaseComponent> list, float f) {
+        List<MobEffect> list1 = getEffects(itemstack);
+        List<Pair<AttributeBase, AttributeModifier>> list2 = Lists.newArrayList();
+        Iterator iterator;
+        ChatMessage chatmessage;
+        MobEffectList mobeffectlist;
+
+        if (list1.isEmpty()) {
+            list.add(PotionUtil.NO_EFFECT);
+        } else {
+            for (iterator = list1.iterator(); iterator.hasNext(); list.add(chatmessage.a(mobeffectlist.e().a()))) {
+                MobEffect mobeffect = (MobEffect) iterator.next();
+
+                chatmessage = new ChatMessage(mobeffect.g());
+                mobeffectlist = mobeffect.getMobEffect();
+                Map<AttributeBase, AttributeModifier> map = mobeffectlist.g();
+
+                if (!map.isEmpty()) {
+                    Iterator iterator1 = map.entrySet().iterator();
+
+                    while (iterator1.hasNext()) {
+                        Entry<AttributeBase, AttributeModifier> entry = (Entry) iterator1.next();
+                        AttributeModifier attributemodifier = (AttributeModifier) entry.getValue();
+                        AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), mobeffectlist.a(mobeffect.getAmplifier(), attributemodifier), attributemodifier.getOperation());
+
+                        list2.add(new Pair((AttributeBase) entry.getKey(), attributemodifier1));
+                    }
+                }
+
+                if (mobeffect.getAmplifier() > 0) {
+                    chatmessage = new ChatMessage("potion.withAmplifier", new Object[]{chatmessage, new ChatMessage("potion.potency." + mobeffect.getAmplifier())});
+                }
+
+                if (mobeffect.getDuration() > 20) {
+                    chatmessage = new ChatMessage("potion.withDuration", new Object[]{chatmessage, MobEffectUtil.a(mobeffect, f)});
+                }
+            }
+        }
+
+        if (!list2.isEmpty()) {
+            list.add(ChatComponentText.EMPTY);
+            list.add((new ChatMessage("potion.whenDrank")).a(EnumChatFormat.DARK_PURPLE));
+            iterator = list2.iterator();
+
+            while (iterator.hasNext()) {
+                Pair<AttributeBase, AttributeModifier> pair = (Pair) iterator.next();
+                AttributeModifier attributemodifier2 = (AttributeModifier) pair.getSecond();
+                double d0 = attributemodifier2.getAmount();
+                double d1;
+
+                if (attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
+                    d1 = attributemodifier2.getAmount();
+                } else {
+                    d1 = attributemodifier2.getAmount() * 100.0D;
+                }
+
+                if (d0 > 0.0D) {
+                    list.add((new ChatMessage("attribute.modifier.plus." + attributemodifier2.getOperation().a(), new Object[]{ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new ChatMessage(((AttributeBase) pair.getFirst()).getName())})).a(EnumChatFormat.BLUE));
+                } else if (d0 < 0.0D) {
+                    d1 *= -1.0D;
+                    list.add((new ChatMessage("attribute.modifier.take." + attributemodifier2.getOperation().a(), new Object[]{ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), new ChatMessage(((AttributeBase) pair.getFirst()).getName())})).a(EnumChatFormat.RED));
+                }
+            }
+        }
+
     }
 }

@@ -9,8 +9,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.item.context.BlockActionContextDirectional;
 import net.minecraft.world.level.block.BlockDispenser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public DispenseBehaviorShulkerBox() {}
 
@@ -24,7 +28,11 @@ public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
             EnumDirection enumdirection1 = isourceblock.getWorld().isEmpty(blockposition.down()) ? enumdirection : EnumDirection.UP;
 
-            this.a(((ItemBlock) item).a((BlockActionContext) (new BlockActionContextDirectional(isourceblock.getWorld(), blockposition, enumdirection, itemstack, enumdirection1))).a());
+            try {
+                this.a(((ItemBlock) item).a((BlockActionContext) (new BlockActionContextDirectional(isourceblock.getWorld(), blockposition, enumdirection, itemstack, enumdirection1))).a());
+            } catch (Exception exception) {
+                DispenseBehaviorShulkerBox.LOGGER.error("Error trying to place shulker box at {}", blockposition, exception);
+            }
         }
 
         return itemstack;

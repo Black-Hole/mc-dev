@@ -10,24 +10,26 @@ import net.minecraft.world.level.biome.Biomes;
 
 public abstract class BiomeRegistry {
 
-    private static final Int2ObjectMap<ResourceKey<BiomeBase>> c = new Int2ObjectArrayMap();
-    public static final BiomeBase a;
-    public static final BiomeBase b;
+    private static final Int2ObjectMap<ResourceKey<BiomeBase>> TO_NAME = new Int2ObjectArrayMap();
+    public static final BiomeBase PLAINS;
+    public static final BiomeBase THE_VOID;
+
+    public BiomeRegistry() {}
 
     private static BiomeBase a(int i, ResourceKey<BiomeBase> resourcekey, BiomeBase biomebase) {
-        BiomeRegistry.c.put(i, resourcekey);
-        return (BiomeBase) RegistryGeneration.a(RegistryGeneration.WORLDGEN_BIOME, i, resourcekey, biomebase);
+        BiomeRegistry.TO_NAME.put(i, resourcekey);
+        return (BiomeBase) RegistryGeneration.a(RegistryGeneration.BIOME, i, resourcekey, biomebase);
     }
 
     public static ResourceKey<BiomeBase> a(int i) {
-        return (ResourceKey) BiomeRegistry.c.get(i);
+        return (ResourceKey) BiomeRegistry.TO_NAME.get(i);
     }
 
     static {
         a(0, Biomes.OCEAN, BiomesSettingsDefault.c(false));
-        a = a(1, Biomes.PLAINS, BiomesSettingsDefault.a(false));
+        PLAINS = a(1, Biomes.PLAINS, BiomesSettingsDefault.a(false));
         a(2, Biomes.DESERT, BiomesSettingsDefault.a(0.125F, 0.05F, true, true, true));
-        a(3, Biomes.MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.m, false));
+        a(3, Biomes.MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.MOUNTAIN, false));
         a(4, Biomes.FOREST, BiomesSettingsDefault.c(0.1F, 0.2F));
         a(5, Biomes.TAIGA, BiomesSettingsDefault.a(0.2F, 0.2F, false, false, true, false));
         a(6, Biomes.SWAMP, BiomesSettingsDefault.d(-0.2F, 0.1F, false));
@@ -44,7 +46,7 @@ public abstract class BiomeRegistry {
         a(17, Biomes.DESERT_HILLS, BiomesSettingsDefault.a(0.45F, 0.3F, false, true, false));
         a(18, Biomes.WOODED_HILLS, BiomesSettingsDefault.c(0.45F, 0.3F));
         a(19, Biomes.TAIGA_HILLS, BiomesSettingsDefault.a(0.45F, 0.3F, false, false, false, false));
-        a(20, Biomes.MOUNTAIN_EDGE, BiomesSettingsDefault.a(0.8F, 0.3F, WorldGenSurfaceComposites.j, true));
+        a(20, Biomes.MOUNTAIN_EDGE, BiomesSettingsDefault.a(0.8F, 0.3F, WorldGenSurfaceComposites.GRASS, true));
         a(21, Biomes.JUNGLE, BiomesSettingsDefault.a());
         a(22, Biomes.JUNGLE_HILLS, BiomesSettingsDefault.e());
         a(23, Biomes.JUNGLE_EDGE, BiomesSettingsDefault.b());
@@ -58,7 +60,7 @@ public abstract class BiomeRegistry {
         a(31, Biomes.SNOWY_TAIGA_HILLS, BiomesSettingsDefault.a(0.45F, 0.3F, true, false, false, false));
         a(32, Biomes.GIANT_TREE_TAIGA, BiomesSettingsDefault.a(0.2F, 0.2F, 0.3F, false));
         a(33, Biomes.GIANT_TREE_TAIGA_HILLS, BiomesSettingsDefault.a(0.45F, 0.3F, 0.3F, false));
-        a(34, Biomes.WOODED_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.j, true));
+        a(34, Biomes.WOODED_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.GRASS, true));
         a(35, Biomes.SAVANNA, BiomesSettingsDefault.a(0.125F, 0.05F, 1.2F, false, false));
         a(36, Biomes.SAVANNA_PLATEAU, BiomesSettingsDefault.m());
         a(37, Biomes.BADLANDS, BiomesSettingsDefault.b(0.1F, 0.2F, false));
@@ -75,10 +77,10 @@ public abstract class BiomeRegistry {
         a(48, Biomes.DEEP_LUKEWARM_OCEAN, BiomesSettingsDefault.d(true));
         a(49, Biomes.DEEP_COLD_OCEAN, BiomesSettingsDefault.b(true));
         a(50, Biomes.DEEP_FROZEN_OCEAN, BiomesSettingsDefault.e(true));
-        b = a(127, Biomes.THE_VOID, BiomesSettingsDefault.r());
+        THE_VOID = a(127, Biomes.THE_VOID, BiomesSettingsDefault.r());
         a(129, Biomes.SUNFLOWER_PLAINS, BiomesSettingsDefault.a(true));
         a(130, Biomes.DESERT_LAKES, BiomesSettingsDefault.a(0.225F, 0.25F, false, false, false));
-        a(131, Biomes.GRAVELLY_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.k, false));
+        a(131, Biomes.GRAVELLY_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.GRAVELLY_MOUNTAIN, false));
         a(132, Biomes.FLOWER_FOREST, BiomesSettingsDefault.q());
         a(133, Biomes.TAIGA_MOUNTAINS, BiomesSettingsDefault.a(0.3F, 0.4F, false, true, false, false));
         a(134, Biomes.SWAMP_HILLS, BiomesSettingsDefault.d(-0.1F, 0.3F, true));
@@ -91,7 +93,7 @@ public abstract class BiomeRegistry {
         a(158, Biomes.SNOWY_TAIGA_MOUNTAINS, BiomesSettingsDefault.a(0.3F, 0.4F, true, true, false, false));
         a(160, Biomes.GIANT_SPRUCE_TAIGA, BiomesSettingsDefault.a(0.2F, 0.2F, 0.25F, true));
         a(161, Biomes.GIANT_SPRUCE_TAIGA_HILLS, BiomesSettingsDefault.a(0.2F, 0.2F, 0.25F, true));
-        a(162, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.k, false));
+        a(162, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, BiomesSettingsDefault.a(1.0F, 0.5F, WorldGenSurfaceComposites.GRAVELLY_MOUNTAIN, false));
         a(163, Biomes.SHATTERED_SAVANNA, BiomesSettingsDefault.a(0.3625F, 1.225F, 1.1F, true, true));
         a(164, Biomes.SHATTERED_SAVANNA_PLATEAU, BiomesSettingsDefault.a(1.05F, 1.2125001F, 1.0F, true, true));
         a(165, Biomes.ERODED_BADLANDS, BiomesSettingsDefault.n());
@@ -103,5 +105,7 @@ public abstract class BiomeRegistry {
         a(171, Biomes.CRIMSON_FOREST, BiomesSettingsDefault.v());
         a(172, Biomes.WARPED_FOREST, BiomesSettingsDefault.w());
         a(173, Biomes.BASALT_DELTAS, BiomesSettingsDefault.u());
+        a(174, Biomes.DRIPSTONE_CAVES, BiomesSettingsDefault.y());
+        a(175, Biomes.LUSH_CAVES, BiomesSettingsDefault.x());
     }
 }

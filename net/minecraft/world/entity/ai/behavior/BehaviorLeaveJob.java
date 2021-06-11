@@ -15,11 +15,11 @@ import net.minecraft.world.level.pathfinder.PathEntity;
 
 public class BehaviorLeaveJob extends Behavior<EntityVillager> {
 
-    private final float b;
+    private final float speedModifier;
 
     public BehaviorLeaveJob(float f) {
-        super(ImmutableMap.of(MemoryModuleType.POTENTIAL_JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_ABSENT, MemoryModuleType.MOBS, MemoryStatus.VALUE_PRESENT));
-        this.b = f;
+        super(ImmutableMap.of(MemoryModuleType.POTENTIAL_JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_ABSENT, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT));
+        this.speedModifier = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -28,7 +28,7 @@ public class BehaviorLeaveJob extends Behavior<EntityVillager> {
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BlockPosition blockposition = ((GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get()).getBlockPosition();
-        Optional<VillagePlaceType> optional = worldserver.y().c(blockposition);
+        Optional<VillagePlaceType> optional = worldserver.A().c(blockposition);
 
         if (optional.isPresent()) {
             BehaviorUtil.a(entityvillager, (entityvillager1) -> {
@@ -55,7 +55,7 @@ public class BehaviorLeaveJob extends Behavior<EntityVillager> {
     private void a(WorldServer worldserver, EntityVillager entityvillager, EntityVillager entityvillager1, BlockPosition blockposition, boolean flag) {
         this.a(entityvillager);
         if (!flag) {
-            BehaviorUtil.a(entityvillager1, blockposition, this.b, 1);
+            BehaviorUtil.a(entityvillager1, blockposition, this.speedModifier, 1);
             entityvillager1.getBehaviorController().setMemory(MemoryModuleType.POTENTIAL_JOB_SITE, (Object) GlobalPos.create(worldserver.getDimensionKey(), blockposition));
             PacketDebug.c(worldserver, blockposition);
         }

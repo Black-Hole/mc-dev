@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.BlockCoralFanWallAbstract;
 import net.minecraft.world.level.block.BlockSeaPickle;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
@@ -23,10 +22,14 @@ public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatur
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        Random random = featureplacecontext.c();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
         IBlockData iblockdata = ((Block) TagsBlock.CORAL_BLOCKS.a(random)).getBlockData();
 
-        return this.a(generatoraccessseed, random, blockposition, iblockdata);
+        return this.a((GeneratorAccess) generatoraccessseed, random, blockposition, iblockdata);
     }
 
     protected abstract boolean a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, IBlockData iblockdata);
@@ -40,7 +43,7 @@ public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatur
             if (random.nextFloat() < 0.25F) {
                 generatoraccess.setTypeAndData(blockposition1, ((Block) TagsBlock.CORALS.a(random)).getBlockData(), 2);
             } else if (random.nextFloat() < 0.05F) {
-                generatoraccess.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, random.nextInt(4) + 1), 2);
+                generatoraccess.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.PICKLES, random.nextInt(4) + 1), 2);
             }
 
             Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
@@ -52,7 +55,11 @@ public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatur
                     BlockPosition blockposition2 = blockposition.shift(enumdirection);
 
                     if (generatoraccess.getType(blockposition2).a(Blocks.WATER)) {
-                        IBlockData iblockdata2 = (IBlockData) ((Block) TagsBlock.WALL_CORALS.a(random)).getBlockData().set(BlockCoralFanWallAbstract.a, enumdirection);
+                        IBlockData iblockdata2 = ((Block) TagsBlock.WALL_CORALS.a(random)).getBlockData();
+
+                        if (iblockdata2.b(BlockCoralFanWallAbstract.FACING)) {
+                            iblockdata2 = (IBlockData) iblockdata2.set(BlockCoralFanWallAbstract.FACING, enumdirection);
+                        }
 
                         generatoraccess.setTypeAndData(blockposition2, iblockdata2, 2);
                     }

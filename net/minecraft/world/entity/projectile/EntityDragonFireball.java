@@ -17,6 +17,8 @@ import net.minecraft.world.phys.MovingObjectPositionEntity;
 
 public class EntityDragonFireball extends EntityFireball {
 
+    public static final float SPLASH_RANGE = 4.0F;
+
     public EntityDragonFireball(EntityTypes<? extends EntityDragonFireball> entitytypes, World world) {
         super(entitytypes, world);
     }
@@ -28,12 +30,11 @@ public class EntityDragonFireball extends EntityFireball {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        Entity entity = this.getShooter();
-
-        if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY || !((MovingObjectPositionEntity) movingobjectposition).getEntity().s(entity)) {
-            if (!this.world.isClientSide) {
-                List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
-                EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
+        if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY || !this.d(((MovingObjectPositionEntity) movingobjectposition).getEntity())) {
+            if (!this.level.isClientSide) {
+                List<EntityLiving> list = this.level.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
+                EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.level, this.locX(), this.locY(), this.locZ());
+                Entity entity = this.getShooter();
 
                 if (entity instanceof EntityLiving) {
                     entityareaeffectcloud.setSource((EntityLiving) entity);
@@ -49,7 +50,7 @@ public class EntityDragonFireball extends EntityFireball {
 
                     while (iterator.hasNext()) {
                         EntityLiving entityliving = (EntityLiving) iterator.next();
-                        double d0 = this.h(entityliving);
+                        double d0 = this.f(entityliving);
 
                         if (d0 < 16.0D) {
                             entityareaeffectcloud.setPosition(entityliving.locX(), entityliving.locY(), entityliving.locZ());
@@ -58,8 +59,8 @@ public class EntityDragonFireball extends EntityFireball {
                     }
                 }
 
-                this.world.triggerEffect(2006, this.getChunkCoordinates(), this.isSilent() ? -1 : 1);
-                this.world.addEntity(entityareaeffectcloud);
+                this.level.triggerEffect(2006, this.getChunkCoordinates(), this.isSilent() ? -1 : 1);
+                this.level.addEntity(entityareaeffectcloud);
                 this.die();
             }
 
@@ -77,12 +78,12 @@ public class EntityDragonFireball extends EntityFireball {
     }
 
     @Override
-    protected ParticleParam h() {
+    protected ParticleParam i() {
         return Particles.DRAGON_BREATH;
     }
 
     @Override
-    protected boolean W_() {
+    protected boolean J_() {
         return false;
     }
 }

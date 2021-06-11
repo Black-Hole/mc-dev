@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.EntitySize;
 import net.minecraft.world.entity.EntityTypes;
@@ -32,7 +33,7 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class EntitySilverfish extends EntityMonster {
 
-    private EntitySilverfish.PathfinderGoalSilverfishWakeOthers b;
+    private EntitySilverfish.PathfinderGoalSilverfishWakeOthers friendsGoal;
 
     public EntitySilverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world) {
         super(entitytypes, world);
@@ -40,9 +41,9 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     protected void initPathfinder() {
-        this.b = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this);
+        this.friendsGoal = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.b);
+        this.goalSelector.a(3, this.friendsGoal);
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new EntitySilverfish.PathfinderGoalSilverfishHideInBlock(this));
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a());
@@ -50,7 +51,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    public double bb() {
+    public double bk() {
         return 0.1D;
     }
 
@@ -59,33 +60,33 @@ public class EntitySilverfish extends EntityMonster {
         return 0.13F;
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
     }
 
     @Override
-    protected boolean playStepSound() {
-        return false;
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.EVENTS;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_SILVERFISH_AMBIENT;
+        return SoundEffects.SILVERFISH_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_SILVERFISH_HURT;
+        return SoundEffects.SILVERFISH_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_SILVERFISH_DEATH;
+        return SoundEffects.SILVERFISH_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_SILVERFISH_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.SILVERFISH_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -93,8 +94,8 @@ public class EntitySilverfish extends EntityMonster {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if ((damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) && this.b != null) {
-                this.b.g();
+            if ((damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) && this.friendsGoal != null) {
+                this.friendsGoal.g();
             }
 
             return super.damageEntity(damagesource, f);
@@ -103,14 +104,14 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     public void tick() {
-        this.aA = this.yaw;
+        this.yBodyRot = this.getYRot();
         super.tick();
     }
 
     @Override
-    public void n(float f) {
-        this.yaw = f;
-        super.n(f);
+    public void m(float f) {
+        this.setYRot(f);
+        super.m(f);
     }
 
     @Override
@@ -133,106 +134,47 @@ public class EntitySilverfish extends EntityMonster {
         return EnumMonsterType.ARTHROPOD;
     }
 
-    static class PathfinderGoalSilverfishHideInBlock extends PathfinderGoalRandomStroll {
-
-        private EnumDirection h;
-        private boolean i;
-
-        public PathfinderGoalSilverfishHideInBlock(EntitySilverfish entitysilverfish) {
-            super(entitysilverfish, 1.0D, 10);
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean a() {
-            if (this.a.getGoalTarget() != null) {
-                return false;
-            } else if (!this.a.getNavigation().m()) {
-                return false;
-            } else {
-                Random random = this.a.getRandom();
-
-                if (this.a.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && random.nextInt(10) == 0) {
-                    this.h = EnumDirection.a(random);
-                    BlockPosition blockposition = (new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ())).shift(this.h);
-                    IBlockData iblockdata = this.a.world.getType(blockposition);
-
-                    if (BlockMonsterEggs.h(iblockdata)) {
-                        this.i = true;
-                        return true;
-                    }
-                }
-
-                this.i = false;
-                return super.a();
-            }
-        }
-
-        @Override
-        public boolean b() {
-            return this.i ? false : super.b();
-        }
-
-        @Override
-        public void c() {
-            if (!this.i) {
-                super.c();
-            } else {
-                World world = this.a.world;
-                BlockPosition blockposition = (new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ())).shift(this.h);
-                IBlockData iblockdata = world.getType(blockposition);
-
-                if (BlockMonsterEggs.h(iblockdata)) {
-                    world.setTypeAndData(blockposition, BlockMonsterEggs.c(iblockdata.getBlock()), 3);
-                    this.a.doSpawnEffect();
-                    this.a.die();
-                }
-
-            }
-        }
-    }
-
-    static class PathfinderGoalSilverfishWakeOthers extends PathfinderGoal {
+    private static class PathfinderGoalSilverfishWakeOthers extends PathfinderGoal {
 
         private final EntitySilverfish silverfish;
-        private int b;
+        private int lookForFriends;
 
         public PathfinderGoalSilverfishWakeOthers(EntitySilverfish entitysilverfish) {
             this.silverfish = entitysilverfish;
         }
 
         public void g() {
-            if (this.b == 0) {
-                this.b = 20;
+            if (this.lookForFriends == 0) {
+                this.lookForFriends = 20;
             }
 
         }
 
         @Override
         public boolean a() {
-            return this.b > 0;
+            return this.lookForFriends > 0;
         }
 
         @Override
         public void e() {
-            --this.b;
-            if (this.b <= 0) {
-                World world = this.silverfish.world;
+            --this.lookForFriends;
+            if (this.lookForFriends <= 0) {
+                World world = this.silverfish.level;
                 Random random = this.silverfish.getRandom();
                 BlockPosition blockposition = this.silverfish.getChunkCoordinates();
 
                 for (int i = 0; i <= 5 && i >= -5; i = (i <= 0 ? 1 : 0) - i) {
                     for (int j = 0; j <= 10 && j >= -10; j = (j <= 0 ? 1 : 0) - j) {
                         for (int k = 0; k <= 10 && k >= -10; k = (k <= 0 ? 1 : 0) - k) {
-                            BlockPosition blockposition1 = blockposition.b(j, i, k);
+                            BlockPosition blockposition1 = blockposition.c(j, i, k);
                             IBlockData iblockdata = world.getType(blockposition1);
                             Block block = iblockdata.getBlock();
 
                             if (block instanceof BlockMonsterEggs) {
-                                if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+                                if (world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                                     world.a(blockposition1, true, this.silverfish);
                                 } else {
-                                    world.setTypeAndData(blockposition1, ((BlockMonsterEggs) block).c().getBlockData(), 3);
+                                    world.setTypeAndData(blockposition1, ((BlockMonsterEggs) block).o(world.getType(blockposition1)), 3);
                                 }
 
                                 if (random.nextBoolean()) {
@@ -244,6 +186,65 @@ public class EntitySilverfish extends EntityMonster {
                 }
             }
 
+        }
+    }
+
+    private static class PathfinderGoalSilverfishHideInBlock extends PathfinderGoalRandomStroll {
+
+        private EnumDirection selectedDirection;
+        private boolean doMerge;
+
+        public PathfinderGoalSilverfishHideInBlock(EntitySilverfish entitysilverfish) {
+            super(entitysilverfish, 1.0D, 10);
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean a() {
+            if (this.mob.getGoalTarget() != null) {
+                return false;
+            } else if (!this.mob.getNavigation().m()) {
+                return false;
+            } else {
+                Random random = this.mob.getRandom();
+
+                if (this.mob.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && random.nextInt(10) == 0) {
+                    this.selectedDirection = EnumDirection.a(random);
+                    BlockPosition blockposition = (new BlockPosition(this.mob.locX(), this.mob.locY() + 0.5D, this.mob.locZ())).shift(this.selectedDirection);
+                    IBlockData iblockdata = this.mob.level.getType(blockposition);
+
+                    if (BlockMonsterEggs.h(iblockdata)) {
+                        this.doMerge = true;
+                        return true;
+                    }
+                }
+
+                this.doMerge = false;
+                return super.a();
+            }
+        }
+
+        @Override
+        public boolean b() {
+            return this.doMerge ? false : super.b();
+        }
+
+        @Override
+        public void c() {
+            if (!this.doMerge) {
+                super.c();
+            } else {
+                World world = this.mob.level;
+                BlockPosition blockposition = (new BlockPosition(this.mob.locX(), this.mob.locY() + 0.5D, this.mob.locZ())).shift(this.selectedDirection);
+                IBlockData iblockdata = world.getType(blockposition);
+
+                if (BlockMonsterEggs.h(iblockdata)) {
+                    world.setTypeAndData(blockposition, BlockMonsterEggs.n(iblockdata), 3);
+                    this.mob.doSpawnEffect();
+                    this.mob.die();
+                }
+
+            }
         }
     }
 }

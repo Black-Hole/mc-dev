@@ -5,10 +5,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMaps;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final MethodProfilerResult b = new MethodProfilerResult() {
+    private static final MethodProfilerResult EMPTY = new MethodProfilerResult() {
         @Override
         public long a() {
             return 0L;
@@ -38,50 +38,56 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         }
 
         @Override
-        public Object2LongMap<String> c() {
+        public long c() {
+            return 0L;
+        }
+
+        @Override
+        public Object2LongMap<String> d() {
             return Object2LongMaps.emptyMap();
         }
     };
-    private static final Splitter c = Splitter.on('\u001e');
-    private static final Comparator<Entry<String, MethodProfilerResultsFilled.a>> d = Entry.comparingByValue(Comparator.comparingLong((methodprofilerresultsfilled_a) -> {
-        return methodprofilerresultsfilled_a.b;
+    private static final Splitter SPLITTER = Splitter.on('\u001e');
+    private static final Comparator<Entry<String, MethodProfilerResultsFilled.a>> COUNTER_ENTRY_COMPARATOR = Entry.comparingByValue(Comparator.comparingLong((methodprofilerresultsfilled_a) -> {
+        return methodprofilerresultsfilled_a.totalValue;
     })).reversed();
-    private final Map<String, ? extends MethodProfilerResult> e;
-    private final long f;
-    private final int g;
-    private final long h;
-    private final int i;
-    private final int j;
+    private final Map<String, ? extends MethodProfilerResult> entries;
+    private final long startTimeNano;
+    private final int startTimeTicks;
+    private final long endTimeNano;
+    private final int endTimeTicks;
+    private final int tickDuration;
 
     public MethodProfilerResultsFilled(Map<String, ? extends MethodProfilerResult> map, long i, int j, long k, int l) {
-        this.e = map;
-        this.f = i;
-        this.g = j;
-        this.h = k;
-        this.i = l;
-        this.j = l - j;
+        this.entries = map;
+        this.startTimeNano = i;
+        this.startTimeTicks = j;
+        this.endTimeNano = k;
+        this.endTimeTicks = l;
+        this.tickDuration = l - j;
     }
 
     private MethodProfilerResult c(String s) {
-        MethodProfilerResult methodprofilerresult = (MethodProfilerResult) this.e.get(s);
+        MethodProfilerResult methodprofilerresult = (MethodProfilerResult) this.entries.get(s);
 
-        return methodprofilerresult != null ? methodprofilerresult : MethodProfilerResultsFilled.b;
+        return methodprofilerresult != null ? methodprofilerresult : MethodProfilerResultsFilled.EMPTY;
     }
 
+    @Override
     public List<MethodProfilerResultsField> a(String s) {
         MethodProfilerResult methodprofilerresult = this.c("root");
         long i = methodprofilerresult.a();
         MethodProfilerResult methodprofilerresult1 = this.c(s);
         long j = methodprofilerresult1.a();
-        long k = methodprofilerresult1.b();
+        long k = methodprofilerresult1.c();
         List<MethodProfilerResultsField> list = Lists.newArrayList();
 
         if (!s.isEmpty()) {
-            s = s + '\u001e';
+            s = s + "\u001e";
         }
 
         long l = 0L;
-        Iterator iterator = this.e.keySet().iterator();
+        Iterator iterator = this.entries.keySet().iterator();
 
         while (iterator.hasNext()) {
             String s1 = (String) iterator.next();
@@ -101,7 +107,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
             i = l;
         }
 
-        Iterator iterator1 = this.e.keySet().iterator();
+        Iterator iterator1 = this.entries.keySet().iterator();
 
         while (iterator1.hasNext()) {
             String s2 = (String) iterator1.next();
@@ -113,7 +119,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
                 double d1 = (double) i1 * 100.0D / (double) i;
                 String s3 = s2.substring(s.length());
 
-                list.add(new MethodProfilerResultsField(s3, d0, d1, methodprofilerresult2.b()));
+                list.add(new MethodProfilerResultsField(s3, d0, d1, methodprofilerresult2.c()));
             }
         }
 
@@ -133,11 +139,11 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
     private Map<String, MethodProfilerResultsFilled.a> h() {
         Map<String, MethodProfilerResultsFilled.a> map = Maps.newTreeMap();
 
-        this.e.forEach((s, methodprofilerresult) -> {
-            Object2LongMap<String> object2longmap = methodprofilerresult.c();
+        this.entries.forEach((s, methodprofilerresult) -> {
+            Object2LongMap<String> object2longmap = methodprofilerresult.d();
 
             if (!object2longmap.isEmpty()) {
-                List<String> list = MethodProfilerResultsFilled.c.splitToList(s);
+                List<String> list = MethodProfilerResultsFilled.SPLITTER.splitToList(s);
 
                 object2longmap.forEach((s1, olong) -> {
                     ((MethodProfilerResultsFilled.a) map.computeIfAbsent(s1, (s2) -> {
@@ -152,42 +158,42 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     @Override
     public long a() {
-        return this.f;
+        return this.startTimeNano;
     }
 
     @Override
     public int b() {
-        return this.g;
+        return this.startTimeTicks;
     }
 
     @Override
     public long c() {
-        return this.h;
+        return this.endTimeNano;
     }
 
     @Override
     public int d() {
-        return this.i;
+        return this.endTimeTicks;
     }
 
     @Override
-    public boolean a(File file) {
-        file.getParentFile().mkdirs();
-        OutputStreamWriter outputstreamwriter = null;
+    public boolean a(Path path) {
+        BufferedWriter bufferedwriter = null;
 
         boolean flag;
 
         try {
-            outputstreamwriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-            outputstreamwriter.write(this.a(this.g(), this.f()));
+            Files.createDirectories(path.getParent());
+            bufferedwriter = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+            bufferedwriter.write(this.a(this.g(), this.f()));
             boolean flag1 = true;
 
             return flag1;
         } catch (Throwable throwable) {
-            MethodProfilerResultsFilled.LOGGER.error("Could not save profiler results to {}", file, throwable);
+            MethodProfilerResultsFilled.LOGGER.error("Could not save profiler results to {}", path, throwable);
             flag = false;
         } finally {
-            IOUtils.closeQuietly(outputstreamwriter);
+            IOUtils.closeQuietly(bufferedwriter);
         }
 
         return flag;
@@ -218,6 +224,14 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         return stringbuilder.toString();
     }
 
+    @Override
+    public String e() {
+        StringBuilder stringbuilder = new StringBuilder();
+
+        this.a(0, "root", stringbuilder);
+        return stringbuilder.toString();
+    }
+
     private static StringBuilder a(StringBuilder stringbuilder, int i) {
         stringbuilder.append(String.format("[%02d] ", i));
 
@@ -230,19 +244,19 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     private void a(int i, String s, StringBuilder stringbuilder) {
         List<MethodProfilerResultsField> list = this.a(s);
-        Object2LongMap<String> object2longmap = ((MethodProfilerResult) ObjectUtils.firstNonNull(new MethodProfilerResult[]{(MethodProfilerResult) this.e.get(s), MethodProfilerResultsFilled.b})).c();
+        Object2LongMap<String> object2longmap = ((MethodProfilerResult) ObjectUtils.firstNonNull(new MethodProfilerResult[]{(MethodProfilerResult) this.entries.get(s), MethodProfilerResultsFilled.EMPTY})).d();
 
         object2longmap.forEach((s1, olong) -> {
-            a(stringbuilder, i).append('#').append(s1).append(' ').append(olong).append('/').append(olong / (long) this.j).append('\n');
+            a(stringbuilder, i).append('#').append(s1).append(' ').append(olong).append('/').append(olong / (long) this.tickDuration).append('\n');
         });
         if (list.size() >= 3) {
             for (int j = 1; j < list.size(); ++j) {
                 MethodProfilerResultsField methodprofilerresultsfield = (MethodProfilerResultsField) list.get(j);
 
-                a(stringbuilder, i).append(methodprofilerresultsfield.d).append('(').append(methodprofilerresultsfield.c).append('/').append(String.format(Locale.ROOT, "%.0f", (float) methodprofilerresultsfield.c / (float) this.j)).append(')').append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.a)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.b)).append("%\n");
-                if (!"unspecified".equals(methodprofilerresultsfield.d)) {
+                a(stringbuilder, i).append(methodprofilerresultsfield.name).append('(').append(methodprofilerresultsfield.count).append('/').append(String.format(Locale.ROOT, "%.0f", (float) methodprofilerresultsfield.count / (float) this.tickDuration)).append(')').append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.percentage)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.globalPercentage)).append("%\n");
+                if (!"unspecified".equals(methodprofilerresultsfield.name)) {
                     try {
-                        this.a(i + 1, s + '\u001e' + methodprofilerresultsfield.d, stringbuilder);
+                        this.a(i + 1, s + "\u001e" + methodprofilerresultsfield.name, stringbuilder);
                     } catch (Exception exception) {
                         stringbuilder.append("[[ EXCEPTION ").append(exception).append(" ]]");
                     }
@@ -253,8 +267,8 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
     }
 
     private void a(int i, String s, MethodProfilerResultsFilled.a methodprofilerresultsfilled_a, int j, StringBuilder stringbuilder) {
-        a(stringbuilder, i).append(s).append(" total:").append(methodprofilerresultsfilled_a.a).append('/').append(methodprofilerresultsfilled_a.b).append(" average: ").append(methodprofilerresultsfilled_a.a / (long) j).append('/').append(methodprofilerresultsfilled_a.b / (long) j).append('\n');
-        methodprofilerresultsfilled_a.c.entrySet().stream().sorted(MethodProfilerResultsFilled.d).forEach((entry) -> {
+        a(stringbuilder, i).append(s).append(" total:").append(methodprofilerresultsfilled_a.selfValue).append('/').append(methodprofilerresultsfilled_a.totalValue).append(" average: ").append(methodprofilerresultsfilled_a.selfValue / (long) j).append('/').append(methodprofilerresultsfilled_a.totalValue / (long) j).append('\n');
+        methodprofilerresultsfilled_a.children.entrySet().stream().sorted(MethodProfilerResultsFilled.COUNTER_ENTRY_COMPARATOR).forEach((entry) -> {
             this.a(i + 1, (String) entry.getKey(), (MethodProfilerResultsFilled.a) entry.getValue(), j, stringbuilder);
         });
     }
@@ -262,7 +276,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
     private void a(Map<String, MethodProfilerResultsFilled.a> map, StringBuilder stringbuilder, int i) {
         map.forEach((s, methodprofilerresultsfilled_a) -> {
             stringbuilder.append("-- Counter: ").append(s).append(" --\n");
-            this.a(0, "root", (MethodProfilerResultsFilled.a) methodprofilerresultsfilled_a.c.get("root"), i, stringbuilder);
+            this.a(0, "root", (MethodProfilerResultsFilled.a) methodprofilerresultsfilled_a.children.get("root"), i, stringbuilder);
             stringbuilder.append("\n\n");
         });
     }
@@ -279,25 +293,23 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     @Override
     public int f() {
-        return this.j;
+        return this.tickDuration;
     }
 
-    static class a {
+    private static class a {
 
-        private long a;
-        private long b;
-        private final Map<String, MethodProfilerResultsFilled.a> c;
+        long selfValue;
+        long totalValue;
+        final Map<String, MethodProfilerResultsFilled.a> children = Maps.newHashMap();
 
-        private a() {
-            this.c = Maps.newHashMap();
-        }
+        a() {}
 
         public void a(Iterator<String> iterator, long i) {
-            this.b += i;
+            this.totalValue += i;
             if (!iterator.hasNext()) {
-                this.a += i;
+                this.selfValue += i;
             } else {
-                ((MethodProfilerResultsFilled.a) this.c.computeIfAbsent(iterator.next(), (s) -> {
+                ((MethodProfilerResultsFilled.a) this.children.computeIfAbsent((String) iterator.next(), (s) -> {
                     return new MethodProfilerResultsFilled.a();
                 })).a(iterator, i);
             }

@@ -2,10 +2,12 @@ package net.minecraft.world.level.levelgen.feature;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.IRegistryCustom;
+import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.WorldGenJunglePyramidPiece;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
@@ -23,15 +25,14 @@ public class WorldGenFeatureJunglePyramid extends StructureGenerator<WorldGenFea
 
     public static class a extends StructureStart<WorldGenFeatureEmptyConfiguration> {
 
-        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, ChunkCoordIntPair chunkcoordintpair, int i, long j) {
+            super(structuregenerator, chunkcoordintpair, i, j);
         }
 
-        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-            WorldGenJunglePyramidPiece worldgenjunglepyramidpiece = new WorldGenJunglePyramidPiece(this.d, i * 16, j * 16);
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration, LevelHeightAccessor levelheightaccessor) {
+            WorldGenJunglePyramidPiece worldgenjunglepyramidpiece = new WorldGenJunglePyramidPiece(this.random, chunkcoordintpair.d(), chunkcoordintpair.e());
 
-            this.b.add(worldgenjunglepyramidpiece);
-            this.b();
+            this.a((StructurePiece) worldgenjunglepyramidpiece);
         }
     }
 }

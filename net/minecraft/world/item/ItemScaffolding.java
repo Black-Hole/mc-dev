@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.ChatMessageType;
-import net.minecraft.network.protocol.game.PacketPlayOutChat;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.BlockActionContext;
@@ -37,23 +37,21 @@ public class ItemScaffolding extends ItemBlock {
             EnumDirection enumdirection;
 
             if (blockactioncontext.isSneaking()) {
-                enumdirection = blockactioncontext.l() ? blockactioncontext.getClickedFace().opposite() : blockactioncontext.getClickedFace();
+                enumdirection = blockactioncontext.m() ? blockactioncontext.getClickedFace().opposite() : blockactioncontext.getClickedFace();
             } else {
-                enumdirection = blockactioncontext.getClickedFace() == EnumDirection.UP ? blockactioncontext.f() : EnumDirection.UP;
+                enumdirection = blockactioncontext.getClickedFace() == EnumDirection.UP ? blockactioncontext.g() : EnumDirection.UP;
             }
 
             int i = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i().c(enumdirection);
 
             while (i < 7) {
-                if (!world.isClientSide && !World.isValidLocation(blockposition_mutableblockposition)) {
+                if (!world.isClientSide && !world.isValidLocation(blockposition_mutableblockposition)) {
                     EntityHuman entityhuman = blockactioncontext.getEntity();
-                    int j = world.getBuildHeight();
+                    int j = world.getMaxBuildHeight();
 
                     if (entityhuman instanceof EntityPlayer && blockposition_mutableblockposition.getY() >= j) {
-                        PacketPlayOutChat packetplayoutchat = new PacketPlayOutChat((new ChatMessage("build.tooHigh", new Object[]{j})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO, SystemUtils.b);
-
-                        ((EntityPlayer) entityhuman).playerConnection.sendPacket(packetplayoutchat);
+                        ((EntityPlayer) entityhuman).a((IChatBaseComponent) (new ChatMessage("build.tooHigh", new Object[]{j - 1})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO, SystemUtils.NIL_UUID);
                     }
                     break;
                 }

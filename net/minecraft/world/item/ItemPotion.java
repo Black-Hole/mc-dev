@@ -2,22 +2,28 @@ package net.minecraft.world.item;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.stats.StatisticList;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.InteractionResultWrapper;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.alchemy.PotionRegistry;
 import net.minecraft.world.item.alchemy.PotionUtil;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 public class ItemPotion extends Item {
+
+    private static final int DRINK_DURATION = 32;
 
     public ItemPotion(Item.Info item_info) {
         super(item_info);
@@ -33,7 +39,7 @@ public class ItemPotion extends Item {
         EntityHuman entityhuman = entityliving instanceof EntityHuman ? (EntityHuman) entityliving : null;
 
         if (entityhuman instanceof EntityPlayer) {
-            CriterionTriggers.z.a((EntityPlayer) entityhuman, itemstack);
+            CriterionTriggers.CONSUME_ITEM.a((EntityPlayer) entityhuman, itemstack);
         }
 
         if (!world.isClientSide) {
@@ -53,31 +59,32 @@ public class ItemPotion extends Item {
 
         if (entityhuman != null) {
             entityhuman.b(StatisticList.ITEM_USED.b(this));
-            if (!entityhuman.abilities.canInstantlyBuild) {
+            if (!entityhuman.getAbilities().instabuild) {
                 itemstack.subtract(1);
             }
         }
 
-        if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
+        if (entityhuman == null || !entityhuman.getAbilities().instabuild) {
             if (itemstack.isEmpty()) {
                 return new ItemStack(Items.GLASS_BOTTLE);
             }
 
             if (entityhuman != null) {
-                entityhuman.inventory.pickup(new ItemStack(Items.GLASS_BOTTLE));
+                entityhuman.getInventory().pickup(new ItemStack(Items.GLASS_BOTTLE));
             }
         }
 
+        world.a((Entity) entityliving, GameEvent.DRINKING_FINISH, entityliving.cT());
         return itemstack;
     }
 
     @Override
-    public int e_(ItemStack itemstack) {
+    public int b(ItemStack itemstack) {
         return 32;
     }
 
     @Override
-    public EnumAnimation d_(ItemStack itemstack) {
+    public EnumAnimation c(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
@@ -87,13 +94,18 @@ public class ItemPotion extends Item {
     }
 
     @Override
-    public String f(ItemStack itemstack) {
+    public String j(ItemStack itemstack) {
         return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
-        return super.e(itemstack) || !PotionUtil.getEffects(itemstack).isEmpty();
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        PotionUtil.a(itemstack, list, 1.0F);
+    }
+
+    @Override
+    public boolean i(ItemStack itemstack) {
+        return super.i(itemstack) || !PotionUtil.getEffects(itemstack).isEmpty();
     }
 
     @Override

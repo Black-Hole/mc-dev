@@ -17,11 +17,11 @@ import net.minecraft.world.level.material.FluidTypes;
 
 public class BlockFloorSign extends BlockSign {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.aD;
+    public static final BlockStateInteger ROTATION = BlockProperties.ROTATION_16;
 
     public BlockFloorSign(BlockBase.Info blockbase_info, BlockPropertyWood blockpropertywood) {
         super(blockbase_info, blockpropertywood);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFloorSign.ROTATION, 0)).set(BlockFloorSign.a, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockFloorSign.ROTATION, 0)).set(BlockFloorSign.WATERLOGGED, false));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BlockFloorSign extends BlockSign {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockFloorSign.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15)).set(BlockFloorSign.a, fluid.getType() == FluidTypes.WATER);
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockFloorSign.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.i()) * 16.0F / 360.0F) + 0.5D) & 15)).set(BlockFloorSign.WATERLOGGED, fluid.getType() == FluidTypes.WATER);
     }
 
     @Override
@@ -53,6 +53,6 @@ public class BlockFloorSign extends BlockSign {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockFloorSign.ROTATION, BlockFloorSign.a);
+        blockstatelist_a.a(BlockFloorSign.ROTATION, BlockFloorSign.WATERLOGGED);
     }
 }

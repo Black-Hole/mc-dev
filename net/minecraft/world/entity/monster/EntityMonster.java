@@ -29,7 +29,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     protected EntityMonster(EntityTypes<? extends EntityMonster> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 5;
+        this.xpReward = 5;
     }
 
     @Override
@@ -39,65 +39,60 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public void movementTick() {
-        this.dA();
-        this.eQ();
+        this.ei();
+        this.fz();
         super.movementTick();
     }
 
-    protected void eQ() {
-        float f = this.aR();
+    protected void fz() {
+        float f = this.aY();
 
         if (f > 0.5F) {
-            this.ticksFarFromPlayer += 2;
+            this.noActionTime += 2;
         }
 
     }
 
     @Override
-    protected boolean L() {
+    protected boolean Q() {
         return true;
     }
 
     @Override
     protected SoundEffect getSoundSwim() {
-        return SoundEffects.ENTITY_HOSTILE_SWIM;
+        return SoundEffects.HOSTILE_SWIM;
     }
 
     @Override
     protected SoundEffect getSoundSplash() {
-        return SoundEffects.ENTITY_HOSTILE_SPLASH;
-    }
-
-    @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
-        return this.isInvulnerable(damagesource) ? false : super.damageEntity(damagesource, f);
+        return SoundEffects.HOSTILE_SPLASH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_HOSTILE_HURT;
+        return SoundEffects.HOSTILE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_HOSTILE_DEATH;
+        return SoundEffects.HOSTILE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundFall(int i) {
-        return i > 4 ? SoundEffects.ENTITY_HOSTILE_BIG_FALL : SoundEffects.ENTITY_HOSTILE_SMALL_FALL;
+        return i > 4 ? SoundEffects.HOSTILE_BIG_FALL : SoundEffects.HOSTILE_SMALL_FALL;
     }
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return 0.5F - iworldreader.y(blockposition);
+        return 0.5F - iworldreader.z(blockposition);
     }
 
     public static boolean a(WorldAccess worldaccess, BlockPosition blockposition, Random random) {
         if (worldaccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
             return false;
         } else {
-            int i = worldaccess.getMinecraftWorld().W() ? worldaccess.c(blockposition, 10) : worldaccess.getLightLevel(blockposition);
+            int i = worldaccess.getLevel().Y() ? worldaccess.c(blockposition, 10) : worldaccess.getLightLevel(blockposition);
 
             return i <= random.nextInt(8);
         }
@@ -111,8 +106,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
-    public static AttributeProvider.Builder eR() {
-        return EntityInsentient.p().a(GenericAttributes.ATTACK_DAMAGE);
+    public static AttributeProvider.Builder fA() {
+        return EntityInsentient.w().a(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
@@ -121,7 +116,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     @Override
-    protected boolean cW() {
+    protected boolean dD() {
         return true;
     }
 
@@ -130,14 +125,14 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     @Override
-    public ItemStack f(ItemStack itemstack) {
+    public ItemStack h(ItemStack itemstack) {
         if (itemstack.getItem() instanceof ItemProjectileWeapon) {
             Predicate<ItemStack> predicate = ((ItemProjectileWeapon) itemstack.getItem()).e();
             ItemStack itemstack1 = ItemProjectileWeapon.a((EntityLiving) this, predicate);
 
             return itemstack1.isEmpty() ? new ItemStack(Items.ARROW) : itemstack1;
         } else {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         }
     }
 }

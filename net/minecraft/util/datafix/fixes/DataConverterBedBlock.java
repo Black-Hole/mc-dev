@@ -15,6 +15,7 @@ import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -64,7 +65,7 @@ public class DataConverterBedBlock extends DataFix {
                 });
                 int i1 = 0;
 
-                stream.getClass();
+                Objects.requireNonNull(stream);
 
                 for (Iterator iterator = (stream::iterator).iterator(); iterator.hasNext(); ++i1) {
                     int j1 = (Integer) iterator.next();

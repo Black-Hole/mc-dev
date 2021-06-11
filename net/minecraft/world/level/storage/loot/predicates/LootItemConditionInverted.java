@@ -12,30 +12,30 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
 
 public class LootItemConditionInverted implements LootItemCondition {
 
-    private final LootItemCondition a;
+    final LootItemCondition term;
 
-    private LootItemConditionInverted(LootItemCondition lootitemcondition) {
-        this.a = lootitemcondition;
+    LootItemConditionInverted(LootItemCondition lootitemcondition) {
+        this.term = lootitemcondition;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.a;
+    public LootItemConditionType a() {
+        return LootItemConditions.INVERTED;
     }
 
     public final boolean test(LootTableInfo loottableinfo) {
-        return !this.a.test(loottableinfo);
+        return !this.term.test(loottableinfo);
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return this.a.a();
+    public Set<LootContextParameter<?>> b() {
+        return this.term.b();
     }
 
     @Override
     public void a(LootCollector lootcollector) {
         LootItemCondition.super.a(lootcollector);
-        this.a.a(lootcollector);
+        this.term.a(lootcollector);
     }
 
     public static LootItemCondition.a a(LootItemCondition.a lootitemcondition_a) {
@@ -51,7 +51,7 @@ public class LootItemConditionInverted implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionInverted lootitemconditioninverted, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("term", jsonserializationcontext.serialize(lootitemconditioninverted.a));
+            jsonobject.add("term", jsonserializationcontext.serialize(lootitemconditioninverted.term));
         }
 
         @Override

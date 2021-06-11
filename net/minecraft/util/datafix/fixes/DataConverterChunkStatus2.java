@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class DataConverterChunkStatus2 extends DataFix {
 
-    private static final Map<String, String> a = ImmutableMap.builder().put("structure_references", "empty").put("biomes", "empty").put("base", "surface").put("carved", "carvers").put("liquid_carved", "liquid_carvers").put("decorated", "features").put("lighted", "light").put("mobs_spawned", "spawn").put("finalized", "heightmaps").put("fullchunk", "full").build();
+    private static final Map<String, String> RENAMES_AND_DOWNGRADES = ImmutableMap.builder().put("structure_references", "empty").put("biomes", "empty").put("base", "surface").put("carved", "carvers").put("liquid_carved", "liquid_carvers").put("decorated", "features").put("lighted", "light").put("mobs_spawned", "spawn").put("finalized", "heightmaps").put("fullchunk", "full").build();
 
     public DataConverterChunkStatus2(Schema schema, boolean flag) {
         super(schema, flag);
@@ -28,7 +28,7 @@ public class DataConverterChunkStatus2 extends DataFix {
             return typed.updateTyped(opticfinder, (typed1) -> {
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
                 String s = dynamic.get("Status").asString("empty");
-                String s1 = (String) DataConverterChunkStatus2.a.getOrDefault(s, "empty");
+                String s1 = (String) DataConverterChunkStatus2.RENAMES_AND_DOWNGRADES.getOrDefault(s, "empty");
 
                 return Objects.equals(s, s1) ? typed1 : typed1.set(DSL.remainderFinder(), dynamic.set("Status", dynamic.createString(s1)));
             });

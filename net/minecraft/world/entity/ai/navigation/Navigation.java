@@ -7,8 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import net.minecraft.world.level.pathfinder.PathMode;
 import net.minecraft.world.level.pathfinder.PathPoint;
@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3D;
 
 public class Navigation extends NavigationAbstract {
 
-    private boolean p;
+    private boolean avoidSun;
 
     public Navigation(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
@@ -27,45 +27,45 @@ public class Navigation extends NavigationAbstract {
 
     @Override
     protected Pathfinder a(int i) {
-        this.o = new PathfinderNormal();
-        this.o.a(true);
-        return new Pathfinder(this.o, i);
+        this.nodeEvaluator = new PathfinderNormal();
+        this.nodeEvaluator.a(true);
+        return new Pathfinder(this.nodeEvaluator, i);
     }
 
     @Override
     protected boolean a() {
-        return this.a.isOnGround() || this.p() || this.a.isPassenger();
+        return this.mob.isOnGround() || this.p() || this.mob.isPassenger();
     }
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX(), (double) this.u(), this.a.locZ());
+        return new Vec3D(this.mob.locX(), (double) this.u(), this.mob.locZ());
     }
 
     @Override
     public PathEntity a(BlockPosition blockposition, int i) {
         BlockPosition blockposition1;
 
-        if (this.b.getType(blockposition).isAir()) {
-            for (blockposition1 = blockposition.down(); blockposition1.getY() > 0 && this.b.getType(blockposition1).isAir(); blockposition1 = blockposition1.down()) {
+        if (this.level.getType(blockposition).isAir()) {
+            for (blockposition1 = blockposition.down(); blockposition1.getY() > this.level.getMinBuildHeight() && this.level.getType(blockposition1).isAir(); blockposition1 = blockposition1.down()) {
                 ;
             }
 
-            if (blockposition1.getY() > 0) {
+            if (blockposition1.getY() > this.level.getMinBuildHeight()) {
                 return super.a(blockposition1.up(), i);
             }
 
-            while (blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).isAir()) {
+            while (blockposition1.getY() < this.level.getMaxBuildHeight() && this.level.getType(blockposition1).isAir()) {
                 blockposition1 = blockposition1.up();
             }
 
             blockposition = blockposition1;
         }
 
-        if (!this.b.getType(blockposition).getMaterial().isBuildable()) {
+        if (!this.level.getType(blockposition).getMaterial().isBuildable()) {
             return super.a(blockposition, i);
         } else {
-            for (blockposition1 = blockposition.up(); blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
+            for (blockposition1 = blockposition.up(); blockposition1.getY() < this.level.getMaxBuildHeight() && this.level.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
                 ;
             }
 
@@ -79,40 +79,40 @@ public class Navigation extends NavigationAbstract {
     }
 
     private int u() {
-        if (this.a.isInWater() && this.r()) {
-            int i = MathHelper.floor(this.a.locY());
-            Block block = this.b.getType(new BlockPosition(this.a.locX(), (double) i, this.a.locZ())).getBlock();
+        if (this.mob.isInWater() && this.r()) {
+            int i = this.mob.cY();
+            IBlockData iblockdata = this.level.getType(new BlockPosition(this.mob.locX(), (double) i, this.mob.locZ()));
             int j = 0;
 
             do {
-                if (block != Blocks.WATER) {
+                if (!iblockdata.a(Blocks.WATER)) {
                     return i;
                 }
 
                 ++i;
-                block = this.b.getType(new BlockPosition(this.a.locX(), (double) i, this.a.locZ())).getBlock();
+                iblockdata = this.level.getType(new BlockPosition(this.mob.locX(), (double) i, this.mob.locZ()));
                 ++j;
             } while (j <= 16);
 
-            return MathHelper.floor(this.a.locY());
+            return this.mob.cY();
         } else {
-            return MathHelper.floor(this.a.locY() + 0.5D);
+            return MathHelper.floor(this.mob.locY() + 0.5D);
         }
     }
 
     @Override
     protected void D_() {
         super.D_();
-        if (this.p) {
-            if (this.b.e(new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ()))) {
+        if (this.avoidSun) {
+            if (this.level.g(new BlockPosition(this.mob.locX(), this.mob.locY() + 0.5D, this.mob.locZ()))) {
                 return;
             }
 
-            for (int i = 0; i < this.c.e(); ++i) {
-                PathPoint pathpoint = this.c.a(i);
+            for (int i = 0; i < this.path.e(); ++i) {
+                PathPoint pathpoint = this.path.a(i);
 
-                if (this.b.e(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
-                    this.c.b(i);
+                if (this.level.g(new BlockPosition(pathpoint.x, pathpoint.y, pathpoint.z))) {
+                    this.path.b(i);
                     return;
                 }
             }
@@ -198,14 +198,14 @@ public class Navigation extends NavigationAbstract {
                     double d3 = (double) j2 + 0.5D - vec3d.z;
 
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
-                        PathType pathtype = this.o.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
+                        PathType pathtype = this.nodeEvaluator.a(this.level, i2, j - 1, j2, this.mob, l, i1, j1, true, true);
 
                         if (!this.a(pathtype)) {
                             return false;
                         }
 
-                        pathtype = this.o.a(this.b, i2, j, j2, this.a, l, i1, j1, true, true);
-                        float f = this.a.a(pathtype);
+                        pathtype = this.nodeEvaluator.a(this.level, i2, j, j2, this.mob, l, i1, j1, true, true);
+                        float f = this.mob.a(pathtype);
 
                         if (f < 0.0F || f >= 8.0F) {
                             return false;
@@ -241,20 +241,28 @@ public class Navigation extends NavigationAbstract {
             blockposition = (BlockPosition) iterator.next();
             d2 = (double) blockposition.getX() + 0.5D - vec3d.x;
             d3 = (double) blockposition.getZ() + 0.5D - vec3d.z;
-        } while (d2 * d0 + d3 * d1 < 0.0D || this.b.getType(blockposition).a((IBlockAccess) this.b, blockposition, PathMode.LAND));
+        } while (d2 * d0 + d3 * d1 < 0.0D || this.level.getType(blockposition).a((IBlockAccess) this.level, blockposition, PathMode.LAND));
 
         return false;
     }
 
     public void a(boolean flag) {
-        this.o.b(flag);
+        this.nodeEvaluator.b(flag);
+    }
+
+    public boolean e() {
+        return this.nodeEvaluator.d();
+    }
+
+    public void b(boolean flag) {
+        this.nodeEvaluator.a(flag);
     }
 
     public boolean f() {
-        return this.o.c();
+        return this.nodeEvaluator.d();
     }
 
     public void c(boolean flag) {
-        this.p = flag;
+        this.avoidSun = flag;
     }
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 
 public class BlockAttachable extends BlockFacingHorizontal {
 
-    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.Q;
+    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.ATTACH_FACE;
 
     protected BlockAttachable(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -34,7 +34,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
     @Nullable
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -42,7 +42,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
             IBlockData iblockdata;
 
             if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
-                iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, enumdirection == EnumDirection.UP ? BlockPropertyAttachPosition.CEILING : BlockPropertyAttachPosition.FLOOR)).set(BlockAttachable.FACING, blockactioncontext.f());
+                iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, enumdirection == EnumDirection.UP ? BlockPropertyAttachPosition.CEILING : BlockPropertyAttachPosition.FLOOR)).set(BlockAttachable.FACING, blockactioncontext.g());
             } else {
                 iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, BlockPropertyAttachPosition.WALL)).set(BlockAttachable.FACING, enumdirection.opposite());
             }

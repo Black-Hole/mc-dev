@@ -41,17 +41,25 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityVex extends EntityMonster {
 
-    protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityVex.class, DataWatcherRegistry.a);
-    private EntityInsentient c;
+    public static final float FLAP_DEGREES_PER_TICK = 45.836624F;
+    public static final int TICKS_PER_FLAP = MathHelper.f(3.9269907F);
+    protected static final DataWatcherObject<Byte> DATA_FLAGS_ID = DataWatcher.a(EntityVex.class, DataWatcherRegistry.BYTE);
+    private static final int FLAG_IS_CHARGING = 1;
+    EntityInsentient owner;
     @Nullable
-    private BlockPosition d;
-    private boolean bo;
-    private int bp;
+    private BlockPosition boundOrigin;
+    private boolean hasLimitedLife;
+    private int limitedLifeTicks;
 
     public EntityVex(EntityTypes<? extends EntityVex> entitytypes, World world) {
         super(entitytypes, world);
-        this.moveController = new EntityVex.c(this);
-        this.f = 3;
+        this.moveControl = new EntityVex.c(this);
+        this.xpReward = 3;
+    }
+
+    @Override
+    public boolean aF() {
+        return this.tickCount % EntityVex.TICKS_PER_FLAP == 0;
     }
 
     @Override
@@ -62,12 +70,12 @@ public class EntityVex extends EntityMonster {
 
     @Override
     public void tick() {
-        this.noclip = true;
+        this.noPhysics = true;
         super.tick();
-        this.noclip = false;
+        this.noPhysics = false;
         this.setNoGravity(true);
-        if (this.bo && --this.bp <= 0) {
-            this.bp = 20;
+        if (this.hasLimitedLife && --this.limitedLifeTicks <= 0) {
+            this.limitedLifeTicks = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
@@ -86,21 +94,21 @@ public class EntityVex extends EntityMonster {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityVex.b, (byte) 0);
+        this.entityData.register(EntityVex.DATA_FLAGS_ID, (byte) 0);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("BoundX")) {
-            this.d = new BlockPosition(nbttagcompound.getInt("BoundX"), nbttagcompound.getInt("BoundY"), nbttagcompound.getInt("BoundZ"));
+            this.boundOrigin = new BlockPosition(nbttagcompound.getInt("BoundX"), nbttagcompound.getInt("BoundY"), nbttagcompound.getInt("BoundZ"));
         }
 
         if (nbttagcompound.hasKey("LifeTicks")) {
@@ -112,39 +120,39 @@ public class EntityVex extends EntityMonster {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        if (this.d != null) {
-            nbttagcompound.setInt("BoundX", this.d.getX());
-            nbttagcompound.setInt("BoundY", this.d.getY());
-            nbttagcompound.setInt("BoundZ", this.d.getZ());
+        if (this.boundOrigin != null) {
+            nbttagcompound.setInt("BoundX", this.boundOrigin.getX());
+            nbttagcompound.setInt("BoundY", this.boundOrigin.getY());
+            nbttagcompound.setInt("BoundZ", this.boundOrigin.getZ());
         }
 
-        if (this.bo) {
-            nbttagcompound.setInt("LifeTicks", this.bp);
+        if (this.hasLimitedLife) {
+            nbttagcompound.setInt("LifeTicks", this.limitedLifeTicks);
         }
 
     }
 
-    public EntityInsentient eK() {
-        return this.c;
+    public EntityInsentient p() {
+        return this.owner;
     }
 
     @Nullable
-    public BlockPosition eL() {
-        return this.d;
+    public BlockPosition t() {
+        return this.boundOrigin;
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.d = blockposition;
+        this.boundOrigin = blockposition;
     }
 
     private boolean b(int i) {
-        byte b0 = (Byte) this.datawatcher.get(EntityVex.b);
+        byte b0 = (Byte) this.entityData.get(EntityVex.DATA_FLAGS_ID);
 
         return (b0 & i) != 0;
     }
 
     private void a(int i, boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityVex.b);
+        byte b0 = (Byte) this.entityData.get(EntityVex.DATA_FLAGS_ID);
         int j;
 
         if (flag) {
@@ -153,7 +161,7 @@ public class EntityVex extends EntityMonster {
             j = b0 & ~i;
         }
 
-        this.datawatcher.set(EntityVex.b, (byte) (j & 255));
+        this.entityData.set(EntityVex.DATA_FLAGS_ID, (byte) (j & 255));
     }
 
     public boolean isCharging() {
@@ -165,31 +173,31 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(EntityInsentient entityinsentient) {
-        this.c = entityinsentient;
+        this.owner = entityinsentient;
     }
 
     public void a(int i) {
-        this.bo = true;
-        this.bp = i;
+        this.hasLimitedLife = true;
+        this.limitedLifeTicks = i;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_VEX_AMBIENT;
+        return SoundEffects.VEX_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_VEX_DEATH;
+        return SoundEffects.VEX_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_VEX_HURT;
+        return SoundEffects.VEX_HURT;
     }
 
     @Override
-    public float aR() {
+    public float aY() {
         return 1.0F;
     }
 
@@ -207,27 +215,93 @@ public class EntityVex extends EntityMonster {
         this.a(EnumItemSlot.MAINHAND, 0.0F);
     }
 
-    class b extends PathfinderGoalTarget {
+    private class c extends ControllerMove {
 
-        private final PathfinderTargetCondition b = (new PathfinderTargetCondition()).c().e();
+        public c(EntityVex entityvex) {
+            super(entityvex);
+        }
 
-        public b(EntityCreature entitycreature) {
-            super(entitycreature, false);
+        @Override
+        public void a() {
+            if (this.operation == ControllerMove.Operation.MOVE_TO) {
+                Vec3D vec3d = new Vec3D(this.wantedX - EntityVex.this.locX(), this.wantedY - EntityVex.this.locY(), this.wantedZ - EntityVex.this.locZ());
+                double d0 = vec3d.f();
+
+                if (d0 < EntityVex.this.getBoundingBox().a()) {
+                    this.operation = ControllerMove.Operation.WAIT;
+                    EntityVex.this.setMot(EntityVex.this.getMot().a(0.5D));
+                } else {
+                    EntityVex.this.setMot(EntityVex.this.getMot().e(vec3d.a(this.speedModifier * 0.05D / d0)));
+                    if (EntityVex.this.getGoalTarget() == null) {
+                        Vec3D vec3d1 = EntityVex.this.getMot();
+
+                        EntityVex.this.setYRot(-((float) MathHelper.d(vec3d1.x, vec3d1.z)) * 57.295776F);
+                        EntityVex.this.yBodyRot = EntityVex.this.getYRot();
+                    } else {
+                        double d1 = EntityVex.this.getGoalTarget().locX() - EntityVex.this.locX();
+                        double d2 = EntityVex.this.getGoalTarget().locZ() - EntityVex.this.locZ();
+
+                        EntityVex.this.setYRot(-((float) MathHelper.d(d1, d2)) * 57.295776F);
+                        EntityVex.this.yBodyRot = EntityVex.this.getYRot();
+                    }
+                }
+
+            }
+        }
+    }
+
+    private class a extends PathfinderGoal {
+
+        public a() {
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean a() {
-            return EntityVex.this.c != null && EntityVex.this.c.getGoalTarget() != null && this.a(EntityVex.this.c.getGoalTarget(), this.b);
+            return EntityVex.this.getGoalTarget() != null && !EntityVex.this.getControllerMove().b() && EntityVex.this.random.nextInt(7) == 0 ? EntityVex.this.f((Entity) EntityVex.this.getGoalTarget()) > 4.0D : false;
+        }
+
+        @Override
+        public boolean b() {
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.isCharging() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         @Override
         public void c() {
-            EntityVex.this.setGoalTarget(EntityVex.this.c.getGoalTarget());
-            super.c();
+            EntityLiving entityliving = EntityVex.this.getGoalTarget();
+            Vec3D vec3d = entityliving.bb();
+
+            EntityVex.this.moveControl.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+            EntityVex.this.setCharging(true);
+            EntityVex.this.playSound(SoundEffects.VEX_CHARGE, 1.0F, 1.0F);
+        }
+
+        @Override
+        public void d() {
+            EntityVex.this.setCharging(false);
+        }
+
+        @Override
+        public void e() {
+            EntityLiving entityliving = EntityVex.this.getGoalTarget();
+
+            if (EntityVex.this.getBoundingBox().c(entityliving.getBoundingBox())) {
+                EntityVex.this.attackEntity(entityliving);
+                EntityVex.this.setCharging(false);
+            } else {
+                double d0 = EntityVex.this.f((Entity) entityliving);
+
+                if (d0 < 9.0D) {
+                    Vec3D vec3d = entityliving.bb();
+
+                    EntityVex.this.moveControl.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+                }
+            }
+
         }
     }
 
-    class d extends PathfinderGoal {
+    private class d extends PathfinderGoal {
 
         public d() {
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
@@ -245,17 +319,17 @@ public class EntityVex extends EntityMonster {
 
         @Override
         public void e() {
-            BlockPosition blockposition = EntityVex.this.eL();
+            BlockPosition blockposition = EntityVex.this.t();
 
             if (blockposition == null) {
                 blockposition = EntityVex.this.getChunkCoordinates();
             }
 
             for (int i = 0; i < 3; ++i) {
-                BlockPosition blockposition1 = blockposition.b(EntityVex.this.random.nextInt(15) - 7, EntityVex.this.random.nextInt(11) - 5, EntityVex.this.random.nextInt(15) - 7);
+                BlockPosition blockposition1 = blockposition.c(EntityVex.this.random.nextInt(15) - 7, EntityVex.this.random.nextInt(11) - 5, EntityVex.this.random.nextInt(15) - 7);
 
-                if (EntityVex.this.world.isEmpty(blockposition1)) {
-                    EntityVex.this.moveController.a((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.5D, (double) blockposition1.getZ() + 0.5D, 0.25D);
+                if (EntityVex.this.level.isEmpty(blockposition1)) {
+                    EntityVex.this.moveControl.a((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.5D, (double) blockposition1.getZ() + 0.5D, 0.25D);
                     if (EntityVex.this.getGoalTarget() == null) {
                         EntityVex.this.getControllerLook().a((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.5D, (double) blockposition1.getZ() + 0.5D, 180.0F, 20.0F);
                     }
@@ -266,89 +340,23 @@ public class EntityVex extends EntityMonster {
         }
     }
 
-    class a extends PathfinderGoal {
+    private class b extends PathfinderGoalTarget {
 
-        public a() {
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        private final PathfinderTargetCondition copyOwnerTargeting = PathfinderTargetCondition.b().d().e();
+
+        public b(EntityCreature entitycreature) {
+            super(entitycreature, false);
         }
 
         @Override
         public boolean a() {
-            return EntityVex.this.getGoalTarget() != null && !EntityVex.this.getControllerMove().b() && EntityVex.this.random.nextInt(7) == 0 ? EntityVex.this.h((Entity) EntityVex.this.getGoalTarget()) > 4.0D : false;
-        }
-
-        @Override
-        public boolean b() {
-            return EntityVex.this.getControllerMove().b() && EntityVex.this.isCharging() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.owner != null && EntityVex.this.owner.getGoalTarget() != null && this.a(EntityVex.this.owner.getGoalTarget(), this.copyOwnerTargeting);
         }
 
         @Override
         public void c() {
-            EntityLiving entityliving = EntityVex.this.getGoalTarget();
-            Vec3D vec3d = entityliving.j(1.0F);
-
-            EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
-            EntityVex.this.setCharging(true);
-            EntityVex.this.playSound(SoundEffects.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
-        }
-
-        @Override
-        public void d() {
-            EntityVex.this.setCharging(false);
-        }
-
-        @Override
-        public void e() {
-            EntityLiving entityliving = EntityVex.this.getGoalTarget();
-
-            if (EntityVex.this.getBoundingBox().c(entityliving.getBoundingBox())) {
-                EntityVex.this.attackEntity(entityliving);
-                EntityVex.this.setCharging(false);
-            } else {
-                double d0 = EntityVex.this.h((Entity) entityliving);
-
-                if (d0 < 9.0D) {
-                    Vec3D vec3d = entityliving.j(1.0F);
-
-                    EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
-                }
-            }
-
-        }
-    }
-
-    class c extends ControllerMove {
-
-        public c(EntityVex entityvex) {
-            super(entityvex);
-        }
-
-        @Override
-        public void a() {
-            if (this.h == ControllerMove.Operation.MOVE_TO) {
-                Vec3D vec3d = new Vec3D(this.b - EntityVex.this.locX(), this.c - EntityVex.this.locY(), this.d - EntityVex.this.locZ());
-                double d0 = vec3d.f();
-
-                if (d0 < EntityVex.this.getBoundingBox().a()) {
-                    this.h = ControllerMove.Operation.WAIT;
-                    EntityVex.this.setMot(EntityVex.this.getMot().a(0.5D));
-                } else {
-                    EntityVex.this.setMot(EntityVex.this.getMot().e(vec3d.a(this.e * 0.05D / d0)));
-                    if (EntityVex.this.getGoalTarget() == null) {
-                        Vec3D vec3d1 = EntityVex.this.getMot();
-
-                        EntityVex.this.yaw = -((float) MathHelper.d(vec3d1.x, vec3d1.z)) * 57.295776F;
-                        EntityVex.this.aA = EntityVex.this.yaw;
-                    } else {
-                        double d1 = EntityVex.this.getGoalTarget().locX() - EntityVex.this.locX();
-                        double d2 = EntityVex.this.getGoalTarget().locZ() - EntityVex.this.locZ();
-
-                        EntityVex.this.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                        EntityVex.this.aA = EntityVex.this.yaw;
-                    }
-                }
-
-            }
+            EntityVex.this.setGoalTarget(EntityVex.this.owner.getGoalTarget());
+            super.c();
         }
     }
 }

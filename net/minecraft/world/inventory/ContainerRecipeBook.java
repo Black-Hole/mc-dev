@@ -18,13 +18,19 @@ public abstract class ContainerRecipeBook<C extends IInventory> extends Containe
 
     public abstract void a(AutoRecipeStackManager autorecipestackmanager);
 
-    public abstract void e();
+    public abstract void i();
 
     public abstract boolean a(IRecipe<? super C> irecipe);
 
-    public abstract int f();
+    public abstract int j();
 
-    public abstract int g();
+    public abstract int k();
 
-    public abstract int h();
+    public abstract int l();
+
+    public abstract int m();
+
+    public abstract RecipeBookType q();
+
+    public abstract boolean d(int i);
 }

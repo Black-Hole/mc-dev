@@ -1,23 +1,18 @@
 package net.minecraft.nbt;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.bytes.ByteOpenHashSet;
-import it.unimi.dsi.fastutil.bytes.ByteSet;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
 
 public class NBTTagList extends NBTList<NBTBase> {
 
-    public static final NBTTagType<NBTTagList> a = new NBTTagType<NBTTagList>() {
+    private static final int SELF_SIZE_IN_BITS = 296;
+    public static final NBTTagType<NBTTagList> TYPE = new NBTTagType<NBTTagList>() {
         @Override
         public NBTTagList b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(296L);
@@ -53,11 +48,10 @@ public class NBTTagList extends NBTList<NBTBase> {
             return "TAG_List";
         }
     };
-    private static final ByteSet b = new ByteOpenHashSet(Arrays.asList(1, 2, 3, 4, 5, 6));
     private final List<NBTBase> list;
     private byte type;
 
-    private NBTTagList(List<NBTBase> list, byte b0) {
+    NBTTagList(List<NBTBase> list, byte b0) {
         this.list = list;
         this.type = b0;
     }
@@ -93,25 +87,15 @@ public class NBTTagList extends NBTList<NBTBase> {
 
     @Override
     public NBTTagType<NBTTagList> b() {
-        return NBTTagList.a;
+        return NBTTagList.TYPE;
     }
 
     @Override
     public String toString() {
-        StringBuilder stringbuilder = new StringBuilder("[");
-
-        for (int i = 0; i < this.list.size(); ++i) {
-            if (i != 0) {
-                stringbuilder.append(',');
-            }
-
-            stringbuilder.append(this.list.get(i));
-        }
-
-        return stringbuilder.append(']').toString();
+        return this.asString();
     }
 
-    private void g() {
+    private void f() {
         if (this.list.isEmpty()) {
             this.type = 0;
         }
@@ -122,7 +106,7 @@ public class NBTTagList extends NBTList<NBTBase> {
     public NBTBase remove(int i) {
         NBTBase nbtbase = (NBTBase) this.list.remove(i);
 
-        this.g();
+        this.f();
         return nbtbase;
     }
 
@@ -188,6 +172,18 @@ public class NBTTagList extends NBTList<NBTBase> {
         }
 
         return new int[0];
+    }
+
+    public long[] g(int i) {
+        if (i >= 0 && i < this.list.size()) {
+            NBTBase nbtbase = (NBTBase) this.list.get(i);
+
+            if (nbtbase.getTypeId() == 11) {
+                return ((NBTTagLongArray) nbtbase).getLongs();
+            }
+        }
+
+        return new long[0];
     }
 
     public double h(int i) {
@@ -298,58 +294,12 @@ public class NBTTagList extends NBTList<NBTBase> {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        if (this.isEmpty()) {
-            return new ChatComponentText("[]");
-        } else {
-            int j;
-
-            if (NBTTagList.b.contains(this.type) && this.size() <= 8) {
-                String s1 = ", ";
-                ChatComponentText chatcomponenttext = new ChatComponentText("[");
-
-                for (j = 0; j < this.list.size(); ++j) {
-                    if (j != 0) {
-                        chatcomponenttext.c(", ");
-                    }
-
-                    chatcomponenttext.addSibling(((NBTBase) this.list.get(j)).l());
-                }
-
-                chatcomponenttext.c("]");
-                return chatcomponenttext;
-            } else {
-                ChatComponentText chatcomponenttext1 = new ChatComponentText("[");
-
-                if (!s.isEmpty()) {
-                    chatcomponenttext1.c("\n");
-                }
-
-                String s2 = String.valueOf(',');
-
-                for (j = 0; j < this.list.size(); ++j) {
-                    ChatComponentText chatcomponenttext2 = new ChatComponentText(Strings.repeat(s, i + 1));
-
-                    chatcomponenttext2.addSibling(((NBTBase) this.list.get(j)).a(s, i + 1));
-                    if (j != this.list.size() - 1) {
-                        chatcomponenttext2.c(s2).c(s.isEmpty() ? " " : "\n");
-                    }
-
-                    chatcomponenttext1.addSibling(chatcomponenttext2);
-                }
-
-                if (!s.isEmpty()) {
-                    chatcomponenttext1.c("\n").c(Strings.repeat(s, i));
-                }
-
-                chatcomponenttext1.c("]");
-                return chatcomponenttext1;
-            }
-        }
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override
-    public byte d_() {
+    public byte e() {
         return this.type;
     }
 

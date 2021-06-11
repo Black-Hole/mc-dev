@@ -9,22 +9,22 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorRemoveMemory<E extends EntityLiving> extends Behavior<E> {
 
-    private final Predicate<E> b;
-    private final MemoryModuleType<?> c;
+    private final Predicate<E> predicate;
+    private final MemoryModuleType<?> memoryType;
 
     public BehaviorRemoveMemory(Predicate<E> predicate, MemoryModuleType<?> memorymoduletype) {
         super(ImmutableMap.of(memorymoduletype, MemoryStatus.VALUE_PRESENT));
-        this.b = predicate;
-        this.c = memorymoduletype;
+        this.predicate = predicate;
+        this.memoryType = memorymoduletype;
     }
 
     @Override
     protected boolean a(WorldServer worldserver, E e0) {
-        return this.b.test(e0);
+        return this.predicate.test(e0);
     }
 
     @Override
     protected void a(WorldServer worldserver, E e0, long i) {
-        e0.getBehaviorController().removeMemory(this.c);
+        e0.getBehaviorController().removeMemory(this.memoryType);
     }
 }

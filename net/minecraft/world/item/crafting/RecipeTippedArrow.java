@@ -3,7 +3,6 @@ package net.minecraft.world.item.crafting;
 import java.util.Collection;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.inventory.InventoryCrafting;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtil;
@@ -25,13 +24,11 @@ public class RecipeTippedArrow extends IRecipeComplex {
                         return false;
                     }
 
-                    Item item = itemstack.getItem();
-
                     if (i == 1 && j == 1) {
-                        if (item != Items.LINGERING_POTION) {
+                        if (!itemstack.a(Items.LINGERING_POTION)) {
                             return false;
                         }
-                    } else if (item != Items.ARROW) {
+                    } else if (!itemstack.a(Items.ARROW)) {
                         return false;
                     }
                 }
@@ -46,8 +43,8 @@ public class RecipeTippedArrow extends IRecipeComplex {
     public ItemStack a(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = inventorycrafting.getItem(1 + inventorycrafting.g());
 
-        if (itemstack.getItem() != Items.LINGERING_POTION) {
-            return ItemStack.b;
+        if (!itemstack.a(Items.LINGERING_POTION)) {
+            return ItemStack.EMPTY;
         } else {
             ItemStack itemstack1 = new ItemStack(Items.TIPPED_ARROW, 8);
 
@@ -58,7 +55,12 @@ public class RecipeTippedArrow extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i >= 2 && j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.j;
+        return RecipeSerializer.TIPPED_ARROW;
     }
 }

@@ -7,23 +7,23 @@ import net.minecraft.world.level.material.Material;
 
 public class MaterialPredicate implements Predicate<IBlockData> {
 
-    private static final MaterialPredicate a = new MaterialPredicate(Material.AIR) {
+    private static final MaterialPredicate AIR = new MaterialPredicate(Material.AIR) {
         @Override
         public boolean test(@Nullable IBlockData iblockdata) {
             return iblockdata != null && iblockdata.isAir();
         }
     };
-    private final Material b;
+    private final Material material;
 
-    private MaterialPredicate(Material material) {
-        this.b = material;
+    MaterialPredicate(Material material) {
+        this.material = material;
     }
 
     public static MaterialPredicate a(Material material) {
-        return material == Material.AIR ? MaterialPredicate.a : new MaterialPredicate(material);
+        return material == Material.AIR ? MaterialPredicate.AIR : new MaterialPredicate(material);
     }
 
     public boolean test(@Nullable IBlockData iblockdata) {
-        return iblockdata != null && iblockdata.getMaterial() == this.b;
+        return iblockdata != null && iblockdata.getMaterial() == this.material;
     }
 }

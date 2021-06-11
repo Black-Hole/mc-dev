@@ -4,17 +4,17 @@ import net.minecraft.resources.MinecraftKey;
 
 public class LootContextParameter<T> {
 
-    private final MinecraftKey a;
+    private final MinecraftKey name;
 
     public LootContextParameter(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
+        this.name = minecraftkey;
     }
 
     public MinecraftKey a() {
-        return this.a;
+        return this.name;
     }
 
     public String toString() {
-        return "<parameter " + this.a + ">";
+        return "<parameter " + this.name + ">";
     }
 }

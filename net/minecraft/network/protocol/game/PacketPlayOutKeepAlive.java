@@ -1,30 +1,30 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutKeepAlive implements Packet<PacketListenerPlayOut> {
 
-    private long a;
-
-    public PacketPlayOutKeepAlive() {}
+    private final long id;
 
     public PacketPlayOutKeepAlive(long i) {
-        this.a = i;
+        this.id = i;
+    }
+
+    public PacketPlayOutKeepAlive(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.readLong();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeLong(this.id);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readLong();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeLong(this.a);
+    public long b() {
+        return this.id;
     }
 }

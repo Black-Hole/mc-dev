@@ -6,32 +6,46 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import javax.annotation.Nullable;
 
 public class ArraySetSorted<T> extends AbstractSet<T> {
 
-    private final Comparator<T> a;
-    private T[] b;
-    private int c;
+    private static final int DEFAULT_INITIAL_CAPACITY = 10;
+    private final Comparator<T> comparator;
+    T[] contents;
+    int size;
 
     private ArraySetSorted(int i, Comparator<T> comparator) {
-        this.a = comparator;
+        this.comparator = comparator;
         if (i < 0) {
             throw new IllegalArgumentException("Initial capacity (" + i + ") is negative");
         } else {
-            this.b = a(new Object[i]);
+            this.contents = a(new Object[i]);
         }
+    }
+
+    public static <T extends Comparable<T>> ArraySetSorted<T> a() {
+        return a(10);
     }
 
     public static <T extends Comparable<T>> ArraySetSorted<T> a(int i) {
         return new ArraySetSorted<>(i, Comparator.naturalOrder());
     }
 
+    public static <T> ArraySetSorted<T> a(Comparator<T> comparator) {
+        return a(comparator, 10);
+    }
+
+    public static <T> ArraySetSorted<T> a(Comparator<T> comparator, int i) {
+        return new ArraySetSorted<>(i, comparator);
+    }
+
     private static <T> T[] a(Object[] aobject) {
-        return (Object[]) aobject;
+        return aobject;
     }
 
     private int c(T t0) {
-        return Arrays.binarySearch(this.b, 0, this.c, t0, this.a);
+        return Arrays.binarySearch(this.contents, 0, this.size, t0, this.comparator);
     }
 
     private static int b(int i) {
@@ -52,41 +66,41 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
     }
 
     private void c(int i) {
-        if (i > this.b.length) {
-            if (this.b != ObjectArrays.DEFAULT_EMPTY_ARRAY) {
-                i = (int) Math.max(Math.min((long) this.b.length + (long) (this.b.length >> 1), 2147483639L), (long) i);
+        if (i > this.contents.length) {
+            if (this.contents != ObjectArrays.DEFAULT_EMPTY_ARRAY) {
+                i = (int) Math.max(Math.min((long) this.contents.length + (long) (this.contents.length >> 1), 2147483639L), (long) i);
             } else if (i < 10) {
                 i = 10;
             }
 
             Object[] aobject = new Object[i];
 
-            System.arraycopy(this.b, 0, aobject, 0, this.c);
-            this.b = a(aobject);
+            System.arraycopy(this.contents, 0, aobject, 0, this.size);
+            this.contents = a(aobject);
         }
     }
 
     private void a(T t0, int i) {
-        this.c(this.c + 1);
-        if (i != this.c) {
-            System.arraycopy(this.b, i, this.b, i + 1, this.c - i);
+        this.c(this.size + 1);
+        if (i != this.size) {
+            System.arraycopy(this.contents, i, this.contents, i + 1, this.size - i);
         }
 
-        this.b[i] = t0;
-        ++this.c;
+        this.contents[i] = t0;
+        ++this.size;
     }
 
-    private void d(int i) {
-        --this.c;
-        if (i != this.c) {
-            System.arraycopy(this.b, i + 1, this.b, i, this.c - i);
+    void d(int i) {
+        --this.size;
+        if (i != this.size) {
+            System.arraycopy(this.contents, i + 1, this.contents, i, this.size - i);
         }
 
-        this.b[this.c] = null;
+        this.contents[this.size] = null;
     }
 
     private T e(int i) {
-        return this.b[i];
+        return this.contents[i];
     }
 
     public T a(T t0) {
@@ -111,8 +125,19 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
         }
     }
 
+    @Nullable
+    public T b(T t0) {
+        int i = this.c(t0);
+
+        return i >= 0 ? this.e(i) : null;
+    }
+
     public T b() {
         return this.e(0);
+    }
+
+    public T c() {
+        return this.e(this.size - 1);
     }
 
     public boolean contains(Object object) {
@@ -126,20 +151,20 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
     }
 
     public int size() {
-        return this.c;
+        return this.size;
     }
 
     public Object[] toArray() {
-        return (Object[]) this.b.clone();
+        return (Object[]) this.contents.clone();
     }
 
     public <U> U[] toArray(U[] au) {
-        if (au.length < this.c) {
-            return (Object[]) Arrays.copyOf(this.b, this.c, au.getClass());
+        if (au.length < this.size) {
+            return Arrays.copyOf(this.contents, this.size, au.getClass());
         } else {
-            System.arraycopy(this.b, 0, au, 0, this.c);
-            if (au.length > this.c) {
-                au[this.c] = null;
+            System.arraycopy(this.contents, 0, au, 0, this.size);
+            if (au.length > this.size) {
+                au[this.size] = null;
             }
 
             return au;
@@ -147,8 +172,8 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
     }
 
     public void clear() {
-        Arrays.fill(this.b, 0, this.c, (Object) null);
-        this.c = 0;
+        Arrays.fill(this.contents, 0, this.size, (Object) null);
+        this.size = 0;
     }
 
     public boolean equals(Object object) {
@@ -158,8 +183,8 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
             if (object instanceof ArraySetSorted) {
                 ArraySetSorted<?> arraysetsorted = (ArraySetSorted) object;
 
-                if (this.a.equals(arraysetsorted.a)) {
-                    return this.c == arraysetsorted.c && Arrays.equals(this.b, arraysetsorted.b);
+                if (this.comparator.equals(arraysetsorted.comparator)) {
+                    return this.size == arraysetsorted.size && Arrays.equals(this.contents, arraysetsorted.contents);
                 }
             }
 
@@ -167,35 +192,33 @@ public class ArraySetSorted<T> extends AbstractSet<T> {
         }
     }
 
-    class a implements Iterator<T> {
+    private class a implements Iterator<T> {
 
-        private int b;
-        private int c;
+        private int index;
+        private int last = -1;
 
-        private a() {
-            this.c = -1;
-        }
+        a() {}
 
         public boolean hasNext() {
-            return this.b < ArraySetSorted.this.c;
+            return this.index < ArraySetSorted.this.size;
         }
 
         public T next() {
-            if (this.b >= ArraySetSorted.this.c) {
+            if (this.index >= ArraySetSorted.this.size) {
                 throw new NoSuchElementException();
             } else {
-                this.c = this.b++;
-                return ArraySetSorted.this.b[this.c];
+                this.last = this.index++;
+                return ArraySetSorted.this.contents[this.last];
             }
         }
 
         public void remove() {
-            if (this.c == -1) {
+            if (this.last == -1) {
                 throw new IllegalStateException();
             } else {
-                ArraySetSorted.this.d(this.c);
-                --this.b;
-                this.c = -1;
+                ArraySetSorted.this.d(this.last);
+                --this.index;
+                this.last = -1;
             }
         }
     }

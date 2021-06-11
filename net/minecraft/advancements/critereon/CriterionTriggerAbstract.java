@@ -16,25 +16,25 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public abstract class CriterionTriggerAbstract<T extends CriterionInstanceAbstract> implements CriterionTrigger<T> {
 
-    private final Map<AdvancementDataPlayer, Set<CriterionTrigger.a<T>>> a = Maps.newIdentityHashMap();
+    private final Map<AdvancementDataPlayer, Set<CriterionTrigger.a<T>>> players = Maps.newIdentityHashMap();
 
     public CriterionTriggerAbstract() {}
 
     @Override
     public final void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<T> criteriontrigger_a) {
-        ((Set) this.a.computeIfAbsent(advancementdataplayer, (advancementdataplayer1) -> {
+        ((Set) this.players.computeIfAbsent(advancementdataplayer, (advancementdataplayer1) -> {
             return Sets.newHashSet();
         })).add(criteriontrigger_a);
     }
 
     @Override
     public final void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<T> criteriontrigger_a) {
-        Set<CriterionTrigger.a<T>> set = (Set) this.a.get(advancementdataplayer);
+        Set<CriterionTrigger.a<T>> set = (Set) this.players.get(advancementdataplayer);
 
         if (set != null) {
             set.remove(criteriontrigger_a);
             if (set.isEmpty()) {
-                this.a.remove(advancementdataplayer);
+                this.players.remove(advancementdataplayer);
             }
         }
 
@@ -42,7 +42,7 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstanceAbstra
 
     @Override
     public final void a(AdvancementDataPlayer advancementdataplayer) {
-        this.a.remove(advancementdataplayer);
+        this.players.remove(advancementdataplayer);
     }
 
     protected abstract T b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext);
@@ -56,7 +56,7 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstanceAbstra
 
     protected void a(EntityPlayer entityplayer, Predicate<T> predicate) {
         AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
-        Set<CriterionTrigger.a<T>> set = (Set) this.a.get(advancementdataplayer);
+        Set<CriterionTrigger.a<T>> set = (Set) this.players.get(advancementdataplayer);
 
         if (set != null && !set.isEmpty()) {
             LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityplayer);
@@ -69,7 +69,7 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstanceAbstra
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 T t0 = (CriterionInstanceAbstract) criteriontrigger_a.a();
 
-                if (t0.b().a(loottableinfo) && predicate.test(t0)) {
+                if (predicate.test(t0) && t0.b().a(loottableinfo)) {
                     if (list == null) {
                         list = Lists.newArrayList();
                     }

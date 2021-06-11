@@ -5,14 +5,14 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public class CommandException extends RuntimeException {
 
-    private final IChatBaseComponent a;
+    private final IChatBaseComponent message;
 
     public CommandException(IChatBaseComponent ichatbasecomponent) {
         super(ichatbasecomponent.getString(), (Throwable) null, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES);
-        this.a = ichatbasecomponent;
+        this.message = ichatbasecomponent;
     }
 
     public IChatBaseComponent a() {
-        return this.a;
+        return this.message;
     }
 }

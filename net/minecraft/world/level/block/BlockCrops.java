@@ -6,8 +6,11 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.EntityRavager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.IMaterial;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
@@ -20,21 +23,22 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.ai;
-    private static final VoxelShape[] a = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+    public static final int MAX_AGE = 7;
+    public static final BlockStateInteger AGE = BlockProperties.AGE_7;
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     protected BlockCrops(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.c(), 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(this.c(), 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCrops.a[(Integer) iblockdata.get(this.c())];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCrops.SHAPE_BY_AGE[(Integer) iblockdata.get(this.c())];
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.a(Blocks.FARMLAND);
     }
 
@@ -101,7 +105,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 float f1 = 0.0F;
-                IBlockData iblockdata = iblockaccess.getType(blockposition1.b(i, 0, j));
+                IBlockData iblockdata = iblockaccess.getType(blockposition1.c(i, 0, j));
 
                 if (iblockdata.a(Blocks.FARMLAND)) {
                     f1 = 1.0F;
@@ -122,13 +126,13 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         BlockPosition blockposition3 = blockposition.south();
         BlockPosition blockposition4 = blockposition.west();
         BlockPosition blockposition5 = blockposition.east();
-        boolean flag = block == iblockaccess.getType(blockposition4).getBlock() || block == iblockaccess.getType(blockposition5).getBlock();
-        boolean flag1 = block == iblockaccess.getType(blockposition2).getBlock() || block == iblockaccess.getType(blockposition3).getBlock();
+        boolean flag = iblockaccess.getType(blockposition4).a(block) || iblockaccess.getType(blockposition5).a(block);
+        boolean flag1 = iblockaccess.getType(blockposition2).a(block) || iblockaccess.getType(blockposition3).a(block);
 
         if (flag && flag1) {
             f /= 2.0F;
         } else {
-            boolean flag2 = block == iblockaccess.getType(blockposition4.north()).getBlock() || block == iblockaccess.getType(blockposition5.north()).getBlock() || block == iblockaccess.getType(blockposition5.south()).getBlock() || block == iblockaccess.getType(blockposition4.south()).getBlock();
+            boolean flag2 = iblockaccess.getType(blockposition4.north()).a(block) || iblockaccess.getType(blockposition5.north()).a(block) || iblockaccess.getType(blockposition5.south()).a(block) || iblockaccess.getType(blockposition4.south()).a(block);
 
             if (flag2) {
                 f /= 2.0F;
@@ -140,16 +144,25 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return (iworldreader.getLightLevel(blockposition, 0) >= 8 || iworldreader.e(blockposition)) && super.canPlace(iblockdata, iworldreader, blockposition);
+        return (iworldreader.getLightLevel(blockposition, 0) >= 8 || iworldreader.g(blockposition)) && super.canPlace(iblockdata, iworldreader, blockposition);
     }
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (entity instanceof EntityRavager && world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+        if (entity instanceof EntityRavager && world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             world.a(blockposition, true, entity);
         }
 
         super.a(iblockdata, world, blockposition, entity);
+    }
+
+    protected IMaterial e() {
+        return Items.WHEAT_SEEDS;
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(this.e());
     }
 
     @Override

@@ -14,6 +14,8 @@ import net.minecraft.world.level.World;
 
 public class ItemHoneyBottle extends Item {
 
+    private static final int DRINK_DURATION = 40;
+
     public ItemHoneyBottle(Item.Info item_info) {
         super(item_info);
     }
@@ -24,7 +26,7 @@ public class ItemHoneyBottle extends Item {
         if (entityliving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
-            CriterionTriggers.z.a(entityplayer, itemstack);
+            CriterionTriggers.CONSUME_ITEM.a(entityplayer, itemstack);
             entityplayer.b(StatisticList.ITEM_USED.b(this));
         }
 
@@ -35,11 +37,11 @@ public class ItemHoneyBottle extends Item {
         if (itemstack.isEmpty()) {
             return new ItemStack(Items.GLASS_BOTTLE);
         } else {
-            if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
+            if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).getAbilities().instabuild) {
                 ItemStack itemstack1 = new ItemStack(Items.GLASS_BOTTLE);
                 EntityHuman entityhuman = (EntityHuman) entityliving;
 
-                if (!entityhuman.inventory.pickup(itemstack1)) {
+                if (!entityhuman.getInventory().pickup(itemstack1)) {
                     entityhuman.drop(itemstack1, false);
                 }
             }
@@ -49,23 +51,23 @@ public class ItemHoneyBottle extends Item {
     }
 
     @Override
-    public int e_(ItemStack itemstack) {
+    public int b(ItemStack itemstack) {
         return 40;
     }
 
     @Override
-    public EnumAnimation d_(ItemStack itemstack) {
+    public EnumAnimation c(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
     @Override
-    public SoundEffect ae_() {
-        return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
+    public SoundEffect O_() {
+        return SoundEffects.HONEY_DRINK;
     }
 
     @Override
-    public SoundEffect ad_() {
-        return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
+    public SoundEffect h() {
+        return SoundEffects.HONEY_DRINK;
     }
 
     @Override

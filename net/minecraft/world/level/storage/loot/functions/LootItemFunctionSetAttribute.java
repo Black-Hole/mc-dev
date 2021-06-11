@@ -1,6 +1,7 @@
 package net.minecraft.world.level.storage.loot.functions;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -9,9 +10,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.SystemUtils;
@@ -23,79 +26,95 @@ import net.minecraft.world.entity.ai.attributes.AttributeBase;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
-import net.minecraft.world.level.storage.loot.LootValueBounds;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
 
-    private final List<LootItemFunctionSetAttribute.b> a;
+    final List<LootItemFunctionSetAttribute.b> modifiers;
 
-    private LootItemFunctionSetAttribute(LootItemCondition[] alootitemcondition, List<LootItemFunctionSetAttribute.b> list) {
+    LootItemFunctionSetAttribute(LootItemCondition[] alootitemcondition, List<LootItemFunctionSetAttribute.b> list) {
         super(alootitemcondition);
-        this.a = ImmutableList.copyOf(list);
+        this.modifiers = ImmutableList.copyOf(list);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.i;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_ATTRIBUTES;
+    }
+
+    @Override
+    public Set<LootContextParameter<?>> b() {
+        return (Set) this.modifiers.stream().flatMap((lootitemfunctionsetattribute_b) -> {
+            return lootitemfunctionsetattribute_b.amount.b().stream();
+        }).collect(ImmutableSet.toImmutableSet());
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         Random random = loottableinfo.a();
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.modifiers.iterator();
 
         while (iterator.hasNext()) {
             LootItemFunctionSetAttribute.b lootitemfunctionsetattribute_b = (LootItemFunctionSetAttribute.b) iterator.next();
-            UUID uuid = lootitemfunctionsetattribute_b.e;
+            UUID uuid = lootitemfunctionsetattribute_b.id;
 
             if (uuid == null) {
                 uuid = UUID.randomUUID();
             }
 
-            EnumItemSlot enumitemslot = (EnumItemSlot) SystemUtils.a((Object[]) lootitemfunctionsetattribute_b.f, random);
+            EnumItemSlot enumitemslot = (EnumItemSlot) SystemUtils.a((Object[]) lootitemfunctionsetattribute_b.slots, random);
 
-            itemstack.a(lootitemfunctionsetattribute_b.b, new AttributeModifier(uuid, lootitemfunctionsetattribute_b.a, (double) lootitemfunctionsetattribute_b.d.b(random), lootitemfunctionsetattribute_b.c), enumitemslot);
+            itemstack.a(lootitemfunctionsetattribute_b.attribute, new AttributeModifier(uuid, lootitemfunctionsetattribute_b.name, (double) lootitemfunctionsetattribute_b.amount.b(loottableinfo), lootitemfunctionsetattribute_b.operation), enumitemslot);
         }
 
         return itemstack;
     }
 
-    static class b {
+    public static LootItemFunctionSetAttribute.c a(String s, AttributeBase attributebase, AttributeModifier.Operation attributemodifier_operation, NumberProvider numberprovider) {
+        return new LootItemFunctionSetAttribute.c(s, attributebase, attributemodifier_operation, numberprovider);
+    }
 
-        private final String a;
-        private final AttributeBase b;
-        private final AttributeModifier.Operation c;
-        private final LootValueBounds d;
+    public static LootItemFunctionSetAttribute.a c() {
+        return new LootItemFunctionSetAttribute.a();
+    }
+
+    private static class b {
+
+        final String name;
+        final AttributeBase attribute;
+        final AttributeModifier.Operation operation;
+        final NumberProvider amount;
         @Nullable
-        private final UUID e;
-        private final EnumItemSlot[] f;
+        final UUID id;
+        final EnumItemSlot[] slots;
 
-        private b(String s, AttributeBase attributebase, AttributeModifier.Operation attributemodifier_operation, LootValueBounds lootvaluebounds, EnumItemSlot[] aenumitemslot, @Nullable UUID uuid) {
-            this.a = s;
-            this.b = attributebase;
-            this.c = attributemodifier_operation;
-            this.d = lootvaluebounds;
-            this.e = uuid;
-            this.f = aenumitemslot;
+        b(String s, AttributeBase attributebase, AttributeModifier.Operation attributemodifier_operation, NumberProvider numberprovider, EnumItemSlot[] aenumitemslot, @Nullable UUID uuid) {
+            this.name = s;
+            this.attribute = attributebase;
+            this.operation = attributemodifier_operation;
+            this.amount = numberprovider;
+            this.id = uuid;
+            this.slots = aenumitemslot;
         }
 
         public JsonObject a(JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("name", this.a);
-            jsonobject.addProperty("attribute", IRegistry.ATTRIBUTE.getKey(this.b).toString());
-            jsonobject.addProperty("operation", a(this.c));
-            jsonobject.add("amount", jsonserializationcontext.serialize(this.d));
-            if (this.e != null) {
-                jsonobject.addProperty("id", this.e.toString());
+            jsonobject.addProperty("name", this.name);
+            jsonobject.addProperty("attribute", IRegistry.ATTRIBUTE.getKey(this.attribute).toString());
+            jsonobject.addProperty("operation", a(this.operation));
+            jsonobject.add("amount", jsonserializationcontext.serialize(this.amount));
+            if (this.id != null) {
+                jsonobject.addProperty("id", this.id.toString());
             }
 
-            if (this.f.length == 1) {
-                jsonobject.addProperty("slot", this.f[0].getSlotName());
+            if (this.slots.length == 1) {
+                jsonobject.addProperty("slot", this.slots[0].getSlotName());
             } else {
                 JsonArray jsonarray = new JsonArray();
-                EnumItemSlot[] aenumitemslot = this.f;
+                EnumItemSlot[] aenumitemslot = this.slots;
                 int i = aenumitemslot.length;
 
                 for (int j = 0; j < i; ++j) {
@@ -119,7 +138,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
                 throw new JsonSyntaxException("Unknown attribute: " + minecraftkey);
             } else {
                 AttributeModifier.Operation attributemodifier_operation = a(ChatDeserializer.h(jsonobject, "operation"));
-                LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "amount", jsondeserializationcontext, LootValueBounds.class);
+                NumberProvider numberprovider = (NumberProvider) ChatDeserializer.a(jsonobject, "amount", jsondeserializationcontext, NumberProvider.class);
                 UUID uuid = null;
                 EnumItemSlot[] aenumitemslot;
 
@@ -156,7 +175,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
                     }
                 }
 
-                return new LootItemFunctionSetAttribute.b(s, attributebase, attributemodifier_operation, lootvaluebounds, aenumitemslot, uuid);
+                return new LootItemFunctionSetAttribute.b(s, attributebase, attributemodifier_operation, numberprovider, aenumitemslot, uuid);
             }
         }
 
@@ -206,6 +225,60 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
         }
     }
 
+    public static class c {
+
+        private final String name;
+        private final AttributeBase attribute;
+        private final AttributeModifier.Operation operation;
+        private final NumberProvider amount;
+        @Nullable
+        private UUID id;
+        private final Set<EnumItemSlot> slots = EnumSet.noneOf(EnumItemSlot.class);
+
+        public c(String s, AttributeBase attributebase, AttributeModifier.Operation attributemodifier_operation, NumberProvider numberprovider) {
+            this.name = s;
+            this.attribute = attributebase;
+            this.operation = attributemodifier_operation;
+            this.amount = numberprovider;
+        }
+
+        public LootItemFunctionSetAttribute.c a(EnumItemSlot enumitemslot) {
+            this.slots.add(enumitemslot);
+            return this;
+        }
+
+        public LootItemFunctionSetAttribute.c a(UUID uuid) {
+            this.id = uuid;
+            return this;
+        }
+
+        public LootItemFunctionSetAttribute.b a() {
+            return new LootItemFunctionSetAttribute.b(this.name, this.attribute, this.operation, this.amount, (EnumItemSlot[]) this.slots.toArray(new EnumItemSlot[0]), this.id);
+        }
+    }
+
+    public static class a extends LootItemFunctionConditional.a<LootItemFunctionSetAttribute.a> {
+
+        private final List<LootItemFunctionSetAttribute.b> modifiers = Lists.newArrayList();
+
+        public a() {}
+
+        @Override
+        protected LootItemFunctionSetAttribute.a d() {
+            return this;
+        }
+
+        public LootItemFunctionSetAttribute.a a(LootItemFunctionSetAttribute.c lootitemfunctionsetattribute_c) {
+            this.modifiers.add(lootitemfunctionsetattribute_c.a());
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootItemFunctionSetAttribute(this.g(), this.modifiers);
+        }
+    }
+
     public static class d extends LootItemFunctionConditional.c<LootItemFunctionSetAttribute> {
 
         public d() {}
@@ -213,7 +286,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
         public void a(JsonObject jsonobject, LootItemFunctionSetAttribute lootitemfunctionsetattribute, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetattribute, jsonserializationcontext);
             JsonArray jsonarray = new JsonArray();
-            Iterator iterator = lootitemfunctionsetattribute.a.iterator();
+            Iterator iterator = lootitemfunctionsetattribute.modifiers.iterator();
 
             while (iterator.hasNext()) {
                 LootItemFunctionSetAttribute.b lootitemfunctionsetattribute_b = (LootItemFunctionSetAttribute.b) iterator.next();

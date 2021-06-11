@@ -1,8 +1,12 @@
 package net.minecraft.world.level.block;
 
 import java.util.Optional;
+import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.particles.Particles;
+import net.minecraft.sounds.SoundCategory;
+import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.EntityHuman;
@@ -18,12 +22,14 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public abstract class BlockFireAbstract extends Block {
 
-    private final float b;
-    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+    private static final int SECONDS_ON_FIRE = 8;
+    private final float fireDamage;
+    protected static final float AABB_OFFSET = 1.0F;
+    protected static final VoxelShape DOWN_AABB = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 
     public BlockFireAbstract(BlockBase.Info blockbase_info, float f) {
         super(blockbase_info);
-        this.b = f;
+        this.fireDamage = f;
     }
 
     @Override
@@ -35,15 +41,84 @@ public abstract class BlockFireAbstract extends Block {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata = iblockaccess.getType(blockposition1);
 
-        return BlockSoulFire.c(iblockdata.getBlock()) ? Blocks.SOUL_FIRE.getBlockData() : ((BlockFire) Blocks.FIRE).getPlacedState(iblockaccess, blockposition);
+        return BlockSoulFire.h(iblockdata) ? Blocks.SOUL_FIRE.getBlockData() : ((BlockFire) Blocks.FIRE).getPlacedState(iblockaccess, blockposition);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockFireAbstract.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockFireAbstract.DOWN_AABB;
     }
 
-    protected abstract boolean e(IBlockData iblockdata);
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (random.nextInt(24) == 0) {
+            world.a((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+        }
+
+        BlockPosition blockposition1 = blockposition.down();
+        IBlockData iblockdata1 = world.getType(blockposition1);
+        double d0;
+        double d1;
+        double d2;
+        int i;
+
+        if (!this.f(iblockdata1) && !iblockdata1.d(world, blockposition1, EnumDirection.UP)) {
+            if (this.f(world.getType(blockposition.west()))) {
+                for (i = 0; i < 2; ++i) {
+                    d0 = (double) blockposition.getX() + random.nextDouble() * 0.10000000149011612D;
+                    d1 = (double) blockposition.getY() + random.nextDouble();
+                    d2 = (double) blockposition.getZ() + random.nextDouble();
+                    world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+
+            if (this.f(world.getType(blockposition.east()))) {
+                for (i = 0; i < 2; ++i) {
+                    d0 = (double) (blockposition.getX() + 1) - random.nextDouble() * 0.10000000149011612D;
+                    d1 = (double) blockposition.getY() + random.nextDouble();
+                    d2 = (double) blockposition.getZ() + random.nextDouble();
+                    world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+
+            if (this.f(world.getType(blockposition.north()))) {
+                for (i = 0; i < 2; ++i) {
+                    d0 = (double) blockposition.getX() + random.nextDouble();
+                    d1 = (double) blockposition.getY() + random.nextDouble();
+                    d2 = (double) blockposition.getZ() + random.nextDouble() * 0.10000000149011612D;
+                    world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+
+            if (this.f(world.getType(blockposition.south()))) {
+                for (i = 0; i < 2; ++i) {
+                    d0 = (double) blockposition.getX() + random.nextDouble();
+                    d1 = (double) blockposition.getY() + random.nextDouble();
+                    d2 = (double) (blockposition.getZ() + 1) - random.nextDouble() * 0.10000000149011612D;
+                    world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+
+            if (this.f(world.getType(blockposition.up()))) {
+                for (i = 0; i < 2; ++i) {
+                    d0 = (double) blockposition.getX() + random.nextDouble();
+                    d1 = (double) (blockposition.getY() + 1) - random.nextDouble() * 0.10000000149011612D;
+                    d2 = (double) blockposition.getZ() + random.nextDouble();
+                    world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+        } else {
+            for (i = 0; i < 3; ++i) {
+                d0 = (double) blockposition.getX() + random.nextDouble();
+                d1 = (double) blockposition.getY() + random.nextDouble() * 0.5D + 0.5D;
+                d2 = (double) blockposition.getZ() + random.nextDouble();
+                world.addParticle(Particles.LARGE_SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            }
+        }
+
+    }
+
+    protected abstract boolean f(IBlockData iblockdata);
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
@@ -53,7 +128,7 @@ public abstract class BlockFireAbstract extends Block {
                 entity.setOnFire(8);
             }
 
-            entity.damageEntity(DamageSource.FIRE, this.b);
+            entity.damageEntity(DamageSource.IN_FIRE, this.fireDamage);
         }
 
         super.a(iblockdata, world, blockposition, entity);
@@ -79,15 +154,19 @@ public abstract class BlockFireAbstract extends Block {
     }
 
     private static boolean a(World world) {
-        return world.getDimensionKey() == World.OVERWORLD || world.getDimensionKey() == World.THE_NETHER;
+        return world.getDimensionKey() == World.OVERWORLD || world.getDimensionKey() == World.NETHER;
     }
 
     @Override
+    protected void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata) {}
+
+    @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.s_()) {
+        if (!world.isClientSide()) {
             world.a((EntityHuman) null, 1009, blockposition, 0);
         }
 
+        super.a(world, blockposition, iblockdata, entityhuman);
     }
 
     public static boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {

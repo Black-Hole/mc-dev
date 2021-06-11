@@ -13,8 +13,8 @@ public class FoodMetaData {
     public int foodLevel = 20;
     public float saturationLevel = 5.0F;
     public float exhaustionLevel;
-    private int foodTickTimer;
-    private int e = 20;
+    private int tickTimer;
+    private int lastFoodLevel = 20;
 
     public FoodMetaData() {}
 
@@ -33,9 +33,9 @@ public class FoodMetaData {
     }
 
     public void a(EntityHuman entityhuman) {
-        EnumDifficulty enumdifficulty = entityhuman.world.getDifficulty();
+        EnumDifficulty enumdifficulty = entityhuman.level.getDifficulty();
 
-        this.e = this.foodLevel;
+        this.lastFoodLevel = this.foodLevel;
         if (this.exhaustionLevel > 4.0F) {
             this.exhaustionLevel -= 4.0F;
             if (this.saturationLevel > 0.0F) {
@@ -45,35 +45,35 @@ public class FoodMetaData {
             }
         }
 
-        boolean flag = entityhuman.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION);
+        boolean flag = entityhuman.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
 
-        if (flag && this.saturationLevel > 0.0F && entityhuman.eJ() && this.foodLevel >= 20) {
-            ++this.foodTickTimer;
-            if (this.foodTickTimer >= 10) {
+        if (flag && this.saturationLevel > 0.0F && entityhuman.ft() && this.foodLevel >= 20) {
+            ++this.tickTimer;
+            if (this.tickTimer >= 10) {
                 float f = Math.min(this.saturationLevel, 6.0F);
 
                 entityhuman.heal(f / 6.0F);
                 this.a(f);
-                this.foodTickTimer = 0;
+                this.tickTimer = 0;
             }
-        } else if (flag && this.foodLevel >= 18 && entityhuman.eJ()) {
-            ++this.foodTickTimer;
-            if (this.foodTickTimer >= 80) {
+        } else if (flag && this.foodLevel >= 18 && entityhuman.ft()) {
+            ++this.tickTimer;
+            if (this.tickTimer >= 80) {
                 entityhuman.heal(1.0F);
                 this.a(6.0F);
-                this.foodTickTimer = 0;
+                this.tickTimer = 0;
             }
         } else if (this.foodLevel <= 0) {
-            ++this.foodTickTimer;
-            if (this.foodTickTimer >= 80) {
+            ++this.tickTimer;
+            if (this.tickTimer >= 80) {
                 if (entityhuman.getHealth() > 10.0F || enumdifficulty == EnumDifficulty.HARD || entityhuman.getHealth() > 1.0F && enumdifficulty == EnumDifficulty.NORMAL) {
                     entityhuman.damageEntity(DamageSource.STARVE, 1.0F);
                 }
 
-                this.foodTickTimer = 0;
+                this.tickTimer = 0;
             }
         } else {
-            this.foodTickTimer = 0;
+            this.tickTimer = 0;
         }
 
     }
@@ -81,7 +81,7 @@ public class FoodMetaData {
     public void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("foodLevel", 99)) {
             this.foodLevel = nbttagcompound.getInt("foodLevel");
-            this.foodTickTimer = nbttagcompound.getInt("foodTickTimer");
+            this.tickTimer = nbttagcompound.getInt("foodTickTimer");
             this.saturationLevel = nbttagcompound.getFloat("foodSaturationLevel");
             this.exhaustionLevel = nbttagcompound.getFloat("foodExhaustionLevel");
         }
@@ -90,13 +90,17 @@ public class FoodMetaData {
 
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("foodLevel", this.foodLevel);
-        nbttagcompound.setInt("foodTickTimer", this.foodTickTimer);
+        nbttagcompound.setInt("foodTickTimer", this.tickTimer);
         nbttagcompound.setFloat("foodSaturationLevel", this.saturationLevel);
         nbttagcompound.setFloat("foodExhaustionLevel", this.exhaustionLevel);
     }
 
     public int getFoodLevel() {
         return this.foodLevel;
+    }
+
+    public int b() {
+        return this.lastFoodLevel;
     }
 
     public boolean c() {
@@ -107,11 +111,23 @@ public class FoodMetaData {
         this.exhaustionLevel = Math.min(this.exhaustionLevel + f, 40.0F);
     }
 
+    public float d() {
+        return this.exhaustionLevel;
+    }
+
     public float getSaturationLevel() {
         return this.saturationLevel;
     }
 
     public void a(int i) {
         this.foodLevel = i;
+    }
+
+    public void b(float f) {
+        this.saturationLevel = f;
+    }
+
+    public void c(float f) {
+        this.exhaustionLevel = f;
     }
 }

@@ -5,17 +5,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.level.VirtualLevelWritable;
+import net.minecraft.world.level.VirtualLevelReadable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.WorldGenFoilagePlacer;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class TrunkPlacerMegaJungle extends TrunkPlacerGiant {
 
-    public static final Codec<TrunkPlacerMegaJungle> b = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<TrunkPlacerMegaJungle> CODEC = RecordCodecBuilder.create((instance) -> {
         return a(instance).apply(instance, TrunkPlacerMegaJungle::new);
     });
 
@@ -25,14 +25,14 @@ public class TrunkPlacerMegaJungle extends TrunkPlacerGiant {
 
     @Override
     protected TrunkPlacers<?> a() {
-        return TrunkPlacers.d;
+        return TrunkPlacers.MEGA_JUNGLE_TRUNK_PLACER;
     }
 
     @Override
-    public List<WorldGenFoilagePlacer.b> a(VirtualLevelWritable virtuallevelwritable, Random random, int i, BlockPosition blockposition, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
-        List<WorldGenFoilagePlacer.b> list = Lists.newArrayList();
+    public List<WorldGenFoilagePlacer.a> a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, int i, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        List<WorldGenFoilagePlacer.a> list = Lists.newArrayList();
 
-        list.addAll(super.a(virtuallevelwritable, random, i, blockposition, set, structureboundingbox, worldgenfeaturetreeconfiguration));
+        list.addAll(super.a(virtuallevelreadable, biconsumer, random, i, blockposition, worldgenfeaturetreeconfiguration));
 
         for (int j = i - 2 - random.nextInt(4); j > i / 2; j -= 2 + random.nextInt(4)) {
             float f = random.nextFloat() * 6.2831855F;
@@ -42,12 +42,12 @@ public class TrunkPlacerMegaJungle extends TrunkPlacerGiant {
             for (int i1 = 0; i1 < 5; ++i1) {
                 k = (int) (1.5F + MathHelper.cos(f) * (float) i1);
                 l = (int) (1.5F + MathHelper.sin(f) * (float) i1);
-                BlockPosition blockposition1 = blockposition.b(k, j - 3 + i1 / 2, l);
+                BlockPosition blockposition1 = blockposition.c(k, j - 3 + i1 / 2, l);
 
-                a(virtuallevelwritable, random, blockposition1, set, structureboundingbox, worldgenfeaturetreeconfiguration);
+                b(virtuallevelreadable, biconsumer, random, blockposition1, worldgenfeaturetreeconfiguration);
             }
 
-            list.add(new WorldGenFoilagePlacer.b(blockposition.b(k, j, l), -2, false));
+            list.add(new WorldGenFoilagePlacer.a(blockposition.c(k, j, l), -2, false));
         }
 
         return list;

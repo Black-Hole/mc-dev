@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.level.CommandBlockListenerAbstract;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityCommand;
@@ -27,22 +26,24 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BlockCommand extends BlockTileEntity {
+public class BlockCommand extends BlockTileEntity implements GameMasterBlock {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final BlockStateDirection a = BlockDirectional.FACING;
-    public static final BlockStateBoolean b = BlockProperties.c;
+    public static final BlockStateDirection FACING = BlockDirectional.FACING;
+    public static final BlockStateBoolean CONDITIONAL = BlockProperties.CONDITIONAL;
+    private final boolean automatic;
 
-    public BlockCommand(BlockBase.Info blockbase_info) {
+    public BlockCommand(BlockBase.Info blockbase_info, boolean flag) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockCommand.FACING, EnumDirection.NORTH)).set(BlockCommand.CONDITIONAL, false));
+        this.automatic = flag;
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        TileEntityCommand tileentitycommand = new TileEntityCommand();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        TileEntityCommand tileentitycommand = new TileEntityCommand(blockposition, iblockdata);
 
-        tileentitycommand.b(this == Blocks.CHAIN_COMMAND_BLOCK);
+        tileentitycommand.b(this.automatic);
         return tileentitycommand;
     }
 
@@ -57,9 +58,9 @@ public class BlockCommand extends BlockTileEntity {
                 boolean flag2 = tileentitycommand.f();
 
                 tileentitycommand.a(flag1);
-                if (!flag2 && !tileentitycommand.g() && tileentitycommand.m() != TileEntityCommand.Type.SEQUENCE) {
+                if (!flag2 && !tileentitycommand.g() && tileentitycommand.t() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag1) {
-                        tileentitycommand.k();
+                        tileentitycommand.j();
                         world.getBlockTickList().a(blockposition, this, 1);
                     }
 
@@ -76,14 +77,14 @@ public class BlockCommand extends BlockTileEntity {
             TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
             CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
             boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
-            TileEntityCommand.Type tileentitycommand_type = tileentitycommand.m();
-            boolean flag1 = tileentitycommand.j();
+            TileEntityCommand.Type tileentitycommand_type = tileentitycommand.t();
+            boolean flag1 = tileentitycommand.i();
 
             if (tileentitycommand_type == TileEntityCommand.Type.AUTO) {
-                tileentitycommand.k();
+                tileentitycommand.j();
                 if (flag1) {
                     this.a(iblockdata, worldserver, blockposition, commandblocklistenerabstract, flag);
-                } else if (tileentitycommand.x()) {
+                } else if (tileentitycommand.u()) {
                     commandblocklistenerabstract.a(0);
                 }
 
@@ -93,7 +94,7 @@ public class BlockCommand extends BlockTileEntity {
             } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
                 if (flag1) {
                     this.a(iblockdata, worldserver, blockposition, commandblocklistenerabstract, flag);
-                } else if (tileentitycommand.x()) {
+                } else if (tileentitycommand.u()) {
                     commandblocklistenerabstract.a(0);
                 }
             }
@@ -110,7 +111,7 @@ public class BlockCommand extends BlockTileEntity {
             commandblocklistenerabstract.a(0);
         }
 
-        a(world, blockposition, (EnumDirection) iblockdata.get(BlockCommand.a));
+        a(world, blockposition, (EnumDirection) iblockdata.get(BlockCommand.FACING));
     }
 
     @Override
@@ -134,7 +135,7 @@ public class BlockCommand extends BlockTileEntity {
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityCommand ? ((TileEntityCommand) tileentity).getCommandBlock().i() : 0;
+        return tileentity instanceof TileEntityCommand ? ((TileEntityCommand) tileentity).getCommandBlock().j() : 0;
     }
 
     @Override
@@ -151,11 +152,11 @@ public class BlockCommand extends BlockTileEntity {
 
             if (!world.isClientSide) {
                 if (itemstack.b("BlockEntityTag") == null) {
-                    commandblocklistenerabstract.a(world.getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK));
-                    tileentitycommand.b(this == Blocks.CHAIN_COMMAND_BLOCK);
+                    commandblocklistenerabstract.a(world.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK));
+                    tileentitycommand.b(this.automatic);
                 }
 
-                if (tileentitycommand.m() == TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.t() == TileEntityCommand.Type.SEQUENCE) {
                     boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
                     tileentitycommand.a(flag);
@@ -166,28 +167,28 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockCommand.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockCommand.a)));
+        return (IBlockData) iblockdata.set(BlockCommand.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockCommand.FACING)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockCommand.a)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockCommand.FACING)));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockCommand.a, BlockCommand.b);
+        blockstatelist_a.a(BlockCommand.FACING, BlockCommand.CONDITIONAL);
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockCommand.a, blockactioncontext.d().opposite());
+        return (IBlockData) this.getBlockData().set(BlockCommand.FACING, blockactioncontext.d().opposite());
     }
 
     private static void a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -197,7 +198,7 @@ public class BlockCommand extends BlockTileEntity {
         IBlockData iblockdata;
         int i;
 
-        for (i = gamerules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH); i-- > 0; enumdirection = (EnumDirection) iblockdata.get(BlockCommand.a)) {
+        for (i = gamerules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH); i-- > 0; enumdirection = (EnumDirection) iblockdata.get(BlockCommand.FACING)) {
             blockposition_mutableblockposition.c(enumdirection);
             iblockdata = world.getType(blockposition_mutableblockposition);
             Block block = iblockdata.getBlock();
@@ -214,27 +215,27 @@ public class BlockCommand extends BlockTileEntity {
 
             TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
 
-            if (tileentitycommand.m() != TileEntityCommand.Type.SEQUENCE) {
+            if (tileentitycommand.t() != TileEntityCommand.Type.SEQUENCE) {
                 break;
             }
 
             if (tileentitycommand.f() || tileentitycommand.g()) {
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
 
-                if (tileentitycommand.k()) {
+                if (tileentitycommand.j()) {
                     if (!commandblocklistenerabstract.a(world)) {
                         break;
                     }
 
                     world.updateAdjacentComparators(blockposition_mutableblockposition, block);
-                } else if (tileentitycommand.x()) {
+                } else if (tileentitycommand.u()) {
                     commandblocklistenerabstract.a(0);
                 }
             }
         }
 
         if (i <= 0) {
-            int j = Math.max(gamerules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH), 0);
+            int j = Math.max(gamerules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH), 0);
 
             BlockCommand.LOGGER.warn("Command Block chain tried to execute more than {} steps!", j);
         }

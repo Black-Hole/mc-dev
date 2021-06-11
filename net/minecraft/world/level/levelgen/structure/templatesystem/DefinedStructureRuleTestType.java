@@ -5,12 +5,12 @@ import net.minecraft.core.IRegistry;
 
 public interface DefinedStructureRuleTestType<P extends DefinedStructureRuleTest> {
 
-    DefinedStructureRuleTestType<DefinedStructureTestTrue> a = a("always_true", DefinedStructureTestTrue.a);
-    DefinedStructureRuleTestType<DefinedStructureTestBlock> b = a("block_match", DefinedStructureTestBlock.a);
-    DefinedStructureRuleTestType<DefinedStructureTestBlockState> c = a("blockstate_match", DefinedStructureTestBlockState.a);
-    DefinedStructureRuleTestType<DefinedStructureTestTag> d = a("tag_match", DefinedStructureTestTag.a);
-    DefinedStructureRuleTestType<DefinedStructureTestRandomBlock> e = a("random_block_match", DefinedStructureTestRandomBlock.a);
-    DefinedStructureRuleTestType<DefinedStructureTestRandomBlockState> f = a("random_blockstate_match", DefinedStructureTestRandomBlockState.a);
+    DefinedStructureRuleTestType<DefinedStructureTestTrue> ALWAYS_TRUE_TEST = a("always_true", DefinedStructureTestTrue.CODEC);
+    DefinedStructureRuleTestType<DefinedStructureTestBlock> BLOCK_TEST = a("block_match", DefinedStructureTestBlock.CODEC);
+    DefinedStructureRuleTestType<DefinedStructureTestBlockState> BLOCKSTATE_TEST = a("blockstate_match", DefinedStructureTestBlockState.CODEC);
+    DefinedStructureRuleTestType<DefinedStructureTestTag> TAG_TEST = a("tag_match", DefinedStructureTestTag.CODEC);
+    DefinedStructureRuleTestType<DefinedStructureTestRandomBlock> RANDOM_BLOCK_TEST = a("random_block_match", DefinedStructureTestRandomBlock.CODEC);
+    DefinedStructureRuleTestType<DefinedStructureTestRandomBlockState> RANDOM_BLOCKSTATE_TEST = a("random_blockstate_match", DefinedStructureTestRandomBlockState.CODEC);
 
     Codec<P> codec();
 

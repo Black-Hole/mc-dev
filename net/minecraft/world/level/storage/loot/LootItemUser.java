@@ -6,7 +6,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
 
 public interface LootItemUser {
 
-    default Set<LootContextParameter<?>> a() {
+    default Set<LootContextParameter<?>> b() {
         return ImmutableSet.of();
     }
 

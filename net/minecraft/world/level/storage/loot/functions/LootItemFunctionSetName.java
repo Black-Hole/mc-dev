@@ -24,24 +24,24 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final IChatBaseComponent b;
+    final IChatBaseComponent name;
     @Nullable
-    private final LootTableInfo.EntityTarget d;
+    final LootTableInfo.EntityTarget resolutionContext;
 
-    private LootItemFunctionSetName(LootItemCondition[] alootitemcondition, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+    LootItemFunctionSetName(LootItemCondition[] alootitemcondition, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         super(alootitemcondition);
-        this.b = ichatbasecomponent;
-        this.d = loottableinfo_entitytarget;
+        this.name = ichatbasecomponent;
+        this.resolutionContext = loottableinfo_entitytarget;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.j;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_NAME;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return this.d != null ? ImmutableSet.of(this.d.a()) : ImmutableSet.of();
+    public Set<LootContextParameter<?>> b() {
+        return this.resolutionContext != null ? ImmutableSet.of(this.resolutionContext.a()) : ImmutableSet.of();
     }
 
     public static UnaryOperator<IChatBaseComponent> a(LootTableInfo loottableinfo, @Nullable LootTableInfo.EntityTarget loottableinfo_entitytarget) {
@@ -69,11 +69,23 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        if (this.b != null) {
-            itemstack.a((IChatBaseComponent) a(loottableinfo, this.d).apply(this.b));
+        if (this.name != null) {
+            itemstack.a((IChatBaseComponent) a(loottableinfo, this.resolutionContext).apply(this.name));
         }
 
         return itemstack;
+    }
+
+    public static LootItemFunctionConditional.a<?> a(IChatBaseComponent ichatbasecomponent) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionSetName(alootitemcondition, ichatbasecomponent, (LootTableInfo.EntityTarget) null);
+        });
+    }
+
+    public static LootItemFunctionConditional.a<?> a(IChatBaseComponent ichatbasecomponent, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionSetName(alootitemcondition, ichatbasecomponent, loottableinfo_entitytarget);
+        });
     }
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetName> {
@@ -82,12 +94,12 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
         public void a(JsonObject jsonobject, LootItemFunctionSetName lootitemfunctionsetname, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetname, jsonserializationcontext);
-            if (lootitemfunctionsetname.b != null) {
-                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(lootitemfunctionsetname.b));
+            if (lootitemfunctionsetname.name != null) {
+                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(lootitemfunctionsetname.name));
             }
 
-            if (lootitemfunctionsetname.d != null) {
-                jsonobject.add("entity", jsonserializationcontext.serialize(lootitemfunctionsetname.d));
+            if (lootitemfunctionsetname.resolutionContext != null) {
+                jsonobject.add("entity", jsonserializationcontext.serialize(lootitemfunctionsetname.resolutionContext));
             }
 
         }

@@ -9,13 +9,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerThrownItemPickedUpByEntity extends CriterionTriggerAbstract<CriterionTriggerThrownItemPickedUpByEntity.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("thrown_item_picked_up_by_entity");
+    static final MinecraftKey ID = new MinecraftKey("thrown_item_picked_up_by_entity");
 
     public CriterionTriggerThrownItemPickedUpByEntity() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerThrownItemPickedUpByEntity.a;
+        return CriterionTriggerThrownItemPickedUpByEntity.ID;
     }
 
     @Override
@@ -36,13 +36,13 @@ public class CriterionTriggerThrownItemPickedUpByEntity extends CriterionTrigger
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
-        private final CriterionConditionEntity.b b;
+        private final CriterionConditionItem item;
+        private final CriterionConditionEntity.b entity;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionEntity.b criterionconditionentity_b1) {
-            super(CriterionTriggerThrownItemPickedUpByEntity.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
-            this.b = criterionconditionentity_b1;
+            super(CriterionTriggerThrownItemPickedUpByEntity.ID, criterionconditionentity_b);
+            this.item = criterionconditionitem;
+            this.entity = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerThrownItemPickedUpByEntity.a a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem.a criterionconditionitem_a, CriterionConditionEntity.b criterionconditionentity_b1) {
@@ -50,15 +50,15 @@ public class CriterionTriggerThrownItemPickedUpByEntity extends CriterionTrigger
         }
 
         public boolean a(EntityPlayer entityplayer, ItemStack itemstack, LootTableInfo loottableinfo) {
-            return !this.a.a(itemstack) ? false : this.b.a(loottableinfo);
+            return !this.item.a(itemstack) ? false : this.entity.a(loottableinfo);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.a.a());
-            jsonobject.add("entity", this.b.a(lootserializationcontext));
+            jsonobject.add("item", this.item.a());
+            jsonobject.add("entity", this.entity.a(lootserializationcontext));
             return jsonobject;
         }
     }

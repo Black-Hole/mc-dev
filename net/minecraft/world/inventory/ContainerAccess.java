@@ -8,7 +8,7 @@ import net.minecraft.world.level.World;
 
 public interface ContainerAccess {
 
-    ContainerAccess a = new ContainerAccess() {
+    ContainerAccess NULL = new ContainerAccess() {
         @Override
         public <T> Optional<T> a(BiFunction<World, BlockPosition, T> bifunction) {
             return Optional.empty();

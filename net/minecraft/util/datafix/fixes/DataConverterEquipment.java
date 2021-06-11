@@ -13,6 +13,7 @@ import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -71,14 +72,14 @@ public class DataConverterEquipment extends DataFix {
 
                 if (!dynamic.get("HandDropChances").result().isPresent()) {
                     stream = Stream.of(f, 0.0F);
-                    dynamic.getClass();
+                    Objects.requireNonNull(dynamic);
                     dynamic1 = dynamic.createList(stream.map(dynamic::createFloat));
                     dynamic = dynamic.set("HandDropChances", dynamic1);
                 }
 
                 if (!dynamic.get("ArmorDropChances").result().isPresent()) {
                     stream = Stream.of(((Dynamic) iterator.next()).asFloat(0.0F), ((Dynamic) iterator.next()).asFloat(0.0F), ((Dynamic) iterator.next()).asFloat(0.0F), ((Dynamic) iterator.next()).asFloat(0.0F));
-                    dynamic.getClass();
+                    Objects.requireNonNull(dynamic);
                     dynamic1 = dynamic.createList(stream.map(dynamic::createFloat));
                     dynamic = dynamic.set("ArmorDropChances", dynamic1);
                 }

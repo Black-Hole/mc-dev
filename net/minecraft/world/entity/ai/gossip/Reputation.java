@@ -19,20 +19,35 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.DoublePredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.MinecraftSerializableUUID;
+import net.minecraft.util.VisibleForDebug;
 
 public class Reputation {
 
-    private final Map<UUID, Reputation.a> a = Maps.newHashMap();
+    public static final int DISCARD_THRESHOLD = 2;
+    private final Map<UUID, Reputation.a> gossips = Maps.newHashMap();
 
     public Reputation() {}
 
+    @VisibleForDebug
+    public Map<UUID, Object2IntMap<ReputationType>> a() {
+        Map<UUID, Object2IntMap<ReputationType>> map = Maps.newHashMap();
+
+        this.gossips.keySet().forEach((uuid) -> {
+            Reputation.a reputation_a = (Reputation.a) this.gossips.get(uuid);
+
+            map.put(uuid, reputation_a.entries);
+        });
+        return map;
+    }
+
     public void b() {
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.gossips.values().iterator();
 
         while (iterator.hasNext()) {
             Reputation.a reputation_a = (Reputation.a) iterator.next();
@@ -46,7 +61,7 @@ public class Reputation {
     }
 
     private Stream<Reputation.b> c() {
-        return this.a.entrySet().stream().flatMap((entry) -> {
+        return this.gossips.entrySet().stream().flatMap((entry) -> {
             return ((Reputation.a) entry.getValue()).a((UUID) entry.getKey());
         });
     }
@@ -73,7 +88,7 @@ public class Reputation {
                 int i1 = random.nextInt(j);
                 int j1 = Arrays.binarySearch(aint, i1);
 
-                set.add(list.get(j1 < 0 ? -j1 - 1 : j1));
+                set.add((Reputation.b) list.get(j1 < 0 ? -j1 - 1 : j1));
             }
 
             return set;
@@ -81,7 +96,7 @@ public class Reputation {
     }
 
     private Reputation.a a(UUID uuid) {
-        return (Reputation.a) this.a.computeIfAbsent(uuid, (uuid1) -> {
+        return (Reputation.a) this.gossips.computeIfAbsent(uuid, (uuid1) -> {
             return new Reputation.a();
         });
     }
@@ -90,30 +105,66 @@ public class Reputation {
         Collection<Reputation.b> collection = reputation.a(random, i);
 
         collection.forEach((reputation_b) -> {
-            int j = reputation_b.c - reputation_b.b.j;
+            int j = reputation_b.value - reputation_b.type.decayPerTransfer;
 
             if (j >= 2) {
-                this.a(reputation_b.a).a.mergeInt(reputation_b.b, j, Reputation::a);
+                this.a(reputation_b.target).entries.mergeInt(reputation_b.type, j, Reputation::a);
             }
 
         });
     }
 
     public int a(UUID uuid, Predicate<ReputationType> predicate) {
-        Reputation.a reputation_a = (Reputation.a) this.a.get(uuid);
+        Reputation.a reputation_a = (Reputation.a) this.gossips.get(uuid);
 
         return reputation_a != null ? reputation_a.a(predicate) : 0;
+    }
+
+    public long a(ReputationType reputationtype, DoublePredicate doublepredicate) {
+        return this.gossips.values().stream().filter((reputation_a) -> {
+            return doublepredicate.test((double) (reputation_a.entries.getOrDefault(reputationtype, 0) * reputationtype.weight));
+        }).count();
     }
 
     public void a(UUID uuid, ReputationType reputationtype, int i) {
         Reputation.a reputation_a = this.a(uuid);
 
-        reputation_a.a.mergeInt(reputationtype, i, (integer, integer1) -> {
+        reputation_a.entries.mergeInt(reputationtype, i, (integer, integer1) -> {
             return this.a(reputationtype, integer, integer1);
         });
         reputation_a.a(reputationtype);
         if (reputation_a.b()) {
-            this.a.remove(uuid);
+            this.gossips.remove(uuid);
+        }
+
+    }
+
+    public void b(UUID uuid, ReputationType reputationtype, int i) {
+        this.a(uuid, reputationtype, -i);
+    }
+
+    public void a(UUID uuid, ReputationType reputationtype) {
+        Reputation.a reputation_a = (Reputation.a) this.gossips.get(uuid);
+
+        if (reputation_a != null) {
+            reputation_a.b(reputationtype);
+            if (reputation_a.b()) {
+                this.gossips.remove(uuid);
+            }
+        }
+
+    }
+
+    public void a(ReputationType reputationtype) {
+        Iterator iterator = this.gossips.values().iterator();
+
+        while (iterator.hasNext()) {
+            Reputation.a reputation_a = (Reputation.a) iterator.next();
+
+            reputation_a.b(reputationtype);
+            if (reputation_a.b()) {
+                iterator.remove();
+            }
         }
 
     }
@@ -128,7 +179,7 @@ public class Reputation {
         dynamic.asStream().map(Reputation.b::a).flatMap((dataresult) -> {
             return SystemUtils.a(dataresult.result());
         }).forEach((reputation_b) -> {
-            this.a(reputation_b.a).a.put(reputation_b.b, reputation_b.c);
+            this.a(reputation_b.target).entries.put(reputation_b.type, reputation_b.value);
         });
     }
 
@@ -139,37 +190,35 @@ public class Reputation {
     private int a(ReputationType reputationtype, int i, int j) {
         int k = i + j;
 
-        return k > reputationtype.h ? Math.max(reputationtype.h, i) : k;
+        return k > reputationtype.max ? Math.max(reputationtype.max, i) : k;
     }
 
-    static class a {
+    private static class a {
 
-        private final Object2IntMap<ReputationType> a;
+        final Object2IntMap<ReputationType> entries = new Object2IntOpenHashMap();
 
-        private a() {
-            this.a = new Object2IntOpenHashMap();
-        }
+        a() {}
 
         public int a(Predicate<ReputationType> predicate) {
-            return this.a.object2IntEntrySet().stream().filter((entry) -> {
-                return predicate.test(entry.getKey());
+            return this.entries.object2IntEntrySet().stream().filter((entry) -> {
+                return predicate.test((ReputationType) entry.getKey());
             }).mapToInt((entry) -> {
-                return entry.getIntValue() * ((ReputationType) entry.getKey()).g;
+                return entry.getIntValue() * ((ReputationType) entry.getKey()).weight;
             }).sum();
         }
 
         public Stream<Reputation.b> a(UUID uuid) {
-            return this.a.object2IntEntrySet().stream().map((entry) -> {
+            return this.entries.object2IntEntrySet().stream().map((entry) -> {
                 return new Reputation.b(uuid, (ReputationType) entry.getKey(), entry.getIntValue());
             });
         }
 
         public void a() {
-            ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
+            ObjectIterator objectiterator = this.entries.object2IntEntrySet().iterator();
 
             while (objectiterator.hasNext()) {
                 Entry<ReputationType> entry = (Entry) objectiterator.next();
-                int i = entry.getIntValue() - ((ReputationType) entry.getKey()).i;
+                int i = entry.getIntValue() - ((ReputationType) entry.getKey()).decayPerDay;
 
                 if (i < 2) {
                     objectiterator.remove();
@@ -181,14 +230,14 @@ public class Reputation {
         }
 
         public boolean b() {
-            return this.a.isEmpty();
+            return this.entries.isEmpty();
         }
 
         public void a(ReputationType reputationtype) {
-            int i = this.a.getInt(reputationtype);
+            int i = this.entries.getInt(reputationtype);
 
-            if (i > reputationtype.h) {
-                this.a.put(reputationtype, reputationtype.h);
+            if (i > reputationtype.max) {
+                this.entries.put(reputationtype, reputationtype.max);
             }
 
             if (i < 2) {
@@ -198,36 +247,39 @@ public class Reputation {
         }
 
         public void b(ReputationType reputationtype) {
-            this.a.removeInt(reputationtype);
+            this.entries.removeInt(reputationtype);
         }
     }
 
-    static class b {
+    private static class b {
 
-        public final UUID a;
-        public final ReputationType b;
-        public final int c;
+        public static final String TAG_TARGET = "Target";
+        public static final String TAG_TYPE = "Type";
+        public static final String TAG_VALUE = "Value";
+        public final UUID target;
+        public final ReputationType type;
+        public final int value;
 
         public b(UUID uuid, ReputationType reputationtype, int i) {
-            this.a = uuid;
-            this.b = reputationtype;
-            this.c = i;
+            this.target = uuid;
+            this.type = reputationtype;
+            this.value = i;
         }
 
         public int a() {
-            return this.c * this.b.g;
+            return this.value * this.type.weight;
         }
 
         public String toString() {
-            return "GossipEntry{target=" + this.a + ", type=" + this.b + ", value=" + this.c + '}';
+            return "GossipEntry{target=" + this.target + ", type=" + this.type + ", value=" + this.value + "}";
         }
 
         public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-            return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Target"), MinecraftSerializableUUID.a.encodeStart(dynamicops, this.a).result().orElseThrow(RuntimeException::new), dynamicops.createString("Type"), dynamicops.createString(this.b.f), dynamicops.createString("Value"), dynamicops.createInt(this.c))));
+            return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Target"), MinecraftSerializableUUID.CODEC.encodeStart(dynamicops, this.target).result().orElseThrow(RuntimeException::new), dynamicops.createString("Type"), dynamicops.createString(this.type.id), dynamicops.createString("Value"), dynamicops.createInt(this.value))));
         }
 
         public static DataResult<Reputation.b> a(Dynamic<?> dynamic) {
-            return DataResult.unbox(DataResult.instance().group(dynamic.get("Target").read(MinecraftSerializableUUID.a), dynamic.get("Type").asString().map(ReputationType::a), dynamic.get("Value").asNumber().map(Number::intValue)).apply(DataResult.instance(), Reputation.b::new));
+            return DataResult.unbox(DataResult.instance().group(dynamic.get("Target").read(MinecraftSerializableUUID.CODEC), dynamic.get("Type").asString().map(ReputationType::a), dynamic.get("Value").asNumber().map(Number::intValue)).apply(DataResult.instance(), Reputation.b::new));
         }
     }
 }

@@ -9,13 +9,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerCuredZombieVillager extends CriterionTriggerAbstract<CriterionTriggerCuredZombieVillager.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("cured_zombie_villager");
+    static final MinecraftKey ID = new MinecraftKey("cured_zombie_villager");
 
     public CriterionTriggerCuredZombieVillager() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerCuredZombieVillager.a;
+        return CriterionTriggerCuredZombieVillager.ID;
     }
 
     @Override
@@ -37,29 +37,29 @@ public class CriterionTriggerCuredZombieVillager extends CriterionTriggerAbstrac
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b a;
-        private final CriterionConditionEntity.b b;
+        private final CriterionConditionEntity.b zombie;
+        private final CriterionConditionEntity.b villager;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionEntity.b criterionconditionentity_b2) {
-            super(CriterionTriggerCuredZombieVillager.a, criterionconditionentity_b);
-            this.a = criterionconditionentity_b1;
-            this.b = criterionconditionentity_b2;
+            super(CriterionTriggerCuredZombieVillager.ID, criterionconditionentity_b);
+            this.zombie = criterionconditionentity_b1;
+            this.villager = criterionconditionentity_b2;
         }
 
         public static CriterionTriggerCuredZombieVillager.a c() {
-            return new CriterionTriggerCuredZombieVillager.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
+            return new CriterionTriggerCuredZombieVillager.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY);
         }
 
         public boolean a(LootTableInfo loottableinfo, LootTableInfo loottableinfo1) {
-            return !this.a.a(loottableinfo) ? false : this.b.a(loottableinfo1);
+            return !this.zombie.a(loottableinfo) ? false : this.villager.a(loottableinfo1);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("zombie", this.a.a(lootserializationcontext));
-            jsonobject.add("villager", this.b.a(lootserializationcontext));
+            jsonobject.add("zombie", this.zombie.a(lootserializationcontext));
+            jsonobject.add("villager", this.villager.a(lootserializationcontext));
             return jsonobject;
         }
     }

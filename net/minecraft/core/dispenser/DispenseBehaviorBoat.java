@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.BlockDispenser;
 
 public class DispenseBehaviorBoat extends DispenseBehaviorItem {
 
-    private final DispenseBehaviorItem b = new DispenseBehaviorItem();
-    private final EntityBoat.EnumBoatType c;
+    private final DispenseBehaviorItem defaultDispenseItemBehavior = new DispenseBehaviorItem();
+    private final EntityBoat.EnumBoatType type;
 
     public DispenseBehaviorBoat(EntityBoat.EnumBoatType entityboat_enumboattype) {
-        this.c = entityboat_enumboattype;
+        this.type = entityboat_enumboattype;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DispenseBehaviorBoat extends DispenseBehaviorItem {
             d3 = 1.0D;
         } else {
             if (!worldserver.getType(blockposition).isAir() || !worldserver.getFluid(blockposition.down()).a((Tag) TagsFluid.WATER)) {
-                return this.b.dispense(isourceblock, itemstack);
+                return this.defaultDispenseItemBehavior.dispense(isourceblock, itemstack);
             }
 
             d3 = 0.0D;
@@ -41,8 +41,8 @@ public class DispenseBehaviorBoat extends DispenseBehaviorItem {
 
         EntityBoat entityboat = new EntityBoat(worldserver, d0, d1 + d3, d2);
 
-        entityboat.setType(this.c);
-        entityboat.yaw = enumdirection.o();
+        entityboat.setType(this.type);
+        entityboat.setYRot(enumdirection.o());
         worldserver.addEntity(entityboat);
         itemstack.subtract(1);
         return itemstack;

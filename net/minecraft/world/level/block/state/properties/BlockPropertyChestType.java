@@ -6,21 +6,21 @@ public enum BlockPropertyChestType implements INamable {
 
     SINGLE("single", 0), LEFT("left", 2), RIGHT("right", 1);
 
-    public static final BlockPropertyChestType[] d = values();
-    private final String e;
-    private final int f;
+    public static final BlockPropertyChestType[] BY_ID = values();
+    private final String name;
+    private final int opposite;
 
     private BlockPropertyChestType(String s, int i) {
-        this.e = s;
-        this.f = i;
+        this.name = s;
+        this.opposite = i;
     }
 
     @Override
     public String getName() {
-        return this.e;
+        return this.name;
     }
 
-    public BlockPropertyChestType b() {
-        return BlockPropertyChestType.d[this.f];
+    public BlockPropertyChestType a() {
+        return BlockPropertyChestType.BY_ID[this.opposite];
     }
 }

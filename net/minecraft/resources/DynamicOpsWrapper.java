@@ -16,149 +16,149 @@ import java.util.stream.Stream;
 
 public abstract class DynamicOpsWrapper<T> implements DynamicOps<T> {
 
-    protected final DynamicOps<T> a;
+    protected final DynamicOps<T> delegate;
 
     protected DynamicOpsWrapper(DynamicOps<T> dynamicops) {
-        this.a = dynamicops;
+        this.delegate = dynamicops;
     }
 
     public T empty() {
-        return this.a.empty();
+        return this.delegate.empty();
     }
 
     public <U> U convertTo(DynamicOps<U> dynamicops, T t0) {
-        return this.a.convertTo(dynamicops, t0);
+        return this.delegate.convertTo(dynamicops, t0);
     }
 
     public DataResult<Number> getNumberValue(T t0) {
-        return this.a.getNumberValue(t0);
+        return this.delegate.getNumberValue(t0);
     }
 
     public T createNumeric(Number number) {
-        return this.a.createNumeric(number);
+        return this.delegate.createNumeric(number);
     }
 
     public T createByte(byte b0) {
-        return this.a.createByte(b0);
+        return this.delegate.createByte(b0);
     }
 
     public T createShort(short short0) {
-        return this.a.createShort(short0);
+        return this.delegate.createShort(short0);
     }
 
     public T createInt(int i) {
-        return this.a.createInt(i);
+        return this.delegate.createInt(i);
     }
 
     public T createLong(long i) {
-        return this.a.createLong(i);
+        return this.delegate.createLong(i);
     }
 
     public T createFloat(float f) {
-        return this.a.createFloat(f);
+        return this.delegate.createFloat(f);
     }
 
     public T createDouble(double d0) {
-        return this.a.createDouble(d0);
+        return this.delegate.createDouble(d0);
     }
 
     public DataResult<Boolean> getBooleanValue(T t0) {
-        return this.a.getBooleanValue(t0);
+        return this.delegate.getBooleanValue(t0);
     }
 
     public T createBoolean(boolean flag) {
-        return this.a.createBoolean(flag);
+        return this.delegate.createBoolean(flag);
     }
 
     public DataResult<String> getStringValue(T t0) {
-        return this.a.getStringValue(t0);
+        return this.delegate.getStringValue(t0);
     }
 
     public T createString(String s) {
-        return this.a.createString(s);
+        return this.delegate.createString(s);
     }
 
     public DataResult<T> mergeToList(T t0, T t1) {
-        return this.a.mergeToList(t0, t1);
+        return this.delegate.mergeToList(t0, t1);
     }
 
     public DataResult<T> mergeToList(T t0, List<T> list) {
-        return this.a.mergeToList(t0, list);
+        return this.delegate.mergeToList(t0, list);
     }
 
     public DataResult<T> mergeToMap(T t0, T t1, T t2) {
-        return this.a.mergeToMap(t0, t1, t2);
+        return this.delegate.mergeToMap(t0, t1, t2);
     }
 
     public DataResult<T> mergeToMap(T t0, MapLike<T> maplike) {
-        return this.a.mergeToMap(t0, maplike);
+        return this.delegate.mergeToMap(t0, maplike);
     }
 
     public DataResult<Stream<Pair<T, T>>> getMapValues(T t0) {
-        return this.a.getMapValues(t0);
+        return this.delegate.getMapValues(t0);
     }
 
     public DataResult<Consumer<BiConsumer<T, T>>> getMapEntries(T t0) {
-        return this.a.getMapEntries(t0);
+        return this.delegate.getMapEntries(t0);
     }
 
     public T createMap(Stream<Pair<T, T>> stream) {
-        return this.a.createMap(stream);
+        return this.delegate.createMap(stream);
     }
 
     public DataResult<MapLike<T>> getMap(T t0) {
-        return this.a.getMap(t0);
+        return this.delegate.getMap(t0);
     }
 
     public DataResult<Stream<T>> getStream(T t0) {
-        return this.a.getStream(t0);
+        return this.delegate.getStream(t0);
     }
 
     public DataResult<Consumer<Consumer<T>>> getList(T t0) {
-        return this.a.getList(t0);
+        return this.delegate.getList(t0);
     }
 
     public T createList(Stream<T> stream) {
-        return this.a.createList(stream);
+        return this.delegate.createList(stream);
     }
 
     public DataResult<ByteBuffer> getByteBuffer(T t0) {
-        return this.a.getByteBuffer(t0);
+        return this.delegate.getByteBuffer(t0);
     }
 
     public T createByteList(ByteBuffer bytebuffer) {
-        return this.a.createByteList(bytebuffer);
+        return this.delegate.createByteList(bytebuffer);
     }
 
     public DataResult<IntStream> getIntStream(T t0) {
-        return this.a.getIntStream(t0);
+        return this.delegate.getIntStream(t0);
     }
 
     public T createIntList(IntStream intstream) {
-        return this.a.createIntList(intstream);
+        return this.delegate.createIntList(intstream);
     }
 
     public DataResult<LongStream> getLongStream(T t0) {
-        return this.a.getLongStream(t0);
+        return this.delegate.getLongStream(t0);
     }
 
     public T createLongList(LongStream longstream) {
-        return this.a.createLongList(longstream);
+        return this.delegate.createLongList(longstream);
     }
 
     public T remove(T t0, String s) {
-        return this.a.remove(t0, s);
+        return this.delegate.remove(t0, s);
     }
 
     public boolean compressMaps() {
-        return this.a.compressMaps();
+        return this.delegate.compressMaps();
     }
 
     public ListBuilder<T> listBuilder() {
-        return this.a.listBuilder();
+        return this.delegate.listBuilder();
     }
 
     public RecordBuilder<T> mapBuilder() {
-        return this.a.mapBuilder();
+        return this.delegate.mapBuilder();
     }
 }

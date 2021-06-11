@@ -7,6 +7,7 @@ import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.server.level.RegionLimitedWorldAccess;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.IStructureAccess;
 import net.minecraft.world.level.levelgen.GeneratorSettings;
@@ -15,27 +16,29 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 public class StructureManager {
 
-    private final GeneratorAccess a;
-    private final GeneratorSettings b;
+    private final GeneratorAccess level;
+    private final GeneratorSettings worldGenSettings;
 
     public StructureManager(GeneratorAccess generatoraccess, GeneratorSettings generatorsettings) {
-        this.a = generatoraccess;
-        this.b = generatorsettings;
+        this.level = generatoraccess;
+        this.worldGenSettings = generatorsettings;
     }
 
     public StructureManager a(RegionLimitedWorldAccess regionlimitedworldaccess) {
-        if (regionlimitedworldaccess.getMinecraftWorld() != this.a) {
-            throw new IllegalStateException("Using invalid feature manager (source level: " + regionlimitedworldaccess.getMinecraftWorld() + ", region: " + regionlimitedworldaccess);
+        if (regionlimitedworldaccess.getLevel() != this.level) {
+            WorldServer worldserver = regionlimitedworldaccess.getLevel();
+
+            throw new IllegalStateException("Using invalid feature manager (source level: " + worldserver + ", region: " + regionlimitedworldaccess);
         } else {
-            return new StructureManager(regionlimitedworldaccess, this.b);
+            return new StructureManager(regionlimitedworldaccess, this.worldGenSettings);
         }
     }
 
     public Stream<? extends StructureStart<?>> a(SectionPosition sectionposition, StructureGenerator<?> structuregenerator) {
-        return this.a.getChunkAt(sectionposition.a(), sectionposition.c(), ChunkStatus.STRUCTURE_REFERENCES).b(structuregenerator).stream().map((olong) -> {
-            return SectionPosition.a(new ChunkCoordIntPair(olong), 0);
+        return this.level.getChunkAt(sectionposition.a(), sectionposition.c(), ChunkStatus.STRUCTURE_REFERENCES).b(structuregenerator).stream().map((olong) -> {
+            return SectionPosition.a(new ChunkCoordIntPair(olong), this.level.getMinSection());
         }).map((sectionposition1) -> {
-            return this.a(sectionposition1, structuregenerator, this.a.getChunkAt(sectionposition1.a(), sectionposition1.c(), ChunkStatus.STRUCTURE_STARTS));
+            return this.a(sectionposition1, structuregenerator, this.level.getChunkAt(sectionposition1.a(), sectionposition1.c(), ChunkStatus.STRUCTURE_STARTS));
         }).filter((structurestart) -> {
             return structurestart != null && structurestart.e();
         });
@@ -55,16 +58,14 @@ public class StructureManager {
     }
 
     public boolean a() {
-        return this.b.shouldGenerateMapFeatures();
+        return this.worldGenSettings.shouldGenerateMapFeatures();
     }
 
     public StructureStart<?> a(BlockPosition blockposition, boolean flag, StructureGenerator<?> structuregenerator) {
         return (StructureStart) DataFixUtils.orElse(this.a(SectionPosition.a(blockposition), structuregenerator).filter((structurestart) -> {
-            return structurestart.c().b((BaseBlockPosition) blockposition);
-        }).filter((structurestart) -> {
-            return !flag || structurestart.d().stream().anyMatch((structurepiece) -> {
-                return structurepiece.g().b((BaseBlockPosition) blockposition);
-            });
-        }).findFirst(), StructureStart.a);
+            return flag ? structurestart.d().stream().anyMatch((structurepiece) -> {
+                return structurepiece.f().b((BaseBlockPosition) blockposition);
+            }) : structurestart.c().b((BaseBlockPosition) blockposition);
+        }).findFirst(), StructureStart.INVALID_START);
     }
 }

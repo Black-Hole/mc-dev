@@ -9,8 +9,8 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
 
     INSTANCE;
 
-    private static final IntSet b = new IntOpenHashSet(new int[]{26, 11, 12, 13, 140, 30, 31, 158, 10});
-    private static final IntSet c = new IntOpenHashSet(new int[]{168, 169, 21, 22, 23, 149, 151});
+    private static final IntSet SNOWY = new IntOpenHashSet(new int[]{26, 11, 12, 13, 140, 30, 31, 158, 10});
+    private static final IntSet JUNGLES = new IntOpenHashSet(new int[]{168, 169, 21, 22, 23, 149, 151});
 
     private GenLayerMushroomShore() {}
 
@@ -20,7 +20,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
             if (GenLayers.b(i) || GenLayers.b(j) || GenLayers.b(k) || GenLayers.b(l)) {
                 return 15;
             }
-        } else if (GenLayerMushroomShore.c.contains(i1)) {
+        } else if (GenLayerMushroomShore.JUNGLES.contains(i1)) {
             if (!c(i) || !c(j) || !c(k) || !c(l)) {
                 return 23;
             }
@@ -29,7 +29,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
                 return 16;
             }
         } else if (i1 != 3 && i1 != 34 && i1 != 20) {
-            if (GenLayerMushroomShore.b.contains(i1)) {
+            if (GenLayerMushroomShore.SNOWY.contains(i1)) {
                 if (!GenLayers.a(i1) && (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l))) {
                     return 26;
                 }
@@ -48,7 +48,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
     }
 
     private static boolean c(int i) {
-        return GenLayerMushroomShore.c.contains(i) || i == 4 || i == 5 || GenLayers.a(i);
+        return GenLayerMushroomShore.JUNGLES.contains(i) || i == 4 || i == 5 || GenLayers.a(i);
     }
 
     private boolean d(int i) {

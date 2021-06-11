@@ -9,27 +9,31 @@ import net.minecraft.util.MathHelper;
 
 public class CriterionConditionDistance {
 
-    public static final CriterionConditionDistance a = new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e);
-    private final CriterionConditionValue.FloatRange b;
-    private final CriterionConditionValue.FloatRange c;
-    private final CriterionConditionValue.FloatRange d;
-    private final CriterionConditionValue.FloatRange e;
-    private final CriterionConditionValue.FloatRange f;
+    public static final CriterionConditionDistance ANY = new CriterionConditionDistance(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY);
+    private final CriterionConditionValue.DoubleRange x;
+    private final CriterionConditionValue.DoubleRange y;
+    private final CriterionConditionValue.DoubleRange z;
+    private final CriterionConditionValue.DoubleRange horizontal;
+    private final CriterionConditionValue.DoubleRange absolute;
 
-    public CriterionConditionDistance(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange3, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange4) {
-        this.b = criterionconditionvalue_floatrange;
-        this.c = criterionconditionvalue_floatrange1;
-        this.d = criterionconditionvalue_floatrange2;
-        this.e = criterionconditionvalue_floatrange3;
-        this.f = criterionconditionvalue_floatrange4;
+    public CriterionConditionDistance(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange1, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange2, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange3, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange4) {
+        this.x = criterionconditionvalue_doublerange;
+        this.y = criterionconditionvalue_doublerange1;
+        this.z = criterionconditionvalue_doublerange2;
+        this.horizontal = criterionconditionvalue_doublerange3;
+        this.absolute = criterionconditionvalue_doublerange4;
     }
 
-    public static CriterionConditionDistance a(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
-        return new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange.e);
+    public static CriterionConditionDistance a(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+        return new CriterionConditionDistance(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, criterionconditionvalue_doublerange, CriterionConditionValue.DoubleRange.ANY);
     }
 
-    public static CriterionConditionDistance b(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
-        return new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e);
+    public static CriterionConditionDistance b(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+        return new CriterionConditionDistance(CriterionConditionValue.DoubleRange.ANY, criterionconditionvalue_doublerange, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY);
+    }
+
+    public static CriterionConditionDistance c(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+        return new CriterionConditionDistance(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, criterionconditionvalue_doublerange);
     }
 
     public boolean a(double d0, double d1, double d2, double d3, double d4, double d5) {
@@ -37,35 +41,35 @@ public class CriterionConditionDistance {
         float f1 = (float) (d1 - d4);
         float f2 = (float) (d2 - d5);
 
-        return this.b.d(MathHelper.e(f)) && this.c.d(MathHelper.e(f1)) && this.d.d(MathHelper.e(f2)) ? (!this.e.a((double) (f * f + f2 * f2)) ? false : this.f.a((double) (f * f + f1 * f1 + f2 * f2))) : false;
+        return this.x.d((double) MathHelper.e(f)) && this.y.d((double) MathHelper.e(f1)) && this.z.d((double) MathHelper.e(f2)) ? (!this.horizontal.e((double) (f * f + f2 * f2)) ? false : this.absolute.e((double) (f * f + f1 * f1 + f2 * f2))) : false;
     }
 
     public static CriterionConditionDistance a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "distance");
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("x"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1 = CriterionConditionValue.FloatRange.a(jsonobject.get("y"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2 = CriterionConditionValue.FloatRange.a(jsonobject.get("z"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange3 = CriterionConditionValue.FloatRange.a(jsonobject.get("horizontal"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange4 = CriterionConditionValue.FloatRange.a(jsonobject.get("absolute"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange = CriterionConditionValue.DoubleRange.a(jsonobject.get("x"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange1 = CriterionConditionValue.DoubleRange.a(jsonobject.get("y"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange2 = CriterionConditionValue.DoubleRange.a(jsonobject.get("z"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange3 = CriterionConditionValue.DoubleRange.a(jsonobject.get("horizontal"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange4 = CriterionConditionValue.DoubleRange.a(jsonobject.get("absolute"));
 
-            return new CriterionConditionDistance(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, criterionconditionvalue_floatrange3, criterionconditionvalue_floatrange4);
+            return new CriterionConditionDistance(criterionconditionvalue_doublerange, criterionconditionvalue_doublerange1, criterionconditionvalue_doublerange2, criterionconditionvalue_doublerange3, criterionconditionvalue_doublerange4);
         } else {
-            return CriterionConditionDistance.a;
+            return CriterionConditionDistance.ANY;
         }
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionDistance.a) {
+        if (this == CriterionConditionDistance.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("x", this.b.d());
-            jsonobject.add("y", this.c.d());
-            jsonobject.add("z", this.d.d());
-            jsonobject.add("horizontal", this.e.d());
-            jsonobject.add("absolute", this.f.d());
+            jsonobject.add("x", this.x.d());
+            jsonobject.add("y", this.y.d());
+            jsonobject.add("z", this.z.d());
+            jsonobject.add("horizontal", this.horizontal.d());
+            jsonobject.add("absolute", this.absolute.d());
             return jsonobject;
         }
     }

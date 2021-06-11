@@ -18,11 +18,11 @@ import net.minecraft.tags.Tag;
 
 public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
-    private static final Collection<String> a = Arrays.asList("foo", "foo:bar", "#foo");
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("foo", "foo:bar", "#foo");
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_TAG = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.function.tag.unknown", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_FUNCTION = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.function.unknown", new Object[]{object});
     });
 
@@ -41,14 +41,14 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
             return new ArgumentTag.a() {
                 @Override
                 public Collection<CustomFunction> a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    Tag<CustomFunction> tag = ArgumentTag.d(commandcontext, minecraftkey);
+                    Tag<CustomFunction> tag = ArgumentTag.b(commandcontext, minecraftkey);
 
                     return tag.getTagged();
                 }
 
                 @Override
                 public Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    return Pair.of(minecraftkey, Either.right(ArgumentTag.d(commandcontext, minecraftkey)));
+                    return Pair.of(minecraftkey, Either.right(ArgumentTag.b(commandcontext, minecraftkey)));
                 }
             };
         } else {
@@ -56,28 +56,28 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
             return new ArgumentTag.a() {
                 @Override
                 public Collection<CustomFunction> a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    return Collections.singleton(ArgumentTag.c(commandcontext, minecraftkey));
+                    return Collections.singleton(ArgumentTag.a(commandcontext, minecraftkey));
                 }
 
                 @Override
                 public Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    return Pair.of(minecraftkey, Either.left(ArgumentTag.c(commandcontext, minecraftkey)));
+                    return Pair.of(minecraftkey, Either.left(ArgumentTag.a(commandcontext, minecraftkey)));
                 }
             };
         }
     }
 
-    private static CustomFunction c(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
+    static CustomFunction a(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
         return (CustomFunction) ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().a(minecraftkey).orElseThrow(() -> {
-            return ArgumentTag.c.create(minecraftkey.toString());
+            return ArgumentTag.ERROR_UNKNOWN_FUNCTION.create(minecraftkey.toString());
         });
     }
 
-    private static Tag<CustomFunction> d(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
+    static Tag<CustomFunction> b(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
         Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().b(minecraftkey);
 
         if (tag == null) {
-            throw ArgumentTag.b.create(minecraftkey.toString());
+            throw ArgumentTag.ERROR_UNKNOWN_TAG.create(minecraftkey.toString());
         } else {
             return tag;
         }
@@ -92,7 +92,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentTag.a;
+        return ArgumentTag.EXAMPLES;
     }
 
     public interface a {

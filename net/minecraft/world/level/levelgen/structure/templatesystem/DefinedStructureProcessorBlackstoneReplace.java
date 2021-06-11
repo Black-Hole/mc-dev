@@ -5,20 +5,23 @@ import com.mojang.serialization.Codec;
 import java.util.Map;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.EnumDirection;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockStairs;
 import net.minecraft.world.level.block.BlockStepAbstract;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.block.state.properties.BlockPropertyHalf;
+import net.minecraft.world.level.block.state.properties.BlockPropertySlabType;
 
 public class DefinedStructureProcessorBlackstoneReplace extends DefinedStructureProcessor {
 
-    public static final Codec<DefinedStructureProcessorBlackstoneReplace> a = Codec.unit(() -> {
-        return DefinedStructureProcessorBlackstoneReplace.b;
+    public static final Codec<DefinedStructureProcessorBlackstoneReplace> CODEC = Codec.unit(() -> {
+        return DefinedStructureProcessorBlackstoneReplace.INSTANCE;
     });
-    public static final DefinedStructureProcessorBlackstoneReplace b = new DefinedStructureProcessorBlackstoneReplace();
-    private final Map<Block, Block> c = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    public static final DefinedStructureProcessorBlackstoneReplace INSTANCE = new DefinedStructureProcessorBlackstoneReplace();
+    private final Map<Block, Block> replacements = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(Blocks.COBBLESTONE, Blocks.BLACKSTONE);
         hashmap.put(Blocks.MOSSY_COBBLESTONE, Blocks.BLACKSTONE);
         hashmap.put(Blocks.STONE, Blocks.POLISHED_BLACKSTONE);
@@ -48,32 +51,32 @@ public class DefinedStructureProcessorBlackstoneReplace extends DefinedStructure
 
     @Override
     public DefinedStructure.BlockInfo a(IWorldReader iworldreader, BlockPosition blockposition, BlockPosition blockposition1, DefinedStructure.BlockInfo definedstructure_blockinfo, DefinedStructure.BlockInfo definedstructure_blockinfo1, DefinedStructureInfo definedstructureinfo) {
-        Block block = (Block) this.c.get(definedstructure_blockinfo1.b.getBlock());
+        Block block = (Block) this.replacements.get(definedstructure_blockinfo1.state.getBlock());
 
         if (block == null) {
             return definedstructure_blockinfo1;
         } else {
-            IBlockData iblockdata = definedstructure_blockinfo1.b;
+            IBlockData iblockdata = definedstructure_blockinfo1.state;
             IBlockData iblockdata1 = block.getBlockData();
 
             if (iblockdata.b(BlockStairs.FACING)) {
-                iblockdata1 = (IBlockData) iblockdata1.set(BlockStairs.FACING, iblockdata.get(BlockStairs.FACING));
+                iblockdata1 = (IBlockData) iblockdata1.set(BlockStairs.FACING, (EnumDirection) iblockdata.get(BlockStairs.FACING));
             }
 
             if (iblockdata.b(BlockStairs.HALF)) {
-                iblockdata1 = (IBlockData) iblockdata1.set(BlockStairs.HALF, iblockdata.get(BlockStairs.HALF));
+                iblockdata1 = (IBlockData) iblockdata1.set(BlockStairs.HALF, (BlockPropertyHalf) iblockdata.get(BlockStairs.HALF));
             }
 
-            if (iblockdata.b(BlockStepAbstract.a)) {
-                iblockdata1 = (IBlockData) iblockdata1.set(BlockStepAbstract.a, iblockdata.get(BlockStepAbstract.a));
+            if (iblockdata.b(BlockStepAbstract.TYPE)) {
+                iblockdata1 = (IBlockData) iblockdata1.set(BlockStepAbstract.TYPE, (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.TYPE));
             }
 
-            return new DefinedStructure.BlockInfo(definedstructure_blockinfo1.a, iblockdata1, definedstructure_blockinfo1.c);
+            return new DefinedStructure.BlockInfo(definedstructure_blockinfo1.pos, iblockdata1, definedstructure_blockinfo1.nbt);
         }
     }
 
     @Override
     protected DefinedStructureStructureProcessorType<?> a() {
-        return DefinedStructureStructureProcessorType.h;
+        return DefinedStructureStructureProcessorType.BLACKSTONE_REPLACE;
     }
 }

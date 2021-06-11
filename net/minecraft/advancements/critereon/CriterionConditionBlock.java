@@ -1,9 +1,14 @@
 package net.minecraft.advancements.critereon;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import java.util.Iterator;
+import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
@@ -20,41 +25,40 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class CriterionConditionBlock {
 
-    public static final CriterionConditionBlock a = new CriterionConditionBlock((Tag) null, (Block) null, CriterionTriggerProperties.a, CriterionConditionNBT.a);
+    public static final CriterionConditionBlock ANY = new CriterionConditionBlock((Tag) null, (Set) null, CriterionTriggerProperties.ANY, CriterionConditionNBT.ANY);
     @Nullable
-    private final Tag<Block> b;
+    private final Tag<Block> tag;
     @Nullable
-    private final Block c;
-    private final CriterionTriggerProperties d;
-    private final CriterionConditionNBT e;
+    private final Set<Block> blocks;
+    private final CriterionTriggerProperties properties;
+    private final CriterionConditionNBT nbt;
 
-    public CriterionConditionBlock(@Nullable Tag<Block> tag, @Nullable Block block, CriterionTriggerProperties criteriontriggerproperties, CriterionConditionNBT criterionconditionnbt) {
-        this.b = tag;
-        this.c = block;
-        this.d = criteriontriggerproperties;
-        this.e = criterionconditionnbt;
+    public CriterionConditionBlock(@Nullable Tag<Block> tag, @Nullable Set<Block> set, CriterionTriggerProperties criteriontriggerproperties, CriterionConditionNBT criterionconditionnbt) {
+        this.tag = tag;
+        this.blocks = set;
+        this.properties = criteriontriggerproperties;
+        this.nbt = criterionconditionnbt;
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition) {
-        if (this == CriterionConditionBlock.a) {
+        if (this == CriterionConditionBlock.ANY) {
             return true;
-        } else if (!worldserver.p(blockposition)) {
+        } else if (!worldserver.o(blockposition)) {
             return false;
         } else {
             IBlockData iblockdata = worldserver.getType(blockposition);
-            Block block = iblockdata.getBlock();
 
-            if (this.b != null && !this.b.isTagged(block)) {
+            if (this.tag != null && !iblockdata.a(this.tag)) {
                 return false;
-            } else if (this.c != null && block != this.c) {
+            } else if (this.blocks != null && !this.blocks.contains(iblockdata.getBlock())) {
                 return false;
-            } else if (!this.d.a(iblockdata)) {
+            } else if (!this.properties.a(iblockdata)) {
                 return false;
             } else {
-                if (this.e != CriterionConditionNBT.a) {
+                if (this.nbt != CriterionConditionNBT.ANY) {
                     TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-                    if (tileentity == null || !this.e.a((NBTBase) tileentity.save(new NBTTagCompound()))) {
+                    if (tileentity == null || !this.nbt.a((NBTBase) tileentity.save(new NBTTagCompound()))) {
                         return false;
                     }
                 }
@@ -68,12 +72,23 @@ public class CriterionConditionBlock {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "block");
             CriterionConditionNBT criterionconditionnbt = CriterionConditionNBT.a(jsonobject.get("nbt"));
-            Block block = null;
+            Set<Block> set = null;
+            JsonArray jsonarray = ChatDeserializer.a(jsonobject, "blocks", (JsonArray) null);
 
-            if (jsonobject.has("block")) {
-                MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
+            if (jsonarray != null) {
+                Builder<Block> builder = ImmutableSet.builder();
+                Iterator iterator = jsonarray.iterator();
 
-                block = (Block) IRegistry.BLOCK.get(minecraftkey);
+                while (iterator.hasNext()) {
+                    JsonElement jsonelement1 = (JsonElement) iterator.next();
+                    MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.a(jsonelement1, "block"));
+
+                    builder.add((Block) IRegistry.BLOCK.getOptional(minecraftkey).orElseThrow(() -> {
+                        return new JsonSyntaxException("Unknown block id '" + minecraftkey + "'");
+                    }));
+                }
+
+                set = builder.build();
             }
 
             Tag<Block> tag = null;
@@ -81,36 +96,46 @@ public class CriterionConditionBlock {
             if (jsonobject.has("tag")) {
                 MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                tag = TagsInstance.a().getBlockTags().a(minecraftkey1);
-                if (tag == null) {
-                    throw new JsonSyntaxException("Unknown block tag '" + minecraftkey1 + "'");
-                }
+                tag = TagsInstance.a().a(IRegistry.BLOCK_REGISTRY, minecraftkey1, (minecraftkey2) -> {
+                    return new JsonSyntaxException("Unknown block tag '" + minecraftkey2 + "'");
+                });
             }
 
             CriterionTriggerProperties criteriontriggerproperties = CriterionTriggerProperties.a(jsonobject.get("state"));
 
-            return new CriterionConditionBlock(tag, block, criteriontriggerproperties, criterionconditionnbt);
+            return new CriterionConditionBlock(tag, set, criteriontriggerproperties, criterionconditionnbt);
         } else {
-            return CriterionConditionBlock.a;
+            return CriterionConditionBlock.ANY;
         }
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionBlock.a) {
+        if (this == CriterionConditionBlock.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (this.c != null) {
-                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.c).toString());
+            if (this.blocks != null) {
+                JsonArray jsonarray = new JsonArray();
+                Iterator iterator = this.blocks.iterator();
+
+                while (iterator.hasNext()) {
+                    Block block = (Block) iterator.next();
+
+                    jsonarray.add(IRegistry.BLOCK.getKey(block).toString());
+                }
+
+                jsonobject.add("blocks", jsonarray);
             }
 
-            if (this.b != null) {
-                jsonobject.addProperty("tag", TagsInstance.a().getBlockTags().b(this.b).toString());
+            if (this.tag != null) {
+                jsonobject.addProperty("tag", TagsInstance.a().a(IRegistry.BLOCK_REGISTRY, this.tag, () -> {
+                    return new IllegalStateException("Unknown block tag");
+                }).toString());
             }
 
-            jsonobject.add("nbt", this.e.a());
-            jsonobject.add("state", this.d.a());
+            jsonobject.add("nbt", this.nbt.a());
+            jsonobject.add("state", this.properties.a());
             return jsonobject;
         }
     }
@@ -118,38 +143,48 @@ public class CriterionConditionBlock {
     public static class a {
 
         @Nullable
-        private Block a;
+        private Set<Block> blocks;
         @Nullable
-        private Tag<Block> b;
-        private CriterionTriggerProperties c;
-        private CriterionConditionNBT d;
+        private Tag<Block> tag;
+        private CriterionTriggerProperties properties;
+        private CriterionConditionNBT nbt;
 
         private a() {
-            this.c = CriterionTriggerProperties.a;
-            this.d = CriterionConditionNBT.a;
+            this.properties = CriterionTriggerProperties.ANY;
+            this.nbt = CriterionConditionNBT.ANY;
         }
 
         public static CriterionConditionBlock.a a() {
             return new CriterionConditionBlock.a();
         }
 
-        public CriterionConditionBlock.a a(Block block) {
-            this.a = block;
+        public CriterionConditionBlock.a a(Block... ablock) {
+            this.blocks = ImmutableSet.copyOf(ablock);
+            return this;
+        }
+
+        public CriterionConditionBlock.a a(Iterable<Block> iterable) {
+            this.blocks = ImmutableSet.copyOf(iterable);
             return this;
         }
 
         public CriterionConditionBlock.a a(Tag<Block> tag) {
-            this.b = tag;
+            this.tag = tag;
+            return this;
+        }
+
+        public CriterionConditionBlock.a a(NBTTagCompound nbttagcompound) {
+            this.nbt = new CriterionConditionNBT(nbttagcompound);
             return this;
         }
 
         public CriterionConditionBlock.a a(CriterionTriggerProperties criteriontriggerproperties) {
-            this.c = criteriontriggerproperties;
+            this.properties = criteriontriggerproperties;
             return this;
         }
 
         public CriterionConditionBlock b() {
-            return new CriterionConditionBlock(this.b, this.a, this.c, this.d);
+            return new CriterionConditionBlock(this.tag, this.blocks, this.properties, this.nbt);
         }
     }
 }

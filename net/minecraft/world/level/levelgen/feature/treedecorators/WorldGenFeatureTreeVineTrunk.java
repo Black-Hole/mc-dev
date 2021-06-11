@@ -3,58 +3,57 @@ package net.minecraft.world.level.levelgen.feature.treedecorators;
 import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.IWorldWriter;
+import net.minecraft.world.level.VirtualLevelReadable;
 import net.minecraft.world.level.block.BlockVine;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.WorldGenerator;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class WorldGenFeatureTreeVineTrunk extends WorldGenFeatureTree {
 
-    public static final Codec<WorldGenFeatureTreeVineTrunk> a = Codec.unit(() -> {
-        return WorldGenFeatureTreeVineTrunk.b;
+    public static final Codec<WorldGenFeatureTreeVineTrunk> CODEC = Codec.unit(() -> {
+        return WorldGenFeatureTreeVineTrunk.INSTANCE;
     });
-    public static final WorldGenFeatureTreeVineTrunk b = new WorldGenFeatureTreeVineTrunk();
+    public static final WorldGenFeatureTreeVineTrunk INSTANCE = new WorldGenFeatureTreeVineTrunk();
 
     public WorldGenFeatureTreeVineTrunk() {}
 
     @Override
     protected WorldGenFeatureTrees<?> a() {
-        return WorldGenFeatureTrees.a;
+        return WorldGenFeatureTrees.TRUNK_VINE;
     }
 
     @Override
-    public void a(GeneratorAccessSeed generatoraccessseed, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox) {
+    public void a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, List<BlockPosition> list, List<BlockPosition> list1) {
         list.forEach((blockposition) -> {
             BlockPosition blockposition1;
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.west();
-                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.EAST, set, structureboundingbox);
+                if (WorldGenerator.b(virtuallevelreadable, blockposition1)) {
+                    a(biconsumer, blockposition1, BlockVine.EAST);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.east();
-                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.WEST, set, structureboundingbox);
+                if (WorldGenerator.b(virtuallevelreadable, blockposition1)) {
+                    a(biconsumer, blockposition1, BlockVine.WEST);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.north();
-                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.SOUTH, set, structureboundingbox);
+                if (WorldGenerator.b(virtuallevelreadable, blockposition1)) {
+                    a(biconsumer, blockposition1, BlockVine.SOUTH);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.south();
-                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.NORTH, set, structureboundingbox);
+                if (WorldGenerator.b(virtuallevelreadable, blockposition1)) {
+                    a(biconsumer, blockposition1, BlockVine.NORTH);
                 }
             }
 

@@ -16,7 +16,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockTileEntity;
 import net.minecraft.world.level.block.EnumBlockMirror;
 import net.minecraft.world.level.block.EnumBlockRotation;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -34,22 +36,28 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockPistonMoving extends BlockTileEntity {
 
-    public static final BlockStateDirection a = BlockPistonExtension.FACING;
-    public static final BlockStateEnum<BlockPropertyPistonType> b = BlockPistonExtension.TYPE;
+    public static final BlockStateDirection FACING = BlockPistonExtension.FACING;
+    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockPistonExtension.TYPE;
 
     public BlockPistonMoving(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockPistonMoving.FACING, EnumDirection.NORTH)).set(BlockPistonMoving.TYPE, BlockPropertyPistonType.DEFAULT));
     }
 
     @Nullable
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
-    public static TileEntity a(IBlockData iblockdata, EnumDirection enumdirection, boolean flag, boolean flag1) {
-        return new TileEntityPiston(iblockdata, enumdirection, flag, flag1);
+    public static TileEntity a(BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, EnumDirection enumdirection, boolean flag, boolean flag1) {
+        return new TileEntityPiston(blockposition, iblockdata, iblockdata1, enumdirection, flag, flag1);
+    }
+
+    @Nullable
+    @Override
+    public <T extends TileEntity> BlockEntityTicker<T> a(World world, IBlockData iblockdata, TileEntityTypes<T> tileentitytypes) {
+        return a(tileentitytypes, TileEntityTypes.PISTON, TileEntityPiston::a);
     }
 
     @Override
@@ -58,7 +66,7 @@ public class BlockPistonMoving extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).l();
+                ((TileEntityPiston) tileentity).j();
             }
 
         }
@@ -66,7 +74,7 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     @Override
     public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.a)).opposite());
+        BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)).opposite());
         IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
         if (iblockdata1.getBlock() instanceof BlockPiston && (Boolean) iblockdata1.get(BlockPiston.EXTENDED)) {
@@ -89,11 +97,11 @@ public class BlockPistonMoving extends BlockTileEntity {
     public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
         TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), new BlockPosition((Vec3D) loottableinfo_builder.a(LootContextParameters.ORIGIN)));
 
-        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.k().a(loottableinfo_builder);
+        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.i().a(loottableinfo_builder);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
@@ -112,18 +120,23 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockPistonMoving.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
+        return (IBlockData) iblockdata.set(BlockPistonMoving.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockPistonMoving.a, BlockPistonMoving.b);
+        blockstatelist_a.a(BlockPistonMoving.FACING, BlockPistonMoving.TYPE);
     }
 
     @Override

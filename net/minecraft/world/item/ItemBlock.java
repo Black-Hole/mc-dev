@@ -1,45 +1,62 @@
 package net.minecraft.world.item;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.item.context.ItemActionContext;
+import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BlockShulkerBox;
 import net.minecraft.world.level.block.SoundEffectType;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.IBlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class ItemBlock extends Item {
 
+    public static final String BLOCK_ENTITY_TAG = "BlockEntityTag";
+    public static final String BLOCK_STATE_TAG = "BlockStateTag";
     @Deprecated
-    private final Block a;
+    private final Block block;
 
     public ItemBlock(Block block, Item.Info item_info) {
         super(item_info);
-        this.a = block;
+        this.block = block;
     }
 
     @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         EnumInteractionResult enuminteractionresult = this.a(new BlockActionContext(itemactioncontext));
 
-        return !enuminteractionresult.a() && this.isFood() ? this.a(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand()).a() : enuminteractionresult;
+        if (!enuminteractionresult.a() && this.isFood()) {
+            EnumInteractionResult enuminteractionresult1 = this.a(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand()).a();
+
+            return enuminteractionresult1 == EnumInteractionResult.CONSUME ? EnumInteractionResult.CONSUME_PARTIAL : enuminteractionresult1;
+        } else {
+            return enuminteractionresult;
+        }
     }
 
     public EnumInteractionResult a(BlockActionContext blockactioncontext) {
@@ -63,21 +80,21 @@ public class ItemBlock extends Item {
                     EntityHuman entityhuman = blockactioncontext1.getEntity();
                     ItemStack itemstack = blockactioncontext1.getItemStack();
                     IBlockData iblockdata1 = world.getType(blockposition);
-                    Block block = iblockdata1.getBlock();
 
-                    if (block == iblockdata.getBlock()) {
+                    if (iblockdata1.a(iblockdata.getBlock())) {
                         iblockdata1 = this.a(blockposition, world, itemstack, iblockdata1);
                         this.a(blockposition, world, entityhuman, itemstack, iblockdata1);
-                        block.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
+                        iblockdata1.getBlock().postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                         if (entityhuman instanceof EntityPlayer) {
-                            CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                            CriterionTriggers.PLACED_BLOCK.a((EntityPlayer) entityhuman, blockposition, itemstack);
                         }
                     }
 
                     SoundEffectType soundeffecttype = iblockdata1.getStepSound();
 
                     world.playSound(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.getVolume() + 1.0F) / 2.0F, soundeffecttype.getPitch() * 0.8F);
-                    if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
+                    world.a((Entity) entityhuman, GameEvent.BLOCK_PLACE, blockposition);
+                    if (entityhuman == null || !entityhuman.getAbilities().instabuild) {
                         itemstack.subtract(1);
                     }
 
@@ -180,7 +197,7 @@ public class ItemBlock extends Item {
                     nbttagcompound1.setInt("y", blockposition.getY());
                     nbttagcompound1.setInt("z", blockposition.getZ());
                     if (!nbttagcompound1.equals(nbttagcompound2)) {
-                        tileentity.load(world.getType(blockposition), nbttagcompound1);
+                        tileentity.load(nbttagcompound1);
                         tileentity.update();
                         return true;
                     }
@@ -193,7 +210,7 @@ public class ItemBlock extends Item {
 
     @Override
     public String getName() {
-        return this.getBlock().i();
+        return this.getBlock().h();
     }
 
     @Override
@@ -204,11 +221,38 @@ public class ItemBlock extends Item {
 
     }
 
+    @Override
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        super.a(itemstack, world, list, tooltipflag);
+        this.getBlock().a(itemstack, (IBlockAccess) world, list, tooltipflag);
+    }
+
     public Block getBlock() {
-        return this.a;
+        return this.block;
     }
 
     public void a(Map<Block, Item> map, Item item) {
         map.put(this.getBlock(), item);
+    }
+
+    @Override
+    public boolean P_() {
+        return !(this.block instanceof BlockShulkerBox);
+    }
+
+    @Override
+    public void a(EntityItem entityitem) {
+        if (this.block instanceof BlockShulkerBox) {
+            NBTTagCompound nbttagcompound = entityitem.getItemStack().getTag();
+
+            if (nbttagcompound != null) {
+                NBTTagList nbttaglist = nbttagcompound.getCompound("BlockEntityTag").getList("Items", 10);
+                Stream stream = nbttaglist.stream();
+
+                Objects.requireNonNull(NBTTagCompound.class);
+                ItemLiquidUtil.a(entityitem, stream.map(NBTTagCompound.class::cast).map(ItemStack::a));
+            }
+        }
+
     }
 }

@@ -31,52 +31,51 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockTurtleEgg extends Block {
 
-    private static final VoxelShape c = Block.a(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
-    private static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
-    public static final BlockStateInteger a = BlockProperties.ap;
-    public static final BlockStateInteger b = BlockProperties.ao;
+    public static final int MAX_HATCH_LEVEL = 2;
+    public static final int MIN_EGGS = 1;
+    public static final int MAX_EGGS = 4;
+    private static final VoxelShape ONE_EGG_AABB = Block.a(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
+    private static final VoxelShape MULTIPLE_EGGS_AABB = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
+    public static final BlockStateInteger HATCH = BlockProperties.HATCH;
+    public static final BlockStateInteger EGGS = BlockProperties.EGGS;
 
     public BlockTurtleEgg(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockTurtleEgg.HATCH, 0)).set(BlockTurtleEgg.EGGS, 1));
     }
 
     @Override
-    public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        this.a(world, blockposition, entity, 100);
-        super.stepOn(world, blockposition, entity);
+    public void stepOn(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
+        this.a(world, iblockdata, blockposition, entity, 100);
+        super.stepOn(world, blockposition, iblockdata, entity);
     }
 
     @Override
-    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
+    public void fallOn(World world, IBlockData iblockdata, BlockPosition blockposition, Entity entity, float f) {
         if (!(entity instanceof EntityZombie)) {
-            this.a(world, blockposition, entity, 3);
+            this.a(world, iblockdata, blockposition, entity, 3);
         }
 
-        super.fallOn(world, blockposition, entity, f);
+        super.fallOn(world, iblockdata, blockposition, entity, f);
     }
 
-    private void a(World world, BlockPosition blockposition, Entity entity, int i) {
+    private void a(World world, IBlockData iblockdata, BlockPosition blockposition, Entity entity, int i) {
         if (this.a(world, entity)) {
-            if (!world.isClientSide && world.random.nextInt(i) == 0) {
-                IBlockData iblockdata = world.getType(blockposition);
-
-                if (iblockdata.a(Blocks.TURTLE_EGG)) {
-                    this.a(world, blockposition, iblockdata);
-                }
+            if (!world.isClientSide && world.random.nextInt(i) == 0 && iblockdata.a(Blocks.TURTLE_EGG)) {
+                this.a(world, blockposition, iblockdata);
             }
 
         }
     }
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
-        int i = (Integer) iblockdata.get(BlockTurtleEgg.b);
+        world.playSound((EntityHuman) null, blockposition, SoundEffects.TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
+        int i = (Integer) iblockdata.get(BlockTurtleEgg.EGGS);
 
         if (i <= 1) {
             world.b(blockposition, false);
         } else {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.b, i - 1), 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.EGGS, i - 1), 2);
             world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
         }
 
@@ -85,16 +84,16 @@ public class BlockTurtleEgg extends Block {
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (this.a((World) worldserver) && a((IBlockAccess) worldserver, blockposition)) {
-            int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
+            int i = (Integer) iblockdata.get(BlockTurtleEgg.HATCH);
 
             if (i < 2) {
-                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
+                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.HATCH, i + 1), 2);
             } else {
-                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
                 worldserver.a(blockposition, false);
 
-                for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {
+                for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.EGGS); ++j) {
                     worldserver.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
                     EntityTurtle entityturtle = (EntityTurtle) EntityTypes.TURTLE.a((World) worldserver);
 
@@ -138,7 +137,7 @@ public class BlockTurtleEgg extends Block {
 
     @Override
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
-        return blockactioncontext.getItemStack().getItem() == this.getItem() && (Integer) iblockdata.get(BlockTurtleEgg.b) < 4 ? true : super.a(iblockdata, blockactioncontext);
+        return !blockactioncontext.isSneaking() && blockactioncontext.getItemStack().a(this.getItem()) && (Integer) iblockdata.get(BlockTurtleEgg.EGGS) < 4 ? true : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
@@ -146,20 +145,20 @@ public class BlockTurtleEgg extends Block {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata.a((Block) this) ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
+        return iblockdata.a((Block) this) ? (IBlockData) iblockdata.set(BlockTurtleEgg.EGGS, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.EGGS) + 1)) : super.getPlacedState(blockactioncontext);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (Integer) iblockdata.get(BlockTurtleEgg.b) > 1 ? BlockTurtleEgg.d : BlockTurtleEgg.c;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (Integer) iblockdata.get(BlockTurtleEgg.EGGS) > 1 ? BlockTurtleEgg.MULTIPLE_EGGS_AABB : BlockTurtleEgg.ONE_EGG_AABB;
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockTurtleEgg.a, BlockTurtleEgg.b);
+        blockstatelist_a.a(BlockTurtleEgg.HATCH, BlockTurtleEgg.EGGS);
     }
 
     private boolean a(World world, Entity entity) {
-        return !(entity instanceof EntityTurtle) && !(entity instanceof EntityBat) ? (!(entity instanceof EntityLiving) ? false : entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) : false;
+        return !(entity instanceof EntityTurtle) && !(entity instanceof EntityBat) ? (!(entity instanceof EntityLiving) ? false : entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) : false;
     }
 }

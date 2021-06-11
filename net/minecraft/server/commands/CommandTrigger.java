@@ -27,8 +27,10 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class CommandTrigger {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.trigger.failed.unprimed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.trigger.failed.invalid"));
+    private static final SimpleCommandExceptionType ERROR_NOT_PRIMED = new SimpleCommandExceptionType(new ChatMessage("commands.trigger.failed.unprimed"));
+    private static final SimpleCommandExceptionType ERROR_INVALID_OBJECTIVE = new SimpleCommandExceptionType(new ChatMessage("commands.trigger.failed.invalid"));
+
+    public CommandTrigger() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("trigger").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).suggests((commandcontext, suggestionsbuilder) -> {
@@ -87,18 +89,18 @@ public class CommandTrigger {
 
     private static ScoreboardScore a(EntityPlayer entityplayer, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {
         if (scoreboardobjective.getCriteria() != IScoreboardCriteria.TRIGGER) {
-            throw CommandTrigger.b.create();
+            throw CommandTrigger.ERROR_INVALID_OBJECTIVE.create();
         } else {
             Scoreboard scoreboard = entityplayer.getScoreboard();
             String s = entityplayer.getName();
 
             if (!scoreboard.b(s, scoreboardobjective)) {
-                throw CommandTrigger.a.create();
+                throw CommandTrigger.ERROR_NOT_PRIMED.create();
             } else {
                 ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
 
                 if (scoreboardscore.g()) {
-                    throw CommandTrigger.a.create();
+                    throw CommandTrigger.ERROR_NOT_PRIMED.create();
                 } else {
                     scoreboardscore.a(true);
                     return scoreboardscore;

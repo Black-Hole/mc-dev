@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class DataConverterSignText extends DataConverterNamedEntity {
 
-    public static final Gson a = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer<IChatBaseComponent>() {
+    public static final Gson GSON = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer<IChatBaseComponent>() {
         public IChatMutableComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatComponentText(jsonelement.getAsString());
@@ -61,9 +61,9 @@ public class DataConverterSignText extends DataConverterNamedEntity {
                 object = new ChatComponentText(s1);
             } else {
                 try {
-                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s1, IChatBaseComponent.class, true);
+                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.GSON, s1, IChatBaseComponent.class, true);
                     if (object == null) {
-                        object = ChatComponentText.d;
+                        object = ChatComponentText.EMPTY;
                     }
                 } catch (JsonParseException jsonparseexception) {
                     ;
@@ -90,7 +90,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
                 }
             }
         } else {
-            object = ChatComponentText.d;
+            object = ChatComponentText.EMPTY;
         }
 
         return dynamic.set(s, dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));

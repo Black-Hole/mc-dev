@@ -10,13 +10,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorAdmireTimeout<E extends EntityPiglin> extends Behavior<E> {
 
-    private final int b;
-    private final int c;
+    private final int maxTimeToReachItem;
+    private final int disableTime;
 
     public BehaviorAdmireTimeout(int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.ADMIRING_ITEM, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryStatus.VALUE_PRESENT, MemoryModuleType.TIME_TRYING_TO_REACH_ADMIRE_ITEM, MemoryStatus.REGISTERED, MemoryModuleType.DISABLE_WALK_TO_ADMIRE_ITEM, MemoryStatus.REGISTERED));
-        this.b = i;
-        this.c = j;
+        this.maxTimeToReachItem = i;
+        this.disableTime = j;
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
@@ -32,10 +32,10 @@ public class BehaviorAdmireTimeout<E extends EntityPiglin> extends Behavior<E> {
         } else {
             int j = (Integer) optional.get();
 
-            if (j > this.b) {
+            if (j > this.maxTimeToReachItem) {
                 behaviorcontroller.removeMemory(MemoryModuleType.ADMIRING_ITEM);
                 behaviorcontroller.removeMemory(MemoryModuleType.TIME_TRYING_TO_REACH_ADMIRE_ITEM);
-                behaviorcontroller.a(MemoryModuleType.DISABLE_WALK_TO_ADMIRE_ITEM, true, (long) this.c);
+                behaviorcontroller.a(MemoryModuleType.DISABLE_WALK_TO_ADMIRE_ITEM, true, (long) this.disableTime);
             } else {
                 behaviorcontroller.setMemory(MemoryModuleType.TIME_TRYING_TO_REACH_ADMIRE_ITEM, (Object) (j + 1));
             }

@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.state.properties.IBlockState;
 
 public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.ac;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.RAIL_SHAPE;
 
     protected BlockMinecartTrack(BlockBase.Info blockbase_info) {
         super(false, blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockMinecartTrack.WATERLOGGED, false));
     }
 
     @Override
@@ -153,6 +153,6 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockMinecartTrack.SHAPE);
+        blockstatelist_a.a(BlockMinecartTrack.SHAPE, BlockMinecartTrack.WATERLOGGED);
     }
 }

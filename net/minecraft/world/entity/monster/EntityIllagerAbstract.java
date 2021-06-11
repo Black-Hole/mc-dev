@@ -22,7 +22,18 @@ public abstract class EntityIllagerAbstract extends EntityRaider {
         return EnumMonsterType.ILLAGER;
     }
 
-    public class b extends PathfinderGoalDoorOpen {
+    public EntityIllagerAbstract.a n() {
+        return EntityIllagerAbstract.a.CROSSED;
+    }
+
+    public static enum a {
+
+        CROSSED, ATTACKING, SPELLCASTING, BOW_AND_ARROW, CROSSBOW_HOLD, CROSSBOW_CHARGE, CELEBRATING, NEUTRAL;
+
+        private a() {}
+    }
+
+    protected class b extends PathfinderGoalDoorOpen {
 
         public b(EntityRaider entityraider) {
             super(entityraider, false);
@@ -30,7 +41,7 @@ public abstract class EntityIllagerAbstract extends EntityRaider {
 
         @Override
         public boolean a() {
-            return super.a() && EntityIllagerAbstract.this.fb();
+            return super.a() && EntityIllagerAbstract.this.fK();
         }
     }
 }

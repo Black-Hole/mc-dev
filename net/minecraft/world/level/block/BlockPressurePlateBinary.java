@@ -20,13 +20,13 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
-    private final BlockPressurePlateBinary.EnumMobType e;
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
+    private final BlockPressurePlateBinary.EnumMobType sensitivity;
 
     protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
-        this.e = blockpressureplatebinary_enummobtype;
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
+        this.sensitivity = blockpressureplatebinary_enummobtype;
     }
 
     @Override
@@ -42,9 +42,9 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material != Material.WOOD && this.material != Material.NETHER_WOOD) {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
         } else {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
         }
 
     }
@@ -52,19 +52,19 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material != Material.WOOD && this.material != Material.NETHER_WOOD) {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
         } else {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
         }
 
     }
 
     @Override
     protected int b(World world, BlockPosition blockposition) {
-        AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.c.a(blockposition);
+        AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.TOUCH_AABB.a(blockposition);
         List list;
 
-        switch (this.e) {
+        switch (this.sensitivity) {
             case EVERYTHING:
                 list = world.getEntities((Entity) null, axisalignedbb);
                 break;

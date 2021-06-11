@@ -3,11 +3,17 @@ package net.minecraft;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import java.util.Optional;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.IBlockData;
 
 public class BlockUtil {
+
+    public BlockUtil() {}
 
     public static BlockUtil.Rectangle a(BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis, int i, EnumDirection.EnumAxis enumdirection_enumaxis1, int j, Predicate<BlockPosition> predicate) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
@@ -21,19 +27,19 @@ public class BlockUtil {
         BlockUtil.IntBounds[] ablockutil_intbounds = new BlockUtil.IntBounds[k + 1 + l];
 
         ablockutil_intbounds[k] = new BlockUtil.IntBounds(a(predicate, blockposition_mutableblockposition.g(blockposition), enumdirection2, j), a(predicate, blockposition_mutableblockposition.g(blockposition), enumdirection3, j));
-        int j1 = ablockutil_intbounds[k].a;
+        int j1 = ablockutil_intbounds[k].min;
 
         BlockUtil.IntBounds blockutil_intbounds;
         int k1;
 
         for (k1 = 1; k1 <= k; ++k1) {
             blockutil_intbounds = ablockutil_intbounds[i1 - (k1 - 1)];
-            ablockutil_intbounds[i1 - k1] = new BlockUtil.IntBounds(a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection, k1), enumdirection2, blockutil_intbounds.a), a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection, k1), enumdirection3, blockutil_intbounds.b));
+            ablockutil_intbounds[i1 - k1] = new BlockUtil.IntBounds(a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection, k1), enumdirection2, blockutil_intbounds.min), a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection, k1), enumdirection3, blockutil_intbounds.max));
         }
 
         for (k1 = 1; k1 <= l; ++k1) {
             blockutil_intbounds = ablockutil_intbounds[i1 + k1 - 1];
-            ablockutil_intbounds[i1 + k1] = new BlockUtil.IntBounds(a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection1, k1), enumdirection2, blockutil_intbounds.a), a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection1, k1), enumdirection3, blockutil_intbounds.b));
+            ablockutil_intbounds[i1 + k1] = new BlockUtil.IntBounds(a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection1, k1), enumdirection2, blockutil_intbounds.min), a(predicate, blockposition_mutableblockposition.g(blockposition).c(enumdirection1, k1), enumdirection3, blockutil_intbounds.max));
         }
 
         k1 = 0;
@@ -49,25 +55,25 @@ public class BlockUtil {
 
             for (int j3 = 0; j3 < ablockutil_intbounds.length; ++j3) {
                 blockutil_intbounds1 = ablockutil_intbounds[j3];
-                l2 = j1 - blockutil_intbounds1.a;
-                i3 = j1 + blockutil_intbounds1.b;
+                l2 = j1 - blockutil_intbounds1.min;
+                i3 = j1 + blockutil_intbounds1.max;
                 aint[j3] = k2 >= l2 && k2 <= i3 ? i3 + 1 - k2 : 0;
             }
 
             Pair<BlockUtil.IntBounds, Integer> pair = a(aint);
 
             blockutil_intbounds1 = (BlockUtil.IntBounds) pair.getFirst();
-            l2 = 1 + blockutil_intbounds1.b - blockutil_intbounds1.a;
+            l2 = 1 + blockutil_intbounds1.max - blockutil_intbounds1.min;
             i3 = (Integer) pair.getSecond();
             if (l2 * i3 > i2 * j2) {
-                k1 = blockutil_intbounds1.a;
+                k1 = blockutil_intbounds1.min;
                 l1 = k2;
                 i2 = l2;
                 j2 = i3;
             }
         }
 
-        return new BlockUtil.Rectangle(blockposition.a(enumdirection_enumaxis, k1 - i1).a(enumdirection_enumaxis1, l1 - j1), i2, j2);
+        return new BlockUtil.Rectangle(blockposition.b(enumdirection_enumaxis, k1 - i1).b(enumdirection_enumaxis1, l1 - j1), i2, j2);
     }
 
     private static int a(Predicate<BlockPosition> predicate, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, EnumDirection enumdirection, int i) {
@@ -124,31 +130,44 @@ public class BlockUtil {
         return new Pair(new BlockUtil.IntBounds(i, j - 1), k);
     }
 
-    public static class Rectangle {
+    public static Optional<BlockPosition> a(IBlockAccess iblockaccess, BlockPosition blockposition, Block block, EnumDirection enumdirection, Block block1) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
 
-        public final BlockPosition origin;
-        public final int side1;
-        public final int side2;
+        IBlockData iblockdata;
 
-        public Rectangle(BlockPosition blockposition, int i, int j) {
-            this.origin = blockposition;
-            this.side1 = i;
-            this.side2 = j;
-        }
+        do {
+            blockposition_mutableblockposition.c(enumdirection);
+            iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
+        } while (iblockdata.a(block));
+
+        return iblockdata.a(block1) ? Optional.of(blockposition_mutableblockposition) : Optional.empty();
     }
 
     public static class IntBounds {
 
-        public final int a;
-        public final int b;
+        public final int min;
+        public final int max;
 
         public IntBounds(int i, int j) {
-            this.a = i;
-            this.b = j;
+            this.min = i;
+            this.max = j;
         }
 
         public String toString() {
-            return "IntBounds{min=" + this.a + ", max=" + this.b + '}';
+            return "IntBounds{min=" + this.min + ", max=" + this.max + "}";
+        }
+    }
+
+    public static class Rectangle {
+
+        public final BlockPosition minCorner;
+        public final int axis1Size;
+        public final int axis2Size;
+
+        public Rectangle(BlockPosition blockposition, int i, int j) {
+            this.minCorner = blockposition;
+            this.axis1Size = i;
+            this.axis2Size = j;
         }
     }
 }

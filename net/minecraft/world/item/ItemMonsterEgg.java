@@ -29,23 +29,24 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityMobSpawner;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.MovingObjectPosition;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 import net.minecraft.world.phys.Vec3D;
 
 public class ItemMonsterEgg extends Item {
 
-    private static final Map<EntityTypes<?>, ItemMonsterEgg> a = Maps.newIdentityHashMap();
-    private final int b;
-    private final int c;
-    private final EntityTypes<?> d;
+    private static final Map<EntityTypes<? extends EntityInsentient>, ItemMonsterEgg> BY_ID = Maps.newIdentityHashMap();
+    private final int backgroundColor;
+    private final int highlightColor;
+    private final EntityTypes<?> defaultType;
 
-    public ItemMonsterEgg(EntityTypes<?> entitytypes, int i, int j, Item.Info item_info) {
+    public ItemMonsterEgg(EntityTypes<? extends EntityInsentient> entitytypes, int i, int j, Item.Info item_info) {
         super(item_info);
-        this.d = entitytypes;
-        this.b = i;
-        this.c = j;
-        ItemMonsterEgg.a.put(entitytypes, this);
+        this.defaultType = entitytypes;
+        this.backgroundColor = i;
+        this.highlightColor = j;
+        ItemMonsterEgg.BY_ID.put(entitytypes, this);
     }
 
     @Override
@@ -87,6 +88,7 @@ public class ItemMonsterEgg extends Item {
 
             if (entitytypes1.spawnCreature((WorldServer) world, itemstack, itemactioncontext.getEntity(), blockposition1, EnumMobSpawn.SPAWN_EGG, true, !Objects.equals(blockposition, blockposition1) && enumdirection == EnumDirection.UP) != null) {
                 itemstack.subtract(1);
+                world.a((Entity) itemactioncontext.getEntity(), GameEvent.ENTITY_PLACE, blockposition);
             }
 
             return EnumInteractionResult.CONSUME;
@@ -114,11 +116,12 @@ public class ItemMonsterEgg extends Item {
                 if (entitytypes.spawnCreature((WorldServer) world, itemstack, entityhuman, blockposition, EnumMobSpawn.SPAWN_EGG, false, false) == null) {
                     return InteractionResultWrapper.pass(itemstack);
                 } else {
-                    if (!entityhuman.abilities.canInstantlyBuild) {
+                    if (!entityhuman.getAbilities().instabuild) {
                         itemstack.subtract(1);
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
+                    world.a(GameEvent.ENTITY_PLACE, (Entity) entityhuman);
                     return InteractionResultWrapper.consume(itemstack);
                 }
             } else {
@@ -131,8 +134,17 @@ public class ItemMonsterEgg extends Item {
         return Objects.equals(this.a(nbttagcompound), entitytypes);
     }
 
-    public static Iterable<ItemMonsterEgg> f() {
-        return Iterables.unmodifiableIterable(ItemMonsterEgg.a.values());
+    public int a(int i) {
+        return i == 0 ? this.backgroundColor : this.highlightColor;
+    }
+
+    @Nullable
+    public static ItemMonsterEgg a(@Nullable EntityTypes<?> entitytypes) {
+        return (ItemMonsterEgg) ItemMonsterEgg.BY_ID.get(entitytypes);
+    }
+
+    public static Iterable<ItemMonsterEgg> i() {
+        return Iterables.unmodifiableIterable(ItemMonsterEgg.BY_ID.values());
     }
 
     public EntityTypes<?> a(@Nullable NBTTagCompound nbttagcompound) {
@@ -140,11 +152,11 @@ public class ItemMonsterEgg extends Item {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("EntityTag");
 
             if (nbttagcompound1.hasKeyOfType("id", 8)) {
-                return (EntityTypes) EntityTypes.a(nbttagcompound1.getString("id")).orElse(this.d);
+                return (EntityTypes) EntityTypes.a(nbttagcompound1.getString("id")).orElse(this.defaultType);
             }
         }
 
-        return this.d;
+        return this.defaultType;
     }
 
     public Optional<EntityInsentient> a(EntityHuman entityhuman, EntityInsentient entityinsentient, EntityTypes<? extends EntityInsentient> entitytypes, WorldServer worldserver, Vec3D vec3d, ItemStack itemstack) {
@@ -172,7 +184,7 @@ public class ItemMonsterEgg extends Item {
                         ((EntityInsentient) object).setCustomName(itemstack.getName());
                     }
 
-                    if (!entityhuman.abilities.canInstantlyBuild) {
+                    if (!entityhuman.getAbilities().instabuild) {
                         itemstack.subtract(1);
                     }
 

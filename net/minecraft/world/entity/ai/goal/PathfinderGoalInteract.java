@@ -6,6 +6,11 @@ import net.minecraft.world.entity.EntityLiving;
 
 public class PathfinderGoalInteract extends PathfinderGoalLookAtPlayer {
 
+    public PathfinderGoalInteract(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f) {
+        super(entityinsentient, oclass, f);
+        this.a(EnumSet.of(PathfinderGoal.Type.LOOK, PathfinderGoal.Type.MOVE));
+    }
+
     public PathfinderGoalInteract(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f, float f1) {
         super(entityinsentient, oclass, f, f1);
         this.a(EnumSet.of(PathfinderGoal.Type.LOOK, PathfinderGoal.Type.MOVE));

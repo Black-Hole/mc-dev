@@ -27,7 +27,7 @@ import net.minecraft.util.ChatDeserializer;
 
 public class DataConverterLevelDataGeneratorOptions extends DataFix {
 
-    static final Map<String, String> a = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    static final Map<String, String> MAP = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put("0", "minecraft:ocean");
         hashmap.put("1", "minecraft:plains");
         hashmap.put("2", "minecraft:desert");
@@ -102,6 +102,7 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
         hashmap.put("166", "minecraft:modified_wooded_badlands_plateau");
         hashmap.put("167", "minecraft:modified_badlands_plateau");
     });
+    public static final String GENERATOR_OPTIONS = "generatorOptions";
 
     public DataConverterLevelDataGeneratorOptions(Schema schema, boolean flag) {
         super(schema, flag);
@@ -144,7 +145,7 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
             object = b((String) iterator.next());
             if (!((List) object).isEmpty()) {
                 if (iterator.hasNext()) {
-                    s1 = (String) DataConverterLevelDataGeneratorOptions.a.getOrDefault(iterator.next(), "minecraft:plains");
+                    s1 = (String) DataConverterLevelDataGeneratorOptions.MAP.getOrDefault(iterator.next(), "minecraft:plains");
                 }
 
                 if (iterator.hasNext()) {

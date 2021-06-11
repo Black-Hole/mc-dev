@@ -15,15 +15,18 @@ public class WorldGenPackedIce1 extends WorldGenFeatureDisk {
     }
 
     @Override
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCircleConfiguration worldgenfeaturecircleconfiguration) {
-        while (generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > 2) {
-            blockposition = blockposition.down();
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureCircleConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        ChunkGenerator chunkgenerator = featureplacecontext.b();
+        Random random = featureplacecontext.c();
+        WorldGenFeatureCircleConfiguration worldgenfeaturecircleconfiguration = (WorldGenFeatureCircleConfiguration) featureplacecontext.e();
+
+        BlockPosition blockposition;
+
+        for (blockposition = featureplacecontext.d(); generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > generatoraccessseed.getMinBuildHeight() + 2; blockposition = blockposition.down()) {
+            ;
         }
 
-        if (!generatoraccessseed.getType(blockposition).a(Blocks.SNOW_BLOCK)) {
-            return false;
-        } else {
-            return super.a(generatoraccessseed, chunkgenerator, random, blockposition, worldgenfeaturecircleconfiguration);
-        }
+        return !generatoraccessseed.getType(blockposition).a(Blocks.SNOW_BLOCK) ? false : super.generate(new FeaturePlaceContext<>(generatoraccessseed, chunkgenerator, random, blockposition, worldgenfeaturecircleconfiguration));
     }
 }

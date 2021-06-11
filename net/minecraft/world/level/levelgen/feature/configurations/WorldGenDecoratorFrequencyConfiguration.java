@@ -1,22 +1,23 @@
 package net.minecraft.world.level.levelgen.feature.configurations;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.IntSpread;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
 
 public class WorldGenDecoratorFrequencyConfiguration implements WorldGenFeatureDecoratorConfiguration, WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenDecoratorFrequencyConfiguration> a = IntSpread.a(-10, 128, 128).fieldOf("count").xmap(WorldGenDecoratorFrequencyConfiguration::new, WorldGenDecoratorFrequencyConfiguration::a).codec();
-    private final IntSpread c;
+    public static final Codec<WorldGenDecoratorFrequencyConfiguration> CODEC = IntProvider.b(0, 256).fieldOf("count").xmap(WorldGenDecoratorFrequencyConfiguration::new, WorldGenDecoratorFrequencyConfiguration::a).codec();
+    private final IntProvider count;
 
     public WorldGenDecoratorFrequencyConfiguration(int i) {
-        this.c = IntSpread.a(i);
+        this.count = ConstantInt.a(i);
     }
 
-    public WorldGenDecoratorFrequencyConfiguration(IntSpread intspread) {
-        this.c = intspread;
+    public WorldGenDecoratorFrequencyConfiguration(IntProvider intprovider) {
+        this.count = intprovider;
     }
 
-    public IntSpread a() {
-        return this.c;
+    public IntProvider a() {
+        return this.count;
     }
 }

@@ -15,19 +15,19 @@ import net.minecraft.world.phys.Vec3D;
 
 public class LootItemConditionDamageSourceProperties implements LootItemCondition {
 
-    private final CriterionConditionDamageSource a;
+    final CriterionConditionDamageSource predicate;
 
-    private LootItemConditionDamageSourceProperties(CriterionConditionDamageSource criterionconditiondamagesource) {
-        this.a = criterionconditiondamagesource;
+    LootItemConditionDamageSourceProperties(CriterionConditionDamageSource criterionconditiondamagesource) {
+        this.predicate = criterionconditiondamagesource;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.l;
+    public LootItemConditionType a() {
+        return LootItemConditions.DAMAGE_SOURCE_PROPERTIES;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.ORIGIN, LootContextParameters.DAMAGE_SOURCE);
     }
 
@@ -35,7 +35,7 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
         DamageSource damagesource = (DamageSource) loottableinfo.getContextParameter(LootContextParameters.DAMAGE_SOURCE);
         Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-        return vec3d != null && damagesource != null && this.a.a(loottableinfo.getWorld(), vec3d, damagesource);
+        return vec3d != null && damagesource != null && this.predicate.a(loottableinfo.getWorld(), vec3d, damagesource);
     }
 
     public static LootItemCondition.a a(CriterionConditionDamageSource.a criterionconditiondamagesource_a) {
@@ -49,7 +49,7 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionDamageSourceProperties lootitemconditiondamagesourceproperties, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("predicate", lootitemconditiondamagesourceproperties.a.a());
+            jsonobject.add("predicate", lootitemconditiondamagesourceproperties.predicate.a());
         }
 
         @Override

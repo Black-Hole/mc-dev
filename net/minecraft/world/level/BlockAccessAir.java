@@ -29,4 +29,14 @@ public enum BlockAccessAir implements IBlockAccess {
     public Fluid getFluid(BlockPosition blockposition) {
         return FluidTypes.EMPTY.h();
     }
+
+    @Override
+    public int getMinBuildHeight() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
 }

@@ -3,36 +3,36 @@ package net.minecraft.world.level.levelgen.feature.foliageplacers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.util.IntSpread;
-import net.minecraft.world.level.VirtualLevelWritable;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.VirtualLevelReadable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class WorldGenFoilagePlacerAcacia extends WorldGenFoilagePlacer {
 
-    public static final Codec<WorldGenFoilagePlacerAcacia> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenFoilagePlacerAcacia> CODEC = RecordCodecBuilder.create((instance) -> {
         return b(instance).apply(instance, WorldGenFoilagePlacerAcacia::new);
     });
 
-    public WorldGenFoilagePlacerAcacia(IntSpread intspread, IntSpread intspread1) {
-        super(intspread, intspread1);
+    public WorldGenFoilagePlacerAcacia(IntProvider intprovider, IntProvider intprovider1) {
+        super(intprovider, intprovider1);
     }
 
     @Override
     protected WorldGenFoilagePlacers<?> a() {
-        return WorldGenFoilagePlacers.d;
+        return WorldGenFoilagePlacers.ACACIA_FOLIAGE_PLACER;
     }
 
     @Override
-    protected void a(VirtualLevelWritable virtuallevelwritable, Random random, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration, int i, WorldGenFoilagePlacer.b worldgenfoilageplacer_b, int j, int k, Set<BlockPosition> set, int l, StructureBoundingBox structureboundingbox) {
-        boolean flag = worldgenfoilageplacer_b.c();
-        BlockPosition blockposition = worldgenfoilageplacer_b.a().up(l);
+    protected void a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration, int i, WorldGenFoilagePlacer.a worldgenfoilageplacer_a, int j, int k, int l) {
+        boolean flag = worldgenfoilageplacer_a.c();
+        BlockPosition blockposition = worldgenfoilageplacer_a.a().up(l);
 
-        this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + worldgenfoilageplacer_b.b(), set, -1 - j, flag, structureboundingbox);
-        this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k - 1, set, -j, flag, structureboundingbox);
-        this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + worldgenfoilageplacer_b.b() - 1, set, 0, flag, structureboundingbox);
+        this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + worldgenfoilageplacer_a.b(), -1 - j, flag);
+        this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k - 1, -j, flag);
+        this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + worldgenfoilageplacer_a.b() - 1, 0, flag);
     }
 
     @Override

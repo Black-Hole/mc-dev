@@ -7,10 +7,10 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 @FunctionalInterface
 interface LootEntryChildren {
 
-    LootEntryChildren a = (loottableinfo, consumer) -> {
+    LootEntryChildren ALWAYS_FALSE = (loottableinfo, consumer) -> {
         return false;
     };
-    LootEntryChildren b = (loottableinfo, consumer) -> {
+    LootEntryChildren ALWAYS_TRUE = (loottableinfo, consumer) -> {
         return true;
     };
 

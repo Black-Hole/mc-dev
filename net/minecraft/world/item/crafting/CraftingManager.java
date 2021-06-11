@@ -36,17 +36,17 @@ import org.apache.logging.log4j.Logger;
 
 public class CraftingManager extends ResourceDataJson {
 
-    private static final Gson a = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogManager.getLogger();
     public Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> recipes = ImmutableMap.of();
-    private boolean d;
+    private boolean hasErrors;
 
     public CraftingManager() {
-        super(CraftingManager.a, "recipes");
+        super(CraftingManager.GSON, "recipes");
     }
 
     protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
-        this.d = false;
+        this.hasErrors = false;
         Map<Recipes<?>, Builder<MinecraftKey, IRecipe<?>>> map1 = Maps.newHashMap();
         Iterator iterator = map.entrySet().iterator();
 
@@ -71,6 +71,10 @@ public class CraftingManager extends ResourceDataJson {
         CraftingManager.LOGGER.info("Loaded {} recipes", map1.size());
     }
 
+    public boolean a() {
+        return this.hasErrors;
+    }
+
     public <C extends IInventory, T extends IRecipe<C>> Optional<T> craft(Recipes<T> recipes, C c0, World world) {
         return this.b(recipes).values().stream().flatMap((irecipe) -> {
             return SystemUtils.a(recipes.a(irecipe, world, c0));
@@ -87,7 +91,7 @@ public class CraftingManager extends ResourceDataJson {
         return (List) this.b(recipes).values().stream().flatMap((irecipe) -> {
             return SystemUtils.a(recipes.a(irecipe, world, c0));
         }).sorted(Comparator.comparing((irecipe) -> {
-            return irecipe.getResult().j();
+            return irecipe.getResult().n();
         })).collect(Collectors.toList());
     }
 
@@ -101,7 +105,7 @@ public class CraftingManager extends ResourceDataJson {
         if (optional.isPresent()) {
             return ((IRecipe) optional.get()).b(c0);
         } else {
-            NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.b);
+            NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.EMPTY);
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 nonnulllist.set(i, c0.getItem(i));
@@ -135,5 +139,22 @@ public class CraftingManager extends ResourceDataJson {
         return ((RecipeSerializer) IRegistry.RECIPE_SERIALIZER.getOptional(new MinecraftKey(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Invalid or unsupported recipe type '" + s + "'");
         })).a(minecraftkey, jsonobject);
+    }
+
+    public void a(Iterable<IRecipe<?>> iterable) {
+        this.hasErrors = false;
+        Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> map = Maps.newHashMap();
+
+        iterable.forEach((irecipe) -> {
+            Map<MinecraftKey, IRecipe<?>> map1 = (Map) map.computeIfAbsent(irecipe.g(), (recipes) -> {
+                return Maps.newHashMap();
+            });
+            IRecipe<?> irecipe1 = (IRecipe) map1.put(irecipe.getKey(), irecipe);
+
+            if (irecipe1 != null) {
+                throw new IllegalStateException("Duplicate recipe ignored with ID " + irecipe.getKey());
+            }
+        });
+        this.recipes = ImmutableMap.copyOf(map);
     }
 }

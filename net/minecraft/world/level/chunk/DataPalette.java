@@ -14,9 +14,13 @@ public interface DataPalette<T> {
     @Nullable
     T a(int i);
 
+    void a(PacketDataSerializer packetdataserializer);
+
     void b(PacketDataSerializer packetdataserializer);
 
     int a();
+
+    int b();
 
     void a(NBTTagList nbttaglist);
 }

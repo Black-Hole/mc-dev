@@ -8,8 +8,9 @@ import net.minecraft.core.IRegistry;
 
 public abstract class FeatureSize {
 
-    public static final Codec<FeatureSize> a = IRegistry.FEATURE_SIZE_TYPE.dispatch(FeatureSize::b, FeatureSizeType::a);
-    protected final OptionalInt b;
+    public static final Codec<FeatureSize> CODEC = IRegistry.FEATURE_SIZE_TYPES.dispatch(FeatureSize::b, FeatureSizeType::a);
+    protected static final int MAX_WIDTH = 16;
+    protected final OptionalInt minClippedHeight;
 
     protected static <S extends FeatureSize> RecordCodecBuilder<S, OptionalInt> a() {
         return Codec.intRange(0, 80).optionalFieldOf("min_clipped_height").xmap((optional) -> {
@@ -17,12 +18,12 @@ public abstract class FeatureSize {
         }, (optionalint) -> {
             return optionalint.isPresent() ? Optional.of(optionalint.getAsInt()) : Optional.empty();
         }).forGetter((featuresize) -> {
-            return featuresize.b;
+            return featuresize.minClippedHeight;
         });
     }
 
     public FeatureSize(OptionalInt optionalint) {
-        this.b = optionalint;
+        this.minClippedHeight = optionalint;
     }
 
     protected abstract FeatureSizeType<?> b();
@@ -30,6 +31,6 @@ public abstract class FeatureSize {
     public abstract int a(int i, int j);
 
     public OptionalInt c() {
-        return this.b;
+        return this.minClippedHeight;
     }
 }

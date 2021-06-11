@@ -1,44 +1,46 @@
 package net.minecraft.world.level.pathfinder;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.phys.Vec3D;
 
 public class PathPoint {
 
-    public final int a;
-    public final int b;
-    public final int c;
-    private final int m;
-    public int d = -1;
-    public float e;
-    public float f;
+    public final int x;
+    public final int y;
+    public final int z;
+    private final int hash;
+    public int heapIdx = -1;
     public float g;
-    public PathPoint h;
-    public boolean i;
-    public float j;
-    public float k;
-    public PathType l;
+    public float h;
+    public float f;
+    public PathPoint cameFrom;
+    public boolean closed;
+    public float walkedDistance;
+    public float costMalus;
+    public PathType type;
 
     public PathPoint(int i, int j, int k) {
-        this.l = PathType.BLOCKED;
-        this.a = i;
-        this.b = j;
-        this.c = k;
-        this.m = b(i, j, k);
+        this.type = PathType.BLOCKED;
+        this.x = i;
+        this.y = j;
+        this.z = k;
+        this.hash = b(i, j, k);
     }
 
     public PathPoint a(int i, int j, int k) {
         PathPoint pathpoint = new PathPoint(i, j, k);
 
-        pathpoint.d = this.d;
-        pathpoint.e = this.e;
-        pathpoint.f = this.f;
+        pathpoint.heapIdx = this.heapIdx;
         pathpoint.g = this.g;
         pathpoint.h = this.h;
-        pathpoint.i = this.i;
-        pathpoint.j = this.j;
-        pathpoint.k = this.k;
-        pathpoint.l = this.l;
+        pathpoint.f = this.f;
+        pathpoint.cameFrom = this.cameFrom;
+        pathpoint.closed = this.closed;
+        pathpoint.walkedDistance = this.walkedDistance;
+        pathpoint.costMalus = this.costMalus;
+        pathpoint.type = this.type;
         return pathpoint;
     }
 
@@ -47,39 +49,59 @@ public class PathPoint {
     }
 
     public float a(PathPoint pathpoint) {
-        float f = (float) (pathpoint.a - this.a);
-        float f1 = (float) (pathpoint.b - this.b);
-        float f2 = (float) (pathpoint.c - this.c);
+        float f = (float) (pathpoint.x - this.x);
+        float f1 = (float) (pathpoint.y - this.y);
+        float f2 = (float) (pathpoint.z - this.z);
+
+        return MathHelper.c(f * f + f1 * f1 + f2 * f2);
+    }
+
+    public float a(BlockPosition blockposition) {
+        float f = (float) (blockposition.getX() - this.x);
+        float f1 = (float) (blockposition.getY() - this.y);
+        float f2 = (float) (blockposition.getZ() - this.z);
 
         return MathHelper.c(f * f + f1 * f1 + f2 * f2);
     }
 
     public float b(PathPoint pathpoint) {
-        float f = (float) (pathpoint.a - this.a);
-        float f1 = (float) (pathpoint.b - this.b);
-        float f2 = (float) (pathpoint.c - this.c);
+        float f = (float) (pathpoint.x - this.x);
+        float f1 = (float) (pathpoint.y - this.y);
+        float f2 = (float) (pathpoint.z - this.z);
+
+        return f * f + f1 * f1 + f2 * f2;
+    }
+
+    public float b(BlockPosition blockposition) {
+        float f = (float) (blockposition.getX() - this.x);
+        float f1 = (float) (blockposition.getY() - this.y);
+        float f2 = (float) (blockposition.getZ() - this.z);
 
         return f * f + f1 * f1 + f2 * f2;
     }
 
     public float c(PathPoint pathpoint) {
-        float f = (float) Math.abs(pathpoint.a - this.a);
-        float f1 = (float) Math.abs(pathpoint.b - this.b);
-        float f2 = (float) Math.abs(pathpoint.c - this.c);
+        float f = (float) Math.abs(pathpoint.x - this.x);
+        float f1 = (float) Math.abs(pathpoint.y - this.y);
+        float f2 = (float) Math.abs(pathpoint.z - this.z);
 
         return f + f1 + f2;
     }
 
     public float c(BlockPosition blockposition) {
-        float f = (float) Math.abs(blockposition.getX() - this.a);
-        float f1 = (float) Math.abs(blockposition.getY() - this.b);
-        float f2 = (float) Math.abs(blockposition.getZ() - this.c);
+        float f = (float) Math.abs(blockposition.getX() - this.x);
+        float f1 = (float) Math.abs(blockposition.getY() - this.y);
+        float f2 = (float) Math.abs(blockposition.getZ() - this.z);
 
         return f + f1 + f2;
     }
 
     public BlockPosition a() {
-        return new BlockPosition(this.a, this.b, this.c);
+        return new BlockPosition(this.x, this.y, this.z);
+    }
+
+    public Vec3D b() {
+        return new Vec3D((double) this.x, (double) this.y, (double) this.z);
     }
 
     public boolean equals(Object object) {
@@ -88,19 +110,41 @@ public class PathPoint {
         } else {
             PathPoint pathpoint = (PathPoint) object;
 
-            return this.m == pathpoint.m && this.a == pathpoint.a && this.b == pathpoint.b && this.c == pathpoint.c;
+            return this.hash == pathpoint.hash && this.x == pathpoint.x && this.y == pathpoint.y && this.z == pathpoint.z;
         }
     }
 
     public int hashCode() {
-        return this.m;
+        return this.hash;
     }
 
     public boolean c() {
-        return this.d >= 0;
+        return this.heapIdx >= 0;
     }
 
     public String toString() {
-        return "Node{x=" + this.a + ", y=" + this.b + ", z=" + this.c + '}';
+        return "Node{x=" + this.x + ", y=" + this.y + ", z=" + this.z + "}";
+    }
+
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeInt(this.x);
+        packetdataserializer.writeInt(this.y);
+        packetdataserializer.writeInt(this.z);
+        packetdataserializer.writeFloat(this.walkedDistance);
+        packetdataserializer.writeFloat(this.costMalus);
+        packetdataserializer.writeBoolean(this.closed);
+        packetdataserializer.writeInt(this.type.ordinal());
+        packetdataserializer.writeFloat(this.f);
+    }
+
+    public static PathPoint b(PacketDataSerializer packetdataserializer) {
+        PathPoint pathpoint = new PathPoint(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt());
+
+        pathpoint.walkedDistance = packetdataserializer.readFloat();
+        pathpoint.costMalus = packetdataserializer.readFloat();
+        pathpoint.closed = packetdataserializer.readBoolean();
+        pathpoint.type = PathType.values()[packetdataserializer.readInt()];
+        pathpoint.f = packetdataserializer.readFloat();
+        return pathpoint;
     }
 }

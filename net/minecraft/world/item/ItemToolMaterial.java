@@ -2,24 +2,24 @@ package net.minecraft.world.item;
 
 public class ItemToolMaterial extends Item {
 
-    private final ToolMaterial a;
+    private final ToolMaterial tier;
 
     public ItemToolMaterial(ToolMaterial toolmaterial, Item.Info item_info) {
         super(item_info.b(toolmaterial.a()));
-        this.a = toolmaterial;
+        this.tier = toolmaterial;
     }
 
-    public ToolMaterial g() {
-        return this.a;
+    public ToolMaterial j() {
+        return this.tier;
     }
 
     @Override
     public int c() {
-        return this.a.e();
+        return this.tier.e();
     }
 
     @Override
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return this.a.f().test(itemstack1) || super.a(itemstack, itemstack1);
+        return this.tier.f().test(itemstack1) || super.a(itemstack, itemstack1);
     }
 }

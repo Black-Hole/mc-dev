@@ -5,17 +5,17 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class PathfinderGoalLookAtTradingPlayer extends PathfinderGoalLookAtPlayer {
 
-    private final EntityVillagerAbstract g;
+    private final EntityVillagerAbstract villager;
 
     public PathfinderGoalLookAtTradingPlayer(EntityVillagerAbstract entityvillagerabstract) {
         super(entityvillagerabstract, EntityHuman.class, 8.0F);
-        this.g = entityvillagerabstract;
+        this.villager = entityvillagerabstract;
     }
 
     @Override
     public boolean a() {
-        if (this.g.eN()) {
-            this.b = this.g.getTrader();
+        if (this.villager.fw()) {
+            this.lookAt = this.villager.getTrader();
             return true;
         } else {
             return false;

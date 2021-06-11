@@ -24,9 +24,11 @@ import net.minecraft.server.players.IpBanList;
 
 public class CommandBanIp {
 
-    public static final Pattern a = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.banip.invalid"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.banip.failed"));
+    public static final Pattern IP_ADDRESS_PATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+    private static final SimpleCommandExceptionType ERROR_INVALID_IP = new SimpleCommandExceptionType(new ChatMessage("commands.banip.invalid"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_BANNED = new SimpleCommandExceptionType(new ChatMessage("commands.banip.failed"));
+
+    public CommandBanIp() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("ban-ip").requires((commandlistenerwrapper) -> {
@@ -39,7 +41,7 @@ public class CommandBanIp {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s, @Nullable IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
-        Matcher matcher = CommandBanIp.a.matcher(s);
+        Matcher matcher = CommandBanIp.IP_ADDRESS_PATTERN.matcher(s);
 
         if (matcher.matches()) {
             return b(commandlistenerwrapper, s, ichatbasecomponent);
@@ -49,7 +51,7 @@ public class CommandBanIp {
             if (entityplayer != null) {
                 return b(commandlistenerwrapper, entityplayer.v(), ichatbasecomponent);
             } else {
-                throw CommandBanIp.b.create();
+                throw CommandBanIp.ERROR_INVALID_IP.create();
             }
         }
     }
@@ -58,7 +60,7 @@ public class CommandBanIp {
         IpBanList ipbanlist = commandlistenerwrapper.getServer().getPlayerList().getIPBans();
 
         if (ipbanlist.a(s)) {
-            throw CommandBanIp.c.create();
+            throw CommandBanIp.ERROR_ALREADY_BANNED.create();
         } else {
             List<EntityPlayer> list = commandlistenerwrapper.getServer().getPlayerList().b(s);
             IpBanEntry ipbanentry = new IpBanEntry(s, (Date) null, commandlistenerwrapper.getName(), (Date) null, ichatbasecomponent == null ? null : ichatbasecomponent.getString());
@@ -74,7 +76,7 @@ public class CommandBanIp {
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.ip_banned"));
+                entityplayer.connection.disconnect(new ChatMessage("multiplayer.disconnect.ip_banned"));
             }
 
             return list.size();

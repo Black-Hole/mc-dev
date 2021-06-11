@@ -10,27 +10,27 @@ public enum EnumDifficulty {
 
     PEACEFUL(0, "peaceful"), EASY(1, "easy"), NORMAL(2, "normal"), HARD(3, "hard");
 
-    private static final EnumDifficulty[] e = (EnumDifficulty[]) Arrays.stream(values()).sorted(Comparator.comparingInt(EnumDifficulty::a)).toArray((i) -> {
+    private static final EnumDifficulty[] BY_ID = (EnumDifficulty[]) Arrays.stream(values()).sorted(Comparator.comparingInt(EnumDifficulty::a)).toArray((i) -> {
         return new EnumDifficulty[i];
     });
-    private final int f;
-    private final String g;
+    private final int id;
+    private final String key;
 
     private EnumDifficulty(int i, String s) {
-        this.f = i;
-        this.g = s;
+        this.id = i;
+        this.key = s;
     }
 
     public int a() {
-        return this.f;
+        return this.id;
     }
 
     public IChatBaseComponent b() {
-        return new ChatMessage("options.difficulty." + this.g);
+        return new ChatMessage("options.difficulty." + this.key);
     }
 
     public static EnumDifficulty getById(int i) {
-        return EnumDifficulty.e[i % EnumDifficulty.e.length];
+        return EnumDifficulty.BY_ID[i % EnumDifficulty.BY_ID.length];
     }
 
     @Nullable
@@ -41,7 +41,7 @@ public enum EnumDifficulty {
         for (int j = 0; j < i; ++j) {
             EnumDifficulty enumdifficulty = aenumdifficulty[j];
 
-            if (enumdifficulty.g.equals(s)) {
+            if (enumdifficulty.key.equals(s)) {
                 return enumdifficulty;
             }
         }
@@ -50,6 +50,6 @@ public enum EnumDifficulty {
     }
 
     public String c() {
-        return this.g;
+        return this.key;
     }
 }

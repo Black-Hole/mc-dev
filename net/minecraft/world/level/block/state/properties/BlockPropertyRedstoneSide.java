@@ -6,10 +6,10 @@ public enum BlockPropertyRedstoneSide implements INamable {
 
     UP("up"), SIDE("side"), NONE("none");
 
-    private final String d;
+    private final String name;
 
     private BlockPropertyRedstoneSide(String s) {
-        this.d = s;
+        this.name = s;
     }
 
     public String toString() {
@@ -18,10 +18,10 @@ public enum BlockPropertyRedstoneSide implements INamable {
 
     @Override
     public String getName() {
-        return this.d;
+        return this.name;
     }
 
-    public boolean b() {
+    public boolean a() {
         return this != BlockPropertyRedstoneSide.NONE;
     }
 }

@@ -7,13 +7,13 @@ import javax.crypto.Cipher;
 
 public class PacketEncrypter extends MessageToByteEncoder<ByteBuf> {
 
-    private final PacketEncryptionHandler a;
+    private final PacketEncryptionHandler cipher;
 
     public PacketEncrypter(Cipher cipher) {
-        this.a = new PacketEncryptionHandler(cipher);
+        this.cipher = new PacketEncryptionHandler(cipher);
     }
 
     protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
-        this.a.a(bytebuf, bytebuf1);
+        this.cipher.a(bytebuf, bytebuf1);
     }
 }

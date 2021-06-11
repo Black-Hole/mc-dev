@@ -3,12 +3,11 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
 
 public class NBTTagInt extends NBTNumber {
 
-    public static final NBTTagType<NBTTagInt> a = new NBTTagType<NBTTagInt>() {
+    private static final int SELF_SIZE_IN_BITS = 96;
+    public static final NBTTagType<NBTTagInt> TYPE = new NBTTagType<NBTTagInt>() {
         @Override
         public NBTTagInt b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(96L);
@@ -32,12 +31,12 @@ public class NBTTagInt extends NBTNumber {
     };
     private final int data;
 
-    private NBTTagInt(int i) {
+    NBTTagInt(int i) {
         this.data = i;
     }
 
     public static NBTTagInt a(int i) {
-        return i >= -128 && i <= 1024 ? NBTTagInt.a.a[i + 128] : new NBTTagInt(i);
+        return i >= -128 && i <= 1024 ? NBTTagInt.a.cache[i - -128] : new NBTTagInt(i);
     }
 
     @Override
@@ -52,12 +51,7 @@ public class NBTTagInt extends NBTNumber {
 
     @Override
     public NBTTagType<NBTTagInt> b() {
-        return NBTTagInt.a;
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(this.data);
+        return NBTTagInt.TYPE;
     }
 
     @Override
@@ -74,8 +68,8 @@ public class NBTTagInt extends NBTNumber {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        return (new ChatComponentText(String.valueOf(this.data))).a(NBTTagInt.f);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override
@@ -113,13 +107,17 @@ public class NBTTagInt extends NBTNumber {
         return this.data;
     }
 
-    static class a {
+    private static class a {
 
-        static final NBTTagInt[] a = new NBTTagInt[1153];
+        private static final int HIGH = 1024;
+        private static final int LOW = -128;
+        static final NBTTagInt[] cache = new NBTTagInt[1153];
+
+        private a() {}
 
         static {
-            for (int i = 0; i < NBTTagInt.a.a.length; ++i) {
-                NBTTagInt.a.a[i] = new NBTTagInt(-128 + i);
+            for (int i = 0; i < NBTTagInt.a.cache.length; ++i) {
+                NBTTagInt.a.cache[i] = new NBTTagInt(-128 + i);
             }
 
         }

@@ -19,17 +19,19 @@ import net.minecraft.world.item.crafting.IRecipe;
 
 public class CommandRecipe {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.give.failed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.take.failed"));
+    private static final SimpleCommandExceptionType ERROR_GIVE_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.give.failed"));
+    private static final SimpleCommandExceptionType ERROR_TAKE_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.take.failed"));
+
+    public CommandRecipe() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("recipe").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("give").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.b).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("give").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.ALL_RECIPES).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), Collections.singleton(ArgumentMinecraftKeyRegistered.b(commandcontext, "recipe")));
         }))).then(net.minecraft.commands.CommandDispatcher.a("*").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager().b());
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("take").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.b).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("take").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.ALL_RECIPES).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), Collections.singleton(ArgumentMinecraftKeyRegistered.b(commandcontext, "recipe")));
         }))).then(net.minecraft.commands.CommandDispatcher.a("*").executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager().b());
@@ -46,7 +48,7 @@ public class CommandRecipe {
         }
 
         if (i == 0) {
-            throw CommandRecipe.a.create();
+            throw CommandRecipe.ERROR_GIVE_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.single", new Object[]{collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
@@ -68,7 +70,7 @@ public class CommandRecipe {
         }
 
         if (i == 0) {
-            throw CommandRecipe.b.create();
+            throw CommandRecipe.ERROR_TAKE_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.single", new Object[]{collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);

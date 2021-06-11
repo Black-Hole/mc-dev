@@ -19,12 +19,14 @@ import net.minecraft.world.item.trading.MerchantRecipe;
 
 public class BehaviorTradePlayer extends Behavior<EntityVillager> {
 
+    private static final int MAX_LOOK_TIME = 900;
+    private static final int STARTING_LOOK_TIME = 40;
     @Nullable
-    private ItemStack b;
-    private final List<ItemStack> c = Lists.newArrayList();
-    private int d;
-    private int e;
-    private int f;
+    private ItemStack playerItemStack;
+    private final List<ItemStack> displayItems = Lists.newArrayList();
+    private int cycleCounter;
+    private int displayIndex;
+    private int lookTime;
 
     public BehaviorTradePlayer(int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT), i, j);
@@ -38,57 +40,57 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
         } else {
             EntityLiving entityliving = (EntityLiving) behaviorcontroller.getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
-            return entityliving.getEntityType() == EntityTypes.PLAYER && entityvillager.isAlive() && entityliving.isAlive() && !entityvillager.isBaby() && entityvillager.h((Entity) entityliving) <= 17.0D;
+            return entityliving.getEntityType() == EntityTypes.PLAYER && entityvillager.isAlive() && entityliving.isAlive() && !entityvillager.isBaby() && entityvillager.f((Entity) entityliving) <= 17.0D;
         }
     }
 
     public boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.a(worldserver, entityvillager) && this.f > 0 && entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).isPresent();
+        return this.a(worldserver, entityvillager) && this.lookTime > 0 && entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).isPresent();
     }
 
     public void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         super.a(worldserver, entityvillager, i);
         this.c(entityvillager);
-        this.d = 0;
-        this.e = 0;
-        this.f = 40;
+        this.cycleCounter = 0;
+        this.displayIndex = 0;
+        this.lookTime = 40;
     }
 
     public void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         EntityLiving entityliving = this.c(entityvillager);
 
         this.a(entityliving, entityvillager);
-        if (!this.c.isEmpty()) {
+        if (!this.displayItems.isEmpty()) {
             this.d(entityvillager);
         } else {
-            entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.b);
-            this.f = Math.min(this.f, 40);
+            entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+            this.lookTime = Math.min(this.lookTime, 40);
         }
 
-        --this.f;
+        --this.lookTime;
     }
 
     public void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         super.c(worldserver, entityvillager, i);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
-        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.b);
-        this.b = null;
+        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+        this.playerItemStack = null;
     }
 
     private void a(EntityLiving entityliving, EntityVillager entityvillager) {
         boolean flag = false;
         ItemStack itemstack = entityliving.getItemInMainHand();
 
-        if (this.b == null || !ItemStack.c(this.b, itemstack)) {
-            this.b = itemstack;
+        if (this.playerItemStack == null || !ItemStack.c(this.playerItemStack, itemstack)) {
+            this.playerItemStack = itemstack;
             flag = true;
-            this.c.clear();
+            this.displayItems.clear();
         }
 
-        if (flag && !this.b.isEmpty()) {
+        if (flag && !this.playerItemStack.isEmpty()) {
             this.b(entityvillager);
-            if (!this.c.isEmpty()) {
-                this.f = 900;
+            if (!this.displayItems.isEmpty()) {
+                this.lookTime = 900;
                 this.a(entityvillager);
             }
         }
@@ -96,7 +98,7 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
     }
 
     private void a(EntityVillager entityvillager) {
-        entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.c.get(0));
+        entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.displayItems.get(0));
     }
 
     private void b(EntityVillager entityvillager) {
@@ -106,14 +108,14 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
             MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
 
             if (!merchantrecipe.isFullyUsed() && this.a(merchantrecipe)) {
-                this.c.add(merchantrecipe.getSellingItem());
+                this.displayItems.add(merchantrecipe.getSellingItem());
             }
         }
 
     }
 
     private boolean a(MerchantRecipe merchantrecipe) {
-        return ItemStack.c(this.b, merchantrecipe.getBuyItem1()) || ItemStack.c(this.b, merchantrecipe.getBuyItem2());
+        return ItemStack.c(this.playerItemStack, merchantrecipe.getBuyItem1()) || ItemStack.c(this.playerItemStack, merchantrecipe.getBuyItem2());
     }
 
     private EntityLiving c(EntityVillager entityvillager) {
@@ -125,14 +127,14 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
     }
 
     private void d(EntityVillager entityvillager) {
-        if (this.c.size() >= 2 && ++this.d >= 40) {
-            ++this.e;
-            this.d = 0;
-            if (this.e > this.c.size() - 1) {
-                this.e = 0;
+        if (this.displayItems.size() >= 2 && ++this.cycleCounter >= 40) {
+            ++this.displayIndex;
+            this.cycleCounter = 0;
+            if (this.displayIndex > this.displayItems.size() - 1) {
+                this.displayIndex = 0;
             }
 
-            entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.c.get(this.e));
+            entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.displayItems.get(this.displayIndex));
         }
 
     }

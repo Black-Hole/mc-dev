@@ -17,9 +17,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
-import net.minecraft.util.IntRange;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.TimeRange;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyDamageScaler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -56,13 +56,14 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
 
-    private static final DataWatcherObject<Boolean> bo = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.i);
-    private float bp;
-    private float bq;
-    private int br;
-    private static final IntRange bs = TimeRange.a(20, 39);
-    private int bt;
-    private UUID bu;
+    private static final DataWatcherObject<Boolean> DATA_STANDING_ID = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.BOOLEAN);
+    private static final float STAND_ANIMATION_TICKS = 6.0F;
+    private float clientSideStandAnimationO;
+    private float clientSideStandAnimation;
+    private int warningSoundTicks;
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeRange.a(20, 39);
+    private int remainingPersistentAngerTime;
+    private UUID persistentAngerTarget;
 
     public EntityPolarBear(EntityTypes<? extends EntityPolarBear> entitytypes, World world) {
         super(entitytypes, world);
@@ -74,7 +75,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     }
 
     @Override
-    public boolean k(ItemStack itemstack) {
+    public boolean n(ItemStack itemstack) {
         return false;
     }
 
@@ -95,12 +96,12 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
         this.targetSelector.a(5, new PathfinderGoalUniversalAngerReset<>(this, false));
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 30.0D).a(GenericAttributes.FOLLOW_RANGE, 20.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
+    public static AttributeProvider.Builder p() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 30.0D).a(GenericAttributes.FOLLOW_RANGE, 20.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
     }
 
     public static boolean c(EntityTypes<EntityPolarBear> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        Optional<ResourceKey<BiomeBase>> optional = generatoraccess.i(blockposition);
+        Optional<ResourceKey<BiomeBase>> optional = generatoraccess.j(blockposition);
 
         return !Objects.equals(optional, Optional.of(Biomes.FROZEN_OCEAN)) && !Objects.equals(optional, Optional.of(Biomes.DEEP_FROZEN_OCEAN)) ? b(entitytypes, generatoraccess, enummobspawn, blockposition, random) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).a(Blocks.ICE);
     }
@@ -108,7 +109,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.a((WorldServer) this.world, nbttagcompound);
+        this.a(this.level, nbttagcompound);
     }
 
     @Override
@@ -119,53 +120,53 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
 
     @Override
     public void anger() {
-        this.setAnger(EntityPolarBear.bs.a(this.random));
+        this.setAnger(EntityPolarBear.PERSISTENT_ANGER_TIME.a(this.random));
     }
 
     @Override
     public void setAnger(int i) {
-        this.bt = i;
+        this.remainingPersistentAngerTime = i;
     }
 
     @Override
     public int getAnger() {
-        return this.bt;
+        return this.remainingPersistentAngerTime;
     }
 
     @Override
     public void setAngerTarget(@Nullable UUID uuid) {
-        this.bu = uuid;
+        this.persistentAngerTarget = uuid;
     }
 
     @Override
     public UUID getAngerTarget() {
-        return this.bu;
+        return this.persistentAngerTarget;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.isBaby() ? SoundEffects.ENTITY_POLAR_BEAR_AMBIENT_BABY : SoundEffects.ENTITY_POLAR_BEAR_AMBIENT;
+        return this.isBaby() ? SoundEffects.POLAR_BEAR_AMBIENT_BABY : SoundEffects.POLAR_BEAR_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_POLAR_BEAR_HURT;
+        return SoundEffects.POLAR_BEAR_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_POLAR_BEAR_DEATH;
+        return SoundEffects.POLAR_BEAR_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void eL() {
-        if (this.br <= 0) {
-            this.playSound(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.dH());
-            this.br = 40;
+    protected void t() {
+        if (this.warningSoundTicks <= 0) {
+            this.playSound(SoundEffects.POLAR_BEAR_WARNING, 1.0F, this.ep());
+            this.warningSoundTicks = 40;
         }
 
     }
@@ -173,39 +174,39 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPolarBear.bo, false);
+        this.entityData.register(EntityPolarBear.DATA_STANDING_ID, false);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide) {
-            if (this.bq != this.bp) {
+        if (this.level.isClientSide) {
+            if (this.clientSideStandAnimation != this.clientSideStandAnimationO) {
                 this.updateSize();
             }
 
-            this.bp = this.bq;
-            if (this.eM()) {
-                this.bq = MathHelper.a(this.bq + 1.0F, 0.0F, 6.0F);
+            this.clientSideStandAnimationO = this.clientSideStandAnimation;
+            if (this.fv()) {
+                this.clientSideStandAnimation = MathHelper.a(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
             } else {
-                this.bq = MathHelper.a(this.bq - 1.0F, 0.0F, 6.0F);
+                this.clientSideStandAnimation = MathHelper.a(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.br > 0) {
-            --this.br;
+        if (this.warningSoundTicks > 0) {
+            --this.warningSoundTicks;
         }
 
-        if (!this.world.isClientSide) {
-            this.a((WorldServer) this.world, true);
+        if (!this.level.isClientSide) {
+            this.a((WorldServer) this.level, true);
         }
 
     }
 
     @Override
     public EntitySize a(EntityPose entitypose) {
-        if (this.bq > 0.0F) {
-            float f = this.bq / 6.0F;
+        if (this.clientSideStandAnimation > 0.0F) {
+            float f = this.clientSideStandAnimation / 6.0F;
             float f1 = 1.0F + f;
 
             return super.a(entitypose).a(1.0F, f1);
@@ -225,16 +226,20 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
         return flag;
     }
 
-    public boolean eM() {
-        return (Boolean) this.datawatcher.get(EntityPolarBear.bo);
+    public boolean fv() {
+        return (Boolean) this.entityData.get(EntityPolarBear.DATA_STANDING_ID);
     }
 
-    public void t(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bo, flag);
+    public void v(boolean flag) {
+        this.entityData.set(EntityPolarBear.DATA_STANDING_ID, flag);
+    }
+
+    public float z(float f) {
+        return MathHelper.h(f, this.clientSideStandAnimationO, this.clientSideStandAnimation) / 6.0F;
     }
 
     @Override
-    protected float dM() {
+    protected float eu() {
         return 0.98F;
     }
 
@@ -247,19 +252,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    class d extends PathfinderGoalPanic {
-
-        public d() {
-            super(EntityPolarBear.this, 2.0D);
-        }
-
-        @Override
-        public boolean a() {
-            return !EntityPolarBear.this.isBaby() && !EntityPolarBear.this.isBurning() ? false : super.a();
-        }
-    }
-
-    class c extends PathfinderGoalMeleeAttack {
+    private class c extends PathfinderGoalMeleeAttack {
 
         public c() {
             super(EntityPolarBear.this, 1.25D, true);
@@ -271,28 +264,28 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
 
             if (d0 <= d1 && this.h()) {
                 this.g();
-                this.a.attackEntity(entityliving);
-                EntityPolarBear.this.t(false);
+                this.mob.attackEntity(entityliving);
+                EntityPolarBear.this.v(false);
             } else if (d0 <= d1 * 2.0D) {
                 if (this.h()) {
-                    EntityPolarBear.this.t(false);
+                    EntityPolarBear.this.v(false);
                     this.g();
                 }
 
                 if (this.j() <= 10) {
-                    EntityPolarBear.this.t(true);
-                    EntityPolarBear.this.eL();
+                    EntityPolarBear.this.v(true);
+                    EntityPolarBear.this.t();
                 }
             } else {
                 this.g();
-                EntityPolarBear.this.t(false);
+                EntityPolarBear.this.v(false);
             }
 
         }
 
         @Override
         public void d() {
-            EntityPolarBear.this.t(false);
+            EntityPolarBear.this.v(false);
             super.d();
         }
 
@@ -302,41 +295,19 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
         }
     }
 
-    class a extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
+    private class d extends PathfinderGoalPanic {
 
-        public a() {
-            super(EntityPolarBear.this, EntityHuman.class, 20, true, true, (Predicate) null);
+        public d() {
+            super(EntityPolarBear.this, 2.0D);
         }
 
         @Override
         public boolean a() {
-            if (EntityPolarBear.this.isBaby()) {
-                return false;
-            } else {
-                if (super.a()) {
-                    List<EntityPolarBear> list = EntityPolarBear.this.world.a(EntityPolarBear.class, EntityPolarBear.this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
-                    Iterator iterator = list.iterator();
-
-                    while (iterator.hasNext()) {
-                        EntityPolarBear entitypolarbear = (EntityPolarBear) iterator.next();
-
-                        if (entitypolarbear.isBaby()) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        @Override
-        protected double k() {
-            return super.k() * 0.5D;
+            return !EntityPolarBear.this.isBaby() && !EntityPolarBear.this.isBurning() ? false : super.a();
         }
     }
 
-    class b extends PathfinderGoalHurtByTarget {
+    private class b extends PathfinderGoalHurtByTarget {
 
         public b() {
             super(EntityPolarBear.this);
@@ -358,6 +329,40 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
                 super.a(entityinsentient, entityliving);
             }
 
+        }
+    }
+
+    private class a extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
+
+        public a() {
+            super(EntityPolarBear.this, EntityHuman.class, 20, true, true, (Predicate) null);
+        }
+
+        @Override
+        public boolean a() {
+            if (EntityPolarBear.this.isBaby()) {
+                return false;
+            } else {
+                if (super.a()) {
+                    List<EntityPolarBear> list = EntityPolarBear.this.level.a(EntityPolarBear.class, EntityPolarBear.this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
+                    Iterator iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        EntityPolarBear entitypolarbear = (EntityPolarBear) iterator.next();
+
+                        if (entitypolarbear.isBaby()) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        @Override
+        protected double k() {
+            return super.k() * 0.5D;
         }
     }
 }

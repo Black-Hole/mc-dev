@@ -15,13 +15,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerKilledByCrossbow extends CriterionTriggerAbstract<CriterionTriggerKilledByCrossbow.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("killed_by_crossbow");
+    static final MinecraftKey ID = new MinecraftKey("killed_by_crossbow");
 
     public CriterionTriggerKilledByCrossbow() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerKilledByCrossbow.a;
+        return CriterionTriggerKilledByCrossbow.ID;
     }
 
     @Override
@@ -51,13 +51,13 @@ public class CriterionTriggerKilledByCrossbow extends CriterionTriggerAbstract<C
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b[] a;
-        private final CriterionConditionValue.IntegerRange b;
+        private final CriterionConditionEntity.b[] victims;
+        private final CriterionConditionValue.IntegerRange uniqueEntityTypes;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b[] acriterionconditionentity_b, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerKilledByCrossbow.a, criterionconditionentity_b);
-            this.a = acriterionconditionentity_b;
-            this.b = criterionconditionvalue_integerrange;
+            super(CriterionTriggerKilledByCrossbow.ID, criterionconditionentity_b);
+            this.victims = acriterionconditionentity_b;
+            this.uniqueEntityTypes = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerKilledByCrossbow.a a(CriterionConditionEntity.a... acriterionconditionentity_a) {
@@ -69,19 +69,19 @@ public class CriterionTriggerKilledByCrossbow extends CriterionTriggerAbstract<C
                 acriterionconditionentity_b[i] = CriterionConditionEntity.b.a(criterionconditionentity_a.b());
             }
 
-            return new CriterionTriggerKilledByCrossbow.a(CriterionConditionEntity.b.a, acriterionconditionentity_b, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerKilledByCrossbow.a(CriterionConditionEntity.b.ANY, acriterionconditionentity_b, CriterionConditionValue.IntegerRange.ANY);
         }
 
         public static CriterionTriggerKilledByCrossbow.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
             CriterionConditionEntity.b[] acriterionconditionentity_b = new CriterionConditionEntity.b[0];
 
-            return new CriterionTriggerKilledByCrossbow.a(CriterionConditionEntity.b.a, acriterionconditionentity_b, criterionconditionvalue_integerrange);
+            return new CriterionTriggerKilledByCrossbow.a(CriterionConditionEntity.b.ANY, acriterionconditionentity_b, criterionconditionvalue_integerrange);
         }
 
         public boolean a(Collection<LootTableInfo> collection, int i) {
-            if (this.a.length > 0) {
+            if (this.victims.length > 0) {
                 List<LootTableInfo> list = Lists.newArrayList(collection);
-                CriterionConditionEntity.b[] acriterionconditionentity_b = this.a;
+                CriterionConditionEntity.b[] acriterionconditionentity_b = this.victims;
                 int j = acriterionconditionentity_b.length;
 
                 for (int k = 0; k < j; ++k) {
@@ -105,15 +105,15 @@ public class CriterionTriggerKilledByCrossbow extends CriterionTriggerAbstract<C
                 }
             }
 
-            return this.b.d(i);
+            return this.uniqueEntityTypes.d(i);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("victims", CriterionConditionEntity.b.a(this.a, lootserializationcontext));
-            jsonobject.add("unique_entity_types", this.b.d());
+            jsonobject.add("victims", CriterionConditionEntity.b.a(this.victims, lootserializationcontext));
+            jsonobject.add("unique_entity_types", this.uniqueEntityTypes.d());
             return jsonobject;
         }
     }

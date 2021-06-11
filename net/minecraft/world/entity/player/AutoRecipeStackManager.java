@@ -20,12 +20,13 @@ import net.minecraft.world.item.crafting.RecipeItemStack;
 
 public class AutoRecipeStackManager {
 
-    public final Int2IntMap a = new Int2IntOpenHashMap();
+    private static final int EMPTY = 0;
+    public final Int2IntMap contents = new Int2IntOpenHashMap();
 
     public AutoRecipeStackManager() {}
 
     public void a(ItemStack itemstack) {
-        if (!itemstack.f() && !itemstack.hasEnchantments() && !itemstack.hasName()) {
+        if (!itemstack.g() && !itemstack.hasEnchantments() && !itemstack.hasName()) {
             this.b(itemstack);
         }
 
@@ -46,26 +47,26 @@ public class AutoRecipeStackManager {
     }
 
     public static int c(ItemStack itemstack) {
-        return IRegistry.ITEM.a((Object) itemstack.getItem());
+        return IRegistry.ITEM.getId(itemstack.getItem());
     }
 
-    private boolean b(int i) {
-        return this.a.get(i) > 0;
+    boolean b(int i) {
+        return this.contents.get(i) > 0;
     }
 
-    private int a(int i, int j) {
-        int k = this.a.get(i);
+    int a(int i, int j) {
+        int k = this.contents.get(i);
 
         if (k >= j) {
-            this.a.put(i, k - j);
+            this.contents.put(i, k - j);
             return i;
         } else {
             return 0;
         }
     }
 
-    private void b(int i, int j) {
-        this.a.put(i, this.a.get(i) + j);
+    void b(int i, int j) {
+        this.contents.put(i, this.contents.get(i) + j);
     }
 
     public boolean a(IRecipe<?> irecipe, @Nullable IntList intlist) {
@@ -85,38 +86,38 @@ public class AutoRecipeStackManager {
     }
 
     public static ItemStack a(int i) {
-        return i == 0 ? ItemStack.b : new ItemStack(Item.getById(i));
+        return i == 0 ? ItemStack.EMPTY : new ItemStack(Item.getById(i));
     }
 
     public void a() {
-        this.a.clear();
+        this.contents.clear();
     }
 
-    class a {
+    private class a {
 
-        private final IRecipe<?> b;
-        private final List<RecipeItemStack> c = Lists.newArrayList();
-        private final int d;
-        private final int[] e;
-        private final int f;
-        private final BitSet g;
-        private final IntList h = new IntArrayList();
+        private final IRecipe<?> recipe;
+        private final List<RecipeItemStack> ingredients = Lists.newArrayList();
+        private final int ingredientCount;
+        private final int[] items;
+        private final int itemCount;
+        private final BitSet data;
+        private final IntList path = new IntArrayList();
 
         public a(IRecipe irecipe) {
-            this.b = irecipe;
-            this.c.addAll(irecipe.a());
-            this.c.removeIf(RecipeItemStack::d);
-            this.d = this.c.size();
-            this.e = this.a();
-            this.f = this.e.length;
-            this.g = new BitSet(this.d + this.f + this.d + this.d * this.f);
+            this.recipe = irecipe;
+            this.ingredients.addAll(irecipe.a());
+            this.ingredients.removeIf(RecipeItemStack::d);
+            this.ingredientCount = this.ingredients.size();
+            this.items = this.a();
+            this.itemCount = this.items.length;
+            this.data = new BitSet(this.ingredientCount + this.itemCount + this.ingredientCount + this.ingredientCount * this.itemCount);
 
-            for (int i = 0; i < this.c.size(); ++i) {
-                IntList intlist = ((RecipeItemStack) this.c.get(i)).b();
+            for (int i = 0; i < this.ingredients.size(); ++i) {
+                IntList intlist = ((RecipeItemStack) this.ingredients.get(i)).b();
 
-                for (int j = 0; j < this.f; ++j) {
-                    if (intlist.contains(this.e[j])) {
-                        this.g.set(this.d(true, j, i));
+                for (int j = 0; j < this.itemCount; ++j) {
+                    if (intlist.contains(this.items[j])) {
+                        this.data.set(this.d(true, j, i));
                     }
                 }
             }
@@ -130,40 +131,40 @@ public class AutoRecipeStackManager {
                 int j;
 
                 for (j = 0; this.a(i); ++j) {
-                    AutoRecipeStackManager.this.a(this.e[this.h.getInt(0)], i);
-                    int k = this.h.size() - 1;
+                    AutoRecipeStackManager.this.a(this.items[this.path.getInt(0)], i);
+                    int k = this.path.size() - 1;
 
-                    this.c(this.h.getInt(k));
+                    this.c(this.path.getInt(k));
 
                     for (int l = 0; l < k; ++l) {
-                        this.c((l & 1) == 0, this.h.get(l), this.h.get(l + 1));
+                        this.c((l & 1) == 0, this.path.get(l), this.path.get(l + 1));
                     }
 
-                    this.h.clear();
-                    this.g.clear(0, this.d + this.f);
+                    this.path.clear();
+                    this.data.clear(0, this.ingredientCount + this.itemCount);
                 }
 
-                boolean flag = j == this.d;
+                boolean flag = j == this.ingredientCount;
                 boolean flag1 = flag && intlist != null;
 
                 if (flag1) {
                     intlist.clear();
                 }
 
-                this.g.clear(0, this.d + this.f + this.d);
+                this.data.clear(0, this.ingredientCount + this.itemCount + this.ingredientCount);
                 int i1 = 0;
-                List<RecipeItemStack> list = this.b.a();
+                List<RecipeItemStack> list = this.recipe.a();
 
                 for (int j1 = 0; j1 < list.size(); ++j1) {
                     if (flag1 && ((RecipeItemStack) list.get(j1)).d()) {
                         intlist.add(0);
                     } else {
-                        for (int k1 = 0; k1 < this.f; ++k1) {
+                        for (int k1 = 0; k1 < this.itemCount; ++k1) {
                             if (this.b(false, i1, k1)) {
                                 this.c(true, k1, i1);
-                                AutoRecipeStackManager.this.b(this.e[k1], i);
+                                AutoRecipeStackManager.this.b(this.items[k1], i);
                                 if (flag1) {
-                                    intlist.add(this.e[k1]);
+                                    intlist.add(this.items[k1]);
                                 }
                             }
                         }
@@ -178,7 +179,7 @@ public class AutoRecipeStackManager {
 
         private int[] a() {
             IntAVLTreeSet intavltreeset = new IntAVLTreeSet();
-            Iterator iterator = this.c.iterator();
+            Iterator iterator = this.ingredients.iterator();
 
             while (iterator.hasNext()) {
                 RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
@@ -198,22 +199,22 @@ public class AutoRecipeStackManager {
         }
 
         private boolean a(int i) {
-            int j = this.f;
+            int j = this.itemCount;
 
             for (int k = 0; k < j; ++k) {
-                if (AutoRecipeStackManager.this.a.get(this.e[k]) >= i) {
+                if (AutoRecipeStackManager.this.contents.get(this.items[k]) >= i) {
                     this.a(false, k);
 
-                    while (!this.h.isEmpty()) {
-                        int l = this.h.size();
+                    while (!this.path.isEmpty()) {
+                        int l = this.path.size();
                         boolean flag = (l & 1) == 1;
-                        int i1 = this.h.getInt(l - 1);
+                        int i1 = this.path.getInt(l - 1);
 
                         if (!flag && !this.b(i1)) {
                             break;
                         }
 
-                        int j1 = flag ? this.d : j;
+                        int j1 = flag ? this.ingredientCount : j;
 
                         int k1;
 
@@ -224,13 +225,13 @@ public class AutoRecipeStackManager {
                             }
                         }
 
-                        k1 = this.h.size();
+                        k1 = this.path.size();
                         if (k1 == l) {
-                            this.h.removeInt(k1 - 1);
+                            this.path.removeInt(k1 - 1);
                         }
                     }
 
-                    if (!this.h.isEmpty()) {
+                    if (!this.path.isEmpty()) {
                         return true;
                     }
                 }
@@ -240,46 +241,46 @@ public class AutoRecipeStackManager {
         }
 
         private boolean b(int i) {
-            return this.g.get(this.d(i));
+            return this.data.get(this.d(i));
         }
 
         private void c(int i) {
-            this.g.set(this.d(i));
+            this.data.set(this.d(i));
         }
 
         private int d(int i) {
-            return this.d + this.f + i;
+            return this.ingredientCount + this.itemCount + i;
         }
 
         private boolean a(boolean flag, int i, int j) {
-            return this.g.get(this.d(flag, i, j));
+            return this.data.get(this.d(flag, i, j));
         }
 
         private boolean b(boolean flag, int i, int j) {
-            return flag != this.g.get(1 + this.d(flag, i, j));
+            return flag != this.data.get(1 + this.d(flag, i, j));
         }
 
         private void c(boolean flag, int i, int j) {
-            this.g.flip(1 + this.d(flag, i, j));
+            this.data.flip(1 + this.d(flag, i, j));
         }
 
         private int d(boolean flag, int i, int j) {
-            int k = flag ? i * this.d + j : j * this.d + i;
+            int k = flag ? i * this.ingredientCount + j : j * this.ingredientCount + i;
 
-            return this.d + this.f + this.d + 2 * k;
+            return this.ingredientCount + this.itemCount + this.ingredientCount + 2 * k;
         }
 
         private void a(boolean flag, int i) {
-            this.g.set(this.c(flag, i));
-            this.h.add(i);
+            this.data.set(this.c(flag, i));
+            this.path.add(i);
         }
 
         private boolean b(boolean flag, int i) {
-            return this.g.get(this.c(flag, i));
+            return this.data.get(this.c(flag, i));
         }
 
         private int c(boolean flag, int i) {
-            return (flag ? 0 : this.d) + i;
+            return (flag ? 0 : this.ingredientCount) + i;
         }
 
         public int b(int i, @Nullable IntList intlist) {
@@ -309,7 +310,7 @@ public class AutoRecipeStackManager {
 
         private int b() {
             int i = Integer.MAX_VALUE;
-            Iterator iterator = this.c.iterator();
+            Iterator iterator = this.ingredients.iterator();
 
             while (iterator.hasNext()) {
                 RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
@@ -317,7 +318,7 @@ public class AutoRecipeStackManager {
 
                 int k;
 
-                for (IntListIterator intlistiterator = recipeitemstack.b().iterator(); intlistiterator.hasNext(); j = Math.max(j, AutoRecipeStackManager.this.a.get(k))) {
+                for (IntListIterator intlistiterator = recipeitemstack.b().iterator(); intlistiterator.hasNext(); j = Math.max(j, AutoRecipeStackManager.this.contents.get(k))) {
                     k = (Integer) intlistiterator.next();
                 }
 

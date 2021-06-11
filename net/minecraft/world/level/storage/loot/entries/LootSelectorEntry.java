@@ -20,31 +20,33 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class LootSelectorEntry extends LootEntryAbstract {
 
-    protected final int c;
-    protected final int e;
-    protected final LootItemFunction[] f;
-    private final BiFunction<ItemStack, LootTableInfo, ItemStack> g;
-    private final LootEntry h = new LootSelectorEntry.c() {
+    public static final int DEFAULT_WEIGHT = 1;
+    public static final int DEFAULT_QUALITY = 0;
+    protected final int weight;
+    protected final int quality;
+    protected final LootItemFunction[] functions;
+    final BiFunction<ItemStack, LootTableInfo, ItemStack> compositeFunction;
+    private final LootEntry entry = new LootSelectorEntry.c() {
         @Override
         public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-            LootSelectorEntry.this.a(LootItemFunction.a(LootSelectorEntry.this.g, consumer, loottableinfo), loottableinfo);
+            LootSelectorEntry.this.a(LootItemFunction.a(LootSelectorEntry.this.compositeFunction, consumer, loottableinfo), loottableinfo);
         }
     };
 
     protected LootSelectorEntry(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(alootitemcondition);
-        this.c = i;
-        this.e = j;
-        this.f = alootitemfunction;
-        this.g = LootItemFunctions.a(alootitemfunction);
+        this.weight = i;
+        this.quality = j;
+        this.functions = alootitemfunction;
+        this.compositeFunction = LootItemFunctions.a(alootitemfunction);
     }
 
     @Override
     public void a(LootCollector lootcollector) {
         super.a(lootcollector);
 
-        for (int i = 0; i < this.f.length; ++i) {
-            this.f[i].a(lootcollector.b(".functions[" + i + "]"));
+        for (int i = 0; i < this.functions.length; ++i) {
+            this.functions[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
     }
@@ -54,7 +56,7 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
     @Override
     public boolean expand(LootTableInfo loottableinfo, Consumer<LootEntry> consumer) {
         if (this.a(loottableinfo)) {
-            consumer.accept(this.h);
+            consumer.accept(this.entry);
             return true;
         } else {
             return false;
@@ -65,21 +67,46 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
         return new LootSelectorEntry.b(lootselectorentry_d);
     }
 
+    private static class b extends LootSelectorEntry.a<LootSelectorEntry.b> {
+
+        private final LootSelectorEntry.d constructor;
+
+        public b(LootSelectorEntry.d lootselectorentry_d) {
+            this.constructor = lootselectorentry_d;
+        }
+
+        @Override
+        protected LootSelectorEntry.b d() {
+            return this;
+        }
+
+        @Override
+        public LootEntryAbstract b() {
+            return this.constructor.build(this.weight, this.quality, this.f(), this.a());
+        }
+    }
+
+    @FunctionalInterface
+    protected interface d {
+
+        LootSelectorEntry build(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction);
+    }
+
     public abstract static class e<T extends LootSelectorEntry> extends LootEntryAbstract.Serializer<T> {
 
         public e() {}
 
         public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
-            if (t0.c != 1) {
-                jsonobject.addProperty("weight", t0.c);
+            if (t0.weight != 1) {
+                jsonobject.addProperty("weight", t0.weight);
             }
 
-            if (t0.e != 0) {
-                jsonobject.addProperty("quality", t0.e);
+            if (t0.quality != 0) {
+                jsonobject.addProperty("quality", t0.quality);
             }
 
-            if (!ArrayUtils.isEmpty(t0.f)) {
-                jsonobject.add("functions", jsonserializationcontext.serialize(t0.f));
+            if (!ArrayUtils.isEmpty(t0.functions)) {
+                jsonobject.add("functions", jsonserializationcontext.serialize(t0.functions));
             }
 
         }
@@ -96,67 +123,42 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
         protected abstract T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction);
     }
 
-    static class b extends LootSelectorEntry.a<LootSelectorEntry.b> {
-
-        private final LootSelectorEntry.d c;
-
-        public b(LootSelectorEntry.d lootselectorentry_d) {
-            this.c = lootselectorentry_d;
-        }
-
-        @Override
-        protected LootSelectorEntry.b d() {
-            return this;
-        }
-
-        @Override
-        public LootEntryAbstract b() {
-            return this.c.build(this.a, this.b, this.f(), this.a());
-        }
-    }
-
-    @FunctionalInterface
-    public interface d {
-
-        LootSelectorEntry build(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction);
-    }
-
     public abstract static class a<T extends LootSelectorEntry.a<T>> extends LootEntryAbstract.a<T> implements LootItemFunctionUser<T> {
 
-        protected int a = 1;
-        protected int b = 0;
-        private final List<LootItemFunction> c = Lists.newArrayList();
+        protected int weight = 1;
+        protected int quality = 0;
+        private final List<LootItemFunction> functions = Lists.newArrayList();
 
         public a() {}
 
         @Override
         public T b(LootItemFunction.a lootitemfunction_a) {
-            this.c.add(lootitemfunction_a.b());
+            this.functions.add(lootitemfunction_a.b());
             return (LootSelectorEntry.a) this.d();
         }
 
         protected LootItemFunction[] a() {
-            return (LootItemFunction[]) this.c.toArray(new LootItemFunction[0]);
+            return (LootItemFunction[]) this.functions.toArray(new LootItemFunction[0]);
         }
 
         public T a(int i) {
-            this.a = i;
+            this.weight = i;
             return (LootSelectorEntry.a) this.d();
         }
 
         public T b(int i) {
-            this.b = i;
+            this.quality = i;
             return (LootSelectorEntry.a) this.d();
         }
     }
 
-    public abstract class c implements LootEntry {
+    protected abstract class c implements LootEntry {
 
         protected c() {}
 
         @Override
         public int a(float f) {
-            return Math.max(MathHelper.d((float) LootSelectorEntry.this.c + (float) LootSelectorEntry.this.e * f), 0);
+            return Math.max(MathHelper.d((float) LootSelectorEntry.this.weight + (float) LootSelectorEntry.this.quality * f), 0);
         }
     }
 }

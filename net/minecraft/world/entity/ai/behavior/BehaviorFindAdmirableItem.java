@@ -11,9 +11,9 @@ import net.minecraft.world.entity.item.EntityItem;
 
 public class BehaviorFindAdmirableItem<E extends EntityLiving> extends Behavior<E> {
 
-    private final Predicate<E> b;
-    private final int c;
-    private final float d;
+    private final Predicate<E> predicate;
+    private final int maxDistToWalk;
+    private final float speedModifier;
 
     public BehaviorFindAdmirableItem(float f, boolean flag, int i) {
         this((entityliving) -> {
@@ -23,19 +23,19 @@ public class BehaviorFindAdmirableItem<E extends EntityLiving> extends Behavior<
 
     public BehaviorFindAdmirableItem(Predicate<E> predicate, float f, boolean flag, int i) {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, flag ? MemoryStatus.REGISTERED : MemoryStatus.VALUE_ABSENT, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryStatus.VALUE_PRESENT));
-        this.b = predicate;
-        this.c = i;
-        this.d = f;
+        this.predicate = predicate;
+        this.maxDistToWalk = i;
+        this.speedModifier = f;
     }
 
     @Override
     protected boolean a(WorldServer worldserver, E e0) {
-        return this.b.test(e0) && this.a(e0).a((Entity) e0, (double) this.c);
+        return this.predicate.test(e0) && this.a(e0).a((Entity) e0, (double) this.maxDistToWalk);
     }
 
     @Override
     protected void a(WorldServer worldserver, E e0, long i) {
-        BehaviorUtil.a(e0, (Entity) this.a(e0), this.d, 0);
+        BehaviorUtil.a(e0, (Entity) this.a(e0), this.speedModifier, 0);
     }
 
     private EntityItem a(E e0) {

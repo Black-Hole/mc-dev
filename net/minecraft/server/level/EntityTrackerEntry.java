@@ -6,11 +6,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutAttachEntity;
 import net.minecraft.network.protocol.game.PacketPlayOutEntity;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityEffect;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityHeadRotation;
@@ -43,63 +45,68 @@ import org.apache.logging.log4j.Logger;
 public class EntityTrackerEntry {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final WorldServer b;
-    private final Entity tracker;
-    private final int d;
-    private final boolean e;
-    private final Consumer<Packet<?>> f;
-    private long xLoc;
-    private long yLoc;
-    private long zLoc;
-    private int yRot;
-    private int xRot;
-    private int headYaw;
-    private Vec3D m;
-    private int tickCounter;
-    private int o;
-    private List<Entity> p;
-    private boolean q;
-    private boolean r;
+    private static final int TOLERANCE_LEVEL_ROTATION = 1;
+    private final WorldServer level;
+    private final Entity entity;
+    private final int updateInterval;
+    private final boolean trackDelta;
+    private final Consumer<Packet<?>> broadcast;
+    private long xp;
+    private long yp;
+    private long zp;
+    private int yRotp;
+    private int xRotp;
+    private int yHeadRotp;
+    private Vec3D ap;
+    private int tickCount;
+    private int teleportDelay;
+    private List<Entity> lastPassengers;
+    private boolean wasRiding;
+    private boolean wasOnGround;
 
     public EntityTrackerEntry(WorldServer worldserver, Entity entity, int i, boolean flag, Consumer<Packet<?>> consumer) {
-        this.m = Vec3D.ORIGIN;
-        this.p = Collections.emptyList();
-        this.b = worldserver;
-        this.f = consumer;
-        this.tracker = entity;
-        this.d = i;
-        this.e = flag;
+        this.ap = Vec3D.ZERO;
+        this.lastPassengers = Collections.emptyList();
+        this.level = worldserver;
+        this.broadcast = consumer;
+        this.entity = entity;
+        this.updateInterval = i;
+        this.trackDelta = flag;
         this.d();
-        this.yRot = MathHelper.d(entity.yaw * 256.0F / 360.0F);
-        this.xRot = MathHelper.d(entity.pitch * 256.0F / 360.0F);
-        this.headYaw = MathHelper.d(entity.getHeadRotation() * 256.0F / 360.0F);
-        this.r = entity.isOnGround();
+        this.yRotp = MathHelper.d(entity.getYRot() * 256.0F / 360.0F);
+        this.xRotp = MathHelper.d(entity.getXRot() * 256.0F / 360.0F);
+        this.yHeadRotp = MathHelper.d(entity.getHeadRotation() * 256.0F / 360.0F);
+        this.wasOnGround = entity.isOnGround();
     }
 
     public void a() {
-        List<Entity> list = this.tracker.getPassengers();
+        List<Entity> list = this.entity.getPassengers();
 
-        if (!list.equals(this.p)) {
-            this.p = list;
-            this.f.accept(new PacketPlayOutMount(this.tracker));
+        if (!list.equals(this.lastPassengers)) {
+            this.lastPassengers = list;
+            this.broadcast.accept(new PacketPlayOutMount(this.entity));
         }
 
-        if (this.tracker instanceof EntityItemFrame && this.tickCounter % 10 == 0) {
-            EntityItemFrame entityitemframe = (EntityItemFrame) this.tracker;
+        if (this.entity instanceof EntityItemFrame && this.tickCount % 10 == 0) {
+            EntityItemFrame entityitemframe = (EntityItemFrame) this.entity;
             ItemStack itemstack = entityitemframe.getItem();
 
             if (itemstack.getItem() instanceof ItemWorldMap) {
-                WorldMap worldmap = ItemWorldMap.getSavedMap(itemstack, this.b);
-                Iterator iterator = this.b.getPlayers().iterator();
+                Integer integer = ItemWorldMap.d(itemstack);
+                WorldMap worldmap = ItemWorldMap.a(integer, (World) this.level);
 
-                while (iterator.hasNext()) {
-                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                if (worldmap != null) {
+                    Iterator iterator = this.level.getPlayers().iterator();
 
-                    worldmap.a((EntityHuman) entityplayer, itemstack);
-                    Packet<?> packet = ((ItemWorldMap) itemstack.getItem()).a(itemstack, (World) this.b, (EntityHuman) entityplayer);
+                    while (iterator.hasNext()) {
+                        EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    if (packet != null) {
-                        entityplayer.playerConnection.sendPacket(packet);
+                        worldmap.a((EntityHuman) entityplayer, itemstack);
+                        Packet<?> packet = worldmap.a(integer, entityplayer);
+
+                        if (packet != null) {
+                            entityplayer.connection.sendPacket(packet);
+                        }
                     }
                 }
             }
@@ -107,69 +114,69 @@ public class EntityTrackerEntry {
             this.c();
         }
 
-        if (this.tickCounter % this.d == 0 || this.tracker.impulse || this.tracker.getDataWatcher().a()) {
+        if (this.tickCount % this.updateInterval == 0 || this.entity.hasImpulse || this.entity.getDataWatcher().a()) {
             int i;
             int j;
 
-            if (this.tracker.isPassenger()) {
-                i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
-                j = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
-                boolean flag = Math.abs(i - this.yRot) >= 1 || Math.abs(j - this.xRot) >= 1;
+            if (this.entity.isPassenger()) {
+                i = MathHelper.d(this.entity.getYRot() * 256.0F / 360.0F);
+                j = MathHelper.d(this.entity.getXRot() * 256.0F / 360.0F);
+                boolean flag = Math.abs(i - this.yRotp) >= 1 || Math.abs(j - this.xRotp) >= 1;
 
                 if (flag) {
-                    this.f.accept(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.isOnGround()));
-                    this.yRot = i;
-                    this.xRot = j;
+                    this.broadcast.accept(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.entity.getId(), (byte) i, (byte) j, this.entity.isOnGround()));
+                    this.yRotp = i;
+                    this.xRotp = j;
                 }
 
                 this.d();
                 this.c();
-                this.q = true;
+                this.wasRiding = true;
             } else {
-                ++this.o;
-                i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
-                j = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
-                Vec3D vec3d = this.tracker.getPositionVector().d(PacketPlayOutEntity.a(this.xLoc, this.yLoc, this.zLoc));
+                ++this.teleportDelay;
+                i = MathHelper.d(this.entity.getYRot() * 256.0F / 360.0F);
+                j = MathHelper.d(this.entity.getXRot() * 256.0F / 360.0F);
+                Vec3D vec3d = this.entity.getPositionVector().d(PacketPlayOutEntity.a(this.xp, this.yp, this.zp));
                 boolean flag1 = vec3d.g() >= 7.62939453125E-6D;
                 Packet<?> packet1 = null;
-                boolean flag2 = flag1 || this.tickCounter % 60 == 0;
-                boolean flag3 = Math.abs(i - this.yRot) >= 1 || Math.abs(j - this.xRot) >= 1;
+                boolean flag2 = flag1 || this.tickCount % 60 == 0;
+                boolean flag3 = Math.abs(i - this.yRotp) >= 1 || Math.abs(j - this.xRotp) >= 1;
 
-                if (this.tickCounter > 0 || this.tracker instanceof EntityArrow) {
+                if (this.tickCount > 0 || this.entity instanceof EntityArrow) {
                     long k = PacketPlayOutEntity.a(vec3d.x);
                     long l = PacketPlayOutEntity.a(vec3d.y);
                     long i1 = PacketPlayOutEntity.a(vec3d.z);
                     boolean flag4 = k < -32768L || k > 32767L || l < -32768L || l > 32767L || i1 < -32768L || i1 > 32767L;
 
-                    if (!flag4 && this.o <= 400 && !this.q && this.r == this.tracker.isOnGround()) {
-                        if ((!flag2 || !flag3) && !(this.tracker instanceof EntityArrow)) {
+                    if (!flag4 && this.teleportDelay <= 400 && !this.wasRiding && this.wasOnGround == this.entity.isOnGround()) {
+                        if ((!flag2 || !flag3) && !(this.entity instanceof EntityArrow)) {
                             if (flag2) {
-                                packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), this.tracker.isOnGround());
+                                packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.entity.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), this.entity.isOnGround());
                             } else if (flag3) {
-                                packet1 = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.isOnGround());
+                                packet1 = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.entity.getId(), (byte) i, (byte) j, this.entity.isOnGround());
                             }
                         } else {
-                            packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), (byte) i, (byte) j, this.tracker.isOnGround());
+                            packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.entity.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), (byte) i, (byte) j, this.entity.isOnGround());
                         }
                     } else {
-                        this.r = this.tracker.isOnGround();
-                        this.o = 0;
-                        packet1 = new PacketPlayOutEntityTeleport(this.tracker);
+                        this.wasOnGround = this.entity.isOnGround();
+                        this.teleportDelay = 0;
+                        packet1 = new PacketPlayOutEntityTeleport(this.entity);
                     }
                 }
 
-                if ((this.e || this.tracker.impulse || this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).isGliding()) && this.tickCounter > 0) {
-                    Vec3D vec3d1 = this.tracker.getMot();
-                    double d0 = vec3d1.distanceSquared(this.m);
+                if ((this.trackDelta || this.entity.hasImpulse || this.entity instanceof EntityLiving && ((EntityLiving) this.entity).isGliding()) && this.tickCount > 0) {
+                    Vec3D vec3d1 = this.entity.getMot();
+                    double d0 = vec3d1.distanceSquared(this.ap);
 
                     if (d0 > 1.0E-7D || d0 > 0.0D && vec3d1.g() == 0.0D) {
-                        this.m = vec3d1;
-                        this.f.accept(new PacketPlayOutEntityVelocity(this.tracker.getId(), this.m));
+                        this.ap = vec3d1;
+                        this.broadcast.accept(new PacketPlayOutEntityVelocity(this.entity.getId(), this.ap));
                     }
                 }
 
                 if (packet1 != null) {
-                    this.f.accept(packet1);
+                    this.broadcast.accept(packet1);
                 }
 
                 this.c();
@@ -178,84 +185,83 @@ public class EntityTrackerEntry {
                 }
 
                 if (flag3) {
-                    this.yRot = i;
-                    this.xRot = j;
+                    this.yRotp = i;
+                    this.xRotp = j;
                 }
 
-                this.q = false;
+                this.wasRiding = false;
             }
 
-            i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
-            if (Math.abs(i - this.headYaw) >= 1) {
-                this.f.accept(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) i));
-                this.headYaw = i;
+            i = MathHelper.d(this.entity.getHeadRotation() * 256.0F / 360.0F);
+            if (Math.abs(i - this.yHeadRotp) >= 1) {
+                this.broadcast.accept(new PacketPlayOutEntityHeadRotation(this.entity, (byte) i));
+                this.yHeadRotp = i;
             }
 
-            this.tracker.impulse = false;
+            this.entity.hasImpulse = false;
         }
 
-        ++this.tickCounter;
-        if (this.tracker.velocityChanged) {
-            this.broadcastIncludingSelf(new PacketPlayOutEntityVelocity(this.tracker));
-            this.tracker.velocityChanged = false;
+        ++this.tickCount;
+        if (this.entity.hurtMarked) {
+            this.broadcastIncludingSelf(new PacketPlayOutEntityVelocity(this.entity));
+            this.entity.hurtMarked = false;
         }
 
     }
 
     public void a(EntityPlayer entityplayer) {
-        this.tracker.c(entityplayer);
-        entityplayer.c(this.tracker);
+        this.entity.d(entityplayer);
+        entityplayer.connection.sendPacket(new PacketPlayOutEntityDestroy(this.entity.getId()));
     }
 
     public void b(EntityPlayer entityplayer) {
-        PlayerConnection playerconnection = entityplayer.playerConnection;
+        PlayerConnection playerconnection = entityplayer.connection;
 
-        entityplayer.playerConnection.getClass();
+        Objects.requireNonNull(entityplayer.connection);
         this.a(playerconnection::sendPacket);
-        this.tracker.b(entityplayer);
-        entityplayer.d(this.tracker);
+        this.entity.c(entityplayer);
     }
 
     public void a(Consumer<Packet<?>> consumer) {
-        if (this.tracker.dead) {
-            EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity " + this.tracker);
+        if (this.entity.isRemoved()) {
+            EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity {}", this.entity);
         }
 
-        Packet<?> packet = this.tracker.P();
+        Packet<?> packet = this.entity.getPacket();
 
-        this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
+        this.yHeadRotp = MathHelper.d(this.entity.getHeadRotation() * 256.0F / 360.0F);
         consumer.accept(packet);
-        if (!this.tracker.getDataWatcher().d()) {
-            consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
+        if (!this.entity.getDataWatcher().d()) {
+            consumer.accept(new PacketPlayOutEntityMetadata(this.entity.getId(), this.entity.getDataWatcher(), true));
         }
 
-        boolean flag = this.e;
+        boolean flag = this.trackDelta;
 
-        if (this.tracker instanceof EntityLiving) {
-            Collection<AttributeModifiable> collection = ((EntityLiving) this.tracker).getAttributeMap().b();
+        if (this.entity instanceof EntityLiving) {
+            Collection<AttributeModifiable> collection = ((EntityLiving) this.entity).getAttributeMap().b();
 
             if (!collection.isEmpty()) {
-                consumer.accept(new PacketPlayOutUpdateAttributes(this.tracker.getId(), collection));
+                consumer.accept(new PacketPlayOutUpdateAttributes(this.entity.getId(), collection));
             }
 
-            if (((EntityLiving) this.tracker).isGliding()) {
+            if (((EntityLiving) this.entity).isGliding()) {
                 flag = true;
             }
         }
 
-        this.m = this.tracker.getMot();
+        this.ap = this.entity.getMot();
         if (flag && !(packet instanceof PacketPlayOutSpawnEntityLiving)) {
-            consumer.accept(new PacketPlayOutEntityVelocity(this.tracker.getId(), this.m));
+            consumer.accept(new PacketPlayOutEntityVelocity(this.entity.getId(), this.ap));
         }
 
-        if (this.tracker instanceof EntityLiving) {
+        if (this.entity instanceof EntityLiving) {
             List<Pair<EnumItemSlot, ItemStack>> list = Lists.newArrayList();
             EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
             int i = aenumitemslot.length;
 
             for (int j = 0; j < i; ++j) {
                 EnumItemSlot enumitemslot = aenumitemslot[j];
-                ItemStack itemstack = ((EntityLiving) this.tracker).getEquipment(enumitemslot);
+                ItemStack itemstack = ((EntityLiving) this.entity).getEquipment(enumitemslot);
 
                 if (!itemstack.isEmpty()) {
                     list.add(Pair.of(enumitemslot, itemstack.cloneItemStack()));
@@ -263,31 +269,31 @@ public class EntityTrackerEntry {
             }
 
             if (!list.isEmpty()) {
-                consumer.accept(new PacketPlayOutEntityEquipment(this.tracker.getId(), list));
+                consumer.accept(new PacketPlayOutEntityEquipment(this.entity.getId(), list));
             }
         }
 
-        if (this.tracker instanceof EntityLiving) {
-            EntityLiving entityliving = (EntityLiving) this.tracker;
+        if (this.entity instanceof EntityLiving) {
+            EntityLiving entityliving = (EntityLiving) this.entity;
             Iterator iterator = entityliving.getEffects().iterator();
 
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
 
-                consumer.accept(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
+                consumer.accept(new PacketPlayOutEntityEffect(this.entity.getId(), mobeffect));
             }
         }
 
-        if (!this.tracker.getPassengers().isEmpty()) {
-            consumer.accept(new PacketPlayOutMount(this.tracker));
+        if (!this.entity.getPassengers().isEmpty()) {
+            consumer.accept(new PacketPlayOutMount(this.entity));
         }
 
-        if (this.tracker.isPassenger()) {
-            consumer.accept(new PacketPlayOutMount(this.tracker.getVehicle()));
+        if (this.entity.isPassenger()) {
+            consumer.accept(new PacketPlayOutMount(this.entity.getVehicle()));
         }
 
-        if (this.tracker instanceof EntityInsentient) {
-            EntityInsentient entityinsentient = (EntityInsentient) this.tracker;
+        if (this.entity instanceof EntityInsentient) {
+            EntityInsentient entityinsentient = (EntityInsentient) this.entity;
 
             if (entityinsentient.isLeashed()) {
                 consumer.accept(new PacketPlayOutAttachEntity(entityinsentient, entityinsentient.getLeashHolder()));
@@ -297,17 +303,17 @@ public class EntityTrackerEntry {
     }
 
     private void c() {
-        DataWatcher datawatcher = this.tracker.getDataWatcher();
+        DataWatcher datawatcher = this.entity.getDataWatcher();
 
         if (datawatcher.a()) {
-            this.broadcastIncludingSelf(new PacketPlayOutEntityMetadata(this.tracker.getId(), datawatcher, false));
+            this.broadcastIncludingSelf(new PacketPlayOutEntityMetadata(this.entity.getId(), datawatcher, false));
         }
 
-        if (this.tracker instanceof EntityLiving) {
-            Set<AttributeModifiable> set = ((EntityLiving) this.tracker).getAttributeMap().getAttributes();
+        if (this.entity instanceof EntityLiving) {
+            Set<AttributeModifiable> set = ((EntityLiving) this.entity).getAttributeMap().getAttributes();
 
             if (!set.isEmpty()) {
-                this.broadcastIncludingSelf(new PacketPlayOutUpdateAttributes(this.tracker.getId(), set));
+                this.broadcastIncludingSelf(new PacketPlayOutUpdateAttributes(this.entity.getId(), set));
             }
 
             set.clear();
@@ -316,19 +322,19 @@ public class EntityTrackerEntry {
     }
 
     private void d() {
-        this.xLoc = PacketPlayOutEntity.a(this.tracker.locX());
-        this.yLoc = PacketPlayOutEntity.a(this.tracker.locY());
-        this.zLoc = PacketPlayOutEntity.a(this.tracker.locZ());
+        this.xp = PacketPlayOutEntity.a(this.entity.locX());
+        this.yp = PacketPlayOutEntity.a(this.entity.locY());
+        this.zp = PacketPlayOutEntity.a(this.entity.locZ());
     }
 
     public Vec3D b() {
-        return PacketPlayOutEntity.a(this.xLoc, this.yLoc, this.zLoc);
+        return PacketPlayOutEntity.a(this.xp, this.yp, this.zp);
     }
 
     private void broadcastIncludingSelf(Packet<?> packet) {
-        this.f.accept(packet);
-        if (this.tracker instanceof EntityPlayer) {
-            ((EntityPlayer) this.tracker).playerConnection.sendPacket(packet);
+        this.broadcast.accept(packet);
+        if (this.entity instanceof EntityPlayer) {
+            ((EntityPlayer) this.entity).connection.sendPacket(packet);
         }
 
     }

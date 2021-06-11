@@ -12,11 +12,11 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public abstract class DataConverterEntityRenameAbstract extends DataFix {
 
-    private final String a;
+    private final String name;
 
     public DataConverterEntityRenameAbstract(String s, Schema schema, boolean flag) {
         super(schema, flag);
-        this.a = s;
+        this.name = s;
     }
 
     public TypeRewriteRule makeRule() {
@@ -27,7 +27,7 @@ public abstract class DataConverterEntityRenameAbstract extends DataFix {
         if (!Objects.equals(this.getOutputSchema().getType(DataConverterTypes.ENTITY_NAME), type)) {
             throw new IllegalStateException("Entity name type is not what was expected.");
         } else {
-            return TypeRewriteRule.seq(this.fixTypeEverywhere(this.a, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
+            return TypeRewriteRule.seq(this.fixTypeEverywhere(this.name, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapFirst((s) -> {
                         String s1 = this.a(s);
@@ -41,7 +41,7 @@ public abstract class DataConverterEntityRenameAbstract extends DataFix {
                         }
                     });
                 };
-            }), this.fixTypeEverywhere(this.a + " for entity name", type, (dynamicops) -> {
+            }), this.fixTypeEverywhere(this.name + " for entity name", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond(this::a);
                 };

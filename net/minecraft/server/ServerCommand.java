@@ -4,11 +4,11 @@ import net.minecraft.commands.CommandListenerWrapper;
 
 public class ServerCommand {
 
-    public final String command;
+    public final String msg;
     public final CommandListenerWrapper source;
 
     public ServerCommand(String s, CommandListenerWrapper commandlistenerwrapper) {
-        this.command = s;
+        this.msg = s;
         this.source = commandlistenerwrapper;
     }
 }

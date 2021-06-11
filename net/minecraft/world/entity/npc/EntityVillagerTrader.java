@@ -36,7 +36,6 @@ import net.minecraft.world.entity.monster.EntityVindicator;
 import net.minecraft.world.entity.monster.EntityZoglin;
 import net.minecraft.world.entity.monster.EntityZombie;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtil;
@@ -48,23 +47,23 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityVillagerTrader extends EntityVillagerAbstract {
 
+    private static final int NUMBER_OF_TRADE_OFFERS = 5;
     @Nullable
-    private BlockPosition bp;
+    private BlockPosition wanderTarget;
     private int despawnDelay;
 
     public EntityVillagerTrader(EntityTypes<? extends EntityVillagerTrader> entitytypes, World world) {
         super(entitytypes, world);
-        this.attachedToPlayer = true;
     }
 
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.INVISIBILITY), SoundEffects.ENTITY_WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
-            return this.world.isNight() && !entityvillagertrader.isInvisible();
+        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.INVISIBILITY), SoundEffects.WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
+            return this.level.isNight() && !entityvillagertrader.isInvisible();
         }));
-        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, new ItemStack(Items.MILK_BUCKET), SoundEffects.ENTITY_WANDERING_TRADER_REAPPEARED, (entityvillagertrader) -> {
-            return this.world.isDay() && entityvillagertrader.isInvisible();
+        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, new ItemStack(Items.MILK_BUCKET), SoundEffects.WANDERING_TRADER_REAPPEARED, (entityvillagertrader) -> {
+            return this.level.isDay() && entityvillagertrader.isInvisible();
         }));
         this.goalSelector.a(1, new PathfinderGoalTradeWithPlayer(this));
         this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityZombie.class, 8.0F, 0.5D, 0.5D));
@@ -98,20 +97,20 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.eN() && !this.isBaby()) {
+        if (!itemstack.a(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.fw() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
 
             if (this.getOffers().isEmpty()) {
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             } else {
-                if (!this.world.isClientSide) {
+                if (!this.level.isClientSide) {
                     this.setTradingPlayer(entityhuman);
                     this.openTrade(entityhuman, this.getScoreboardDisplayName(), 1);
                 }
 
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
         } else {
             return super.b(entityhuman, enumhand);
@@ -119,9 +118,9 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected void eW() {
-        VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(1);
-        VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption1 = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(2);
+    protected void fE() {
+        VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.WANDERING_TRADER_TRADES.get(1);
+        VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption1 = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.WANDERING_TRADER_TRADES.get(2);
 
         if (avillagertrades_imerchantrecipeoption != null && avillagertrades_imerchantrecipeoption1 != null) {
             MerchantRecipeList merchantrecipelist = this.getOffers();
@@ -142,8 +141,8 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setInt("DespawnDelay", this.despawnDelay);
-        if (this.bp != null) {
-            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bp));
+        if (this.wanderTarget != null) {
+            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.wanderTarget));
         }
 
     }
@@ -156,7 +155,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         }
 
         if (nbttagcompound.hasKey("WanderTarget")) {
-            this.bp = GameProfileSerializer.b(nbttagcompound.getCompound("WanderTarget"));
+            this.wanderTarget = GameProfileSerializer.b(nbttagcompound.getCompound("WanderTarget"));
         }
 
         this.setAgeRaw(Math.max(0, this.getAge()));
@@ -172,41 +171,39 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         if (merchantrecipe.isRewardExp()) {
             int i = 3 + this.random.nextInt(4);
 
-            this.world.addEntity(new EntityExperienceOrb(this.world, this.locX(), this.locY() + 0.5D, this.locZ(), i));
+            this.level.addEntity(new EntityExperienceOrb(this.level, this.locX(), this.locY() + 0.5D, this.locZ(), i));
         }
 
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.eN() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
+        return this.fw() ? SoundEffects.WANDERING_TRADER_TRADE : SoundEffects.WANDERING_TRADER_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_WANDERING_TRADER_HURT;
+        return SoundEffects.WANDERING_TRADER_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_WANDERING_TRADER_DEATH;
+        return SoundEffects.WANDERING_TRADER_DEATH;
     }
 
     @Override
-    protected SoundEffect c(ItemStack itemstack) {
-        Item item = itemstack.getItem();
-
-        return item == Items.MILK_BUCKET ? SoundEffects.ENTITY_WANDERING_TRADER_DRINK_MILK : SoundEffects.ENTITY_WANDERING_TRADER_DRINK_POTION;
+    protected SoundEffect d(ItemStack itemstack) {
+        return itemstack.a(Items.MILK_BUCKET) ? SoundEffects.WANDERING_TRADER_DRINK_MILK : SoundEffects.WANDERING_TRADER_DRINK_POTION;
     }
 
     @Override
-    protected SoundEffect t(boolean flag) {
-        return flag ? SoundEffects.ENTITY_WANDERING_TRADER_YES : SoundEffects.ENTITY_WANDERING_TRADER_NO;
+    protected SoundEffect v(boolean flag) {
+        return flag ? SoundEffects.WANDERING_TRADER_YES : SoundEffects.WANDERING_TRADER_NO;
     }
 
     @Override
     public SoundEffect getTradeSound() {
-        return SoundEffects.ENTITY_WANDERING_TRADER_YES;
+        return SoundEffects.WANDERING_TRADER_YES;
     }
 
     public void setDespawnDelay(int i) {
@@ -220,73 +217,73 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.world.isClientSide) {
-            this.eY();
+        if (!this.level.isClientSide) {
+            this.fH();
         }
 
     }
 
-    private void eY() {
-        if (this.despawnDelay > 0 && !this.eN() && --this.despawnDelay == 0) {
+    private void fH() {
+        if (this.despawnDelay > 0 && !this.fw() && --this.despawnDelay == 0) {
             this.die();
         }
 
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.bp = blockposition;
+        this.wanderTarget = blockposition;
     }
 
     @Nullable
-    private BlockPosition eZ() {
-        return this.bp;
+    BlockPosition fI() {
+        return this.wanderTarget;
     }
 
-    class a extends PathfinderGoal {
+    private class a extends PathfinderGoal {
 
-        final EntityVillagerTrader a;
-        final double b;
-        final double c;
+        final EntityVillagerTrader trader;
+        final double stopDistance;
+        final double speedModifier;
 
         a(EntityVillagerTrader entityvillagertrader, double d0, double d1) {
-            this.a = entityvillagertrader;
-            this.b = d0;
-            this.c = d1;
+            this.trader = entityvillagertrader;
+            this.stopDistance = d0;
+            this.speedModifier = d1;
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public void d() {
-            this.a.g((BlockPosition) null);
+            this.trader.g((BlockPosition) null);
             EntityVillagerTrader.this.navigation.o();
         }
 
         @Override
         public boolean a() {
-            BlockPosition blockposition = this.a.eZ();
+            BlockPosition blockposition = this.trader.fI();
 
-            return blockposition != null && this.a(blockposition, this.b);
+            return blockposition != null && this.a(blockposition, this.stopDistance);
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.eZ();
+            BlockPosition blockposition = this.trader.fI();
 
             if (blockposition != null && EntityVillagerTrader.this.navigation.m()) {
                 if (this.a(blockposition, 10.0D)) {
-                    Vec3D vec3d = (new Vec3D((double) blockposition.getX() - this.a.locX(), (double) blockposition.getY() - this.a.locY(), (double) blockposition.getZ() - this.a.locZ())).d();
-                    Vec3D vec3d1 = vec3d.a(10.0D).add(this.a.locX(), this.a.locY(), this.a.locZ());
+                    Vec3D vec3d = (new Vec3D((double) blockposition.getX() - this.trader.locX(), (double) blockposition.getY() - this.trader.locY(), (double) blockposition.getZ() - this.trader.locZ())).d();
+                    Vec3D vec3d1 = vec3d.a(10.0D).add(this.trader.locX(), this.trader.locY(), this.trader.locZ());
 
-                    EntityVillagerTrader.this.navigation.a(vec3d1.x, vec3d1.y, vec3d1.z, this.c);
+                    EntityVillagerTrader.this.navigation.a(vec3d1.x, vec3d1.y, vec3d1.z, this.speedModifier);
                 } else {
-                    EntityVillagerTrader.this.navigation.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), this.c);
+                    EntityVillagerTrader.this.navigation.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), this.speedModifier);
                 }
             }
 
         }
 
         private boolean a(BlockPosition blockposition, double d0) {
-            return !blockposition.a((IPosition) this.a.getPositionVector(), d0);
+            return !blockposition.a((IPosition) this.trader.getPositionVector(), d0);
         }
     }
 }

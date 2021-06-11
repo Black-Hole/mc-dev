@@ -9,9 +9,9 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.level.block.BlockLeaves;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
@@ -25,11 +25,11 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
     protected Vec3D g() {
         Vec3D vec3d = null;
 
-        if (this.a.isInWater()) {
-            vec3d = RandomPositionGenerator.b(this.a, 15, 15);
+        if (this.mob.isInWater()) {
+            vec3d = LandRandomPos.a(this.mob, 15, 15);
         }
 
-        if (this.a.getRandom().nextFloat() >= this.h) {
+        if (this.mob.getRandom().nextFloat() >= this.probability) {
             vec3d = this.j();
         }
 
@@ -38,20 +38,20 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
 
     @Nullable
     private Vec3D j() {
-        BlockPosition blockposition = this.a.getChunkCoordinates();
+        BlockPosition blockposition = this.mob.getChunkCoordinates();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
-        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX() - 3.0D), MathHelper.floor(this.a.locY() - 6.0D), MathHelper.floor(this.a.locZ() - 3.0D), MathHelper.floor(this.a.locX() + 3.0D), MathHelper.floor(this.a.locY() + 6.0D), MathHelper.floor(this.a.locZ() + 3.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.mob.locX() - 3.0D), MathHelper.floor(this.mob.locY() - 6.0D), MathHelper.floor(this.mob.locZ() - 3.0D), MathHelper.floor(this.mob.locX() + 3.0D), MathHelper.floor(this.mob.locY() + 6.0D), MathHelper.floor(this.mob.locZ() + 3.0D));
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
             if (!blockposition.equals(blockposition1)) {
-                Block block = this.a.world.getType(blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition1, EnumDirection.DOWN)).getBlock();
-                boolean flag = block instanceof BlockLeaves || block.a((Tag) TagsBlock.LOGS);
+                IBlockData iblockdata = this.mob.level.getType(blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition1, EnumDirection.DOWN));
+                boolean flag = iblockdata.getBlock() instanceof BlockLeaves || iblockdata.a((Tag) TagsBlock.LOGS);
 
-                if (flag && this.a.world.isEmpty(blockposition1) && this.a.world.isEmpty(blockposition_mutableblockposition.a((BaseBlockPosition) blockposition1, EnumDirection.UP))) {
+                if (flag && this.mob.level.isEmpty(blockposition1) && this.mob.level.isEmpty(blockposition_mutableblockposition.a((BaseBlockPosition) blockposition1, EnumDirection.UP))) {
                     return Vec3D.c((BaseBlockPosition) blockposition1);
                 }
             }

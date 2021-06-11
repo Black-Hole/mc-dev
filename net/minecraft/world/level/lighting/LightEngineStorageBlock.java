@@ -18,10 +18,10 @@ public class LightEngineStorageBlock extends LightEngineStorage<LightEngineStora
         long j = SectionPosition.e(i);
         NibbleArray nibblearray = this.a(j, false);
 
-        return nibblearray == null ? 0 : nibblearray.a(SectionPosition.b(BlockPosition.b(i)), SectionPosition.b(BlockPosition.c(i)), SectionPosition.b(BlockPosition.d(i)));
+        return nibblearray == null ? 0 : nibblearray.a(SectionPosition.b(BlockPosition.a(i)), SectionPosition.b(BlockPosition.b(i)), SectionPosition.b(BlockPosition.c(i)));
     }
 
-    public static final class a extends LightEngineStorageArray<LightEngineStorageBlock.a> {
+    protected static final class a extends LightEngineStorageArray<LightEngineStorageBlock.a> {
 
         public a(Long2ObjectOpenHashMap<NibbleArray> long2objectopenhashmap) {
             super(long2objectopenhashmap);
@@ -29,7 +29,7 @@ public class LightEngineStorageBlock extends LightEngineStorage<LightEngineStora
 
         @Override
         public LightEngineStorageBlock.a b() {
-            return new LightEngineStorageBlock.a(this.a.clone());
+            return new LightEngineStorageBlock.a(this.map.clone());
         }
     }
 }

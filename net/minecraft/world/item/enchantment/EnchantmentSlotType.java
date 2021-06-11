@@ -100,7 +100,7 @@ public enum EnchantmentSlotType {
         }
     };
 
-    private EnchantmentSlotType() {}
+    EnchantmentSlotType() {}
 
     public abstract boolean canEnchant(Item item);
 }

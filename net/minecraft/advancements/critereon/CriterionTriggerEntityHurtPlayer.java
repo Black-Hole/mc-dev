@@ -7,13 +7,13 @@ import net.minecraft.world.damagesource.DamageSource;
 
 public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<CriterionTriggerEntityHurtPlayer.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("entity_hurt_player");
+    static final MinecraftKey ID = new MinecraftKey("entity_hurt_player");
 
     public CriterionTriggerEntityHurtPlayer() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerEntityHurtPlayer.a;
+        return CriterionTriggerEntityHurtPlayer.ID;
     }
 
     @Override
@@ -31,26 +31,34 @@ public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<C
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionDamage a;
+        private final CriterionConditionDamage damage;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionDamage criterionconditiondamage) {
-            super(CriterionTriggerEntityHurtPlayer.a, criterionconditionentity_b);
-            this.a = criterionconditiondamage;
+            super(CriterionTriggerEntityHurtPlayer.ID, criterionconditionentity_b);
+            this.damage = criterionconditiondamage;
+        }
+
+        public static CriterionTriggerEntityHurtPlayer.a c() {
+            return new CriterionTriggerEntityHurtPlayer.a(CriterionConditionEntity.b.ANY, CriterionConditionDamage.ANY);
+        }
+
+        public static CriterionTriggerEntityHurtPlayer.a a(CriterionConditionDamage criterionconditiondamage) {
+            return new CriterionTriggerEntityHurtPlayer.a(CriterionConditionEntity.b.ANY, criterionconditiondamage);
         }
 
         public static CriterionTriggerEntityHurtPlayer.a a(CriterionConditionDamage.a criterionconditiondamage_a) {
-            return new CriterionTriggerEntityHurtPlayer.a(CriterionConditionEntity.b.a, criterionconditiondamage_a.b());
+            return new CriterionTriggerEntityHurtPlayer.a(CriterionConditionEntity.b.ANY, criterionconditiondamage_a.b());
         }
 
         public boolean a(EntityPlayer entityplayer, DamageSource damagesource, float f, float f1, boolean flag) {
-            return this.a.a(entityplayer, damagesource, f, f1, flag);
+            return this.damage.a(entityplayer, damagesource, f, f1, flag);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("damage", this.a.a());
+            jsonobject.add("damage", this.damage.a());
             return jsonobject;
         }
     }

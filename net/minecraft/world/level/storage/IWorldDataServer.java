@@ -1,9 +1,11 @@
 package net.minecraft.world.level.storage;
 
 import java.util.UUID;
+import javax.annotation.Nullable;
 import net.minecraft.CrashReportSystemDetails;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.EnumGamemode;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.timers.CustomFunctionCallbackTimerQueue;
 
@@ -22,8 +24,8 @@ public interface IWorldDataServer extends WorldDataMutable {
     int getThunderDuration();
 
     @Override
-    default void a(CrashReportSystemDetails crashreportsystemdetails) {
-        WorldDataMutable.super.a(crashreportsystemdetails);
+    default void a(CrashReportSystemDetails crashreportsystemdetails, LevelHeightAccessor levelheightaccessor) {
+        WorldDataMutable.super.a(crashreportsystemdetails, levelheightaccessor);
         crashreportsystemdetails.a("Level name", this::getName);
         crashreportsystemdetails.a("Level game mode", () -> {
             return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", this.getGameType().b(), this.getGameType().getId(), this.isHardcore(), this.o());
@@ -44,6 +46,9 @@ public interface IWorldDataServer extends WorldDataMutable {
     int w();
 
     void h(int i);
+
+    @Nullable
+    UUID x();
 
     void a(UUID uuid);
 

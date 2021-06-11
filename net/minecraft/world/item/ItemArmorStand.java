@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.item.context.ItemActionContext;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.Vec3D;
 
@@ -40,7 +41,7 @@ public class ItemArmorStand extends Item {
             BlockPosition blockposition = blockactioncontext.getClickPosition();
             ItemStack itemstack = itemactioncontext.getItemStack();
             Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
-            AxisAlignedBB axisalignedbb = EntityTypes.ARMOR_STAND.l().a(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+            AxisAlignedBB axisalignedbb = EntityTypes.ARMOR_STAND.m().a(vec3d.getX(), vec3d.getY(), vec3d.getZ());
 
             if (world.b((Entity) null, axisalignedbb, (entity) -> {
                 return true;
@@ -53,13 +54,13 @@ public class ItemArmorStand extends Item {
                         return EnumInteractionResult.FAIL;
                     }
 
-                    worldserver.addAllEntities(entityarmorstand);
-                    float f = (float) MathHelper.d((MathHelper.g(itemactioncontext.h() - 180.0F) + 22.5F) / 45.0F) * 45.0F;
+                    float f = (float) MathHelper.d((MathHelper.g(itemactioncontext.i() - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 
                     entityarmorstand.setPositionRotation(entityarmorstand.locX(), entityarmorstand.locY(), entityarmorstand.locZ(), f, 0.0F);
                     this.a(entityarmorstand, world.random);
-                    world.addEntity(entityarmorstand);
-                    world.playSound((EntityHuman) null, entityarmorstand.locX(), entityarmorstand.locY(), entityarmorstand.locZ(), SoundEffects.ENTITY_ARMOR_STAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                    worldserver.addAllEntities(entityarmorstand);
+                    world.playSound((EntityHuman) null, entityarmorstand.locX(), entityarmorstand.locY(), entityarmorstand.locZ(), SoundEffects.ARMOR_STAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                    world.a((Entity) itemactioncontext.getEntity(), GameEvent.ENTITY_PLACE, (Entity) entityarmorstand);
                 }
 
                 itemstack.subtract(1);
@@ -71,13 +72,13 @@ public class ItemArmorStand extends Item {
     }
 
     private void a(EntityArmorStand entityarmorstand, Random random) {
-        Vector3f vector3f = entityarmorstand.r();
+        Vector3f vector3f = entityarmorstand.v();
         float f = random.nextFloat() * 5.0F;
         float f1 = random.nextFloat() * 20.0F - 10.0F;
         Vector3f vector3f1 = new Vector3f(vector3f.getX() + f, vector3f.getY() + f1, vector3f.getZ());
 
         entityarmorstand.setHeadPose(vector3f1);
-        vector3f = entityarmorstand.t();
+        vector3f = entityarmorstand.w();
         f = random.nextFloat() * 10.0F - 5.0F;
         vector3f1 = new Vector3f(vector3f.getX(), vector3f.getY() + f, vector3f.getZ());
         entityarmorstand.setBodyPose(vector3f1);

@@ -2,25 +2,18 @@ package net.minecraft.world.level.levelgen.feature.configurations;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 
-public class WorldGenFeatureChanceDecoratorRangeConfiguration implements WorldGenFeatureDecoratorConfiguration {
+public class WorldGenFeatureChanceDecoratorRangeConfiguration implements WorldGenFeatureDecoratorConfiguration, WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureChanceDecoratorRangeConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("bottom_offset").orElse(0).forGetter((worldgenfeaturechancedecoratorrangeconfiguration) -> {
-            return worldgenfeaturechancedecoratorrangeconfiguration.c;
-        }), Codec.INT.fieldOf("top_offset").orElse(0).forGetter((worldgenfeaturechancedecoratorrangeconfiguration) -> {
-            return worldgenfeaturechancedecoratorrangeconfiguration.d;
-        }), Codec.INT.fieldOf("maximum").orElse(0).forGetter((worldgenfeaturechancedecoratorrangeconfiguration) -> {
-            return worldgenfeaturechancedecoratorrangeconfiguration.e;
+    public static final Codec<WorldGenFeatureChanceDecoratorRangeConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(HeightProvider.CODEC.fieldOf("height").forGetter((worldgenfeaturechancedecoratorrangeconfiguration) -> {
+            return worldgenfeaturechancedecoratorrangeconfiguration.height;
         })).apply(instance, WorldGenFeatureChanceDecoratorRangeConfiguration::new);
     });
-    public final int c;
-    public final int d;
-    public final int e;
+    public final HeightProvider height;
 
-    public WorldGenFeatureChanceDecoratorRangeConfiguration(int i, int j, int k) {
-        this.c = i;
-        this.d = j;
-        this.e = k;
+    public WorldGenFeatureChanceDecoratorRangeConfiguration(HeightProvider heightprovider) {
+        this.height = heightprovider;
     }
 }

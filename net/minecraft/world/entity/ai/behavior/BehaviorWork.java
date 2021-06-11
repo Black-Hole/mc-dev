@@ -12,19 +12,21 @@ import net.minecraft.world.entity.npc.EntityVillager;
 
 public class BehaviorWork extends Behavior<EntityVillager> {
 
-    private long b;
+    private static final int CHECK_COOLDOWN = 300;
+    private static final double DISTANCE = 1.73D;
+    private long lastCheck;
 
     public BehaviorWork() {
         super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        if (worldserver.getTime() - this.b < 300L) {
+        if (worldserver.getTime() - this.lastCheck < 300L) {
             return false;
         } else if (worldserver.random.nextInt(2) != 0) {
             return false;
         } else {
-            this.b = worldserver.getTime();
+            this.lastCheck = worldserver.getTime();
             GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE).get();
 
             return globalpos.getDimensionManager() == worldserver.getDimensionKey() && globalpos.getBlockPosition().a((IPosition) entityvillager.getPositionVector(), 1.73D);
@@ -38,10 +40,10 @@ public class BehaviorWork extends Behavior<EntityVillager> {
         behaviorcontroller.getMemory(MemoryModuleType.JOB_SITE).ifPresent((globalpos) -> {
             behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.getBlockPosition())));
         });
-        entityvillager.fd();
+        entityvillager.fM();
         this.doWork(worldserver, entityvillager);
-        if (entityvillager.fc()) {
-            entityvillager.fb();
+        if (entityvillager.fL()) {
+            entityvillager.fK();
         }
 
     }

@@ -1,27 +1,32 @@
 package net.minecraft.world.entity.ai.control;
 
+import java.util.Optional;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.phys.Vec3D;
 
-public class ControllerLook {
+public class ControllerLook implements Control {
 
-    protected final EntityInsentient a;
-    protected float b;
-    protected float c;
-    protected boolean d;
-    protected double e;
-    protected double f;
-    protected double g;
+    protected final EntityInsentient mob;
+    protected float yMaxRotSpeed;
+    protected float xMaxRotAngle;
+    protected boolean hasWanted;
+    protected double wantedX;
+    protected double wantedY;
+    protected double wantedZ;
 
     public ControllerLook(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.mob = entityinsentient;
     }
 
     public void a(Vec3D vec3d) {
         this.a(vec3d.x, vec3d.y, vec3d.z);
+    }
+
+    public void a(Entity entity) {
+        this.a(entity.locX(), b(entity), entity.locZ());
     }
 
     public void a(Entity entity, float f, float f1) {
@@ -29,71 +34,79 @@ public class ControllerLook {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a(d0, d1, d2, (float) this.a.ep(), (float) this.a.O());
+        this.a(d0, d1, d2, (float) this.mob.fa(), (float) this.mob.eY());
     }
 
     public void a(double d0, double d1, double d2, float f, float f1) {
-        this.e = d0;
-        this.f = d1;
-        this.g = d2;
-        this.b = f;
-        this.c = f1;
-        this.d = true;
+        this.wantedX = d0;
+        this.wantedY = d1;
+        this.wantedZ = d2;
+        this.yMaxRotSpeed = f;
+        this.xMaxRotAngle = f1;
+        this.hasWanted = true;
     }
 
     public void a() {
-        if (this.b()) {
-            this.a.pitch = 0.0F;
+        if (this.c()) {
+            this.mob.setXRot(0.0F);
         }
 
-        if (this.d) {
-            this.d = false;
-            this.a.aC = this.a(this.a.aC, this.h(), this.b);
-            this.a.pitch = this.a(this.a.pitch, this.g(), this.c);
+        if (this.hasWanted) {
+            this.hasWanted = false;
+            this.i().ifPresent((ofloat) -> {
+                this.mob.yHeadRot = this.a(this.mob.yHeadRot, ofloat, this.yMaxRotSpeed);
+            });
+            this.h().ifPresent((ofloat) -> {
+                this.mob.setXRot(this.a(this.mob.getXRot(), ofloat, this.xMaxRotAngle));
+            });
         } else {
-            this.a.aC = this.a(this.a.aC, this.a.aA, 10.0F);
+            this.mob.yHeadRot = this.a(this.mob.yHeadRot, this.mob.yBodyRot, 10.0F);
         }
 
-        if (!this.a.getNavigation().m()) {
-            this.a.aC = MathHelper.b(this.a.aC, this.a.aA, (float) this.a.Q());
+        this.b();
+    }
+
+    protected void b() {
+        if (!this.mob.getNavigation().m()) {
+            this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.eZ());
         }
 
     }
 
-    protected boolean b() {
+    protected boolean c() {
         return true;
     }
 
-    public boolean c() {
-        return this.d;
-    }
-
-    public double d() {
-        return this.e;
+    public boolean d() {
+        return this.hasWanted;
     }
 
     public double e() {
-        return this.f;
+        return this.wantedX;
     }
 
     public double f() {
-        return this.g;
+        return this.wantedY;
     }
 
-    protected float g() {
-        double d0 = this.e - this.a.locX();
-        double d1 = this.f - this.a.getHeadY();
-        double d2 = this.g - this.a.locZ();
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-
-        return (float) (-(MathHelper.d(d1, d3) * 57.2957763671875D));
+    public double g() {
+        return this.wantedZ;
     }
 
-    protected float h() {
-        double d0 = this.e - this.a.locX();
-        double d1 = this.g - this.a.locZ();
+    protected Optional<Float> h() {
+        double d0 = this.wantedX - this.mob.locX();
+        double d1 = this.wantedY - this.mob.getHeadY();
+        double d2 = this.wantedZ - this.mob.locZ();
+        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 
-        return (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
+        return Math.abs(d1) <= 9.999999747378752E-6D && Math.abs(d3) <= 9.999999747378752E-6D ? Optional.empty() : Optional.of((float) (-(MathHelper.d(d1, d3) * 57.2957763671875D)));
+    }
+
+    protected Optional<Float> i() {
+        double d0 = this.wantedX - this.mob.locX();
+        double d1 = this.wantedZ - this.mob.locZ();
+
+        return Math.abs(d1) <= 9.999999747378752E-6D && Math.abs(d0) <= 9.999999747378752E-6D ? Optional.empty() : Optional.of((float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F);
     }
 
     protected float a(float f, float f1, float f2) {

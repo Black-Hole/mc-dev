@@ -14,21 +14,24 @@ public class Activity {
     public static final Activity RAID = a("raid");
     public static final Activity PRE_RAID = a("pre_raid");
     public static final Activity HIDE = a("hide");
-    public static final Activity FLIGHT = a("fight");
+    public static final Activity FIGHT = a("fight");
     public static final Activity CELEBRATE = a("celebrate");
     public static final Activity ADMIRE_ITEM = a("admire_item");
     public static final Activity AVOID = a("avoid");
     public static final Activity RIDE = a("ride");
-    private final String p;
-    private final int q;
+    public static final Activity PLAY_DEAD = a("play_dead");
+    public static final Activity LONG_JUMP = a("long_jump");
+    public static final Activity RAM = a("ram");
+    private final String name;
+    private final int hashCode;
 
     private Activity(String s) {
-        this.p = s;
-        this.q = s.hashCode();
+        this.name = s;
+        this.hashCode = s.hashCode();
     }
 
     public String a() {
-        return this.p;
+        return this.name;
     }
 
     private static Activity a(String s) {
@@ -41,14 +44,14 @@ public class Activity {
         } else if (object != null && this.getClass() == object.getClass()) {
             Activity activity = (Activity) object;
 
-            return this.p.equals(activity.p);
+            return this.name.equals(activity.name);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return this.q;
+        return this.hashCode;
     }
 
     public String toString() {

@@ -9,17 +9,19 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.EntityHanging;
 import net.minecraft.world.entity.decoration.EntityItemFrame;
 import net.minecraft.world.entity.decoration.EntityPainting;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.ItemActionContext;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 public class ItemHanging extends Item {
 
-    private final EntityTypes<? extends EntityHanging> a;
+    private final EntityTypes<? extends EntityHanging> type;
 
     public ItemHanging(EntityTypes<? extends EntityHanging> entitytypes, Item.Info item_info) {
         super(item_info);
-        this.a = entitytypes;
+        this.type = entitytypes;
     }
 
     @Override
@@ -36,14 +38,16 @@ public class ItemHanging extends Item {
             World world = itemactioncontext.getWorld();
             Object object;
 
-            if (this.a == EntityTypes.PAINTING) {
+            if (this.type == EntityTypes.PAINTING) {
                 object = new EntityPainting(world, blockposition1, enumdirection);
+            } else if (this.type == EntityTypes.ITEM_FRAME) {
+                object = new EntityItemFrame(world, blockposition1, enumdirection);
             } else {
-                if (this.a != EntityTypes.ITEM_FRAME) {
+                if (this.type != EntityTypes.GLOW_ITEM_FRAME) {
                     return EnumInteractionResult.a(world.isClientSide);
                 }
 
-                object = new EntityItemFrame(world, blockposition1, enumdirection);
+                object = new GlowItemFrame(world, blockposition1, enumdirection);
             }
 
             NBTTagCompound nbttagcompound = itemstack.getTag();
@@ -55,6 +59,7 @@ public class ItemHanging extends Item {
             if (((EntityHanging) object).survives()) {
                 if (!world.isClientSide) {
                     ((EntityHanging) object).playPlaceSound();
+                    world.a((Entity) entityhuman, GameEvent.ENTITY_PLACE, blockposition);
                     world.addEntity((Entity) object);
                 }
 
@@ -67,6 +72,6 @@ public class ItemHanging extends Item {
     }
 
     protected boolean a(EntityHuman entityhuman, EnumDirection enumdirection, ItemStack itemstack, BlockPosition blockposition) {
-        return !enumdirection.n().c() && entityhuman.a(blockposition, enumdirection, itemstack);
+        return !enumdirection.n().b() && entityhuman.a(blockposition, enumdirection, itemstack);
     }
 }

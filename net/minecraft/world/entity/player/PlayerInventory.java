@@ -14,6 +14,7 @@ import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.PacketPlayOutSetSlot;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.ContainerUtil;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.INamableTileEntity;
@@ -23,31 +24,35 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemArmor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;
 
 public class PlayerInventory implements IInventory, INamableTileEntity {
 
+    public static final int POP_TIME_DURATION = 5;
+    public static final int INVENTORY_SIZE = 36;
+    private static final int SELECTION_SIZE = 9;
+    public static final int SLOT_OFFHAND = 40;
+    public static final int NOT_FOUND_INDEX = -1;
+    public static final int[] ALL_ARMOR_SLOTS = new int[]{0, 1, 2, 3};
+    public static final int[] HELMET_SLOT_ONLY = new int[]{3};
     public final NonNullList<ItemStack> items;
     public final NonNullList<ItemStack> armor;
-    public final NonNullList<ItemStack> extraSlots;
-    private final List<NonNullList<ItemStack>> f;
-    public int itemInHandIndex;
+    public final NonNullList<ItemStack> offhand;
+    private final List<NonNullList<ItemStack>> compartments;
+    public int selected;
     public final EntityHuman player;
-    private ItemStack carried;
-    private int h;
+    private int timesChanged;
 
     public PlayerInventory(EntityHuman entityhuman) {
-        this.items = NonNullList.a(36, ItemStack.b);
-        this.armor = NonNullList.a(4, ItemStack.b);
-        this.extraSlots = NonNullList.a(1, ItemStack.b);
-        this.f = ImmutableList.of(this.items, this.armor, this.extraSlots);
-        this.carried = ItemStack.b;
+        this.items = NonNullList.a(36, ItemStack.EMPTY);
+        this.armor = NonNullList.a(4, ItemStack.EMPTY);
+        this.offhand = NonNullList.a(1, ItemStack.EMPTY);
+        this.compartments = ImmutableList.of(this.items, this.armor, this.offhand);
         this.player = entityhuman;
     }
 
     public ItemStack getItemInHand() {
-        return d(this.itemInHandIndex) ? (ItemStack) this.items.get(this.itemInHandIndex) : ItemStack.b;
+        return d(this.selected) ? (ItemStack) this.items.get(this.selected) : ItemStack.EMPTY;
     }
 
     public static int getHotbarSize() {
@@ -55,11 +60,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     private boolean isSimilarAndNotFull(ItemStack itemstack, ItemStack itemstack1) {
-        return !itemstack.isEmpty() && this.b(itemstack, itemstack1) && itemstack.isStackable() && itemstack.getCount() < itemstack.getMaxStackSize() && itemstack.getCount() < this.getMaxStackSize();
-    }
-
-    private boolean b(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack.getItem() == itemstack1.getItem() && ItemStack.equals(itemstack, itemstack1);
+        return !itemstack.isEmpty() && ItemStack.e(itemstack, itemstack1) && itemstack.isStackable() && itemstack.getCount() < itemstack.getMaxStackSize() && itemstack.getCount() < this.getMaxStackSize();
     }
 
     public int getFirstEmptySlotIndex() {
@@ -72,11 +73,35 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return -1;
     }
 
-    public void c(int i) {
-        this.itemInHandIndex = this.i();
-        ItemStack itemstack = (ItemStack) this.items.get(this.itemInHandIndex);
+    public void a(ItemStack itemstack) {
+        int i = this.b(itemstack);
 
-        this.items.set(this.itemInHandIndex, this.items.get(i));
+        if (d(i)) {
+            this.selected = i;
+        } else {
+            if (i == -1) {
+                this.selected = this.i();
+                if (!((ItemStack) this.items.get(this.selected)).isEmpty()) {
+                    int j = this.getFirstEmptySlotIndex();
+
+                    if (j != -1) {
+                        this.items.set(j, (ItemStack) this.items.get(this.selected));
+                    }
+                }
+
+                this.items.set(this.selected, itemstack);
+            } else {
+                this.c(i);
+            }
+
+        }
+    }
+
+    public void c(int i) {
+        this.selected = this.i();
+        ItemStack itemstack = (ItemStack) this.items.get(this.selected);
+
+        this.items.set(this.selected, (ItemStack) this.items.get(i));
         this.items.set(i, itemstack);
     }
 
@@ -84,11 +109,21 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return i >= 0 && i < 9;
     }
 
+    public int b(ItemStack itemstack) {
+        for (int i = 0; i < this.items.size(); ++i) {
+            if (!((ItemStack) this.items.get(i)).isEmpty() && ItemStack.e(itemstack, (ItemStack) this.items.get(i))) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public int c(ItemStack itemstack) {
         for (int i = 0; i < this.items.size(); ++i) {
             ItemStack itemstack1 = (ItemStack) this.items.get(i);
 
-            if (!((ItemStack) this.items.get(i)).isEmpty() && this.b(itemstack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).f() && !itemstack1.hasEnchantments() && !itemstack1.hasName()) {
+            if (!((ItemStack) this.items.get(i)).isEmpty() && ItemStack.e(itemstack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).g() && !itemstack1.hasEnchantments() && !itemstack1.hasName()) {
                 return i;
             }
         }
@@ -101,20 +136,39 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         int j;
 
         for (j = 0; j < 9; ++j) {
-            i = (this.itemInHandIndex + j) % 9;
+            i = (this.selected + j) % 9;
             if (((ItemStack) this.items.get(i)).isEmpty()) {
                 return i;
             }
         }
 
         for (j = 0; j < 9; ++j) {
-            i = (this.itemInHandIndex + j) % 9;
+            i = (this.selected + j) % 9;
             if (!((ItemStack) this.items.get(i)).hasEnchantments()) {
                 return i;
             }
         }
 
-        return this.itemInHandIndex;
+        return this.selected;
+    }
+
+    public void a(double d0) {
+        if (d0 > 0.0D) {
+            d0 = 1.0D;
+        }
+
+        if (d0 < 0.0D) {
+            d0 = -1.0D;
+        }
+
+        for (this.selected = (int) ((double) this.selected - d0); this.selected < 0; this.selected += 9) {
+            ;
+        }
+
+        while (this.selected >= 9) {
+            this.selected -= 9;
+        }
+
     }
 
     public int a(Predicate<ItemStack> predicate, int i, IInventory iinventory) {
@@ -123,9 +177,11 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         int j = b0 + ContainerUtil.a((IInventory) this, predicate, i - b0, flag);
 
         j += ContainerUtil.a(iinventory, predicate, i - j, flag);
-        j += ContainerUtil.a(this.carried, predicate, i - j, flag);
-        if (this.carried.isEmpty()) {
-            this.carried = ItemStack.b;
+        ItemStack itemstack = this.player.containerMenu.getCarried();
+
+        j += ContainerUtil.a(itemstack, predicate, i - j, flag);
+        if (itemstack.isEmpty()) {
+            this.player.containerMenu.setCarried(ItemStack.EMPTY);
         }
 
         return j;
@@ -176,8 +232,8 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public int firstPartial(ItemStack itemstack) {
-        if (this.isSimilarAndNotFull(this.getItem(this.itemInHandIndex), itemstack)) {
-            return this.itemInHandIndex;
+        if (this.isSimilarAndNotFull(this.getItem(this.selected), itemstack)) {
+            return this.selected;
         } else if (this.isSimilarAndNotFull(this.getItem(40), itemstack)) {
             return 40;
         } else {
@@ -192,14 +248,14 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public void j() {
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.compartments.iterator();
 
         while (iterator.hasNext()) {
             NonNullList<ItemStack> nonnulllist = (NonNullList) iterator.next();
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 if (!((ItemStack) nonnulllist.get(i)).isEmpty()) {
-                    ((ItemStack) nonnulllist.get(i)).a(this.player.world, this.player, i, this.itemInHandIndex == i);
+                    ((ItemStack) nonnulllist.get(i)).a(this.player.level, this.player, i, this.selected == i);
                 }
             }
         }
@@ -215,7 +271,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             return false;
         } else {
             try {
-                if (itemstack.f()) {
+                if (itemstack.g()) {
                     if (i == -1) {
                         i = this.getFirstEmptySlotIndex();
                     }
@@ -225,7 +281,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
                         ((ItemStack) this.items.get(i)).d(5);
                         itemstack.setCount(0);
                         return true;
-                    } else if (this.player.abilities.canInstantlyBuild) {
+                    } else if (this.player.getAbilities().instabuild) {
                         itemstack.setCount(0);
                         return true;
                     } else {
@@ -243,7 +299,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
                         }
                     } while (!itemstack.isEmpty() && itemstack.getCount() < j);
 
-                    if (itemstack.getCount() == j && this.player.abilities.canInstantlyBuild) {
+                    if (itemstack.getCount() == j && this.player.getAbilities().instabuild) {
                         itemstack.setCount(0);
                         return true;
                     } else {
@@ -264,27 +320,32 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         }
     }
 
-    public void a(World world, ItemStack itemstack) {
-        if (!world.isClientSide) {
-            while (!itemstack.isEmpty()) {
+    public void f(ItemStack itemstack) {
+        this.a(itemstack, true);
+    }
+
+    public void a(ItemStack itemstack, boolean flag) {
+        while (true) {
+            if (!itemstack.isEmpty()) {
                 int i = this.firstPartial(itemstack);
 
                 if (i == -1) {
                     i = this.getFirstEmptySlotIndex();
                 }
 
-                if (i == -1) {
-                    this.player.drop(itemstack, false);
-                    break;
+                if (i != -1) {
+                    int j = itemstack.getMaxStackSize() - this.getItem(i).getCount();
+
+                    if (this.c(i, itemstack.cloneAndSubtract(j)) && flag && this.player instanceof EntityPlayer) {
+                        ((EntityPlayer) this.player).connection.sendPacket(new PacketPlayOutSetSlot(-2, i, this.getItem(i)));
+                    }
+                    continue;
                 }
 
-                int j = itemstack.getMaxStackSize() - this.getItem(i).getCount();
-
-                if (this.c(i, itemstack.cloneAndSubtract(j))) {
-                    ((EntityPlayer) this.player).playerConnection.sendPacket(new PacketPlayOutSetSlot(-2, i, this.getItem(i)));
-                }
+                this.player.drop(itemstack, false);
             }
 
+            return;
         }
     }
 
@@ -294,7 +355,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
         NonNullList nonnulllist;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
+        for (Iterator iterator = this.compartments.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
             nonnulllist = (NonNullList) iterator.next();
             if (i < nonnulllist.size()) {
                 list = nonnulllist;
@@ -302,18 +363,18 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             }
         }
 
-        return list != null && !((ItemStack) list.get(i)).isEmpty() ? ContainerUtil.a(list, i, j) : ItemStack.b;
+        return list != null && !((ItemStack) list.get(i)).isEmpty() ? ContainerUtil.a(list, i, j) : ItemStack.EMPTY;
     }
 
-    public void f(ItemStack itemstack) {
-        Iterator iterator = this.f.iterator();
+    public void g(ItemStack itemstack) {
+        Iterator iterator = this.compartments.iterator();
 
         while (iterator.hasNext()) {
             NonNullList<ItemStack> nonnulllist = (NonNullList) iterator.next();
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 if (nonnulllist.get(i) == itemstack) {
-                    nonnulllist.set(i, ItemStack.b);
+                    nonnulllist.set(i, ItemStack.EMPTY);
                     break;
                 }
             }
@@ -327,7 +388,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.compartments.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -338,10 +399,10 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         if (nonnulllist != null && !((ItemStack) nonnulllist.get(i)).isEmpty()) {
             ItemStack itemstack = (ItemStack) nonnulllist.get(i);
 
-            nonnulllist.set(i, ItemStack.b);
+            nonnulllist.set(i, ItemStack.EMPTY);
             return itemstack;
         } else {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -351,7 +412,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.compartments.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -366,7 +427,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public float a(IBlockData iblockdata) {
-        return ((ItemStack) this.items.get(this.itemInHandIndex)).a(iblockdata);
+        return ((ItemStack) this.items.get(this.selected)).a(iblockdata);
     }
 
     public NBTTagList a(NBTTagList nbttaglist) {
@@ -391,11 +452,11 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             }
         }
 
-        for (i = 0; i < this.extraSlots.size(); ++i) {
-            if (!((ItemStack) this.extraSlots.get(i)).isEmpty()) {
+        for (i = 0; i < this.offhand.size(); ++i) {
+            if (!((ItemStack) this.offhand.get(i)).isEmpty()) {
                 nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte("Slot", (byte) (i + 150));
-                ((ItemStack) this.extraSlots.get(i)).save(nbttagcompound);
+                ((ItemStack) this.offhand.get(i)).save(nbttagcompound);
                 nbttaglist.add(nbttagcompound);
             }
         }
@@ -406,7 +467,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     public void b(NBTTagList nbttaglist) {
         this.items.clear();
         this.armor.clear();
-        this.extraSlots.clear();
+        this.offhand.clear();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
@@ -418,8 +479,8 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
                     this.items.set(j, itemstack);
                 } else if (j >= 100 && j < this.armor.size() + 100) {
                     this.armor.set(j - 100, itemstack);
-                } else if (j >= 150 && j < this.extraSlots.size() + 150) {
-                    this.extraSlots.set(j - 150, itemstack);
+                } else if (j >= 150 && j < this.offhand.size() + 150) {
+                    this.offhand.set(j - 150, itemstack);
                 }
             }
         }
@@ -428,7 +489,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
     @Override
     public int getSize() {
-        return this.items.size() + this.armor.size() + this.extraSlots.size();
+        return this.items.size() + this.armor.size() + this.offhand.size();
     }
 
     @Override
@@ -443,7 +504,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
                 do {
                     if (!iterator.hasNext()) {
-                        iterator = this.extraSlots.iterator();
+                        iterator = this.offhand.iterator();
 
                         do {
                             if (!iterator.hasNext()) {
@@ -474,7 +535,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
         NonNullList nonnulllist;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
+        for (Iterator iterator = this.compartments.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
             nonnulllist = (NonNullList) iterator.next();
             if (i < nonnulllist.size()) {
                 list = nonnulllist;
@@ -482,7 +543,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             }
         }
 
-        return list == null ? ItemStack.b : (ItemStack) list.get(i);
+        return list == null ? ItemStack.EMPTY : (ItemStack) list.get(i);
     }
 
     @Override
@@ -490,19 +551,27 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return new ChatMessage("container.inventory");
     }
 
-    public void a(DamageSource damagesource, float f) {
+    public ItemStack e(int i) {
+        return (ItemStack) this.armor.get(i);
+    }
+
+    public void a(DamageSource damagesource, float f, int[] aint) {
         if (f > 0.0F) {
             f /= 4.0F;
             if (f < 1.0F) {
                 f = 1.0F;
             }
 
-            for (int i = 0; i < this.armor.size(); ++i) {
-                ItemStack itemstack = (ItemStack) this.armor.get(i);
+            int[] aint1 = aint;
+            int i = aint.length;
 
-                if ((!damagesource.isFire() || !itemstack.getItem().u()) && itemstack.getItem() instanceof ItemArmor) {
+            for (int j = 0; j < i; ++j) {
+                int k = aint1[j];
+                ItemStack itemstack = (ItemStack) this.armor.get(k);
+
+                if ((!damagesource.isFire() || !itemstack.getItem().w()) && itemstack.getItem() instanceof ItemArmor) {
                     itemstack.damage((int) f, this.player, (entityhuman) -> {
-                        entityhuman.broadcastItemBreak(EnumItemSlot.a(EnumItemSlot.Function.ARMOR, i));
+                        entityhuman.broadcastItemBreak(EnumItemSlot.a(EnumItemSlot.Function.ARMOR, k));
                     });
                 }
             }
@@ -511,7 +580,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public void dropContents() {
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.compartments.iterator();
 
         while (iterator.hasNext()) {
             List<ItemStack> list = (List) iterator.next();
@@ -521,7 +590,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
                 if (!itemstack.isEmpty()) {
                     this.player.a(itemstack, true, false);
-                    list.set(i, ItemStack.b);
+                    list.set(i, ItemStack.EMPTY);
                 }
             }
         }
@@ -530,24 +599,20 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
     @Override
     public void update() {
-        ++this.h;
+        ++this.timesChanged;
     }
 
-    public void setCarried(ItemStack itemstack) {
-        this.carried = itemstack;
-    }
-
-    public ItemStack getCarried() {
-        return this.carried;
+    public int l() {
+        return this.timesChanged;
     }
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.player.dead ? false : entityhuman.h((Entity) this.player) <= 64.0D;
+        return this.player.isRemoved() ? false : entityhuman.f((Entity) this.player) <= 64.0D;
     }
 
     public boolean h(ItemStack itemstack) {
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.compartments.iterator();
 
         while (iterator.hasNext()) {
             List<ItemStack> list = (List) iterator.next();
@@ -565,17 +630,36 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return false;
     }
 
+    public boolean a(Tag<Item> tag) {
+        Iterator iterator = this.compartments.iterator();
+
+        while (iterator.hasNext()) {
+            List<ItemStack> list = (List) iterator.next();
+            Iterator iterator1 = list.iterator();
+
+            while (iterator1.hasNext()) {
+                ItemStack itemstack = (ItemStack) iterator1.next();
+
+                if (!itemstack.isEmpty() && itemstack.a(tag)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void a(PlayerInventory playerinventory) {
         for (int i = 0; i < this.getSize(); ++i) {
             this.setItem(i, playerinventory.getItem(i));
         }
 
-        this.itemInHandIndex = playerinventory.itemInHandIndex;
+        this.selected = playerinventory.selected;
     }
 
     @Override
     public void clear() {
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.compartments.iterator();
 
         while (iterator.hasNext()) {
             List<ItemStack> list = (List) iterator.next();

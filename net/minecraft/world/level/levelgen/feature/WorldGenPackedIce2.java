@@ -5,10 +5,9 @@ import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
@@ -17,9 +16,15 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        while (generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > 2) {
-            blockposition = blockposition.down();
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+
+        GeneratorAccessSeed generatoraccessseed;
+
+        for (generatoraccessseed = featureplacecontext.a(); generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > generatoraccessseed.getMinBuildHeight() + 2; blockposition = blockposition.down()) {
+            ;
         }
 
         if (!generatoraccessseed.getType(blockposition).a(Blocks.SNOW_BLOCK)) {
@@ -48,18 +53,16 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                         float f2 = (float) MathHelper.a(j1) - 0.25F;
 
                         if ((i1 == 0 && j1 == 0 || f1 * f1 + f2 * f2 <= f * f) && (i1 != -l && i1 != l && j1 != -l && j1 != l || random.nextFloat() <= 0.75F)) {
-                            IBlockData iblockdata = generatoraccessseed.getType(blockposition.b(i1, k, j1));
-                            Block block = iblockdata.getBlock();
+                            IBlockData iblockdata = generatoraccessseed.getType(blockposition.c(i1, k, j1));
 
-                            if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
-                                this.a(generatoraccessseed, blockposition.b(i1, k, j1), Blocks.PACKED_ICE.getBlockData());
+                            if (iblockdata.isAir() || b(iblockdata) || iblockdata.a(Blocks.SNOW_BLOCK) || iblockdata.a(Blocks.ICE)) {
+                                this.a((IWorldWriter) generatoraccessseed, blockposition.c(i1, k, j1), Blocks.PACKED_ICE.getBlockData());
                             }
 
                             if (k != 0 && l > 1) {
-                                iblockdata = generatoraccessseed.getType(blockposition.b(i1, -k, j1));
-                                block = iblockdata.getBlock();
-                                if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
-                                    this.a(generatoraccessseed, blockposition.b(i1, -k, j1), Blocks.PACKED_ICE.getBlockData());
+                                iblockdata = generatoraccessseed.getType(blockposition.c(i1, -k, j1));
+                                if (iblockdata.isAir() || b(iblockdata) || iblockdata.a(Blocks.SNOW_BLOCK) || iblockdata.a(Blocks.ICE)) {
+                                    this.a((IWorldWriter) generatoraccessseed, blockposition.c(i1, -k, j1), Blocks.PACKED_ICE.getBlockData());
                                 }
                             }
                         }
@@ -78,7 +81,7 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                 l = -k;
 
                 while (l <= k) {
-                    BlockPosition blockposition1 = blockposition.b(k1, -1, l);
+                    BlockPosition blockposition1 = blockposition.c(k1, -1, l);
                     int l1 = 50;
 
                     if (Math.abs(k1) == 1 && Math.abs(l) == 1) {
@@ -88,10 +91,9 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                     while (true) {
                         if (blockposition1.getY() > 50) {
                             IBlockData iblockdata1 = generatoraccessseed.getType(blockposition1);
-                            Block block1 = iblockdata1.getBlock();
 
-                            if (iblockdata1.isAir() || b(block1) || block1 == Blocks.SNOW_BLOCK || block1 == Blocks.ICE || block1 == Blocks.PACKED_ICE) {
-                                this.a(generatoraccessseed, blockposition1, Blocks.PACKED_ICE.getBlockData());
+                            if (iblockdata1.isAir() || b(iblockdata1) || iblockdata1.a(Blocks.SNOW_BLOCK) || iblockdata1.a(Blocks.ICE) || iblockdata1.a(Blocks.PACKED_ICE)) {
+                                this.a((IWorldWriter) generatoraccessseed, blockposition1, Blocks.PACKED_ICE.getBlockData());
                                 blockposition1 = blockposition1.down();
                                 --l1;
                                 if (l1 <= 0) {

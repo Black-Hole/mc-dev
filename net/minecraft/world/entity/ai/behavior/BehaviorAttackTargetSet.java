@@ -12,13 +12,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorAttackTargetSet<E extends EntityInsentient> extends Behavior<E> {
 
-    private final Predicate<E> b;
-    private final Function<E, Optional<? extends EntityLiving>> c;
+    private final Predicate<E> canAttackPredicate;
+    private final Function<E, Optional<? extends EntityLiving>> targetFinderFunction;
 
     public BehaviorAttackTargetSet(Predicate<E> predicate, Function<E, Optional<? extends EntityLiving>> function) {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryStatus.REGISTERED));
-        this.b = predicate;
-        this.c = function;
+        this.canAttackPredicate = predicate;
+        this.targetFinderFunction = function;
     }
 
     public BehaviorAttackTargetSet(Function<E, Optional<? extends EntityLiving>> function) {
@@ -28,17 +28,17 @@ public class BehaviorAttackTargetSet<E extends EntityInsentient> extends Behavio
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
-        if (!this.b.test(e0)) {
+        if (!this.canAttackPredicate.test(e0)) {
             return false;
         } else {
-            Optional<? extends EntityLiving> optional = (Optional) this.c.apply(e0);
+            Optional<? extends EntityLiving> optional = (Optional) this.targetFinderFunction.apply(e0);
 
-            return optional.isPresent() && ((EntityLiving) optional.get()).isAlive();
+            return optional.isPresent() ? e0.c((EntityLiving) optional.get()) : false;
         }
     }
 
     protected void a(WorldServer worldserver, E e0, long i) {
-        ((Optional) this.c.apply(e0)).ifPresent((entityliving) -> {
+        ((Optional) this.targetFinderFunction.apply(e0)).ifPresent((entityliving) -> {
             this.a(e0, entityliving);
         });
     }

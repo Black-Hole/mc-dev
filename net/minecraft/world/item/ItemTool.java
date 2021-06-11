@@ -3,8 +3,9 @@ package net.minecraft.world.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
-import java.util.Set;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeBase;
@@ -16,26 +17,26 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class ItemTool extends ItemToolMaterial implements ItemVanishable {
 
-    private final Set<Block> a;
-    protected final float b;
-    private final float c;
-    private final Multimap<AttributeBase, AttributeModifier> d;
+    private final Tag<Block> blocks;
+    protected final float speed;
+    private final float attackDamageBaseline;
+    private final Multimap<AttributeBase, AttributeModifier> defaultModifiers;
 
-    protected ItemTool(float f, float f1, ToolMaterial toolmaterial, Set<Block> set, Item.Info item_info) {
+    protected ItemTool(float f, float f1, ToolMaterial toolmaterial, Tag<Block> tag, Item.Info item_info) {
         super(toolmaterial, item_info);
-        this.a = set;
-        this.b = toolmaterial.b();
-        this.c = f + toolmaterial.c();
+        this.blocks = tag;
+        this.speed = toolmaterial.b();
+        this.attackDamageBaseline = f + toolmaterial.c();
         Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
 
-        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTool.f, "Tool modifier", (double) this.c, AttributeModifier.Operation.ADDITION));
-        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTool.g, "Tool modifier", (double) f1, AttributeModifier.Operation.ADDITION));
-        this.d = builder.build();
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTool.BASE_ATTACK_DAMAGE_UUID, "Tool modifier", (double) this.attackDamageBaseline, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTool.BASE_ATTACK_SPEED_UUID, "Tool modifier", (double) f1, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
     }
 
     @Override
     public float getDestroySpeed(ItemStack itemstack, IBlockData iblockdata) {
-        return this.a.contains(iblockdata.getBlock()) ? this.b : 1.0F;
+        return this.blocks.isTagged(iblockdata.getBlock()) ? this.speed : 1.0F;
     }
 
     @Override
@@ -59,10 +60,17 @@ public class ItemTool extends ItemToolMaterial implements ItemVanishable {
 
     @Override
     public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        return enumitemslot == EnumItemSlot.MAINHAND ? this.d : super.a(enumitemslot);
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.defaultModifiers : super.a(enumitemslot);
     }
 
     public float d() {
-        return this.c;
+        return this.attackDamageBaseline;
+    }
+
+    @Override
+    public boolean canDestroySpecialBlock(IBlockData iblockdata) {
+        int i = this.j().d();
+
+        return i < 3 && iblockdata.a((Tag) TagsBlock.NEEDS_DIAMOND_TOOL) ? false : (i < 2 && iblockdata.a((Tag) TagsBlock.NEEDS_IRON_TOOL) ? false : (i < 1 && iblockdata.a((Tag) TagsBlock.NEEDS_STONE_TOOL) ? false : iblockdata.a(this.blocks)));
     }
 }

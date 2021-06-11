@@ -20,11 +20,13 @@ import net.minecraft.sounds.SoundCategory;
 
 public class CommandStopSound {
 
+    public CommandStopSound() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         RequiredArgumentBuilder<CommandListenerWrapper, EntitySelector> requiredargumentbuilder = (RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, (MinecraftKey) null);
-        })).then(net.minecraft.commands.CommandDispatcher.a("*").then(net.minecraft.commands.CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.e(commandcontext, "sound"));
+        })).then(net.minecraft.commands.CommandDispatcher.a("*").then(net.minecraft.commands.CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.AVAILABLE_SOUNDS).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.f(commandcontext, "sound"));
         })));
         SoundCategory[] asoundcategory = SoundCategory.values();
         int i = asoundcategory.length;
@@ -34,8 +36,8 @@ public class CommandStopSound {
 
             requiredargumentbuilder.then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a(soundcategory.a()).executes((commandcontext) -> {
                 return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, (MinecraftKey) null);
-            })).then(net.minecraft.commands.CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.e(commandcontext, "sound"));
+            })).then(net.minecraft.commands.CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.AVAILABLE_SOUNDS).executes((commandcontext) -> {
+                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.f(commandcontext, "sound"));
             })));
         }
 
@@ -51,7 +53,7 @@ public class CommandStopSound {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.playerConnection.sendPacket(packetplayoutstopsound);
+            entityplayer.connection.sendPacket(packetplayoutstopsound);
         }
 
         if (soundcategory != null) {

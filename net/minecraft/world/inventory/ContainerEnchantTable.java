@@ -23,15 +23,15 @@ import net.minecraft.world.level.block.Blocks;
 public class ContainerEnchantTable extends Container {
 
     private final IInventory enchantSlots;
-    private final ContainerAccess containerAccess;
-    private final Random h;
-    private final ContainerProperty i;
+    private final ContainerAccess access;
+    private final Random random;
+    private final ContainerProperty enchantmentSeed;
     public final int[] costs;
-    public final int[] enchantments;
-    public final int[] levels;
+    public final int[] enchantClue;
+    public final int[] levelClue;
 
     public ContainerEnchantTable(int i, PlayerInventory playerinventory) {
-        this(i, playerinventory, ContainerAccess.a);
+        this(i, playerinventory, ContainerAccess.NULL);
     }
 
     public ContainerEnchantTable(int i, PlayerInventory playerinventory, ContainerAccess containeraccess) {
@@ -43,12 +43,12 @@ public class ContainerEnchantTable extends Container {
                 ContainerEnchantTable.this.a((IInventory) this);
             }
         };
-        this.h = new Random();
-        this.i = ContainerProperty.a();
+        this.random = new Random();
+        this.enchantmentSeed = ContainerProperty.a();
         this.costs = new int[3];
-        this.enchantments = new int[]{-1, -1, -1};
-        this.levels = new int[]{-1, -1, -1};
-        this.containerAccess = containeraccess;
+        this.enchantClue = new int[]{-1, -1, -1};
+        this.levelClue = new int[]{-1, -1, -1};
+        this.access = containeraccess;
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
@@ -63,7 +63,7 @@ public class ContainerEnchantTable extends Container {
         this.a(new Slot(this.enchantSlots, 1, 35, 47) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.getItem() == Items.LAPIS_LAZULI;
+                return itemstack.a(Items.LAPIS_LAZULI);
             }
         });
 
@@ -82,13 +82,13 @@ public class ContainerEnchantTable extends Container {
         this.a(ContainerProperty.a(this.costs, 0));
         this.a(ContainerProperty.a(this.costs, 1));
         this.a(ContainerProperty.a(this.costs, 2));
-        this.a(this.i).set(playerinventory.player.eG());
-        this.a(ContainerProperty.a(this.enchantments, 0));
-        this.a(ContainerProperty.a(this.enchantments, 1));
-        this.a(ContainerProperty.a(this.enchantments, 2));
-        this.a(ContainerProperty.a(this.levels, 0));
-        this.a(ContainerProperty.a(this.levels, 1));
-        this.a(ContainerProperty.a(this.levels, 2));
+        this.a(this.enchantmentSeed).set(playerinventory.player.fq());
+        this.a(ContainerProperty.a(this.enchantClue, 0));
+        this.a(ContainerProperty.a(this.enchantClue, 1));
+        this.a(ContainerProperty.a(this.enchantClue, 2));
+        this.a(ContainerProperty.a(this.levelClue, 0));
+        this.a(ContainerProperty.a(this.levelClue, 1));
+        this.a(ContainerProperty.a(this.levelClue, 2));
     }
 
     @Override
@@ -97,36 +97,36 @@ public class ContainerEnchantTable extends Container {
             ItemStack itemstack = iinventory.getItem(0);
 
             if (!itemstack.isEmpty() && itemstack.canEnchant()) {
-                this.containerAccess.a((world, blockposition) -> {
+                this.access.a((world, blockposition) -> {
                     int i = 0;
 
                     int j;
 
                     for (j = -1; j <= 1; ++j) {
                         for (int k = -1; k <= 1; ++k) {
-                            if ((j != 0 || k != 0) && world.isEmpty(blockposition.b(k, 0, j)) && world.isEmpty(blockposition.b(k, 1, j))) {
-                                if (world.getType(blockposition.b(k * 2, 0, j * 2)).a(Blocks.BOOKSHELF)) {
+                            if ((j != 0 || k != 0) && world.isEmpty(blockposition.c(k, 0, j)) && world.isEmpty(blockposition.c(k, 1, j))) {
+                                if (world.getType(blockposition.c(k * 2, 0, j * 2)).a(Blocks.BOOKSHELF)) {
                                     ++i;
                                 }
 
-                                if (world.getType(blockposition.b(k * 2, 1, j * 2)).a(Blocks.BOOKSHELF)) {
+                                if (world.getType(blockposition.c(k * 2, 1, j * 2)).a(Blocks.BOOKSHELF)) {
                                     ++i;
                                 }
 
                                 if (k != 0 && j != 0) {
-                                    if (world.getType(blockposition.b(k * 2, 0, j)).a(Blocks.BOOKSHELF)) {
+                                    if (world.getType(blockposition.c(k * 2, 0, j)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k * 2, 1, j)).a(Blocks.BOOKSHELF)) {
+                                    if (world.getType(blockposition.c(k * 2, 1, j)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k, 0, j * 2)).a(Blocks.BOOKSHELF)) {
+                                    if (world.getType(blockposition.c(k, 0, j * 2)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k, 1, j * 2)).a(Blocks.BOOKSHELF)) {
+                                    if (world.getType(blockposition.c(k, 1, j * 2)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
                                 }
@@ -134,12 +134,12 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    this.h.setSeed((long) this.i.get());
+                    this.random.setSeed((long) this.enchantmentSeed.get());
 
                     for (j = 0; j < 3; ++j) {
-                        this.costs[j] = EnchantmentManager.a(this.h, j, i, itemstack);
-                        this.enchantments[j] = -1;
-                        this.levels[j] = -1;
+                        this.costs[j] = EnchantmentManager.a(this.random, j, i, itemstack);
+                        this.enchantClue[j] = -1;
+                        this.levelClue[j] = -1;
                         if (this.costs[j] < j + 1) {
                             this.costs[j] = 0;
                         }
@@ -150,21 +150,21 @@ public class ContainerEnchantTable extends Container {
                             List<WeightedRandomEnchant> list = this.a(itemstack, j, this.costs[j]);
 
                             if (list != null && !list.isEmpty()) {
-                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.h.nextInt(list.size()));
+                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.random.nextInt(list.size()));
 
-                                this.enchantments[j] = IRegistry.ENCHANTMENT.a((Object) weightedrandomenchant.enchantment);
-                                this.levels[j] = weightedrandomenchant.level;
+                                this.enchantClue[j] = IRegistry.ENCHANTMENT.getId(weightedrandomenchant.enchantment);
+                                this.levelClue[j] = weightedrandomenchant.level;
                             }
                         }
                     }
 
-                    this.c();
+                    this.d();
                 });
             } else {
                 for (int i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
-                    this.enchantments[i] = -1;
-                    this.levels[i] = -1;
+                    this.enchantClue[i] = -1;
+                    this.levelClue[i] = -1;
                 }
             }
         }
@@ -177,16 +177,16 @@ public class ContainerEnchantTable extends Container {
         ItemStack itemstack1 = this.enchantSlots.getItem(1);
         int j = i + 1;
 
-        if ((itemstack1.isEmpty() || itemstack1.getCount() < j) && !entityhuman.abilities.canInstantlyBuild) {
+        if ((itemstack1.isEmpty() || itemstack1.getCount() < j) && !entityhuman.getAbilities().instabuild) {
             return false;
-        } else if (this.costs[i] > 0 && !itemstack.isEmpty() && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
-            this.containerAccess.a((world, blockposition) -> {
+        } else if (this.costs[i] > 0 && !itemstack.isEmpty() && (entityhuman.experienceLevel >= j && entityhuman.experienceLevel >= this.costs[i] || entityhuman.getAbilities().instabuild)) {
+            this.access.a((world, blockposition) -> {
                 ItemStack itemstack2 = itemstack;
                 List<WeightedRandomEnchant> list = this.a(itemstack, i, this.costs[i]);
 
                 if (!list.isEmpty()) {
                     entityhuman.enchantDone(itemstack, j);
-                    boolean flag = itemstack.getItem() == Items.BOOK;
+                    boolean flag = itemstack.a(Items.BOOK);
 
                     if (flag) {
                         itemstack2 = new ItemStack(Items.ENCHANTED_BOOK);
@@ -209,22 +209,22 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    if (!entityhuman.abilities.canInstantlyBuild) {
+                    if (!entityhuman.getAbilities().instabuild) {
                         itemstack1.subtract(j);
                         if (itemstack1.isEmpty()) {
-                            this.enchantSlots.setItem(1, ItemStack.b);
+                            this.enchantSlots.setItem(1, ItemStack.EMPTY);
                         }
                     }
 
                     entityhuman.a(StatisticList.ENCHANT_ITEM);
                     if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.i.a((EntityPlayer) entityhuman, itemstack2, j);
+                        CriterionTriggers.ENCHANTED_ITEM.a((EntityPlayer) entityhuman, itemstack2, j);
                     }
 
                     this.enchantSlots.update();
-                    this.i.set(entityhuman.eG());
+                    this.enchantmentSeed.set(entityhuman.fq());
                     this.a(this.enchantSlots);
-                    world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
 
             });
@@ -235,32 +235,42 @@ public class ContainerEnchantTable extends Container {
     }
 
     private List<WeightedRandomEnchant> a(ItemStack itemstack, int i, int j) {
-        this.h.setSeed((long) (this.i.get() + i));
-        List<WeightedRandomEnchant> list = EnchantmentManager.b(this.h, itemstack, j, false);
+        this.random.setSeed((long) (this.enchantmentSeed.get() + i));
+        List<WeightedRandomEnchant> list = EnchantmentManager.b(this.random, itemstack, j, false);
 
-        if (itemstack.getItem() == Items.BOOK && list.size() > 1) {
-            list.remove(this.h.nextInt(list.size()));
+        if (itemstack.a(Items.BOOK) && list.size() > 1) {
+            list.remove(this.random.nextInt(list.size()));
         }
 
         return list;
     }
 
+    public int i() {
+        ItemStack itemstack = this.enchantSlots.getItem(1);
+
+        return itemstack.isEmpty() ? 0 : itemstack.getCount();
+    }
+
+    public int j() {
+        return this.enchantmentSeed.get();
+    }
+
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.containerAccess.a((world, blockposition) -> {
-            this.a(entityhuman, entityhuman.world, this.enchantSlots);
+        this.access.a((world, blockposition) -> {
+            this.a(entityhuman, this.enchantSlots);
         });
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return a(this.containerAccess, entityhuman, Blocks.ENCHANTING_TABLE);
+        return a(this.access, entityhuman, Blocks.ENCHANTING_TABLE);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -269,19 +279,19 @@ public class ContainerEnchantTable extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (i == 1) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
-            } else if (itemstack1.getItem() == Items.LAPIS_LAZULI) {
+            } else if (itemstack1.a(Items.LAPIS_LAZULI)) {
                 if (!this.a(itemstack1, 1, 2, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else {
                 if (((Slot) this.slots.get(0)).hasItem() || !((Slot) this.slots.get(0)).isAllowed(itemstack1)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 ItemStack itemstack2 = itemstack1.cloneItemStack();
@@ -292,13 +302,13 @@ public class ContainerEnchantTable extends Container {
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);

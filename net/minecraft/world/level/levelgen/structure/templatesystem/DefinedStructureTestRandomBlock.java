@@ -9,28 +9,28 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class DefinedStructureTestRandomBlock extends DefinedStructureRuleTest {
 
-    public static final Codec<DefinedStructureTestRandomBlock> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<DefinedStructureTestRandomBlock> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(IRegistry.BLOCK.fieldOf("block").forGetter((definedstructuretestrandomblock) -> {
-            return definedstructuretestrandomblock.b;
+            return definedstructuretestrandomblock.block;
         }), Codec.FLOAT.fieldOf("probability").forGetter((definedstructuretestrandomblock) -> {
-            return definedstructuretestrandomblock.d;
+            return definedstructuretestrandomblock.probability;
         })).apply(instance, DefinedStructureTestRandomBlock::new);
     });
-    private final Block b;
-    private final float d;
+    private final Block block;
+    private final float probability;
 
     public DefinedStructureTestRandomBlock(Block block, float f) {
-        this.b = block;
-        this.d = f;
+        this.block = block;
+        this.probability = f;
     }
 
     @Override
     public boolean a(IBlockData iblockdata, Random random) {
-        return iblockdata.a(this.b) && random.nextFloat() < this.d;
+        return iblockdata.a(this.block) && random.nextFloat() < this.probability;
     }
 
     @Override
     protected DefinedStructureRuleTestType<?> a() {
-        return DefinedStructureRuleTestType.e;
+        return DefinedStructureRuleTestType.RANDOM_BLOCK_TEST;
     }
 }

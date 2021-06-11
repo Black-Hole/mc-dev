@@ -17,8 +17,8 @@ public abstract class AbstractDragonControllerLanded extends AbstractDragonContr
 
     @Override
     public float a(DamageSource damagesource, float f) {
-        if (damagesource.j() instanceof EntityArrow) {
-            damagesource.j().setOnFire(1);
+        if (damagesource.k() instanceof EntityArrow) {
+            damagesource.k().setOnFire(1);
             return 0.0F;
         } else {
             return super.a(damagesource, f);

@@ -7,10 +7,10 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class StatisticManager {
 
-    protected final Object2IntMap<Statistic<?>> a = Object2IntMaps.synchronize(new Object2IntOpenHashMap());
+    protected final Object2IntMap<Statistic<?>> stats = Object2IntMaps.synchronize(new Object2IntOpenHashMap());
 
     public StatisticManager() {
-        this.a.defaultReturnValue(0);
+        this.stats.defaultReturnValue(0);
     }
 
     public void b(EntityHuman entityhuman, Statistic<?> statistic, int i) {
@@ -20,10 +20,14 @@ public class StatisticManager {
     }
 
     public void setStatistic(EntityHuman entityhuman, Statistic<?> statistic, int i) {
-        this.a.put(statistic, i);
+        this.stats.put(statistic, i);
+    }
+
+    public <T> int a(StatisticWrapper<T> statisticwrapper, T t0) {
+        return statisticwrapper.a(t0) ? this.getStatisticValue(statisticwrapper.b(t0)) : 0;
     }
 
     public int getStatisticValue(Statistic<?> statistic) {
-        return this.a.getInt(statistic);
+        return this.stats.getInt(statistic);
     }
 }

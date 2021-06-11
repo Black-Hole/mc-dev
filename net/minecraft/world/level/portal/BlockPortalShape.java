@@ -21,21 +21,25 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BlockPortalShape {
 
-    private static final BlockBase.e a = (iblockdata, iblockaccess, blockposition) -> {
+    private static final int MIN_WIDTH = 2;
+    public static final int MAX_WIDTH = 21;
+    private static final int MIN_HEIGHT = 3;
+    public static final int MAX_HEIGHT = 21;
+    private static final BlockBase.e FRAME = (iblockdata, iblockaccess, blockposition) -> {
         return iblockdata.a(Blocks.OBSIDIAN);
     };
-    private final GeneratorAccess b;
-    private final EnumDirection.EnumAxis c;
-    private final EnumDirection d;
-    private int e;
+    private final GeneratorAccess level;
+    private final EnumDirection.EnumAxis axis;
+    private final EnumDirection rightDir;
+    private int numPortalBlocks;
     @Nullable
-    private BlockPosition position;
+    private BlockPosition bottomLeft;
     private int height;
-    private int width;
+    private final int width;
 
     public static Optional<BlockPortalShape> a(GeneratorAccess generatoraccess, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
         return a(generatoraccess, blockposition, (blockportalshape) -> {
-            return blockportalshape.a() && blockportalshape.e == 0;
+            return blockportalshape.a() && blockportalshape.numPortalBlocks == 0;
         }, enumdirection_enumaxis);
     }
 
@@ -52,12 +56,12 @@ public class BlockPortalShape {
     }
 
     public BlockPortalShape(GeneratorAccess generatoraccess, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
-        this.b = generatoraccess;
-        this.c = enumdirection_enumaxis;
-        this.d = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? EnumDirection.WEST : EnumDirection.SOUTH;
-        this.position = this.a(blockposition);
-        if (this.position == null) {
-            this.position = blockposition;
+        this.level = generatoraccess;
+        this.axis = enumdirection_enumaxis;
+        this.rightDir = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? EnumDirection.WEST : EnumDirection.SOUTH;
+        this.bottomLeft = this.a(blockposition);
+        if (this.bottomLeft == null) {
+            this.bottomLeft = blockposition;
             this.width = 1;
             this.height = 1;
         } else {
@@ -71,18 +75,18 @@ public class BlockPortalShape {
 
     @Nullable
     private BlockPosition a(BlockPosition blockposition) {
-        for (int i = Math.max(0, blockposition.getY() - 21); blockposition.getY() > i && a(this.b.getType(blockposition.down())); blockposition = blockposition.down()) {
+        for (int i = Math.max(this.level.getMinBuildHeight(), blockposition.getY() - 21); blockposition.getY() > i && a(this.level.getType(blockposition.down())); blockposition = blockposition.down()) {
             ;
         }
 
-        EnumDirection enumdirection = this.d.opposite();
+        EnumDirection enumdirection = this.rightDir.opposite();
         int j = this.a(blockposition, enumdirection) - 1;
 
         return j < 0 ? null : blockposition.shift(enumdirection, j);
     }
 
     private int d() {
-        int i = this.a(this.position, this.d);
+        int i = this.a(this.bottomLeft, this.rightDir);
 
         return i >= 2 && i <= 21 ? i : 0;
     }
@@ -92,18 +96,18 @@ public class BlockPortalShape {
 
         for (int i = 0; i <= 21; ++i) {
             blockposition_mutableblockposition.g(blockposition).c(enumdirection, i);
-            IBlockData iblockdata = this.b.getType(blockposition_mutableblockposition);
+            IBlockData iblockdata = this.level.getType(blockposition_mutableblockposition);
 
             if (!a(iblockdata)) {
-                if (BlockPortalShape.a.test(iblockdata, this.b, blockposition_mutableblockposition)) {
+                if (BlockPortalShape.FRAME.test(iblockdata, this.level, blockposition_mutableblockposition)) {
                     return i;
                 }
                 break;
             }
 
-            IBlockData iblockdata1 = this.b.getType(blockposition_mutableblockposition.c(EnumDirection.DOWN));
+            IBlockData iblockdata1 = this.level.getType(blockposition_mutableblockposition.c(EnumDirection.DOWN));
 
-            if (!BlockPortalShape.a.test(iblockdata1, this.b, blockposition_mutableblockposition)) {
+            if (!BlockPortalShape.FRAME.test(iblockdata1, this.level, blockposition_mutableblockposition)) {
                 break;
             }
         }
@@ -120,9 +124,9 @@ public class BlockPortalShape {
 
     private boolean a(BlockPosition.MutableBlockPosition blockposition_mutableblockposition, int i) {
         for (int j = 0; j < this.width; ++j) {
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = blockposition_mutableblockposition.g(this.position).c(EnumDirection.UP, i).c(this.d, j);
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = blockposition_mutableblockposition.g(this.bottomLeft).c(EnumDirection.UP, i).c(this.rightDir, j);
 
-            if (!BlockPortalShape.a.test(this.b.getType(blockposition_mutableblockposition1), this.b, blockposition_mutableblockposition1)) {
+            if (!BlockPortalShape.FRAME.test(this.level.getType(blockposition_mutableblockposition1), this.level, blockposition_mutableblockposition1)) {
                 return false;
             }
         }
@@ -132,26 +136,26 @@ public class BlockPortalShape {
 
     private int a(BlockPosition.MutableBlockPosition blockposition_mutableblockposition) {
         for (int i = 0; i < 21; ++i) {
-            blockposition_mutableblockposition.g(this.position).c(EnumDirection.UP, i).c(this.d, -1);
-            if (!BlockPortalShape.a.test(this.b.getType(blockposition_mutableblockposition), this.b, blockposition_mutableblockposition)) {
+            blockposition_mutableblockposition.g(this.bottomLeft).c(EnumDirection.UP, i).c(this.rightDir, -1);
+            if (!BlockPortalShape.FRAME.test(this.level.getType(blockposition_mutableblockposition), this.level, blockposition_mutableblockposition)) {
                 return i;
             }
 
-            blockposition_mutableblockposition.g(this.position).c(EnumDirection.UP, i).c(this.d, this.width);
-            if (!BlockPortalShape.a.test(this.b.getType(blockposition_mutableblockposition), this.b, blockposition_mutableblockposition)) {
+            blockposition_mutableblockposition.g(this.bottomLeft).c(EnumDirection.UP, i).c(this.rightDir, this.width);
+            if (!BlockPortalShape.FRAME.test(this.level.getType(blockposition_mutableblockposition), this.level, blockposition_mutableblockposition)) {
                 return i;
             }
 
             for (int j = 0; j < this.width; ++j) {
-                blockposition_mutableblockposition.g(this.position).c(EnumDirection.UP, i).c(this.d, j);
-                IBlockData iblockdata = this.b.getType(blockposition_mutableblockposition);
+                blockposition_mutableblockposition.g(this.bottomLeft).c(EnumDirection.UP, i).c(this.rightDir, j);
+                IBlockData iblockdata = this.level.getType(blockposition_mutableblockposition);
 
                 if (!a(iblockdata)) {
                     return i;
                 }
 
                 if (iblockdata.a(Blocks.NETHER_PORTAL)) {
-                    ++this.e;
+                    ++this.numPortalBlocks;
                 }
             }
         }
@@ -164,25 +168,25 @@ public class BlockPortalShape {
     }
 
     public boolean a() {
-        return this.position != null && this.width >= 2 && this.width <= 21 && this.height >= 3 && this.height <= 21;
+        return this.bottomLeft != null && this.width >= 2 && this.width <= 21 && this.height >= 3 && this.height <= 21;
     }
 
     public void createPortal() {
-        IBlockData iblockdata = (IBlockData) Blocks.NETHER_PORTAL.getBlockData().set(BlockPortal.AXIS, this.c);
+        IBlockData iblockdata = (IBlockData) Blocks.NETHER_PORTAL.getBlockData().set(BlockPortal.AXIS, this.axis);
 
-        BlockPosition.a(this.position, this.position.shift(EnumDirection.UP, this.height - 1).shift(this.d, this.width - 1)).forEach((blockposition) -> {
-            this.b.setTypeAndData(blockposition, iblockdata, 18);
+        BlockPosition.a(this.bottomLeft, this.bottomLeft.shift(EnumDirection.UP, this.height - 1).shift(this.rightDir, this.width - 1)).forEach((blockposition) -> {
+            this.level.setTypeAndData(blockposition, iblockdata, 18);
         });
     }
 
     public boolean c() {
-        return this.a() && this.e == this.width * this.height;
+        return this.a() && this.numPortalBlocks == this.width * this.height;
     }
 
     public static Vec3D a(BlockUtil.Rectangle blockutil_rectangle, EnumDirection.EnumAxis enumdirection_enumaxis, Vec3D vec3d, EntitySize entitysize) {
-        double d0 = (double) blockutil_rectangle.side1 - (double) entitysize.width;
-        double d1 = (double) blockutil_rectangle.side2 - (double) entitysize.height;
-        BlockPosition blockposition = blockutil_rectangle.origin;
+        double d0 = (double) blockutil_rectangle.axis1Size - (double) entitysize.width;
+        double d1 = (double) blockutil_rectangle.axis2Size - (double) entitysize.height;
+        BlockPosition blockposition = blockutil_rectangle.minCorner;
         double d2;
 
         if (d0 > 0.0D) {
@@ -210,11 +214,11 @@ public class BlockPortalShape {
     }
 
     public static ShapeDetectorShape a(WorldServer worldserver, BlockUtil.Rectangle blockutil_rectangle, EnumDirection.EnumAxis enumdirection_enumaxis, Vec3D vec3d, EntitySize entitysize, Vec3D vec3d1, float f, float f1) {
-        BlockPosition blockposition = blockutil_rectangle.origin;
+        BlockPosition blockposition = blockutil_rectangle.minCorner;
         IBlockData iblockdata = worldserver.getType(blockposition);
-        EnumDirection.EnumAxis enumdirection_enumaxis1 = (EnumDirection.EnumAxis) iblockdata.get(BlockProperties.E);
-        double d0 = (double) blockutil_rectangle.side1;
-        double d1 = (double) blockutil_rectangle.side2;
+        EnumDirection.EnumAxis enumdirection_enumaxis1 = (EnumDirection.EnumAxis) iblockdata.d(BlockProperties.HORIZONTAL_AXIS).orElse(EnumDirection.EnumAxis.X);
+        double d0 = (double) blockutil_rectangle.axis1Size;
+        double d1 = (double) blockutil_rectangle.axis2Size;
         int i = enumdirection_enumaxis == enumdirection_enumaxis1 ? 0 : 90;
         Vec3D vec3d2 = enumdirection_enumaxis == enumdirection_enumaxis1 ? vec3d1 : new Vec3D(vec3d1.z, vec3d1.y, -vec3d1.x);
         double d2 = (double) entitysize.width / 2.0D + (d0 - (double) entitysize.width) * vec3d.getX();

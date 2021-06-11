@@ -9,6 +9,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class CommandIdleTimeout {
 
+    public CommandIdleTimeout() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("setidletimeout").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(3);

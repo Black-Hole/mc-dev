@@ -15,12 +15,15 @@ import it.unimi.dsi.fastutil.shorts.ShortList;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class DataConverterProtoChunk extends DataFix {
+
+    private static final int NUM_SECTIONS = 16;
 
     public DataConverterProtoChunk(Schema schema, boolean flag) {
         super(schema, flag);
@@ -81,7 +84,7 @@ public class DataConverterProtoChunk extends DataFix {
                         dynamic = dynamic.set("ToBeTicked", dynamic.createList(list.stream().map((shortlist) -> {
                             Stream stream = shortlist.stream();
 
-                            dynamic.getClass();
+                            Objects.requireNonNull(dynamic);
                             return dynamic.createList(stream.map(dynamic::createShort));
                         })));
                     }

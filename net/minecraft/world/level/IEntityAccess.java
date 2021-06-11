@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.IEntitySelector;
 import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.shapes.OperatorBoolean;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -19,18 +20,18 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public interface IEntityAccess {
 
-    List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super Entity> predicate);
+    List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<? super Entity> predicate);
 
-    <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate);
+    <T extends Entity> List<T> a(EntityTypeTest<Entity, T> entitytypetest, AxisAlignedBB axisalignedbb, Predicate<? super T> predicate);
 
-    default <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
-        return this.a(oclass, axisalignedbb, predicate);
+    default <T extends Entity> List<T> a(Class<T> oclass, AxisAlignedBB axisalignedbb, Predicate<? super T> predicate) {
+        return this.a(EntityTypeTest.a(oclass), axisalignedbb, predicate);
     }
 
     List<? extends EntityHuman> getPlayers();
 
     default List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.getEntities(entity, axisalignedbb, IEntitySelector.g);
+        return this.getEntities(entity, axisalignedbb, IEntitySelector.NO_SPECTATORS);
     }
 
     default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
@@ -47,18 +48,14 @@ public interface IEntityAccess {
                 }
 
                 entity1 = (Entity) iterator.next();
-            } while (entity1.dead || !entity1.i || entity != null && entity1.isSameVehicle(entity) || !VoxelShapes.c(voxelshape, VoxelShapes.a(entity1.getBoundingBox()), OperatorBoolean.AND));
+            } while (entity1.isRemoved() || !entity1.blocksBuilding || entity != null && entity1.isSameVehicle(entity) || !VoxelShapes.c(voxelshape, VoxelShapes.a(entity1.getBoundingBox()), OperatorBoolean.AND));
 
             return false;
         }
     }
 
-    default <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
-        return this.a(oclass, axisalignedbb, IEntitySelector.g);
-    }
-
-    default <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
-        return this.b(oclass, axisalignedbb, IEntitySelector.g);
+    default <T extends Entity> List<T> a(Class<T> oclass, AxisAlignedBB axisalignedbb) {
+        return this.a(oclass, axisalignedbb, IEntitySelector.NO_SPECTATORS);
     }
 
     default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
@@ -74,10 +71,10 @@ public interface IEntityAccess {
                     label25:
                     {
                         if (entity == null) {
-                            if (!entity1.aZ()) {
+                            if (!entity1.bi()) {
                                 break label25;
                             }
-                        } else if (!entity.j(entity1)) {
+                        } else if (!entity.h(entity1)) {
                             break label25;
                         }
 
@@ -121,7 +118,7 @@ public interface IEntityAccess {
 
     @Nullable
     default EntityHuman a(double d0, double d1, double d2, double d3, boolean flag) {
-        Predicate<Entity> predicate = flag ? IEntitySelector.e : IEntitySelector.g;
+        Predicate<Entity> predicate = flag ? IEntitySelector.NO_CREATIVE_OR_SPECTATOR : IEntitySelector.NO_SPECTATORS;
 
         return this.a(d0, d1, d2, d3, predicate);
     }
@@ -141,8 +138,8 @@ public interface IEntityAccess {
                     }
 
                     entityhuman = (EntityHuman) iterator.next();
-                } while (!IEntitySelector.g.test(entityhuman));
-            } while (!IEntitySelector.b.test(entityhuman));
+                } while (!IEntitySelector.NO_SPECTATORS.test(entityhuman));
+            } while (!IEntitySelector.LIVING_ENTITY_STILL_ALIVE.test(entityhuman));
 
             d4 = entityhuman.h(d0, d1, d2);
         } while (d3 >= 0.0D && d4 >= d3 * d3);
@@ -167,12 +164,9 @@ public interface IEntityAccess {
 
     @Nullable
     default <T extends EntityLiving> T a(Class<? extends T> oclass, PathfinderTargetCondition pathfindertargetcondition, @Nullable EntityLiving entityliving, double d0, double d1, double d2, AxisAlignedBB axisalignedbb) {
-        return this.a(this.a(oclass, axisalignedbb, (Predicate) null), pathfindertargetcondition, entityliving, d0, d1, d2);
-    }
-
-    @Nullable
-    default <T extends EntityLiving> T b(Class<? extends T> oclass, PathfinderTargetCondition pathfindertargetcondition, @Nullable EntityLiving entityliving, double d0, double d1, double d2, AxisAlignedBB axisalignedbb) {
-        return this.a(this.b(oclass, axisalignedbb, (Predicate) null), pathfindertargetcondition, entityliving, d0, d1, d2);
+        return this.a(this.a(oclass, axisalignedbb, (entityliving1) -> {
+            return true;
+        }), pathfindertargetcondition, entityliving, d0, d1, d2);
     }
 
     @Nullable
@@ -212,8 +206,10 @@ public interface IEntityAccess {
         return list;
     }
 
-    default <T extends EntityLiving> List<T> a(Class<? extends T> oclass, PathfinderTargetCondition pathfindertargetcondition, EntityLiving entityliving, AxisAlignedBB axisalignedbb) {
-        List<T> list = this.a(oclass, axisalignedbb, (Predicate) null);
+    default <T extends EntityLiving> List<T> a(Class<T> oclass, PathfinderTargetCondition pathfindertargetcondition, EntityLiving entityliving, AxisAlignedBB axisalignedbb) {
+        List<T> list = this.a(oclass, axisalignedbb, (entityliving1) -> {
+            return true;
+        });
         List<T> list1 = Lists.newArrayList();
         Iterator iterator = list.iterator();
 

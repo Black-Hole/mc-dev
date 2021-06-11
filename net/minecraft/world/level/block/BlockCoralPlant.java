@@ -16,12 +16,13 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCoralPlant extends BlockCoralBase {
 
-    private final Block c;
-    protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 15.0D, 14.0D);
+    private final Block deadBlock;
+    protected static final float AABB_OFFSET = 6.0F;
+    protected static final VoxelShape SHAPE = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 15.0D, 14.0D);
 
     protected BlockCoralPlant(Block block, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.c = block;
+        this.deadBlock = block;
     }
 
     @Override
@@ -31,8 +32,8 @@ public class BlockCoralPlant extends BlockCoralBase {
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!c(iblockdata, (IBlockAccess) worldserver, blockposition)) {
-            worldserver.setTypeAndData(blockposition, (IBlockData) this.c.getBlockData().set(BlockCoralPlant.b, false), 2);
+        if (!e(iblockdata, worldserver, blockposition)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) this.deadBlock.getBlockData().set(BlockCoralPlant.WATERLOGGED, false), 2);
         }
 
     }
@@ -43,7 +44,7 @@ public class BlockCoralPlant extends BlockCoralBase {
             return Blocks.AIR.getBlockData();
         } else {
             this.a(iblockdata, generatoraccess, blockposition);
-            if ((Boolean) iblockdata.get(BlockCoralPlant.b)) {
+            if ((Boolean) iblockdata.get(BlockCoralPlant.WATERLOGGED)) {
                 generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
 
@@ -52,7 +53,7 @@ public class BlockCoralPlant extends BlockCoralBase {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCoralPlant.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCoralPlant.SHAPE;
     }
 }

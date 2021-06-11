@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -39,11 +40,11 @@ public interface ICompletionProvider {
     CompletableFuture<Suggestions> a(CommandContext<ICompletionProvider> commandcontext, SuggestionsBuilder suggestionsbuilder);
 
     default Collection<ICompletionProvider.a> s() {
-        return Collections.singleton(ICompletionProvider.a.b);
+        return Collections.singleton(ICompletionProvider.a.DEFAULT_GLOBAL);
     }
 
     default Collection<ICompletionProvider.a> t() {
-        return Collections.singleton(ICompletionProvider.a.b);
+        return Collections.singleton(ICompletionProvider.a.DEFAULT_GLOBAL);
     }
 
     Set<ResourceKey<World>> p();
@@ -120,10 +121,12 @@ public interface ICompletionProvider {
     }
 
     static CompletableFuture<Suggestions> a(Stream<MinecraftKey> stream, SuggestionsBuilder suggestionsbuilder) {
+        Objects.requireNonNull(stream);
         return a(stream::iterator, suggestionsbuilder);
     }
 
     static <T> CompletableFuture<Suggestions> a(Stream<T> stream, SuggestionsBuilder suggestionsbuilder, Function<T, MinecraftKey> function, Function<T, Message> function1) {
+        Objects.requireNonNull(stream);
         return a(stream::iterator, suggestionsbuilder, function, function1);
     }
 
@@ -135,11 +138,11 @@ public interface ICompletionProvider {
 
             while (iterator.hasNext()) {
                 ICompletionProvider.a icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                String s1 = icompletionprovider_a.c + " " + icompletionprovider_a.d + " " + icompletionprovider_a.e;
+                String s1 = icompletionprovider_a.x + " " + icompletionprovider_a.y + " " + icompletionprovider_a.z;
 
                 if (predicate.test(s1)) {
-                    list.add(icompletionprovider_a.c);
-                    list.add(icompletionprovider_a.c + " " + icompletionprovider_a.d);
+                    list.add(icompletionprovider_a.x);
+                    list.add(icompletionprovider_a.x + " " + icompletionprovider_a.y);
                     list.add(s1);
                 }
             }
@@ -154,9 +157,9 @@ public interface ICompletionProvider {
 
                 while (iterator1.hasNext()) {
                     icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
-                    s2 = astring[0] + " " + icompletionprovider_a1.d + " " + icompletionprovider_a1.e;
+                    s2 = astring[0] + " " + icompletionprovider_a1.y + " " + icompletionprovider_a1.z;
                     if (predicate.test(s2)) {
-                        list.add(astring[0] + " " + icompletionprovider_a1.d);
+                        list.add(astring[0] + " " + icompletionprovider_a1.y);
                         list.add(s2);
                     }
                 }
@@ -165,7 +168,7 @@ public interface ICompletionProvider {
 
                 while (iterator1.hasNext()) {
                     icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
-                    s2 = astring[0] + " " + astring[1] + " " + icompletionprovider_a1.e;
+                    s2 = astring[0] + " " + astring[1] + " " + icompletionprovider_a1.z;
                     if (predicate.test(s2)) {
                         list.add(s2);
                     }
@@ -184,10 +187,10 @@ public interface ICompletionProvider {
 
             while (iterator.hasNext()) {
                 ICompletionProvider.a icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                String s1 = icompletionprovider_a.c + " " + icompletionprovider_a.e;
+                String s1 = icompletionprovider_a.x + " " + icompletionprovider_a.z;
 
                 if (predicate.test(s1)) {
-                    list.add(icompletionprovider_a.c);
+                    list.add(icompletionprovider_a.x);
                     list.add(s1);
                 }
             }
@@ -199,7 +202,7 @@ public interface ICompletionProvider {
 
                 while (iterator1.hasNext()) {
                     ICompletionProvider.a icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
-                    String s2 = astring[0] + " " + icompletionprovider_a1.e;
+                    String s2 = astring[0] + " " + icompletionprovider_a1.z;
 
                     if (predicate.test(s2)) {
                         list.add(s2);
@@ -228,10 +231,12 @@ public interface ICompletionProvider {
 
     static CompletableFuture<Suggestions> b(Stream<String> stream, SuggestionsBuilder suggestionsbuilder) {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
-
-        stream.filter((s1) -> {
+        Stream stream1 = stream.filter((s1) -> {
             return a(s, s1.toLowerCase(Locale.ROOT));
-        }).forEach(suggestionsbuilder::suggest);
+        });
+
+        Objects.requireNonNull(suggestionsbuilder);
+        stream1.forEach(suggestionsbuilder::suggest);
         return suggestionsbuilder.buildFuture();
     }
 
@@ -251,6 +256,22 @@ public interface ICompletionProvider {
         return suggestionsbuilder.buildFuture();
     }
 
+    static <T> CompletableFuture<Suggestions> b(Iterable<T> iterable, SuggestionsBuilder suggestionsbuilder, Function<T, String> function, Function<T, Message> function1) {
+        String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
+        Iterator iterator = iterable.iterator();
+
+        while (iterator.hasNext()) {
+            T t0 = iterator.next();
+            String s1 = (String) function.apply(t0);
+
+            if (a(s, s1.toLowerCase(Locale.ROOT))) {
+                suggestionsbuilder.suggest(s1, (Message) function1.apply(t0));
+            }
+        }
+
+        return suggestionsbuilder.buildFuture();
+    }
+
     static boolean a(String s, String s1) {
         for (int i = 0; !s1.startsWith(s, i); ++i) {
             i = s1.indexOf(95, i);
@@ -264,16 +285,16 @@ public interface ICompletionProvider {
 
     public static class a {
 
-        public static final ICompletionProvider.a a = new ICompletionProvider.a("^", "^", "^");
-        public static final ICompletionProvider.a b = new ICompletionProvider.a("~", "~", "~");
-        public final String c;
-        public final String d;
-        public final String e;
+        public static final ICompletionProvider.a DEFAULT_LOCAL = new ICompletionProvider.a("^", "^", "^");
+        public static final ICompletionProvider.a DEFAULT_GLOBAL = new ICompletionProvider.a("~", "~", "~");
+        public final String x;
+        public final String y;
+        public final String z;
 
         public a(String s, String s1, String s2) {
-            this.c = s;
-            this.d = s1;
-            this.e = s2;
+            this.x = s;
+            this.y = s1;
+            this.z = s2;
         }
     }
 }

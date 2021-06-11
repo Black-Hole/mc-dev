@@ -5,21 +5,21 @@ import java.util.Collection;
 
 public class GameTestHarnessTicker {
 
-    public static final GameTestHarnessTicker a = new GameTestHarnessTicker();
-    private final Collection<GameTestHarnessInfo> b = Lists.newCopyOnWriteArrayList();
+    public static final GameTestHarnessTicker SINGLETON = new GameTestHarnessTicker();
+    private final Collection<GameTestHarnessInfo> testInfos = Lists.newCopyOnWriteArrayList();
 
     public GameTestHarnessTicker() {}
 
     public void a(GameTestHarnessInfo gametestharnessinfo) {
-        this.b.add(gametestharnessinfo);
+        this.testInfos.add(gametestharnessinfo);
     }
 
     public void a() {
-        this.b.clear();
+        this.testInfos.clear();
     }
 
     public void b() {
-        this.b.forEach(GameTestHarnessInfo::b);
-        this.b.removeIf(GameTestHarnessInfo::k);
+        this.testInfos.forEach(GameTestHarnessInfo::b);
+        this.testInfos.removeIf(GameTestHarnessInfo::k);
     }
 }

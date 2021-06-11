@@ -20,7 +20,7 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockLoom extends BlockFacingHorizontal {
 
-    private static final IChatBaseComponent a = new ChatMessage("container.loom");
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.loom");
 
     protected BlockLoom(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -41,12 +41,12 @@ public class BlockLoom extends BlockFacingHorizontal {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerLoom(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockLoom.a);
+        }, BlockLoom.CONTAINER_TITLE);
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockLoom.FACING, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockLoom.FACING, blockactioncontext.g().opposite());
     }
 
     @Override

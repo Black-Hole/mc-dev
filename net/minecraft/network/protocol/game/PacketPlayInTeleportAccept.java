@@ -1,23 +1,23 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInTeleportAccept implements Packet<PacketListenerPlayIn> {
 
-    private int a;
+    private final int id;
 
-    public PacketPlayInTeleportAccept() {}
+    public PacketPlayInTeleportAccept(int i) {
+        this.id = i;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
+    public PacketPlayInTeleportAccept(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -25,6 +25,6 @@ public class PacketPlayInTeleportAccept implements Packet<PacketListenerPlayIn> 
     }
 
     public int b() {
-        return this.a;
+        return this.id;
     }
 }

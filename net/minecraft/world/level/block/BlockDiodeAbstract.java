@@ -22,33 +22,33 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
-    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
-    public static final BlockStateBoolean c = BlockProperties.w;
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
 
     protected BlockDiodeAbstract(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockDiodeAbstract.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockDiodeAbstract.SHAPE;
     }
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return c((IBlockAccess) iworldreader, blockposition.down());
+        return c(iworldreader, blockposition.down());
     }
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!this.a((IWorldReader) worldserver, blockposition, iblockdata)) {
-            boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.c);
+            boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.POWERED);
             boolean flag1 = this.a((World) worldserver, blockposition, iblockdata);
 
             if (flag && !flag1) {
-                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, false), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.POWERED, false), 2);
             } else if (!flag) {
-                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, true), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.POWERED, true), 2);
                 if (!flag1) {
                     worldserver.getBlockTickList().a(blockposition, this, this.g(iblockdata), TickListPriority.VERY_HIGH);
                 }
@@ -64,7 +64,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return !(Boolean) iblockdata.get(BlockDiodeAbstract.c) ? 0 : (iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? this.b(iblockaccess, blockposition, iblockdata) : 0);
+        return !(Boolean) iblockdata.get(BlockDiodeAbstract.POWERED) ? 0 : (iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? this.b(iblockaccess, blockposition, iblockdata) : 0);
     }
 
     @Override
@@ -72,7 +72,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         if (iblockdata.canPlace(world, blockposition)) {
             this.c(world, blockposition, iblockdata);
         } else {
-            TileEntity tileentity = this.isTileEntity() ? world.getTileEntity(blockposition) : null;
+            TileEntity tileentity = iblockdata.isTileEntity() ? world.getTileEntity(blockposition) : null;
 
             a(iblockdata, (GeneratorAccess) world, blockposition, tileentity);
             world.a(blockposition, false);
@@ -90,7 +90,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     protected void c(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!this.a((IWorldReader) world, blockposition, iblockdata)) {
-            boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.c);
+            boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.POWERED);
             boolean flag1 = this.a(world, blockposition, iblockdata);
 
             if (flag != flag1 && !world.getBlockTickList().b(blockposition, this)) {
@@ -151,7 +151,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockDiodeAbstract.FACING, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockDiodeAbstract.FACING, blockactioncontext.g().opposite());
     }
 
     @Override

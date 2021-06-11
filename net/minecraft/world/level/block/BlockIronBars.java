@@ -23,7 +23,7 @@ public class BlockIronBars extends BlockTall {
 
     protected BlockIronBars(BlockBase.Info blockbase_info) {
         super(1.0F, 1.0F, 16.0F, 16.0F, 16.0F, blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIronBars.NORTH, false)).set(BlockIronBars.EAST, false)).set(BlockIronBars.SOUTH, false)).set(BlockIronBars.WEST, false)).set(BlockIronBars.e, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockIronBars.NORTH, false)).set(BlockIronBars.EAST, false)).set(BlockIronBars.SOUTH, false)).set(BlockIronBars.WEST, false)).set(BlockIronBars.WATERLOGGED, false));
     }
 
     @Override
@@ -40,31 +40,44 @@ public class BlockIronBars extends BlockTall {
         IBlockData iblockdata2 = world.getType(blockposition3);
         IBlockData iblockdata3 = world.getType(blockposition4);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockIronBars.NORTH, this.a(iblockdata, iblockdata.d(world, blockposition1, EnumDirection.SOUTH)))).set(BlockIronBars.SOUTH, this.a(iblockdata1, iblockdata1.d(world, blockposition2, EnumDirection.NORTH)))).set(BlockIronBars.WEST, this.a(iblockdata2, iblockdata2.d(world, blockposition3, EnumDirection.EAST)))).set(BlockIronBars.EAST, this.a(iblockdata3, iblockdata3.d(world, blockposition4, EnumDirection.WEST)))).set(BlockIronBars.e, fluid.getType() == FluidTypes.WATER);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockIronBars.NORTH, this.a(iblockdata, iblockdata.d(world, blockposition1, EnumDirection.SOUTH)))).set(BlockIronBars.SOUTH, this.a(iblockdata1, iblockdata1.d(world, blockposition2, EnumDirection.NORTH)))).set(BlockIronBars.WEST, this.a(iblockdata2, iblockdata2.d(world, blockposition3, EnumDirection.EAST)))).set(BlockIronBars.EAST, this.a(iblockdata3, iblockdata3.d(world, blockposition4, EnumDirection.WEST)))).set(BlockIronBars.WATERLOGGED, fluid.getType() == FluidTypes.WATER);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockIronBars.e)) {
+        if ((Boolean) iblockdata.get(BlockIronBars.WATERLOGGED)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.n().d() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.n().d() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.PROPERTY_BY_DIRECTION.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
-    public final boolean a(IBlockData iblockdata, boolean flag) {
-        Block block = iblockdata.getBlock();
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockData iblockdata1, EnumDirection enumdirection) {
+        if (iblockdata1.a((Block) this)) {
+            if (!enumdirection.n().d()) {
+                return true;
+            }
 
-        return !b(block) && flag || block instanceof BlockIronBars || block.a((Tag) TagsBlock.WALLS);
+            if ((Boolean) iblockdata.get((IBlockState) BlockIronBars.PROPERTY_BY_DIRECTION.get(enumdirection)) && (Boolean) iblockdata1.get((IBlockState) BlockIronBars.PROPERTY_BY_DIRECTION.get(enumdirection.opposite()))) {
+                return true;
+            }
+        }
+
+        return super.a(iblockdata, iblockdata1, enumdirection);
+    }
+
+    public final boolean a(IBlockData iblockdata, boolean flag) {
+        return !j(iblockdata) && flag || iblockdata.getBlock() instanceof BlockIronBars || iblockdata.a((Tag) TagsBlock.WALLS);
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockIronBars.NORTH, BlockIronBars.EAST, BlockIronBars.WEST, BlockIronBars.SOUTH, BlockIronBars.e);
+        blockstatelist_a.a(BlockIronBars.NORTH, BlockIronBars.EAST, BlockIronBars.WEST, BlockIronBars.SOUTH, BlockIronBars.WATERLOGGED);
     }
 }

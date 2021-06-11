@@ -14,11 +14,12 @@ import net.minecraft.world.entity.schedule.Activity;
 
 public class BehaviorPotentialJobSite extends Behavior<EntityVillager> {
 
-    final float b;
+    private static final int TICKS_UNTIL_TIMEOUT = 1200;
+    final float speedModifier;
 
     public BehaviorPotentialJobSite(float f) {
         super(ImmutableMap.of(MemoryModuleType.POTENTIAL_JOB_SITE, MemoryStatus.VALUE_PRESENT), 1200);
-        this.b = f;
+        this.speedModifier = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -32,7 +33,7 @@ public class BehaviorPotentialJobSite extends Behavior<EntityVillager> {
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        BehaviorUtil.a(entityvillager, ((GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get()).getBlockPosition(), this.b, 1);
+        BehaviorUtil.a(entityvillager, ((GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get()).getBlockPosition(), this.speedModifier, 1);
     }
 
     protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -43,7 +44,7 @@ public class BehaviorPotentialJobSite extends Behavior<EntityVillager> {
             WorldServer worldserver1 = worldserver.getMinecraftServer().getWorldServer(globalpos.getDimensionManager());
 
             if (worldserver1 != null) {
-                VillagePlace villageplace = worldserver1.y();
+                VillagePlace villageplace = worldserver1.A();
 
                 if (villageplace.a(blockposition, (villageplacetype) -> {
                     return true;

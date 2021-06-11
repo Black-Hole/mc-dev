@@ -6,6 +6,10 @@ public enum GenLayerZoomVoronoi implements GenLayerZoomer {
 
     INSTANCE;
 
+    private static final int ZOOM_BITS = 2;
+    private static final int ZOOM = 4;
+    private static final int ZOOM_MASK = 3;
+
     private GenLayerZoomVoronoi() {}
 
     @Override
@@ -19,43 +23,34 @@ public enum GenLayerZoomVoronoi implements GenLayerZoomer {
         double d0 = (double) (i1 & 3) / 4.0D;
         double d1 = (double) (j1 & 3) / 4.0D;
         double d2 = (double) (k1 & 3) / 4.0D;
-        double[] adouble = new double[8];
+        int k2 = 0;
+        double d3 = Double.POSITIVE_INFINITY;
 
-        int k2;
         int l2;
-        int i3;
 
-        for (k2 = 0; k2 < 8; ++k2) {
-            boolean flag = (k2 & 4) == 0;
-            boolean flag1 = (k2 & 2) == 0;
-            boolean flag2 = (k2 & 1) == 0;
+        for (l2 = 0; l2 < 8; ++l2) {
+            boolean flag = (l2 & 4) == 0;
+            boolean flag1 = (l2 & 2) == 0;
+            boolean flag2 = (l2 & 1) == 0;
+            int i3 = flag ? l1 : l1 + 1;
+            int j3 = flag1 ? i2 : i2 + 1;
+            int k3 = flag2 ? j2 : j2 + 1;
+            double d4 = flag ? d0 : d0 - 1.0D;
+            double d5 = flag1 ? d1 : d1 - 1.0D;
+            double d6 = flag2 ? d2 : d2 - 1.0D;
+            double d7 = a(i, i3, j3, k3, d4, d5, d6);
 
-            l2 = flag ? l1 : l1 + 1;
-            i3 = flag1 ? i2 : i2 + 1;
-            int j3 = flag2 ? j2 : j2 + 1;
-            double d3 = flag ? d0 : d0 - 1.0D;
-            double d4 = flag1 ? d1 : d1 - 1.0D;
-            double d5 = flag2 ? d2 : d2 - 1.0D;
-
-            adouble[k2] = a(i, l2, i3, j3, d3, d4, d5);
-        }
-
-        k2 = 0;
-        double d6 = adouble[0];
-
-        int k3;
-
-        for (k3 = 1; k3 < 8; ++k3) {
-            if (d6 > adouble[k3]) {
-                k2 = k3;
-                d6 = adouble[k3];
+            if (d3 > d7) {
+                k2 = l2;
+                d3 = d7;
             }
         }
 
-        k3 = (k2 & 4) == 0 ? l1 : l1 + 1;
-        l2 = (k2 & 2) == 0 ? i2 : i2 + 1;
-        i3 = (k2 & 1) == 0 ? j2 : j2 + 1;
-        return biomemanager_provider.getBiome(k3, l2, i3);
+        l2 = (k2 & 4) == 0 ? l1 : l1 + 1;
+        int l3 = (k2 & 2) == 0 ? i2 : i2 + 1;
+        int i4 = (k2 & 1) == 0 ? j2 : j2 + 1;
+
+        return biomemanager_provider.getBiome(l2, l3, i4);
     }
 
     private static double a(long i, int j, int k, int l, double d0, double d1, double d2) {
@@ -78,7 +73,7 @@ public enum GenLayerZoomVoronoi implements GenLayerZoomer {
     }
 
     private static double a(long i) {
-        double d0 = (double) ((int) Math.floorMod(i >> 24, 1024L)) / 1024.0D;
+        double d0 = (double) Math.floorMod(i >> 24, 1024) / 1024.0D;
 
         return (d0 - 0.5D) * 0.9D;
     }

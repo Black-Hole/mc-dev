@@ -20,11 +20,11 @@ import net.minecraft.world.entity.EnumItemSlot;
 
 public class ArgumentInventorySlot implements ArgumentType<Integer> {
 
-    private static final Collection<String> a = Arrays.asList("container.5", "12", "weapon");
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("container.5", "12", "weapon");
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_SLOT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("slot.unknown", new Object[]{object});
     });
-    private static final Map<String, Integer> c = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, Integer> SLOTS = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         int i;
 
         for (i = 0; i < 54; ++i) {
@@ -51,13 +51,13 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
             hashmap.put("horse." + i, 500 + i);
         }
 
-        hashmap.put("weapon", 98);
-        hashmap.put("weapon.mainhand", 98);
-        hashmap.put("weapon.offhand", 99);
-        hashmap.put("armor.head", 100 + EnumItemSlot.HEAD.b());
-        hashmap.put("armor.chest", 100 + EnumItemSlot.CHEST.b());
-        hashmap.put("armor.legs", 100 + EnumItemSlot.LEGS.b());
-        hashmap.put("armor.feet", 100 + EnumItemSlot.FEET.b());
+        hashmap.put("weapon", EnumItemSlot.MAINHAND.a(98));
+        hashmap.put("weapon.mainhand", EnumItemSlot.MAINHAND.a(98));
+        hashmap.put("weapon.offhand", EnumItemSlot.OFFHAND.a(98));
+        hashmap.put("armor.head", EnumItemSlot.HEAD.a(100));
+        hashmap.put("armor.chest", EnumItemSlot.CHEST.a(100));
+        hashmap.put("armor.legs", EnumItemSlot.LEGS.a(100));
+        hashmap.put("armor.feet", EnumItemSlot.FEET.a(100));
         hashmap.put("horse.saddle", 400);
         hashmap.put("horse.armor", 401);
         hashmap.put("horse.chest", 499);
@@ -76,18 +76,18 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
     public Integer parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
 
-        if (!ArgumentInventorySlot.c.containsKey(s)) {
-            throw ArgumentInventorySlot.b.create(s);
+        if (!ArgumentInventorySlot.SLOTS.containsKey(s)) {
+            throw ArgumentInventorySlot.ERROR_UNKNOWN_SLOT.create(s);
         } else {
-            return (Integer) ArgumentInventorySlot.c.get(s);
+            return (Integer) ArgumentInventorySlot.SLOTS.get(s);
         }
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.b((Iterable) ArgumentInventorySlot.c.keySet(), suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) ArgumentInventorySlot.SLOTS.keySet(), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {
-        return ArgumentInventorySlot.a;
+        return ArgumentInventorySlot.EXAMPLES;
     }
 }

@@ -2,20 +2,20 @@ package net.minecraft.network.syncher;
 
 public class DataWatcherObject<T> {
 
-    private final int a;
-    private final DataWatcherSerializer<T> b;
+    private final int id;
+    private final DataWatcherSerializer<T> serializer;
 
     public DataWatcherObject(int i, DataWatcherSerializer<T> datawatcherserializer) {
-        this.a = i;
-        this.b = datawatcherserializer;
+        this.id = i;
+        this.serializer = datawatcherserializer;
     }
 
     public int a() {
-        return this.a;
+        return this.id;
     }
 
     public DataWatcherSerializer<T> b() {
-        return this.b;
+        return this.serializer;
     }
 
     public boolean equals(Object object) {
@@ -24,17 +24,17 @@ public class DataWatcherObject<T> {
         } else if (object != null && this.getClass() == object.getClass()) {
             DataWatcherObject<?> datawatcherobject = (DataWatcherObject) object;
 
-            return this.a == datawatcherobject.a;
+            return this.id == datawatcherobject.id;
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return this.a;
+        return this.id;
     }
 
     public String toString() {
-        return "<entity data: " + this.a + ">";
+        return "<entity data: " + this.id + ">";
     }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import java.util.UUID;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
@@ -8,44 +7,62 @@ import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.decoration.EntityPainting;
+import net.minecraft.world.entity.decoration.Paintings;
 
 public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private UUID b;
-    private BlockPosition c;
-    private EnumDirection d;
-    private int e;
-
-    public PacketPlayOutSpawnEntityPainting() {}
+    private final int id;
+    private final UUID uuid;
+    private final BlockPosition pos;
+    private final EnumDirection direction;
+    private final int motive;
 
     public PacketPlayOutSpawnEntityPainting(EntityPainting entitypainting) {
-        this.a = entitypainting.getId();
-        this.b = entitypainting.getUniqueID();
-        this.c = entitypainting.getBlockPosition();
-        this.d = entitypainting.getDirection();
-        this.e = IRegistry.MOTIVE.a((Object) entitypainting.art);
+        this.id = entitypainting.getId();
+        this.uuid = entitypainting.getUniqueID();
+        this.pos = entitypainting.getBlockPosition();
+        this.direction = entitypainting.getDirection();
+        this.motive = IRegistry.MOTIVE.getId(entitypainting.motive);
+    }
+
+    public PacketPlayOutSpawnEntityPainting(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.uuid = packetdataserializer.l();
+        this.motive = packetdataserializer.j();
+        this.pos = packetdataserializer.f();
+        this.direction = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.k();
-        this.e = packetdataserializer.i();
-        this.c = packetdataserializer.e();
-        this.d = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.d(this.e);
-        packetdataserializer.a(this.c);
-        packetdataserializer.writeByte(this.d.get2DRotationValue());
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.a(this.uuid);
+        packetdataserializer.d(this.motive);
+        packetdataserializer.a(this.pos);
+        packetdataserializer.writeByte(this.direction.get2DRotationValue());
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.id;
+    }
+
+    public UUID c() {
+        return this.uuid;
+    }
+
+    public BlockPosition d() {
+        return this.pos;
+    }
+
+    public EnumDirection e() {
+        return this.direction;
+    }
+
+    public Paintings f() {
+        return (Paintings) IRegistry.MOTIVE.fromId(this.motive);
     }
 }

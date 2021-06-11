@@ -4,7 +4,9 @@ import java.util.Random;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.level.GeneratorAccess;
@@ -21,16 +23,18 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockLeaves extends Block {
 
-    public static final BlockStateInteger DISTANCE = BlockProperties.an;
-    public static final BlockStateBoolean PERSISTENT = BlockProperties.v;
+    public static final int DECAY_DISTANCE = 7;
+    public static final BlockStateInteger DISTANCE = BlockProperties.DISTANCE;
+    public static final BlockStateBoolean PERSISTENT = BlockProperties.PERSISTENT;
+    private static final int TICK_DELAY = 1;
 
     public BlockLeaves(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLeaves.DISTANCE, 7)).set(BlockLeaves.PERSISTENT, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockLeaves.DISTANCE, 7)).set(BlockLeaves.PERSISTENT, false));
     }
 
     @Override
-    public VoxelShape e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return VoxelShapes.a();
     }
 
@@ -54,7 +58,7 @@ public class BlockLeaves extends Block {
     }
 
     @Override
-    public int f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public int g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return 1;
     }
 
@@ -89,7 +93,25 @@ public class BlockLeaves extends Block {
     }
 
     private static int h(IBlockData iblockdata) {
-        return TagsBlock.LOGS.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? (Integer) iblockdata.get(BlockLeaves.DISTANCE) : 7);
+        return iblockdata.a((Tag) TagsBlock.LOGS) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? (Integer) iblockdata.get(BlockLeaves.DISTANCE) : 7);
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (world.isRainingAt(blockposition.up())) {
+            if (random.nextInt(15) == 1) {
+                BlockPosition blockposition1 = blockposition.down();
+                IBlockData iblockdata1 = world.getType(blockposition1);
+
+                if (!iblockdata1.l() || !iblockdata1.d(world, blockposition1, EnumDirection.UP)) {
+                    double d0 = (double) blockposition.getX() + random.nextDouble();
+                    double d1 = (double) blockposition.getY() - 0.05D;
+                    double d2 = (double) blockposition.getZ() + random.nextDouble();
+
+                    world.addParticle(Particles.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+        }
     }
 
     @Override

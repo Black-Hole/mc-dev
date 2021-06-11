@@ -11,7 +11,6 @@ import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -20,10 +19,15 @@ import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.EntitySize;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.World;
 import net.minecraft.world.phys.AxisAlignedBB;
+import net.minecraft.world.phys.Vec3D;
 
 public class EntityLeash extends EntityHanging {
+
+    public static final double OFFSET_Y = 0.375D;
 
     public EntityLeash(EntityTypes<? extends EntityLeash> entitytypes, World world) {
         super(entitytypes, world);
@@ -31,23 +35,16 @@ public class EntityLeash extends EntityHanging {
 
     public EntityLeash(World world, BlockPosition blockposition) {
         super(EntityTypes.LEASH_KNOT, world, blockposition);
-        this.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
-        float f = 0.125F;
-        float f1 = 0.1875F;
-        float f2 = 0.25F;
-
-        this.a(new AxisAlignedBB(this.locX() - 0.1875D, this.locY() - 0.25D + 0.125D, this.locZ() - 0.1875D, this.locX() + 0.1875D, this.locY() + 0.25D + 0.125D, this.locZ() + 0.1875D));
-        this.attachedToPlayer = true;
-    }
-
-    @Override
-    public void setPosition(double d0, double d1, double d2) {
-        super.setPosition((double) MathHelper.floor(d0) + 0.5D, (double) MathHelper.floor(d1) + 0.5D, (double) MathHelper.floor(d2) + 0.5D);
+        this.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
     }
 
     @Override
     protected void updateBoundingBox() {
-        this.setPositionRaw((double) this.blockPosition.getX() + 0.5D, (double) this.blockPosition.getY() + 0.5D, (double) this.blockPosition.getZ() + 0.5D);
+        this.setPositionRaw((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.375D, (double) this.pos.getZ() + 0.5D);
+        double d0 = (double) this.getEntityType().k() / 2.0D;
+        double d1 = (double) this.getEntityType().l();
+
+        this.a(new AxisAlignedBB(this.locX() - d0, this.locY(), this.locZ() - d0, this.locX() + d0, this.locY() + d1, this.locZ() + d0));
     }
 
     @Override
@@ -65,12 +62,17 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     protected float getHeadHeight(EntityPose entitypose, EntitySize entitysize) {
-        return -0.0625F;
+        return 0.0625F;
+    }
+
+    @Override
+    public boolean a(double d0) {
+        return d0 < 1024.0D;
     }
 
     @Override
     public void a(@Nullable Entity entity) {
-        this.playSound(SoundEffects.ENTITY_LEASH_KNOT_BREAK, 1.0F, 1.0F);
+        this.playSound(SoundEffects.LEASH_KNOT_BREAK, 1.0F, 1.0F);
     }
 
     @Override
@@ -81,12 +83,12 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
-        if (this.world.isClientSide) {
+        if (this.level.isClientSide) {
             return EnumInteractionResult.SUCCESS;
         } else {
             boolean flag = false;
             double d0 = 7.0D;
-            List<EntityInsentient> list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX() - 7.0D, this.locY() - 7.0D, this.locZ() - 7.0D, this.locX() + 7.0D, this.locY() + 7.0D, this.locZ() + 7.0D));
+            List<EntityInsentient> list = this.level.a(EntityInsentient.class, new AxisAlignedBB(this.locX() - 7.0D, this.locY() - 7.0D, this.locZ() - 7.0D, this.locX() + 7.0D, this.locY() + 7.0D, this.locZ() + 7.0D));
             Iterator iterator = list.iterator();
 
             EntityInsentient entityinsentient;
@@ -101,7 +103,7 @@ public class EntityLeash extends EntityHanging {
 
             if (!flag) {
                 this.die();
-                if (entityhuman.abilities.canInstantlyBuild) {
+                if (entityhuman.getAbilities().instabuild) {
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
@@ -119,10 +121,10 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     public boolean survives() {
-        return this.world.getType(this.blockPosition).getBlock().a((Tag) TagsBlock.FENCES);
+        return this.level.getType(this.pos).a((Tag) TagsBlock.FENCES);
     }
 
-    public static EntityLeash a(World world, BlockPosition blockposition) {
+    public static EntityLeash b(World world, BlockPosition blockposition) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -136,7 +138,6 @@ public class EntityLeash extends EntityHanging {
                 EntityLeash entityleash1 = new EntityLeash(world, blockposition);
 
                 world.addEntity(entityleash1);
-                entityleash1.playPlaceSound();
                 return entityleash1;
             }
 
@@ -148,11 +149,21 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     public void playPlaceSound() {
-        this.playSound(SoundEffects.ENTITY_LEASH_KNOT_PLACE, 1.0F, 1.0F);
+        this.playSound(SoundEffects.LEASH_KNOT_PLACE, 1.0F, 1.0F);
     }
 
     @Override
-    public Packet<?> P() {
+    public Packet<?> getPacket() {
         return new PacketPlayOutSpawnEntity(this, this.getEntityType(), 0, this.getBlockPosition());
+    }
+
+    @Override
+    public Vec3D n(float f) {
+        return this.k(f).add(0.0D, 0.2D, 0.0D);
+    }
+
+    @Override
+    public ItemStack df() {
+        return new ItemStack(Items.LEAD);
     }
 }

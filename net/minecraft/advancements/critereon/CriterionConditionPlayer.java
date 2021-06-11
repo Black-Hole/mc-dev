@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.advancements.Advancement;
@@ -29,16 +30,24 @@ import net.minecraft.stats.Statistic;
 import net.minecraft.stats.StatisticWrapper;
 import net.minecraft.util.ChatDeserializer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ProjectileHelper;
 import net.minecraft.world.level.EnumGamemode;
+import net.minecraft.world.phys.AxisAlignedBB;
+import net.minecraft.world.phys.MovingObjectPosition;
+import net.minecraft.world.phys.MovingObjectPositionEntity;
+import net.minecraft.world.phys.Vec3D;
 
 public class CriterionConditionPlayer {
 
-    public static final CriterionConditionPlayer a = (new CriterionConditionPlayer.d()).b();
-    private final CriterionConditionValue.IntegerRange b;
-    private final EnumGamemode c;
-    private final Map<Statistic<?>, CriterionConditionValue.IntegerRange> d;
-    private final Object2BooleanMap<MinecraftKey> e;
-    private final Map<MinecraftKey, CriterionConditionPlayer.c> f;
+    public static final CriterionConditionPlayer ANY = (new CriterionConditionPlayer.d()).b();
+    public static final int LOOKING_AT_RANGE = 100;
+    private final CriterionConditionValue.IntegerRange level;
+    @Nullable
+    private final EnumGamemode gameType;
+    private final Map<Statistic<?>, CriterionConditionValue.IntegerRange> stats;
+    private final Object2BooleanMap<MinecraftKey> recipes;
+    private final Map<MinecraftKey, CriterionConditionPlayer.c> advancements;
+    private final CriterionConditionEntity lookingAt;
 
     private static CriterionConditionPlayer.c b(JsonElement jsonelement) {
         if (jsonelement.isJsonPrimitive()) {
@@ -52,35 +61,36 @@ public class CriterionConditionPlayer {
             jsonobject.entrySet().forEach((entry) -> {
                 boolean flag1 = ChatDeserializer.c((JsonElement) entry.getValue(), "criterion test");
 
-                object2booleanmap.put(entry.getKey(), flag1);
+                object2booleanmap.put((String) entry.getKey(), flag1);
             });
             return new CriterionConditionPlayer.a(object2booleanmap);
         }
     }
 
-    private CriterionConditionPlayer(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, EnumGamemode enumgamemode, Map<Statistic<?>, CriterionConditionValue.IntegerRange> map, Object2BooleanMap<MinecraftKey> object2booleanmap, Map<MinecraftKey, CriterionConditionPlayer.c> map1) {
-        this.b = criterionconditionvalue_integerrange;
-        this.c = enumgamemode;
-        this.d = map;
-        this.e = object2booleanmap;
-        this.f = map1;
+    CriterionConditionPlayer(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, @Nullable EnumGamemode enumgamemode, Map<Statistic<?>, CriterionConditionValue.IntegerRange> map, Object2BooleanMap<MinecraftKey> object2booleanmap, Map<MinecraftKey, CriterionConditionPlayer.c> map1, CriterionConditionEntity criterionconditionentity) {
+        this.level = criterionconditionvalue_integerrange;
+        this.gameType = enumgamemode;
+        this.stats = map;
+        this.recipes = object2booleanmap;
+        this.advancements = map1;
+        this.lookingAt = criterionconditionentity;
     }
 
     public boolean a(Entity entity) {
-        if (this == CriterionConditionPlayer.a) {
+        if (this == CriterionConditionPlayer.ANY) {
             return true;
         } else if (!(entity instanceof EntityPlayer)) {
             return false;
         } else {
             EntityPlayer entityplayer = (EntityPlayer) entity;
 
-            if (!this.b.d(entityplayer.expLevel)) {
+            if (!this.level.d(entityplayer.experienceLevel)) {
                 return false;
-            } else if (this.c != EnumGamemode.NOT_SET && this.c != entityplayer.playerInteractManager.getGameMode()) {
+            } else if (this.gameType != null && this.gameType != entityplayer.gameMode.getGameMode()) {
                 return false;
             } else {
                 ServerStatisticManager serverstatisticmanager = entityplayer.getStatisticManager();
-                Iterator iterator = this.d.entrySet().iterator();
+                Iterator iterator = this.stats.entrySet().iterator();
 
                 while (iterator.hasNext()) {
                     Entry<Statistic<?>, CriterionConditionValue.IntegerRange> entry = (Entry) iterator.next();
@@ -92,7 +102,7 @@ public class CriterionConditionPlayer {
                 }
 
                 RecipeBookServer recipebookserver = entityplayer.getRecipeBook();
-                ObjectIterator objectiterator = this.e.object2BooleanEntrySet().iterator();
+                ObjectIterator objectiterator = this.recipes.object2BooleanEntrySet().iterator();
 
                 while (objectiterator.hasNext()) {
                     it.unimi.dsi.fastutil.objects.Object2BooleanMap.Entry<MinecraftKey> it_unimi_dsi_fastutil_objects_object2booleanmap_entry = (it.unimi.dsi.fastutil.objects.Object2BooleanMap.Entry) objectiterator.next();
@@ -102,10 +112,10 @@ public class CriterionConditionPlayer {
                     }
                 }
 
-                if (!this.f.isEmpty()) {
+                if (!this.advancements.isEmpty()) {
                     AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
                     AdvancementDataWorld advancementdataworld = entityplayer.getMinecraftServer().getAdvancementData();
-                    Iterator iterator1 = this.f.entrySet().iterator();
+                    Iterator iterator1 = this.advancements.entrySet().iterator();
 
                     while (iterator1.hasNext()) {
                         Entry<MinecraftKey, CriterionConditionPlayer.c> entry1 = (Entry) iterator1.next();
@@ -114,6 +124,25 @@ public class CriterionConditionPlayer {
                         if (advancement == null || !((CriterionConditionPlayer.c) entry1.getValue()).test(advancementdataplayer.getProgress(advancement))) {
                             return false;
                         }
+                    }
+                }
+
+                if (this.lookingAt != CriterionConditionEntity.ANY) {
+                    Vec3D vec3d = entityplayer.bb();
+                    Vec3D vec3d1 = entityplayer.e(1.0F);
+                    Vec3D vec3d2 = vec3d.add(vec3d1.x * 100.0D, vec3d1.y * 100.0D, vec3d1.z * 100.0D);
+                    MovingObjectPositionEntity movingobjectpositionentity = ProjectileHelper.a(entityplayer.level, entityplayer, vec3d, vec3d2, (new AxisAlignedBB(vec3d, vec3d2)).g(1.0D), (entity1) -> {
+                        return !entity1.isSpectator();
+                    }, 0.0F);
+
+                    if (movingobjectpositionentity == null || movingobjectpositionentity.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+                        return false;
+                    }
+
+                    Entity entity1 = movingobjectpositionentity.getEntity();
+
+                    if (!this.lookingAt.a(entityplayer, entity1) || !entityplayer.hasLineOfSight(entity1)) {
+                        return false;
                     }
                 }
 
@@ -127,7 +156,7 @@ public class CriterionConditionPlayer {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "player");
             CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("level"));
             String s = ChatDeserializer.a(jsonobject, "gamemode", "");
-            EnumGamemode enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
+            EnumGamemode enumgamemode = EnumGamemode.a(s, (EnumGamemode) null);
             Map<Statistic<?>, CriterionConditionValue.IntegerRange> map = Maps.newHashMap();
             JsonArray jsonarray = ChatDeserializer.a(jsonobject, "stats", (JsonArray) null);
 
@@ -138,7 +167,7 @@ public class CriterionConditionPlayer {
                     JsonElement jsonelement1 = (JsonElement) iterator.next();
                     JsonObject jsonobject1 = ChatDeserializer.m(jsonelement1, "stats entry");
                     MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject1, "type"));
-                    StatisticWrapper<?> statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(minecraftkey);
+                    StatisticWrapper<?> statisticwrapper = (StatisticWrapper) IRegistry.STAT_TYPE.get(minecraftkey);
 
                     if (statisticwrapper == null) {
                         throw new JsonParseException("Invalid stat type: " + minecraftkey);
@@ -176,9 +205,11 @@ public class CriterionConditionPlayer {
                 map1.put(minecraftkey3, criterionconditionplayer_c);
             }
 
-            return new CriterionConditionPlayer(criterionconditionvalue_integerrange, enumgamemode, map, object2booleanmap, map1);
+            CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("looking_at"));
+
+            return new CriterionConditionPlayer(criterionconditionvalue_integerrange, enumgamemode, map, object2booleanmap, map1, criterionconditionentity);
         } else {
-            return CriterionConditionPlayer.a;
+            return CriterionConditionPlayer.ANY;
         }
     }
 
@@ -187,7 +218,7 @@ public class CriterionConditionPlayer {
         T t0 = iregistry.get(minecraftkey);
 
         if (t0 == null) {
-            throw new JsonParseException("Unknown object " + minecraftkey + " for stat type " + IRegistry.STATS.getKey(statisticwrapper));
+            throw new JsonParseException("Unknown object " + minecraftkey + " for stat type " + IRegistry.STAT_TYPE.getKey(statisticwrapper));
         } else {
             return statisticwrapper.b(t0);
         }
@@ -198,23 +229,23 @@ public class CriterionConditionPlayer {
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionPlayer.a) {
+        if (this == CriterionConditionPlayer.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("level", this.b.d());
-            if (this.c != EnumGamemode.NOT_SET) {
-                jsonobject.addProperty("gamemode", this.c.b());
+            jsonobject.add("level", this.level.d());
+            if (this.gameType != null) {
+                jsonobject.addProperty("gamemode", this.gameType.b());
             }
 
-            if (!this.d.isEmpty()) {
+            if (!this.stats.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
 
-                this.d.forEach((statistic, criterionconditionvalue_integerrange) -> {
+                this.stats.forEach((statistic, criterionconditionvalue_integerrange) -> {
                     JsonObject jsonobject1 = new JsonObject();
 
-                    jsonobject1.addProperty("type", IRegistry.STATS.getKey(statistic.getWrapper()).toString());
+                    jsonobject1.addProperty("type", IRegistry.STAT_TYPE.getKey(statistic.getWrapper()).toString());
                     jsonobject1.addProperty("stat", a(statistic).toString());
                     jsonobject1.add("value", criterionconditionvalue_integerrange.d());
                     jsonarray.add(jsonobject1);
@@ -224,65 +255,65 @@ public class CriterionConditionPlayer {
 
             JsonObject jsonobject1;
 
-            if (!this.e.isEmpty()) {
+            if (!this.recipes.isEmpty()) {
                 jsonobject1 = new JsonObject();
-                this.e.forEach((minecraftkey, obool) -> {
+                this.recipes.forEach((minecraftkey, obool) -> {
                     jsonobject1.addProperty(minecraftkey.toString(), obool);
                 });
                 jsonobject.add("recipes", jsonobject1);
             }
 
-            if (!this.f.isEmpty()) {
+            if (!this.advancements.isEmpty()) {
                 jsonobject1 = new JsonObject();
-                this.f.forEach((minecraftkey, criterionconditionplayer_c) -> {
+                this.advancements.forEach((minecraftkey, criterionconditionplayer_c) -> {
                     jsonobject1.add(minecraftkey.toString(), criterionconditionplayer_c.a());
                 });
                 jsonobject.add("advancements", jsonobject1);
             }
 
+            jsonobject.add("looking_at", this.lookingAt.a());
             return jsonobject;
         }
     }
 
-    public static class d {
+    private static class b implements CriterionConditionPlayer.c {
 
-        private CriterionConditionValue.IntegerRange a;
-        private EnumGamemode b;
-        private final Map<Statistic<?>, CriterionConditionValue.IntegerRange> c;
-        private final Object2BooleanMap<MinecraftKey> d;
-        private final Map<MinecraftKey, CriterionConditionPlayer.c> e;
+        private final boolean state;
 
-        public d() {
-            this.a = CriterionConditionValue.IntegerRange.e;
-            this.b = EnumGamemode.NOT_SET;
-            this.c = Maps.newHashMap();
-            this.d = new Object2BooleanOpenHashMap();
-            this.e = Maps.newHashMap();
+        public b(boolean flag) {
+            this.state = flag;
         }
 
-        public CriterionConditionPlayer b() {
-            return new CriterionConditionPlayer(this.a, this.b, this.c, this.d, this.e);
+        @Override
+        public JsonElement a() {
+            return new JsonPrimitive(this.state);
+        }
+
+        public boolean test(AdvancementProgress advancementprogress) {
+            return advancementprogress.isDone() == this.state;
         }
     }
 
-    static class a implements CriterionConditionPlayer.c {
+    private static class a implements CriterionConditionPlayer.c {
 
-        private final Object2BooleanMap<String> a;
+        private final Object2BooleanMap<String> criterions;
 
         public a(Object2BooleanMap<String> object2booleanmap) {
-            this.a = object2booleanmap;
+            this.criterions = object2booleanmap;
         }
 
         @Override
         public JsonElement a() {
             JsonObject jsonobject = new JsonObject();
+            Object2BooleanMap object2booleanmap = this.criterions;
 
-            this.a.forEach(jsonobject::addProperty);
+            Objects.requireNonNull(jsonobject);
+            object2booleanmap.forEach(jsonobject::addProperty);
             return jsonobject;
         }
 
         public boolean test(AdvancementProgress advancementprogress) {
-            ObjectIterator objectiterator = this.a.object2BooleanEntrySet().iterator();
+            ObjectIterator objectiterator = this.criterions.object2BooleanEntrySet().iterator();
 
             it.unimi.dsi.fastutil.objects.Object2BooleanMap.Entry it_unimi_dsi_fastutil_objects_object2booleanmap_entry;
             CriterionProgress criterionprogress;
@@ -300,26 +331,70 @@ public class CriterionConditionPlayer {
         }
     }
 
-    static class b implements CriterionConditionPlayer.c {
-
-        private final boolean a;
-
-        public b(boolean flag) {
-            this.a = flag;
-        }
-
-        @Override
-        public JsonElement a() {
-            return new JsonPrimitive(this.a);
-        }
-
-        public boolean test(AdvancementProgress advancementprogress) {
-            return advancementprogress.isDone() == this.a;
-        }
-    }
-
-    interface c extends Predicate<AdvancementProgress> {
+    private interface c extends Predicate<AdvancementProgress> {
 
         JsonElement a();
+    }
+
+    public static class d {
+
+        private CriterionConditionValue.IntegerRange level;
+        @Nullable
+        private EnumGamemode gameType;
+        private final Map<Statistic<?>, CriterionConditionValue.IntegerRange> stats;
+        private final Object2BooleanMap<MinecraftKey> recipes;
+        private final Map<MinecraftKey, CriterionConditionPlayer.c> advancements;
+        private CriterionConditionEntity lookingAt;
+
+        public d() {
+            this.level = CriterionConditionValue.IntegerRange.ANY;
+            this.stats = Maps.newHashMap();
+            this.recipes = new Object2BooleanOpenHashMap();
+            this.advancements = Maps.newHashMap();
+            this.lookingAt = CriterionConditionEntity.ANY;
+        }
+
+        public static CriterionConditionPlayer.d a() {
+            return new CriterionConditionPlayer.d();
+        }
+
+        public CriterionConditionPlayer.d a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.level = criterionconditionvalue_integerrange;
+            return this;
+        }
+
+        public CriterionConditionPlayer.d a(Statistic<?> statistic, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.stats.put(statistic, criterionconditionvalue_integerrange);
+            return this;
+        }
+
+        public CriterionConditionPlayer.d a(MinecraftKey minecraftkey, boolean flag) {
+            this.recipes.put(minecraftkey, flag);
+            return this;
+        }
+
+        public CriterionConditionPlayer.d a(EnumGamemode enumgamemode) {
+            this.gameType = enumgamemode;
+            return this;
+        }
+
+        public CriterionConditionPlayer.d a(CriterionConditionEntity criterionconditionentity) {
+            this.lookingAt = criterionconditionentity;
+            return this;
+        }
+
+        public CriterionConditionPlayer.d b(MinecraftKey minecraftkey, boolean flag) {
+            this.advancements.put(minecraftkey, new CriterionConditionPlayer.b(flag));
+            return this;
+        }
+
+        public CriterionConditionPlayer.d a(MinecraftKey minecraftkey, Map<String, Boolean> map) {
+            this.advancements.put(minecraftkey, new CriterionConditionPlayer.a(new Object2BooleanOpenHashMap(map)));
+            return this;
+        }
+
+        public CriterionConditionPlayer b() {
+            return new CriterionConditionPlayer(this.level, this.gameType, this.stats, this.recipes, this.advancements, this.lookingAt);
+        }
     }
 }

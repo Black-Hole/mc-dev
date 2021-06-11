@@ -26,7 +26,7 @@ public class ItemBlockWallable extends ItemBlock {
         IBlockData iblockdata1 = null;
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {

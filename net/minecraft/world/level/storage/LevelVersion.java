@@ -6,18 +6,18 @@ import net.minecraft.SharedConstants;
 
 public class LevelVersion {
 
-    private final int a;
-    private final long b;
-    private final String c;
-    private final int d;
-    private final boolean e;
+    private final int levelDataVersion;
+    private final long lastPlayed;
+    private final String minecraftVersionName;
+    private final int minecraftVersion;
+    private final boolean snapshot;
 
     public LevelVersion(int i, long j, String s, int k, boolean flag) {
-        this.a = i;
-        this.b = j;
-        this.c = s;
-        this.d = k;
-        this.e = flag;
+        this.levelDataVersion = i;
+        this.lastPlayed = j;
+        this.minecraftVersionName = s;
+        this.minecraftVersion = k;
+        this.snapshot = flag;
     }
 
     public static LevelVersion a(Dynamic<?> dynamic) {
@@ -29,10 +29,22 @@ public class LevelVersion {
     }
 
     public int a() {
-        return this.a;
+        return this.levelDataVersion;
     }
 
     public long b() {
-        return this.b;
+        return this.lastPlayed;
+    }
+
+    public String c() {
+        return this.minecraftVersionName;
+    }
+
+    public int d() {
+        return this.minecraftVersion;
+    }
+
+    public boolean e() {
+        return this.snapshot;
     }
 }

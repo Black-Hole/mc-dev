@@ -1,8 +1,11 @@
 package net.minecraft.util.profiling;
 
 import java.util.function.Supplier;
+import net.minecraft.util.profiling.metrics.MetricCategory;
 
 public interface GameProfilerFiller {
+
+    String ROOT = "root";
 
     void a();
 
@@ -16,12 +19,16 @@ public interface GameProfilerFiller {
 
     void exitEnter(String s);
 
+    void b(Supplier<String> supplier);
+
+    void a(MetricCategory metriccategory);
+
     void c(String s);
 
     void c(Supplier<String> supplier);
 
     static GameProfilerFiller a(final GameProfilerFiller gameprofilerfiller, final GameProfilerFiller gameprofilerfiller1) {
-        return gameprofilerfiller == GameProfilerDisabled.a ? gameprofilerfiller1 : (gameprofilerfiller1 == GameProfilerDisabled.a ? gameprofilerfiller : new GameProfilerFiller() {
+        return gameprofilerfiller == GameProfilerDisabled.INSTANCE ? gameprofilerfiller1 : (gameprofilerfiller1 == GameProfilerDisabled.INSTANCE ? gameprofilerfiller : new GameProfilerFiller() {
             @Override
             public void a() {
                 gameprofilerfiller.a();
@@ -47,6 +54,12 @@ public interface GameProfilerFiller {
             }
 
             @Override
+            public void a(MetricCategory metriccategory) {
+                gameprofilerfiller.a(metriccategory);
+                gameprofilerfiller1.a(metriccategory);
+            }
+
+            @Override
             public void exit() {
                 gameprofilerfiller.exit();
                 gameprofilerfiller1.exit();
@@ -56,6 +69,12 @@ public interface GameProfilerFiller {
             public void exitEnter(String s) {
                 gameprofilerfiller.exitEnter(s);
                 gameprofilerfiller1.exitEnter(s);
+            }
+
+            @Override
+            public void b(Supplier<String> supplier) {
+                gameprofilerfiller.b(supplier);
+                gameprofilerfiller1.b(supplier);
             }
 
             @Override

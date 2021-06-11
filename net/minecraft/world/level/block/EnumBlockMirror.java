@@ -2,15 +2,19 @@ package net.minecraft.world.level.block;
 
 import com.mojang.math.PointGroupO;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
 
 public enum EnumBlockMirror {
 
-    NONE(PointGroupO.IDENTITY), LEFT_RIGHT(PointGroupO.INVERT_Z), FRONT_BACK(PointGroupO.INVERT_X);
+    NONE(new ChatMessage("mirror.none"), PointGroupO.IDENTITY), LEFT_RIGHT(new ChatMessage("mirror.left_right"), PointGroupO.INVERT_Z), FRONT_BACK(new ChatMessage("mirror.front_back"), PointGroupO.INVERT_X);
 
-    private final PointGroupO d;
+    private final IChatBaseComponent symbol;
+    private final PointGroupO rotation;
 
-    private EnumBlockMirror(PointGroupO pointgroupo) {
-        this.d = pointgroupo;
+    private EnumBlockMirror(IChatBaseComponent ichatbasecomponent, PointGroupO pointgroupo) {
+        this.symbol = ichatbasecomponent;
+        this.rotation = pointgroupo;
     }
 
     public int a(int i, int j) {
@@ -38,6 +42,10 @@ public enum EnumBlockMirror {
     }
 
     public PointGroupO a() {
-        return this.d;
+        return this.rotation;
+    }
+
+    public IChatBaseComponent b() {
+        return this.symbol;
     }
 }

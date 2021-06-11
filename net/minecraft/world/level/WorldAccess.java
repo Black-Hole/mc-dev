@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 
 public interface WorldAccess extends GeneratorAccess {
 
-    WorldServer getMinecraftWorld();
+    WorldServer getLevel();
 
     default void addAllEntities(Entity entity) {
         entity.recursiveStream().forEach(this::addEntity);

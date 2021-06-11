@@ -1,41 +1,52 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
 
 public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private PacketPlayInEntityAction.EnumPlayerAction animation;
-    private int c;
+    private final int id;
+    private final PacketPlayInEntityAction.EnumPlayerAction action;
+    private final int data;
 
-    public PacketPlayInEntityAction() {}
+    public PacketPlayInEntityAction(Entity entity, PacketPlayInEntityAction.EnumPlayerAction packetplayinentityaction_enumplayeraction) {
+        this(entity, packetplayinentityaction_enumplayeraction, 0);
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.animation = (PacketPlayInEntityAction.EnumPlayerAction) packetdataserializer.a(PacketPlayInEntityAction.EnumPlayerAction.class);
-        this.c = packetdataserializer.i();
+    public PacketPlayInEntityAction(Entity entity, PacketPlayInEntityAction.EnumPlayerAction packetplayinentityaction_enumplayeraction, int i) {
+        this.id = entity.getId();
+        this.action = packetplayinentityaction_enumplayeraction;
+        this.data = i;
+    }
+
+    public PacketPlayInEntityAction(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.action = (PacketPlayInEntityAction.EnumPlayerAction) packetdataserializer.a(PacketPlayInEntityAction.EnumPlayerAction.class);
+        this.data = packetdataserializer.j();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.a((Enum) this.animation);
-        packetdataserializer.d(this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.a((Enum) this.action);
+        packetdataserializer.d(this.data);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
     }
 
+    public int b() {
+        return this.id;
+    }
+
     public PacketPlayInEntityAction.EnumPlayerAction c() {
-        return this.animation;
+        return this.action;
     }
 
     public int d() {
-        return this.c;
+        return this.data;
     }
 
     public static enum EnumPlayerAction {

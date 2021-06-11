@@ -7,92 +7,94 @@ import net.minecraft.resources.MinecraftKey;
 
 public class LootTables {
 
-    private static final Set<MinecraftKey> az = Sets.newHashSet();
-    private static final Set<MinecraftKey> aA = Collections.unmodifiableSet(LootTables.az);
-    public static final MinecraftKey a = new MinecraftKey("empty");
-    public static final MinecraftKey b = a("chests/spawn_bonus_chest");
-    public static final MinecraftKey c = a("chests/end_city_treasure");
-    public static final MinecraftKey d = a("chests/simple_dungeon");
-    public static final MinecraftKey e = a("chests/village/village_weaponsmith");
-    public static final MinecraftKey f = a("chests/village/village_toolsmith");
-    public static final MinecraftKey g = a("chests/village/village_armorer");
-    public static final MinecraftKey h = a("chests/village/village_cartographer");
-    public static final MinecraftKey i = a("chests/village/village_mason");
-    public static final MinecraftKey j = a("chests/village/village_shepherd");
-    public static final MinecraftKey k = a("chests/village/village_butcher");
-    public static final MinecraftKey l = a("chests/village/village_fletcher");
-    public static final MinecraftKey m = a("chests/village/village_fisher");
-    public static final MinecraftKey n = a("chests/village/village_tannery");
-    public static final MinecraftKey o = a("chests/village/village_temple");
-    public static final MinecraftKey p = a("chests/village/village_desert_house");
-    public static final MinecraftKey q = a("chests/village/village_plains_house");
-    public static final MinecraftKey r = a("chests/village/village_taiga_house");
-    public static final MinecraftKey s = a("chests/village/village_snowy_house");
-    public static final MinecraftKey t = a("chests/village/village_savanna_house");
-    public static final MinecraftKey u = a("chests/abandoned_mineshaft");
-    public static final MinecraftKey v = a("chests/nether_bridge");
-    public static final MinecraftKey w = a("chests/stronghold_library");
-    public static final MinecraftKey x = a("chests/stronghold_crossing");
-    public static final MinecraftKey y = a("chests/stronghold_corridor");
-    public static final MinecraftKey z = a("chests/desert_pyramid");
-    public static final MinecraftKey A = a("chests/jungle_temple");
-    public static final MinecraftKey B = a("chests/jungle_temple_dispenser");
-    public static final MinecraftKey C = a("chests/igloo_chest");
-    public static final MinecraftKey D = a("chests/woodland_mansion");
-    public static final MinecraftKey E = a("chests/underwater_ruin_small");
-    public static final MinecraftKey F = a("chests/underwater_ruin_big");
-    public static final MinecraftKey G = a("chests/buried_treasure");
-    public static final MinecraftKey H = a("chests/shipwreck_map");
-    public static final MinecraftKey I = a("chests/shipwreck_supply");
-    public static final MinecraftKey J = a("chests/shipwreck_treasure");
-    public static final MinecraftKey K = a("chests/pillager_outpost");
-    public static final MinecraftKey L = a("chests/bastion_treasure");
-    public static final MinecraftKey M = a("chests/bastion_other");
-    public static final MinecraftKey N = a("chests/bastion_bridge");
-    public static final MinecraftKey O = a("chests/bastion_hoglin_stable");
-    public static final MinecraftKey P = a("chests/ruined_portal");
-    public static final MinecraftKey Q = a("entities/sheep/white");
-    public static final MinecraftKey R = a("entities/sheep/orange");
-    public static final MinecraftKey S = a("entities/sheep/magenta");
-    public static final MinecraftKey T = a("entities/sheep/light_blue");
-    public static final MinecraftKey U = a("entities/sheep/yellow");
-    public static final MinecraftKey V = a("entities/sheep/lime");
-    public static final MinecraftKey W = a("entities/sheep/pink");
-    public static final MinecraftKey X = a("entities/sheep/gray");
-    public static final MinecraftKey Y = a("entities/sheep/light_gray");
-    public static final MinecraftKey Z = a("entities/sheep/cyan");
-    public static final MinecraftKey aa = a("entities/sheep/purple");
-    public static final MinecraftKey ab = a("entities/sheep/blue");
-    public static final MinecraftKey ac = a("entities/sheep/brown");
-    public static final MinecraftKey ad = a("entities/sheep/green");
-    public static final MinecraftKey ae = a("entities/sheep/red");
-    public static final MinecraftKey af = a("entities/sheep/black");
-    public static final MinecraftKey ag = a("gameplay/fishing");
-    public static final MinecraftKey ah = a("gameplay/fishing/junk");
-    public static final MinecraftKey ai = a("gameplay/fishing/treasure");
-    public static final MinecraftKey aj = a("gameplay/fishing/fish");
-    public static final MinecraftKey ak = a("gameplay/cat_morning_gift");
-    public static final MinecraftKey al = a("gameplay/hero_of_the_village/armorer_gift");
-    public static final MinecraftKey am = a("gameplay/hero_of_the_village/butcher_gift");
-    public static final MinecraftKey an = a("gameplay/hero_of_the_village/cartographer_gift");
-    public static final MinecraftKey ao = a("gameplay/hero_of_the_village/cleric_gift");
-    public static final MinecraftKey ap = a("gameplay/hero_of_the_village/farmer_gift");
-    public static final MinecraftKey aq = a("gameplay/hero_of_the_village/fisherman_gift");
-    public static final MinecraftKey ar = a("gameplay/hero_of_the_village/fletcher_gift");
-    public static final MinecraftKey as = a("gameplay/hero_of_the_village/leatherworker_gift");
-    public static final MinecraftKey at = a("gameplay/hero_of_the_village/librarian_gift");
-    public static final MinecraftKey au = a("gameplay/hero_of_the_village/mason_gift");
-    public static final MinecraftKey av = a("gameplay/hero_of_the_village/shepherd_gift");
-    public static final MinecraftKey aw = a("gameplay/hero_of_the_village/toolsmith_gift");
-    public static final MinecraftKey ax = a("gameplay/hero_of_the_village/weaponsmith_gift");
-    public static final MinecraftKey ay = a("gameplay/piglin_bartering");
+    private static final Set<MinecraftKey> LOCATIONS = Sets.newHashSet();
+    private static final Set<MinecraftKey> IMMUTABLE_LOCATIONS = Collections.unmodifiableSet(LootTables.LOCATIONS);
+    public static final MinecraftKey EMPTY = new MinecraftKey("empty");
+    public static final MinecraftKey SPAWN_BONUS_CHEST = a("chests/spawn_bonus_chest");
+    public static final MinecraftKey END_CITY_TREASURE = a("chests/end_city_treasure");
+    public static final MinecraftKey SIMPLE_DUNGEON = a("chests/simple_dungeon");
+    public static final MinecraftKey VILLAGE_WEAPONSMITH = a("chests/village/village_weaponsmith");
+    public static final MinecraftKey VILLAGE_TOOLSMITH = a("chests/village/village_toolsmith");
+    public static final MinecraftKey VILLAGE_ARMORER = a("chests/village/village_armorer");
+    public static final MinecraftKey VILLAGE_CARTOGRAPHER = a("chests/village/village_cartographer");
+    public static final MinecraftKey VILLAGE_MASON = a("chests/village/village_mason");
+    public static final MinecraftKey VILLAGE_SHEPHERD = a("chests/village/village_shepherd");
+    public static final MinecraftKey VILLAGE_BUTCHER = a("chests/village/village_butcher");
+    public static final MinecraftKey VILLAGE_FLETCHER = a("chests/village/village_fletcher");
+    public static final MinecraftKey VILLAGE_FISHER = a("chests/village/village_fisher");
+    public static final MinecraftKey VILLAGE_TANNERY = a("chests/village/village_tannery");
+    public static final MinecraftKey VILLAGE_TEMPLE = a("chests/village/village_temple");
+    public static final MinecraftKey VILLAGE_DESERT_HOUSE = a("chests/village/village_desert_house");
+    public static final MinecraftKey VILLAGE_PLAINS_HOUSE = a("chests/village/village_plains_house");
+    public static final MinecraftKey VILLAGE_TAIGA_HOUSE = a("chests/village/village_taiga_house");
+    public static final MinecraftKey VILLAGE_SNOWY_HOUSE = a("chests/village/village_snowy_house");
+    public static final MinecraftKey VILLAGE_SAVANNA_HOUSE = a("chests/village/village_savanna_house");
+    public static final MinecraftKey ABANDONED_MINESHAFT = a("chests/abandoned_mineshaft");
+    public static final MinecraftKey NETHER_BRIDGE = a("chests/nether_bridge");
+    public static final MinecraftKey STRONGHOLD_LIBRARY = a("chests/stronghold_library");
+    public static final MinecraftKey STRONGHOLD_CROSSING = a("chests/stronghold_crossing");
+    public static final MinecraftKey STRONGHOLD_CORRIDOR = a("chests/stronghold_corridor");
+    public static final MinecraftKey DESERT_PYRAMID = a("chests/desert_pyramid");
+    public static final MinecraftKey JUNGLE_TEMPLE = a("chests/jungle_temple");
+    public static final MinecraftKey JUNGLE_TEMPLE_DISPENSER = a("chests/jungle_temple_dispenser");
+    public static final MinecraftKey IGLOO_CHEST = a("chests/igloo_chest");
+    public static final MinecraftKey WOODLAND_MANSION = a("chests/woodland_mansion");
+    public static final MinecraftKey UNDERWATER_RUIN_SMALL = a("chests/underwater_ruin_small");
+    public static final MinecraftKey UNDERWATER_RUIN_BIG = a("chests/underwater_ruin_big");
+    public static final MinecraftKey BURIED_TREASURE = a("chests/buried_treasure");
+    public static final MinecraftKey SHIPWRECK_MAP = a("chests/shipwreck_map");
+    public static final MinecraftKey SHIPWRECK_SUPPLY = a("chests/shipwreck_supply");
+    public static final MinecraftKey SHIPWRECK_TREASURE = a("chests/shipwreck_treasure");
+    public static final MinecraftKey PILLAGER_OUTPOST = a("chests/pillager_outpost");
+    public static final MinecraftKey BASTION_TREASURE = a("chests/bastion_treasure");
+    public static final MinecraftKey BASTION_OTHER = a("chests/bastion_other");
+    public static final MinecraftKey BASTION_BRIDGE = a("chests/bastion_bridge");
+    public static final MinecraftKey BASTION_HOGLIN_STABLE = a("chests/bastion_hoglin_stable");
+    public static final MinecraftKey RUINED_PORTAL = a("chests/ruined_portal");
+    public static final MinecraftKey SHEEP_WHITE = a("entities/sheep/white");
+    public static final MinecraftKey SHEEP_ORANGE = a("entities/sheep/orange");
+    public static final MinecraftKey SHEEP_MAGENTA = a("entities/sheep/magenta");
+    public static final MinecraftKey SHEEP_LIGHT_BLUE = a("entities/sheep/light_blue");
+    public static final MinecraftKey SHEEP_YELLOW = a("entities/sheep/yellow");
+    public static final MinecraftKey SHEEP_LIME = a("entities/sheep/lime");
+    public static final MinecraftKey SHEEP_PINK = a("entities/sheep/pink");
+    public static final MinecraftKey SHEEP_GRAY = a("entities/sheep/gray");
+    public static final MinecraftKey SHEEP_LIGHT_GRAY = a("entities/sheep/light_gray");
+    public static final MinecraftKey SHEEP_CYAN = a("entities/sheep/cyan");
+    public static final MinecraftKey SHEEP_PURPLE = a("entities/sheep/purple");
+    public static final MinecraftKey SHEEP_BLUE = a("entities/sheep/blue");
+    public static final MinecraftKey SHEEP_BROWN = a("entities/sheep/brown");
+    public static final MinecraftKey SHEEP_GREEN = a("entities/sheep/green");
+    public static final MinecraftKey SHEEP_RED = a("entities/sheep/red");
+    public static final MinecraftKey SHEEP_BLACK = a("entities/sheep/black");
+    public static final MinecraftKey FISHING = a("gameplay/fishing");
+    public static final MinecraftKey FISHING_JUNK = a("gameplay/fishing/junk");
+    public static final MinecraftKey FISHING_TREASURE = a("gameplay/fishing/treasure");
+    public static final MinecraftKey FISHING_FISH = a("gameplay/fishing/fish");
+    public static final MinecraftKey CAT_MORNING_GIFT = a("gameplay/cat_morning_gift");
+    public static final MinecraftKey ARMORER_GIFT = a("gameplay/hero_of_the_village/armorer_gift");
+    public static final MinecraftKey BUTCHER_GIFT = a("gameplay/hero_of_the_village/butcher_gift");
+    public static final MinecraftKey CARTOGRAPHER_GIFT = a("gameplay/hero_of_the_village/cartographer_gift");
+    public static final MinecraftKey CLERIC_GIFT = a("gameplay/hero_of_the_village/cleric_gift");
+    public static final MinecraftKey FARMER_GIFT = a("gameplay/hero_of_the_village/farmer_gift");
+    public static final MinecraftKey FISHERMAN_GIFT = a("gameplay/hero_of_the_village/fisherman_gift");
+    public static final MinecraftKey FLETCHER_GIFT = a("gameplay/hero_of_the_village/fletcher_gift");
+    public static final MinecraftKey LEATHERWORKER_GIFT = a("gameplay/hero_of_the_village/leatherworker_gift");
+    public static final MinecraftKey LIBRARIAN_GIFT = a("gameplay/hero_of_the_village/librarian_gift");
+    public static final MinecraftKey MASON_GIFT = a("gameplay/hero_of_the_village/mason_gift");
+    public static final MinecraftKey SHEPHERD_GIFT = a("gameplay/hero_of_the_village/shepherd_gift");
+    public static final MinecraftKey TOOLSMITH_GIFT = a("gameplay/hero_of_the_village/toolsmith_gift");
+    public static final MinecraftKey WEAPONSMITH_GIFT = a("gameplay/hero_of_the_village/weaponsmith_gift");
+    public static final MinecraftKey PIGLIN_BARTERING = a("gameplay/piglin_bartering");
+
+    public LootTables() {}
 
     private static MinecraftKey a(String s) {
         return a(new MinecraftKey(s));
     }
 
     private static MinecraftKey a(MinecraftKey minecraftkey) {
-        if (LootTables.az.add(minecraftkey)) {
+        if (LootTables.LOCATIONS.add(minecraftkey)) {
             return minecraftkey;
         } else {
             throw new IllegalArgumentException(minecraftkey + " is already a registered built-in loot table");
@@ -100,6 +102,6 @@ public class LootTables {
     }
 
     public static Set<MinecraftKey> a() {
-        return LootTables.aA;
+        return LootTables.IMMUTABLE_LOCATIONS;
     }
 }

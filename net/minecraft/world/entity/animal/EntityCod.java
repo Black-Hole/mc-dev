@@ -15,27 +15,27 @@ public class EntityCod extends EntityFishSchool {
     }
 
     @Override
-    protected ItemStack eK() {
+    public ItemStack getBucketItem() {
         return new ItemStack(Items.COD_BUCKET);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_COD_AMBIENT;
+        return SoundEffects.COD_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_COD_DEATH;
+        return SoundEffects.COD_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_COD_HURT;
+        return SoundEffects.COD_HURT;
     }
 
     @Override
     protected SoundEffect getSoundFlop() {
-        return SoundEffects.ENTITY_COD_FLOP;
+        return SoundEffects.COD_FLOP;
     }
 }

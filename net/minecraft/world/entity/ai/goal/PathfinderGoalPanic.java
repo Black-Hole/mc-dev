@@ -7,37 +7,37 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalPanic extends PathfinderGoal {
 
-    protected final EntityCreature a;
-    protected final double b;
-    protected double c;
-    protected double d;
-    protected double e;
-    protected boolean f;
+    protected final EntityCreature mob;
+    protected final double speedModifier;
+    protected double posX;
+    protected double posY;
+    protected double posZ;
+    protected boolean isRunning;
 
     public PathfinderGoalPanic(EntityCreature entitycreature, double d0) {
-        this.a = entitycreature;
-        this.b = d0;
+        this.mob = entitycreature;
+        this.speedModifier = d0;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean a() {
-        if (this.a.getLastDamager() == null && !this.a.isBurning()) {
+        if (this.mob.getLastDamager() == null && !this.mob.isBurning()) {
             return false;
         } else {
-            if (this.a.isBurning()) {
-                BlockPosition blockposition = this.a(this.a.world, this.a, 5, 4);
+            if (this.mob.isBurning()) {
+                BlockPosition blockposition = this.a(this.mob.level, this.mob, 5, 4);
 
                 if (blockposition != null) {
-                    this.c = (double) blockposition.getX();
-                    this.d = (double) blockposition.getY();
-                    this.e = (double) blockposition.getZ();
+                    this.posX = (double) blockposition.getX();
+                    this.posY = (double) blockposition.getY();
+                    this.posZ = (double) blockposition.getZ();
                     return true;
                 }
             }
@@ -47,36 +47,36 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     }
 
     protected boolean g() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.a, 5, 4);
+        Vec3D vec3d = DefaultRandomPos.a(this.mob, 5, 4);
 
         if (vec3d == null) {
             return false;
         } else {
-            this.c = vec3d.x;
-            this.d = vec3d.y;
-            this.e = vec3d.z;
+            this.posX = vec3d.x;
+            this.posY = vec3d.y;
+            this.posZ = vec3d.z;
             return true;
         }
     }
 
     public boolean h() {
-        return this.f;
+        return this.isRunning;
     }
 
     @Override
     public void c() {
-        this.a.getNavigation().a(this.c, this.d, this.e, this.b);
-        this.f = true;
+        this.mob.getNavigation().a(this.posX, this.posY, this.posZ, this.speedModifier);
+        this.isRunning = true;
     }
 
     @Override
     public void d() {
-        this.f = false;
+        this.isRunning = false;
     }
 
     @Override
     public boolean b() {
-        return !this.a.getNavigation().m();
+        return !this.mob.getNavigation().m();
     }
 
     @Nullable

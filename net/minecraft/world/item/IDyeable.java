@@ -6,19 +6,23 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public interface IDyeable {
 
-    default boolean a(ItemStack itemstack) {
+    String TAG_COLOR = "color";
+    String TAG_DISPLAY = "display";
+    int DEFAULT_LEATHER_COLOR = 10511680;
+
+    default boolean c_(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.b("display");
 
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("color", 99);
     }
 
-    default int b(ItemStack itemstack) {
+    default int d_(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.b("display");
 
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("color", 99) ? nbttagcompound.getInt("color") : 10511680;
     }
 
-    default void c(ItemStack itemstack) {
+    default void e_(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.b("display");
 
         if (nbttagcompound != null && nbttagcompound.hasKey("color")) {
@@ -32,7 +36,7 @@ public interface IDyeable {
     }
 
     static ItemStack a(ItemStack itemstack, List<ItemDye> list) {
-        ItemStack itemstack1 = ItemStack.b;
+        ItemStack itemstack1 = ItemStack.EMPTY;
         int[] aint = new int[3];
         int i = 0;
         int j = 0;
@@ -46,8 +50,8 @@ public interface IDyeable {
             idyeable = (IDyeable) item;
             itemstack1 = itemstack.cloneItemStack();
             itemstack1.setCount(1);
-            if (idyeable.a(itemstack)) {
-                k = idyeable.b(itemstack1);
+            if (idyeable.c_(itemstack)) {
+                k = idyeable.d_(itemstack1);
                 float f1 = (float) (k >> 16 & 255) / 255.0F;
                 float f2 = (float) (k >> 8 & 255) / 255.0F;
 
@@ -74,7 +78,7 @@ public interface IDyeable {
         }
 
         if (idyeable == null) {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         } else {
             k = aint[0] / j;
             int k1 = aint[1] / j;

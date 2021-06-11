@@ -1,10 +1,12 @@
 package net.minecraft.world.entity;
 
-public interface IJumpable {
+public interface IJumpable extends PlayerRideable {
 
-    boolean P_();
+    void a(int i);
+
+    boolean a();
 
     void b(int i);
 
-    void c();
+    void b();
 }

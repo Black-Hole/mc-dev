@@ -22,9 +22,4 @@ public class EnchantmentTridentLoyalty extends Enchantment {
     public int getMaxLevel() {
         return 3;
     }
-
-    @Override
-    public boolean a(Enchantment enchantment) {
-        return super.a(enchantment);
-    }
 }

@@ -2,20 +2,20 @@ package net.minecraft.world;
 
 public class InteractionResultWrapper<T> {
 
-    private final EnumInteractionResult a;
-    private final T b;
+    private final EnumInteractionResult result;
+    private final T object;
 
     public InteractionResultWrapper(EnumInteractionResult enuminteractionresult, T t0) {
-        this.a = enuminteractionresult;
-        this.b = t0;
+        this.result = enuminteractionresult;
+        this.object = t0;
     }
 
     public EnumInteractionResult a() {
-        return this.a;
+        return this.result;
     }
 
     public T b() {
-        return this.b;
+        return this.object;
     }
 
     public static <T> InteractionResultWrapper<T> success(T t0) {

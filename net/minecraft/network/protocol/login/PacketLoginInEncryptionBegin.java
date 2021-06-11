@@ -1,7 +1,8 @@
 package net.minecraft.network.protocol.login;
 
-import java.io.IOException;
+import java.security.Key;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import javax.crypto.SecretKey;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -10,21 +11,23 @@ import net.minecraft.util.MinecraftEncryption;
 
 public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListener> {
 
-    private byte[] a = new byte[0];
-    private byte[] b = new byte[0];
+    private final byte[] keybytes;
+    private final byte[] nonce;
 
-    public PacketLoginInEncryptionBegin() {}
+    public PacketLoginInEncryptionBegin(SecretKey secretkey, PublicKey publickey, byte[] abyte) throws CryptographyException {
+        this.keybytes = MinecraftEncryption.a((Key) publickey, secretkey.getEncoded());
+        this.nonce = MinecraftEncryption.a((Key) publickey, abyte);
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.a();
-        this.b = packetdataserializer.a();
+    public PacketLoginInEncryptionBegin(PacketDataSerializer packetdataserializer) {
+        this.keybytes = packetdataserializer.b();
+        this.nonce = packetdataserializer.b();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.keybytes);
+        packetdataserializer.a(this.nonce);
     }
 
     public void a(PacketLoginInListener packetlogininlistener) {
@@ -32,10 +35,10 @@ public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListene
     }
 
     public SecretKey a(PrivateKey privatekey) throws CryptographyException {
-        return MinecraftEncryption.a(privatekey, this.a);
+        return MinecraftEncryption.a(privatekey, this.keybytes);
     }
 
     public byte[] b(PrivateKey privatekey) throws CryptographyException {
-        return MinecraftEncryption.b(privatekey, this.b);
+        return MinecraftEncryption.b(privatekey, this.nonce);
     }
 }

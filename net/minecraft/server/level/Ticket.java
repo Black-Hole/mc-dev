@@ -4,26 +4,26 @@ import java.util.Objects;
 
 public final class Ticket<T> implements Comparable<Ticket<?>> {
 
-    private final TicketType<T> a;
-    private final int b;
-    public final T identifier;
-    private long d;
+    private final TicketType<T> type;
+    private final int ticketLevel;
+    public final T key;
+    private long createdTick;
 
     protected Ticket(TicketType<T> tickettype, int i, T t0) {
-        this.a = tickettype;
-        this.b = i;
-        this.identifier = t0;
+        this.type = tickettype;
+        this.ticketLevel = i;
+        this.key = t0;
     }
 
     public int compareTo(Ticket<?> ticket) {
-        int i = Integer.compare(this.b, ticket.b);
+        int i = Integer.compare(this.ticketLevel, ticket.ticketLevel);
 
         if (i != 0) {
             return i;
         } else {
-            int j = Integer.compare(System.identityHashCode(this.a), System.identityHashCode(ticket.a));
+            int j = Integer.compare(System.identityHashCode(this.type), System.identityHashCode(ticket.type));
 
-            return j != 0 ? j : this.a.a().compare(this.identifier, ticket.identifier);
+            return j != 0 ? j : this.type.a().compare(this.key, ticket.key);
         }
     }
 
@@ -35,33 +35,33 @@ public final class Ticket<T> implements Comparable<Ticket<?>> {
         } else {
             Ticket<?> ticket = (Ticket) object;
 
-            return this.b == ticket.b && Objects.equals(this.a, ticket.a) && Objects.equals(this.identifier, ticket.identifier);
+            return this.ticketLevel == ticket.ticketLevel && Objects.equals(this.type, ticket.type) && Objects.equals(this.key, ticket.key);
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{this.a, this.b, this.identifier});
+        return Objects.hash(new Object[]{this.type, this.ticketLevel, this.key});
     }
 
     public String toString() {
-        return "Ticket[" + this.a + " " + this.b + " (" + this.identifier + ")] at " + this.d;
+        return "Ticket[" + this.type + " " + this.ticketLevel + " (" + this.key + ")] at " + this.createdTick;
     }
 
     public TicketType<T> getTicketType() {
-        return this.a;
+        return this.type;
     }
 
     public int b() {
-        return this.b;
+        return this.ticketLevel;
     }
 
     protected void a(long i) {
-        this.d = i;
+        this.createdTick = i;
     }
 
     protected boolean b(long i) {
-        long j = this.a.b();
+        long j = this.type.b();
 
-        return j != 0L && i - this.d > j;
+        return j != 0L && i - this.createdTick > j;
     }
 }

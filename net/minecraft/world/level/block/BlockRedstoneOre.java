@@ -23,11 +23,11 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockRedstoneOre extends Block {
 
-    public static final BlockStateBoolean a = BlockRedstoneTorch.LIT;
+    public static final BlockStateBoolean LIT = BlockRedstoneTorch.LIT;
 
     public BlockRedstoneOre(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
+        this.k((IBlockData) this.getBlockData().set(BlockRedstoneOre.LIT, false));
     }
 
     @Override
@@ -37,9 +37,9 @@ public class BlockRedstoneOre extends Block {
     }
 
     @Override
-    public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        interact(world.getType(blockposition), world, blockposition);
-        super.stepOn(world, blockposition, entity);
+    public void stepOn(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
+        interact(iblockdata, world, blockposition);
+        super.stepOn(world, blockposition, iblockdata, entity);
     }
 
     @Override
@@ -57,21 +57,21 @@ public class BlockRedstoneOre extends Block {
 
     private static void interact(IBlockData iblockdata, World world, BlockPosition blockposition) {
         playEffect(world, blockposition);
-        if (!(Boolean) iblockdata.get(BlockRedstoneOre.a)) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, true), 3);
+        if (!(Boolean) iblockdata.get(BlockRedstoneOre.LIT)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.LIT, true), 3);
         }
 
     }
 
     @Override
     public boolean isTicking(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockRedstoneOre.a);
+        return (Boolean) iblockdata.get(BlockRedstoneOre.LIT);
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if ((Boolean) iblockdata.get(BlockRedstoneOre.a)) {
-            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, false), 3);
+        if ((Boolean) iblockdata.get(BlockRedstoneOre.LIT)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.LIT, false), 3);
         }
 
     }
@@ -83,6 +83,14 @@ public class BlockRedstoneOre extends Block {
             int i = 1 + worldserver.random.nextInt(5);
 
             this.dropExperience(worldserver, blockposition, i);
+        }
+
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockRedstoneOre.LIT)) {
+            playEffect(world, blockposition);
         }
 
     }
@@ -103,7 +111,7 @@ public class BlockRedstoneOre extends Block {
                 double d2 = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentY() : (double) random.nextFloat();
                 double d3 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentZ() : (double) random.nextFloat();
 
-                world.addParticle(ParticleParamRedstone.a, (double) blockposition.getX() + d1, (double) blockposition.getY() + d2, (double) blockposition.getZ() + d3, 0.0D, 0.0D, 0.0D);
+                world.addParticle(ParticleParamRedstone.REDSTONE, (double) blockposition.getX() + d1, (double) blockposition.getY() + d2, (double) blockposition.getZ() + d3, 0.0D, 0.0D, 0.0D);
             }
         }
 
@@ -111,6 +119,6 @@ public class BlockRedstoneOre extends Block {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockRedstoneOre.a);
+        blockstatelist_a.a(BlockRedstoneOre.LIT);
     }
 }

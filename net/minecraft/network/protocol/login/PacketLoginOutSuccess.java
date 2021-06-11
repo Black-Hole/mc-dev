@@ -1,7 +1,6 @@
 package net.minecraft.network.protocol.login;
 
 import com.mojang.authlib.GameProfile;
-import java.io.IOException;
 import java.util.UUID;
 import net.minecraft.core.MinecraftSerializableUUID;
 import net.minecraft.network.PacketDataSerializer;
@@ -9,16 +8,13 @@ import net.minecraft.network.protocol.Packet;
 
 public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
 
-    private GameProfile a;
-
-    public PacketLoginOutSuccess() {}
+    private final GameProfile gameProfile;
 
     public PacketLoginOutSuccess(GameProfile gameprofile) {
-        this.a = gameprofile;
+        this.gameProfile = gameprofile;
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
+    public PacketLoginOutSuccess(PacketDataSerializer packetdataserializer) {
         int[] aint = new int[4];
 
         for (int i = 0; i < aint.length; ++i) {
@@ -28,12 +24,12 @@ public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
         UUID uuid = MinecraftSerializableUUID.a(aint);
         String s = packetdataserializer.e(16);
 
-        this.a = new GameProfile(uuid, s);
+        this.gameProfile = new GameProfile(uuid, s);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        int[] aint = MinecraftSerializableUUID.a(this.a.getId());
+    public void a(PacketDataSerializer packetdataserializer) {
+        int[] aint = MinecraftSerializableUUID.a(this.gameProfile.getId());
         int i = aint.length;
 
         for (int j = 0; j < i; ++j) {
@@ -42,10 +38,14 @@ public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
             packetdataserializer.writeInt(k);
         }
 
-        packetdataserializer.a(this.a.getName());
+        packetdataserializer.a(this.gameProfile.getName());
     }
 
     public void a(PacketLoginOutListener packetloginoutlistener) {
         packetloginoutlistener.a(this);
+    }
+
+    public GameProfile b() {
+        return this.gameProfile;
     }
 }

@@ -1,5 +1,6 @@
 package net.minecraft.world.level.levelgen.feature;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.OptionalInt;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
@@ -18,13 +20,9 @@ import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.VirtualLevelReadable;
-import net.minecraft.world.level.VirtualLevelWritable;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockProperties;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.WorldGenFoilagePlacer;
 import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
@@ -34,6 +32,8 @@ import net.minecraft.world.phys.shapes.VoxelShapeBitSet;
 import net.minecraft.world.phys.shapes.VoxelShapeDiscrete;
 
 public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfiguration> {
+
+    private static final int BLOCK_UPDATE_FLAGS = 19;
 
     public WorldGenTrees(Codec<WorldGenFeatureTreeConfiguration> codec) {
         super(codec);
@@ -65,73 +65,40 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
 
     private static boolean h(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
-            Block block = iblockdata.getBlock();
-
-            return b(block) || block == Blocks.FARMLAND;
-        });
-    }
-
-    private static boolean i(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
-        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
             Material material = iblockdata.getMaterial();
 
             return material == Material.REPLACEABLE_PLANT;
         });
     }
 
-    public static void b(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
+    private static void b(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
         iworldwriter.setTypeAndData(blockposition, iblockdata, 19);
     }
 
     public static boolean e(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
-        return d(virtuallevelreadable, blockposition) || i(virtuallevelreadable, blockposition) || g(virtuallevelreadable, blockposition);
+        return d(virtuallevelreadable, blockposition) || h(virtuallevelreadable, blockposition) || g(virtuallevelreadable, blockposition);
     }
 
-    private boolean a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, Set<BlockPosition> set, Set<BlockPosition> set1, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
-        int i = worldgenfeaturetreeconfiguration.g.a(random);
-        int j = worldgenfeaturetreeconfiguration.f.a(random, i, worldgenfeaturetreeconfiguration);
+    private boolean a(GeneratorAccessSeed generatoraccessseed, Random random, BlockPosition blockposition, BiConsumer<BlockPosition, IBlockData> biconsumer, BiConsumer<BlockPosition, IBlockData> biconsumer1, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        int i = worldgenfeaturetreeconfiguration.trunkPlacer.a(random);
+        int j = worldgenfeaturetreeconfiguration.foliagePlacer.a(random, i, worldgenfeaturetreeconfiguration);
         int k = i - j;
-        int l = worldgenfeaturetreeconfiguration.f.a(random, k);
-        int i1;
-        BlockPosition blockposition1;
+        int l = worldgenfeaturetreeconfiguration.foliagePlacer.a(random, k);
 
-        if (!worldgenfeaturetreeconfiguration.e) {
-            int j1 = virtuallevelwritable.getHighestBlockYAt(HeightMap.Type.OCEAN_FLOOR, blockposition).getY();
-
-            i1 = virtuallevelwritable.getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE, blockposition).getY();
-            if (i1 - j1 > worldgenfeaturetreeconfiguration.i) {
-                return false;
-            }
-
-            int k1;
-
-            if (worldgenfeaturetreeconfiguration.l == HeightMap.Type.OCEAN_FLOOR) {
-                k1 = j1;
-            } else if (worldgenfeaturetreeconfiguration.l == HeightMap.Type.WORLD_SURFACE) {
-                k1 = i1;
-            } else {
-                k1 = virtuallevelwritable.getHighestBlockYAt(worldgenfeaturetreeconfiguration.l, blockposition).getY();
-            }
-
-            blockposition1 = new BlockPosition(blockposition.getX(), k1, blockposition.getZ());
-        } else {
-            blockposition1 = blockposition;
-        }
-
-        if (blockposition1.getY() >= 1 && blockposition1.getY() + i + 1 <= 256) {
-            if (!h(virtuallevelwritable, blockposition1.down())) {
+        if (blockposition.getY() >= generatoraccessseed.getMinBuildHeight() + 1 && blockposition.getY() + i + 1 <= generatoraccessseed.getMaxBuildHeight()) {
+            if (!worldgenfeaturetreeconfiguration.saplingProvider.a(random, blockposition).canPlace(generatoraccessseed, blockposition)) {
                 return false;
             } else {
-                OptionalInt optionalint = worldgenfeaturetreeconfiguration.h.c();
+                OptionalInt optionalint = worldgenfeaturetreeconfiguration.minimumSize.c();
+                int i1 = this.a(generatoraccessseed, i, blockposition, worldgenfeaturetreeconfiguration);
 
-                i1 = this.a(virtuallevelwritable, i, blockposition1, worldgenfeaturetreeconfiguration);
                 if (i1 < i && (!optionalint.isPresent() || i1 < optionalint.getAsInt())) {
                     return false;
                 } else {
-                    List<WorldGenFoilagePlacer.b> list = worldgenfeaturetreeconfiguration.g.a(virtuallevelwritable, random, i1, blockposition1, set, structureboundingbox, worldgenfeaturetreeconfiguration);
+                    List<WorldGenFoilagePlacer.a> list = worldgenfeaturetreeconfiguration.trunkPlacer.a(generatoraccessseed, biconsumer, random, i1, blockposition, worldgenfeaturetreeconfiguration);
 
-                    list.forEach((worldgenfoilageplacer_b) -> {
-                        worldgenfeaturetreeconfiguration.f.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, i1, worldgenfoilageplacer_b, j, l, set1, structureboundingbox);
+                    list.forEach((worldgenfoilageplacer_a) -> {
+                        worldgenfeaturetreeconfiguration.foliagePlacer.a(generatoraccessseed, biconsumer1, random, worldgenfeaturetreeconfiguration, i1, worldgenfoilageplacer_a, j, l);
                     });
                     return true;
                 }
@@ -145,12 +112,12 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int j = 0; j <= i + 1; ++j) {
-            int k = worldgenfeaturetreeconfiguration.h.a(i, j);
+            int k = worldgenfeaturetreeconfiguration.minimumSize.a(i, j);
 
             for (int l = -k; l <= k; ++l) {
                 for (int i1 = -k; i1 <= k; ++i1) {
                     blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, l, j, i1);
-                    if (!c(virtuallevelreadable, blockposition_mutableblockposition) || !worldgenfeaturetreeconfiguration.j && f(virtuallevelreadable, blockposition_mutableblockposition)) {
+                    if (!c(virtuallevelreadable, blockposition_mutableblockposition) || !worldgenfeaturetreeconfiguration.ignoreVines && f(virtuallevelreadable, blockposition_mutableblockposition)) {
                         return j - 2;
                     }
                 }
@@ -165,37 +132,55 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
         b(iworldwriter, blockposition, iblockdata);
     }
 
-    public final boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+    @Override
+    public final boolean generate(FeaturePlaceContext<WorldGenFeatureTreeConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
+        BlockPosition blockposition = featureplacecontext.d();
+        WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration = (WorldGenFeatureTreeConfiguration) featureplacecontext.e();
         Set<BlockPosition> set = Sets.newHashSet();
         Set<BlockPosition> set1 = Sets.newHashSet();
         Set<BlockPosition> set2 = Sets.newHashSet();
-        StructureBoundingBox structureboundingbox = StructureBoundingBox.a();
-        boolean flag = this.a((VirtualLevelWritable) generatoraccessseed, random, blockposition, (Set) set, set1, structureboundingbox, worldgenfeaturetreeconfiguration);
+        BiConsumer<BlockPosition, IBlockData> biconsumer = (blockposition1, iblockdata) -> {
+            set.add(blockposition1.immutableCopy());
+            generatoraccessseed.setTypeAndData(blockposition1, iblockdata, 19);
+        };
+        BiConsumer<BlockPosition, IBlockData> biconsumer1 = (blockposition1, iblockdata) -> {
+            set1.add(blockposition1.immutableCopy());
+            generatoraccessseed.setTypeAndData(blockposition1, iblockdata, 19);
+        };
+        BiConsumer<BlockPosition, IBlockData> biconsumer2 = (blockposition1, iblockdata) -> {
+            set2.add(blockposition1.immutableCopy());
+            generatoraccessseed.setTypeAndData(blockposition1, iblockdata, 19);
+        };
+        boolean flag = this.a(generatoraccessseed, random, blockposition, biconsumer, biconsumer1, worldgenfeaturetreeconfiguration);
 
-        if (structureboundingbox.a <= structureboundingbox.d && flag && !set.isEmpty()) {
-            if (!worldgenfeaturetreeconfiguration.d.isEmpty()) {
+        if (flag && (!set.isEmpty() || !set1.isEmpty())) {
+            if (!worldgenfeaturetreeconfiguration.decorators.isEmpty()) {
                 List<BlockPosition> list = Lists.newArrayList(set);
                 List<BlockPosition> list1 = Lists.newArrayList(set1);
 
                 list.sort(Comparator.comparingInt(BaseBlockPosition::getY));
                 list1.sort(Comparator.comparingInt(BaseBlockPosition::getY));
-                worldgenfeaturetreeconfiguration.d.forEach((worldgenfeaturetree) -> {
-                    worldgenfeaturetree.a(generatoraccessseed, random, list, list1, set2, structureboundingbox);
+                worldgenfeaturetreeconfiguration.decorators.forEach((worldgenfeaturetree) -> {
+                    worldgenfeaturetree.a(generatoraccessseed, biconsumer2, random, list, list1);
                 });
             }
 
-            VoxelShapeDiscrete voxelshapediscrete = this.a(generatoraccessseed, structureboundingbox, set, set2);
+            return (Boolean) StructureBoundingBox.a(Iterables.concat(set, set1, set2)).map((structureboundingbox) -> {
+                VoxelShapeDiscrete voxelshapediscrete = a((GeneratorAccess) generatoraccessseed, structureboundingbox, set, set2);
 
-            DefinedStructure.a(generatoraccessseed, 3, voxelshapediscrete, structureboundingbox.a, structureboundingbox.b, structureboundingbox.c);
-            return true;
+                DefinedStructure.a(generatoraccessseed, 3, voxelshapediscrete, structureboundingbox.g(), structureboundingbox.h(), structureboundingbox.i());
+                return true;
+            }).orElse(false);
         } else {
             return false;
         }
     }
 
-    private VoxelShapeDiscrete a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, Set<BlockPosition> set, Set<BlockPosition> set1) {
+    private static VoxelShapeDiscrete a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, Set<BlockPosition> set, Set<BlockPosition> set1) {
         List<Set<BlockPosition>> list = Lists.newArrayList();
-        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(structureboundingbox.d(), structureboundingbox.e(), structureboundingbox.f());
+        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(structureboundingbox.c(), structureboundingbox.d(), structureboundingbox.e());
         boolean flag = true;
 
         for (int i = 0; i < 6; ++i) {
@@ -210,7 +195,7 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
         while (iterator.hasNext()) {
             blockposition = (BlockPosition) iterator.next();
             if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                voxelshapebitset.a(blockposition.getX() - structureboundingbox.a, blockposition.getY() - structureboundingbox.b, blockposition.getZ() - structureboundingbox.c, true, true);
+                voxelshapebitset.c(blockposition.getX() - structureboundingbox.g(), blockposition.getY() - structureboundingbox.h(), blockposition.getZ() - structureboundingbox.i());
             }
         }
 
@@ -219,7 +204,7 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
         while (iterator.hasNext()) {
             blockposition = (BlockPosition) iterator.next();
             if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                voxelshapebitset.a(blockposition.getX() - structureboundingbox.a, blockposition.getY() - structureboundingbox.b, blockposition.getZ() - structureboundingbox.c, true, true);
+                voxelshapebitset.c(blockposition.getX() - structureboundingbox.g(), blockposition.getY() - structureboundingbox.h(), blockposition.getZ() - structureboundingbox.i());
             }
 
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -232,11 +217,11 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
                 if (!set.contains(blockposition_mutableblockposition)) {
                     IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition);
 
-                    if (iblockdata.b(BlockProperties.an)) {
+                    if (iblockdata.b(BlockProperties.DISTANCE)) {
                         ((Set) list.get(0)).add(blockposition_mutableblockposition.immutableCopy());
-                        b(generatoraccess, blockposition_mutableblockposition, (IBlockData) iblockdata.set(BlockProperties.an, 1));
+                        b(generatoraccess, blockposition_mutableblockposition, (IBlockData) iblockdata.set(BlockProperties.DISTANCE, 1));
                         if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
-                            voxelshapebitset.a(blockposition_mutableblockposition.getX() - structureboundingbox.a, blockposition_mutableblockposition.getY() - structureboundingbox.b, blockposition_mutableblockposition.getZ() - structureboundingbox.c, true, true);
+                            voxelshapebitset.c(blockposition_mutableblockposition.getX() - structureboundingbox.g(), blockposition_mutableblockposition.getY() - structureboundingbox.h(), blockposition_mutableblockposition.getZ() - structureboundingbox.i());
                         }
                     }
                 }
@@ -252,7 +237,7 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
                 BlockPosition blockposition1 = (BlockPosition) iterator1.next();
 
                 if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                    voxelshapebitset.a(blockposition1.getX() - structureboundingbox.a, blockposition1.getY() - structureboundingbox.b, blockposition1.getZ() - structureboundingbox.c, true, true);
+                    voxelshapebitset.c(blockposition1.getX() - structureboundingbox.g(), blockposition1.getY() - structureboundingbox.h(), blockposition1.getZ() - structureboundingbox.i());
                 }
 
                 EnumDirection[] aenumdirection1 = EnumDirection.values();
@@ -265,15 +250,15 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
                     if (!set2.contains(blockposition_mutableblockposition) && !set3.contains(blockposition_mutableblockposition)) {
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition);
 
-                        if (iblockdata1.b(BlockProperties.an)) {
-                            int k1 = (Integer) iblockdata1.get(BlockProperties.an);
+                        if (iblockdata1.b(BlockProperties.DISTANCE)) {
+                            int k1 = (Integer) iblockdata1.get(BlockProperties.DISTANCE);
 
                             if (k1 > l + 1) {
-                                IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.an, l + 1);
+                                IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.DISTANCE, l + 1);
 
                                 b(generatoraccess, blockposition_mutableblockposition, iblockdata2);
                                 if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
-                                    voxelshapebitset.a(blockposition_mutableblockposition.getX() - structureboundingbox.a, blockposition_mutableblockposition.getY() - structureboundingbox.b, blockposition_mutableblockposition.getZ() - structureboundingbox.c, true, true);
+                                    voxelshapebitset.c(blockposition_mutableblockposition.getX() - structureboundingbox.g(), blockposition_mutableblockposition.getY() - structureboundingbox.h(), blockposition_mutableblockposition.getZ() - structureboundingbox.i());
                                 }
 
                                 set3.add(blockposition_mutableblockposition.immutableCopy());

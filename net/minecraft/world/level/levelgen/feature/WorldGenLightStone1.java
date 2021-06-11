@@ -7,7 +7,6 @@ import net.minecraft.core.EnumDirection;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class WorldGenLightStone1 extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
@@ -16,7 +15,12 @@ public class WorldGenLightStone1 extends WorldGenerator<WorldGenFeatureEmptyConf
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+
         if (!generatoraccessseed.isEmpty(blockposition)) {
             return false;
         } else {
@@ -28,7 +32,7 @@ public class WorldGenLightStone1 extends WorldGenerator<WorldGenFeatureEmptyConf
                 generatoraccessseed.setTypeAndData(blockposition, Blocks.GLOWSTONE.getBlockData(), 2);
 
                 for (int i = 0; i < 1500; ++i) {
-                    BlockPosition blockposition1 = blockposition.b(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
+                    BlockPosition blockposition1 = blockposition.c(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
 
                     if (generatoraccessseed.getType(blockposition1).isAir()) {
                         int j = 0;

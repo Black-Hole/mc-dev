@@ -12,14 +12,13 @@ import net.minecraft.world.entity.npc.EntityVillager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.BlockComposter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 
 public class BehaviorWorkComposter extends BehaviorWork {
 
-    private static final List<Item> b = ImmutableList.of(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS);
+    private static final List<Item> COMPOSTABLE_ITEMS = ImmutableList.of(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS);
 
     public BehaviorWorkComposter() {}
 
@@ -42,20 +41,20 @@ public class BehaviorWorkComposter extends BehaviorWork {
     private void a(WorldServer worldserver, EntityVillager entityvillager, GlobalPos globalpos, IBlockData iblockdata) {
         BlockPosition blockposition = globalpos.getBlockPosition();
 
-        if ((Integer) iblockdata.get(BlockComposter.a) == 8) {
-            iblockdata = BlockComposter.d(iblockdata, (World) worldserver, blockposition);
+        if ((Integer) iblockdata.get(BlockComposter.LEVEL) == 8) {
+            iblockdata = BlockComposter.d(iblockdata, worldserver, blockposition);
         }
 
         int i = 20;
         boolean flag = true;
-        int[] aint = new int[BehaviorWorkComposter.b.size()];
+        int[] aint = new int[BehaviorWorkComposter.COMPOSTABLE_ITEMS.size()];
         InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
         int j = inventorysubcontainer.getSize();
         IBlockData iblockdata1 = iblockdata;
 
         for (int k = j - 1; k >= 0 && i > 0; --k) {
             ItemStack itemstack = inventorysubcontainer.getItem(k);
-            int l = BehaviorWorkComposter.b.indexOf(itemstack.getItem());
+            int l = BehaviorWorkComposter.COMPOSTABLE_ITEMS.indexOf(itemstack.getItem());
 
             if (l != -1) {
                 int i1 = itemstack.getCount();
@@ -69,7 +68,7 @@ public class BehaviorWorkComposter extends BehaviorWork {
 
                     for (int l1 = 0; l1 < k1; ++l1) {
                         iblockdata1 = BlockComposter.a(iblockdata1, worldserver, itemstack, blockposition);
-                        if ((Integer) iblockdata1.get(BlockComposter.a) == 7) {
+                        if ((Integer) iblockdata1.get(BlockComposter.LEVEL) == 7) {
                             this.a(worldserver, iblockdata, blockposition, iblockdata1);
                             return;
                         }

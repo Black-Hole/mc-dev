@@ -4,17 +4,21 @@ import it.unimi.dsi.fastutil.doubles.AbstractDoubleList;
 
 public class VoxelShapeCubePoint extends AbstractDoubleList {
 
-    private final int a;
+    private final int parts;
 
     VoxelShapeCubePoint(int i) {
-        this.a = i;
+        if (i <= 0) {
+            throw new IllegalArgumentException("Need at least 1 part");
+        } else {
+            this.parts = i;
+        }
     }
 
     public double getDouble(int i) {
-        return (double) i / (double) this.a;
+        return (double) i / (double) this.parts;
     }
 
     public int size() {
-        return this.a + 1;
+        return this.parts + 1;
     }
 }

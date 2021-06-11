@@ -1,5 +1,6 @@
 package net.minecraft.world.level;
 
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -10,6 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.AxisAlignedBB;
+import net.minecraft.world.phys.Vec3D;
+import net.minecraft.world.phys.shapes.OperatorBoolean;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 import net.minecraft.world.phys.shapes.VoxelShapes;
@@ -31,7 +34,7 @@ public interface ICollisionAccess extends IBlockAccess {
         return voxelshape.isEmpty() || this.a((Entity) null, voxelshape.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
     }
 
-    default boolean j(Entity entity) {
+    default boolean f(Entity entity) {
         return this.a(entity, VoxelShapes.a(entity.getBoundingBox()));
     }
 
@@ -67,7 +70,27 @@ public interface ICollisionAccess extends IBlockAccess {
         return StreamSupport.stream(new VoxelShapeSpliterator(this, entity, axisalignedbb), false);
     }
 
+    default boolean a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, BiPredicate<IBlockData, BlockPosition> bipredicate) {
+        return !this.b(entity, axisalignedbb, bipredicate).allMatch(VoxelShape::isEmpty);
+    }
+
     default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, BiPredicate<IBlockData, BlockPosition> bipredicate) {
         return StreamSupport.stream(new VoxelShapeSpliterator(this, entity, axisalignedbb, bipredicate), false);
+    }
+
+    default Optional<Vec3D> a(@Nullable Entity entity, VoxelShape voxelshape, Vec3D vec3d, double d0, double d1, double d2) {
+        if (voxelshape.isEmpty()) {
+            return Optional.empty();
+        } else {
+            AxisAlignedBB axisalignedbb = voxelshape.getBoundingBox().grow(d0, d1, d2);
+            VoxelShape voxelshape1 = (VoxelShape) this.b(entity, axisalignedbb).flatMap((voxelshape2) -> {
+                return voxelshape2.d().stream();
+            }).map((axisalignedbb1) -> {
+                return axisalignedbb1.grow(d0 / 2.0D, d1 / 2.0D, d2 / 2.0D);
+            }).map(VoxelShapes::a).reduce(VoxelShapes.a(), VoxelShapes::a);
+            VoxelShape voxelshape2 = VoxelShapes.a(voxelshape, voxelshape1, OperatorBoolean.ONLY_FIRST);
+
+            return voxelshape2.a(vec3d);
+        }
     }
 }

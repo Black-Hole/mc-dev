@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RecipeBookServer extends RecipeBook {
 
+    public static final String RECIPE_BOOK_TAG = "recipeBook";
     private static final Logger LOGGER = LogManager.getLogger();
 
     public RecipeBookServer() {}
@@ -35,11 +36,11 @@ public class RecipeBookServer extends RecipeBook {
             IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (!this.recipes.contains(minecraftkey) && !irecipe.isComplex()) {
+            if (!this.known.contains(minecraftkey) && !irecipe.isComplex()) {
                 this.a(minecraftkey);
                 this.d(minecraftkey);
                 list.add(minecraftkey);
-                CriterionTriggers.f.a(entityplayer, irecipe);
+                CriterionTriggers.RECIPE_UNLOCKED.a(entityplayer, irecipe);
                 ++i;
             }
         }
@@ -57,7 +58,7 @@ public class RecipeBookServer extends RecipeBook {
             IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (this.recipes.contains(minecraftkey)) {
+            if (this.known.contains(minecraftkey)) {
                 this.c(minecraftkey);
                 list.add(minecraftkey);
                 ++i;
@@ -69,7 +70,7 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     private void a(PacketPlayOutRecipes.Action packetplayoutrecipes_action, EntityPlayer entityplayer, List<MinecraftKey> list) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.a()));
+        entityplayer.connection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.a()));
     }
 
     public NBTTagCompound save() {
@@ -77,7 +78,7 @@ public class RecipeBookServer extends RecipeBook {
 
         this.a().b(nbttagcompound);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.recipes.iterator();
+        Iterator iterator = this.known.iterator();
 
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
@@ -87,7 +88,7 @@ public class RecipeBookServer extends RecipeBook {
 
         nbttagcompound.set("recipes", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator1 = this.toBeDisplayed.iterator();
+        Iterator iterator1 = this.highlight.iterator();
 
         while (iterator1.hasNext()) {
             MinecraftKey minecraftkey1 = (MinecraftKey) iterator1.next();
@@ -120,7 +121,7 @@ public class RecipeBookServer extends RecipeBook {
                 if (!optional.isPresent()) {
                     RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
                 } else {
-                    consumer.accept(optional.get());
+                    consumer.accept((IRecipe) optional.get());
                 }
             } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
                 RecipeBookServer.LOGGER.error("Tried to load improperly formatted recipe: {} removed now.", s);
@@ -130,6 +131,6 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     public void a(EntityPlayer entityplayer) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.recipes, this.toBeDisplayed, this.a()));
+        entityplayer.connection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.known, this.highlight, this.a()));
     }
 }

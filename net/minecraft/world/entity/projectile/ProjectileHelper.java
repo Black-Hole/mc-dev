@@ -21,9 +21,11 @@ import net.minecraft.world.phys.Vec3D;
 
 public final class ProjectileHelper {
 
+    public ProjectileHelper() {}
+
     public static MovingObjectPosition a(Entity entity, Predicate<Entity> predicate) {
         Vec3D vec3d = entity.getMot();
-        World world = entity.world;
+        World world = entity.level;
         Vec3D vec3d1 = entity.getPositionVector();
         Vec3D vec3d2 = vec3d1.e(vec3d);
         Object object = world.rayTrace(new RayTrace(vec3d1, vec3d2, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, entity));
@@ -42,14 +44,64 @@ public final class ProjectileHelper {
     }
 
     @Nullable
+    public static MovingObjectPositionEntity a(Entity entity, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate, double d0) {
+        World world = entity.level;
+        double d1 = d0;
+        Entity entity1 = null;
+        Vec3D vec3d2 = null;
+        Iterator iterator = world.getEntities(entity, axisalignedbb, predicate).iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity2 = (Entity) iterator.next();
+            AxisAlignedBB axisalignedbb1 = entity2.getBoundingBox().g((double) entity2.bp());
+            Optional<Vec3D> optional = axisalignedbb1.b(vec3d, vec3d1);
+
+            if (axisalignedbb1.d(vec3d)) {
+                if (d1 >= 0.0D) {
+                    entity1 = entity2;
+                    vec3d2 = (Vec3D) optional.orElse(vec3d);
+                    d1 = 0.0D;
+                }
+            } else if (optional.isPresent()) {
+                Vec3D vec3d3 = (Vec3D) optional.get();
+                double d2 = vec3d.distanceSquared(vec3d3);
+
+                if (d2 < d1 || d1 == 0.0D) {
+                    if (entity2.getRootVehicle() == entity.getRootVehicle()) {
+                        if (d1 == 0.0D) {
+                            entity1 = entity2;
+                            vec3d2 = vec3d3;
+                        }
+                    } else {
+                        entity1 = entity2;
+                        vec3d2 = vec3d3;
+                        d1 = d2;
+                    }
+                }
+            }
+        }
+
+        if (entity1 == null) {
+            return null;
+        } else {
+            return new MovingObjectPositionEntity(entity1, vec3d2);
+        }
+    }
+
+    @Nullable
     public static MovingObjectPositionEntity a(World world, Entity entity, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
+        return a(world, entity, vec3d, vec3d1, axisalignedbb, predicate, 0.3F);
+    }
+
+    @Nullable
+    public static MovingObjectPositionEntity a(World world, Entity entity, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate, float f) {
         double d0 = Double.MAX_VALUE;
         Entity entity1 = null;
         Iterator iterator = world.getEntities(entity, axisalignedbb, predicate).iterator();
 
         while (iterator.hasNext()) {
             Entity entity2 = (Entity) iterator.next();
-            AxisAlignedBB axisalignedbb1 = entity2.getBoundingBox().g(0.30000001192092896D);
+            AxisAlignedBB axisalignedbb1 = entity2.getBoundingBox().g((double) f);
             Optional<Vec3D> optional = axisalignedbb1.b(vec3d, vec3d1);
 
             if (optional.isPresent()) {
@@ -69,46 +121,47 @@ public final class ProjectileHelper {
         }
     }
 
-    public static final void a(Entity entity, float f) {
+    public static void a(Entity entity, float f) {
         Vec3D vec3d = entity.getMot();
 
         if (vec3d.g() != 0.0D) {
-            float f1 = MathHelper.sqrt(Entity.c(vec3d));
+            double d0 = vec3d.h();
 
-            entity.yaw = (float) (MathHelper.d(vec3d.z, vec3d.x) * 57.2957763671875D) + 90.0F;
+            entity.setYRot((float) (MathHelper.d(vec3d.z, vec3d.x) * 57.2957763671875D) + 90.0F);
+            entity.setXRot((float) (MathHelper.d(d0, vec3d.y) * 57.2957763671875D) - 90.0F);
 
-            for (entity.pitch = (float) (MathHelper.d((double) f1, vec3d.y) * 57.2957763671875D) - 90.0F; entity.pitch - entity.lastPitch < -180.0F; entity.lastPitch -= 360.0F) {
-                ;
+            while (entity.getXRot() - entity.xRotO < -180.0F) {
+                entity.xRotO -= 360.0F;
             }
 
-            while (entity.pitch - entity.lastPitch >= 180.0F) {
-                entity.lastPitch += 360.0F;
+            while (entity.getXRot() - entity.xRotO >= 180.0F) {
+                entity.xRotO += 360.0F;
             }
 
-            while (entity.yaw - entity.lastYaw < -180.0F) {
-                entity.lastYaw -= 360.0F;
+            while (entity.getYRot() - entity.yRotO < -180.0F) {
+                entity.yRotO -= 360.0F;
             }
 
-            while (entity.yaw - entity.lastYaw >= 180.0F) {
-                entity.lastYaw += 360.0F;
+            while (entity.getYRot() - entity.yRotO >= 180.0F) {
+                entity.yRotO += 360.0F;
             }
 
-            entity.pitch = MathHelper.g(f, entity.lastPitch, entity.pitch);
-            entity.yaw = MathHelper.g(f, entity.lastYaw, entity.yaw);
+            entity.setXRot(MathHelper.h(f, entity.xRotO, entity.getXRot()));
+            entity.setYRot(MathHelper.h(f, entity.yRotO, entity.getYRot()));
         }
     }
 
     public static EnumHand a(EntityLiving entityliving, Item item) {
-        return entityliving.getItemInMainHand().getItem() == item ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+        return entityliving.getItemInMainHand().a(item) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
     }
 
     public static EntityArrow a(EntityLiving entityliving, ItemStack itemstack, float f) {
-        ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
-        EntityArrow entityarrow = itemarrow.a(entityliving.world, itemstack, entityliving);
+        ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
+        EntityArrow entityarrow = itemarrow.a(entityliving.level, itemstack, entityliving);
 
         entityarrow.a(entityliving, f);
-        if (itemstack.getItem() == Items.TIPPED_ARROW && entityarrow instanceof EntityTippedArrow) {
-            ((EntityTippedArrow) entityarrow).b(itemstack);
+        if (itemstack.a(Items.TIPPED_ARROW) && entityarrow instanceof EntityTippedArrow) {
+            ((EntityTippedArrow) entityarrow).a(itemstack);
         }
 
         return entityarrow;

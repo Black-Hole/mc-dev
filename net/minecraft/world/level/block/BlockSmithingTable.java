@@ -18,7 +18,7 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockSmithingTable extends BlockWorkbench {
 
-    private static final IChatBaseComponent a = new ChatMessage("container.upgrade");
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.upgrade");
 
     protected BlockSmithingTable(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -28,7 +28,7 @@ public class BlockSmithingTable extends BlockWorkbench {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerSmithing(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockSmithingTable.a);
+        }, BlockSmithingTable.CONTAINER_TITLE);
     }
 
     @Override

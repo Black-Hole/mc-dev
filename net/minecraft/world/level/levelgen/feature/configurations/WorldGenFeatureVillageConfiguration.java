@@ -7,22 +7,22 @@ import net.minecraft.world.level.levelgen.feature.structures.WorldGenFeatureDefi
 
 public class WorldGenFeatureVillageConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureVillageConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureDefinedStructurePoolTemplate.b.fieldOf("start_pool").forGetter(WorldGenFeatureVillageConfiguration::c), Codec.intRange(0, 7).fieldOf("size").forGetter(WorldGenFeatureVillageConfiguration::b)).apply(instance, WorldGenFeatureVillageConfiguration::new);
+    public static final Codec<WorldGenFeatureVillageConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureDefinedStructurePoolTemplate.CODEC.fieldOf("start_pool").forGetter(WorldGenFeatureVillageConfiguration::c), Codec.intRange(0, 7).fieldOf("size").forGetter(WorldGenFeatureVillageConfiguration::b)).apply(instance, WorldGenFeatureVillageConfiguration::new);
     });
-    private final Supplier<WorldGenFeatureDefinedStructurePoolTemplate> b;
-    private final int c;
+    private final Supplier<WorldGenFeatureDefinedStructurePoolTemplate> startPool;
+    private final int maxDepth;
 
     public WorldGenFeatureVillageConfiguration(Supplier<WorldGenFeatureDefinedStructurePoolTemplate> supplier, int i) {
-        this.b = supplier;
-        this.c = i;
+        this.startPool = supplier;
+        this.maxDepth = i;
     }
 
     public int b() {
-        return this.c;
+        return this.maxDepth;
     }
 
     public Supplier<WorldGenFeatureDefinedStructurePoolTemplate> c() {
-        return this.b;
+        return this.startPool;
     }
 }

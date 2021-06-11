@@ -1,7 +1,5 @@
 package net.minecraft.world.inventory;
 
-import net.minecraft.recipebook.AutoRecipeFurnace;
-import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.InventorySubcontainer;
 import net.minecraft.world.entity.player.AutoRecipeStackManager;
@@ -16,11 +14,20 @@ import net.minecraft.world.level.block.entity.TileEntityFurnace;
 
 public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
 
-    private final IInventory furnace;
-    private final IContainerProperties e;
-    protected final World c;
-    private final Recipes<? extends RecipeCooking> f;
-    private final RecipeBookType g;
+    public static final int INGREDIENT_SLOT = 0;
+    public static final int FUEL_SLOT = 1;
+    public static final int RESULT_SLOT = 2;
+    public static final int SLOT_COUNT = 3;
+    public static final int DATA_COUNT = 4;
+    private static final int INV_SLOT_START = 3;
+    private static final int INV_SLOT_END = 30;
+    private static final int USE_ROW_SLOT_START = 30;
+    private static final int USE_ROW_SLOT_END = 39;
+    private final IInventory container;
+    private final IContainerProperties data;
+    protected final World level;
+    private final Recipes<? extends RecipeCooking> recipeType;
+    private final RecipeBookType recipeBookType;
 
     protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, RecipeBookType recipebooktype, int i, PlayerInventory playerinventory) {
         this(containers, recipes, recipebooktype, i, playerinventory, new InventorySubcontainer(3), new ContainerProperties(4));
@@ -28,13 +35,13 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
 
     protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, RecipeBookType recipebooktype, int i, PlayerInventory playerinventory, IInventory iinventory, IContainerProperties icontainerproperties) {
         super(containers, i);
-        this.f = recipes;
-        this.g = recipebooktype;
+        this.recipeType = recipes;
+        this.recipeBookType = recipebooktype;
         a(iinventory, 3);
         a(icontainerproperties, 4);
-        this.furnace = iinventory;
-        this.e = icontainerproperties;
-        this.c = playerinventory.player.world;
+        this.container = iinventory;
+        this.data = icontainerproperties;
+        this.level = playerinventory.player.level;
         this.a(new Slot(iinventory, 0, 56, 17));
         this.a((Slot) (new SlotFurnaceFuel(this, iinventory, 1, 56, 53)));
         this.a((Slot) (new SlotFurnaceResult(playerinventory.player, iinventory, 2, 116, 35)));
@@ -56,50 +63,51 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
 
     @Override
     public void a(AutoRecipeStackManager autorecipestackmanager) {
-        if (this.furnace instanceof AutoRecipeOutput) {
-            ((AutoRecipeOutput) this.furnace).a(autorecipestackmanager);
+        if (this.container instanceof AutoRecipeOutput) {
+            ((AutoRecipeOutput) this.container).a(autorecipestackmanager);
         }
 
     }
 
     @Override
-    public void e() {
-        this.furnace.clear();
-    }
-
-    @Override
-    public void a(boolean flag, IRecipe<?> irecipe, EntityPlayer entityplayer) {
-        (new AutoRecipeFurnace<>(this)).a(entityplayer, irecipe, flag);
+    public void i() {
+        this.getSlot(0).set(ItemStack.EMPTY);
+        this.getSlot(2).set(ItemStack.EMPTY);
     }
 
     @Override
     public boolean a(IRecipe<? super IInventory> irecipe) {
-        return irecipe.a(this.furnace, this.c);
+        return irecipe.a(this.container, this.level);
     }
 
     @Override
-    public int f() {
+    public int j() {
         return 2;
     }
 
     @Override
-    public int g() {
+    public int k() {
         return 1;
     }
 
     @Override
-    public int h() {
+    public int l() {
         return 1;
+    }
+
+    @Override
+    public int m() {
+        return 3;
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return this.furnace.a(entityhuman);
+        return this.container.a(entityhuman);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -108,38 +116,38 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
             itemstack = itemstack1.cloneItemStack();
             if (i == 2) {
                 if (!this.a(itemstack1, 3, 39, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i != 1 && i != 0) {
-                if (this.a(itemstack1)) {
+                if (this.c(itemstack1)) {
                     if (!this.a(itemstack1, 0, 1, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
-                } else if (this.b(itemstack1)) {
+                } else if (this.d(itemstack1)) {
                     if (!this.a(itemstack1, 1, 2, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (i >= 3 && i < 30) {
                     if (!this.a(itemstack1, 30, 39, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (i >= 30 && i < 39 && !this.a(itemstack1, 3, 30, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.a(itemstack1, 3, 39, false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -148,11 +156,42 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
         return itemstack;
     }
 
-    protected boolean a(ItemStack itemstack) {
-        return this.c.getCraftingManager().craft(this.f, new InventorySubcontainer(new ItemStack[]{itemstack}), this.c).isPresent();
+    protected boolean c(ItemStack itemstack) {
+        return this.level.getCraftingManager().craft(this.recipeType, new InventorySubcontainer(new ItemStack[]{itemstack}), this.level).isPresent();
     }
 
-    protected boolean b(ItemStack itemstack) {
+    protected boolean d(ItemStack itemstack) {
         return TileEntityFurnace.isFuel(itemstack);
+    }
+
+    public int n() {
+        int i = this.data.getProperty(2);
+        int j = this.data.getProperty(3);
+
+        return j != 0 && i != 0 ? i * 24 / j : 0;
+    }
+
+    public int o() {
+        int i = this.data.getProperty(1);
+
+        if (i == 0) {
+            i = 200;
+        }
+
+        return this.data.getProperty(0) * 13 / i;
+    }
+
+    public boolean p() {
+        return this.data.getProperty(0) > 0;
+    }
+
+    @Override
+    public RecipeBookType q() {
+        return this.recipeBookType;
+    }
+
+    @Override
+    public boolean d(int i) {
+        return i != 1;
     }
 }

@@ -2,19 +2,28 @@ package net.minecraft;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import it.unimi.dsi.fastutil.Hash.Strategy;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.nio.file.spi.FileSystemProvider;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -34,8 +43,10 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -48,18 +59,26 @@ import net.minecraft.server.DispenserRegistry;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.datafix.DataConverterRegistry;
 import net.minecraft.world.level.block.state.properties.IBlockState;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SystemUtils {
 
-    private static final AtomicInteger c = new AtomicInteger(1);
-    private static final ExecutorService d = a("Bootstrap");
-    private static final ExecutorService e = a("Main");
-    private static final ExecutorService f = n();
-    public static LongSupplier a = System::nanoTime;
-    public static final UUID b = new UUID(0L, 0L);
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final AtomicInteger WORKER_COUNT = new AtomicInteger(1);
+    private static final ExecutorService BOOTSTRAP_EXECUTOR = b("Bootstrap");
+    private static final ExecutorService BACKGROUND_EXECUTOR = b("Main");
+    private static final ExecutorService IO_POOL = m();
+    public static LongSupplier timeSource = System::nanoTime;
+    public static final UUID NIL_UUID = new UUID(0L, 0L);
+    public static final FileSystemProvider ZIP_FILE_SYSTEM_PROVIDER = (FileSystemProvider) FileSystemProvider.installedProviders().stream().filter((filesystemprovider) -> {
+        return filesystemprovider.getScheme().equalsIgnoreCase("jar");
+    }).findFirst().orElseThrow(() -> {
+        return new IllegalStateException("No jar file system provider found");
+    });
+    static final Logger LOGGER = LogManager.getLogger();
+
+    public SystemUtils() {}
 
     public static <K, V> Collector<Entry<? extends K, ? extends V>, ?, Map<K, V>> a() {
         return Collectors.toMap(Entry::getKey, Entry::getValue);
@@ -70,7 +89,7 @@ public class SystemUtils {
     }
 
     public static String a(String s, @Nullable MinecraftKey minecraftkey) {
-        return minecraftkey == null ? s + ".unregistered_sadface" : s + '.' + minecraftkey.getNamespace() + '.' + minecraftkey.getKey().replace('/', '.');
+        return minecraftkey == null ? s + ".unregistered_sadface" : s + "." + minecraftkey.getNamespace() + "." + minecraftkey.getKey().replace('/', '.');
     }
 
     public static long getMonotonicMillis() {
@@ -78,14 +97,14 @@ public class SystemUtils {
     }
 
     public static long getMonotonicNanos() {
-        return SystemUtils.a.getAsLong();
+        return SystemUtils.timeSource.getAsLong();
     }
 
     public static long getTimeMillis() {
         return Instant.now().toEpochMilli();
     }
 
-    private static ExecutorService a(String s) {
+    private static ExecutorService b(String s) {
         int i = MathHelper.clamp(Runtime.getRuntime().availableProcessors() - 1, 1, 7);
         Object object;
 
@@ -105,7 +124,7 @@ public class SystemUtils {
                     }
                 };
 
-                forkjoinworkerthread.setName("Worker-" + s + "-" + SystemUtils.c.getAndIncrement());
+                forkjoinworkerthread.setName("Worker-" + s + "-" + SystemUtils.WORKER_COUNT.getAndIncrement());
                 return forkjoinworkerthread;
             }, SystemUtils::a, true);
         }
@@ -114,20 +133,20 @@ public class SystemUtils {
     }
 
     public static Executor e() {
-        return SystemUtils.d;
+        return SystemUtils.BOOTSTRAP_EXECUTOR;
     }
 
     public static Executor f() {
-        return SystemUtils.e;
+        return SystemUtils.BACKGROUND_EXECUTOR;
     }
 
     public static Executor g() {
-        return SystemUtils.f;
+        return SystemUtils.IO_POOL;
     }
 
     public static void h() {
-        a(SystemUtils.e);
-        a(SystemUtils.f);
+        a(SystemUtils.BACKGROUND_EXECUTOR);
+        a(SystemUtils.IO_POOL);
     }
 
     private static void a(ExecutorService executorservice) {
@@ -147,14 +166,25 @@ public class SystemUtils {
 
     }
 
-    private static ExecutorService n() {
+    private static ExecutorService m() {
         return Executors.newCachedThreadPool((runnable) -> {
             Thread thread = new Thread(runnable);
 
-            thread.setName("IO-Worker-" + SystemUtils.c.getAndIncrement());
+            thread.setName("IO-Worker-" + SystemUtils.WORKER_COUNT.getAndIncrement());
             thread.setUncaughtExceptionHandler(SystemUtils::a);
             return thread;
         });
+    }
+
+    public static <T> CompletableFuture<T> a(Throwable throwable) {
+        CompletableFuture<T> completablefuture = new CompletableFuture();
+
+        completablefuture.completeExceptionally(throwable);
+        return completablefuture;
+    }
+
+    public static void b(Throwable throwable) {
+        throw throwable instanceof RuntimeException ? (RuntimeException) throwable : new RuntimeException(throwable);
     }
 
     private static void a(Thread thread, Throwable throwable) {
@@ -173,7 +203,7 @@ public class SystemUtils {
 
     @Nullable
     public static Type<?> a(TypeReference typereference, String s) {
-        return !SharedConstants.c ? null : b(typereference, s);
+        return !SharedConstants.CHECK_DATA_FIXER_SCHEMA ? null : b(typereference, s);
     }
 
     @Nullable
@@ -184,12 +214,28 @@ public class SystemUtils {
             type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(typereference, s);
         } catch (IllegalArgumentException illegalargumentexception) {
             SystemUtils.LOGGER.error("No data fixer registered for {}", s);
-            if (SharedConstants.d) {
+            if (SharedConstants.IS_RUNNING_IN_IDE) {
                 throw illegalargumentexception;
             }
         }
 
         return type;
+    }
+
+    public static Runnable a(String s, Runnable runnable) {
+        return SharedConstants.IS_RUNNING_IN_IDE ? () -> {
+            Thread thread = Thread.currentThread();
+            String s1 = thread.getName();
+
+            thread.setName(s);
+
+            try {
+                runnable.run();
+            } finally {
+                thread.setName(s1);
+            }
+
+        } : runnable;
     }
 
     public static SystemUtils.OS i() {
@@ -264,6 +310,26 @@ public class SystemUtils {
     }
 
     public static <V> CompletableFuture<List<V>> b(List<? extends CompletableFuture<? extends V>> list) {
+        return (CompletableFuture) list.stream().reduce(CompletableFuture.completedFuture(Lists.newArrayList()), (completablefuture, completablefuture1) -> {
+            return completablefuture1.thenCombine(completablefuture, (object, list1) -> {
+                List<V> list2 = Lists.newArrayListWithCapacity(list1.size() + 1);
+
+                list2.addAll(list1);
+                list2.add(object);
+                return list2;
+            });
+        }, (completablefuture, completablefuture1) -> {
+            return completablefuture.thenCombine(completablefuture1, (list1, list2) -> {
+                List<V> list3 = Lists.newArrayListWithCapacity(list1.size() + list2.size());
+
+                list3.addAll(list1);
+                list3.addAll(list2);
+                return list3;
+            });
+        });
+    }
+
+    public static <V> CompletableFuture<List<V>> c(List<? extends CompletableFuture<? extends V>> list) {
         List<V> list1 = Lists.newArrayListWithCapacity(list.size());
         CompletableFuture<?>[] acompletablefuture = new CompletableFuture[list.size()];
         CompletableFuture<Void> completablefuture = new CompletableFuture();
@@ -304,20 +370,31 @@ public class SystemUtils {
         return runnable;
     }
 
-    public static <T extends Throwable> T c(T t0) {
-        if (SharedConstants.d) {
-            SystemUtils.LOGGER.error("Trying to throw a fatal exception, pausing in IDE", t0);
+    public static void a(String s) {
+        SystemUtils.LOGGER.error(s);
+        if (SharedConstants.IS_RUNNING_IN_IDE) {
+            n();
+        }
 
-            while (true) {
-                try {
-                    Thread.sleep(1000L);
-                    SystemUtils.LOGGER.error("paused");
-                } catch (InterruptedException interruptedexception) {
-                    return t0;
-                }
+    }
+
+    public static <T extends Throwable> T c(T t0) {
+        if (SharedConstants.IS_RUNNING_IN_IDE) {
+            SystemUtils.LOGGER.error("Trying to throw a fatal exception, pausing in IDE", t0);
+            n();
+        }
+
+        return t0;
+    }
+
+    private static void n() {
+        while (true) {
+            try {
+                Thread.sleep(1000L);
+                SystemUtils.LOGGER.error("paused");
+            } catch (InterruptedException interruptedexception) {
+                return;
             }
-        } else {
-            return t0;
         }
     }
 
@@ -331,6 +408,10 @@ public class SystemUtils {
 
     public static int a(int[] aint, Random random) {
         return aint[random.nextInt(aint.length)];
+    }
+
+    public static <T> T a(List<T> list, Random random) {
+        return list.get(random.nextInt(list.size()));
     }
 
     private static BooleanSupplier a(final Path path, final Path path1) {
@@ -439,6 +520,28 @@ public class SystemUtils {
         }
     }
 
+    public static int a(String s, int i, int j) {
+        int k = s.length();
+        int l;
+
+        if (j >= 0) {
+            for (l = 0; i < k && l < j; ++l) {
+                if (Character.isHighSurrogate(s.charAt(i++)) && i < k && Character.isLowSurrogate(s.charAt(i))) {
+                    ++i;
+                }
+            }
+        } else {
+            for (l = j; i > 0 && l < 0; ++l) {
+                --i;
+                if (Character.isLowSurrogate(s.charAt(i)) && i > 0 && Character.isHighSurrogate(s.charAt(i - 1))) {
+                    --i;
+                }
+            }
+        }
+
+        return i;
+    }
+
     public static Consumer<String> a(String s, Consumer<String> consumer) {
         return (s1) -> {
             consumer.accept(s + s1);
@@ -454,6 +557,16 @@ public class SystemUtils {
             return aint.length >= i ? DataResult.error(s, Arrays.copyOf(aint, i)) : DataResult.error(s);
         } else {
             return DataResult.success(aint);
+        }
+    }
+
+    public static <T> DataResult<List<T>> a(List<T> list, int i) {
+        if (list.size() != i) {
+            String s = "Input is not a list of " + i + " elements";
+
+            return list.size() >= i ? DataResult.error(s, list.subList(0, i)) : DataResult.error(s);
+        } else {
+            return DataResult.success(list);
         }
     }
 
@@ -476,7 +589,128 @@ public class SystemUtils {
         thread.start();
     }
 
-    static enum IdentityHashingStrategy implements Strategy<Object> {
+    public static void b(Path path, Path path1, Path path2) throws IOException {
+        Path path3 = path.relativize(path2);
+        Path path4 = path1.resolve(path3);
+
+        Files.copy(path2, path4);
+    }
+
+    public static String a(String s, CharPredicate charpredicate) {
+        return (String) s.toLowerCase(Locale.ROOT).chars().mapToObj((i) -> {
+            return charpredicate.test((char) i) ? Character.toString((char) i) : "_";
+        }).collect(Collectors.joining());
+    }
+
+    public static <T, R> Function<T, R> a(final Function<T, R> function) {
+        return new Function<T, R>() {
+            private final Map<T, R> cache = Maps.newHashMap();
+
+            public R apply(T t0) {
+                return this.cache.computeIfAbsent(t0, function);
+            }
+
+            public String toString() {
+                return "memoize/1[function=" + function + ", size=" + this.cache.size() + "]";
+            }
+        };
+    }
+
+    public static <T, U, R> BiFunction<T, U, R> a(final BiFunction<T, U, R> bifunction) {
+        return new BiFunction<T, U, R>() {
+            private final Map<Pair<T, U>, R> cache = Maps.newHashMap();
+
+            public R apply(T t0, U u0) {
+                return this.cache.computeIfAbsent(Pair.of(t0, u0), (pair) -> {
+                    return bifunction.apply(pair.getFirst(), pair.getSecond());
+                });
+            }
+
+            public String toString() {
+                return "memoize/2[function=" + bifunction + ", size=" + this.cache.size() + "]";
+            }
+        };
+    }
+
+    public static enum OS {
+
+        LINUX, SOLARIS, WINDOWS {
+            @Override
+            protected String[] b(URL url) {
+                return new String[]{"rundll32", "url.dll,FileProtocolHandler", url.toString()};
+            }
+        },
+        OSX {
+            @Override
+            protected String[] b(URL url) {
+                return new String[]{"open", url.toString()};
+            }
+        },
+        UNKNOWN;
+
+        OS() {}
+
+        public void a(URL url) {
+            try {
+                Process process = (Process) AccessController.doPrivileged(() -> {
+                    return Runtime.getRuntime().exec(this.b(url));
+                });
+                Iterator iterator = IOUtils.readLines(process.getErrorStream()).iterator();
+
+                while (iterator.hasNext()) {
+                    String s = (String) iterator.next();
+
+                    SystemUtils.LOGGER.error(s);
+                }
+
+                process.getInputStream().close();
+                process.getErrorStream().close();
+                process.getOutputStream().close();
+            } catch (IOException | PrivilegedActionException privilegedactionexception) {
+                SystemUtils.LOGGER.error("Couldn't open url '{}'", url, privilegedactionexception);
+            }
+
+        }
+
+        public void a(URI uri) {
+            try {
+                this.a(uri.toURL());
+            } catch (MalformedURLException malformedurlexception) {
+                SystemUtils.LOGGER.error("Couldn't open uri '{}'", uri, malformedurlexception);
+            }
+
+        }
+
+        public void a(File file) {
+            try {
+                this.a(file.toURI().toURL());
+            } catch (MalformedURLException malformedurlexception) {
+                SystemUtils.LOGGER.error("Couldn't open file '{}'", file, malformedurlexception);
+            }
+
+        }
+
+        protected String[] b(URL url) {
+            String s = url.toString();
+
+            if ("file".equals(url.getProtocol())) {
+                s = s.replace("file:", "file://");
+            }
+
+            return new String[]{"xdg-open", s};
+        }
+
+        public void a(String s) {
+            try {
+                this.a((new URI(s)).toURL());
+            } catch (MalformedURLException | IllegalArgumentException | URISyntaxException urisyntaxexception) {
+                SystemUtils.LOGGER.error("Couldn't open uri '{}'", s, urisyntaxexception);
+            }
+
+        }
+    }
+
+    private static enum IdentityHashingStrategy implements Strategy<Object> {
 
         INSTANCE;
 
@@ -489,16 +723,5 @@ public class SystemUtils {
         public boolean equals(Object object, Object object1) {
             return object == object1;
         }
-    }
-
-    public static enum OS {
-
-        LINUX, SOLARIS, WINDOWS {
-        },
-        OSX {
-        },
-        UNKNOWN;
-
-        private OS() {}
     }
 }

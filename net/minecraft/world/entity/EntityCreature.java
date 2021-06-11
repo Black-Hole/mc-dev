@@ -14,7 +14,7 @@ public abstract class EntityCreature extends EntityInsentient {
     }
 
     public float f(BlockPosition blockposition) {
-        return this.a(blockposition, (IWorldReader) this.world);
+        return this.a(blockposition, (IWorldReader) this.level);
     }
 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
@@ -26,18 +26,18 @@ public abstract class EntityCreature extends EntityInsentient {
         return this.a(this.getChunkCoordinates(), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean eI() {
+    public boolean ft() {
         return !this.getNavigation().m();
     }
 
     @Override
-    protected void eA() {
-        super.eA();
+    protected void fl() {
+        super.fl();
         Entity entity = this.getLeashHolder();
 
-        if (entity != null && entity.world == this.world) {
+        if (entity != null && entity.level == this.level) {
             this.a(entity.getChunkCoordinates(), 5);
-            float f = this.g(entity);
+            float f = this.e(entity);
 
             if (this instanceof EntityTameableAnimal && ((EntityTameableAnimal) this).isSitting()) {
                 if (f > 10.0F) {
@@ -47,7 +47,7 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            this.x(f);
+            this.y(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
                 this.goalSelector.a(PathfinderGoal.Type.MOVE);
@@ -62,15 +62,15 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX() - this.locX(), entity.locY() - this.locY(), entity.locZ() - this.locZ())).d().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.eJ());
+                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.fu());
             }
         }
 
     }
 
-    protected double eJ() {
+    protected double fu() {
         return 1.0D;
     }
 
-    protected void x(float f) {}
+    protected void y(float f) {}
 }

@@ -1,13 +1,13 @@
 package net.minecraft.advancements;
 
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.resources.MinecraftKey;
@@ -18,19 +18,60 @@ public class Advancements {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public final Map<MinecraftKey, Advancement> advancements = Maps.newHashMap();
-    private final Set<Advancement> c = Sets.newLinkedHashSet();
-    private final Set<Advancement> d = Sets.newLinkedHashSet();
-    private Advancements.a e;
+    private final Set<Advancement> roots = Sets.newLinkedHashSet();
+    private final Set<Advancement> tasks = Sets.newLinkedHashSet();
+    private Advancements.a listener;
 
     public Advancements() {}
 
+    private void a(Advancement advancement) {
+        Iterator iterator = advancement.e().iterator();
+
+        while (iterator.hasNext()) {
+            Advancement advancement1 = (Advancement) iterator.next();
+
+            this.a(advancement1);
+        }
+
+        Advancements.LOGGER.info("Forgot about advancement {}", advancement.getName());
+        this.advancements.remove(advancement.getName());
+        if (advancement.b() == null) {
+            this.roots.remove(advancement);
+            if (this.listener != null) {
+                this.listener.b(advancement);
+            }
+        } else {
+            this.tasks.remove(advancement);
+            if (this.listener != null) {
+                this.listener.d(advancement);
+            }
+        }
+
+    }
+
+    public void a(Set<MinecraftKey> set) {
+        Iterator iterator = set.iterator();
+
+        while (iterator.hasNext()) {
+            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
+            Advancement advancement = (Advancement) this.advancements.get(minecraftkey);
+
+            if (advancement == null) {
+                Advancements.LOGGER.warn("Told to remove advancement {} but I don't know what that is", minecraftkey);
+            } else {
+                this.a(advancement);
+            }
+        }
+
+    }
+
     public void a(Map<MinecraftKey, Advancement.SerializedAdvancement> map) {
-        Function function = Functions.forMap(this.advancements, (Object) null);
+        HashMap hashmap = Maps.newHashMap(map);
 
         label42:
-        while (!map.isEmpty()) {
+        while (!hashmap.isEmpty()) {
             boolean flag = false;
-            Iterator iterator = map.entrySet().iterator();
+            Iterator iterator = hashmap.entrySet().iterator();
 
             Entry entry;
 
@@ -38,29 +79,31 @@ public class Advancements {
                 entry = (Entry) iterator.next();
                 MinecraftKey minecraftkey = (MinecraftKey) entry.getKey();
                 Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) entry.getValue();
+                Map map1 = this.advancements;
 
-                if (advancement_serializedadvancement.a((java.util.function.Function) function)) {
+                Objects.requireNonNull(this.advancements);
+                if (advancement_serializedadvancement.a(map1::get)) {
                     Advancement advancement = advancement_serializedadvancement.b(minecraftkey);
 
                     this.advancements.put(minecraftkey, advancement);
                     flag = true;
                     iterator.remove();
                     if (advancement.b() == null) {
-                        this.c.add(advancement);
-                        if (this.e != null) {
-                            this.e.a(advancement);
+                        this.roots.add(advancement);
+                        if (this.listener != null) {
+                            this.listener.a(advancement);
                         }
                     } else {
-                        this.d.add(advancement);
-                        if (this.e != null) {
-                            this.e.c(advancement);
+                        this.tasks.add(advancement);
+                        if (this.listener != null) {
+                            this.listener.c(advancement);
                         }
                     }
                 }
             }
 
             if (!flag) {
-                iterator = map.entrySet().iterator();
+                iterator = hashmap.entrySet().iterator();
 
                 while (true) {
                     if (!iterator.hasNext()) {
@@ -76,8 +119,18 @@ public class Advancements {
         Advancements.LOGGER.info("Loaded {} advancements", this.advancements.size());
     }
 
+    public void a() {
+        this.advancements.clear();
+        this.roots.clear();
+        this.tasks.clear();
+        if (this.listener != null) {
+            this.listener.a();
+        }
+
+    }
+
     public Iterable<Advancement> b() {
-        return this.c;
+        return this.roots;
     }
 
     public Collection<Advancement> c() {
@@ -89,10 +142,38 @@ public class Advancements {
         return (Advancement) this.advancements.get(minecraftkey);
     }
 
+    public void a(@Nullable Advancements.a advancements_a) {
+        this.listener = advancements_a;
+        if (advancements_a != null) {
+            Iterator iterator = this.roots.iterator();
+
+            Advancement advancement;
+
+            while (iterator.hasNext()) {
+                advancement = (Advancement) iterator.next();
+                advancements_a.a(advancement);
+            }
+
+            iterator = this.tasks.iterator();
+
+            while (iterator.hasNext()) {
+                advancement = (Advancement) iterator.next();
+                advancements_a.c(advancement);
+            }
+        }
+
+    }
+
     public interface a {
 
         void a(Advancement advancement);
 
+        void b(Advancement advancement);
+
         void c(Advancement advancement);
+
+        void d(Advancement advancement);
+
+        void a();
     }
 }

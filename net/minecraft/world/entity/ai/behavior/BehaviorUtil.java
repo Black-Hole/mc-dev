@@ -2,36 +2,44 @@ package net.minecraft.world.entity.ai.behavior;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryTarget;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.npc.EntityVillager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemProjectileWeapon;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.pathfinder.PathMode;
 import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorUtil {
 
+    public BehaviorUtil() {}
+
     public static void a(EntityLiving entityliving, EntityLiving entityliving1, float f) {
-        d(entityliving, entityliving1);
+        c(entityliving, entityliving1);
         b(entityliving, entityliving1, f);
     }
 
     public static boolean a(BehaviorController<?> behaviorcontroller, EntityLiving entityliving) {
-        return behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).filter((list) -> {
+        return behaviorcontroller.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).filter((list) -> {
             return list.contains(entityliving);
         }).isPresent();
     }
@@ -48,7 +56,7 @@ public class BehaviorUtil {
         }).isPresent();
     }
 
-    private static void d(EntityLiving entityliving, EntityLiving entityliving1) {
+    private static void c(EntityLiving entityliving, EntityLiving entityliving1) {
         a(entityliving, entityliving1);
         a(entityliving1, entityliving);
     }
@@ -80,14 +88,14 @@ public class BehaviorUtil {
 
     public static void a(EntityLiving entityliving, ItemStack itemstack, Vec3D vec3d) {
         double d0 = entityliving.getHeadY() - 0.30000001192092896D;
-        EntityItem entityitem = new EntityItem(entityliving.world, entityliving.locX(), d0, entityliving.locZ(), itemstack);
+        EntityItem entityitem = new EntityItem(entityliving.level, entityliving.locX(), d0, entityliving.locZ(), itemstack);
         float f = 0.3F;
         Vec3D vec3d1 = vec3d.d(entityliving.getPositionVector());
 
         vec3d1 = vec3d1.d().a(0.30000001192092896D);
         entityitem.setMot(vec3d1);
         entityitem.defaultPickupDelay();
-        entityliving.world.addEntity(entityitem);
+        entityliving.level.addEntity(entityitem);
     }
 
     public static SectionPosition a(WorldServer worldserver, SectionPosition sectionposition, int i) {
@@ -96,7 +104,7 @@ public class BehaviorUtil {
             return worldserver.b(sectionposition1) < j;
         });
 
-        worldserver.getClass();
+        Objects.requireNonNull(worldserver);
         return (SectionPosition) stream.min(Comparator.comparingInt(worldserver::b)).orElse(sectionposition);
     }
 
@@ -108,15 +116,14 @@ public class BehaviorUtil {
 
             return entityinsentient.a((Entity) entityliving, (double) j);
         } else {
-            return b((EntityLiving) entityinsentient, entityliving);
+            return a(entityinsentient, entityliving);
         }
     }
 
-    public static boolean b(EntityLiving entityliving, EntityLiving entityliving1) {
-        double d0 = entityliving.h(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
-        double d1 = (double) (entityliving.getWidth() * 2.0F * entityliving.getWidth() * 2.0F + entityliving1.getWidth());
+    public static boolean a(EntityInsentient entityinsentient, EntityLiving entityliving) {
+        double d0 = entityinsentient.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
 
-        return d0 <= d1;
+        return d0 <= entityinsentient.i(entityliving);
     }
 
     public static boolean a(EntityLiving entityliving, EntityLiving entityliving1, double d0) {
@@ -132,10 +139,10 @@ public class BehaviorUtil {
         }
     }
 
-    public static boolean c(EntityLiving entityliving, EntityLiving entityliving1) {
+    public static boolean b(EntityLiving entityliving, EntityLiving entityliving1) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        return !behaviorcontroller.hasMemory(MemoryModuleType.VISIBLE_MOBS) ? false : ((List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).get()).contains(entityliving1);
+        return !behaviorcontroller.hasMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ? false : ((List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).contains(entityliving1);
     }
 
     public static EntityLiving a(EntityLiving entityliving, Optional<EntityLiving> optional, EntityLiving entityliving1) {
@@ -153,17 +160,30 @@ public class BehaviorUtil {
         Optional<UUID> optional = entityliving.getBehaviorController().getMemory(memorymoduletype);
 
         return optional.map((uuid) -> {
-            return (EntityLiving) ((WorldServer) entityliving.world).getEntity(uuid);
+            return ((WorldServer) entityliving.level).getEntity(uuid);
+        }).map((entity) -> {
+            return entity instanceof EntityLiving ? (EntityLiving) entity : null;
         });
     }
 
     public static Stream<EntityVillager> a(EntityVillager entityvillager, Predicate<EntityVillager> predicate) {
-        return (Stream) entityvillager.getBehaviorController().getMemory(MemoryModuleType.MOBS).map((list) -> {
+        return (Stream) entityvillager.getBehaviorController().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map((list) -> {
             return list.stream().filter((entityliving) -> {
                 return entityliving instanceof EntityVillager && entityliving != entityvillager;
             }).map((entityliving) -> {
                 return (EntityVillager) entityliving;
             }).filter(EntityLiving::isAlive).filter(predicate);
         }).orElseGet(Stream::empty);
+    }
+
+    @Nullable
+    public static Vec3D a(EntityCreature entitycreature, int i, int j) {
+        Vec3D vec3d = DefaultRandomPos.a(entitycreature, i, j);
+
+        for (int k = 0; vec3d != null && !entitycreature.level.getType(new BlockPosition(vec3d)).a((IBlockAccess) entitycreature.level, new BlockPosition(vec3d), PathMode.WATER) && k++ < 10; vec3d = DefaultRandomPos.a(entitycreature, i, j)) {
+            ;
+        }
+
+        return vec3d;
     }
 }

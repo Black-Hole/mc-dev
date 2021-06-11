@@ -15,11 +15,11 @@ public class SensorAdult extends Sensor<EntityAgeable> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_ADULY, MemoryModuleType.VISIBLE_MOBS);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
     }
 
     protected void a(WorldServer worldserver, EntityAgeable entityageable) {
-        entityageable.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
+        entityageable.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).ifPresent((list) -> {
             this.a(entityageable, list);
         });
     }
@@ -33,6 +33,6 @@ public class SensorAdult extends Sensor<EntityAgeable> {
             return !entityageable1.isBaby();
         }).findFirst();
 
-        entityageable.getBehaviorController().setMemory(MemoryModuleType.NEAREST_VISIBLE_ADULY, optional);
+        entityageable.getBehaviorController().setMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT, optional);
     }
 }

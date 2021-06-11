@@ -2,21 +2,21 @@ package net.minecraft.nbt;
 
 public class NBTReadLimiter {
 
-    public static final NBTReadLimiter a = new NBTReadLimiter(0L) {
+    public static final NBTReadLimiter UNLIMITED = new NBTReadLimiter(0L) {
         @Override
         public void a(long i) {}
     };
-    private final long b;
-    private long c;
+    private final long quota;
+    private long usage;
 
     public NBTReadLimiter(long i) {
-        this.b = i;
+        this.quota = i;
     }
 
     public void a(long i) {
-        this.c += i / 8L;
-        if (this.c > this.b) {
-            throw new RuntimeException("Tried to read NBT tag that was too big; tried to allocate: " + this.c + "bytes where max allowed: " + this.b);
+        this.usage += i / 8L;
+        if (this.usage > this.quota) {
+            throw new RuntimeException("Tried to read NBT tag that was too big; tried to allocate: " + this.usage + "bytes where max allowed: " + this.quota);
         }
     }
 }

@@ -7,26 +7,26 @@ import net.minecraft.world.entity.ai.util.PathfinderGoalUtil;
 
 public class PathfinderGoalRestrictSun extends PathfinderGoal {
 
-    private final EntityCreature a;
+    private final EntityCreature mob;
 
     public PathfinderGoalRestrictSun(EntityCreature entitycreature) {
-        this.a = entitycreature;
+        this.mob = entitycreature;
     }
 
     @Override
     public boolean a() {
-        return this.a.world.isDay() && this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() && PathfinderGoalUtil.a(this.a);
+        return this.mob.level.isDay() && this.mob.getEquipment(EnumItemSlot.HEAD).isEmpty() && PathfinderGoalUtil.a(this.mob);
     }
 
     @Override
     public void c() {
-        ((Navigation) this.a.getNavigation()).c(true);
+        ((Navigation) this.mob.getNavigation()).c(true);
     }
 
     @Override
     public void d() {
-        if (PathfinderGoalUtil.a(this.a)) {
-            ((Navigation) this.a.getNavigation()).c(false);
+        if (PathfinderGoalUtil.a(this.mob)) {
+            ((Navigation) this.mob.getNavigation()).c(false);
         }
 
     }

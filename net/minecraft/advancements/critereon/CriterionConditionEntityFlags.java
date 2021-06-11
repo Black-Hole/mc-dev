@@ -10,28 +10,28 @@ import net.minecraft.world.entity.EntityLiving;
 
 public class CriterionConditionEntityFlags {
 
-    public static final CriterionConditionEntityFlags a = (new CriterionConditionEntityFlags.a()).b();
+    public static final CriterionConditionEntityFlags ANY = (new CriterionConditionEntityFlags.a()).b();
     @Nullable
-    private final Boolean b;
+    private final Boolean isOnFire;
     @Nullable
-    private final Boolean c;
+    private final Boolean isCrouching;
     @Nullable
-    private final Boolean d;
+    private final Boolean isSprinting;
     @Nullable
-    private final Boolean e;
+    private final Boolean isSwimming;
     @Nullable
-    private final Boolean f;
+    private final Boolean isBaby;
 
     public CriterionConditionEntityFlags(@Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4) {
-        this.b = obool;
-        this.c = obool1;
-        this.d = obool2;
-        this.e = obool3;
-        this.f = obool4;
+        this.isOnFire = obool;
+        this.isCrouching = obool1;
+        this.isSprinting = obool2;
+        this.isSwimming = obool3;
+        this.isBaby = obool4;
     }
 
     public boolean a(Entity entity) {
-        return this.b != null && entity.isBurning() != this.b ? false : (this.c != null && entity.bz() != this.c ? false : (this.d != null && entity.isSprinting() != this.d ? false : (this.e != null && entity.isSwimming() != this.e ? false : this.f == null || !(entity instanceof EntityLiving) || ((EntityLiving) entity).isBaby() == this.f)));
+        return this.isOnFire != null && entity.isBurning() != this.isOnFire ? false : (this.isCrouching != null && entity.isCrouching() != this.isCrouching ? false : (this.isSprinting != null && entity.isSprinting() != this.isSprinting ? false : (this.isSwimming != null && entity.isSwimming() != this.isSwimming ? false : this.isBaby == null || !(entity instanceof EntityLiving) || ((EntityLiving) entity).isBaby() == this.isBaby)));
     }
 
     @Nullable
@@ -50,7 +50,7 @@ public class CriterionConditionEntityFlags {
 
             return new CriterionConditionEntityFlags(obool, obool1, obool2, obool3, obool4);
         } else {
-            return CriterionConditionEntityFlags.a;
+            return CriterionConditionEntityFlags.ANY;
         }
     }
 
@@ -62,16 +62,16 @@ public class CriterionConditionEntityFlags {
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionEntityFlags.a) {
+        if (this == CriterionConditionEntityFlags.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            this.a(jsonobject, "is_on_fire", this.b);
-            this.a(jsonobject, "is_sneaking", this.c);
-            this.a(jsonobject, "is_sprinting", this.d);
-            this.a(jsonobject, "is_swimming", this.e);
-            this.a(jsonobject, "is_baby", this.f);
+            this.a(jsonobject, "is_on_fire", this.isOnFire);
+            this.a(jsonobject, "is_sneaking", this.isCrouching);
+            this.a(jsonobject, "is_sprinting", this.isSprinting);
+            this.a(jsonobject, "is_swimming", this.isSwimming);
+            this.a(jsonobject, "is_baby", this.isBaby);
             return jsonobject;
         }
     }
@@ -79,15 +79,15 @@ public class CriterionConditionEntityFlags {
     public static class a {
 
         @Nullable
-        private Boolean a;
+        private Boolean isOnFire;
         @Nullable
-        private Boolean b;
+        private Boolean isCrouching;
         @Nullable
-        private Boolean c;
+        private Boolean isSprinting;
         @Nullable
-        private Boolean d;
+        private Boolean isSwimming;
         @Nullable
-        private Boolean e;
+        private Boolean isBaby;
 
         public a() {}
 
@@ -96,17 +96,32 @@ public class CriterionConditionEntityFlags {
         }
 
         public CriterionConditionEntityFlags.a a(@Nullable Boolean obool) {
-            this.a = obool;
+            this.isOnFire = obool;
+            return this;
+        }
+
+        public CriterionConditionEntityFlags.a b(@Nullable Boolean obool) {
+            this.isCrouching = obool;
+            return this;
+        }
+
+        public CriterionConditionEntityFlags.a c(@Nullable Boolean obool) {
+            this.isSprinting = obool;
+            return this;
+        }
+
+        public CriterionConditionEntityFlags.a d(@Nullable Boolean obool) {
+            this.isSwimming = obool;
             return this;
         }
 
         public CriterionConditionEntityFlags.a e(@Nullable Boolean obool) {
-            this.e = obool;
+            this.isBaby = obool;
             return this;
         }
 
         public CriterionConditionEntityFlags b() {
-            return new CriterionConditionEntityFlags(this.a, this.b, this.c, this.d, this.e);
+            return new CriterionConditionEntityFlags(this.isOnFire, this.isCrouching, this.isSprinting, this.isSwimming, this.isBaby);
         }
     }
 }

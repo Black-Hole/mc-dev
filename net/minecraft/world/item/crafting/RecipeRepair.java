@@ -30,7 +30,7 @@ public class RecipeRepair extends IRecipeComplex {
                 if (list.size() > 1) {
                     ItemStack itemstack1 = (ItemStack) list.get(0);
 
-                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
+                    if (!itemstack.a(itemstack1.getItem()) || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
                         return false;
                     }
                 }
@@ -52,8 +52,8 @@ public class RecipeRepair extends IRecipeComplex {
                 if (list.size() > 1) {
                     ItemStack itemstack1 = (ItemStack) list.get(0);
 
-                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
-                        return ItemStack.b;
+                    if (!itemstack.a(itemstack1.getItem()) || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
+                        return ItemStack.EMPTY;
                     }
                 }
             }
@@ -63,7 +63,7 @@ public class RecipeRepair extends IRecipeComplex {
             ItemStack itemstack2 = (ItemStack) list.get(0);
 
             itemstack = (ItemStack) list.get(1);
-            if (itemstack2.getItem() == itemstack.getItem() && itemstack2.getCount() == 1 && itemstack.getCount() == 1 && itemstack2.getItem().usesDurability()) {
+            if (itemstack2.a(itemstack.getItem()) && itemstack2.getCount() == 1 && itemstack.getCount() == 1 && itemstack2.getItem().usesDurability()) {
                 Item item = itemstack2.getItem();
                 int j = item.getMaxDurability() - itemstack2.getDamage();
                 int k = item.getMaxDurability() - itemstack.getDamage();
@@ -97,11 +97,16 @@ public class RecipeRepair extends IRecipeComplex {
             }
         }
 
-        return ItemStack.b;
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
     }
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.o;
+        return RecipeSerializer.REPAIR_ITEM;
     }
 }

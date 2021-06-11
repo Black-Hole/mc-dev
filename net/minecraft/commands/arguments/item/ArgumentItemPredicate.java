@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.core.IRegistry;
 import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -24,8 +25,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate.b> {
 
-    private static final Collection<String> a = Arrays.asList("stick", "minecraft:stick", "#stick", "#stick{foo=bar}");
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("stick", "minecraft:stick", "#stick", "#stick{foo=bar}");
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_TAG = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.item.tag.unknown", new Object[]{object});
     });
 
@@ -36,25 +37,23 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
     }
 
     public ArgumentItemPredicate.b parse(StringReader stringreader) throws CommandSyntaxException {
-        ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, true)).h();
+        ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, true)).g();
 
-        if (argumentparseritemstack.b() != null) {
-            ArgumentItemPredicate.a argumentitempredicate_a = new ArgumentItemPredicate.a(argumentparseritemstack.b(), argumentparseritemstack.c());
+        if (argumentparseritemstack.a() != null) {
+            ArgumentItemPredicate.a argumentitempredicate_a = new ArgumentItemPredicate.a(argumentparseritemstack.a(), argumentparseritemstack.b());
 
             return (commandcontext) -> {
                 return argumentitempredicate_a;
             };
         } else {
-            MinecraftKey minecraftkey = argumentparseritemstack.d();
+            MinecraftKey minecraftkey = argumentparseritemstack.c();
 
             return (commandcontext) -> {
-                Tag<Item> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().getItemTags().a(minecraftkey);
+                Tag<Item> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().a(IRegistry.ITEM_REGISTRY, minecraftkey, (minecraftkey1) -> {
+                    return ArgumentItemPredicate.ERROR_UNKNOWN_TAG.create(minecraftkey1.toString());
+                });
 
-                if (tag == null) {
-                    throw ArgumentItemPredicate.b.create(minecraftkey.toString());
-                } else {
-                    return new ArgumentItemPredicate.c(tag, argumentparseritemstack.c());
-                }
+                return new ArgumentItemPredicate.c(tag, argumentparseritemstack.b());
             };
         }
     }
@@ -70,7 +69,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
         ArgumentParserItemStack argumentparseritemstack = new ArgumentParserItemStack(stringreader, true);
 
         try {
-            argumentparseritemstack.h();
+            argumentparseritemstack.g();
         } catch (CommandSyntaxException commandsyntaxexception) {
             ;
         }
@@ -79,43 +78,43 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
     }
 
     public Collection<String> getExamples() {
-        return ArgumentItemPredicate.a;
+        return ArgumentItemPredicate.EXAMPLES;
     }
 
-    static class c implements Predicate<ItemStack> {
+    private static class a implements Predicate<ItemStack> {
 
-        private final Tag<Item> a;
+        private final Item item;
         @Nullable
-        private final NBTTagCompound b;
-
-        public c(Tag<Item> tag, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = tag;
-            this.b = nbttagcompound;
-        }
-
-        public boolean test(ItemStack itemstack) {
-            return this.a.isTagged(itemstack.getItem()) && GameProfileSerializer.a(this.b, itemstack.getTag(), true);
-        }
-    }
-
-    static class a implements Predicate<ItemStack> {
-
-        private final Item a;
-        @Nullable
-        private final NBTTagCompound b;
+        private final NBTTagCompound nbt;
 
         public a(Item item, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = item;
-            this.b = nbttagcompound;
+            this.item = item;
+            this.nbt = nbttagcompound;
         }
 
         public boolean test(ItemStack itemstack) {
-            return itemstack.getItem() == this.a && GameProfileSerializer.a(this.b, itemstack.getTag(), true);
+            return itemstack.a(this.item) && GameProfileSerializer.a(this.nbt, itemstack.getTag(), true);
         }
     }
 
     public interface b {
 
         Predicate<ItemStack> create(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
+    }
+
+    private static class c implements Predicate<ItemStack> {
+
+        private final Tag<Item> tag;
+        @Nullable
+        private final NBTTagCompound nbt;
+
+        public c(Tag<Item> tag, @Nullable NBTTagCompound nbttagcompound) {
+            this.tag = tag;
+            this.nbt = nbttagcompound;
+        }
+
+        public boolean test(ItemStack itemstack) {
+            return itemstack.a(this.tag) && GameProfileSerializer.a(this.nbt, itemstack.getTag(), true);
+        }
     }
 }

@@ -3,6 +3,7 @@ package net.minecraft.world.level.block.entity;
 import java.util.List;
 import java.util.stream.IntStream;
 import javax.annotation.Nullable;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,150 +16,109 @@ import net.minecraft.world.ContainerUtil;
 import net.minecraft.world.IWorldInventory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EnumMoveType;
+import net.minecraft.world.entity.monster.EntityShulker;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.inventory.ContainerShulkerBox;
 import net.minecraft.world.item.EnumColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockShulkerBox;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.EnumPistonReaction;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.Vec3D;
-import net.minecraft.world.phys.shapes.VoxelShapes;
 
-public class TileEntityShulkerBox extends TileEntityLootable implements IWorldInventory, ITickable {
+public class TileEntityShulkerBox extends TileEntityLootable implements IWorldInventory {
 
-    private static final int[] a = IntStream.range(0, 27).toArray();
-    private NonNullList<ItemStack> contents;
-    public int viewingCount;
-    private TileEntityShulkerBox.AnimationPhase i;
-    private float j;
-    private float k;
+    public static final int COLUMNS = 9;
+    public static final int ROWS = 3;
+    public static final int CONTAINER_SIZE = 27;
+    public static final int EVENT_SET_OPEN_COUNT = 1;
+    public static final int OPENING_TICK_LENGTH = 10;
+    public static final float MAX_LID_HEIGHT = 0.5F;
+    public static final float MAX_LID_ROTATION = 270.0F;
+    public static final String ITEMS_TAG = "Items";
+    private static final int[] SLOTS = IntStream.range(0, 27).toArray();
+    private NonNullList<ItemStack> itemStacks;
+    public int openCount;
+    private TileEntityShulkerBox.AnimationPhase animationStatus;
+    private float progress;
+    private float progressOld;
     @Nullable
-    private EnumColor l;
-    private boolean m;
+    private final EnumColor color;
 
-    public TileEntityShulkerBox(@Nullable EnumColor enumcolor) {
-        super(TileEntityTypes.SHULKER_BOX);
-        this.contents = NonNullList.a(27, ItemStack.b);
-        this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
-        this.l = enumcolor;
+    public TileEntityShulkerBox(@Nullable EnumColor enumcolor, BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.SHULKER_BOX, blockposition, iblockdata);
+        this.itemStacks = NonNullList.a(27, ItemStack.EMPTY);
+        this.animationStatus = TileEntityShulkerBox.AnimationPhase.CLOSED;
+        this.color = enumcolor;
     }
 
-    public TileEntityShulkerBox() {
-        this((EnumColor) null);
-        this.m = true;
+    public TileEntityShulkerBox(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.SHULKER_BOX, blockposition, iblockdata);
+        this.itemStacks = NonNullList.a(27, ItemStack.EMPTY);
+        this.animationStatus = TileEntityShulkerBox.AnimationPhase.CLOSED;
+        this.color = BlockShulkerBox.a(iblockdata.getBlock());
     }
 
-    @Override
-    public void tick() {
-        this.h();
-        if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.m();
-        }
-
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityShulkerBox tileentityshulkerbox) {
+        tileentityshulkerbox.b(world, blockposition, iblockdata);
     }
 
-    protected void h() {
-        this.k = this.j;
-        switch (this.i) {
+    private void b(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.progressOld = this.progress;
+        switch (this.animationStatus) {
             case CLOSED:
-                this.j = 0.0F;
+                this.progress = 0.0F;
                 break;
             case OPENING:
-                this.j += 0.1F;
-                if (this.j >= 1.0F) {
-                    this.m();
-                    this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
-                    this.j = 1.0F;
-                    this.x();
+                this.progress += 0.1F;
+                if (this.progress >= 1.0F) {
+                    this.animationStatus = TileEntityShulkerBox.AnimationPhase.OPENED;
+                    this.progress = 1.0F;
+                    d(world, blockposition, iblockdata);
                 }
+
+                this.c(world, blockposition, iblockdata);
                 break;
             case CLOSING:
-                this.j -= 0.1F;
-                if (this.j <= 0.0F) {
-                    this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
-                    this.j = 0.0F;
-                    this.x();
+                this.progress -= 0.1F;
+                if (this.progress <= 0.0F) {
+                    this.animationStatus = TileEntityShulkerBox.AnimationPhase.CLOSED;
+                    this.progress = 0.0F;
+                    d(world, blockposition, iblockdata);
                 }
                 break;
             case OPENED:
-                this.j = 1.0F;
+                this.progress = 1.0F;
         }
 
     }
 
-    public TileEntityShulkerBox.AnimationPhase j() {
-        return this.i;
+    public TileEntityShulkerBox.AnimationPhase h() {
+        return this.animationStatus;
     }
 
     public AxisAlignedBB a(IBlockData iblockdata) {
-        return this.b((EnumDirection) iblockdata.get(BlockShulkerBox.a));
+        return EntityShulker.a((EnumDirection) iblockdata.get(BlockShulkerBox.FACING), 0.5F * this.a(1.0F));
     }
 
-    public AxisAlignedBB b(EnumDirection enumdirection) {
-        float f = this.a(1.0F);
-
-        return VoxelShapes.b().getBoundingBox().b((double) (0.5F * f * (float) enumdirection.getAdjacentX()), (double) (0.5F * f * (float) enumdirection.getAdjacentY()), (double) (0.5F * f * (float) enumdirection.getAdjacentZ()));
-    }
-
-    private AxisAlignedBB c(EnumDirection enumdirection) {
-        EnumDirection enumdirection1 = enumdirection.opposite();
-
-        return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
-    }
-
-    private void m() {
-        IBlockData iblockdata = this.world.getType(this.getPosition());
-
+    private void c(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
-            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
-            AxisAlignedBB axisalignedbb = this.c(enumdirection).a(this.position);
-            List<Entity> list = this.world.getEntities((Entity) null, axisalignedbb);
+            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.FACING);
+            AxisAlignedBB axisalignedbb = EntityShulker.a(enumdirection, this.progressOld, this.progress).a(blockposition);
+            List<Entity> list = world.getEntities((Entity) null, axisalignedbb);
 
             if (!list.isEmpty()) {
                 for (int i = 0; i < list.size(); ++i) {
                     Entity entity = (Entity) list.get(i);
 
                     if (entity.getPushReaction() != EnumPistonReaction.IGNORE) {
-                        double d0 = 0.0D;
-                        double d1 = 0.0D;
-                        double d2 = 0.0D;
-                        AxisAlignedBB axisalignedbb1 = entity.getBoundingBox();
-
-                        switch (enumdirection.n()) {
-                            case X:
-                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                    d0 = axisalignedbb.maxX - axisalignedbb1.minX;
-                                } else {
-                                    d0 = axisalignedbb1.maxX - axisalignedbb.minX;
-                                }
-
-                                d0 += 0.01D;
-                                break;
-                            case Y:
-                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                    d1 = axisalignedbb.maxY - axisalignedbb1.minY;
-                                } else {
-                                    d1 = axisalignedbb1.maxY - axisalignedbb.minY;
-                                }
-
-                                d1 += 0.01D;
-                                break;
-                            case Z:
-                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                    d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
-                                } else {
-                                    d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
-                                }
-
-                                d2 += 0.01D;
-                        }
-
-                        entity.move(EnumMoveType.SHULKER_BOX, new Vec3D(d0 * (double) enumdirection.getAdjacentX(), d1 * (double) enumdirection.getAdjacentY(), d2 * (double) enumdirection.getAdjacentZ()));
+                        entity.move(EnumMoveType.SHULKER_BOX, new Vec3D((axisalignedbb.b() + 0.01D) * (double) enumdirection.getAdjacentX(), (axisalignedbb.c() + 0.01D) * (double) enumdirection.getAdjacentY(), (axisalignedbb.d() + 0.01D) * (double) enumdirection.getAdjacentZ()));
                     }
                 }
 
@@ -168,21 +128,21 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Override
     public int getSize() {
-        return this.contents.size();
+        return this.itemStacks.size();
     }
 
     @Override
     public boolean setProperty(int i, int j) {
         if (i == 1) {
-            this.viewingCount = j;
+            this.openCount = j;
             if (j == 0) {
-                this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
-                this.x();
+                this.animationStatus = TileEntityShulkerBox.AnimationPhase.CLOSING;
+                d(this.getWorld(), this.worldPosition, this.getBlock());
             }
 
             if (j == 1) {
-                this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
-                this.x();
+                this.animationStatus = TileEntityShulkerBox.AnimationPhase.OPENING;
+                d(this.getWorld(), this.worldPosition, this.getBlock());
             }
 
             return true;
@@ -191,21 +151,22 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         }
     }
 
-    private void x() {
-        this.getBlock().a(this.getWorld(), this.getPosition(), 3);
+    private static void d(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        iblockdata.a(world, blockposition, 3);
     }
 
     @Override
     public void startOpen(EntityHuman entityhuman) {
         if (!entityhuman.isSpectator()) {
-            if (this.viewingCount < 0) {
-                this.viewingCount = 0;
+            if (this.openCount < 0) {
+                this.openCount = 0;
             }
 
-            ++this.viewingCount;
-            this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.viewingCount);
-            if (this.viewingCount == 1) {
-                this.world.playSound((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            ++this.openCount;
+            this.level.playBlockAction(this.worldPosition, this.getBlock().getBlock(), 1, this.openCount);
+            if (this.openCount == 1) {
+                this.level.a((Entity) entityhuman, GameEvent.CONTAINER_OPEN, this.worldPosition);
+                this.level.playSound((EntityHuman) null, this.worldPosition, SoundEffects.SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -214,10 +175,11 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     @Override
     public void closeContainer(EntityHuman entityhuman) {
         if (!entityhuman.isSpectator()) {
-            --this.viewingCount;
-            this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.viewingCount);
-            if (this.viewingCount <= 0) {
-                this.world.playSound((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            --this.openCount;
+            this.level.playBlockAction(this.worldPosition, this.getBlock().getBlock(), 1, this.openCount);
+            if (this.openCount <= 0) {
+                this.level.a((Entity) entityhuman, GameEvent.CONTAINER_CLOSE, this.worldPosition);
+                this.level.playSound((EntityHuman) null, this.worldPosition, SoundEffects.SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -229,28 +191,28 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.d(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.e(nbttagcompound);
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        return this.e(nbttagcompound);
+        return this.f(nbttagcompound);
     }
 
-    public void d(NBTTagCompound nbttagcompound) {
-        this.contents = NonNullList.a(this.getSize(), ItemStack.b);
-        if (!this.b(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
-            ContainerUtil.b(nbttagcompound, this.contents);
+    public void e(NBTTagCompound nbttagcompound) {
+        this.itemStacks = NonNullList.a(this.getSize(), ItemStack.EMPTY);
+        if (!this.c(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
+            ContainerUtil.b(nbttagcompound, this.itemStacks);
         }
 
     }
 
-    public NBTTagCompound e(NBTTagCompound nbttagcompound) {
-        if (!this.c(nbttagcompound)) {
-            ContainerUtil.a(nbttagcompound, this.contents, false);
+    public NBTTagCompound f(NBTTagCompound nbttagcompound) {
+        if (!this.d(nbttagcompound)) {
+            ContainerUtil.a(nbttagcompound, this.itemStacks, false);
         }
 
         return nbttagcompound;
@@ -258,17 +220,17 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Override
     protected NonNullList<ItemStack> f() {
-        return this.contents;
+        return this.itemStacks;
     }
 
     @Override
     protected void a(NonNullList<ItemStack> nonnulllist) {
-        this.contents = nonnulllist;
+        this.itemStacks = nonnulllist;
     }
 
     @Override
     public int[] getSlotsForFace(EnumDirection enumdirection) {
-        return TileEntityShulkerBox.a;
+        return TileEntityShulkerBox.SLOTS;
     }
 
     @Override
@@ -282,7 +244,12 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     }
 
     public float a(float f) {
-        return MathHelper.g(f, this.k, this.j);
+        return MathHelper.h(f, this.progressOld, this.progress);
+    }
+
+    @Nullable
+    public EnumColor i() {
+        return this.color;
     }
 
     @Override
@@ -290,8 +257,8 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         return new ContainerShulkerBox(i, playerinventory, this);
     }
 
-    public boolean l() {
-        return this.i == TileEntityShulkerBox.AnimationPhase.CLOSED;
+    public boolean j() {
+        return this.animationStatus == TileEntityShulkerBox.AnimationPhase.CLOSED;
     }
 
     public static enum AnimationPhase {

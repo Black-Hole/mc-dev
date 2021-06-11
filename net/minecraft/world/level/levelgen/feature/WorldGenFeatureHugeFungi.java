@@ -17,16 +17,24 @@ import net.minecraft.world.level.material.Material;
 
 public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHugeFungiConfiguration> {
 
+    private static final float HUGE_PROBABILITY = 0.06F;
+
     public WorldGenFeatureHugeFungi(Codec<WorldGenFeatureHugeFungiConfiguration> codec) {
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration) {
-        Block block = worldgenfeaturehugefungiconfiguration.f.getBlock();
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureHugeFungiConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+        ChunkGenerator chunkgenerator = featureplacecontext.b();
+        WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration = (WorldGenFeatureHugeFungiConfiguration) featureplacecontext.e();
+        Block block = worldgenfeaturehugefungiconfiguration.validBaseState.getBlock();
         BlockPosition blockposition1 = null;
-        Block block1 = generatoraccessseed.getType(blockposition.down()).getBlock();
+        IBlockData iblockdata = generatoraccessseed.getType(blockposition.down());
 
-        if (block1 == block) {
+        if (iblockdata.a(block)) {
             blockposition1 = blockposition;
         }
 
@@ -39,7 +47,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
                 i *= 2;
             }
 
-            if (!worldgenfeaturehugefungiconfiguration.j) {
+            if (!worldgenfeaturehugefungiconfiguration.planted) {
                 int j = chunkgenerator.getGenerationDepth();
 
                 if (blockposition1.getY() + i + 1 >= j) {
@@ -47,7 +55,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
                 }
             }
 
-            boolean flag = !worldgenfeaturehugefungiconfiguration.j && random.nextFloat() < 0.06F;
+            boolean flag = !worldgenfeaturehugefungiconfiguration.planted && random.nextFloat() < 0.06F;
 
             generatoraccessseed.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
             this.a(generatoraccessseed, random, worldgenfeaturehugefungiconfiguration, blockposition1, i, flag);
@@ -66,7 +74,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
 
     private void a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration, BlockPosition blockposition, int i, boolean flag) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        IBlockData iblockdata = worldgenfeaturehugefungiconfiguration.g;
+        IBlockData iblockdata = worldgenfeaturehugefungiconfiguration.stemState;
         int j = flag ? 1 : 0;
 
         for (int k = -j; k <= j; ++k) {
@@ -76,7 +84,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
                 for (int i1 = 0; i1 < i; ++i1) {
                     blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, k, i1, l);
                     if (a(generatoraccess, blockposition_mutableblockposition, true)) {
-                        if (worldgenfeaturehugefungiconfiguration.j) {
+                        if (worldgenfeaturehugefungiconfiguration.planted) {
                             if (!generatoraccess.getType(blockposition_mutableblockposition.down()).isAir()) {
                                 generatoraccess.b(blockposition_mutableblockposition, true);
                             }
@@ -98,7 +106,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
 
     private void b(GeneratorAccess generatoraccess, Random random, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration, BlockPosition blockposition, int i, boolean flag) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        boolean flag1 = worldgenfeaturehugefungiconfiguration.h.a(Blocks.NETHER_WART_BLOCK);
+        boolean flag1 = worldgenfeaturehugefungiconfiguration.hatState.a(Blocks.NETHER_WART_BLOCK);
         int j = Math.min(random.nextInt(1 + i / 3) + 5, i);
         int k = i - j;
 
@@ -123,13 +131,13 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
 
                     blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, j1, l, k1);
                     if (a(generatoraccess, blockposition_mutableblockposition, false)) {
-                        if (worldgenfeaturehugefungiconfiguration.j && !generatoraccess.getType(blockposition_mutableblockposition.down()).isAir()) {
+                        if (worldgenfeaturehugefungiconfiguration.planted && !generatoraccess.getType(blockposition_mutableblockposition.down()).isAir()) {
                             generatoraccess.b(blockposition_mutableblockposition, true);
                         }
 
                         if (flag6) {
                             if (!flag4) {
-                                this.a(generatoraccess, random, blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.h, flag1);
+                                this.a(generatoraccess, random, blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.hatState, flag1);
                             }
                         } else if (flag4) {
                             this.a(generatoraccess, random, worldgenfeaturehugefungiconfiguration, blockposition_mutableblockposition, 0.1F, 0.2F, flag1 ? 0.1F : 0.0F);
@@ -147,9 +155,9 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
 
     private void a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, float f, float f1, float f2) {
         if (random.nextFloat() < f) {
-            this.a((IWorldWriter) generatoraccess, (BlockPosition) blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.i);
+            this.a((IWorldWriter) generatoraccess, (BlockPosition) blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.decorState);
         } else if (random.nextFloat() < f1) {
-            this.a((IWorldWriter) generatoraccess, (BlockPosition) blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.h);
+            this.a((IWorldWriter) generatoraccess, (BlockPosition) blockposition_mutableblockposition, worldgenfeaturehugefungiconfiguration.hatState);
             if (random.nextFloat() < f2) {
                 a((BlockPosition) blockposition_mutableblockposition, generatoraccess, random);
             }

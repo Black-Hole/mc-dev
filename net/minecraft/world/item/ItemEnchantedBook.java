@@ -1,27 +1,33 @@
 package net.minecraft.world.item;
 
 import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.WeightedRandomEnchant;
+import net.minecraft.world.level.World;
 
 public class ItemEnchantedBook extends Item {
+
+    public static final String TAG_STORED_ENCHANTMENTS = "StoredEnchantments";
 
     public ItemEnchantedBook(Item.Info item_info) {
         super(item_info);
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
+    public boolean i(ItemStack itemstack) {
         return true;
     }
 
     @Override
-    public boolean f_(ItemStack itemstack) {
+    public boolean a(ItemStack itemstack) {
         return false;
     }
 
@@ -29,6 +35,12 @@ public class ItemEnchantedBook extends Item {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         return nbttagcompound != null ? nbttagcompound.getList("StoredEnchantments", 10) : new NBTTagList();
+    }
+
+    @Override
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        super.a(itemstack, world, list, tooltipflag);
+        ItemStack.a(list, d(itemstack));
     }
 
     public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
@@ -73,12 +85,12 @@ public class ItemEnchantedBook extends Item {
         Iterator iterator;
         Enchantment enchantment;
 
-        if (creativemodetab == CreativeModeTab.g) {
+        if (creativemodetab == CreativeModeTab.TAB_SEARCH) {
             iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {
                 enchantment = (Enchantment) iterator.next();
-                if (enchantment.itemTarget != null) {
+                if (enchantment.category != null) {
                     for (int i = enchantment.getStartLevel(); i <= enchantment.getMaxLevel(); ++i) {
                         nonnulllist.add(a(new WeightedRandomEnchant(enchantment, i)));
                     }
@@ -89,7 +101,7 @@ public class ItemEnchantedBook extends Item {
 
             while (iterator.hasNext()) {
                 enchantment = (Enchantment) iterator.next();
-                if (creativemodetab.a(enchantment.itemTarget)) {
+                if (creativemodetab.a(enchantment.category)) {
                     nonnulllist.add(a(new WeightedRandomEnchant(enchantment, enchantment.getMaxLevel())));
                 }
             }

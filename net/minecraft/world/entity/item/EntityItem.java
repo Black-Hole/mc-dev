@@ -15,10 +15,11 @@ import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.network.syncher.DataWatcherObject;
 import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.sounds.SoundEffects;
+import net.minecraft.sounds.SoundCategory;
 import net.minecraft.stats.StatisticList;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
+import net.minecraft.tags.TagsItem;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -29,44 +30,62 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3D;
 
 public class EntityItem extends Entity {
 
-    private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<ItemStack> DATA_ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.ITEM_STACK);
+    private static final int LIFETIME = 6000;
+    private static final int INFINITE_PICKUP_DELAY = 32767;
+    private static final int INFINITE_LIFETIME = -32768;
     public int age;
     public int pickupDelay;
-    private int f;
+    private int health;
     private UUID thrower;
     private UUID owner;
-    public final float b;
+    public final float bobOffs;
 
     public EntityItem(EntityTypes<? extends EntityItem> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 5;
-        this.b = (float) (Math.random() * 3.141592653589793D * 2.0D);
-    }
-
-    public EntityItem(World world, double d0, double d1, double d2) {
-        this(EntityTypes.ITEM, world);
-        this.setPosition(d0, d1, d2);
-        this.yaw = this.random.nextFloat() * 360.0F;
-        this.setMot(this.random.nextDouble() * 0.2D - 0.1D, 0.2D, this.random.nextDouble() * 0.2D - 0.1D);
+        this.health = 5;
+        this.bobOffs = this.random.nextFloat() * 3.1415927F * 2.0F;
+        this.setYRot(this.random.nextFloat() * 360.0F);
     }
 
     public EntityItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        this(world, d0, d1, d2);
+        this(world, d0, d1, d2, itemstack, world.random.nextDouble() * 0.2D - 0.1D, 0.2D, world.random.nextDouble() * 0.2D - 0.1D);
+    }
+
+    public EntityItem(World world, double d0, double d1, double d2, ItemStack itemstack, double d3, double d4, double d5) {
+        this(EntityTypes.ITEM, world);
+        this.setPosition(d0, d1, d2);
+        this.setMot(d3, d4, d5);
         this.setItemStack(itemstack);
     }
 
+    private EntityItem(EntityItem entityitem) {
+        super(entityitem.getEntityType(), entityitem.level);
+        this.health = 5;
+        this.setItemStack(entityitem.getItemStack().cloneItemStack());
+        this.s(entityitem);
+        this.age = entityitem.age;
+        this.bobOffs = entityitem.bobOffs;
+    }
+
     @Override
-    protected boolean playStepSound() {
-        return false;
+    public boolean aJ() {
+        return TagsItem.OCCLUDES_VIBRATION_SIGNALS.isTagged(this.getItemStack().getItem());
+    }
+
+    @Override
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.NONE;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityItem.ITEM, ItemStack.b);
+        this.getDataWatcher().register(EntityItem.DATA_ITEM, ItemStack.EMPTY);
     }
 
     @Override
@@ -79,35 +98,37 @@ public class EntityItem extends Entity {
                 --this.pickupDelay;
             }
 
-            this.lastX = this.locX();
-            this.lastY = this.locY();
-            this.lastZ = this.locZ();
+            this.xo = this.locX();
+            this.yo = this.locY();
+            this.zo = this.locZ();
             Vec3D vec3d = this.getMot();
             float f = this.getHeadHeight() - 0.11111111F;
 
             if (this.isInWater() && this.b((Tag) TagsFluid.WATER) > (double) f) {
-                this.u();
-            } else if (this.aQ() && this.b((Tag) TagsFluid.LAVA) > (double) f) {
-                this.v();
+                this.w();
+            } else if (this.aX() && this.b((Tag) TagsFluid.LAVA) > (double) f) {
+                this.x();
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
 
-            if (this.world.isClientSide) {
-                this.noclip = false;
+            if (this.level.isClientSide) {
+                this.noPhysics = false;
             } else {
-                this.noclip = !this.world.getCubes(this);
-                if (this.noclip) {
+                this.noPhysics = !this.level.b((Entity) this, this.getBoundingBox().shrink(1.0E-7D), (entity) -> {
+                    return true;
+                });
+                if (this.noPhysics) {
                     this.l(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
                 }
             }
 
-            if (!this.onGround || c(this.getMot()) > 9.999999747378752E-6D || (this.ticksLived + this.getId()) % 4 == 0) {
+            if (!this.onGround || this.getMot().i() > 9.999999747378752E-6D || (this.tickCount + this.getId()) % 4 == 0) {
                 this.move(EnumMoveType.SELF, this.getMot());
                 float f1 = 0.98F;
 
                 if (this.onGround) {
-                    f1 = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
+                    f1 = this.level.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
                 }
 
                 this.setMot(this.getMot().d((double) f1, 0.98D, (double) f1));
@@ -120,64 +141,58 @@ public class EntityItem extends Entity {
                 }
             }
 
-            boolean flag = MathHelper.floor(this.lastX) != MathHelper.floor(this.locX()) || MathHelper.floor(this.lastY) != MathHelper.floor(this.locY()) || MathHelper.floor(this.lastZ) != MathHelper.floor(this.locZ());
+            boolean flag = MathHelper.floor(this.xo) != MathHelper.floor(this.locX()) || MathHelper.floor(this.yo) != MathHelper.floor(this.locY()) || MathHelper.floor(this.zo) != MathHelper.floor(this.locZ());
             int i = flag ? 2 : 40;
 
-            if (this.ticksLived % i == 0) {
-                if (this.world.getFluid(this.getChunkCoordinates()).a((Tag) TagsFluid.LAVA) && !this.isFireProof()) {
-                    this.playSound(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
-                }
-
-                if (!this.world.isClientSide && this.z()) {
-                    this.mergeNearby();
-                }
+            if (this.tickCount % i == 0 && !this.level.isClientSide && this.A()) {
+                this.mergeNearby();
             }
 
             if (this.age != -32768) {
                 ++this.age;
             }
 
-            this.impulse |= this.aK();
-            if (!this.world.isClientSide) {
+            this.hasImpulse |= this.aR();
+            if (!this.level.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
                 if (d0 > 0.01D) {
-                    this.impulse = true;
+                    this.hasImpulse = true;
                 }
             }
 
-            if (!this.world.isClientSide && this.age >= 6000) {
+            if (!this.level.isClientSide && this.age >= 6000) {
                 this.die();
             }
 
         }
     }
 
-    private void u() {
+    private void w() {
         Vec3D vec3d = this.getMot();
 
         this.setMot(vec3d.x * 0.9900000095367432D, vec3d.y + (double) (vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
     }
 
-    private void v() {
+    private void x() {
         Vec3D vec3d = this.getMot();
 
         this.setMot(vec3d.x * 0.949999988079071D, vec3d.y + (double) (vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.949999988079071D);
     }
 
     private void mergeNearby() {
-        if (this.z()) {
-            List<EntityItem> list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D), (entityitem) -> {
-                return entityitem != this && entityitem.z();
+        if (this.A()) {
+            List<EntityItem> list = this.level.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D), (entityitem) -> {
+                return entityitem != this && entityitem.A();
             });
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityItem entityitem = (EntityItem) iterator.next();
 
-                if (entityitem.z()) {
+                if (entityitem.A()) {
                     this.a(entityitem);
-                    if (this.dead) {
+                    if (this.isRemoved()) {
                         break;
                     }
                 }
@@ -186,7 +201,7 @@ public class EntityItem extends Entity {
         }
     }
 
-    private boolean z() {
+    private boolean A() {
         ItemStack itemstack = this.getItemStack();
 
         return this.isAlive() && this.pickupDelay != 32767 && this.age != -32768 && this.age < 6000 && itemstack.getCount() < itemstack.getMaxStackSize();
@@ -207,7 +222,7 @@ public class EntityItem extends Entity {
     }
 
     public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack1.getItem() != itemstack.getItem() ? false : (itemstack1.getCount() + itemstack.getCount() > itemstack1.getMaxStackSize() ? false : (itemstack1.hasTag() ^ itemstack.hasTag() ? false : !itemstack1.hasTag() || itemstack1.getTag().equals(itemstack.getTag())));
+        return !itemstack1.a(itemstack.getItem()) ? false : (itemstack1.getCount() + itemstack.getCount() > itemstack1.getMaxStackSize() ? false : (itemstack1.hasTag() ^ itemstack.hasTag() ? false : !itemstack1.hasTag() || itemstack1.getTag().equals(itemstack.getTag())));
     }
 
     public static ItemStack a(ItemStack itemstack, ItemStack itemstack1, int i) {
@@ -237,31 +252,33 @@ public class EntityItem extends Entity {
 
     @Override
     public boolean isFireProof() {
-        return this.getItemStack().getItem().u() || super.isFireProof();
+        return this.getItemStack().getItem().w() || super.isFireProof();
     }
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
-        } else if (!this.getItemStack().isEmpty() && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
+        } else if (!this.getItemStack().isEmpty() && this.getItemStack().a(Items.NETHER_STAR) && damagesource.isExplosion()) {
             return false;
         } else if (!this.getItemStack().getItem().a(damagesource)) {
             return false;
         } else {
             this.velocityChanged();
-            this.f = (int) ((float) this.f - f);
-            if (this.f <= 0) {
+            this.health = (int) ((float) this.health - f);
+            this.a(GameEvent.ENTITY_DAMAGED, damagesource.getEntity());
+            if (this.health <= 0) {
+                this.getItemStack().a(this);
                 this.die();
             }
 
-            return false;
+            return true;
         }
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("Health", (short) this.f);
+        nbttagcompound.setShort("Health", (short) this.health);
         nbttagcompound.setShort("Age", (short) this.age);
         nbttagcompound.setShort("PickupDelay", (short) this.pickupDelay);
         if (this.getThrower() != null) {
@@ -280,7 +297,7 @@ public class EntityItem extends Entity {
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
-        this.f = nbttagcompound.getShort("Health");
+        this.health = nbttagcompound.getShort("Health");
         this.age = nbttagcompound.getShort("Age");
         if (nbttagcompound.hasKey("PickupDelay")) {
             this.pickupDelay = nbttagcompound.getShort("PickupDelay");
@@ -305,12 +322,12 @@ public class EntityItem extends Entity {
 
     @Override
     public void pickup(EntityHuman entityhuman) {
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             ItemStack itemstack = this.getItemStack();
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
 
-            if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(entityhuman.getUniqueID())) && entityhuman.inventory.pickup(itemstack)) {
+            if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(entityhuman.getUniqueID())) && entityhuman.getInventory().pickup(itemstack)) {
                 entityhuman.receive(this, i);
                 if (itemstack.isEmpty()) {
                     this.die();
@@ -328,11 +345,11 @@ public class EntityItem extends Entity {
     public IChatBaseComponent getDisplayName() {
         IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
-        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage(this.getItemStack().j()));
+        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage(this.getItemStack().n()));
     }
 
     @Override
-    public boolean bL() {
+    public boolean ca() {
         return false;
     }
 
@@ -341,7 +358,7 @@ public class EntityItem extends Entity {
     public Entity b(WorldServer worldserver) {
         Entity entity = super.b(worldserver);
 
-        if (!this.world.isClientSide && entity instanceof EntityItem) {
+        if (!this.level.isClientSide && entity instanceof EntityItem) {
             ((EntityItem) entity).mergeNearby();
         }
 
@@ -349,17 +366,17 @@ public class EntityItem extends Entity {
     }
 
     public ItemStack getItemStack() {
-        return (ItemStack) this.getDataWatcher().get(EntityItem.ITEM);
+        return (ItemStack) this.getDataWatcher().get(EntityItem.DATA_ITEM);
     }
 
     public void setItemStack(ItemStack itemstack) {
-        this.getDataWatcher().set(EntityItem.ITEM, itemstack);
+        this.getDataWatcher().set(EntityItem.DATA_ITEM, itemstack);
     }
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         super.a(datawatcherobject);
-        if (EntityItem.ITEM.equals(datawatcherobject)) {
+        if (EntityItem.DATA_ITEM.equals(datawatcherobject)) {
             this.getItemStack().a((Entity) this);
         }
 
@@ -383,15 +400,19 @@ public class EntityItem extends Entity {
         this.thrower = uuid;
     }
 
+    public int l() {
+        return this.age;
+    }
+
     public void defaultPickupDelay() {
         this.pickupDelay = 10;
     }
 
-    public void n() {
+    public void o() {
         this.pickupDelay = 0;
     }
 
-    public void o() {
+    public void p() {
         this.pickupDelay = 32767;
     }
 
@@ -399,21 +420,38 @@ public class EntityItem extends Entity {
         this.pickupDelay = i;
     }
 
-    public boolean p() {
+    public boolean q() {
         return this.pickupDelay > 0;
     }
 
     public void r() {
-        this.age = -6000;
+        this.age = -32768;
     }
 
     public void s() {
-        this.o();
+        this.age = -6000;
+    }
+
+    public void t() {
+        this.p();
         this.age = 5999;
     }
 
+    public float a(float f) {
+        return ((float) this.l() + f) / 20.0F + this.bobOffs;
+    }
+
     @Override
-    public Packet<?> P() {
+    public Packet<?> getPacket() {
         return new PacketPlayOutSpawnEntity(this);
+    }
+
+    public EntityItem v() {
+        return new EntityItem(this);
+    }
+
+    @Override
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.AMBIENT;
     }
 }

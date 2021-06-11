@@ -17,6 +17,10 @@ import net.minecraft.world.level.GameRules;
 
 public class CommandGamemode {
 
+    public static final int PERMISSION_LEVEL = 2;
+
+    public CommandGamemode() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("gamemode").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
@@ -27,13 +31,11 @@ public class CommandGamemode {
         for (int j = 0; j < i; ++j) {
             EnumGamemode enumgamemode = aenumgamemode[j];
 
-            if (enumgamemode != EnumGamemode.NOT_SET) {
-                literalargumentbuilder.then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a(enumgamemode.b()).executes((commandcontext) -> {
-                    return a(commandcontext, (Collection) Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).h()), enumgamemode);
-                })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
-                    return a(commandcontext, ArgumentEntity.f(commandcontext, "target"), enumgamemode);
-                })));
-            }
+            literalargumentbuilder.then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a(enumgamemode.b()).executes((commandcontext) -> {
+                return a(commandcontext, (Collection) Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).h()), enumgamemode);
+            })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
+                return a(commandcontext, ArgumentEntity.f(commandcontext, "target"), enumgamemode);
+            })));
         }
 
         commanddispatcher.register(literalargumentbuilder);
@@ -45,8 +47,8 @@ public class CommandGamemode {
         if (commandlistenerwrapper.getEntity() == entityplayer) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.self", new Object[]{chatmessage}), true);
         } else {
-            if (commandlistenerwrapper.getWorld().getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
-                entityplayer.sendMessage(new ChatMessage("gameMode.changed", new Object[]{chatmessage}), SystemUtils.b);
+            if (commandlistenerwrapper.getWorld().getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK)) {
+                entityplayer.sendMessage(new ChatMessage("gameMode.changed", new Object[]{chatmessage}), SystemUtils.NIL_UUID);
             }
 
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.other", new Object[]{entityplayer.getScoreboardDisplayName(), chatmessage}), true);
@@ -61,8 +63,7 @@ public class CommandGamemode {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (entityplayer.playerInteractManager.getGameMode() != enumgamemode) {
-                entityplayer.a(enumgamemode);
+            if (entityplayer.a(enumgamemode)) {
                 a((CommandListenerWrapper) commandcontext.getSource(), entityplayer, enumgamemode);
                 ++i;
             }

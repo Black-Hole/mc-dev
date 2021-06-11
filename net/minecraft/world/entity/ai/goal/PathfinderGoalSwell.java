@@ -7,42 +7,42 @@ import net.minecraft.world.entity.monster.EntityCreeper;
 
 public class PathfinderGoalSwell extends PathfinderGoal {
 
-    private final EntityCreeper a;
-    private EntityLiving b;
+    private final EntityCreeper creeper;
+    private EntityLiving target;
 
     public PathfinderGoalSwell(EntityCreeper entitycreeper) {
-        this.a = entitycreeper;
+        this.creeper = entitycreeper;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean a() {
-        EntityLiving entityliving = this.a.getGoalTarget();
+        EntityLiving entityliving = this.creeper.getGoalTarget();
 
-        return this.a.eK() > 0 || entityliving != null && this.a.h((Entity) entityliving) < 9.0D;
+        return this.creeper.p() > 0 || entityliving != null && this.creeper.f((Entity) entityliving) < 9.0D;
     }
 
     @Override
     public void c() {
-        this.a.getNavigation().o();
-        this.b = this.a.getGoalTarget();
+        this.creeper.getNavigation().o();
+        this.target = this.creeper.getGoalTarget();
     }
 
     @Override
     public void d() {
-        this.b = null;
+        this.target = null;
     }
 
     @Override
     public void e() {
-        if (this.b == null) {
-            this.a.a(-1);
-        } else if (this.a.h((Entity) this.b) > 49.0D) {
-            this.a.a(-1);
-        } else if (!this.a.getEntitySenses().a(this.b)) {
-            this.a.a(-1);
+        if (this.target == null) {
+            this.creeper.a((int) -1);
+        } else if (this.creeper.f((Entity) this.target) > 49.0D) {
+            this.creeper.a((int) -1);
+        } else if (!this.creeper.getEntitySenses().a(this.target)) {
+            this.creeper.a((int) -1);
         } else {
-            this.a.a(1);
+            this.creeper.a((int) 1);
         }
     }
 }

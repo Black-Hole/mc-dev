@@ -17,10 +17,12 @@ import net.minecraft.world.level.EnumGamemode;
 
 public class CommandSpectate {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.spectate.self"));
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final SimpleCommandExceptionType ERROR_SELF = new SimpleCommandExceptionType(new ChatMessage("commands.spectate.self"));
+    private static final DynamicCommandExceptionType ERROR_NOT_SPECTATOR = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.spectate.not_spectator", new Object[]{object});
     });
+
+    public CommandSpectate() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("spectate").requires((commandlistenerwrapper) -> {
@@ -36,9 +38,9 @@ public class CommandSpectate {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, EntityPlayer entityplayer) throws CommandSyntaxException {
         if (entityplayer == entity) {
-            throw CommandSpectate.a.create();
-        } else if (entityplayer.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
-            throw CommandSpectate.b.create(entityplayer.getScoreboardDisplayName());
+            throw CommandSpectate.ERROR_SELF.create();
+        } else if (entityplayer.gameMode.getGameMode() != EnumGamemode.SPECTATOR) {
+            throw CommandSpectate.ERROR_NOT_SPECTATOR.create(entityplayer.getScoreboardDisplayName());
         } else {
             entityplayer.setSpectatorTarget(entity);
             if (entity != null) {

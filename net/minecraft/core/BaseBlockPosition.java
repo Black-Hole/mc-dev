@@ -10,7 +10,7 @@ import net.minecraft.util.MathHelper;
 @Immutable
 public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
 
-    public static final Codec<BaseBlockPosition> c = Codec.INT_STREAM.comapFlatMap((intstream) -> {
+    public static final Codec<BaseBlockPosition> CODEC = Codec.INT_STREAM.comapFlatMap((intstream) -> {
         return SystemUtils.a(intstream, 3).map((aint) -> {
             return new BaseBlockPosition(aint[0], aint[1], aint[2]);
         });
@@ -18,14 +18,14 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return IntStream.of(new int[]{baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ()});
     });
     public static final BaseBlockPosition ZERO = new BaseBlockPosition(0, 0, 0);
-    private int a;
-    private int b;
-    private int e;
+    private int x;
+    private int y;
+    private int z;
 
     public BaseBlockPosition(int i, int j, int k) {
-        this.a = i;
-        this.b = j;
-        this.e = k;
+        this.x = i;
+        this.y = j;
+        this.z = k;
     }
 
     public BaseBlockPosition(double d0, double d1, double d2) {
@@ -53,27 +53,50 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public int getX() {
-        return this.a;
+        return this.x;
     }
 
     public int getY() {
-        return this.b;
+        return this.y;
     }
 
     public int getZ() {
-        return this.e;
+        return this.z;
     }
 
-    protected void o(int i) {
-        this.a = i;
+    protected BaseBlockPosition u(int i) {
+        this.x = i;
+        return this;
     }
 
-    protected void p(int i) {
-        this.b = i;
+    protected BaseBlockPosition t(int i) {
+        this.y = i;
+        return this;
     }
 
-    protected void q(int i) {
-        this.e = i;
+    protected BaseBlockPosition s(int i) {
+        this.z = i;
+        return this;
+    }
+
+    public BaseBlockPosition b(double d0, double d1, double d2) {
+        return d0 == 0.0D && d1 == 0.0D && d2 == 0.0D ? this : new BaseBlockPosition((double) this.getX() + d0, (double) this.getY() + d1, (double) this.getZ() + d2);
+    }
+
+    public BaseBlockPosition c(int i, int j, int k) {
+        return i == 0 && j == 0 && k == 0 ? this : new BaseBlockPosition(this.getX() + i, this.getY() + j, this.getZ() + k);
+    }
+
+    public BaseBlockPosition f(BaseBlockPosition baseblockposition) {
+        return this.c(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
+    }
+
+    public BaseBlockPosition e(BaseBlockPosition baseblockposition) {
+        return this.c(-baseblockposition.getX(), -baseblockposition.getY(), -baseblockposition.getZ());
+    }
+
+    public BaseBlockPosition o(int i) {
+        return i == 1 ? this : (i == 0 ? BaseBlockPosition.ZERO : new BaseBlockPosition(this.getX() * i, this.getY() * i, this.getZ() * i));
     }
 
     public BaseBlockPosition up() {
@@ -92,8 +115,56 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return this.shift(EnumDirection.DOWN, i);
     }
 
+    public BaseBlockPosition north() {
+        return this.north(1);
+    }
+
+    public BaseBlockPosition north(int i) {
+        return this.shift(EnumDirection.NORTH, i);
+    }
+
+    public BaseBlockPosition south() {
+        return this.south(1);
+    }
+
+    public BaseBlockPosition south(int i) {
+        return this.shift(EnumDirection.SOUTH, i);
+    }
+
+    public BaseBlockPosition west() {
+        return this.west(1);
+    }
+
+    public BaseBlockPosition west(int i) {
+        return this.shift(EnumDirection.WEST, i);
+    }
+
+    public BaseBlockPosition east() {
+        return this.east(1);
+    }
+
+    public BaseBlockPosition east(int i) {
+        return this.shift(EnumDirection.EAST, i);
+    }
+
+    public BaseBlockPosition shift(EnumDirection enumdirection) {
+        return this.shift(enumdirection, 1);
+    }
+
     public BaseBlockPosition shift(EnumDirection enumdirection, int i) {
         return i == 0 ? this : new BaseBlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
+    }
+
+    public BaseBlockPosition b(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
+        if (i == 0) {
+            return this;
+        } else {
+            int j = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? i : 0;
+            int k = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? i : 0;
+            int l = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? i : 0;
+
+            return new BaseBlockPosition(this.getX() + j, this.getY() + k, this.getZ() + l);
+        }
     }
 
     public BaseBlockPosition d(BaseBlockPosition baseblockposition) {
@@ -116,6 +187,10 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return this.distanceSquared(iposition.getX(), iposition.getY(), iposition.getZ(), flag);
     }
 
+    public double a(BaseBlockPosition baseblockposition, boolean flag) {
+        return this.distanceSquared((double) baseblockposition.x, (double) baseblockposition.y, (double) baseblockposition.z, flag);
+    }
+
     public double distanceSquared(double d0, double d1, double d2, boolean flag) {
         double d3 = flag ? 0.5D : 0.0D;
         double d4 = (double) this.getX() + d3 - d0;
@@ -134,10 +209,16 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.a, this.b, this.e);
+        return enumdirection_enumaxis.a(this.x, this.y, this.z);
     }
 
     public String toString() {
         return MoreObjects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).toString();
+    }
+
+    public String x() {
+        int i = this.getX();
+
+        return i + ", " + this.getY() + ", " + this.getZ();
     }
 }

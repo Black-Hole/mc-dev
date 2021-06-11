@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class CriterionTriggerInteractBlock extends CriterionTriggerAbstract<CriterionTriggerInteractBlock.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("item_used_on_block");
+    static final MinecraftKey ID = new MinecraftKey("item_used_on_block");
 
     public CriterionTriggerInteractBlock() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerInteractBlock.a;
+        return CriterionTriggerInteractBlock.ID;
     }
 
     @Override
@@ -37,29 +37,29 @@ public class CriterionTriggerInteractBlock extends CriterionTriggerAbstract<Crit
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionLocation a;
-        private final CriterionConditionItem b;
+        private final CriterionConditionLocation location;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionLocation criterionconditionlocation, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerInteractBlock.a, criterionconditionentity_b);
-            this.a = criterionconditionlocation;
-            this.b = criterionconditionitem;
+            super(CriterionTriggerInteractBlock.ID, criterionconditionentity_b);
+            this.location = criterionconditionlocation;
+            this.item = criterionconditionitem;
         }
 
         public static CriterionTriggerInteractBlock.a a(CriterionConditionLocation.a criterionconditionlocation_a, CriterionConditionItem.a criterionconditionitem_a) {
-            return new CriterionTriggerInteractBlock.a(CriterionConditionEntity.b.a, criterionconditionlocation_a.b(), criterionconditionitem_a.b());
+            return new CriterionTriggerInteractBlock.a(CriterionConditionEntity.b.ANY, criterionconditionlocation_a.b(), criterionconditionitem_a.b());
         }
 
         public boolean a(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
-            return !this.a.a(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) ? false : this.b.a(itemstack);
+            return !this.location.a(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) ? false : this.item.a(itemstack);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("location", this.a.a());
-            jsonobject.add("item", this.b.a());
+            jsonobject.add("location", this.location.a());
+            jsonobject.add("item", this.item.a());
             return jsonobject;
         }
     }

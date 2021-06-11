@@ -7,10 +7,10 @@ import net.minecraft.network.PacketDataSerializer;
 
 public class ArgumentSerializerVoid<T extends ArgumentType<?>> implements ArgumentSerializer<T> {
 
-    private final Supplier<T> a;
+    private final Supplier<T> constructor;
 
     public ArgumentSerializerVoid(Supplier<T> supplier) {
-        this.a = supplier;
+        this.constructor = supplier;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class ArgumentSerializerVoid<T extends ArgumentType<?>> implements Argume
 
     @Override
     public T b(PacketDataSerializer packetdataserializer) {
-        return (ArgumentType) this.a.get();
+        return (ArgumentType) this.constructor.get();
     }
 
     @Override

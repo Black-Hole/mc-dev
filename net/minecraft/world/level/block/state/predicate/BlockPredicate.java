@@ -7,10 +7,10 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class BlockPredicate implements Predicate<IBlockData> {
 
-    private final Block a;
+    private final Block block;
 
     public BlockPredicate(Block block) {
-        this.a = block;
+        this.block = block;
     }
 
     public static BlockPredicate a(Block block) {
@@ -18,6 +18,6 @@ public class BlockPredicate implements Predicate<IBlockData> {
     }
 
     public boolean test(@Nullable IBlockData iblockdata) {
-        return iblockdata != null && iblockdata.a(this.a);
+        return iblockdata != null && iblockdata.a(this.block);
     }
 }

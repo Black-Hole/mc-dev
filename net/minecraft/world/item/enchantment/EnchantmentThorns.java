@@ -11,6 +11,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class EnchantmentThorns extends Enchantment {
 
+    private static final float CHANCE_PER_LEVEL = 0.15F;
+
     public EnchantmentThorns(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_CHEST, aenumitemslot);
     }

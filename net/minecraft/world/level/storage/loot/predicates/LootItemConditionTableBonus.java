@@ -19,28 +19,28 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionTableBonus implements LootItemCondition {
 
-    private final Enchantment a;
-    private final float[] b;
+    final Enchantment enchantment;
+    final float[] values;
 
-    private LootItemConditionTableBonus(Enchantment enchantment, float[] afloat) {
-        this.a = enchantment;
-        this.b = afloat;
+    LootItemConditionTableBonus(Enchantment enchantment, float[] afloat) {
+        this.enchantment = enchantment;
+        this.values = afloat;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.j;
+    public LootItemConditionType a() {
+        return LootItemConditions.TABLE_BONUS;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.TOOL);
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         ItemStack itemstack = (ItemStack) loottableinfo.getContextParameter(LootContextParameters.TOOL);
-        int i = itemstack != null ? EnchantmentManager.getEnchantmentLevel(this.a, itemstack) : 0;
-        float f = this.b[Math.min(i, this.b.length - 1)];
+        int i = itemstack != null ? EnchantmentManager.getEnchantmentLevel(this.enchantment, itemstack) : 0;
+        float f = this.values[Math.min(i, this.values.length - 1)];
 
         return loottableinfo.a().nextFloat() < f;
     }
@@ -56,8 +56,8 @@ public class LootItemConditionTableBonus implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionTableBonus lootitemconditiontablebonus, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemconditiontablebonus.a).toString());
-            jsonobject.add("chances", jsonserializationcontext.serialize(lootitemconditiontablebonus.b));
+            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemconditiontablebonus.enchantment).toString());
+            jsonobject.add("chances", jsonserializationcontext.serialize(lootitemconditiontablebonus.values));
         }
 
         @Override

@@ -14,20 +14,20 @@ public class RecipeMapClone extends IRecipeComplex {
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         int i = 0;
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
 
             if (!itemstack1.isEmpty()) {
-                if (itemstack1.getItem() == Items.FILLED_MAP) {
+                if (itemstack1.a(Items.FILLED_MAP)) {
                     if (!itemstack.isEmpty()) {
                         return false;
                     }
 
                     itemstack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() != Items.MAP) {
+                    if (!itemstack1.a(Items.MAP)) {
                         return false;
                     }
 
@@ -41,21 +41,21 @@ public class RecipeMapClone extends IRecipeComplex {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         int i = 0;
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
 
             if (!itemstack1.isEmpty()) {
-                if (itemstack1.getItem() == Items.FILLED_MAP) {
+                if (itemstack1.a(Items.FILLED_MAP)) {
                     if (!itemstack.isEmpty()) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
 
                     itemstack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() != Items.MAP) {
-                        return ItemStack.b;
+                    if (!itemstack1.a(Items.MAP)) {
+                        return ItemStack.EMPTY;
                     }
 
                     ++i;
@@ -69,12 +69,17 @@ public class RecipeMapClone extends IRecipeComplex {
             itemstack2.setCount(i + 1);
             return itemstack2;
         } else {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i >= 3 && j >= 3;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.e;
+        return RecipeSerializer.MAP_CLONING;
     }
 }

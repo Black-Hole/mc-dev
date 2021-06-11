@@ -5,6 +5,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
@@ -23,109 +24,105 @@ import org.apache.logging.log4j.Logger;
 public class CriterionConditionLocation {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final CriterionConditionLocation a = new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
-    private final CriterionConditionValue.FloatRange c;
-    private final CriterionConditionValue.FloatRange d;
-    private final CriterionConditionValue.FloatRange e;
+    public static final CriterionConditionLocation ANY = new CriterionConditionLocation(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, (ResourceKey) null, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.ANY, CriterionConditionBlock.ANY, CriterionConditionFluid.ANY);
+    private final CriterionConditionValue.DoubleRange x;
+    private final CriterionConditionValue.DoubleRange y;
+    private final CriterionConditionValue.DoubleRange z;
     @Nullable
-    private final ResourceKey<BiomeBase> f;
+    private final ResourceKey<BiomeBase> biome;
     @Nullable
-    private final StructureGenerator<?> g;
+    private final StructureGenerator<?> feature;
     @Nullable
-    private final ResourceKey<World> h;
+    private final ResourceKey<World> dimension;
     @Nullable
-    private final Boolean i;
-    private final CriterionConditionLight j;
-    private final CriterionConditionBlock k;
-    private final CriterionConditionFluid l;
+    private final Boolean smokey;
+    private final CriterionConditionLight light;
+    private final CriterionConditionBlock block;
+    private final CriterionConditionFluid fluid;
 
-    public CriterionConditionLocation(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, @Nullable ResourceKey<BiomeBase> resourcekey, @Nullable StructureGenerator<?> structuregenerator, @Nullable ResourceKey<World> resourcekey1, @Nullable Boolean obool, CriterionConditionLight criterionconditionlight, CriterionConditionBlock criterionconditionblock, CriterionConditionFluid criterionconditionfluid) {
-        this.c = criterionconditionvalue_floatrange;
-        this.d = criterionconditionvalue_floatrange1;
-        this.e = criterionconditionvalue_floatrange2;
-        this.f = resourcekey;
-        this.g = structuregenerator;
-        this.h = resourcekey1;
-        this.i = obool;
-        this.j = criterionconditionlight;
-        this.k = criterionconditionblock;
-        this.l = criterionconditionfluid;
+    public CriterionConditionLocation(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange1, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange2, @Nullable ResourceKey<BiomeBase> resourcekey, @Nullable StructureGenerator<?> structuregenerator, @Nullable ResourceKey<World> resourcekey1, @Nullable Boolean obool, CriterionConditionLight criterionconditionlight, CriterionConditionBlock criterionconditionblock, CriterionConditionFluid criterionconditionfluid) {
+        this.x = criterionconditionvalue_doublerange;
+        this.y = criterionconditionvalue_doublerange1;
+        this.z = criterionconditionvalue_doublerange2;
+        this.biome = resourcekey;
+        this.feature = structuregenerator;
+        this.dimension = resourcekey1;
+        this.smokey = obool;
+        this.light = criterionconditionlight;
+        this.block = criterionconditionblock;
+        this.fluid = criterionconditionfluid;
     }
 
     public static CriterionConditionLocation a(ResourceKey<BiomeBase> resourcekey) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, resourcekey, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+        return new CriterionConditionLocation(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, resourcekey, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.ANY, CriterionConditionBlock.ANY, CriterionConditionFluid.ANY);
     }
 
     public static CriterionConditionLocation b(ResourceKey<World> resourcekey) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, (StructureGenerator) null, resourcekey, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+        return new CriterionConditionLocation(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, (ResourceKey) null, (StructureGenerator) null, resourcekey, (Boolean) null, CriterionConditionLight.ANY, CriterionConditionBlock.ANY, CriterionConditionFluid.ANY);
     }
 
     public static CriterionConditionLocation a(StructureGenerator<?> structuregenerator) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, structuregenerator, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+        return new CriterionConditionLocation(CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, CriterionConditionValue.DoubleRange.ANY, (ResourceKey) null, structuregenerator, (ResourceKey) null, (Boolean) null, CriterionConditionLight.ANY, CriterionConditionBlock.ANY, CriterionConditionFluid.ANY);
     }
 
     public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
-        return this.a(worldserver, (float) d0, (float) d1, (float) d2);
-    }
-
-    public boolean a(WorldServer worldserver, float f, float f1, float f2) {
-        if (!this.c.d(f)) {
+        if (!this.x.d(d0)) {
             return false;
-        } else if (!this.d.d(f1)) {
+        } else if (!this.y.d(d1)) {
             return false;
-        } else if (!this.e.d(f2)) {
+        } else if (!this.z.d(d2)) {
             return false;
-        } else if (this.h != null && this.h != worldserver.getDimensionKey()) {
+        } else if (this.dimension != null && this.dimension != worldserver.getDimensionKey()) {
             return false;
         } else {
-            BlockPosition blockposition = new BlockPosition((double) f, (double) f1, (double) f2);
-            boolean flag = worldserver.p(blockposition);
-            Optional<ResourceKey<BiomeBase>> optional = worldserver.r().b(IRegistry.ay).c(worldserver.getBiome(blockposition));
+            BlockPosition blockposition = new BlockPosition(d0, d1, d2);
+            boolean flag = worldserver.o(blockposition);
+            Optional<ResourceKey<BiomeBase>> optional = worldserver.t().d(IRegistry.BIOME_REGISTRY).c((Object) worldserver.getBiome(blockposition));
 
-            return !optional.isPresent() ? false : (this.f != null && (!flag || this.f != optional.get()) ? false : (this.g != null && (!flag || !worldserver.getStructureManager().a(blockposition, true, this.g).e()) ? false : (this.i != null && (!flag || this.i != BlockCampfire.a((World) worldserver, blockposition)) ? false : (!this.j.a(worldserver, blockposition) ? false : (!this.k.a(worldserver, blockposition) ? false : this.l.a(worldserver, blockposition))))));
+            return !optional.isPresent() ? false : (this.biome != null && (!flag || this.biome != optional.get()) ? false : (this.feature != null && (!flag || !worldserver.getStructureManager().a(blockposition, true, this.feature).e()) ? false : (this.smokey != null && (!flag || this.smokey != BlockCampfire.a((World) worldserver, blockposition)) ? false : (!this.light.a(worldserver, blockposition) ? false : (!this.block.a(worldserver, blockposition) ? false : this.fluid.a(worldserver, blockposition))))));
         }
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionLocation.a) {
+        if (this == CriterionConditionLocation.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (!this.c.c() || !this.d.c() || !this.e.c()) {
+            if (!this.x.c() || !this.y.c() || !this.z.c()) {
                 JsonObject jsonobject1 = new JsonObject();
 
-                jsonobject1.add("x", this.c.d());
-                jsonobject1.add("y", this.d.d());
-                jsonobject1.add("z", this.e.d());
+                jsonobject1.add("x", this.x.d());
+                jsonobject1.add("y", this.y.d());
+                jsonobject1.add("z", this.z.d());
                 jsonobject.add("position", jsonobject1);
             }
 
-            if (this.h != null) {
-                DataResult dataresult = World.f.encodeStart(JsonOps.INSTANCE, this.h);
+            if (this.dimension != null) {
+                DataResult dataresult = World.RESOURCE_KEY_CODEC.encodeStart(JsonOps.INSTANCE, this.dimension);
                 Logger logger = CriterionConditionLocation.LOGGER;
 
-                logger.getClass();
+                Objects.requireNonNull(logger);
                 dataresult.resultOrPartial(logger::error).ifPresent((jsonelement) -> {
                     jsonobject.add("dimension", jsonelement);
                 });
             }
 
-            if (this.g != null) {
-                jsonobject.addProperty("feature", this.g.i());
+            if (this.feature != null) {
+                jsonobject.addProperty("feature", this.feature.g());
             }
 
-            if (this.f != null) {
-                jsonobject.addProperty("biome", this.f.a().toString());
+            if (this.biome != null) {
+                jsonobject.addProperty("biome", this.biome.a().toString());
             }
 
-            if (this.i != null) {
-                jsonobject.addProperty("smokey", this.i);
+            if (this.smokey != null) {
+                jsonobject.addProperty("smokey", this.smokey);
             }
 
-            jsonobject.add("light", this.j.a());
-            jsonobject.add("block", this.k.a());
-            jsonobject.add("fluid", this.l.a());
+            jsonobject.add("light", this.light.a());
+            jsonobject.add("block", this.block.a());
+            jsonobject.add("fluid", this.fluid.a());
             return jsonobject;
         }
     }
@@ -134,31 +131,31 @@ public class CriterionConditionLocation {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "location");
             JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "position", new JsonObject());
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject1.get("x"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1 = CriterionConditionValue.FloatRange.a(jsonobject1.get("y"));
-            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2 = CriterionConditionValue.FloatRange.a(jsonobject1.get("z"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange = CriterionConditionValue.DoubleRange.a(jsonobject1.get("x"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange1 = CriterionConditionValue.DoubleRange.a(jsonobject1.get("y"));
+            CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange2 = CriterionConditionValue.DoubleRange.a(jsonobject1.get("z"));
             ResourceKey resourcekey;
 
             if (jsonobject.has("dimension")) {
-                DataResult dataresult = MinecraftKey.a.parse(JsonOps.INSTANCE, jsonobject.get("dimension"));
+                DataResult dataresult = MinecraftKey.CODEC.parse(JsonOps.INSTANCE, jsonobject.get("dimension"));
                 Logger logger = CriterionConditionLocation.LOGGER;
 
-                logger.getClass();
+                Objects.requireNonNull(logger);
                 resourcekey = (ResourceKey) dataresult.resultOrPartial(logger::error).map((minecraftkey) -> {
-                    return ResourceKey.a(IRegistry.L, minecraftkey);
+                    return ResourceKey.a(IRegistry.DIMENSION_REGISTRY, minecraftkey);
                 }).orElse((Object) null);
             } else {
                 resourcekey = null;
             }
 
             ResourceKey<World> resourcekey1 = resourcekey;
-            StructureGenerator<?> structuregenerator = jsonobject.has("feature") ? (StructureGenerator) StructureGenerator.a.get(ChatDeserializer.h(jsonobject, "feature")) : null;
+            StructureGenerator<?> structuregenerator = jsonobject.has("feature") ? (StructureGenerator) StructureGenerator.STRUCTURES_REGISTRY.get(ChatDeserializer.h(jsonobject, "feature")) : null;
             ResourceKey<BiomeBase> resourcekey2 = null;
 
             if (jsonobject.has("biome")) {
                 MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "biome"));
 
-                resourcekey2 = ResourceKey.a(IRegistry.ay, minecraftkey);
+                resourcekey2 = ResourceKey.a(IRegistry.BIOME_REGISTRY, minecraftkey);
             }
 
             Boolean obool = jsonobject.has("smokey") ? jsonobject.get("smokey").getAsBoolean() : null;
@@ -166,59 +163,94 @@ public class CriterionConditionLocation {
             CriterionConditionBlock criterionconditionblock = CriterionConditionBlock.a(jsonobject.get("block"));
             CriterionConditionFluid criterionconditionfluid = CriterionConditionFluid.a(jsonobject.get("fluid"));
 
-            return new CriterionConditionLocation(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, resourcekey2, structuregenerator, resourcekey1, obool, criterionconditionlight, criterionconditionblock, criterionconditionfluid);
+            return new CriterionConditionLocation(criterionconditionvalue_doublerange, criterionconditionvalue_doublerange1, criterionconditionvalue_doublerange2, resourcekey2, structuregenerator, resourcekey1, obool, criterionconditionlight, criterionconditionblock, criterionconditionfluid);
         } else {
-            return CriterionConditionLocation.a;
+            return CriterionConditionLocation.ANY;
         }
     }
 
     public static class a {
 
-        private CriterionConditionValue.FloatRange a;
-        private CriterionConditionValue.FloatRange b;
-        private CriterionConditionValue.FloatRange c;
+        private CriterionConditionValue.DoubleRange x;
+        private CriterionConditionValue.DoubleRange y;
+        private CriterionConditionValue.DoubleRange z;
         @Nullable
-        private ResourceKey<BiomeBase> d;
+        private ResourceKey<BiomeBase> biome;
         @Nullable
-        private StructureGenerator<?> e;
+        private StructureGenerator<?> feature;
         @Nullable
-        private ResourceKey<World> f;
+        private ResourceKey<World> dimension;
         @Nullable
-        private Boolean g;
-        private CriterionConditionLight h;
-        private CriterionConditionBlock i;
-        private CriterionConditionFluid j;
+        private Boolean smokey;
+        private CriterionConditionLight light;
+        private CriterionConditionBlock block;
+        private CriterionConditionFluid fluid;
 
         public a() {
-            this.a = CriterionConditionValue.FloatRange.e;
-            this.b = CriterionConditionValue.FloatRange.e;
-            this.c = CriterionConditionValue.FloatRange.e;
-            this.h = CriterionConditionLight.a;
-            this.i = CriterionConditionBlock.a;
-            this.j = CriterionConditionFluid.a;
+            this.x = CriterionConditionValue.DoubleRange.ANY;
+            this.y = CriterionConditionValue.DoubleRange.ANY;
+            this.z = CriterionConditionValue.DoubleRange.ANY;
+            this.light = CriterionConditionLight.ANY;
+            this.block = CriterionConditionBlock.ANY;
+            this.fluid = CriterionConditionFluid.ANY;
         }
 
         public static CriterionConditionLocation.a a() {
             return new CriterionConditionLocation.a();
         }
 
+        public CriterionConditionLocation.a a(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+            this.x = criterionconditionvalue_doublerange;
+            return this;
+        }
+
+        public CriterionConditionLocation.a b(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+            this.y = criterionconditionvalue_doublerange;
+            return this;
+        }
+
+        public CriterionConditionLocation.a c(CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+            this.z = criterionconditionvalue_doublerange;
+            return this;
+        }
+
         public CriterionConditionLocation.a a(@Nullable ResourceKey<BiomeBase> resourcekey) {
-            this.d = resourcekey;
+            this.biome = resourcekey;
+            return this;
+        }
+
+        public CriterionConditionLocation.a a(@Nullable StructureGenerator<?> structuregenerator) {
+            this.feature = structuregenerator;
+            return this;
+        }
+
+        public CriterionConditionLocation.a b(@Nullable ResourceKey<World> resourcekey) {
+            this.dimension = resourcekey;
+            return this;
+        }
+
+        public CriterionConditionLocation.a a(CriterionConditionLight criterionconditionlight) {
+            this.light = criterionconditionlight;
             return this;
         }
 
         public CriterionConditionLocation.a a(CriterionConditionBlock criterionconditionblock) {
-            this.i = criterionconditionblock;
+            this.block = criterionconditionblock;
+            return this;
+        }
+
+        public CriterionConditionLocation.a a(CriterionConditionFluid criterionconditionfluid) {
+            this.fluid = criterionconditionfluid;
             return this;
         }
 
         public CriterionConditionLocation.a a(Boolean obool) {
-            this.g = obool;
+            this.smokey = obool;
             return this;
         }
 
         public CriterionConditionLocation b() {
-            return new CriterionConditionLocation(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j);
+            return new CriterionConditionLocation(this.x, this.y, this.z, this.biome, this.feature, this.dimension, this.smokey, this.light, this.block, this.fluid);
         }
     }
 }

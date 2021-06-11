@@ -7,20 +7,20 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class PlayerListBox extends JList<String> {
 
-    private final MinecraftServer a;
-    private int b;
+    private final MinecraftServer server;
+    private int tickCount;
 
     public PlayerListBox(MinecraftServer minecraftserver) {
-        this.a = minecraftserver;
+        this.server = minecraftserver;
         minecraftserver.b(this::tick);
     }
 
     public void tick() {
-        if (this.b++ % 20 == 0) {
+        if (this.tickCount++ % 20 == 0) {
             Vector<String> vector = new Vector();
 
-            for (int i = 0; i < this.a.getPlayerList().getPlayers().size(); ++i) {
-                vector.add(((EntityPlayer) this.a.getPlayerList().getPlayers().get(i)).getProfile().getName());
+            for (int i = 0; i < this.server.getPlayerList().getPlayers().size(); ++i) {
+                vector.add(((EntityPlayer) this.server.getPlayerList().getPlayers().get(i)).getProfile().getName());
             }
 
             this.setListData(vector);

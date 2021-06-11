@@ -7,27 +7,43 @@ import net.minecraft.sounds.SoundEffects;
 
 public class CaveSoundSettings {
 
-    public static final Codec<CaveSoundSettings> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(SoundEffect.a.fieldOf("sound").forGetter((cavesoundsettings) -> {
-            return cavesoundsettings.c;
+    public static final Codec<CaveSoundSettings> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(SoundEffect.CODEC.fieldOf("sound").forGetter((cavesoundsettings) -> {
+            return cavesoundsettings.soundEvent;
         }), Codec.INT.fieldOf("tick_delay").forGetter((cavesoundsettings) -> {
-            return cavesoundsettings.d;
+            return cavesoundsettings.tickDelay;
         }), Codec.INT.fieldOf("block_search_extent").forGetter((cavesoundsettings) -> {
-            return cavesoundsettings.e;
+            return cavesoundsettings.blockSearchExtent;
         }), Codec.DOUBLE.fieldOf("offset").forGetter((cavesoundsettings) -> {
-            return cavesoundsettings.f;
+            return cavesoundsettings.soundPositionOffset;
         })).apply(instance, CaveSoundSettings::new);
     });
-    public static final CaveSoundSettings b = new CaveSoundSettings(SoundEffects.AMBIENT_CAVE, 6000, 8, 2.0D);
-    private SoundEffect c;
-    private int d;
-    private int e;
-    private double f;
+    public static final CaveSoundSettings LEGACY_CAVE_SETTINGS = new CaveSoundSettings(SoundEffects.AMBIENT_CAVE, 6000, 8, 2.0D);
+    private final SoundEffect soundEvent;
+    private final int tickDelay;
+    private final int blockSearchExtent;
+    private final double soundPositionOffset;
 
     public CaveSoundSettings(SoundEffect soundeffect, int i, int j, double d0) {
-        this.c = soundeffect;
-        this.d = i;
-        this.e = j;
-        this.f = d0;
+        this.soundEvent = soundeffect;
+        this.tickDelay = i;
+        this.blockSearchExtent = j;
+        this.soundPositionOffset = d0;
+    }
+
+    public SoundEffect a() {
+        return this.soundEvent;
+    }
+
+    public int b() {
+        return this.tickDelay;
+    }
+
+    public int c() {
+        return this.blockSearchExtent;
+    }
+
+    public double d() {
+        return this.soundPositionOffset;
     }
 }

@@ -12,18 +12,18 @@ import net.minecraft.resources.MinecraftKey;
 
 public class TickListChunk<T> implements TickList<T> {
 
-    private final List<TickListChunk.a<T>> a;
-    private final Function<T, MinecraftKey> b;
+    private final List<TickListChunk.a<T>> ticks;
+    private final Function<T, MinecraftKey> toId;
 
     public TickListChunk(Function<T, MinecraftKey> function, List<NextTickListEntry<T>> list, long i) {
         this(function, (List) list.stream().map((nextticklistentry) -> {
-            return new TickListChunk.a<>(nextticklistentry.b(), nextticklistentry.a, (int) (nextticklistentry.b - i), nextticklistentry.c);
+            return new TickListChunk.a<>(nextticklistentry.b(), nextticklistentry.pos, (int) (nextticklistentry.triggerTick - i), nextticklistentry.priority);
         }).collect(Collectors.toList()));
     }
 
     private TickListChunk(Function<T, MinecraftKey> function, List<TickListChunk.a<T>> list) {
-        this.a = list;
-        this.b = function;
+        this.ticks = list;
+        this.toId = function;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class TickListChunk<T> implements TickList<T> {
 
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        this.a.add(new TickListChunk.a<>(t0, blockposition, i, ticklistpriority));
+        this.ticks.add(new TickListChunk.a<>(t0, blockposition, i, ticklistpriority));
     }
 
     @Override
@@ -43,18 +43,18 @@ public class TickListChunk<T> implements TickList<T> {
 
     public NBTTagList b() {
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.ticks.iterator();
 
         while (iterator.hasNext()) {
             TickListChunk.a<T> ticklistchunk_a = (TickListChunk.a) iterator.next();
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            nbttagcompound.setString("i", ((MinecraftKey) this.b.apply(ticklistchunk_a.d)).toString());
-            nbttagcompound.setInt("x", ticklistchunk_a.a.getX());
-            nbttagcompound.setInt("y", ticklistchunk_a.a.getY());
-            nbttagcompound.setInt("z", ticklistchunk_a.a.getZ());
-            nbttagcompound.setInt("t", ticklistchunk_a.b);
-            nbttagcompound.setInt("p", ticklistchunk_a.c.a());
+            nbttagcompound.setString("i", ((MinecraftKey) this.toId.apply(ticklistchunk_a.type)).toString());
+            nbttagcompound.setInt("x", ticklistchunk_a.pos.getX());
+            nbttagcompound.setInt("y", ticklistchunk_a.pos.getY());
+            nbttagcompound.setInt("z", ticklistchunk_a.pos.getZ());
+            nbttagcompound.setInt("t", ticklistchunk_a.delay);
+            nbttagcompound.setInt("p", ticklistchunk_a.priority.a());
             nbttaglist.add(nbttagcompound);
         }
 
@@ -79,27 +79,32 @@ public class TickListChunk<T> implements TickList<T> {
     }
 
     public void a(TickList<T> ticklist) {
-        this.a.forEach((ticklistchunk_a) -> {
-            ticklist.a(ticklistchunk_a.a, ticklistchunk_a.d, ticklistchunk_a.b, ticklistchunk_a.c);
+        this.ticks.forEach((ticklistchunk_a) -> {
+            ticklist.a(ticklistchunk_a.pos, ticklistchunk_a.type, ticklistchunk_a.delay, ticklistchunk_a.priority);
         });
     }
 
-    static class a<T> {
+    @Override
+    public int a() {
+        return this.ticks.size();
+    }
 
-        private final T d;
-        public final BlockPosition a;
-        public final int b;
-        public final TickListPriority c;
+    private static class a<T> {
 
-        private a(T t0, BlockPosition blockposition, int i, TickListPriority ticklistpriority) {
-            this.d = t0;
-            this.a = blockposition;
-            this.b = i;
-            this.c = ticklistpriority;
+        final T type;
+        public final BlockPosition pos;
+        public final int delay;
+        public final TickListPriority priority;
+
+        a(T t0, BlockPosition blockposition, int i, TickListPriority ticklistpriority) {
+            this.type = t0;
+            this.pos = blockposition;
+            this.delay = i;
+            this.priority = ticklistpriority;
         }
 
         public String toString() {
-            return this.d + ": " + this.a + ", " + this.b + ", " + this.c;
+            return this.type + ": " + this.pos + ", " + this.delay + ", " + this.priority;
         }
     }
 }

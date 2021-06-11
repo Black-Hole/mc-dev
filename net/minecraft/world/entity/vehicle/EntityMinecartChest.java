@@ -1,6 +1,7 @@
 package net.minecraft.world.entity.vehicle;
 
 import net.minecraft.core.EnumDirection;
+import net.minecraft.world.IInventory;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.PlayerInventory;
@@ -26,7 +27,7 @@ public class EntityMinecartChest extends EntityMinecartContainer {
     @Override
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             this.a((IMaterial) Blocks.CHEST);
         }
 
@@ -43,17 +44,17 @@ public class EntityMinecartChest extends EntityMinecartContainer {
     }
 
     @Override
-    public IBlockData q() {
+    public IBlockData r() {
         return (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
     @Override
-    public int s() {
+    public int t() {
         return 8;
     }
 
     @Override
     public Container a(int i, PlayerInventory playerinventory) {
-        return ContainerChest.a(i, playerinventory, this);
+        return ContainerChest.a(i, playerinventory, (IInventory) this);
     }
 }

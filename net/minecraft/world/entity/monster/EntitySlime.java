@@ -47,15 +47,17 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntitySlime extends EntityInsentient implements IMonster {
 
-    private static final DataWatcherObject<Integer> bo = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
-    public float b;
-    public float c;
-    public float d;
-    private boolean bp;
+    private static final DataWatcherObject<Integer> ID_SIZE = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.INT);
+    public static final int MIN_SIZE = 1;
+    public static final int MAX_SIZE = 127;
+    public float targetSquish;
+    public float squish;
+    public float oSquish;
+    private boolean wasOnGround;
 
     public EntitySlime(EntityTypes<? extends EntitySlime> entitytypes, World world) {
         super(entitytypes, world);
-        this.moveController = new EntitySlime.ControllerMoveSlime(this);
+        this.moveControl = new EntitySlime.ControllerMoveSlime(this);
     }
 
     @Override
@@ -73,66 +75,62 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySlime.bo, 1);
+        this.entityData.register(EntitySlime.ID_SIZE, 1);
     }
 
     public void setSize(int i, boolean flag) {
-        this.datawatcher.set(EntitySlime.bo, i);
-        this.af();
+        int j = MathHelper.clamp(i, 1, 127);
+
+        this.entityData.set(EntitySlime.ID_SIZE, j);
+        this.ah();
         this.updateSize();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) (i * i));
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double) (0.2F + 0.1F * (float) i));
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double) i);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) (j * j));
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double) (0.2F + 0.1F * (float) j));
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double) j);
         if (flag) {
             this.setHealth(this.getMaxHealth());
         }
 
-        this.f = i;
+        this.xpReward = j;
     }
 
     public int getSize() {
-        return (Integer) this.datawatcher.get(EntitySlime.bo);
+        return (Integer) this.entityData.get(EntitySlime.ID_SIZE);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setInt("Size", this.getSize() - 1);
-        nbttagcompound.setBoolean("wasOnGround", this.bp);
+        nbttagcompound.setBoolean("wasOnGround", this.wasOnGround);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
-        int i = nbttagcompound.getInt("Size");
-
-        if (i < 0) {
-            i = 0;
-        }
-
-        this.setSize(i + 1, false);
+        this.setSize(nbttagcompound.getInt("Size") + 1, false);
         super.loadData(nbttagcompound);
-        this.bp = nbttagcompound.getBoolean("wasOnGround");
+        this.wasOnGround = nbttagcompound.getBoolean("wasOnGround");
     }
 
-    public boolean eQ() {
+    public boolean fz() {
         return this.getSize() <= 1;
     }
 
-    protected ParticleParam eI() {
+    protected ParticleParam p() {
         return Particles.ITEM_SLIME;
     }
 
     @Override
-    protected boolean L() {
+    protected boolean Q() {
         return this.getSize() > 0;
     }
 
     @Override
     public void tick() {
-        this.c += (this.b - this.c) * 0.5F;
-        this.d = this.c;
+        this.squish += (this.targetSquish - this.squish) * 0.5F;
+        this.oSquish = this.squish;
         super.tick();
-        if (this.onGround && !this.bp) {
+        if (this.onGround && !this.wasOnGround) {
             int i = this.getSize();
 
             for (int j = 0; j < i * 8; ++j) {
@@ -141,24 +139,24 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                 float f2 = MathHelper.sin(f) * (float) i * 0.5F * f1;
                 float f3 = MathHelper.cos(f) * (float) i * 0.5F * f1;
 
-                this.world.addParticle(this.eI(), this.locX() + (double) f2, this.locY(), this.locZ() + (double) f3, 0.0D, 0.0D, 0.0D);
+                this.level.addParticle(this.p(), this.locX() + (double) f2, this.locY(), this.locZ() + (double) f3, 0.0D, 0.0D, 0.0D);
             }
 
             this.playSound(this.getSoundSquish(), this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
-            this.b = -0.5F;
-        } else if (!this.onGround && this.bp) {
-            this.b = 1.0F;
+            this.targetSquish = -0.5F;
+        } else if (!this.onGround && this.wasOnGround) {
+            this.targetSquish = 1.0F;
         }
 
-        this.bp = this.onGround;
-        this.eK();
+        this.wasOnGround = this.onGround;
+        this.ft();
     }
 
-    protected void eK() {
-        this.b *= 0.6F;
+    protected void ft() {
+        this.targetSquish *= 0.6F;
     }
 
-    protected int eJ() {
+    protected int t() {
         return this.random.nextInt(20) + 10;
     }
 
@@ -174,12 +172,12 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntitySlime.bo.equals(datawatcherobject)) {
+        if (EntitySlime.ID_SIZE.equals(datawatcherobject)) {
             this.updateSize();
-            this.yaw = this.aC;
-            this.aA = this.aC;
+            this.setYRot(this.yHeadRot);
+            this.yBodyRot = this.yHeadRot;
             if (this.isInWater() && this.random.nextInt(20) == 0) {
-                this.aM();
+                this.aT();
             }
         }
 
@@ -192,10 +190,10 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     @Override
-    public void die() {
+    public void a(Entity.RemovalReason entity_removalreason) {
         int i = this.getSize();
 
-        if (!this.world.isClientSide && i > 1 && this.dl()) {
+        if (!this.level.isClientSide && i > 1 && this.dV()) {
             IChatBaseComponent ichatbasecomponent = this.getCustomName();
             boolean flag = this.isNoAI();
             float f = (float) i / 4.0F;
@@ -205,7 +203,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
             for (int l = 0; l < k; ++l) {
                 float f1 = ((float) (l % 2) - 0.5F) * f;
                 float f2 = ((float) (l / 2) - 0.5F) * f;
-                EntitySlime entityslime = (EntitySlime) this.getEntityType().a(this.world);
+                EntitySlime entityslime = (EntitySlime) this.getEntityType().a(this.level);
 
                 if (this.isPersistent()) {
                     entityslime.setPersistent();
@@ -216,36 +214,36 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                 entityslime.setInvulnerable(this.isInvulnerable());
                 entityslime.setSize(j, true);
                 entityslime.setPositionRotation(this.locX() + (double) f1, this.locY() + 0.5D, this.locZ() + (double) f2, this.random.nextFloat() * 360.0F, 0.0F);
-                this.world.addEntity(entityslime);
+                this.level.addEntity(entityslime);
             }
         }
 
-        super.die();
+        super.a(entity_removalreason);
     }
 
     @Override
     public void collide(Entity entity) {
         super.collide(entity);
-        if (entity instanceof EntityIronGolem && this.eL()) {
-            this.i((EntityLiving) entity);
+        if (entity instanceof EntityIronGolem && this.fu()) {
+            this.j((EntityLiving) entity);
         }
 
     }
 
     @Override
     public void pickup(EntityHuman entityhuman) {
-        if (this.eL()) {
-            this.i((EntityLiving) entityhuman);
+        if (this.fu()) {
+            this.j((EntityLiving) entityhuman);
         }
 
     }
 
-    protected void i(EntityLiving entityliving) {
+    protected void j(EntityLiving entityliving) {
         if (this.isAlive()) {
             int i = this.getSize();
 
-            if (this.h((Entity) entityliving) < 0.6D * (double) i * 0.6D * (double) i && this.hasLineOfSight(entityliving) && entityliving.damageEntity(DamageSource.mobAttack(this), this.eM())) {
-                this.playSound(SoundEffects.ENTITY_SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            if (this.f((Entity) entityliving) < 0.6D * (double) i * 0.6D * (double) i && this.hasLineOfSight(entityliving) && entityliving.damageEntity(DamageSource.mobAttack(this), this.fv())) {
+                this.playSound(SoundEffects.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 this.a((EntityLiving) this, (Entity) entityliving);
             }
         }
@@ -257,36 +255,36 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         return 0.625F * entitysize.height;
     }
 
-    protected boolean eL() {
-        return !this.eQ() && this.doAITick();
+    protected boolean fu() {
+        return !this.fz() && this.doAITick();
     }
 
-    protected float eM() {
+    protected float fv() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.eQ() ? SoundEffects.ENTITY_SLIME_HURT_SMALL : SoundEffects.ENTITY_SLIME_HURT;
+        return this.fz() ? SoundEffects.SLIME_HURT_SMALL : SoundEffects.SLIME_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.eQ() ? SoundEffects.ENTITY_SLIME_DEATH_SMALL : SoundEffects.ENTITY_SLIME_DEATH;
+        return this.fz() ? SoundEffects.SLIME_DEATH_SMALL : SoundEffects.SLIME_DEATH;
     }
 
     protected SoundEffect getSoundSquish() {
-        return this.eQ() ? SoundEffects.ENTITY_SLIME_SQUISH_SMALL : SoundEffects.ENTITY_SLIME_SQUISH;
+        return this.fz() ? SoundEffects.SLIME_SQUISH_SMALL : SoundEffects.SLIME_SQUISH;
     }
 
     @Override
-    protected MinecraftKey getDefaultLootTable() {
-        return this.getSize() == 1 ? this.getEntityType().i() : LootTables.a;
+    public MinecraftKey getDefaultLootTable() {
+        return this.getSize() == 1 ? this.getEntityType().j() : LootTables.EMPTY;
     }
 
     public static boolean c(EntityTypes<EntitySlime> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         if (generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL) {
-            if (Objects.equals(generatoraccess.i(blockposition), Optional.of(Biomes.SWAMP)) && blockposition.getY() > 50 && blockposition.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < generatoraccess.af() && generatoraccess.getLightLevel(blockposition) <= random.nextInt(8)) {
+            if (Objects.equals(generatoraccess.j(blockposition), Optional.of(Biomes.SWAMP)) && blockposition.getY() > 50 && blockposition.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < generatoraccess.ak() && generatoraccess.getLightLevel(blockposition) <= random.nextInt(8)) {
                 return a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
             }
 
@@ -311,11 +309,11 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     @Override
-    public int O() {
+    public int eY() {
         return 0;
     }
 
-    protected boolean eR() {
+    protected boolean fA() {
         return this.getSize() > 0;
     }
 
@@ -323,8 +321,8 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     protected void jump() {
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) this.dJ(), vec3d.z);
-        this.impulse = true;
+        this.setMot(vec3d.x, (double) this.er(), vec3d.z);
+        this.hasImpulse = true;
     }
 
     @Nullable
@@ -342,14 +340,14 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
-    private float m() {
-        float f = this.eQ() ? 1.4F : 0.8F;
+    float n() {
+        float f = this.fz() ? 1.4F : 0.8F;
 
         return ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * f;
     }
 
     protected SoundEffect getSoundJump() {
-        return this.eQ() ? SoundEffects.ENTITY_SLIME_JUMP_SMALL : SoundEffects.ENTITY_SLIME_JUMP;
+        return this.fz() ? SoundEffects.SLIME_JUMP_SMALL : SoundEffects.SLIME_JUMP;
     }
 
     @Override
@@ -357,169 +355,169 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         return super.a(entitypose).a(0.255F * (float) this.getSize());
     }
 
-    static class PathfinderGoalSlimeIdle extends PathfinderGoal {
+    private static class ControllerMoveSlime extends ControllerMove {
 
-        private final EntitySlime a;
+        private float yRot;
+        private int jumpDelay;
+        private final EntitySlime slime;
+        private boolean isAggressive;
 
-        public PathfinderGoalSlimeIdle(EntitySlime entityslime) {
-            this.a = entityslime;
-            this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
+        public ControllerMoveSlime(EntitySlime entityslime) {
+            super(entityslime);
+            this.slime = entityslime;
+            this.yRot = 180.0F * entityslime.getYRot() / 3.1415927F;
+        }
+
+        public void a(float f, boolean flag) {
+            this.yRot = f;
+            this.isAggressive = flag;
+        }
+
+        public void a(double d0) {
+            this.speedModifier = d0;
+            this.operation = ControllerMove.Operation.MOVE_TO;
         }
 
         @Override
-        public boolean a() {
-            return !this.a.isPassenger();
-        }
+        public void a() {
+            this.mob.setYRot(this.a(this.mob.getYRot(), this.yRot, 90.0F));
+            this.mob.yHeadRot = this.mob.getYRot();
+            this.mob.yBodyRot = this.mob.getYRot();
+            if (this.operation != ControllerMove.Operation.MOVE_TO) {
+                this.mob.u(0.0F);
+            } else {
+                this.operation = ControllerMove.Operation.WAIT;
+                if (this.mob.isOnGround()) {
+                    this.mob.r((float) (this.speedModifier * this.mob.b(GenericAttributes.MOVEMENT_SPEED)));
+                    if (this.jumpDelay-- <= 0) {
+                        this.jumpDelay = this.slime.t();
+                        if (this.isAggressive) {
+                            this.jumpDelay /= 3;
+                        }
 
-        @Override
-        public void e() {
-            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(1.0D);
+                        this.slime.getControllerJump().jump();
+                        if (this.slime.fA()) {
+                            this.slime.playSound(this.slime.getSoundJump(), this.slime.getSoundVolume(), this.slime.n());
+                        }
+                    } else {
+                        this.slime.xxa = 0.0F;
+                        this.slime.zza = 0.0F;
+                        this.mob.r(0.0F);
+                    }
+                } else {
+                    this.mob.r((float) (this.speedModifier * this.mob.b(GenericAttributes.MOVEMENT_SPEED)));
+                }
+
+            }
         }
     }
 
-    static class PathfinderGoalSlimeRandomJump extends PathfinderGoal {
+    private static class PathfinderGoalSlimeRandomJump extends PathfinderGoal {
 
-        private final EntitySlime a;
+        private final EntitySlime slime;
 
         public PathfinderGoalSlimeRandomJump(EntitySlime entityslime) {
-            this.a = entityslime;
+            this.slime = entityslime;
             this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
             entityslime.getNavigation().d(true);
         }
 
         @Override
         public boolean a() {
-            return (this.a.isInWater() || this.a.aQ()) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
+            return (this.slime.isInWater() || this.slime.aX()) && this.slime.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
         }
 
         @Override
         public void e() {
-            if (this.a.getRandom().nextFloat() < 0.8F) {
-                this.a.getControllerJump().jump();
+            if (this.slime.getRandom().nextFloat() < 0.8F) {
+                this.slime.getControllerJump().jump();
             }
 
-            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(1.2D);
+            ((EntitySlime.ControllerMoveSlime) this.slime.getControllerMove()).a(1.2D);
         }
     }
 
-    static class PathfinderGoalSlimeRandomDirection extends PathfinderGoal {
+    private static class PathfinderGoalSlimeNearestPlayer extends PathfinderGoal {
 
-        private final EntitySlime a;
-        private float b;
-        private int c;
-
-        public PathfinderGoalSlimeRandomDirection(EntitySlime entityslime) {
-            this.a = entityslime;
-            this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
-        }
-
-        @Override
-        public boolean a() {
-            return this.a.getGoalTarget() == null && (this.a.onGround || this.a.isInWater() || this.a.aQ() || this.a.hasEffect(MobEffects.LEVITATION)) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
-        }
-
-        @Override
-        public void e() {
-            if (--this.c <= 0) {
-                this.c = 40 + this.a.getRandom().nextInt(60);
-                this.b = (float) this.a.getRandom().nextInt(360);
-            }
-
-            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(this.b, false);
-        }
-    }
-
-    static class PathfinderGoalSlimeNearestPlayer extends PathfinderGoal {
-
-        private final EntitySlime a;
-        private int b;
+        private final EntitySlime slime;
+        private int growTiredTimer;
 
         public PathfinderGoalSlimeNearestPlayer(EntitySlime entityslime) {
-            this.a = entityslime;
+            this.slime = entityslime;
             this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
         }
 
         @Override
         public boolean a() {
-            EntityLiving entityliving = this.a.getGoalTarget();
+            EntityLiving entityliving = this.slime.getGoalTarget();
 
-            return entityliving == null ? false : (!entityliving.isAlive() ? false : (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable ? false : this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime));
+            return entityliving == null ? false : (!this.slime.c(entityliving) ? false : this.slime.getControllerMove() instanceof EntitySlime.ControllerMoveSlime);
         }
 
         @Override
         public void c() {
-            this.b = 300;
+            this.growTiredTimer = 300;
             super.c();
         }
 
         @Override
         public boolean b() {
-            EntityLiving entityliving = this.a.getGoalTarget();
+            EntityLiving entityliving = this.slime.getGoalTarget();
 
-            return entityliving == null ? false : (!entityliving.isAlive() ? false : (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable ? false : --this.b > 0));
+            return entityliving == null ? false : (!this.slime.c(entityliving) ? false : --this.growTiredTimer > 0);
         }
 
         @Override
         public void e() {
-            this.a.a((Entity) this.a.getGoalTarget(), 10.0F, 10.0F);
-            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(this.a.yaw, this.a.eL());
+            this.slime.a((Entity) this.slime.getGoalTarget(), 10.0F, 10.0F);
+            ((EntitySlime.ControllerMoveSlime) this.slime.getControllerMove()).a(this.slime.getYRot(), this.slime.fu());
         }
     }
 
-    static class ControllerMoveSlime extends ControllerMove {
+    private static class PathfinderGoalSlimeRandomDirection extends PathfinderGoal {
 
-        private float i;
-        private int j;
-        private final EntitySlime k;
-        private boolean l;
+        private final EntitySlime slime;
+        private float chosenDegrees;
+        private int nextRandomizeTime;
 
-        public ControllerMoveSlime(EntitySlime entityslime) {
-            super(entityslime);
-            this.k = entityslime;
-            this.i = 180.0F * entityslime.yaw / 3.1415927F;
-        }
-
-        public void a(float f, boolean flag) {
-            this.i = f;
-            this.l = flag;
-        }
-
-        public void a(double d0) {
-            this.e = d0;
-            this.h = ControllerMove.Operation.MOVE_TO;
+        public PathfinderGoalSlimeRandomDirection(EntitySlime entityslime) {
+            this.slime = entityslime;
+            this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
         }
 
         @Override
-        public void a() {
-            this.a.yaw = this.a(this.a.yaw, this.i, 90.0F);
-            this.a.aC = this.a.yaw;
-            this.a.aA = this.a.yaw;
-            if (this.h != ControllerMove.Operation.MOVE_TO) {
-                this.a.t(0.0F);
-            } else {
-                this.h = ControllerMove.Operation.WAIT;
-                if (this.a.isOnGround()) {
-                    this.a.q((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
-                    if (this.j-- <= 0) {
-                        this.j = this.k.eJ();
-                        if (this.l) {
-                            this.j /= 3;
-                        }
+        public boolean a() {
+            return this.slime.getGoalTarget() == null && (this.slime.onGround || this.slime.isInWater() || this.slime.aX() || this.slime.hasEffect(MobEffects.LEVITATION)) && this.slime.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
+        }
 
-                        this.k.getControllerJump().jump();
-                        if (this.k.eR()) {
-                            this.k.playSound(this.k.getSoundJump(), this.k.getSoundVolume(), this.k.m());
-                        }
-                    } else {
-                        this.k.aR = 0.0F;
-                        this.k.aT = 0.0F;
-                        this.a.q(0.0F);
-                    }
-                } else {
-                    this.a.q((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
-                }
-
+        @Override
+        public void e() {
+            if (--this.nextRandomizeTime <= 0) {
+                this.nextRandomizeTime = 40 + this.slime.getRandom().nextInt(60);
+                this.chosenDegrees = (float) this.slime.getRandom().nextInt(360);
             }
+
+            ((EntitySlime.ControllerMoveSlime) this.slime.getControllerMove()).a(this.chosenDegrees, false);
+        }
+    }
+
+    private static class PathfinderGoalSlimeIdle extends PathfinderGoal {
+
+        private final EntitySlime slime;
+
+        public PathfinderGoalSlimeIdle(EntitySlime entityslime) {
+            this.slime = entityslime;
+            this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean a() {
+            return !this.slime.isPassenger();
+        }
+
+        @Override
+        public void e() {
+            ((EntitySlime.ControllerMoveSlime) this.slime.getControllerMove()).a(1.0D);
         }
     }
 }

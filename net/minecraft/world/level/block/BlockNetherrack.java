@@ -22,7 +22,7 @@ public class BlockNetherrack extends Block implements IBlockFragilePlantElement 
         if (!iblockaccess.getType(blockposition.up()).a(iblockaccess, blockposition)) {
             return false;
         } else {
-            Iterator iterator = BlockPosition.a(blockposition.b(-1, -1, -1), blockposition.b(1, 1, 1)).iterator();
+            Iterator iterator = BlockPosition.a(blockposition.c(-1, -1, -1), blockposition.c(1, 1, 1)).iterator();
 
             BlockPosition blockposition1;
 
@@ -47,7 +47,7 @@ public class BlockNetherrack extends Block implements IBlockFragilePlantElement 
     public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         boolean flag = false;
         boolean flag1 = false;
-        Iterator iterator = BlockPosition.a(blockposition.b(-1, -1, -1), blockposition.b(1, 1, 1)).iterator();
+        Iterator iterator = BlockPosition.a(blockposition.c(-1, -1, -1), blockposition.c(1, 1, 1)).iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();

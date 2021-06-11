@@ -10,6 +10,10 @@ import net.minecraft.world.level.World;
 
 public class ItemSuspiciousStew extends Item {
 
+    public static final String EFFECTS_TAG = "Effects";
+    public static final String EFFECT_ID_TAG = "EffectId";
+    public static final String EFFECT_DURATION_TAG = "EffectDuration";
+
     public ItemSuspiciousStew(Item.Info item_info) {
         super(item_info);
     }
@@ -49,6 +53,6 @@ public class ItemSuspiciousStew extends Item {
             }
         }
 
-        return entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.canInstantlyBuild ? itemstack1 : new ItemStack(Items.BOWL);
+        return entityliving instanceof EntityHuman && ((EntityHuman) entityliving).getAbilities().instabuild ? itemstack1 : new ItemStack(Items.BOWL);
     }
 }

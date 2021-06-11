@@ -6,18 +6,18 @@ public enum BlockPropertyComparatorMode implements INamable {
 
     COMPARE("compare"), SUBTRACT("subtract");
 
-    private final String c;
+    private final String name;
 
     private BlockPropertyComparatorMode(String s) {
-        this.c = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.c;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.c;
+        return this.name;
     }
 }

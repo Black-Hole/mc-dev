@@ -1,7 +1,5 @@
 package net.minecraft.world.level.block.entity;
 
-import java.util.Iterator;
-import java.util.List;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.NonNullList;
@@ -25,23 +23,49 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockChest;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockPropertyChestType;
-import net.minecraft.world.phys.AxisAlignedBB;
 
-public class TileEntityChest extends TileEntityLootable implements ITickable {
+public class TileEntityChest extends TileEntityLootable implements LidBlockEntity {
 
+    private static final int EVENT_SET_OPEN_COUNT = 1;
     private NonNullList<ItemStack> items;
-    protected float a;
-    protected float b;
-    public int viewingCount;
-    private int j;
+    public final ContainerOpenersCounter openersCounter;
+    private final ChestLidController chestLidController;
 
-    protected TileEntityChest(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
-        this.items = NonNullList.a(27, ItemStack.b);
+    protected TileEntityChest(TileEntityTypes<?> tileentitytypes, BlockPosition blockposition, IBlockData iblockdata) {
+        super(tileentitytypes, blockposition, iblockdata);
+        this.items = NonNullList.a(27, ItemStack.EMPTY);
+        this.openersCounter = new ContainerOpenersCounter() {
+            @Override
+            protected void a(World world, BlockPosition blockposition1, IBlockData iblockdata1) {
+                TileEntityChest.playOpenSound(world, blockposition1, iblockdata1, SoundEffects.CHEST_OPEN);
+            }
+
+            @Override
+            protected void b(World world, BlockPosition blockposition1, IBlockData iblockdata1) {
+                TileEntityChest.playOpenSound(world, blockposition1, iblockdata1, SoundEffects.CHEST_CLOSE);
+            }
+
+            @Override
+            protected void a(World world, BlockPosition blockposition1, IBlockData iblockdata1, int i, int j) {
+                TileEntityChest.this.a(world, blockposition1, iblockdata1, i, j);
+            }
+
+            @Override
+            protected boolean a(EntityHuman entityhuman) {
+                if (!(entityhuman.containerMenu instanceof ContainerChest)) {
+                    return false;
+                } else {
+                    IInventory iinventory = ((ContainerChest) entityhuman.containerMenu).i();
+
+                    return iinventory == TileEntityChest.this || iinventory instanceof InventoryLargeChest && ((InventoryLargeChest) iinventory).a((IInventory) TileEntityChest.this);
+                }
+            }
+        };
+        this.chestLidController = new ChestLidController();
     }
 
-    public TileEntityChest() {
-        this(TileEntityTypes.CHEST);
+    public TileEntityChest(BlockPosition blockposition, IBlockData iblockdata) {
+        this(TileEntityTypes.CHEST, blockposition, iblockdata);
     }
 
     @Override
@@ -55,10 +79,10 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.b);
-        if (!this.b(nbttagcompound)) {
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.EMPTY);
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
@@ -67,106 +91,40 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 
         return nbttagcompound;
     }
 
-    @Override
-    public void tick() {
-        int i = this.position.getX();
-        int j = this.position.getY();
-        int k = this.position.getZ();
-
-        ++this.j;
-        this.viewingCount = a(this.world, this, this.j, i, j, k, this.viewingCount);
-        this.b = this.a;
-        float f = 0.1F;
-
-        if (this.viewingCount > 0 && this.a == 0.0F) {
-            this.playOpenSound(SoundEffects.BLOCK_CHEST_OPEN);
-        }
-
-        if (this.viewingCount == 0 && this.a > 0.0F || this.viewingCount > 0 && this.a < 1.0F) {
-            float f1 = this.a;
-
-            if (this.viewingCount > 0) {
-                this.a += 0.1F;
-            } else {
-                this.a -= 0.1F;
-            }
-
-            if (this.a > 1.0F) {
-                this.a = 1.0F;
-            }
-
-            float f2 = 0.5F;
-
-            if (this.a < 0.5F && f1 >= 0.5F) {
-                this.playOpenSound(SoundEffects.BLOCK_CHEST_CLOSE);
-            }
-
-            if (this.a < 0.0F) {
-                this.a = 0.0F;
-            }
-        }
-
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityChest tileentitychest) {
+        tileentitychest.chestLidController.a();
     }
 
-    public static int a(World world, TileEntityContainer tileentitycontainer, int i, int j, int k, int l, int i1) {
-        if (!world.isClientSide && i1 != 0 && (i + j + k + l) % 200 == 0) {
-            i1 = a(world, tileentitycontainer, j, k, l);
-        }
-
-        return i1;
-    }
-
-    public static int a(World world, TileEntityContainer tileentitycontainer, int i, int j, int k) {
-        int l = 0;
-        float f = 5.0F;
-        List<EntityHuman> list = world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - 5.0F), (double) ((float) j - 5.0F), (double) ((float) k - 5.0F), (double) ((float) (i + 1) + 5.0F), (double) ((float) (j + 1) + 5.0F), (double) ((float) (k + 1) + 5.0F)));
-        Iterator iterator = list.iterator();
-
-        while (iterator.hasNext()) {
-            EntityHuman entityhuman = (EntityHuman) iterator.next();
-
-            if (entityhuman.activeContainer instanceof ContainerChest) {
-                IInventory iinventory = ((ContainerChest) entityhuman.activeContainer).e();
-
-                if (iinventory == tileentitycontainer || iinventory instanceof InventoryLargeChest && ((InventoryLargeChest) iinventory).a((IInventory) tileentitycontainer)) {
-                    ++l;
-                }
-            }
-        }
-
-        return l;
-    }
-
-    public void playOpenSound(SoundEffect soundeffect) {
-        BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) this.getBlock().get(BlockChest.c);
+    public static void playOpenSound(World world, BlockPosition blockposition, IBlockData iblockdata, SoundEffect soundeffect) {
+        BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata.get(BlockChest.TYPE);
 
         if (blockpropertychesttype != BlockPropertyChestType.LEFT) {
-            double d0 = (double) this.position.getX() + 0.5D;
-            double d1 = (double) this.position.getY() + 0.5D;
-            double d2 = (double) this.position.getZ() + 0.5D;
+            double d0 = (double) blockposition.getX() + 0.5D;
+            double d1 = (double) blockposition.getY() + 0.5D;
+            double d2 = (double) blockposition.getZ() + 0.5D;
 
             if (blockpropertychesttype == BlockPropertyChestType.RIGHT) {
-                EnumDirection enumdirection = BlockChest.h(this.getBlock());
+                EnumDirection enumdirection = BlockChest.h(iblockdata);
 
                 d0 += (double) enumdirection.getAdjacentX() * 0.5D;
                 d2 += (double) enumdirection.getAdjacentZ() * 0.5D;
             }
 
-            this.world.playSound((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            world.playSound((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
         }
     }
 
     @Override
     public boolean setProperty(int i, int j) {
         if (i == 1) {
-            this.viewingCount = j;
+            this.chestLidController.a(j > 0);
             return true;
         } else {
             return super.setProperty(i, j);
@@ -175,32 +133,16 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
 
     @Override
     public void startOpen(EntityHuman entityhuman) {
-        if (!entityhuman.isSpectator()) {
-            if (this.viewingCount < 0) {
-                this.viewingCount = 0;
-            }
-
-            ++this.viewingCount;
-            this.onOpen();
+        if (!this.remove && !entityhuman.isSpectator()) {
+            this.openersCounter.a(entityhuman, this.getWorld(), this.getPosition(), this.getBlock());
         }
 
     }
 
     @Override
     public void closeContainer(EntityHuman entityhuman) {
-        if (!entityhuman.isSpectator()) {
-            --this.viewingCount;
-            this.onOpen();
-        }
-
-    }
-
-    protected void onOpen() {
-        Block block = this.getBlock().getBlock();
-
-        if (block instanceof BlockChest) {
-            this.world.playBlockAction(this.position, block, 1, this.viewingCount);
-            this.world.applyPhysics(this.position, block);
+        if (!this.remove && !entityhuman.isSpectator()) {
+            this.openersCounter.b(entityhuman, this.getWorld(), this.getPosition(), this.getBlock());
         }
 
     }
@@ -215,14 +157,19 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         this.items = nonnulllist;
     }
 
+    @Override
+    public float a(float f) {
+        return this.chestLidController.a(f);
+    }
+
     public static int a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        if (iblockdata.getBlock().isTileEntity()) {
+        if (iblockdata.isTileEntity()) {
             TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityChest) {
-                return ((TileEntityChest) tileentity).viewingCount;
+                return ((TileEntityChest) tileentity).openersCounter.getOpenerCount();
             }
         }
 
@@ -238,6 +185,19 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
 
     @Override
     protected Container createContainer(int i, PlayerInventory playerinventory) {
-        return ContainerChest.a(i, playerinventory, this);
+        return ContainerChest.a(i, playerinventory, (IInventory) this);
+    }
+
+    public void h() {
+        if (!this.remove) {
+            this.openersCounter.c(this.getWorld(), this.getPosition(), this.getBlock());
+        }
+
+    }
+
+    protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+        Block block = iblockdata.getBlock();
+
+        world.playBlockAction(blockposition, block, 1, j);
     }
 }

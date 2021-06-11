@@ -17,40 +17,39 @@ import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.WorldGenStage;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidType;
 import net.minecraft.world.level.material.FluidTypes;
 
 public class ProtoChunkExtension extends ProtoChunk {
 
-    private final Chunk a;
+    private final Chunk wrapped;
 
     public ProtoChunkExtension(Chunk chunk) {
-        super(chunk.getPos(), ChunkConverter.a);
-        this.a = chunk;
+        super(chunk.getPos(), ChunkConverter.EMPTY, chunk);
+        this.wrapped = chunk;
     }
 
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        return this.a.getTileEntity(blockposition);
+        return this.wrapped.getTileEntity(blockposition);
     }
 
     @Nullable
     @Override
     public IBlockData getType(BlockPosition blockposition) {
-        return this.a.getType(blockposition);
+        return this.wrapped.getType(blockposition);
     }
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return this.a.getFluid(blockposition);
+        return this.wrapped.getFluid(blockposition);
     }
 
     @Override
-    public int K() {
-        return this.a.K();
+    public int O() {
+        return this.wrapped.O();
     }
 
     @Nullable
@@ -60,7 +59,7 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     @Override
-    public void setTileEntity(BlockPosition blockposition, TileEntity tileentity) {}
+    public void setTileEntity(TileEntity tileentity) {}
 
     @Override
     public void a(Entity entity) {}
@@ -70,13 +69,7 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public ChunkSection[] getSections() {
-        return this.a.getSections();
-    }
-
-    @Nullable
-    @Override
-    public LightEngine e() {
-        return this.a.e();
+        return this.wrapped.getSections();
     }
 
     @Override
@@ -88,29 +81,31 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public int getHighestBlock(HeightMap.Type heightmap_type, int i, int j) {
-        return this.a.getHighestBlock(this.c(heightmap_type), i, j);
+        return this.wrapped.getHighestBlock(this.c(heightmap_type), i, j);
+    }
+
+    @Override
+    public BlockPosition b(HeightMap.Type heightmap_type) {
+        return this.wrapped.b(this.c(heightmap_type));
     }
 
     @Override
     public ChunkCoordIntPair getPos() {
-        return this.a.getPos();
+        return this.wrapped.getPos();
     }
-
-    @Override
-    public void setLastSaved(long i) {}
 
     @Nullable
     @Override
     public StructureStart<?> a(StructureGenerator<?> structuregenerator) {
-        return this.a.a(structuregenerator);
+        return this.wrapped.a(structuregenerator);
     }
 
     @Override
     public void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart) {}
 
     @Override
-    public Map<StructureGenerator<?>, StructureStart<?>> h() {
-        return this.a.h();
+    public Map<StructureGenerator<?>, StructureStart<?>> g() {
+        return this.wrapped.g();
     }
 
     @Override
@@ -118,15 +113,15 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public LongSet b(StructureGenerator<?> structuregenerator) {
-        return this.a.b(structuregenerator);
+        return this.wrapped.b(structuregenerator);
     }
 
     @Override
     public void a(StructureGenerator<?> structuregenerator, long i) {}
 
     @Override
-    public Map<StructureGenerator<?>, LongSet> v() {
-        return this.a.v();
+    public Map<StructureGenerator<?>, LongSet> w() {
+        return this.wrapped.w();
     }
 
     @Override
@@ -134,7 +129,7 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public BiomeStorage getBiomeIndex() {
-        return this.a.getBiomeIndex();
+        return this.wrapped.getBiomeIndex();
     }
 
     @Override
@@ -147,7 +142,7 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public ChunkStatus getChunkStatus() {
-        return this.a.getChunkStatus();
+        return this.wrapped.getChunkStatus();
     }
 
     @Override
@@ -161,36 +156,36 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Nullable
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
-        return this.a.i(blockposition);
+    public NBTTagCompound f(BlockPosition blockposition) {
+        return this.wrapped.f(blockposition);
     }
 
     @Nullable
     @Override
-    public NBTTagCompound j(BlockPosition blockposition) {
-        return this.a.j(blockposition);
+    public NBTTagCompound g(BlockPosition blockposition) {
+        return this.wrapped.g(blockposition);
     }
 
     @Override
     public void a(BiomeStorage biomestorage) {}
 
     @Override
-    public Stream<BlockPosition> m() {
-        return this.a.m();
+    public Stream<BlockPosition> n() {
+        return this.wrapped.n();
     }
 
     @Override
-    public ProtoChunkTickList<Block> n() {
+    public ProtoChunkTickList<Block> o() {
         return new ProtoChunkTickList<>((block) -> {
             return block.getBlockData().isAir();
-        }, this.getPos());
+        }, this.getPos(), this);
     }
 
     @Override
-    public ProtoChunkTickList<FluidType> o() {
+    public ProtoChunkTickList<FluidType> p() {
         return new ProtoChunkTickList<>((fluidtype) -> {
             return fluidtype == FluidTypes.EMPTY;
-        }, this.getPos());
+        }, this.getPos(), this);
     }
 
     @Override
@@ -203,17 +198,17 @@ public class ProtoChunkExtension extends ProtoChunk {
         throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Meaningless in this context")));
     }
 
-    public Chunk u() {
-        return this.a;
+    public Chunk v() {
+        return this.wrapped;
     }
 
     @Override
-    public boolean r() {
-        return this.a.r();
+    public boolean s() {
+        return this.wrapped.s();
     }
 
     @Override
     public void b(boolean flag) {
-        this.a.b(flag);
+        this.wrapped.b(flag);
     }
 }

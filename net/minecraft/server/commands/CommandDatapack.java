@@ -22,19 +22,19 @@ import net.minecraft.server.packs.repository.ResourcePackRepository;
 
 public class CommandDatapack {
 
-    private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_PACK = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.datapack.unknown", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_PACK_ALREADY_ENABLED = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.datapack.enable.failed", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_PACK_ALREADY_DISABLED = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.datapack.disable.failed", new Object[]{object});
     });
-    private static final SuggestionProvider<CommandListenerWrapper> d = (commandcontext, suggestionsbuilder) -> {
+    private static final SuggestionProvider<CommandListenerWrapper> SELECTED_PACKS = (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
-    private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
+    private static final SuggestionProvider<CommandListenerWrapper> UNSELECTED_PACKS = (commandcontext, suggestionsbuilder) -> {
         ResourcePackRepository resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
         Collection<String> collection = resourcepackrepository.d();
 
@@ -43,20 +43,22 @@ public class CommandDatapack {
         }).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
 
+    public CommandDatapack() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("datapack").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("enable").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.e).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("enable").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.UNSELECTED_PACKS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", true), (list, resourcepackloader) -> {
                 resourcepackloader.h().a(list, resourcepackloader, (resourcepackloader1) -> {
                     return resourcepackloader1;
                 }, false);
             });
-        })).then(net.minecraft.commands.CommandDispatcher.a("after").then(net.minecraft.commands.CommandDispatcher.a("existing", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.d).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("after").then(net.minecraft.commands.CommandDispatcher.a("existing", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.SELECTED_PACKS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", true), (list, resourcepackloader) -> {
                 list.add(list.indexOf(a(commandcontext, "existing", false)) + 1, resourcepackloader);
             });
-        })))).then(net.minecraft.commands.CommandDispatcher.a("before").then(net.minecraft.commands.CommandDispatcher.a("existing", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.d).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("before").then(net.minecraft.commands.CommandDispatcher.a("existing", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.SELECTED_PACKS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", true), (list, resourcepackloader) -> {
                 list.add(list.indexOf(a(commandcontext, "existing", false)), resourcepackloader);
             });
@@ -66,7 +68,7 @@ public class CommandDatapack {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", true), (list, resourcepackloader) -> {
                 list.add(0, resourcepackloader);
             });
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("disable").then(net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.d).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("disable").then(net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.SELECTED_PACKS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", false));
         })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("list").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource());
@@ -145,21 +147,21 @@ public class CommandDatapack {
         ResourcePackLoader resourcepackloader = resourcepackrepository.a(s1);
 
         if (resourcepackloader == null) {
-            throw CommandDatapack.a.create(s1);
+            throw CommandDatapack.ERROR_UNKNOWN_PACK.create(s1);
         } else {
             boolean flag1 = resourcepackrepository.e().contains(resourcepackloader);
 
             if (flag && flag1) {
-                throw CommandDatapack.b.create(s1);
+                throw CommandDatapack.ERROR_PACK_ALREADY_ENABLED.create(s1);
             } else if (!flag && !flag1) {
-                throw CommandDatapack.c.create(s1);
+                throw CommandDatapack.ERROR_PACK_ALREADY_DISABLED.create(s1);
             } else {
                 return resourcepackloader;
             }
         }
     }
 
-    interface a {
+    private interface a {
 
         void apply(List<ResourcePackLoader> list, ResourcePackLoader resourcepackloader) throws CommandSyntaxException;
     }

@@ -12,12 +12,17 @@ public class BlockBarrier extends Block {
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
+    }
+
+    @Override
+    public float b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return 1.0F;
     }
 }

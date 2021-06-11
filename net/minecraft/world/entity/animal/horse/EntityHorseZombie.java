@@ -24,13 +24,13 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder eL() {
-        return fi().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder t() {
+        return fR().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
-    protected void eK() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fq());
+    protected void p() {
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
     }
 
     @Override
@@ -41,19 +41,19 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     @Override
     protected SoundEffect getSoundAmbient() {
         super.getSoundAmbient();
-        return SoundEffects.ENTITY_ZOMBIE_HORSE_AMBIENT;
+        return SoundEffects.ZOMBIE_HORSE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
-        return SoundEffects.ENTITY_ZOMBIE_HORSE_DEATH;
+        return SoundEffects.ZOMBIE_HORSE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
         super.getSoundHurt(damagesource);
-        return SoundEffects.ENTITY_ZOMBIE_HORSE_HURT;
+        return SoundEffects.ZOMBIE_HORSE_HURT;
     }
 
     @Nullable
@@ -70,16 +70,16 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
             return super.b(entityhuman, enumhand);
-        } else if (entityhuman.eq()) {
+        } else if (entityhuman.eY()) {
             this.f(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         } else if (this.isVehicle()) {
             return super.b(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem() == Items.SADDLE && !this.hasSaddle()) {
+                if (itemstack.a(Items.SADDLE) && !this.hasSaddle()) {
                     this.f(entityhuman);
-                    return EnumInteractionResult.a(this.world.isClientSide);
+                    return EnumInteractionResult.a(this.level.isClientSide);
                 }
 
                 EnumInteractionResult enuminteractionresult = itemstack.a(entityhuman, (EntityLiving) this, enumhand);
@@ -90,10 +90,10 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             }
 
             this.h(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         }
     }
 
     @Override
-    protected void eV() {}
+    protected void fE() {}
 }

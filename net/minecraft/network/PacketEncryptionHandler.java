@@ -7,43 +7,43 @@ import javax.crypto.ShortBufferException;
 
 public class PacketEncryptionHandler {
 
-    private final Cipher a;
-    private byte[] b = new byte[0];
-    private byte[] c = new byte[0];
+    private final Cipher cipher;
+    private byte[] heapIn = new byte[0];
+    private byte[] heapOut = new byte[0];
 
     protected PacketEncryptionHandler(Cipher cipher) {
-        this.a = cipher;
+        this.cipher = cipher;
     }
 
     private byte[] a(ByteBuf bytebuf) {
         int i = bytebuf.readableBytes();
 
-        if (this.b.length < i) {
-            this.b = new byte[i];
+        if (this.heapIn.length < i) {
+            this.heapIn = new byte[i];
         }
 
-        bytebuf.readBytes(this.b, 0, i);
-        return this.b;
+        bytebuf.readBytes(this.heapIn, 0, i);
+        return this.heapIn;
     }
 
     protected ByteBuf a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf) throws ShortBufferException {
         int i = bytebuf.readableBytes();
         byte[] abyte = this.a(bytebuf);
-        ByteBuf bytebuf1 = channelhandlercontext.alloc().heapBuffer(this.a.getOutputSize(i));
+        ByteBuf bytebuf1 = channelhandlercontext.alloc().heapBuffer(this.cipher.getOutputSize(i));
 
-        bytebuf1.writerIndex(this.a.update(abyte, 0, i, bytebuf1.array(), bytebuf1.arrayOffset()));
+        bytebuf1.writerIndex(this.cipher.update(abyte, 0, i, bytebuf1.array(), bytebuf1.arrayOffset()));
         return bytebuf1;
     }
 
     protected void a(ByteBuf bytebuf, ByteBuf bytebuf1) throws ShortBufferException {
         int i = bytebuf.readableBytes();
         byte[] abyte = this.a(bytebuf);
-        int j = this.a.getOutputSize(i);
+        int j = this.cipher.getOutputSize(i);
 
-        if (this.c.length < j) {
-            this.c = new byte[j];
+        if (this.heapOut.length < j) {
+            this.heapOut = new byte[j];
         }
 
-        bytebuf1.writeBytes(this.c, 0, this.a.update(abyte, 0, i, this.c));
+        bytebuf1.writeBytes(this.heapOut, 0, this.cipher.update(abyte, 0, i, this.heapOut));
     }
 }

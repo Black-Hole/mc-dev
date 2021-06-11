@@ -23,16 +23,16 @@ import org.apache.logging.log4j.Logger;
 public class VillageSiege implements MobSpawner {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private boolean b;
-    private VillageSiege.State c;
-    private int d;
-    private int e;
-    private int f;
-    private int g;
-    private int h;
+    private boolean hasSetupSiege;
+    private VillageSiege.State siegeState;
+    private int zombiesToSpawn;
+    private int nextSpawnTime;
+    private int spawnX;
+    private int spawnY;
+    private int spawnZ;
 
     public VillageSiege() {
-        this.c = VillageSiege.State.SIEGE_DONE;
+        this.siegeState = VillageSiege.State.SIEGE_DONE;
     }
 
     @Override
@@ -41,38 +41,38 @@ public class VillageSiege implements MobSpawner {
             float f = worldserver.f(0.0F);
 
             if ((double) f == 0.5D) {
-                this.c = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
+                this.siegeState = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
             }
 
-            if (this.c == VillageSiege.State.SIEGE_DONE) {
+            if (this.siegeState == VillageSiege.State.SIEGE_DONE) {
                 return 0;
             } else {
-                if (!this.b) {
+                if (!this.hasSetupSiege) {
                     if (!this.a(worldserver)) {
                         return 0;
                     }
 
-                    this.b = true;
+                    this.hasSetupSiege = true;
                 }
 
-                if (this.e > 0) {
-                    --this.e;
+                if (this.nextSpawnTime > 0) {
+                    --this.nextSpawnTime;
                     return 0;
                 } else {
-                    this.e = 2;
-                    if (this.d > 0) {
+                    this.nextSpawnTime = 2;
+                    if (this.zombiesToSpawn > 0) {
                         this.b(worldserver);
-                        --this.d;
+                        --this.zombiesToSpawn;
                     } else {
-                        this.c = VillageSiege.State.SIEGE_DONE;
+                        this.siegeState = VillageSiege.State.SIEGE_DONE;
                     }
 
                     return 1;
                 }
             }
         } else {
-            this.c = VillageSiege.State.SIEGE_DONE;
-            this.b = false;
+            this.siegeState = VillageSiege.State.SIEGE_DONE;
+            this.hasSetupSiege = false;
             return 0;
         }
     }
@@ -86,16 +86,16 @@ public class VillageSiege implements MobSpawner {
             if (!entityhuman.isSpectator()) {
                 BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                if (worldserver.a_(blockposition) && worldserver.getBiome(blockposition).t() != BiomeBase.Geography.MUSHROOM) {
+                if (worldserver.b(blockposition) && worldserver.getBiome(blockposition).t() != BiomeBase.Geography.MUSHROOM) {
                     for (int i = 0; i < 10; ++i) {
                         float f = worldserver.random.nextFloat() * 6.2831855F;
 
-                        this.f = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
-                        this.g = blockposition.getY();
-                        this.h = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
-                        if (this.a(worldserver, new BlockPosition(this.f, this.g, this.h)) != null) {
-                            this.e = 0;
-                            this.d = 20;
+                        this.spawnX = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
+                        this.spawnY = blockposition.getY();
+                        this.spawnZ = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
+                        if (this.a(worldserver, new BlockPosition(this.spawnX, this.spawnY, this.spawnZ)) != null) {
+                            this.nextSpawnTime = 0;
+                            this.zombiesToSpawn = 20;
                             break;
                         }
                     }
@@ -109,7 +109,7 @@ public class VillageSiege implements MobSpawner {
     }
 
     private void b(WorldServer worldserver) {
-        Vec3D vec3d = this.a(worldserver, new BlockPosition(this.f, this.g, this.h));
+        Vec3D vec3d = this.a(worldserver, new BlockPosition(this.spawnX, this.spawnY, this.spawnZ));
 
         if (vec3d != null) {
             EntityZombie entityzombie;
@@ -135,7 +135,7 @@ public class VillageSiege implements MobSpawner {
             int l = worldserver.a(HeightMap.Type.WORLD_SURFACE, j, k);
             BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
-            if (worldserver.a_(blockposition1) && EntityMonster.b(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
+            if (worldserver.b(blockposition1) && EntityMonster.b(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
                 return Vec3D.c((BaseBlockPosition) blockposition1);
             }
         }
@@ -143,7 +143,7 @@ public class VillageSiege implements MobSpawner {
         return null;
     }
 
-    static enum State {
+    private static enum State {
 
         SIEGE_CAN_ACTIVATE, SIEGE_TONIGHT, SIEGE_DONE;
 

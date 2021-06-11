@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateDirection;
 
 public abstract class BlockDirectional extends Block {
 
-    public static final BlockStateDirection FACING = BlockProperties.M;
+    public static final BlockStateDirection FACING = BlockProperties.FACING;
 
     protected BlockDirectional(BlockBase.Info blockbase_info) {
         super(blockbase_info);

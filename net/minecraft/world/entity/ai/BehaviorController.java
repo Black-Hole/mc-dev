@@ -1,5 +1,6 @@
 package net.minecraft.world.entity.ai;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableSet;
@@ -20,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -28,6 +30,7 @@ import javax.annotation.Nullable;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.IRegistry;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.ExpirableMemory;
@@ -43,18 +46,19 @@ import org.apache.logging.log4j.Logger;
 
 public class BehaviorController<E extends EntityLiving> {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final Supplier<Codec<BehaviorController<E>>> b;
+    static final Logger LOGGER = LogManager.getLogger();
+    private final Supplier<Codec<BehaviorController<E>>> codec;
+    private static final int SCHEDULE_UPDATE_DELAY = 20;
     private final Map<MemoryModuleType<?>, Optional<? extends ExpirableMemory<?>>> memories = Maps.newHashMap();
     private final Map<SensorType<? extends Sensor<? super E>>, Sensor<? super E>> sensors = Maps.newLinkedHashMap();
-    private final Map<Integer, Map<Activity, Set<Behavior<? super E>>>> e = Maps.newTreeMap();
+    private final Map<Integer, Map<Activity, Set<Behavior<? super E>>>> availableBehaviorsByPriority = Maps.newTreeMap();
     private Schedule schedule;
-    private final Map<Activity, Set<Pair<MemoryModuleType<?>, MemoryStatus>>> g;
-    private final Map<Activity, Set<MemoryModuleType<?>>> h;
-    private Set<Activity> i;
-    private final Set<Activity> j;
-    private Activity k;
-    private long l;
+    private final Map<Activity, Set<Pair<MemoryModuleType<?>, MemoryStatus>>> activityRequirements;
+    private final Map<Activity, Set<MemoryModuleType<?>>> activityMemoriesToEraseWhenStopped;
+    private Set<Activity> coreActivities;
+    private final Set<Activity> activeActivities;
+    private Activity defaultActivity;
+    private long lastScheduleUpdate;
 
     public static <E extends EntityLiving> BehaviorController.b<E> a(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection1) {
         return new BehaviorController.b<>(collection, collection1);
@@ -88,13 +92,13 @@ public class BehaviorController<E extends EntityLiving> {
                 DataResult dataresult = (DataResult) mutableobject1.getValue();
                 Logger logger = BehaviorController.LOGGER;
 
-                logger.getClass();
+                Objects.requireNonNull(logger);
                 ImmutableList<BehaviorController.a<?>> immutablelist = (ImmutableList) dataresult.resultOrPartial(logger::error).map(Builder::build).orElseGet(ImmutableList::of);
                 Collection collection2 = collection;
                 Collection collection3 = collection1;
                 MutableObject mutableobject2 = mutableobject;
 
-                mutableobject.getClass();
+                Objects.requireNonNull(mutableobject);
                 return DataResult.success(new BehaviorController<>(collection2, collection3, immutablelist, mutableobject2::getValue));
             }
 
@@ -109,7 +113,7 @@ public class BehaviorController<E extends EntityLiving> {
             }
 
             public <T> RecordBuilder<T> encode(BehaviorController<E> behaviorcontroller, DynamicOps<T> dynamicops, RecordBuilder<T> recordbuilder) {
-                behaviorcontroller.j().forEach((behaviorcontroller_a) -> {
+                behaviorcontroller.i().forEach((behaviorcontroller_a) -> {
                     behaviorcontroller_a.a(dynamicops, recordbuilder);
                 });
                 return recordbuilder;
@@ -120,13 +124,13 @@ public class BehaviorController<E extends EntityLiving> {
 
     public BehaviorController(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection1, ImmutableList<BehaviorController.a<?>> immutablelist, Supplier<Codec<BehaviorController<E>>> supplier) {
         this.schedule = Schedule.EMPTY;
-        this.g = Maps.newHashMap();
-        this.h = Maps.newHashMap();
-        this.i = Sets.newHashSet();
-        this.j = Sets.newHashSet();
-        this.k = Activity.IDLE;
-        this.l = -9999L;
-        this.b = supplier;
+        this.activityRequirements = Maps.newHashMap();
+        this.activityMemoriesToEraseWhenStopped = Maps.newHashMap();
+        this.coreActivities = Sets.newHashSet();
+        this.activeActivities = Sets.newHashSet();
+        this.defaultActivity = Activity.IDLE;
+        this.lastScheduleUpdate = -9999L;
+        this.codec = supplier;
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -167,12 +171,12 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public <T> DataResult<T> a(DynamicOps<T> dynamicops) {
-        return ((Codec) this.b.get()).encodeStart(dynamicops, this);
+        return ((Codec) this.codec.get()).encodeStart(dynamicops, this);
     }
 
-    private Stream<BehaviorController.a<?>> j() {
+    Stream<BehaviorController.a<?>> i() {
         return this.memories.entrySet().stream().map((entry) -> {
-            return BehaviorController.a.b((MemoryModuleType) entry.getKey(), (Optional) entry.getValue());
+            return BehaviorController.a.a((MemoryModuleType) entry.getKey(), (Optional) entry.getValue());
         });
     }
 
@@ -196,7 +200,7 @@ public class BehaviorController<E extends EntityLiving> {
         this.b(memorymoduletype, optional.map(ExpirableMemory::a));
     }
 
-    private <U> void b(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<?>> optional) {
+    <U> void b(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<?>> optional) {
         if (this.memories.containsKey(memorymoduletype)) {
             if (optional.isPresent() && this.a(((ExpirableMemory) optional.get()).c())) {
                 this.removeMemory(memorymoduletype);
@@ -209,6 +213,18 @@ public class BehaviorController<E extends EntityLiving> {
 
     public <U> Optional<U> getMemory(MemoryModuleType<U> memorymoduletype) {
         return ((Optional) this.memories.get(memorymoduletype)).map(ExpirableMemory::c);
+    }
+
+    public <U> long d(MemoryModuleType<U> memorymoduletype) {
+        Optional<? extends ExpirableMemory<?>> optional = (Optional) this.memories.get(memorymoduletype);
+
+        return (Long) optional.map(ExpirableMemory::b).orElse(0L);
+    }
+
+    @Deprecated
+    @VisibleForDebug
+    public Map<MemoryModuleType<?>, Optional<? extends ExpirableMemory<?>>> a() {
+        return this.memories;
     }
 
     public <U> boolean b(MemoryModuleType<U> memorymoduletype, U u0) {
@@ -232,13 +248,20 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void a(Set<Activity> set) {
-        this.i = set;
+        this.coreActivities = set;
     }
 
     @Deprecated
+    @VisibleForDebug
+    public Set<Activity> c() {
+        return this.activeActivities;
+    }
+
+    @Deprecated
+    @VisibleForDebug
     public List<Behavior<? super E>> d() {
         List<Behavior<? super E>> list = new ObjectArrayList();
-        Iterator iterator = this.e.values().iterator();
+        Iterator iterator = this.availableBehaviorsByPriority.values().iterator();
 
         while (iterator.hasNext()) {
             Map<Activity, Set<Behavior<? super E>>> map = (Map) iterator.next();
@@ -262,11 +285,11 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void e() {
-        this.d(this.k);
+        this.d(this.defaultActivity);
     }
 
     public Optional<Activity> f() {
-        Iterator iterator = this.j.iterator();
+        Iterator iterator = this.activeActivities.iterator();
 
         Activity activity;
 
@@ -276,7 +299,7 @@ public class BehaviorController<E extends EntityLiving> {
             }
 
             activity = (Activity) iterator.next();
-        } while (this.i.contains(activity));
+        } while (this.coreActivities.contains(activity));
 
         return Optional.of(activity);
     }
@@ -293,20 +316,20 @@ public class BehaviorController<E extends EntityLiving> {
     private void d(Activity activity) {
         if (!this.c(activity)) {
             this.e(activity);
-            this.j.clear();
-            this.j.addAll(this.i);
-            this.j.add(activity);
+            this.activeActivities.clear();
+            this.activeActivities.addAll(this.coreActivities);
+            this.activeActivities.add(activity);
         }
     }
 
     private void e(Activity activity) {
-        Iterator iterator = this.j.iterator();
+        Iterator iterator = this.activeActivities.iterator();
 
         while (iterator.hasNext()) {
             Activity activity1 = (Activity) iterator.next();
 
             if (activity1 != activity) {
-                Set<MemoryModuleType<?>> set = (Set) this.h.get(activity1);
+                Set<MemoryModuleType<?>> set = (Set) this.activityMemoriesToEraseWhenStopped.get(activity1);
 
                 if (set != null) {
                     Iterator iterator1 = set.iterator();
@@ -323,11 +346,11 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void a(long i, long j) {
-        if (j - this.l > 20L) {
-            this.l = j;
+        if (j - this.lastScheduleUpdate > 20L) {
+            this.lastScheduleUpdate = j;
             Activity activity = this.getSchedule().a((int) (i % 24000L));
 
-            if (!this.j.contains(activity)) {
+            if (!this.activeActivities.contains(activity)) {
                 this.a(activity);
             }
         }
@@ -349,7 +372,7 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void b(Activity activity) {
-        this.k = activity;
+        this.defaultActivity = activity;
     }
 
     public void a(Activity activity, int i, ImmutableList<? extends Behavior<? super E>> immutablelist) {
@@ -371,10 +394,10 @@ public class BehaviorController<E extends EntityLiving> {
         this.a(activity, immutablelist, set, Sets.newHashSet());
     }
 
-    private void a(Activity activity, ImmutableList<? extends Pair<Integer, ? extends Behavior<? super E>>> immutablelist, Set<Pair<MemoryModuleType<?>, MemoryStatus>> set, Set<MemoryModuleType<?>> set1) {
-        this.g.put(activity, set);
+    public void a(Activity activity, ImmutableList<? extends Pair<Integer, ? extends Behavior<? super E>>> immutablelist, Set<Pair<MemoryModuleType<?>, MemoryStatus>> set, Set<MemoryModuleType<?>> set1) {
+        this.activityRequirements.put(activity, set);
         if (!set1.isEmpty()) {
-            this.h.put(activity, set1);
+            this.activityMemoriesToEraseWhenStopped.put(activity, set1);
         }
 
         UnmodifiableIterator unmodifiableiterator = immutablelist.iterator();
@@ -382,21 +405,26 @@ public class BehaviorController<E extends EntityLiving> {
         while (unmodifiableiterator.hasNext()) {
             Pair<Integer, ? extends Behavior<? super E>> pair = (Pair) unmodifiableiterator.next();
 
-            ((Set) ((Map) this.e.computeIfAbsent(pair.getFirst(), (integer) -> {
+            ((Set) ((Map) this.availableBehaviorsByPriority.computeIfAbsent((Integer) pair.getFirst(), (integer) -> {
                 return Maps.newHashMap();
             })).computeIfAbsent(activity, (activity1) -> {
                 return Sets.newLinkedHashSet();
-            })).add(pair.getSecond());
+            })).add((Behavior) pair.getSecond());
         }
 
     }
 
+    @VisibleForTesting
+    public void g() {
+        this.availableBehaviorsByPriority.clear();
+    }
+
     public boolean c(Activity activity) {
-        return this.j.contains(activity);
+        return this.activeActivities.contains(activity);
     }
 
     public BehaviorController<E> h() {
-        BehaviorController<E> behaviorcontroller = new BehaviorController<>(this.memories.keySet(), this.sensors.keySet(), ImmutableList.of(), this.b);
+        BehaviorController<E> behaviorcontroller = new BehaviorController<>(this.memories.keySet(), this.sensors.keySet(), ImmutableList.of(), this.codec);
         Iterator iterator = this.memories.entrySet().iterator();
 
         while (iterator.hasNext()) {
@@ -404,7 +432,7 @@ public class BehaviorController<E extends EntityLiving> {
             MemoryModuleType<?> memorymoduletype = (MemoryModuleType) entry.getKey();
 
             if (((Optional) entry.getValue()).isPresent()) {
-                behaviorcontroller.memories.put(memorymoduletype, entry.getValue());
+                behaviorcontroller.memories.put(memorymoduletype, (Optional) entry.getValue());
             }
         }
 
@@ -412,7 +440,7 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void a(WorldServer worldserver, E e0) {
-        this.k();
+        this.j();
         this.c(worldserver, e0);
         this.d(worldserver, e0);
         this.e(worldserver, e0);
@@ -429,7 +457,7 @@ public class BehaviorController<E extends EntityLiving> {
 
     }
 
-    private void k() {
+    private void j() {
         Iterator iterator = this.memories.entrySet().iterator();
 
         while (iterator.hasNext()) {
@@ -448,7 +476,7 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     public void b(WorldServer worldserver, E e0) {
-        long i = e0.world.getTime();
+        long i = e0.level.getTime();
         Iterator iterator = this.d().iterator();
 
         while (iterator.hasNext()) {
@@ -461,7 +489,7 @@ public class BehaviorController<E extends EntityLiving> {
 
     private void d(WorldServer worldserver, E e0) {
         long i = worldserver.getTime();
-        Iterator iterator = this.e.values().iterator();
+        Iterator iterator = this.availableBehaviorsByPriority.values().iterator();
 
         while (iterator.hasNext()) {
             Map<Activity, Set<Behavior<? super E>>> map = (Map) iterator.next();
@@ -471,7 +499,7 @@ public class BehaviorController<E extends EntityLiving> {
                 Entry<Activity, Set<Behavior<? super E>>> entry = (Entry) iterator1.next();
                 Activity activity = (Activity) entry.getKey();
 
-                if (this.j.contains(activity)) {
+                if (this.activeActivities.contains(activity)) {
                     Set<Behavior<? super E>> set = (Set) entry.getValue();
                     Iterator iterator2 = set.iterator();
 
@@ -501,10 +529,10 @@ public class BehaviorController<E extends EntityLiving> {
     }
 
     private boolean f(Activity activity) {
-        if (!this.g.containsKey(activity)) {
+        if (!this.activityRequirements.containsKey(activity)) {
             return false;
         } else {
-            Iterator iterator = ((Set) this.g.get(activity)).iterator();
+            Iterator iterator = ((Set) this.activityRequirements.get(activity)).iterator();
 
             MemoryModuleType memorymoduletype;
             MemoryStatus memorystatus;
@@ -542,53 +570,53 @@ public class BehaviorController<E extends EntityLiving> {
         return builder.build();
     }
 
-    static final class a<U> {
+    public static final class b<E extends EntityLiving> {
 
-        private final MemoryModuleType<U> a;
-        private final Optional<? extends ExpirableMemory<U>> b;
+        private final Collection<? extends MemoryModuleType<?>> memoryTypes;
+        private final Collection<? extends SensorType<? extends Sensor<? super E>>> sensorTypes;
+        private final Codec<BehaviorController<E>> codec;
 
-        private static <U> BehaviorController.a<U> b(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<?>> optional) {
-            return new BehaviorController.a<>(memorymoduletype, optional);
+        b(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection1) {
+            this.memoryTypes = collection;
+            this.sensorTypes = collection1;
+            this.codec = BehaviorController.b(collection, collection1);
         }
 
-        private a(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<U>> optional) {
-            this.a = memorymoduletype;
-            this.b = optional;
-        }
+        public BehaviorController<E> a(Dynamic<?> dynamic) {
+            DataResult dataresult = this.codec.parse(dynamic);
+            Logger logger = BehaviorController.LOGGER;
 
-        private void a(BehaviorController<?> behaviorcontroller) {
-            behaviorcontroller.b(this.a, this.b);
-        }
-
-        public <T> void a(DynamicOps<T> dynamicops, RecordBuilder<T> recordbuilder) {
-            this.a.getSerializer().ifPresent((codec) -> {
-                this.b.ifPresent((expirablememory) -> {
-                    recordbuilder.add(IRegistry.MEMORY_MODULE_TYPE.encodeStart(dynamicops, this.a), codec.encodeStart(dynamicops, expirablememory));
+            Objects.requireNonNull(logger);
+            return (BehaviorController) dataresult.resultOrPartial(logger::error).orElseGet(() -> {
+                return new BehaviorController<>(this.memoryTypes, this.sensorTypes, ImmutableList.of(), () -> {
+                    return this.codec;
                 });
             });
         }
     }
 
-    public static final class b<E extends EntityLiving> {
+    private static final class a<U> {
 
-        private final Collection<? extends MemoryModuleType<?>> a;
-        private final Collection<? extends SensorType<? extends Sensor<? super E>>> b;
-        private final Codec<BehaviorController<E>> c;
+        private final MemoryModuleType<U> type;
+        private final Optional<? extends ExpirableMemory<U>> value;
 
-        private b(Collection<? extends MemoryModuleType<?>> collection, Collection<? extends SensorType<? extends Sensor<? super E>>> collection1) {
-            this.a = collection;
-            this.b = collection1;
-            this.c = BehaviorController.b(collection, collection1);
+        static <U> BehaviorController.a<U> a(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<?>> optional) {
+            return new BehaviorController.a<>(memorymoduletype, optional);
         }
 
-        public BehaviorController<E> a(Dynamic<?> dynamic) {
-            DataResult dataresult = this.c.parse(dynamic);
-            Logger logger = BehaviorController.LOGGER;
+        a(MemoryModuleType<U> memorymoduletype, Optional<? extends ExpirableMemory<U>> optional) {
+            this.type = memorymoduletype;
+            this.value = optional;
+        }
 
-            logger.getClass();
-            return (BehaviorController) dataresult.resultOrPartial(logger::error).orElseGet(() -> {
-                return new BehaviorController<>(this.a, this.b, ImmutableList.of(), () -> {
-                    return this.c;
+        void a(BehaviorController<?> behaviorcontroller) {
+            behaviorcontroller.b(this.type, this.value);
+        }
+
+        public <T> void a(DynamicOps<T> dynamicops, RecordBuilder<T> recordbuilder) {
+            this.type.getSerializer().ifPresent((codec) -> {
+                this.value.ifPresent((expirablememory) -> {
+                    recordbuilder.add(IRegistry.MEMORY_MODULE_TYPE.encodeStart(dynamicops, this.type), codec.encodeStart(dynamicops, expirablememory));
                 });
             });
         }

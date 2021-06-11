@@ -9,22 +9,31 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureBasaltColumnsConfiguration;
 
 public class WorldGenFeatureBasaltColumns extends WorldGenerator<WorldGenFeatureBasaltColumnsConfiguration> {
 
-    private static final ImmutableList<Block> a = ImmutableList.of(Blocks.LAVA, Blocks.BEDROCK, Blocks.MAGMA_BLOCK, Blocks.SOUL_SAND, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.NETHER_WART, Blocks.CHEST, Blocks.SPAWNER);
+    private static final ImmutableList<Block> CANNOT_PLACE_ON = ImmutableList.of(Blocks.LAVA, Blocks.BEDROCK, Blocks.MAGMA_BLOCK, Blocks.SOUL_SAND, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.NETHER_WART, Blocks.CHEST, Blocks.SPAWNER);
+    private static final int CLUSTERED_REACH = 5;
+    private static final int CLUSTERED_SIZE = 50;
+    private static final int UNCLUSTERED_REACH = 8;
+    private static final int UNCLUSTERED_SIZE = 15;
 
     public WorldGenFeatureBasaltColumns(Codec<WorldGenFeatureBasaltColumnsConfiguration> codec) {
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBasaltColumnsConfiguration worldgenfeaturebasaltcolumnsconfiguration) {
-        int i = chunkgenerator.getSeaLevel();
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureBasaltColumnsConfiguration> featureplacecontext) {
+        int i = featureplacecontext.b().getSeaLevel();
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
+        WorldGenFeatureBasaltColumnsConfiguration worldgenfeaturebasaltcolumnsconfiguration = (WorldGenFeatureBasaltColumnsConfiguration) featureplacecontext.e();
 
         if (!a(generatoraccessseed, i, blockposition.i())) {
             return false;
@@ -41,7 +50,7 @@ public class WorldGenFeatureBasaltColumns extends WorldGenerator<WorldGenFeature
                 int i1 = j - blockposition1.k(blockposition);
 
                 if (i1 >= 0) {
-                    flag1 |= this.a(generatoraccessseed, i, blockposition1, i1, worldgenfeaturebasaltcolumnsconfiguration.am_().a(random));
+                    flag1 |= this.a(generatoraccessseed, i, blockposition1, i1, worldgenfeaturebasaltcolumnsconfiguration.a().a(random));
                 }
             }
 
@@ -63,7 +72,7 @@ public class WorldGenFeatureBasaltColumns extends WorldGenerator<WorldGenFeature
 
                 for (BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition2.i(); i1 >= 0; --i1) {
                     if (a(generatoraccess, i, (BlockPosition) blockposition_mutableblockposition)) {
-                        this.a(generatoraccess, blockposition_mutableblockposition, Blocks.BASALT.getBlockData());
+                        this.a((IWorldWriter) generatoraccess, blockposition_mutableblockposition, Blocks.BASALT.getBlockData());
                         blockposition_mutableblockposition.c(EnumDirection.UP);
                         flag = true;
                     } else {
@@ -82,7 +91,7 @@ public class WorldGenFeatureBasaltColumns extends WorldGenerator<WorldGenFeature
 
     @Nullable
     private static BlockPosition a(GeneratorAccess generatoraccess, int i, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, int j) {
-        while (blockposition_mutableblockposition.getY() > 1 && j > 0) {
+        while (blockposition_mutableblockposition.getY() > generatoraccess.getMinBuildHeight() + 1 && j > 0) {
             --j;
             if (a(generatoraccess, i, blockposition_mutableblockposition)) {
                 return blockposition_mutableblockposition;
@@ -101,17 +110,17 @@ public class WorldGenFeatureBasaltColumns extends WorldGenerator<WorldGenFeature
             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(EnumDirection.DOWN));
 
             blockposition_mutableblockposition.c(EnumDirection.UP);
-            return !iblockdata.isAir() && !WorldGenFeatureBasaltColumns.a.contains(iblockdata.getBlock());
+            return !iblockdata.isAir() && !WorldGenFeatureBasaltColumns.CANNOT_PLACE_ON.contains(iblockdata.getBlock());
         }
     }
 
     @Nullable
     private static BlockPosition a(GeneratorAccess generatoraccess, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, int i) {
-        while (blockposition_mutableblockposition.getY() < generatoraccess.getBuildHeight() && i > 0) {
+        while (blockposition_mutableblockposition.getY() < generatoraccess.getMaxBuildHeight() && i > 0) {
             --i;
             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition);
 
-            if (WorldGenFeatureBasaltColumns.a.contains(iblockdata.getBlock())) {
+            if (WorldGenFeatureBasaltColumns.CANNOT_PLACE_ON.contains(iblockdata.getBlock())) {
                 return null;
             }
 

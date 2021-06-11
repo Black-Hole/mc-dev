@@ -4,6 +4,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.core.RegistryBlockID;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketDataSerializer;
@@ -11,30 +12,30 @@ import net.minecraft.util.RegistryID;
 
 public class DataPaletteHash<T> implements DataPalette<T> {
 
-    private final RegistryBlockID<T> a;
-    private final RegistryID<T> b;
-    private final DataPaletteExpandable<T> c;
-    private final Function<NBTTagCompound, T> d;
-    private final Function<T, NBTTagCompound> e;
-    private final int f;
+    private final RegistryBlockID<T> registry;
+    private final RegistryID<T> values;
+    private final DataPaletteExpandable<T> resizeHandler;
+    private final Function<NBTTagCompound, T> reader;
+    private final Function<T, NBTTagCompound> writer;
+    private final int bits;
 
     public DataPaletteHash(RegistryBlockID<T> registryblockid, int i, DataPaletteExpandable<T> datapaletteexpandable, Function<NBTTagCompound, T> function, Function<T, NBTTagCompound> function1) {
-        this.a = registryblockid;
-        this.f = i;
-        this.c = datapaletteexpandable;
-        this.d = function;
-        this.e = function1;
-        this.b = new RegistryID<>(1 << i);
+        this.registry = registryblockid;
+        this.bits = i;
+        this.resizeHandler = datapaletteexpandable;
+        this.reader = function;
+        this.writer = function1;
+        this.values = new RegistryID<>(1 << i);
     }
 
     @Override
     public int a(T t0) {
-        int i = this.b.getId(t0);
+        int i = this.values.getId(t0);
 
         if (i == -1) {
-            i = this.b.c(t0);
-            if (i >= 1 << this.f) {
-                i = this.c.onResize(this.f + 1, t0);
+            i = this.values.c(t0);
+            if (i >= 1 << this.bits) {
+                i = this.resizeHandler.onResize(this.bits + 1, t0);
             }
         }
 
@@ -44,7 +45,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
     @Override
     public boolean a(Predicate<T> predicate) {
         for (int i = 0; i < this.b(); ++i) {
-            if (predicate.test(this.b.fromId(i))) {
+            if (predicate.test(this.values.fromId(i))) {
                 return true;
             }
         }
@@ -55,7 +56,18 @@ public class DataPaletteHash<T> implements DataPalette<T> {
     @Nullable
     @Override
     public T a(int i) {
-        return this.b.fromId(i);
+        return this.values.fromId(i);
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        this.values.a();
+        int i = packetdataserializer.j();
+
+        for (int j = 0; j < i; ++j) {
+            this.values.c(this.registry.fromId(packetdataserializer.j()));
+        }
+
     }
 
     @Override
@@ -65,7 +77,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         packetdataserializer.d(i);
 
         for (int j = 0; j < i; ++j) {
-            packetdataserializer.d(this.a.getId(this.b.fromId(j)));
+            packetdataserializer.d(this.registry.getId(this.values.fromId(j)));
         }
 
     }
@@ -75,29 +87,30 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         int i = PacketDataSerializer.a(this.b());
 
         for (int j = 0; j < this.b(); ++j) {
-            i += PacketDataSerializer.a(this.a.getId(this.b.fromId(j)));
+            i += PacketDataSerializer.a(this.registry.getId(this.values.fromId(j)));
         }
 
         return i;
     }
 
+    @Override
     public int b() {
-        return this.b.b();
+        return this.values.b();
     }
 
     @Override
     public void a(NBTTagList nbttaglist) {
-        this.b.a();
+        this.values.a();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            this.b.c(this.d.apply(nbttaglist.getCompound(i)));
+            this.values.c(this.reader.apply(nbttaglist.getCompound(i)));
         }
 
     }
 
     public void b(NBTTagList nbttaglist) {
         for (int i = 0; i < this.b(); ++i) {
-            nbttaglist.add(this.e.apply(this.b.fromId(i)));
+            nbttaglist.add((NBTBase) this.writer.apply(this.values.fromId(i)));
         }
 
     }

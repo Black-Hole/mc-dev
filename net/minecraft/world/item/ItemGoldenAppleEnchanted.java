@@ -7,7 +7,7 @@ public class ItemGoldenAppleEnchanted extends Item {
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
+    public boolean i(ItemStack itemstack) {
         return true;
     }
 }

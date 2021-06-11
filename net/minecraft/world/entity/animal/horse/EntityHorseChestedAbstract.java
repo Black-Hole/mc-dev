@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.AttributeProvider;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.player.EntityHuman;
@@ -20,34 +21,35 @@ import net.minecraft.world.level.block.Blocks;
 
 public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> DATA_ID_CHEST = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.BOOLEAN);
+    public static final int INV_CHEST_COUNT = 15;
 
     protected EntityHorseChestedAbstract(EntityTypes<? extends EntityHorseChestedAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.bu = false;
+        this.canGallop = false;
     }
 
     @Override
-    protected void eK() {
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fp());
+    protected void p() {
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fY());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorseChestedAbstract.bw, false);
+        this.entityData.register(EntityHorseChestedAbstract.DATA_ID_CHEST, false);
     }
 
-    public static AttributeProvider.Builder eL() {
-        return fi().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
+    public static AttributeProvider.Builder t() {
+        return fR().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
     }
 
     public boolean isCarryingChest() {
-        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bw);
+        return (Boolean) this.entityData.get(EntityHorseChestedAbstract.DATA_ID_CHEST);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bw, flag);
+        this.entityData.set(EntityHorseChestedAbstract.DATA_ID_CHEST, flag);
     }
 
     @Override
@@ -56,15 +58,15 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double bc() {
-        return super.bc() - 0.25D;
+    public double bl() {
+        return super.bl() - 0.25D;
     }
 
     @Override
     protected void dropInventory() {
         super.dropInventory();
         if (this.isCarryingChest()) {
-            if (!this.world.isClientSide) {
+            if (!this.level.isClientSide) {
                 this.a((IMaterial) Blocks.CHEST);
             }
 
@@ -80,8 +82,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         if (this.isCarryingChest()) {
             NBTTagList nbttaglist = new NBTTagList();
 
-            for (int i = 2; i < this.inventoryChest.getSize(); ++i) {
-                ItemStack itemstack = this.inventoryChest.getItem(i);
+            for (int i = 2; i < this.inventory.getSize(); ++i) {
+                ItemStack itemstack = this.inventory.getItem(i);
 
                 if (!itemstack.isEmpty()) {
                     NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -101,41 +103,52 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.setCarryingChest(nbttagcompound.getBoolean("ChestedHorse"));
+        this.loadChest();
         if (this.isCarryingChest()) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
-
-            this.loadChest();
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
                 int j = nbttagcompound1.getByte("Slot") & 255;
 
-                if (j >= 2 && j < this.inventoryChest.getSize()) {
-                    this.inventoryChest.setItem(j, ItemStack.a(nbttagcompound1));
+                if (j >= 2 && j < this.inventory.getSize()) {
+                    this.inventory.setItem(j, ItemStack.a(nbttagcompound1));
                 }
             }
         }
 
-        this.fe();
+        this.fN();
     }
 
     @Override
-    public boolean a_(int i, ItemStack itemstack) {
-        if (i == 499) {
-            if (this.isCarryingChest() && itemstack.isEmpty()) {
-                this.setCarryingChest(false);
-                this.loadChest();
-                return true;
+    public SlotAccess k(int i) {
+        return i == 499 ? new SlotAccess() {
+            @Override
+            public ItemStack a() {
+                return EntityHorseChestedAbstract.this.isCarryingChest() ? new ItemStack(Items.CHEST) : ItemStack.EMPTY;
             }
 
-            if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
-                this.setCarryingChest(true);
-                this.loadChest();
-                return true;
-            }
-        }
+            @Override
+            public boolean a(ItemStack itemstack) {
+                if (itemstack.isEmpty()) {
+                    if (EntityHorseChestedAbstract.this.isCarryingChest()) {
+                        EntityHorseChestedAbstract.this.setCarryingChest(false);
+                        EntityHorseChestedAbstract.this.loadChest();
+                    }
 
-        return super.a_(i, itemstack);
+                    return true;
+                } else if (itemstack.a(Items.CHEST)) {
+                    if (!EntityHorseChestedAbstract.this.isCarryingChest()) {
+                        EntityHorseChestedAbstract.this.setCarryingChest(true);
+                        EntityHorseChestedAbstract.this.loadChest();
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } : super.k(i);
     }
 
     @Override
@@ -143,9 +156,9 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.eq()) {
+            if (this.isTamed() && entityhuman.eY()) {
                 this.f(entityhuman);
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
             if (this.isVehicle()) {
@@ -154,29 +167,29 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
 
         if (!itemstack.isEmpty()) {
-            if (this.k(itemstack)) {
-                return this.b(entityhuman, itemstack);
+            if (this.n(itemstack)) {
+                return this.a(entityhuman, itemstack);
             }
 
             if (!this.isTamed()) {
-                this.fm();
-                return EnumInteractionResult.a(this.world.isClientSide);
+                this.fV();
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
-            if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
+            if (!this.isCarryingChest() && itemstack.a(Blocks.CHEST.getItem())) {
                 this.setCarryingChest(true);
-                this.eO();
-                if (!entityhuman.abilities.canInstantlyBuild) {
+                this.fx();
+                if (!entityhuman.getAbilities().instabuild) {
                     itemstack.subtract(1);
                 }
 
                 this.loadChest();
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
-            if (!this.isBaby() && !this.hasSaddle() && itemstack.getItem() == Items.SADDLE) {
+            if (!this.isBaby() && !this.hasSaddle() && itemstack.a(Items.SADDLE)) {
                 this.f(entityhuman);
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
         }
 
@@ -184,15 +197,15 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             return super.b(entityhuman, enumhand);
         } else {
             this.h(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         }
     }
 
-    protected void eO() {
-        this.playSound(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    protected void fx() {
+        this.playSound(SoundEffects.DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int eU() {
+    public int fD() {
         return 5;
     }
 }

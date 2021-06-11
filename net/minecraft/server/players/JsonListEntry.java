@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
 public abstract class JsonListEntry<T> {
 
     @Nullable
-    private final T a;
+    private final T user;
 
     public JsonListEntry(@Nullable T t0) {
-        this.a = t0;
+        this.user = t0;
     }
 
     @Nullable
     public T getKey() {
-        return this.a;
+        return this.user;
     }
 
     boolean hasExpired() {

@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.DifficultyDamageScaler;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IInventory;
 import net.minecraft.world.InventorySubcontainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.EnumMobSpawn;
 import net.minecraft.world.entity.EnumMonsterType;
 import net.minecraft.world.entity.GroupDataEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.AttributeProvider;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalCrossbowAttack;
@@ -34,11 +36,11 @@ import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackable
 import net.minecraft.world.entity.animal.EntityIronGolem;
 import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.npc.EntityVillagerAbstract;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.projectile.IProjectile;
 import net.minecraft.world.entity.raid.EntityRaider;
 import net.minecraft.world.entity.raid.Raid;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemBanner;
 import net.minecraft.world.item.ItemProjectileWeapon;
 import net.minecraft.world.item.ItemStack;
@@ -52,9 +54,12 @@ import net.minecraft.world.level.WorldAccess;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 
-public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
+public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, InventoryCarrier {
 
-    private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityPillager.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> IS_CHARGING_CROSSBOW = DataWatcher.a(EntityPillager.class, DataWatcherRegistry.BOOLEAN);
+    private static final int INVENTORY_SIZE = 5;
+    private static final int SLOT_OFFSET = 300;
+    private static final float CROSSBOW_POWER = 1.6F;
     public final InventorySubcontainer inventory = new InventorySubcontainer(5);
 
     public EntityPillager(EntityTypes<? extends EntityPillager> entitytypes, World world) {
@@ -76,14 +81,14 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
+    public static AttributeProvider.Builder p() {
+        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPillager.b, false);
+        this.entityData.register(EntityPillager.IS_CHARGING_CROSSBOW, false);
     }
 
     @Override
@@ -91,14 +96,18 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
         return itemprojectileweapon == Items.CROSSBOW;
     }
 
-    @Override
-    public void b(boolean flag) {
-        this.datawatcher.set(EntityPillager.b, flag);
+    public boolean fv() {
+        return (Boolean) this.entityData.get(EntityPillager.IS_CHARGING_CROSSBOW);
     }
 
     @Override
-    public void U_() {
-        this.ticksFarFromPlayer = 0;
+    public void b(boolean flag) {
+        this.entityData.set(EntityPillager.IS_CHARGING_CROSSBOW, flag);
+    }
+
+    @Override
+    public void a() {
+        this.noActionTime = 0;
     }
 
     @Override
@@ -115,6 +124,11 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
         }
 
         nbttagcompound.set("Inventory", nbttaglist);
+    }
+
+    @Override
+    public EntityIllagerAbstract.a n() {
+        return this.fv() ? EntityIllagerAbstract.a.CROSSBOW_CHARGE : (this.a(Items.CROSSBOW) ? EntityIllagerAbstract.a.CROSSBOW_HOLD : (this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : EntityIllagerAbstract.a.NEUTRAL));
     }
 
     @Override
@@ -137,7 +151,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
         IBlockData iblockdata = iworldreader.getType(blockposition.down());
 
-        return !iblockdata.a(Blocks.GRASS_BLOCK) && !iblockdata.a(Blocks.SAND) ? 0.5F - iworldreader.y(blockposition) : 10.0F;
+        return !iblockdata.a(Blocks.GRASS_BLOCK) && !iblockdata.a(Blocks.SAND) ? 0.5F - iworldreader.z(blockposition) : 10.0F;
     }
 
     @Override
@@ -159,12 +173,12 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
-    protected void w(float f) {
-        super.w(f);
+    protected void x(float f) {
+        super.x(f);
         if (this.random.nextInt(300) == 0) {
             ItemStack itemstack = this.getItemInMainHand();
 
-            if (itemstack.getItem() == Items.CROSSBOW) {
+            if (itemstack.a(Items.CROSSBOW)) {
                 Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack);
 
                 map.putIfAbsent(Enchantments.PIERCING, 1);
@@ -176,23 +190,23 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
-    public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
+    public boolean p(Entity entity) {
+        return super.p(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_PILLAGER_AMBIENT;
+        return SoundEffects.PILLAGER_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_PILLAGER_DEATH;
+        return SoundEffects.PILLAGER_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_PILLAGER_HURT;
+        return SoundEffects.PILLAGER_HURT;
     }
 
     @Override
@@ -206,51 +220,43 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
+    public IInventory getInventory() {
+        return this.inventory;
+    }
+
+    @Override
     protected void b(EntityItem entityitem) {
         ItemStack itemstack = entityitem.getItemStack();
 
         if (itemstack.getItem() instanceof ItemBanner) {
             super.b(entityitem);
-        } else {
-            Item item = itemstack.getItem();
+        } else if (this.m(itemstack)) {
+            this.a(entityitem);
+            ItemStack itemstack1 = this.inventory.a(itemstack);
 
-            if (this.b(item)) {
-                this.a(entityitem);
-                ItemStack itemstack1 = this.inventory.a(itemstack);
-
-                if (itemstack1.isEmpty()) {
-                    entityitem.die();
-                } else {
-                    itemstack.setCount(itemstack1.getCount());
-                }
+            if (itemstack1.isEmpty()) {
+                entityitem.die();
+            } else {
+                itemstack.setCount(itemstack1.getCount());
             }
         }
 
     }
 
-    private boolean b(Item item) {
-        return this.fb() && item == Items.WHITE_BANNER;
+    private boolean m(ItemStack itemstack) {
+        return this.fK() && itemstack.a(Items.WHITE_BANNER);
     }
 
     @Override
-    public boolean a_(int i, ItemStack itemstack) {
-        if (super.a_(i, itemstack)) {
-            return true;
-        } else {
-            int j = i - 300;
+    public SlotAccess k(int i) {
+        int j = i - 300;
 
-            if (j >= 0 && j < this.inventory.getSize()) {
-                this.inventory.setItem(j, itemstack);
-                return true;
-            } else {
-                return false;
-            }
-        }
+        return j >= 0 && j < this.inventory.getSize() ? SlotAccess.a(this.inventory, j) : super.k(i);
     }
 
     @Override
     public void a(int i, boolean flag) {
-        Raid raid = this.fa();
+        Raid raid = this.fJ();
         boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
@@ -271,7 +277,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
-    public SoundEffect eL() {
-        return SoundEffects.ENTITY_PILLAGER_CELEBRATE;
+    public SoundEffect t() {
+        return SoundEffects.PILLAGER_CELEBRATE;
     }
 }

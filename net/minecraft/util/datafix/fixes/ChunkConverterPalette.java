@@ -33,20 +33,28 @@ import org.apache.logging.log4j.Logger;
 
 public class ChunkConverterPalette extends DataFix {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final BitSet b = new BitSet(256);
-    private static final BitSet c = new BitSet(256);
-    private static final Dynamic<?> d = DataConverterFlattenData.b("{Name:'minecraft:pumpkin'}");
-    private static final Dynamic<?> e = DataConverterFlattenData.b("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
-    private static final Dynamic<?> f = DataConverterFlattenData.b("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
-    private static final Dynamic<?> g = DataConverterFlattenData.b("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
-    private static final Dynamic<?> h = DataConverterFlattenData.b("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
-    private static final Dynamic<?> i = DataConverterFlattenData.b("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
-    private static final Dynamic<?> j = DataConverterFlattenData.b("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
-    private static final Dynamic<?> k = DataConverterFlattenData.b("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
-    private static final Dynamic<?> l = DataConverterFlattenData.b("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
-    private static final Dynamic<?> m = DataConverterFlattenData.b("{Name:'minecraft:peony',Properties:{half:'upper'}}");
-    private static final Map<String, Dynamic<?>> n = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final int NORTH_WEST_MASK = 128;
+    private static final int WEST_MASK = 64;
+    private static final int SOUTH_WEST_MASK = 32;
+    private static final int SOUTH_MASK = 16;
+    private static final int SOUTH_EAST_MASK = 8;
+    private static final int EAST_MASK = 4;
+    private static final int NORTH_EAST_MASK = 2;
+    private static final int NORTH_MASK = 1;
+    static final Logger LOGGER = LogManager.getLogger();
+    static final BitSet VIRTUAL = new BitSet(256);
+    static final BitSet FIX = new BitSet(256);
+    static final Dynamic<?> PUMPKIN = DataConverterFlattenData.b("{Name:'minecraft:pumpkin'}");
+    static final Dynamic<?> SNOWY_PODZOL = DataConverterFlattenData.b("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
+    static final Dynamic<?> SNOWY_GRASS = DataConverterFlattenData.b("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
+    static final Dynamic<?> SNOWY_MYCELIUM = DataConverterFlattenData.b("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
+    static final Dynamic<?> UPPER_SUNFLOWER = DataConverterFlattenData.b("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
+    static final Dynamic<?> UPPER_LILAC = DataConverterFlattenData.b("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
+    static final Dynamic<?> UPPER_TALL_GRASS = DataConverterFlattenData.b("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
+    static final Dynamic<?> UPPER_LARGE_FERN = DataConverterFlattenData.b("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
+    static final Dynamic<?> UPPER_ROSE_BUSH = DataConverterFlattenData.b("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
+    static final Dynamic<?> UPPER_PEONY = DataConverterFlattenData.b("{Name:'minecraft:peony',Properties:{half:'upper'}}");
+    static final Map<String, Dynamic<?>> FLOWER_POT_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:air0", DataConverterFlattenData.b("{Name:'minecraft:flower_pot'}"));
         hashmap.put("minecraft:red_flower0", DataConverterFlattenData.b("{Name:'minecraft:potted_poppy'}"));
         hashmap.put("minecraft:red_flower1", DataConverterFlattenData.b("{Name:'minecraft:potted_blue_orchid'}"));
@@ -70,7 +78,7 @@ public class ChunkConverterPalette extends DataFix {
         hashmap.put("minecraft:tallgrass2", DataConverterFlattenData.b("{Name:'minecraft:potted_fern'}"));
         hashmap.put("minecraft:cactus0", DataConverterFlattenData.b(2240));
     });
-    private static final Map<String, Dynamic<?>> o = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    static final Map<String, Dynamic<?>> SKULL_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         a(hashmap, 0, "skeleton", "skull");
         a(hashmap, 1, "wither_skeleton", "skull");
         a(hashmap, 2, "zombie", "head");
@@ -78,7 +86,7 @@ public class ChunkConverterPalette extends DataFix {
         a(hashmap, 4, "creeper", "head");
         a(hashmap, 5, "dragon", "head");
     });
-    private static final Map<String, Dynamic<?>> p = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    static final Map<String, Dynamic<?>> DOOR_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         a(hashmap, "oak_door", 1024);
         a(hashmap, "iron_door", 1136);
         a(hashmap, "spruce_door", 3088);
@@ -87,14 +95,14 @@ public class ChunkConverterPalette extends DataFix {
         a(hashmap, "acacia_door", 3136);
         a(hashmap, "dark_oak_door", 3152);
     });
-    private static final Map<String, Dynamic<?>> q = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    static final Map<String, Dynamic<?>> NOTE_BLOCK_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         for (int i = 0; i < 26; ++i) {
             hashmap.put("true" + i, DataConverterFlattenData.b("{Name:'minecraft:note_block',Properties:{powered:'true',note:'" + i + "'}}"));
             hashmap.put("false" + i, DataConverterFlattenData.b("{Name:'minecraft:note_block',Properties:{powered:'false',note:'" + i + "'}}"));
         }
 
     });
-    private static final Int2ObjectMap<String> r = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
+    private static final Int2ObjectMap<String> DYE_COLOR_MAP = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
         int2objectopenhashmap.put(0, "white");
         int2objectopenhashmap.put(1, "orange");
         int2objectopenhashmap.put(2, "magenta");
@@ -112,8 +120,8 @@ public class ChunkConverterPalette extends DataFix {
         int2objectopenhashmap.put(14, "red");
         int2objectopenhashmap.put(15, "black");
     });
-    private static final Map<String, Dynamic<?>> s = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
-        ObjectIterator objectiterator = ChunkConverterPalette.r.int2ObjectEntrySet().iterator();
+    static final Map<String, Dynamic<?>> BED_BLOCK_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+        ObjectIterator objectiterator = ChunkConverterPalette.DYE_COLOR_MAP.int2ObjectEntrySet().iterator();
 
         while (objectiterator.hasNext()) {
             Entry<String> entry = (Entry) objectiterator.next();
@@ -124,8 +132,8 @@ public class ChunkConverterPalette extends DataFix {
         }
 
     });
-    private static final Map<String, Dynamic<?>> t = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
-        ObjectIterator objectiterator = ChunkConverterPalette.r.int2ObjectEntrySet().iterator();
+    static final Map<String, Dynamic<?>> BANNER_BLOCK_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+        ObjectIterator objectiterator = ChunkConverterPalette.DYE_COLOR_MAP.int2ObjectEntrySet().iterator();
 
         while (objectiterator.hasNext()) {
             Entry<String> entry = (Entry) objectiterator.next();
@@ -136,7 +144,8 @@ public class ChunkConverterPalette extends DataFix {
         }
 
     });
-    private static final Dynamic<?> u;
+    static final Dynamic<?> AIR;
+    private static final int SIZE = 4096;
 
     public ChunkConverterPalette(Schema schema, boolean flag) {
         super(schema, flag);
@@ -149,7 +158,7 @@ public class ChunkConverterPalette extends DataFix {
         map.put(i + "west", DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_" + s1 + "',Properties:{facing:'west'}}"));
 
         for (int j = 0; j < 16; ++j) {
-            map.put(i + "" + j, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_" + s1 + "',Properties:{rotation:'" + j + "'}}"));
+            map.put(i + j, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_" + s1 + "',Properties:{rotation:'" + j + "'}}"));
         }
 
     }
@@ -238,7 +247,7 @@ public class ChunkConverterPalette extends DataFix {
 
     private static void b(Map<String, Dynamic<?>> map, int i, String s) {
         for (int j = 0; j < 16; ++j) {
-            map.put("" + j + "_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_banner',Properties:{rotation:'" + j + "'}}"));
+            map.put(j + "_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_banner',Properties:{rotation:'" + j + "'}}"));
         }
 
         map.put("north_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_banner',Properties:{facing:'north'}}"));
@@ -307,164 +316,91 @@ public class ChunkConverterPalette extends DataFix {
     }
 
     static {
-        ChunkConverterPalette.c.set(2);
-        ChunkConverterPalette.c.set(3);
-        ChunkConverterPalette.c.set(110);
-        ChunkConverterPalette.c.set(140);
-        ChunkConverterPalette.c.set(144);
-        ChunkConverterPalette.c.set(25);
-        ChunkConverterPalette.c.set(86);
-        ChunkConverterPalette.c.set(26);
-        ChunkConverterPalette.c.set(176);
-        ChunkConverterPalette.c.set(177);
-        ChunkConverterPalette.c.set(175);
-        ChunkConverterPalette.c.set(64);
-        ChunkConverterPalette.c.set(71);
-        ChunkConverterPalette.c.set(193);
-        ChunkConverterPalette.c.set(194);
-        ChunkConverterPalette.c.set(195);
-        ChunkConverterPalette.c.set(196);
-        ChunkConverterPalette.c.set(197);
-        ChunkConverterPalette.b.set(54);
-        ChunkConverterPalette.b.set(146);
-        ChunkConverterPalette.b.set(25);
-        ChunkConverterPalette.b.set(26);
-        ChunkConverterPalette.b.set(51);
-        ChunkConverterPalette.b.set(53);
-        ChunkConverterPalette.b.set(67);
-        ChunkConverterPalette.b.set(108);
-        ChunkConverterPalette.b.set(109);
-        ChunkConverterPalette.b.set(114);
-        ChunkConverterPalette.b.set(128);
-        ChunkConverterPalette.b.set(134);
-        ChunkConverterPalette.b.set(135);
-        ChunkConverterPalette.b.set(136);
-        ChunkConverterPalette.b.set(156);
-        ChunkConverterPalette.b.set(163);
-        ChunkConverterPalette.b.set(164);
-        ChunkConverterPalette.b.set(180);
-        ChunkConverterPalette.b.set(203);
-        ChunkConverterPalette.b.set(55);
-        ChunkConverterPalette.b.set(85);
-        ChunkConverterPalette.b.set(113);
-        ChunkConverterPalette.b.set(188);
-        ChunkConverterPalette.b.set(189);
-        ChunkConverterPalette.b.set(190);
-        ChunkConverterPalette.b.set(191);
-        ChunkConverterPalette.b.set(192);
-        ChunkConverterPalette.b.set(93);
-        ChunkConverterPalette.b.set(94);
-        ChunkConverterPalette.b.set(101);
-        ChunkConverterPalette.b.set(102);
-        ChunkConverterPalette.b.set(160);
-        ChunkConverterPalette.b.set(106);
-        ChunkConverterPalette.b.set(107);
-        ChunkConverterPalette.b.set(183);
-        ChunkConverterPalette.b.set(184);
-        ChunkConverterPalette.b.set(185);
-        ChunkConverterPalette.b.set(186);
-        ChunkConverterPalette.b.set(187);
-        ChunkConverterPalette.b.set(132);
-        ChunkConverterPalette.b.set(139);
-        ChunkConverterPalette.b.set(199);
-        u = DataConverterFlattenData.b(0);
+        ChunkConverterPalette.FIX.set(2);
+        ChunkConverterPalette.FIX.set(3);
+        ChunkConverterPalette.FIX.set(110);
+        ChunkConverterPalette.FIX.set(140);
+        ChunkConverterPalette.FIX.set(144);
+        ChunkConverterPalette.FIX.set(25);
+        ChunkConverterPalette.FIX.set(86);
+        ChunkConverterPalette.FIX.set(26);
+        ChunkConverterPalette.FIX.set(176);
+        ChunkConverterPalette.FIX.set(177);
+        ChunkConverterPalette.FIX.set(175);
+        ChunkConverterPalette.FIX.set(64);
+        ChunkConverterPalette.FIX.set(71);
+        ChunkConverterPalette.FIX.set(193);
+        ChunkConverterPalette.FIX.set(194);
+        ChunkConverterPalette.FIX.set(195);
+        ChunkConverterPalette.FIX.set(196);
+        ChunkConverterPalette.FIX.set(197);
+        ChunkConverterPalette.VIRTUAL.set(54);
+        ChunkConverterPalette.VIRTUAL.set(146);
+        ChunkConverterPalette.VIRTUAL.set(25);
+        ChunkConverterPalette.VIRTUAL.set(26);
+        ChunkConverterPalette.VIRTUAL.set(51);
+        ChunkConverterPalette.VIRTUAL.set(53);
+        ChunkConverterPalette.VIRTUAL.set(67);
+        ChunkConverterPalette.VIRTUAL.set(108);
+        ChunkConverterPalette.VIRTUAL.set(109);
+        ChunkConverterPalette.VIRTUAL.set(114);
+        ChunkConverterPalette.VIRTUAL.set(128);
+        ChunkConverterPalette.VIRTUAL.set(134);
+        ChunkConverterPalette.VIRTUAL.set(135);
+        ChunkConverterPalette.VIRTUAL.set(136);
+        ChunkConverterPalette.VIRTUAL.set(156);
+        ChunkConverterPalette.VIRTUAL.set(163);
+        ChunkConverterPalette.VIRTUAL.set(164);
+        ChunkConverterPalette.VIRTUAL.set(180);
+        ChunkConverterPalette.VIRTUAL.set(203);
+        ChunkConverterPalette.VIRTUAL.set(55);
+        ChunkConverterPalette.VIRTUAL.set(85);
+        ChunkConverterPalette.VIRTUAL.set(113);
+        ChunkConverterPalette.VIRTUAL.set(188);
+        ChunkConverterPalette.VIRTUAL.set(189);
+        ChunkConverterPalette.VIRTUAL.set(190);
+        ChunkConverterPalette.VIRTUAL.set(191);
+        ChunkConverterPalette.VIRTUAL.set(192);
+        ChunkConverterPalette.VIRTUAL.set(93);
+        ChunkConverterPalette.VIRTUAL.set(94);
+        ChunkConverterPalette.VIRTUAL.set(101);
+        ChunkConverterPalette.VIRTUAL.set(102);
+        ChunkConverterPalette.VIRTUAL.set(160);
+        ChunkConverterPalette.VIRTUAL.set(106);
+        ChunkConverterPalette.VIRTUAL.set(107);
+        ChunkConverterPalette.VIRTUAL.set(183);
+        ChunkConverterPalette.VIRTUAL.set(184);
+        ChunkConverterPalette.VIRTUAL.set(185);
+        ChunkConverterPalette.VIRTUAL.set(186);
+        ChunkConverterPalette.VIRTUAL.set(187);
+        ChunkConverterPalette.VIRTUAL.set(132);
+        ChunkConverterPalette.VIRTUAL.set(139);
+        ChunkConverterPalette.VIRTUAL.set(199);
+        AIR = DataConverterFlattenData.b(0);
     }
 
-    public static enum Direction {
+    private static final class d {
 
-        DOWN(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.Y), UP(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.Y), NORTH(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.Z), SOUTH(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.Z), WEST(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.X), EAST(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.X);
-
-        private final ChunkConverterPalette.Direction.Axis g;
-        private final ChunkConverterPalette.Direction.AxisDirection h;
-
-        private Direction(ChunkConverterPalette.Direction.AxisDirection chunkconverterpalette_direction_axisdirection, ChunkConverterPalette.Direction.Axis chunkconverterpalette_direction_axis) {
-            this.g = chunkconverterpalette_direction_axis;
-            this.h = chunkconverterpalette_direction_axisdirection;
-        }
-
-        public ChunkConverterPalette.Direction.AxisDirection a() {
-            return this.h;
-        }
-
-        public ChunkConverterPalette.Direction.Axis b() {
-            return this.g;
-        }
-
-        public static enum AxisDirection {
-
-            POSITIVE(1), NEGATIVE(-1);
-
-            private final int c;
-
-            private AxisDirection(int i) {
-                this.c = i;
-            }
-
-            public int a() {
-                return this.c;
-            }
-        }
-
-        public static enum Axis {
-
-            X, Y, Z;
-
-            private Axis() {}
-        }
-    }
-
-    static class a {
-
-        private final byte[] a;
-
-        public a() {
-            this.a = new byte[2048];
-        }
-
-        public a(byte[] abyte) {
-            this.a = abyte;
-            if (abyte.length != 2048) {
-                throw new IllegalArgumentException("ChunkNibbleArrays should be 2048 bytes not: " + abyte.length);
-            }
-        }
-
-        public int a(int i, int j, int k) {
-            int l = this.b(j << 8 | k << 4 | i);
-
-            return this.a(j << 8 | k << 4 | i) ? this.a[l] & 15 : this.a[l] >> 4 & 15;
-        }
-
-        private boolean a(int i) {
-            return (i & 1) == 0;
-        }
-
-        private int b(int i) {
-            return i >> 1;
-        }
-    }
-
-    static final class d {
-
-        private int a;
-        private final ChunkConverterPalette.c[] b = new ChunkConverterPalette.c[16];
-        private final Dynamic<?> c;
-        private final int d;
-        private final int e;
-        private final Int2ObjectMap<Dynamic<?>> f = new Int2ObjectLinkedOpenHashMap(16);
+        private int sides;
+        private final ChunkConverterPalette.c[] sections = new ChunkConverterPalette.c[16];
+        private final Dynamic<?> level;
+        private final int x;
+        private final int z;
+        private final Int2ObjectMap<Dynamic<?>> blockEntities = new Int2ObjectLinkedOpenHashMap(16);
 
         public d(Dynamic<?> dynamic) {
-            this.c = dynamic;
-            this.d = dynamic.get("xPos").asInt(0) << 4;
-            this.e = dynamic.get("zPos").asInt(0) << 4;
+            this.level = dynamic;
+            this.x = dynamic.get("xPos").asInt(0) << 4;
+            this.z = dynamic.get("zPos").asInt(0) << 4;
             dynamic.get("TileEntities").asStreamOpt().result().ifPresent((stream) -> {
                 stream.forEach((dynamic1) -> {
-                    int i = dynamic1.get("x").asInt(0) - this.d & 15;
+                    int i = dynamic1.get("x").asInt(0) - this.x & 15;
                     int j = dynamic1.get("y").asInt(0);
-                    int k = dynamic1.get("z").asInt(0) - this.e & 15;
+                    int k = dynamic1.get("z").asInt(0) - this.z & 15;
                     int l = j << 8 | k << 4 | i;
 
-                    if (this.f.put(l, dynamic1) != null) {
-                        ChunkConverterPalette.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.d, this.e, i, j, k);
+                    if (this.blockEntities.put(l, dynamic1) != null) {
+                        ChunkConverterPalette.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.x, this.z, i, j, k);
                     }
 
                 });
@@ -475,31 +411,32 @@ public class ChunkConverterPalette extends DataFix {
                 stream.forEach((dynamic1) -> {
                     ChunkConverterPalette.c chunkconverterpalette_c = new ChunkConverterPalette.c(dynamic1);
 
-                    this.a = chunkconverterpalette_c.b(this.a);
-                    this.b[chunkconverterpalette_c.a] = chunkconverterpalette_c;
+                    this.sides = chunkconverterpalette_c.b(this.sides);
+                    this.sections[chunkconverterpalette_c.y] = chunkconverterpalette_c;
                 });
             });
-            ChunkConverterPalette.c[] achunkconverterpalette_c = this.b;
+            ChunkConverterPalette.c[] achunkconverterpalette_c = this.sections;
             int i = achunkconverterpalette_c.length;
 
             for (int j = 0; j < i; ++j) {
                 ChunkConverterPalette.c chunkconverterpalette_c = achunkconverterpalette_c[j];
 
                 if (chunkconverterpalette_c != null) {
-                    ObjectIterator objectiterator = chunkconverterpalette_c.f.entrySet().iterator();
+                    ObjectIterator objectiterator = chunkconverterpalette_c.toFix.entrySet().iterator();
 
                     label229:
                     while (objectiterator.hasNext()) {
                         java.util.Map.Entry<Integer, IntList> java_util_map_entry = (java.util.Map.Entry) objectiterator.next();
-                        int k = chunkconverterpalette_c.a << 12;
+                        int k = chunkconverterpalette_c.y << 12;
                         IntListIterator intlistiterator;
                         int l;
                         Dynamic dynamic1;
                         String s;
+                        String s1;
                         Dynamic dynamic2;
                         int i1;
-                        String s1;
                         String s2;
+                        String s3;
 
                         switch ((Integer) java_util_map_entry.getKey()) {
                             case 2:
@@ -512,7 +449,7 @@ public class ChunkConverterPalette extends DataFix {
                                     if ("minecraft:grass_block".equals(ChunkConverterPalette.a(dynamic1))) {
                                         s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
                                         if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                            this.a(l, ChunkConverterPalette.f);
+                                            this.a(l, ChunkConverterPalette.SNOWY_GRASS);
                                         }
                                     }
                                 }
@@ -531,7 +468,7 @@ public class ChunkConverterPalette extends DataFix {
                                     if ("minecraft:podzol".equals(ChunkConverterPalette.a(dynamic1))) {
                                         s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
                                         if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                            this.a(l, ChunkConverterPalette.e);
+                                            this.a(l, ChunkConverterPalette.SNOWY_PODZOL);
                                         }
                                     }
                                 }
@@ -547,8 +484,9 @@ public class ChunkConverterPalette extends DataFix {
                                     l |= k;
                                     dynamic1 = this.c(l);
                                     if (dynamic1 != null) {
-                                        s = Boolean.toString(dynamic1.get("powered").asBoolean(false)) + (byte) Math.min(Math.max(dynamic1.get("note").asInt(0), 0), 24);
-                                        this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s, ChunkConverterPalette.q.get("false0")));
+                                        s1 = Boolean.toString(dynamic1.get("powered").asBoolean(false));
+                                        s = s1 + (byte) Math.min(Math.max(dynamic1.get("note").asInt(0), 0), 24);
+                                        this.a(l, (Dynamic) ChunkConverterPalette.NOTE_BLOCK_MAP.getOrDefault(s, (Dynamic) ChunkConverterPalette.NOTE_BLOCK_MAP.get("false0")));
                                     }
                                 }
                             case 26:
@@ -566,9 +504,10 @@ public class ChunkConverterPalette extends DataFix {
                                     if (dynamic1 != null) {
                                         i1 = dynamic1.get("color").asInt(0);
                                         if (i1 != 14 && i1 >= 0 && i1 < 16) {
-                                            s1 = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
-                                            if (ChunkConverterPalette.s.containsKey(s1)) {
-                                                this.a(l, (Dynamic) ChunkConverterPalette.s.get(s1));
+                                            s1 = ChunkConverterPalette.a(dynamic2, "facing");
+                                            s2 = s1 + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
+                                            if (ChunkConverterPalette.BED_BLOCK_MAP.containsKey(s2)) {
+                                                this.a(l, (Dynamic) ChunkConverterPalette.BED_BLOCK_MAP.get(s2));
                                             }
                                         }
                                     }
@@ -595,16 +534,16 @@ public class ChunkConverterPalette extends DataFix {
                                         if ("lower".equals(ChunkConverterPalette.a(dynamic2, "half"))) {
                                             i1 = a(l, ChunkConverterPalette.Direction.UP);
                                             Dynamic<?> dynamic3 = this.a(i1);
-                                            String s3 = ChunkConverterPalette.a(dynamic2);
+                                            String s4 = ChunkConverterPalette.a(dynamic2);
 
-                                            if (s3.equals(ChunkConverterPalette.a(dynamic3))) {
-                                                String s4 = ChunkConverterPalette.a(dynamic2, "facing");
-                                                String s5 = ChunkConverterPalette.a(dynamic2, "open");
-                                                String s6 = flag ? "left" : ChunkConverterPalette.a(dynamic3, "hinge");
-                                                String s7 = flag ? "false" : ChunkConverterPalette.a(dynamic3, "powered");
+                                            if (s4.equals(ChunkConverterPalette.a(dynamic3))) {
+                                                String s5 = ChunkConverterPalette.a(dynamic2, "facing");
+                                                String s6 = ChunkConverterPalette.a(dynamic2, "open");
+                                                String s7 = flag ? "left" : ChunkConverterPalette.a(dynamic3, "hinge");
+                                                String s8 = flag ? "false" : ChunkConverterPalette.a(dynamic3, "powered");
 
-                                                this.a(l, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "lower" + s6 + s5 + s7));
-                                                this.a(i1, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "upper" + s6 + s5 + s7));
+                                                this.a(l, (Dynamic) ChunkConverterPalette.DOOR_MAP.get(s4 + s5 + "lower" + s7 + s6 + s8));
+                                                this.a(i1, (Dynamic) ChunkConverterPalette.DOOR_MAP.get(s4 + s5 + "upper" + s7 + s6 + s8));
                                             }
                                         }
                                     }
@@ -623,7 +562,7 @@ public class ChunkConverterPalette extends DataFix {
                                     if ("minecraft:carved_pumpkin".equals(ChunkConverterPalette.a(dynamic1))) {
                                         s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.DOWN)));
                                         if ("minecraft:grass_block".equals(s) || "minecraft:dirt".equals(s)) {
-                                            this.a(l, ChunkConverterPalette.d);
+                                            this.a(l, ChunkConverterPalette.PUMPKIN);
                                         }
                                     }
                                 }
@@ -641,7 +580,7 @@ public class ChunkConverterPalette extends DataFix {
                                     if ("minecraft:mycelium".equals(ChunkConverterPalette.a(dynamic1))) {
                                         s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
                                         if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                            this.a(l, ChunkConverterPalette.g);
+                                            this.a(l, ChunkConverterPalette.SNOWY_MYCELIUM);
                                         }
                                     }
                                 }
@@ -657,8 +596,9 @@ public class ChunkConverterPalette extends DataFix {
                                     l |= k;
                                     dynamic1 = this.c(l);
                                     if (dynamic1 != null) {
-                                        s = dynamic1.get("Item").asString("") + dynamic1.get("Data").asInt(0);
-                                        this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s, ChunkConverterPalette.n.get("minecraft:air0")));
+                                        s1 = dynamic1.get("Item").asString("");
+                                        s = s1 + dynamic1.get("Data").asInt(0);
+                                        this.a(l, (Dynamic) ChunkConverterPalette.FLOWER_POT_MAP.getOrDefault(s, (Dynamic) ChunkConverterPalette.FLOWER_POT_MAP.get("minecraft:air0")));
                                     }
                                 }
                             case 144:
@@ -674,17 +614,17 @@ public class ChunkConverterPalette extends DataFix {
                                     dynamic1 = this.b(l);
                                     if (dynamic1 != null) {
                                         s = String.valueOf(dynamic1.get("SkullType").asInt(0));
-                                        s2 = ChunkConverterPalette.a(this.a(l), "facing");
-                                        if (!"up".equals(s2) && !"down".equals(s2)) {
-                                            s1 = s + s2;
+                                        s3 = ChunkConverterPalette.a(this.a(l), "facing");
+                                        if (!"up".equals(s3) && !"down".equals(s3)) {
+                                            s2 = s + s3;
                                         } else {
-                                            s1 = s + String.valueOf(dynamic1.get("Rot").asInt(0));
+                                            s2 = s + String.valueOf(dynamic1.get("Rot").asInt(0));
                                         }
 
                                         dynamic1.remove("SkullType");
                                         dynamic1.remove("facing");
                                         dynamic1.remove("Rot");
-                                        this.a(l, (Dynamic) ChunkConverterPalette.o.getOrDefault(s1, ChunkConverterPalette.o.get("0north")));
+                                        this.a(l, (Dynamic) ChunkConverterPalette.SKULL_MAP.getOrDefault(s2, (Dynamic) ChunkConverterPalette.SKULL_MAP.get("0north")));
                                     }
                                 }
                             case 175:
@@ -700,19 +640,19 @@ public class ChunkConverterPalette extends DataFix {
                                     dynamic1 = this.a(l);
                                     if ("upper".equals(ChunkConverterPalette.a(dynamic1, "half"))) {
                                         dynamic2 = this.a(a(l, ChunkConverterPalette.Direction.DOWN));
-                                        s2 = ChunkConverterPalette.a(dynamic2);
-                                        if ("minecraft:sunflower".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.h);
-                                        } else if ("minecraft:lilac".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.i);
-                                        } else if ("minecraft:tall_grass".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.j);
-                                        } else if ("minecraft:large_fern".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.k);
-                                        } else if ("minecraft:rose_bush".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.l);
-                                        } else if ("minecraft:peony".equals(s2)) {
-                                            this.a(l, ChunkConverterPalette.m);
+                                        s3 = ChunkConverterPalette.a(dynamic2);
+                                        if ("minecraft:sunflower".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_SUNFLOWER);
+                                        } else if ("minecraft:lilac".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_LILAC);
+                                        } else if ("minecraft:tall_grass".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_TALL_GRASS);
+                                        } else if ("minecraft:large_fern".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_LARGE_FERN);
+                                        } else if ("minecraft:rose_bush".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_ROSE_BUSH);
+                                        } else if ("minecraft:peony".equals(s3)) {
+                                            this.a(l, ChunkConverterPalette.UPPER_PEONY);
                                         }
                                     }
                                 }
@@ -728,9 +668,10 @@ public class ChunkConverterPalette extends DataFix {
                                     if (dynamic1 != null) {
                                         i1 = dynamic1.get("Base").asInt(0);
                                         if (i1 != 15 && i1 >= 0 && i1 < 16) {
-                                            s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing") + "_" + i1;
-                                            if (ChunkConverterPalette.t.containsKey(s1)) {
-                                                this.a(l, (Dynamic) ChunkConverterPalette.t.get(s1));
+                                            s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing");
+                                            s2 = s1 + "_" + i1;
+                                            if (ChunkConverterPalette.BANNER_BLOCK_MAP.containsKey(s2)) {
+                                                this.a(l, (Dynamic) ChunkConverterPalette.BANNER_BLOCK_MAP.get(s2));
                                             }
                                         }
                                     }
@@ -744,12 +685,12 @@ public class ChunkConverterPalette extends DataFix {
 
         @Nullable
         private Dynamic<?> b(int i) {
-            return (Dynamic) this.f.get(i);
+            return (Dynamic) this.blockEntities.get(i);
         }
 
         @Nullable
         private Dynamic<?> c(int i) {
-            return (Dynamic) this.f.remove(i);
+            return (Dynamic) this.blockEntities.remove(i);
         }
 
         public static int a(int i, ChunkConverterPalette.Direction chunkconverterpalette_direction) {
@@ -785,31 +726,31 @@ public class ChunkConverterPalette extends DataFix {
         private ChunkConverterPalette.c d(int i) {
             int j = i >> 12;
 
-            return j < this.b.length ? this.b[j] : null;
+            return j < this.sections.length ? this.sections[j] : null;
         }
 
         public Dynamic<?> a(int i) {
             if (i >= 0 && i <= 65535) {
                 ChunkConverterPalette.c chunkconverterpalette_c = this.d(i);
 
-                return chunkconverterpalette_c == null ? ChunkConverterPalette.u : chunkconverterpalette_c.a(i & 4095);
+                return chunkconverterpalette_c == null ? ChunkConverterPalette.AIR : chunkconverterpalette_c.a(i & 4095);
             } else {
-                return ChunkConverterPalette.u;
+                return ChunkConverterPalette.AIR;
             }
         }
 
         public Dynamic<?> a() {
-            Dynamic<?> dynamic = this.c;
+            Dynamic<?> dynamic = this.level;
 
-            if (this.f.isEmpty()) {
+            if (this.blockEntities.isEmpty()) {
                 dynamic = dynamic.remove("TileEntities");
             } else {
-                dynamic = dynamic.set("TileEntities", dynamic.createList(this.f.values().stream()));
+                dynamic = dynamic.set("TileEntities", dynamic.createList(this.blockEntities.values().stream()));
             }
 
             Dynamic<?> dynamic1 = dynamic.emptyMap();
             List<Dynamic<?>> list = Lists.newArrayList();
-            ChunkConverterPalette.c[] achunkconverterpalette_c = this.b;
+            ChunkConverterPalette.c[] achunkconverterpalette_c = this.sections;
             int i = achunkconverterpalette_c.length;
 
             for (int j = 0; j < i; ++j) {
@@ -817,69 +758,144 @@ public class ChunkConverterPalette extends DataFix {
 
                 if (chunkconverterpalette_c != null) {
                     list.add(chunkconverterpalette_c.a());
-                    dynamic1 = dynamic1.set(String.valueOf(chunkconverterpalette_c.a), dynamic1.createIntList(Arrays.stream(chunkconverterpalette_c.g.toIntArray())));
+                    dynamic1 = dynamic1.set(String.valueOf(chunkconverterpalette_c.y), dynamic1.createIntList(Arrays.stream(chunkconverterpalette_c.update.toIntArray())));
                 }
             }
 
             Dynamic<?> dynamic2 = dynamic.emptyMap();
 
-            dynamic2 = dynamic2.set("Sides", dynamic2.createByte((byte) this.a));
+            dynamic2 = dynamic2.set("Sides", dynamic2.createByte((byte) this.sides));
             dynamic2 = dynamic2.set("Indices", dynamic1);
             return dynamic.set("UpgradeData", dynamic2).set("Sections", dynamic2.createList(list.stream()));
         }
     }
 
-    static class c {
+    public static enum Direction {
 
-        private final RegistryID<Dynamic<?>> b = new RegistryID<>(32);
-        private final List<Dynamic<?>> c = Lists.newArrayList();
-        private final Dynamic<?> d;
-        private final boolean e;
-        private final Int2ObjectMap<IntList> f = new Int2ObjectLinkedOpenHashMap();
-        private final IntList g = new IntArrayList();
-        public final int a;
-        private final Set<Dynamic<?>> h = Sets.newIdentityHashSet();
-        private final int[] i = new int[4096];
+        DOWN(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.Y), UP(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.Y), NORTH(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.Z), SOUTH(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.Z), WEST(ChunkConverterPalette.Direction.AxisDirection.NEGATIVE, ChunkConverterPalette.Direction.Axis.X), EAST(ChunkConverterPalette.Direction.AxisDirection.POSITIVE, ChunkConverterPalette.Direction.Axis.X);
+
+        private final ChunkConverterPalette.Direction.Axis axis;
+        private final ChunkConverterPalette.Direction.AxisDirection axisDirection;
+
+        private Direction(ChunkConverterPalette.Direction.AxisDirection chunkconverterpalette_direction_axisdirection, ChunkConverterPalette.Direction.Axis chunkconverterpalette_direction_axis) {
+            this.axis = chunkconverterpalette_direction_axis;
+            this.axisDirection = chunkconverterpalette_direction_axisdirection;
+        }
+
+        public ChunkConverterPalette.Direction.AxisDirection a() {
+            return this.axisDirection;
+        }
+
+        public ChunkConverterPalette.Direction.Axis b() {
+            return this.axis;
+        }
+
+        public static enum Axis {
+
+            X, Y, Z;
+
+            private Axis() {}
+        }
+
+        public static enum AxisDirection {
+
+            POSITIVE(1), NEGATIVE(-1);
+
+            private final int step;
+
+            private AxisDirection(int i) {
+                this.step = i;
+            }
+
+            public int a() {
+                return this.step;
+            }
+        }
+    }
+
+    private static class a {
+
+        private static final int SIZE = 2048;
+        private static final int NIBBLE_SIZE = 4;
+        private final byte[] data;
+
+        public a() {
+            this.data = new byte[2048];
+        }
+
+        public a(byte[] abyte) {
+            this.data = abyte;
+            if (abyte.length != 2048) {
+                throw new IllegalArgumentException("ChunkNibbleArrays should be 2048 bytes not: " + abyte.length);
+            }
+        }
+
+        public int a(int i, int j, int k) {
+            int l = this.b(j << 8 | k << 4 | i);
+
+            return this.a(j << 8 | k << 4 | i) ? this.data[l] & 15 : this.data[l] >> 4 & 15;
+        }
+
+        private boolean a(int i) {
+            return (i & 1) == 0;
+        }
+
+        private int b(int i) {
+            return i >> 1;
+        }
+    }
+
+    private static class c {
+
+        private final RegistryID<Dynamic<?>> palette = new RegistryID<>(32);
+        private final List<Dynamic<?>> listTag = Lists.newArrayList();
+        private final Dynamic<?> section;
+        private final boolean hasData;
+        final Int2ObjectMap<IntList> toFix = new Int2ObjectLinkedOpenHashMap();
+        final IntList update = new IntArrayList();
+        public final int y;
+        private final Set<Dynamic<?>> seen = Sets.newIdentityHashSet();
+        private final int[] buffer = new int[4096];
 
         public c(Dynamic<?> dynamic) {
-            this.d = dynamic;
-            this.a = dynamic.get("Y").asInt(0);
-            this.e = dynamic.get("Blocks").result().isPresent();
+            this.section = dynamic;
+            this.y = dynamic.get("Y").asInt(0);
+            this.hasData = dynamic.get("Blocks").result().isPresent();
         }
 
         public Dynamic<?> a(int i) {
             if (i >= 0 && i <= 4095) {
-                Dynamic<?> dynamic = (Dynamic) this.b.fromId(this.i[i]);
+                Dynamic<?> dynamic = (Dynamic) this.palette.fromId(this.buffer[i]);
 
-                return dynamic == null ? ChunkConverterPalette.u : dynamic;
+                return dynamic == null ? ChunkConverterPalette.AIR : dynamic;
             } else {
-                return ChunkConverterPalette.u;
+                return ChunkConverterPalette.AIR;
             }
         }
 
         public void a(int i, Dynamic<?> dynamic) {
-            if (this.h.add(dynamic)) {
-                this.c.add("%%FILTER_ME%%".equals(ChunkConverterPalette.a(dynamic)) ? ChunkConverterPalette.u : dynamic);
+            if (this.seen.add(dynamic)) {
+                this.listTag.add("%%FILTER_ME%%".equals(ChunkConverterPalette.a(dynamic)) ? ChunkConverterPalette.AIR : dynamic);
             }
 
-            this.i[i] = ChunkConverterPalette.a(this.b, dynamic);
+            this.buffer[i] = ChunkConverterPalette.a(this.palette, dynamic);
         }
 
         public int b(int i) {
-            if (!this.e) {
+            if (!this.hasData) {
                 return i;
             } else {
-                ByteBuffer bytebuffer = (ByteBuffer) this.d.get("Blocks").asByteBufferOpt().result().get();
-                ChunkConverterPalette.a chunkconverterpalette_a = (ChunkConverterPalette.a) this.d.get("Data").asByteBufferOpt().map((bytebuffer1) -> {
+                ByteBuffer bytebuffer = (ByteBuffer) this.section.get("Blocks").asByteBufferOpt().result().get();
+                ChunkConverterPalette.a chunkconverterpalette_a = (ChunkConverterPalette.a) this.section.get("Data").asByteBufferOpt().map((bytebuffer1) -> {
                     return new ChunkConverterPalette.a(DataFixUtils.toArray(bytebuffer1));
                 }).result().orElseGet(ChunkConverterPalette.a::new);
-                ChunkConverterPalette.a chunkconverterpalette_a1 = (ChunkConverterPalette.a) this.d.get("Add").asByteBufferOpt().map((bytebuffer1) -> {
+                ChunkConverterPalette.a chunkconverterpalette_a1 = (ChunkConverterPalette.a) this.section.get("Add").asByteBufferOpt().map((bytebuffer1) -> {
                     return new ChunkConverterPalette.a(DataFixUtils.toArray(bytebuffer1));
                 }).result().orElseGet(ChunkConverterPalette.a::new);
 
-                this.h.add(ChunkConverterPalette.u);
-                ChunkConverterPalette.a(this.b, ChunkConverterPalette.u);
-                this.c.add(ChunkConverterPalette.u);
+                this.seen.add(ChunkConverterPalette.AIR);
+                ChunkConverterPalette.a(this.palette, ChunkConverterPalette.AIR);
+                this.listTag.add(ChunkConverterPalette.AIR);
 
                 for (int j = 0; j < 4096; ++j) {
                     int k = j & 15;
@@ -887,15 +903,15 @@ public class ChunkConverterPalette extends DataFix {
                     int i1 = j >> 4 & 15;
                     int j1 = chunkconverterpalette_a1.a(k, l, i1) << 12 | (bytebuffer.get(j) & 255) << 4 | chunkconverterpalette_a.a(k, l, i1);
 
-                    if (ChunkConverterPalette.c.get(j1 >> 4)) {
+                    if (ChunkConverterPalette.FIX.get(j1 >> 4)) {
                         this.a(j1 >> 4, j);
                     }
 
-                    if (ChunkConverterPalette.b.get(j1 >> 4)) {
+                    if (ChunkConverterPalette.VIRTUAL.get(j1 >> 4)) {
                         int k1 = ChunkConverterPalette.a(k == 0, k == 15, i1 == 0, i1 == 15);
 
                         if (k1 == 0) {
-                            this.g.add(j);
+                            this.update.add(j);
                         } else {
                             i |= k1;
                         }
@@ -909,28 +925,28 @@ public class ChunkConverterPalette extends DataFix {
         }
 
         private void a(int i, int j) {
-            Object object = (IntList) this.f.get(i);
+            Object object = (IntList) this.toFix.get(i);
 
             if (object == null) {
                 object = new IntArrayList();
-                this.f.put(i, object);
+                this.toFix.put(i, object);
             }
 
             ((IntList) object).add(j);
         }
 
         public Dynamic<?> a() {
-            Dynamic<?> dynamic = this.d;
+            Dynamic<?> dynamic = this.section;
 
-            if (!this.e) {
+            if (!this.hasData) {
                 return dynamic;
             } else {
-                dynamic = dynamic.set("Palette", dynamic.createList(this.c.stream()));
-                int i = Math.max(4, DataFixUtils.ceillog2(this.h.size()));
+                dynamic = dynamic.set("Palette", dynamic.createList(this.listTag.stream()));
+                int i = Math.max(4, DataFixUtils.ceillog2(this.seen.size()));
                 DataBitsPacked databitspacked = new DataBitsPacked(i, 4096);
 
-                for (int j = 0; j < this.i.length; ++j) {
-                    databitspacked.a(j, this.i[j]);
+                for (int j = 0; j < this.buffer.length; ++j) {
+                    databitspacked.a(j, this.buffer[j]);
                 }
 
                 dynamic = dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(databitspacked.a())));

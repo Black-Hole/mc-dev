@@ -12,7 +12,7 @@ import net.minecraft.world.level.World;
 
 public class RecipeFireworksFade extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(Items.FIREWORK_STAR);
+    private static final RecipeItemStack STAR_INGREDIENT = RecipeItemStack.a(Items.FIREWORK_STAR);
 
     public RecipeFireworksFade(MinecraftKey minecraftkey) {
         super(minecraftkey);
@@ -29,7 +29,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
                 if (itemstack.getItem() instanceof ItemDye) {
                     flag = true;
                 } else {
-                    if (!RecipeFireworksFade.a.test(itemstack)) {
+                    if (!RecipeFireworksFade.STAR_INGREDIENT.test(itemstack)) {
                         return false;
                     }
 
@@ -55,7 +55,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
 
             if (item instanceof ItemDye) {
                 list.add(((ItemDye) item).d().getFireworksColor());
-            } else if (RecipeFireworksFade.a.test(itemstack1)) {
+            } else if (RecipeFireworksFade.STAR_INGREDIENT.test(itemstack1)) {
                 itemstack = itemstack1.cloneItemStack();
                 itemstack.setCount(1);
             }
@@ -65,12 +65,17 @@ public class RecipeFireworksFade extends IRecipeComplex {
             itemstack.a("Explosion").b("FadeColors", (List) list);
             return itemstack;
         } else {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.i;
+        return RecipeSerializer.FIREWORK_STAR_FADE;
     }
 }

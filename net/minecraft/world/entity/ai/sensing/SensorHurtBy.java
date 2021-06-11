@@ -21,10 +21,10 @@ public class SensorHurtBy extends Sensor<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        DamageSource damagesource = entityliving.dm();
+        DamageSource damagesource = entityliving.dW();
 
         if (damagesource != null) {
-            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.dm());
+            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.dW());
             Entity entity = damagesource.getEntity();
 
             if (entity instanceof EntityLiving) {
@@ -35,7 +35,7 @@ public class SensorHurtBy extends Sensor<EntityLiving> {
         }
 
         behaviorcontroller.getMemory(MemoryModuleType.HURT_BY_ENTITY).ifPresent((entityliving1) -> {
-            if (!entityliving1.isAlive() || entityliving1.world != worldserver) {
+            if (!entityliving1.isAlive() || entityliving1.level != worldserver) {
                 behaviorcontroller.removeMemory(MemoryModuleType.HURT_BY_ENTITY);
             }
 

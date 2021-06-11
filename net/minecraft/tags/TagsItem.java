@@ -1,12 +1,11 @@
 package net.minecraft.tags;
 
-import java.util.List;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.core.IRegistry;
 import net.minecraft.world.item.Item;
 
 public final class TagsItem {
 
-    protected static final TagUtil<Item> a = TagStatic.a(new MinecraftKey("item"), ITagRegistry::getItemTags);
+    protected static final TagUtil<Item> HELPER = TagStatic.a(IRegistry.ITEM_REGISTRY, "tags/items");
     public static final Tag.e<Item> WOOL = a("wool");
     public static final Tag.e<Item> PLANKS = a("planks");
     public static final Tag.e<Item> STONE_BRICKS = a("stone_bricks");
@@ -47,9 +46,20 @@ public final class TagsItem {
     public static final Tag.e<Item> FLOWERS = a("flowers");
     public static final Tag.e<Item> PIGLIN_REPELLENTS = a("piglin_repellents");
     public static final Tag.e<Item> PIGLIN_LOVED = a("piglin_loved");
+    public static final Tag.e<Item> IGNORED_BY_PIGLIN_BABIES = a("ignored_by_piglin_babies");
+    public static final Tag.e<Item> PIGLIN_FOOD = a("piglin_food");
+    public static final Tag.e<Item> FOX_FOOD = a("fox_food");
     public static final Tag.e<Item> GOLD_ORES = a("gold_ores");
+    public static final Tag.e<Item> IRON_ORES = a("iron_ores");
+    public static final Tag.e<Item> DIAMOND_ORES = a("diamond_ores");
+    public static final Tag.e<Item> REDSTONE_ORES = a("redstone_ores");
+    public static final Tag.e<Item> LAPIS_ORES = a("lapis_ores");
+    public static final Tag.e<Item> COAL_ORES = a("coal_ores");
+    public static final Tag.e<Item> EMERALD_ORES = a("emerald_ores");
+    public static final Tag.e<Item> COPPER_ORES = a("copper_ores");
     public static final Tag.e<Item> NON_FLAMMABLE_WOOD = a("non_flammable_wood");
     public static final Tag.e<Item> SOUL_FIRE_BASE_BLOCKS = a("soul_fire_base_blocks");
+    public static final Tag.e<Item> CANDLES = a("candles");
     public static final Tag.e<Item> BOATS = a("boats");
     public static final Tag.e<Item> FISHES = a("fishes");
     public static final Tag.e<Item> SIGNS = a("signs");
@@ -61,16 +71,18 @@ public final class TagsItem {
     public static final Tag.e<Item> BEACON_PAYMENT_ITEMS = a("beacon_payment_items");
     public static final Tag.e<Item> STONE_TOOL_MATERIALS = a("stone_tool_materials");
     public static final Tag.e<Item> STONE_CRAFTING_MATERIALS = a("stone_crafting_materials");
+    public static final Tag.e<Item> FREEZE_IMMUNE_WEARABLES = a("freeze_immune_wearables");
+    public static final Tag.e<Item> AXOLOTL_TEMPT_ITEMS = a("axolotl_tempt_items");
+    public static final Tag.e<Item> OCCLUDES_VIBRATION_SIGNALS = a("occludes_vibration_signals");
+    public static final Tag.e<Item> CLUSTER_MAX_HARVESTABLES = a("cluster_max_harvestables");
+
+    private TagsItem() {}
 
     private static Tag.e<Item> a(String s) {
-        return TagsItem.a.a(s);
+        return TagsItem.HELPER.a(s);
     }
 
     public static Tags<Item> a() {
-        return TagsItem.a.b();
-    }
-
-    public static List<? extends Tag.e<Item>> b() {
-        return TagsItem.a.c();
+        return TagsItem.HELPER.b();
     }
 }

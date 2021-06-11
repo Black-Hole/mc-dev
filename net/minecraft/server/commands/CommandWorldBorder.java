@@ -2,6 +2,7 @@ package net.minecraft.server.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -18,26 +19,28 @@ import net.minecraft.world.phys.Vec2F;
 
 public class CommandWorldBorder {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.center.failed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.nochange"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.small."));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.big."));
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.time.failed"));
-    private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.distance.failed"));
-    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.buffer.failed"));
-    private static final SimpleCommandExceptionType h = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.amount.failed"));
+    private static final SimpleCommandExceptionType ERROR_SAME_CENTER = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.center.failed"));
+    private static final SimpleCommandExceptionType ERROR_SAME_SIZE = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.nochange"));
+    private static final SimpleCommandExceptionType ERROR_TOO_SMALL = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.small"));
+    private static final SimpleCommandExceptionType ERROR_TOO_BIG = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.big", new Object[]{5.9999968E7D}));
+    private static final SimpleCommandExceptionType ERROR_SAME_WARNING_TIME = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.time.failed"));
+    private static final SimpleCommandExceptionType ERROR_SAME_WARNING_DISTANCE = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.distance.failed"));
+    private static final SimpleCommandExceptionType ERROR_SAME_DAMAGE_BUFFER = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.buffer.failed"));
+    private static final SimpleCommandExceptionType ERROR_SAME_DAMAGE_AMOUNT = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.amount.failed"));
+
+    public CommandWorldBorder() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("worldborder").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("add").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("distance", (ArgumentType) FloatArgumentType.floatArg(-6.0E7F, 6.0E7F)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) FloatArgumentType.getFloat(commandcontext, "distance"), 0L);
+        })).then(net.minecraft.commands.CommandDispatcher.a("add").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("distance", (ArgumentType) DoubleArgumentType.doubleArg(-5.9999968E7D, 5.9999968E7D)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + DoubleArgumentType.getDouble(commandcontext, "distance"), 0L);
         })).then(net.minecraft.commands.CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) FloatArgumentType.getFloat(commandcontext, "distance"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().j() + (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("set").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("distance", (ArgumentType) FloatArgumentType.floatArg(-6.0E7F, 6.0E7F)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), (double) FloatArgumentType.getFloat(commandcontext, "distance"), 0L);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + DoubleArgumentType.getDouble(commandcontext, "distance"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().j() + (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("set").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("distance", (ArgumentType) DoubleArgumentType.doubleArg(-5.9999968E7D, 5.9999968E7D)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), DoubleArgumentType.getDouble(commandcontext, "distance"), 0L);
         })).then(net.minecraft.commands.CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), (double) FloatArgumentType.getFloat(commandcontext, "distance"), (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+            return a((CommandListenerWrapper) commandcontext.getSource(), DoubleArgumentType.getDouble(commandcontext, "distance"), (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
         }))))).then(net.minecraft.commands.CommandDispatcher.a("center").then(net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentVec2.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "pos"));
         })))).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("damage").then(net.minecraft.commands.CommandDispatcher.a("amount").then(net.minecraft.commands.CommandDispatcher.a("damagePerBlock", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {
@@ -57,7 +60,7 @@ public class CommandWorldBorder {
         WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
         if (worldborder.getDamageBuffer() == (double) f) {
-            throw CommandWorldBorder.g.create();
+            throw CommandWorldBorder.ERROR_SAME_DAMAGE_BUFFER.create();
         } else {
             worldborder.setDamageBuffer((double) f);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.buffer.success", new Object[]{String.format(Locale.ROOT, "%.2f", f)}), true);
@@ -69,7 +72,7 @@ public class CommandWorldBorder {
         WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
         if (worldborder.getDamageAmount() == (double) f) {
-            throw CommandWorldBorder.h.create();
+            throw CommandWorldBorder.ERROR_SAME_DAMAGE_AMOUNT.create();
         } else {
             worldborder.setDamageAmount((double) f);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.amount.success", new Object[]{String.format(Locale.ROOT, "%.2f", f)}), true);
@@ -81,7 +84,7 @@ public class CommandWorldBorder {
         WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
         if (worldborder.getWarningTime() == i) {
-            throw CommandWorldBorder.e.create();
+            throw CommandWorldBorder.ERROR_SAME_WARNING_TIME.create();
         } else {
             worldborder.setWarningTime(i);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.warning.time.success", new Object[]{i}), true);
@@ -93,7 +96,7 @@ public class CommandWorldBorder {
         WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
         if (worldborder.getWarningDistance() == i) {
-            throw CommandWorldBorder.f.create();
+            throw CommandWorldBorder.ERROR_SAME_WARNING_DISTANCE.create();
         } else {
             worldborder.setWarningDistance(i);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.warning.distance.success", new Object[]{i}), true);
@@ -111,11 +114,11 @@ public class CommandWorldBorder {
     private static int a(CommandListenerWrapper commandlistenerwrapper, Vec2F vec2f) throws CommandSyntaxException {
         WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
-        if (worldborder.getCenterX() == (double) vec2f.i && worldborder.getCenterZ() == (double) vec2f.j) {
-            throw CommandWorldBorder.a.create();
+        if (worldborder.getCenterX() == (double) vec2f.x && worldborder.getCenterZ() == (double) vec2f.y) {
+            throw CommandWorldBorder.ERROR_SAME_CENTER.create();
         } else {
-            worldborder.setCenter((double) vec2f.i, (double) vec2f.j);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.center.success", new Object[]{String.format(Locale.ROOT, "%.2f", vec2f.i), String.format("%.2f", vec2f.j)}), true);
+            worldborder.setCenter((double) vec2f.x, (double) vec2f.y);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.center.success", new Object[]{String.format(Locale.ROOT, "%.2f", vec2f.x), String.format("%.2f", vec2f.y)}), true);
             return 0;
         }
     }
@@ -125,11 +128,11 @@ public class CommandWorldBorder {
         double d1 = worldborder.getSize();
 
         if (d1 == d0) {
-            throw CommandWorldBorder.b.create();
+            throw CommandWorldBorder.ERROR_SAME_SIZE.create();
         } else if (d0 < 1.0D) {
-            throw CommandWorldBorder.c.create();
-        } else if (d0 > 6.0E7D) {
-            throw CommandWorldBorder.d.create();
+            throw CommandWorldBorder.ERROR_TOO_SMALL.create();
+        } else if (d0 > 5.9999968E7D) {
+            throw CommandWorldBorder.ERROR_TOO_BIG.create();
         } else {
             if (i > 0L) {
                 worldborder.transitionSizeBetween(d1, d0, i);

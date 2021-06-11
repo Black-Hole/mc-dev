@@ -6,20 +6,20 @@ import java.util.stream.Collectors;
 
 public class ChatClickable {
 
-    private final ChatClickable.EnumClickAction a;
-    private final String b;
+    private final ChatClickable.EnumClickAction action;
+    private final String value;
 
     public ChatClickable(ChatClickable.EnumClickAction chatclickable_enumclickaction, String s) {
-        this.a = chatclickable_enumclickaction;
-        this.b = s;
+        this.action = chatclickable_enumclickaction;
+        this.value = s;
     }
 
     public ChatClickable.EnumClickAction a() {
-        return this.a;
+        return this.action;
     }
 
     public String b() {
-        return this.b;
+        return this.value;
     }
 
     public boolean equals(Object object) {
@@ -28,14 +28,14 @@ public class ChatClickable {
         } else if (object != null && this.getClass() == object.getClass()) {
             ChatClickable chatclickable = (ChatClickable) object;
 
-            if (this.a != chatclickable.a) {
+            if (this.action != chatclickable.action) {
                 return false;
             } else {
-                if (this.b != null) {
-                    if (this.b.equals(chatclickable.b)) {
+                if (this.value != null) {
+                    if (this.value.equals(chatclickable.value)) {
                         return true;
                     }
-                } else if (chatclickable.b == null) {
+                } else if (chatclickable.value == null) {
                     return true;
                 }
 
@@ -47,13 +47,13 @@ public class ChatClickable {
     }
 
     public String toString() {
-        return "ClickEvent{action=" + this.a + ", value='" + this.b + '\'' + '}';
+        return "ClickEvent{action=" + this.action + ", value='" + this.value + "'}";
     }
 
     public int hashCode() {
-        int i = this.a.hashCode();
+        int i = this.action.hashCode();
 
-        i = 31 * i + (this.b != null ? this.b.hashCode() : 0);
+        i = 31 * i + (this.value != null ? this.value.hashCode() : 0);
         return i;
     }
 
@@ -61,27 +61,27 @@ public class ChatClickable {
 
         OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true), COPY_TO_CLIPBOARD("copy_to_clipboard", true);
 
-        private static final Map<String, ChatClickable.EnumClickAction> g = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatClickable.EnumClickAction::b, (chatclickable_enumclickaction) -> {
+        private static final Map<String, ChatClickable.EnumClickAction> LOOKUP = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatClickable.EnumClickAction::b, (chatclickable_enumclickaction) -> {
             return chatclickable_enumclickaction;
         }));
-        private final boolean h;
-        private final String i;
+        private final boolean allowFromServer;
+        private final String name;
 
         private EnumClickAction(String s, boolean flag) {
-            this.i = s;
-            this.h = flag;
+            this.name = s;
+            this.allowFromServer = flag;
         }
 
         public boolean a() {
-            return this.h;
+            return this.allowFromServer;
         }
 
         public String b() {
-            return this.i;
+            return this.name;
         }
 
         public static ChatClickable.EnumClickAction a(String s) {
-            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.g.get(s);
+            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.LOOKUP.get(s);
         }
     }
 }

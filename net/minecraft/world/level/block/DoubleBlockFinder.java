@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateDirection;
 
 public class DoubleBlockFinder {
 
+    public DoubleBlockFinder() {}
+
     public static <S extends TileEntity> DoubleBlockFinder.Result<S> a(TileEntityTypes<S> tileentitytypes, Function<IBlockData, DoubleBlockFinder.BlockType> function, Function<IBlockData, EnumDirection> function1, BlockStateDirection blockstatedirection, IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, BiPredicate<GeneratorAccess, BlockPosition> bipredicate) {
         S s0 = tileentitytypes.a((IBlockAccess) generatoraccess, blockposition);
 
@@ -61,33 +63,40 @@ public class DoubleBlockFinder {
 
         public static final class Single<S> implements DoubleBlockFinder.Result<S> {
 
-            private final S a;
+            private final S single;
 
             public Single(S s0) {
-                this.a = s0;
+                this.single = s0;
             }
 
             @Override
             public <T> T apply(DoubleBlockFinder.Combiner<? super S, T> doubleblockfinder_combiner) {
-                return doubleblockfinder_combiner.a(this.a);
+                return doubleblockfinder_combiner.a(this.single);
             }
         }
 
         public static final class Double<S> implements DoubleBlockFinder.Result<S> {
 
-            private final S a;
-            private final S b;
+            private final S first;
+            private final S second;
 
             public Double(S s0, S s1) {
-                this.a = s0;
-                this.b = s1;
+                this.first = s0;
+                this.second = s1;
             }
 
             @Override
             public <T> T apply(DoubleBlockFinder.Combiner<? super S, T> doubleblockfinder_combiner) {
-                return doubleblockfinder_combiner.a(this.a, this.b);
+                return doubleblockfinder_combiner.a(this.first, this.second);
             }
         }
+    }
+
+    public static enum BlockType {
+
+        SINGLE, FIRST, SECOND;
+
+        private BlockType() {}
     }
 
     public interface Combiner<S, T> {
@@ -97,12 +106,5 @@ public class DoubleBlockFinder {
         T a(S s0);
 
         T b();
-    }
-
-    public static enum BlockType {
-
-        SINGLE, FIRST, SECOND;
-
-        private BlockType() {}
     }
 }

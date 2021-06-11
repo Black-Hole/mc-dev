@@ -33,7 +33,7 @@ public class DataConverterTeamDisplayName extends DataFix {
                                 return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
                             });
 
-                            dynamic.getClass();
+                            Objects.requireNonNull(dynamic);
                             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createString).result(), dynamic1);
                         });
                     });

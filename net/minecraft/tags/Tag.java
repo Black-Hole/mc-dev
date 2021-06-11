@@ -6,15 +6,19 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import net.minecraft.resources.MinecraftKey;
@@ -23,7 +27,7 @@ import net.minecraft.util.ChatDeserializer;
 public interface Tag<T> {
 
     static <T> Codec<Tag<T>> a(Supplier<Tags<T>> supplier) {
-        return MinecraftKey.a.flatXmap((minecraftkey) -> {
+        return MinecraftKey.CODEC.flatXmap((minecraftkey) -> {
             return (DataResult) Optional.ofNullable(((Tags) supplier.get()).a(minecraftkey)).map(DataResult::success).orElseGet(() -> {
                 return DataResult.error("Unknown tag: " + minecraftkey);
             });
@@ -55,15 +59,15 @@ public interface Tag<T> {
 
     public static class g implements Tag.d {
 
-        private final MinecraftKey a;
+        private final MinecraftKey id;
 
         public g(MinecraftKey minecraftkey) {
-            this.a = minecraftkey;
+            this.id = minecraftkey;
         }
 
         @Override
         public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
-            Tag<T> tag = (Tag) function.apply(this.a);
+            Tag<T> tag = (Tag) function.apply(this.id);
 
             if (tag != null) {
                 tag.getTagged().forEach(consumer);
@@ -76,27 +80,37 @@ public interface Tag<T> {
         public void a(JsonArray jsonarray) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("id", "#" + this.a);
+            jsonobject.addProperty("id", "#" + this.id);
             jsonobject.addProperty("required", false);
             jsonarray.add(jsonobject);
         }
 
         public String toString() {
-            return "#" + this.a + "?";
+            return "#" + this.id + "?";
+        }
+
+        @Override
+        public void b(Consumer<MinecraftKey> consumer) {
+            consumer.accept(this.id);
+        }
+
+        @Override
+        public boolean a(Predicate<MinecraftKey> predicate, Predicate<MinecraftKey> predicate1) {
+            return true;
         }
     }
 
     public static class h implements Tag.d {
 
-        private final MinecraftKey a;
+        private final MinecraftKey id;
 
         public h(MinecraftKey minecraftkey) {
-            this.a = minecraftkey;
+            this.id = minecraftkey;
         }
 
         @Override
         public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
-            Tag<T> tag = (Tag) function.apply(this.a);
+            Tag<T> tag = (Tag) function.apply(this.id);
 
             if (tag == null) {
                 return false;
@@ -108,25 +122,35 @@ public interface Tag<T> {
 
         @Override
         public void a(JsonArray jsonarray) {
-            jsonarray.add("#" + this.a);
+            jsonarray.add("#" + this.id);
         }
 
         public String toString() {
-            return "#" + this.a;
+            return "#" + this.id;
+        }
+
+        @Override
+        public boolean a(Predicate<MinecraftKey> predicate, Predicate<MinecraftKey> predicate1) {
+            return predicate1.test(this.id);
+        }
+
+        @Override
+        public void a(Consumer<MinecraftKey> consumer) {
+            consumer.accept(this.id);
         }
     }
 
     public static class f implements Tag.d {
 
-        private final MinecraftKey a;
+        private final MinecraftKey id;
 
         public f(MinecraftKey minecraftkey) {
-            this.a = minecraftkey;
+            this.id = minecraftkey;
         }
 
         @Override
         public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
-            T t0 = function1.apply(this.a);
+            T t0 = function1.apply(this.id);
 
             if (t0 != null) {
                 consumer.accept(t0);
@@ -139,27 +163,32 @@ public interface Tag<T> {
         public void a(JsonArray jsonarray) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("id", this.a.toString());
+            jsonobject.addProperty("id", this.id.toString());
             jsonobject.addProperty("required", false);
             jsonarray.add(jsonobject);
         }
 
+        @Override
+        public boolean a(Predicate<MinecraftKey> predicate, Predicate<MinecraftKey> predicate1) {
+            return true;
+        }
+
         public String toString() {
-            return this.a.toString() + "?";
+            return this.id + "?";
         }
     }
 
     public static class c implements Tag.d {
 
-        private final MinecraftKey a;
+        private final MinecraftKey id;
 
         public c(MinecraftKey minecraftkey) {
-            this.a = minecraftkey;
+            this.id = minecraftkey;
         }
 
         @Override
         public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
-            T t0 = function1.apply(this.a);
+            T t0 = function1.apply(this.id);
 
             if (t0 == null) {
                 return false;
@@ -171,11 +200,16 @@ public interface Tag<T> {
 
         @Override
         public void a(JsonArray jsonarray) {
-            jsonarray.add(this.a.toString());
+            jsonarray.add(this.id.toString());
+        }
+
+        @Override
+        public boolean a(Predicate<MinecraftKey> predicate, Predicate<MinecraftKey> predicate1) {
+            return predicate.test(this.id);
         }
 
         public String toString() {
-            return this.a.toString();
+            return this.id.toString();
         }
     }
 
@@ -184,11 +218,17 @@ public interface Tag<T> {
         <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer);
 
         void a(JsonArray jsonarray);
+
+        default void a(Consumer<MinecraftKey> consumer) {}
+
+        default void b(Consumer<MinecraftKey> consumer) {}
+
+        boolean a(Predicate<MinecraftKey> predicate, Predicate<MinecraftKey> predicate1);
     }
 
     public static class a {
 
-        private final List<Tag.b> a = Lists.newArrayList();
+        private final List<Tag.b> entries = Lists.newArrayList();
 
         public a() {}
 
@@ -197,7 +237,7 @@ public interface Tag<T> {
         }
 
         public Tag.a a(Tag.b tag_b) {
-            this.a.add(tag_b);
+            this.entries.add(tag_b);
             return this;
         }
 
@@ -209,38 +249,49 @@ public interface Tag<T> {
             return this.a((Tag.d) (new Tag.c(minecraftkey)), s);
         }
 
+        public Tag.a b(MinecraftKey minecraftkey, String s) {
+            return this.a((Tag.d) (new Tag.f(minecraftkey)), s);
+        }
+
         public Tag.a c(MinecraftKey minecraftkey, String s) {
             return this.a((Tag.d) (new Tag.h(minecraftkey)), s);
         }
 
-        public <T> Optional<Tag<T>> a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
+        public Tag.a d(MinecraftKey minecraftkey, String s) {
+            return this.a((Tag.d) (new Tag.g(minecraftkey)), s);
+        }
+
+        public <T> Either<Collection<Tag.b>, Tag<T>> a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
             Builder<T> builder = ImmutableSet.builder();
-            Iterator iterator = this.a.iterator();
+            List<Tag.b> list = Lists.newArrayList();
+            Iterator iterator = this.entries.iterator();
 
-            Tag.d tag_d;
-
-            do {
-                if (!iterator.hasNext()) {
-                    return Optional.of(Tag.b(builder.build()));
-                }
-
+            while (iterator.hasNext()) {
                 Tag.b tag_b = (Tag.b) iterator.next();
+                Tag.d tag_d = tag_b.a();
 
-                tag_d = tag_b.a();
-                builder.getClass();
-            } while (tag_d.a(function, function1, builder::add));
+                Objects.requireNonNull(builder);
+                if (!tag_d.a(function, function1, builder::add)) {
+                    list.add(tag_b);
+                }
+            }
 
-            return Optional.empty();
+            return list.isEmpty() ? Either.right(Tag.b(builder.build())) : Either.left(list);
         }
 
         public Stream<Tag.b> b() {
-            return this.a.stream();
+            return this.entries.stream();
         }
 
-        public <T> Stream<Tag.b> b(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
-            return this.b().filter((tag_b) -> {
-                return !tag_b.a().a(function, function1, (object) -> {
-                });
+        public void a(Consumer<MinecraftKey> consumer) {
+            this.entries.forEach((tag_b) -> {
+                tag_b.entry.a(consumer);
+            });
+        }
+
+        public void b(Consumer<MinecraftKey> consumer) {
+            this.entries.forEach((tag_b) -> {
+                tag_b.entry.b(consumer);
             });
         }
 
@@ -256,11 +307,11 @@ public interface Tag<T> {
             }
 
             if (ChatDeserializer.a(jsonobject, "replace", false)) {
-                this.a.clear();
+                this.entries.clear();
             }
 
             list.forEach((tag_d) -> {
-                this.a.add(new Tag.b(tag_d, s));
+                this.entries.add(new Tag.b(tag_d, s));
             });
             return this;
         }
@@ -293,7 +344,7 @@ public interface Tag<T> {
         public JsonObject c() {
             JsonObject jsonobject = new JsonObject();
             JsonArray jsonarray = new JsonArray();
-            Iterator iterator = this.a.iterator();
+            Iterator iterator = this.entries.iterator();
 
             while (iterator.hasNext()) {
                 Tag.b tag_b = (Tag.b) iterator.next();
@@ -309,20 +360,24 @@ public interface Tag<T> {
 
     public static class b {
 
-        private final Tag.d a;
-        private final String b;
+        final Tag.d entry;
+        private final String source;
 
-        private b(Tag.d tag_d, String s) {
-            this.a = tag_d;
-            this.b = s;
+        b(Tag.d tag_d, String s) {
+            this.entry = tag_d;
+            this.source = s;
         }
 
         public Tag.d a() {
-            return this.a;
+            return this.entry;
+        }
+
+        public String b() {
+            return this.source;
         }
 
         public String toString() {
-            return this.a.toString() + " (from " + this.b + ")";
+            return this.entry + " (from " + this.source + ")";
         }
     }
 }

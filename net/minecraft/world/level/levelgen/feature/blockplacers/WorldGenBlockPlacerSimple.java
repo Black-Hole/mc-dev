@@ -8,16 +8,16 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenBlockPlacerSimple extends WorldGenBlockPlacer {
 
-    public static final Codec<WorldGenBlockPlacerSimple> b = Codec.unit(() -> {
-        return WorldGenBlockPlacerSimple.c;
+    public static final Codec<WorldGenBlockPlacerSimple> CODEC = Codec.unit(() -> {
+        return WorldGenBlockPlacerSimple.INSTANCE;
     });
-    public static final WorldGenBlockPlacerSimple c = new WorldGenBlockPlacerSimple();
+    public static final WorldGenBlockPlacerSimple INSTANCE = new WorldGenBlockPlacerSimple();
 
     public WorldGenBlockPlacerSimple() {}
 
     @Override
     protected WorldGenBlockPlacers<?> a() {
-        return WorldGenBlockPlacers.a;
+        return WorldGenBlockPlacers.SIMPLE_BLOCK_PLACER;
     }
 
     @Override

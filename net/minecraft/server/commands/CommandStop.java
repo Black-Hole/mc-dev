@@ -7,6 +7,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class CommandStop {
 
+    public CommandStop() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("stop").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(4);

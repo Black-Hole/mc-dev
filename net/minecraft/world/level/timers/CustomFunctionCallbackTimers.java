@@ -13,21 +13,21 @@ import org.apache.logging.log4j.Logger;
 public class CustomFunctionCallbackTimers<C> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final CustomFunctionCallbackTimers<MinecraftServer> a = (new CustomFunctionCallbackTimers<>()).a((CustomFunctionCallbackTimer.a) (new CustomFunctionCallback.a())).a((CustomFunctionCallbackTimer.a) (new CustomFunctionCallbackTag.a()));
-    private final Map<MinecraftKey, CustomFunctionCallbackTimer.a<C, ?>> c = Maps.newHashMap();
-    private final Map<Class<?>, CustomFunctionCallbackTimer.a<C, ?>> d = Maps.newHashMap();
+    public static final CustomFunctionCallbackTimers<MinecraftServer> SERVER_CALLBACKS = (new CustomFunctionCallbackTimers<>()).a((CustomFunctionCallbackTimer.a) (new CustomFunctionCallback.a())).a((CustomFunctionCallbackTimer.a) (new CustomFunctionCallbackTag.a()));
+    private final Map<MinecraftKey, CustomFunctionCallbackTimer.a<C, ?>> idToSerializer = Maps.newHashMap();
+    private final Map<Class<?>, CustomFunctionCallbackTimer.a<C, ?>> classToSerializer = Maps.newHashMap();
 
     @VisibleForTesting
     public CustomFunctionCallbackTimers() {}
 
     public CustomFunctionCallbackTimers<C> a(CustomFunctionCallbackTimer.a<C, ?> customfunctioncallbacktimer_a) {
-        this.c.put(customfunctioncallbacktimer_a.a(), customfunctioncallbacktimer_a);
-        this.d.put(customfunctioncallbacktimer_a.b(), customfunctioncallbacktimer_a);
+        this.idToSerializer.put(customfunctioncallbacktimer_a.a(), customfunctioncallbacktimer_a);
+        this.classToSerializer.put(customfunctioncallbacktimer_a.b(), customfunctioncallbacktimer_a);
         return this;
     }
 
     private <T extends CustomFunctionCallbackTimer<C>> CustomFunctionCallbackTimer.a<C, T> a(Class<?> oclass) {
-        return (CustomFunctionCallbackTimer.a) this.d.get(oclass);
+        return (CustomFunctionCallbackTimer.a) this.classToSerializer.get(oclass);
     }
 
     public <T extends CustomFunctionCallbackTimer<C>> NBTTagCompound a(T t0) {
@@ -42,16 +42,16 @@ public class CustomFunctionCallbackTimers<C> {
     @Nullable
     public CustomFunctionCallbackTimer<C> a(NBTTagCompound nbttagcompound) {
         MinecraftKey minecraftkey = MinecraftKey.a(nbttagcompound.getString("Type"));
-        CustomFunctionCallbackTimer.a<C, ?> customfunctioncallbacktimer_a = (CustomFunctionCallbackTimer.a) this.c.get(minecraftkey);
+        CustomFunctionCallbackTimer.a<C, ?> customfunctioncallbacktimer_a = (CustomFunctionCallbackTimer.a) this.idToSerializer.get(minecraftkey);
 
         if (customfunctioncallbacktimer_a == null) {
-            CustomFunctionCallbackTimers.LOGGER.error("Failed to deserialize timer callback: " + nbttagcompound);
+            CustomFunctionCallbackTimers.LOGGER.error("Failed to deserialize timer callback: {}", nbttagcompound);
             return null;
         } else {
             try {
                 return customfunctioncallbacktimer_a.b(nbttagcompound);
             } catch (Exception exception) {
-                CustomFunctionCallbackTimers.LOGGER.error("Failed to deserialize timer callback: " + nbttagcompound, exception);
+                CustomFunctionCallbackTimers.LOGGER.error("Failed to deserialize timer callback: {}", nbttagcompound, exception);
                 return null;
             }
         }

@@ -14,14 +14,14 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
 
     @Override
     public LootEntryType a() {
-        return LootEntries.f;
+        return LootEntries.ALTERNATIVES;
     }
 
     @Override
     protected LootEntryChildren a(LootEntryChildren[] alootentrychildren) {
         switch (alootentrychildren.length) {
             case 0:
-                return LootEntryAlternatives.a;
+                return LootEntryAlternatives.ALWAYS_FALSE;
             case 1:
                 return alootentrychildren[0];
             case 2:
@@ -48,8 +48,8 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
     public void a(LootCollector lootcollector) {
         super.a(lootcollector);
 
-        for (int i = 0; i < this.c.length - 1; ++i) {
-            if (ArrayUtils.isEmpty(this.c[i].d)) {
+        for (int i = 0; i < this.children.length - 1; ++i) {
+            if (ArrayUtils.isEmpty(this.children[i].conditions)) {
                 lootcollector.a("Unreachable entry!");
             }
         }
@@ -62,7 +62,7 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
 
     public static class a extends LootEntryAbstract.a<LootEntryAlternatives.a> {
 
-        private final List<LootEntryAbstract> a = Lists.newArrayList();
+        private final List<LootEntryAbstract> entries = Lists.newArrayList();
 
         public a(LootEntryAbstract.a<?>... alootentryabstract_a) {
             LootEntryAbstract.a[] alootentryabstract_a1 = alootentryabstract_a;
@@ -71,7 +71,7 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
             for (int j = 0; j < i; ++j) {
                 LootEntryAbstract.a<?> lootentryabstract_a = alootentryabstract_a1[j];
 
-                this.a.add(lootentryabstract_a.b());
+                this.entries.add(lootentryabstract_a.b());
             }
 
         }
@@ -83,13 +83,13 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
 
         @Override
         public LootEntryAlternatives.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
-            this.a.add(lootentryabstract_a.b());
+            this.entries.add(lootentryabstract_a.b());
             return this;
         }
 
         @Override
         public LootEntryAbstract b() {
-            return new LootEntryAlternatives((LootEntryAbstract[]) this.a.toArray(new LootEntryAbstract[0]), this.f());
+            return new LootEntryAlternatives((LootEntryAbstract[]) this.entries.toArray(new LootEntryAbstract[0]), this.f());
         }
     }
 }

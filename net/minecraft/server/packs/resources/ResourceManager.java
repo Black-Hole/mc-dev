@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.packs.EnumResourcePackType;
 import net.minecraft.server.packs.IResourcePack;
@@ -26,38 +27,42 @@ import org.apache.logging.log4j.util.Supplier;
 public class ResourceManager implements IReloadableResourceManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Map<String, ResourceManagerFallback> b = Maps.newHashMap();
-    private final List<IReloadListener> c = Lists.newArrayList();
-    private final List<IReloadListener> d = Lists.newArrayList();
-    private final Set<String> e = Sets.newLinkedHashSet();
-    private final List<IResourcePack> f = Lists.newArrayList();
-    private final EnumResourcePackType g;
+    private final Map<String, ResourceManagerFallback> namespacedPacks = Maps.newHashMap();
+    private final List<IReloadListener> listeners = Lists.newArrayList();
+    private final Set<String> namespaces = Sets.newLinkedHashSet();
+    private final List<IResourcePack> packs = Lists.newArrayList();
+    private final EnumResourcePackType type;
 
     public ResourceManager(EnumResourcePackType enumresourcepacktype) {
-        this.g = enumresourcepacktype;
+        this.type = enumresourcepacktype;
     }
 
     public void a(IResourcePack iresourcepack) {
-        this.f.add(iresourcepack);
+        this.packs.add(iresourcepack);
 
         ResourceManagerFallback resourcemanagerfallback;
 
-        for (Iterator iterator = iresourcepack.a(this.g).iterator(); iterator.hasNext(); resourcemanagerfallback.a(iresourcepack)) {
+        for (Iterator iterator = iresourcepack.a(this.type).iterator(); iterator.hasNext(); resourcemanagerfallback.a(iresourcepack)) {
             String s = (String) iterator.next();
 
-            this.e.add(s);
-            resourcemanagerfallback = (ResourceManagerFallback) this.b.get(s);
+            this.namespaces.add(s);
+            resourcemanagerfallback = (ResourceManagerFallback) this.namespacedPacks.get(s);
             if (resourcemanagerfallback == null) {
-                resourcemanagerfallback = new ResourceManagerFallback(this.g, s);
-                this.b.put(s, resourcemanagerfallback);
+                resourcemanagerfallback = new ResourceManagerFallback(this.type, s);
+                this.namespacedPacks.put(s, resourcemanagerfallback);
             }
         }
 
     }
 
     @Override
+    public Set<String> a() {
+        return this.namespaces;
+    }
+
+    @Override
     public IResource a(MinecraftKey minecraftkey) throws IOException {
-        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
+        IResourceManager iresourcemanager = (IResourceManager) this.namespacedPacks.get(minecraftkey.getNamespace());
 
         if (iresourcemanager != null) {
             return iresourcemanager.a(minecraftkey);
@@ -67,8 +72,15 @@ public class ResourceManager implements IReloadableResourceManager {
     }
 
     @Override
+    public boolean b(MinecraftKey minecraftkey) {
+        IResourceManager iresourcemanager = (IResourceManager) this.namespacedPacks.get(minecraftkey.getNamespace());
+
+        return iresourcemanager != null ? iresourcemanager.b(minecraftkey) : false;
+    }
+
+    @Override
     public List<IResource> c(MinecraftKey minecraftkey) throws IOException {
-        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
+        IResourceManager iresourcemanager = (IResourceManager) this.namespacedPacks.get(minecraftkey.getNamespace());
 
         if (iresourcemanager != null) {
             return iresourcemanager.c(minecraftkey);
@@ -80,7 +92,7 @@ public class ResourceManager implements IReloadableResourceManager {
     @Override
     public Collection<MinecraftKey> a(String s, Predicate<String> predicate) {
         Set<MinecraftKey> set = Sets.newHashSet();
-        Iterator iterator = this.b.values().iterator();
+        Iterator iterator = this.namespacedPacks.values().iterator();
 
         while (iterator.hasNext()) {
             ResourceManagerFallback resourcemanagerfallback = (ResourceManagerFallback) iterator.next();
@@ -95,10 +107,10 @@ public class ResourceManager implements IReloadableResourceManager {
     }
 
     private void c() {
-        this.b.clear();
-        this.e.clear();
-        this.f.forEach(IResourcePack::close);
-        this.f.clear();
+        this.namespacedPacks.clear();
+        this.namespaces.clear();
+        this.packs.forEach(IResourcePack::close);
+        this.packs.clear();
     }
 
     @Override
@@ -108,29 +120,15 @@ public class ResourceManager implements IReloadableResourceManager {
 
     @Override
     public void a(IReloadListener ireloadlistener) {
-        this.c.add(ireloadlistener);
-        this.d.add(ireloadlistener);
-    }
-
-    protected IReloadable b(Executor executor, Executor executor1, List<IReloadListener> list, CompletableFuture<Unit> completablefuture) {
-        Object object;
-
-        if (ResourceManager.LOGGER.isDebugEnabled()) {
-            object = new ReloadableProfiled(this, Lists.newArrayList(list), executor, executor1, completablefuture);
-        } else {
-            object = Reloadable.a(this, Lists.newArrayList(list), executor, executor1, completablefuture);
-        }
-
-        this.d.clear();
-        return (IReloadable) object;
+        this.listeners.add(ireloadlistener);
     }
 
     @Override
     public IReloadable a(Executor executor, Executor executor1, CompletableFuture<Unit> completablefuture, List<IResourcePack> list) {
-        this.c();
         ResourceManager.LOGGER.info("Reloading ResourceManager: {}", new Supplier[]{() -> {
-                    return (String) list.stream().map(IResourcePack::a).collect(Collectors.joining(", "));
+                    return list.stream().map(IResourcePack::a).collect(Collectors.joining(", "));
                 }});
+        this.c();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -144,33 +142,57 @@ public class ResourceManager implements IReloadableResourceManager {
             }
         }
 
-        return this.b(executor, executor1, this.c, completablefuture);
+        return (IReloadable) (ResourceManager.LOGGER.isDebugEnabled() ? new ReloadableProfiled(this, Lists.newArrayList(this.listeners), executor, executor1, completablefuture) : Reloadable.a(this, Lists.newArrayList(this.listeners), executor, executor1, completablefuture));
     }
 
-    static class a implements IReloadable {
+    @Override
+    public Stream<IResourcePack> b() {
+        return this.packs.stream();
+    }
 
-        private final ResourceManager.b a;
-        private final CompletableFuture<Unit> b;
+    private static class a implements IReloadable {
+
+        private final ResourceManager.b exception;
+        private final CompletableFuture<Unit> failedFuture;
 
         public a(ResourceManager.b resourcemanager_b) {
-            this.a = resourcemanager_b;
-            this.b = new CompletableFuture();
-            this.b.completeExceptionally(resourcemanager_b);
+            this.exception = resourcemanager_b;
+            this.failedFuture = new CompletableFuture();
+            this.failedFuture.completeExceptionally(resourcemanager_b);
         }
 
         @Override
         public CompletableFuture<Unit> a() {
-            return this.b;
+            return this.failedFuture;
+        }
+
+        @Override
+        public float b() {
+            return 0.0F;
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+
+        @Override
+        public void d() {
+            throw this.exception;
         }
     }
 
     public static class b extends RuntimeException {
 
-        private final IResourcePack a;
+        private final IResourcePack pack;
 
         public b(IResourcePack iresourcepack, Throwable throwable) {
             super(iresourcepack.a(), throwable);
-            this.a = iresourcepack;
+            this.pack = iresourcepack;
+        }
+
+        public IResourcePack a() {
+            return this.pack;
         }
     }
 }

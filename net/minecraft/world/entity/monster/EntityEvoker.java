@@ -40,11 +40,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class EntityEvoker extends EntityIllagerWizard {
 
-    private EntitySheep bo;
+    private EntitySheep wololoTarget;
 
     public EntityEvoker(EntityTypes<? extends EntityEvoker> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 10;
+        this.xpReward = 10;
     }
 
     @Override
@@ -65,8 +65,8 @@ public class EntityEvoker extends EntityIllagerWizard {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false));
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
+    public static AttributeProvider.Builder p() {
+        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
     }
 
     @Override
@@ -80,8 +80,8 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Override
-    public SoundEffect eL() {
-        return SoundEffects.ENTITY_EVOKER_CELEBRATE;
+    public SoundEffect t() {
+        return SoundEffects.EVOKER_CELEBRATE;
     }
 
     @Override
@@ -95,128 +95,65 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Override
-    public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).eK()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
+    public boolean p(Entity entity) {
+        return entity == null ? false : (entity == this ? true : (super.p(entity) ? true : (entity instanceof EntityVex ? this.p(((EntityVex) entity).p()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_EVOKER_AMBIENT;
+        return SoundEffects.EVOKER_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_EVOKER_DEATH;
+        return SoundEffects.EVOKER_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_EVOKER_HURT;
+        return SoundEffects.EVOKER_HURT;
     }
 
-    private void a(@Nullable EntitySheep entitysheep) {
-        this.bo = entitysheep;
+    void a(@Nullable EntitySheep entitysheep) {
+        this.wololoTarget = entitysheep;
     }
 
     @Nullable
-    private EntitySheep fg() {
-        return this.bo;
+    EntitySheep fO() {
+        return this.wololoTarget;
     }
 
     @Override
     protected SoundEffect getSoundCastSpell() {
-        return SoundEffects.ENTITY_EVOKER_CAST_SPELL;
+        return SoundEffects.EVOKER_CAST_SPELL;
     }
 
     @Override
     public void a(int i, boolean flag) {}
 
-    public class d extends EntityIllagerWizard.PathfinderGoalCastSpell {
+    private class b extends EntityIllagerWizard.b {
 
-        private final PathfinderTargetCondition e = (new PathfinderTargetCondition()).a(16.0D).a().a((entityliving) -> {
-            return ((EntitySheep) entityliving).getColor() == EnumColor.BLUE;
-        });
-
-        public d() {
+        b() {
             super();
         }
 
         @Override
-        public boolean a() {
+        public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                return false;
-            } else if (EntityEvoker.this.eW()) {
-                return false;
-            } else if (EntityEvoker.this.ticksLived < this.c) {
-                return false;
-            } else if (!EntityEvoker.this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-                return false;
-            } else {
-                List<EntitySheep> list = EntityEvoker.this.world.a(EntitySheep.class, this.e, EntityEvoker.this, EntityEvoker.this.getBoundingBox().grow(16.0D, 4.0D, 16.0D));
-
-                if (list.isEmpty()) {
-                    return false;
-                } else {
-                    EntityEvoker.this.a((EntitySheep) list.get(EntityEvoker.this.random.nextInt(list.size())));
-                    return true;
-                }
-            }
-        }
-
-        @Override
-        public boolean b() {
-            return EntityEvoker.this.fg() != null && this.b > 0;
-        }
-
-        @Override
-        public void d() {
-            super.d();
-            EntityEvoker.this.a((EntitySheep) null);
-        }
-
-        @Override
-        protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.fg();
-
-            if (entitysheep != null && entitysheep.isAlive()) {
-                entitysheep.setColor(EnumColor.RED);
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.eZ(), (float) EntityEvoker.this.eY());
+            } else if (EntityEvoker.this.fO() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fO(), (float) EntityEvoker.this.eZ(), (float) EntityEvoker.this.eY());
             }
 
-        }
-
-        @Override
-        protected int m() {
-            return 40;
-        }
-
-        @Override
-        protected int g() {
-            return 60;
-        }
-
-        @Override
-        protected int h() {
-            return 140;
-        }
-
-        @Override
-        protected SoundEffect k() {
-            return SoundEffects.ENTITY_EVOKER_PREPARE_WOLOLO;
-        }
-
-        @Override
-        protected EntityIllagerWizard.Spell getCastSpell() {
-            return EntityIllagerWizard.Spell.WOLOLO;
         }
     }
 
-    class c extends EntityIllagerWizard.PathfinderGoalCastSpell {
+    private class c extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
-        private final PathfinderTargetCondition e;
+        private final PathfinderTargetCondition vexCountTargeting = PathfinderTargetCondition.b().a(16.0D).d().e();
 
-        private c() {
+        c() {
             super();
-            this.e = (new PathfinderTargetCondition()).a(16.0D).c().e().a().b();
         }
 
         @Override
@@ -224,7 +161,7 @@ public class EntityEvoker extends EntityIllagerWizard {
             if (!super.a()) {
                 return false;
             } else {
-                int i = EntityEvoker.this.world.a(EntityVex.class, this.e, EntityEvoker.this, EntityEvoker.this.getBoundingBox().g(16.0D)).size();
+                int i = EntityEvoker.this.level.a(EntityVex.class, this.vexCountTargeting, (EntityLiving) EntityEvoker.this, EntityEvoker.this.getBoundingBox().g(16.0D)).size();
 
                 return EntityEvoker.this.random.nextInt(8) + 1 > i;
             }
@@ -242,14 +179,14 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
-            WorldServer worldserver = (WorldServer) EntityEvoker.this.world;
+            WorldServer worldserver = (WorldServer) EntityEvoker.this.level;
 
             for (int i = 0; i < 3; ++i) {
-                BlockPosition blockposition = EntityEvoker.this.getChunkCoordinates().b(-2 + EntityEvoker.this.random.nextInt(5), 1, -2 + EntityEvoker.this.random.nextInt(5));
-                EntityVex entityvex = (EntityVex) EntityTypes.VEX.a(EntityEvoker.this.world);
+                BlockPosition blockposition = EntityEvoker.this.getChunkCoordinates().c(-2 + EntityEvoker.this.random.nextInt(5), 1, -2 + EntityEvoker.this.random.nextInt(5));
+                EntityVex entityvex = (EntityVex) EntityTypes.VEX.a(EntityEvoker.this.level);
 
                 entityvex.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entityvex.prepare(worldserver, EntityEvoker.this.world.getDamageScaler(blockposition), EnumMobSpawn.MOB_SUMMONED, (GroupDataEntity) null, (NBTTagCompound) null);
+                entityvex.prepare(worldserver, EntityEvoker.this.level.getDamageScaler(blockposition), EnumMobSpawn.MOB_SUMMONED, (GroupDataEntity) null, (NBTTagCompound) null);
                 entityvex.a((EntityInsentient) EntityEvoker.this);
                 entityvex.g(blockposition);
                 entityvex.a(20 * (30 + EntityEvoker.this.random.nextInt(90)));
@@ -260,7 +197,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected SoundEffect k() {
-            return SoundEffects.ENTITY_EVOKER_PREPARE_SUMMON;
+            return SoundEffects.EVOKER_PREPARE_SUMMON;
         }
 
         @Override
@@ -269,9 +206,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
     }
 
-    class a extends EntityIllagerWizard.PathfinderGoalCastSpell {
+    private class a extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
-        private a() {
+        a() {
             super();
         }
 
@@ -293,7 +230,7 @@ public class EntityEvoker extends EntityIllagerWizard {
             float f = (float) MathHelper.d(entityliving.locZ() - EntityEvoker.this.locZ(), entityliving.locX() - EntityEvoker.this.locX());
             int i;
 
-            if (EntityEvoker.this.h((Entity) entityliving) < 9.0D) {
+            if (EntityEvoker.this.f((Entity) entityliving) < 9.0D) {
                 float f1;
 
                 for (i = 0; i < 5; ++i) {
@@ -323,12 +260,12 @@ public class EntityEvoker extends EntityIllagerWizard {
 
             do {
                 BlockPosition blockposition1 = blockposition.down();
-                IBlockData iblockdata = EntityEvoker.this.world.getType(blockposition1);
+                IBlockData iblockdata = EntityEvoker.this.level.getType(blockposition1);
 
-                if (iblockdata.d(EntityEvoker.this.world, blockposition1, EnumDirection.UP)) {
-                    if (!EntityEvoker.this.world.isEmpty(blockposition)) {
-                        IBlockData iblockdata1 = EntityEvoker.this.world.getType(blockposition);
-                        VoxelShape voxelshape = iblockdata1.getCollisionShape(EntityEvoker.this.world, blockposition);
+                if (iblockdata.d(EntityEvoker.this.level, blockposition1, EnumDirection.UP)) {
+                    if (!EntityEvoker.this.level.isEmpty(blockposition)) {
+                        IBlockData iblockdata1 = EntityEvoker.this.level.getType(blockposition);
+                        VoxelShape voxelshape = iblockdata1.getCollisionShape(EntityEvoker.this.level, blockposition);
 
                         if (!voxelshape.isEmpty()) {
                             d4 = voxelshape.c(EnumDirection.EnumAxis.Y);
@@ -343,14 +280,14 @@ public class EntityEvoker extends EntityIllagerWizard {
             } while (blockposition.getY() >= MathHelper.floor(d2) - 1);
 
             if (flag) {
-                EntityEvoker.this.world.addEntity(new EntityEvokerFangs(EntityEvoker.this.world, d0, (double) blockposition.getY() + d4, d1, f, i, EntityEvoker.this));
+                EntityEvoker.this.level.addEntity(new EntityEvokerFangs(EntityEvoker.this.level, d0, (double) blockposition.getY() + d4, d1, f, i, EntityEvoker.this));
             }
 
         }
 
         @Override
         protected SoundEffect k() {
-            return SoundEffects.ENTITY_EVOKER_PREPARE_ATTACK;
+            return SoundEffects.EVOKER_PREPARE_ATTACK;
         }
 
         @Override
@@ -359,20 +296,82 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
     }
 
-    class b extends EntityIllagerWizard.b {
+    public class d extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
-        private b() {
+        private final PathfinderTargetCondition wololoTargeting = PathfinderTargetCondition.b().a(16.0D).a((entityliving) -> {
+            return ((EntitySheep) entityliving).getColor() == EnumColor.BLUE;
+        });
+
+        public d() {
             super();
         }
 
         @Override
-        public void e() {
+        public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.Q(), (float) EntityEvoker.this.O());
-            } else if (EntityEvoker.this.fg() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fg(), (float) EntityEvoker.this.Q(), (float) EntityEvoker.this.O());
+                return false;
+            } else if (EntityEvoker.this.fF()) {
+                return false;
+            } else if (EntityEvoker.this.tickCount < this.nextAttackTickCount) {
+                return false;
+            } else if (!EntityEvoker.this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                return false;
+            } else {
+                List<EntitySheep> list = EntityEvoker.this.level.a(EntitySheep.class, this.wololoTargeting, (EntityLiving) EntityEvoker.this, EntityEvoker.this.getBoundingBox().grow(16.0D, 4.0D, 16.0D));
+
+                if (list.isEmpty()) {
+                    return false;
+                } else {
+                    EntityEvoker.this.a((EntitySheep) list.get(EntityEvoker.this.random.nextInt(list.size())));
+                    return true;
+                }
+            }
+        }
+
+        @Override
+        public boolean b() {
+            return EntityEvoker.this.fO() != null && this.attackWarmupDelay > 0;
+        }
+
+        @Override
+        public void d() {
+            super.d();
+            EntityEvoker.this.a((EntitySheep) null);
+        }
+
+        @Override
+        protected void j() {
+            EntitySheep entitysheep = EntityEvoker.this.fO();
+
+            if (entitysheep != null && entitysheep.isAlive()) {
+                entitysheep.setColor(EnumColor.RED);
             }
 
+        }
+
+        @Override
+        protected int m() {
+            return 40;
+        }
+
+        @Override
+        protected int g() {
+            return 60;
+        }
+
+        @Override
+        protected int h() {
+            return 140;
+        }
+
+        @Override
+        protected SoundEffect k() {
+            return SoundEffects.EVOKER_PREPARE_WOLOLO;
+        }
+
+        @Override
+        protected EntityIllagerWizard.Spell getCastSpell() {
+            return EntityIllagerWizard.Spell.WOLOLO;
         }
     }
 }

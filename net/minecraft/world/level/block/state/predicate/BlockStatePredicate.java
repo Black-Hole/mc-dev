@@ -13,14 +13,14 @@ import net.minecraft.world.level.block.state.properties.IBlockState;
 
 public class BlockStatePredicate implements Predicate<IBlockData> {
 
-    public static final Predicate<IBlockData> a = (iblockdata) -> {
+    public static final Predicate<IBlockData> ANY = (iblockdata) -> {
         return true;
     };
-    private final BlockStateList<Block, IBlockData> b;
-    private final Map<IBlockState<?>, Predicate<Object>> c = Maps.newHashMap();
+    private final BlockStateList<Block, IBlockData> definition;
+    private final Map<IBlockState<?>, Predicate<Object>> properties = Maps.newHashMap();
 
     private BlockStatePredicate(BlockStateList<Block, IBlockData> blockstatelist) {
-        this.b = blockstatelist;
+        this.definition = blockstatelist;
     }
 
     public static BlockStatePredicate a(Block block) {
@@ -28,11 +28,11 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
     }
 
     public boolean test(@Nullable IBlockData iblockdata) {
-        if (iblockdata != null && iblockdata.getBlock().equals(this.b.getBlock())) {
-            if (this.c.isEmpty()) {
+        if (iblockdata != null && iblockdata.getBlock().equals(this.definition.getBlock())) {
+            if (this.properties.isEmpty()) {
                 return true;
             } else {
-                Iterator iterator = this.c.entrySet().iterator();
+                Iterator iterator = this.properties.entrySet().iterator();
 
                 Entry entry;
 
@@ -58,10 +58,10 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
     }
 
     public <V extends Comparable<V>> BlockStatePredicate a(IBlockState<V> iblockstate, Predicate<Object> predicate) {
-        if (!this.b.d().contains(iblockstate)) {
-            throw new IllegalArgumentException(this.b + " cannot support property " + iblockstate);
+        if (!this.definition.d().contains(iblockstate)) {
+            throw new IllegalArgumentException(this.definition + " cannot support property " + iblockstate);
         } else {
-            this.c.put(iblockstate, predicate);
+            this.properties.put(iblockstate, predicate);
             return this;
         }
     }

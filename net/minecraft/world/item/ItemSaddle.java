@@ -19,12 +19,12 @@ public class ItemSaddle extends Item {
             ISaddleable isaddleable = (ISaddleable) entityliving;
 
             if (!isaddleable.hasSaddle() && isaddleable.canSaddle()) {
-                if (!entityhuman.world.isClientSide) {
+                if (!entityhuman.level.isClientSide) {
                     isaddleable.saddle(SoundCategory.NEUTRAL);
                     itemstack.subtract(1);
                 }
 
-                return EnumInteractionResult.a(entityhuman.world.isClientSide);
+                return EnumInteractionResult.a(entityhuman.level.isClientSide);
             }
         }
 

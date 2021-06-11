@@ -5,16 +5,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.world.level.VirtualLevelWritable;
+import net.minecraft.world.level.VirtualLevelReadable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.WorldGenFoilagePlacer;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class TrunkPlacerStraight extends TrunkPlacer {
 
-    public static final Codec<TrunkPlacerStraight> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<TrunkPlacerStraight> CODEC = RecordCodecBuilder.create((instance) -> {
         return a(instance).apply(instance, TrunkPlacerStraight::new);
     });
 
@@ -24,17 +24,17 @@ public class TrunkPlacerStraight extends TrunkPlacer {
 
     @Override
     protected TrunkPlacers<?> a() {
-        return TrunkPlacers.a;
+        return TrunkPlacers.STRAIGHT_TRUNK_PLACER;
     }
 
     @Override
-    public List<WorldGenFoilagePlacer.b> a(VirtualLevelWritable virtuallevelwritable, Random random, int i, BlockPosition blockposition, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
-        a(virtuallevelwritable, blockposition.down());
+    public List<WorldGenFoilagePlacer.a> a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, int i, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        a(virtuallevelreadable, biconsumer, random, blockposition.down(), worldgenfeaturetreeconfiguration);
 
         for (int j = 0; j < i; ++j) {
-            a(virtuallevelwritable, random, blockposition.up(j), set, structureboundingbox, worldgenfeaturetreeconfiguration);
+            b(virtuallevelreadable, biconsumer, random, blockposition.up(j), worldgenfeaturetreeconfiguration);
         }
 
-        return ImmutableList.of(new WorldGenFoilagePlacer.b(blockposition.up(i), 0, false));
+        return ImmutableList.of(new WorldGenFoilagePlacer.a(blockposition.up(i), 0, false));
     }
 }

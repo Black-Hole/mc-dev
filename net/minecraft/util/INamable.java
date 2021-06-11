@@ -6,6 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Keyable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -21,7 +22,9 @@ public interface INamable {
     static <E extends Enum<E> & INamable> Codec<E> a(Supplier<E[]> supplier, Function<? super String, ? extends E> function) {
         E[] ae = (Enum[]) supplier.get();
 
-        return a(Enum::ordinal, (i) -> {
+        return a((object) -> {
+            return ((Enum) object).ordinal();
+        }, (i) -> {
             return ae[i];
         }, function);
     }
@@ -34,13 +37,13 @@ public interface INamable {
 
             public <T> DataResult<Pair<E, T>> decode(DynamicOps<T> dynamicops, T t0) {
                 return dynamicops.compressMaps() ? dynamicops.getNumberValue(t0).flatMap((number) -> {
-                    return (DataResult) Optional.ofNullable(intfunction.apply(number.intValue())).map(DataResult::success).orElseGet(() -> {
+                    return (DataResult) Optional.ofNullable((INamable) intfunction.apply(number.intValue())).map(DataResult::success).orElseGet(() -> {
                         return DataResult.error("Unknown element id: " + number);
                     });
                 }).map((inamable) -> {
                     return Pair.of(inamable, dynamicops.empty());
                 }) : dynamicops.getStringValue(t0).flatMap((s) -> {
-                    return (DataResult) Optional.ofNullable(function.apply(s)).map(DataResult::success).orElseGet(() -> {
+                    return (DataResult) Optional.ofNullable((INamable) function.apply(s)).map(DataResult::success).orElseGet(() -> {
                         return DataResult.error("Unknown element name: " + s);
                     });
                 }).map((inamable) -> {
@@ -60,12 +63,12 @@ public interface INamable {
                 if (dynamicops.compressMaps()) {
                     IntStream intstream = IntStream.range(0, ainamable.length);
 
-                    dynamicops.getClass();
+                    Objects.requireNonNull(dynamicops);
                     return intstream.mapToObj(dynamicops::createInt);
                 } else {
                     Stream stream = Arrays.stream(ainamable).map(INamable::getName);
 
-                    dynamicops.getClass();
+                    Objects.requireNonNull(dynamicops);
                     return stream.map(dynamicops::createString);
                 }
             }

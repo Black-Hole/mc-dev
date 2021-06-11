@@ -19,27 +19,27 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionFillPlayerHead extends LootItemFunctionConditional {
 
-    private final LootTableInfo.EntityTarget a;
+    final LootTableInfo.EntityTarget entityTarget;
 
     public LootItemFunctionFillPlayerHead(LootItemCondition[] alootitemcondition, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         super(alootitemcondition);
-        this.a = loottableinfo_entitytarget;
+        this.entityTarget = loottableinfo_entitytarget;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.t;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.FILL_PLAYER_HEAD;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(this.a.a());
+    public Set<LootContextParameter<?>> b() {
+        return ImmutableSet.of(this.entityTarget.a());
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        if (itemstack.getItem() == Items.PLAYER_HEAD) {
-            Entity entity = (Entity) loottableinfo.getContextParameter(this.a.a());
+        if (itemstack.a(Items.PLAYER_HEAD)) {
+            Entity entity = (Entity) loottableinfo.getContextParameter(this.entityTarget.a());
 
             if (entity instanceof EntityHuman) {
                 GameProfile gameprofile = ((EntityHuman) entity).getProfile();
@@ -51,13 +51,19 @@ public class LootItemFunctionFillPlayerHead extends LootItemFunctionConditional 
         return itemstack;
     }
 
+    public static LootItemFunctionConditional.a<?> a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionFillPlayerHead(alootitemcondition, loottableinfo_entitytarget);
+        });
+    }
+
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionFillPlayerHead> {
 
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionFillPlayerHead lootitemfunctionfillplayerhead, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionfillplayerhead, jsonserializationcontext);
-            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemfunctionfillplayerhead.a));
+            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemfunctionfillplayerhead.entityTarget));
         }
 
         @Override

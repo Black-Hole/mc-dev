@@ -8,16 +8,16 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorPacify extends Behavior<EntityLiving> {
 
-    private final int b;
+    private final int pacifyDuration;
 
     public BehaviorPacify(MemoryModuleType<?> memorymoduletype, int i) {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.PACIFIED, MemoryStatus.VALUE_ABSENT, memorymoduletype, MemoryStatus.VALUE_PRESENT));
-        this.b = i;
+        this.pacifyDuration = i;
     }
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
-        entityliving.getBehaviorController().a(MemoryModuleType.PACIFIED, true, (long) this.b);
+        entityliving.getBehaviorController().a(MemoryModuleType.PACIFIED, true, (long) this.pacifyDuration);
         entityliving.getBehaviorController().removeMemory(MemoryModuleType.ATTACK_TARGET);
     }
 }

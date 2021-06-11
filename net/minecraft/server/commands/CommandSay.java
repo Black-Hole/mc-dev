@@ -13,6 +13,8 @@ import net.minecraft.world.entity.Entity;
 
 public class CommandSay {
 
+    public CommandSay() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("say").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
@@ -24,7 +26,7 @@ public class CommandSay {
             if (entity != null) {
                 ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().sendMessage(chatmessage, ChatMessageType.CHAT, entity.getUniqueID());
             } else {
-                ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().sendMessage(chatmessage, ChatMessageType.SYSTEM, SystemUtils.b);
+                ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().sendMessage(chatmessage, ChatMessageType.SYSTEM, SystemUtils.NIL_UUID);
             }
 
             return 1;

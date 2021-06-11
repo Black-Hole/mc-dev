@@ -11,7 +11,7 @@ public class DataConverterBlockEntityUUID extends DataConverterUUIDBase {
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("BlockEntityUUIDFix", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("BlockEntityUUIDFix", this.getInputSchema().getType(this.typeReference), (typed) -> {
             typed = this.a(typed, "minecraft:conduit", this::c);
             typed = this.a(typed, "minecraft:skull", this::b);
             return typed;

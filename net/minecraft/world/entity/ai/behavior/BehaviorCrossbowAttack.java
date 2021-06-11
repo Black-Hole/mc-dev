@@ -15,18 +15,19 @@ import net.minecraft.world.item.Items;
 
 public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T extends EntityLiving> extends Behavior<E> {
 
-    private int b;
-    private BehaviorCrossbowAttack.BowState c;
+    private static final int TIMEOUT = 1200;
+    private int attackDelay;
+    private BehaviorCrossbowAttack.BowState crossbowState;
 
     public BehaviorCrossbowAttack() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
-        this.c = BehaviorCrossbowAttack.BowState.UNCHARGED;
+        this.crossbowState = BehaviorCrossbowAttack.BowState.UNCHARGED;
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
         EntityLiving entityliving = a(e0);
 
-        return e0.a(Items.CROSSBOW) && BehaviorUtil.c(e0, entityliving) && BehaviorUtil.a(e0, entityliving, 0);
+        return e0.a(Items.CROSSBOW) && BehaviorUtil.b((EntityLiving) e0, entityliving) && BehaviorUtil.a(e0, entityliving, 0);
     }
 
     protected boolean b(WorldServer worldserver, E e0, long i) {
@@ -53,35 +54,35 @@ public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T ex
     }
 
     private void a(E e0, EntityLiving entityliving) {
-        if (this.c == BehaviorCrossbowAttack.BowState.UNCHARGED) {
+        if (this.crossbowState == BehaviorCrossbowAttack.BowState.UNCHARGED) {
             e0.c(ProjectileHelper.a((EntityLiving) e0, Items.CROSSBOW));
-            this.c = BehaviorCrossbowAttack.BowState.CHARGING;
+            this.crossbowState = BehaviorCrossbowAttack.BowState.CHARGING;
             ((ICrossbow) e0).b(true);
-        } else if (this.c == BehaviorCrossbowAttack.BowState.CHARGING) {
+        } else if (this.crossbowState == BehaviorCrossbowAttack.BowState.CHARGING) {
             if (!e0.isHandRaised()) {
-                this.c = BehaviorCrossbowAttack.BowState.UNCHARGED;
+                this.crossbowState = BehaviorCrossbowAttack.BowState.UNCHARGED;
             }
 
-            int i = e0.ea();
+            int i = e0.eI();
             ItemStack itemstack = e0.getActiveItem();
 
-            if (i >= ItemCrossbow.g(itemstack)) {
+            if (i >= ItemCrossbow.k(itemstack)) {
                 e0.releaseActiveItem();
-                this.c = BehaviorCrossbowAttack.BowState.CHARGED;
-                this.b = 20 + e0.getRandom().nextInt(20);
+                this.crossbowState = BehaviorCrossbowAttack.BowState.CHARGED;
+                this.attackDelay = 20 + e0.getRandom().nextInt(20);
                 ((ICrossbow) e0).b(false);
             }
-        } else if (this.c == BehaviorCrossbowAttack.BowState.CHARGED) {
-            --this.b;
-            if (this.b == 0) {
-                this.c = BehaviorCrossbowAttack.BowState.READY_TO_ATTACK;
+        } else if (this.crossbowState == BehaviorCrossbowAttack.BowState.CHARGED) {
+            --this.attackDelay;
+            if (this.attackDelay == 0) {
+                this.crossbowState = BehaviorCrossbowAttack.BowState.READY_TO_ATTACK;
             }
-        } else if (this.c == BehaviorCrossbowAttack.BowState.READY_TO_ATTACK) {
+        } else if (this.crossbowState == BehaviorCrossbowAttack.BowState.READY_TO_ATTACK) {
             ((IRangedEntity) e0).a(entityliving, 1.0F);
             ItemStack itemstack1 = e0.b(ProjectileHelper.a((EntityLiving) e0, Items.CROSSBOW));
 
             ItemCrossbow.a(itemstack1, false);
-            this.c = BehaviorCrossbowAttack.BowState.UNCHARGED;
+            this.crossbowState = BehaviorCrossbowAttack.BowState.UNCHARGED;
         }
 
     }
@@ -94,7 +95,7 @@ public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T ex
         return (EntityLiving) entityliving.getBehaviorController().getMemory(MemoryModuleType.ATTACK_TARGET).get();
     }
 
-    static enum BowState {
+    private static enum BowState {
 
         UNCHARGED, CHARGING, CHARGED, READY_TO_ATTACK;
 

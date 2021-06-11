@@ -19,8 +19,8 @@ public final class VillagerType {
     public static final VillagerType SNOW = a("snow");
     public static final VillagerType SWAMP = a("swamp");
     public static final VillagerType TAIGA = a("taiga");
-    private final String h;
-    private static final Map<ResourceKey<BiomeBase>, VillagerType> i = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private final String name;
+    private static final Map<ResourceKey<BiomeBase>, VillagerType> BY_BIOME = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(Biomes.BADLANDS, VillagerType.DESERT);
         hashmap.put(Biomes.BADLANDS_PLATEAU, VillagerType.DESERT);
         hashmap.put(Biomes.DESERT, VillagerType.DESERT);
@@ -68,11 +68,11 @@ public final class VillagerType {
     });
 
     private VillagerType(String s) {
-        this.h = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.h;
+        return this.name;
     }
 
     private static VillagerType a(String s) {
@@ -81,7 +81,7 @@ public final class VillagerType {
 
     public static VillagerType a(Optional<ResourceKey<BiomeBase>> optional) {
         return (VillagerType) optional.flatMap((resourcekey) -> {
-            return Optional.ofNullable(VillagerType.i.get(resourcekey));
+            return Optional.ofNullable((VillagerType) VillagerType.BY_BIOME.get(resourcekey));
         }).orElse(VillagerType.PLAINS);
     }
 }

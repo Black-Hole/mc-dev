@@ -1,15 +1,17 @@
 package net.minecraft.world.entity.ai.memory;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.behavior.BehaviorPosition;
+import net.minecraft.world.entity.ai.behavior.BehaviorPositionEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorTarget;
 import net.minecraft.world.phys.Vec3D;
 
 public class MemoryTarget {
 
-    private final BehaviorPosition a;
-    private final float b;
-    private final int c;
+    private final BehaviorPosition target;
+    private final float speedModifier;
+    private final int closeEnoughDist;
 
     public MemoryTarget(BlockPosition blockposition, float f, int i) {
         this((BehaviorPosition) (new BehaviorTarget(blockposition)), f, i);
@@ -19,21 +21,25 @@ public class MemoryTarget {
         this((BehaviorPosition) (new BehaviorTarget(new BlockPosition(vec3d))), f, i);
     }
 
+    public MemoryTarget(Entity entity, float f, int i) {
+        this((BehaviorPosition) (new BehaviorPositionEntity(entity, false)), f, i);
+    }
+
     public MemoryTarget(BehaviorPosition behaviorposition, float f, int i) {
-        this.a = behaviorposition;
-        this.b = f;
-        this.c = i;
+        this.target = behaviorposition;
+        this.speedModifier = f;
+        this.closeEnoughDist = i;
     }
 
     public BehaviorPosition a() {
-        return this.a;
+        return this.target;
     }
 
     public float b() {
-        return this.b;
+        return this.speedModifier;
     }
 
     public int c() {
-        return this.c;
+        return this.closeEnoughDist;
     }
 }

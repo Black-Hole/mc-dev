@@ -12,13 +12,13 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterRecipeBase extends DataFix {
 
-    private final String a;
-    private final Function<String, String> b;
+    private final String name;
+    private final Function<String, String> renamer;
 
     public DataConverterRecipeBase(Schema schema, boolean flag, String s, Function<String, String> function) {
         super(schema, flag);
-        this.a = s;
-        this.b = function;
+        this.name = s;
+        this.renamer = function;
     }
 
     protected TypeRewriteRule makeRule() {
@@ -27,9 +27,9 @@ public class DataConverterRecipeBase extends DataFix {
         if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.RECIPE))) {
             throw new IllegalStateException("Recipe type is not what was expected.");
         } else {
-            return this.fixTypeEverywhere(this.a, type, (dynamicops) -> {
+            return this.fixTypeEverywhere(this.name, type, (dynamicops) -> {
                 return (pair) -> {
-                    return pair.mapSecond(this.b);
+                    return pair.mapSecond(this.renamer);
                 };
             });
         }

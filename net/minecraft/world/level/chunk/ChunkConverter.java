@@ -15,9 +15,12 @@ import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.EnumDirection8;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.level.BlockAccessAir;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccess;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockChest;
@@ -36,28 +39,29 @@ import org.apache.logging.log4j.Logger;
 public class ChunkConverter {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final ChunkConverter a = new ChunkConverter();
-    private static final EnumDirection8[] c = EnumDirection8.values();
-    private final EnumSet<EnumDirection8> d;
-    private final int[][] e;
-    private static final Map<Block, ChunkConverter.a> f = new IdentityHashMap();
-    private static final Set<ChunkConverter.a> g = Sets.newHashSet();
+    public static final ChunkConverter EMPTY = new ChunkConverter(BlockAccessAir.INSTANCE);
+    private static final String TAG_INDICES = "Indices";
+    private static final EnumDirection8[] DIRECTIONS = EnumDirection8.values();
+    private final EnumSet<EnumDirection8> sides;
+    private final int[][] index;
+    static final Map<Block, ChunkConverter.a> MAP = new IdentityHashMap();
+    static final Set<ChunkConverter.a> CHUNKY_FIXERS = Sets.newHashSet();
 
-    private ChunkConverter() {
-        this.d = EnumSet.noneOf(EnumDirection8.class);
-        this.e = new int[16][];
+    private ChunkConverter(LevelHeightAccessor levelheightaccessor) {
+        this.sides = EnumSet.noneOf(EnumDirection8.class);
+        this.index = new int[levelheightaccessor.getSectionsCount()][];
     }
 
-    public ChunkConverter(NBTTagCompound nbttagcompound) {
-        this();
+    public ChunkConverter(NBTTagCompound nbttagcompound, LevelHeightAccessor levelheightaccessor) {
+        this(levelheightaccessor);
         if (nbttagcompound.hasKeyOfType("Indices", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Indices");
 
-            for (int i = 0; i < this.e.length; ++i) {
+            for (int i = 0; i < this.index.length; ++i) {
                 String s = String.valueOf(i);
 
                 if (nbttagcompound1.hasKeyOfType(s, 11)) {
-                    this.e[i] = nbttagcompound1.getIntArray(s);
+                    this.index[i] = nbttagcompound1.getIntArray(s);
                 }
             }
         }
@@ -70,7 +74,7 @@ public class ChunkConverter {
             EnumDirection8 enumdirection8 = aenumdirection8[l];
 
             if ((j & 1 << enumdirection8.ordinal()) != 0) {
-                this.d.add(enumdirection8);
+                this.sides.add(enumdirection8);
             }
         }
 
@@ -78,7 +82,7 @@ public class ChunkConverter {
 
     public void a(Chunk chunk) {
         this.b(chunk);
-        EnumDirection8[] aenumdirection8 = ChunkConverter.c;
+        EnumDirection8[] aenumdirection8 = ChunkConverter.DIRECTIONS;
         int i = aenumdirection8.length;
 
         for (int j = 0; j < i; ++j) {
@@ -89,7 +93,7 @@ public class ChunkConverter {
 
         World world = chunk.getWorld();
 
-        ChunkConverter.g.forEach((chunkconverter_a) -> {
+        ChunkConverter.CHUNKY_FIXERS.forEach((chunkconverter_a) -> {
             chunkconverter_a.a(world);
         });
     }
@@ -97,7 +101,7 @@ public class ChunkConverter {
     private static void a(Chunk chunk, EnumDirection8 enumdirection8) {
         World world = chunk.getWorld();
 
-        if (chunk.p().d.remove(enumdirection8)) {
+        if (chunk.q().sides.remove(enumdirection8)) {
             Set<EnumDirection> set = enumdirection8.a();
             boolean flag = false;
             boolean flag1 = true;
@@ -113,7 +117,7 @@ public class ChunkConverter {
             int l = chunkcoordintpair.e() + (flag6 && (flag2 || flag3) ? 14 : (flag5 ? 0 : 15));
             EnumDirection[] aenumdirection = EnumDirection.values();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            Iterator iterator = BlockPosition.b(i, 0, k, j, world.getBuildHeight() - 1, l).iterator();
+            Iterator iterator = BlockPosition.b(i, world.getMinBuildHeight(), k, j, world.getMaxBuildHeight() - 1, l).iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition = (BlockPosition) iterator.next();
@@ -136,7 +140,7 @@ public class ChunkConverter {
     }
 
     private static IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return ((ChunkConverter.a) ChunkConverter.f.getOrDefault(iblockdata.getBlock(), ChunkConverter.Type.DEFAULT)).a(iblockdata, enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
+        return ((ChunkConverter.a) ChunkConverter.MAP.getOrDefault(iblockdata.getBlock(), ChunkConverter.Type.DEFAULT)).a(iblockdata, enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
     }
 
     private void b(Chunk chunk) {
@@ -147,11 +151,11 @@ public class ChunkConverter {
 
         int i;
 
-        for (i = 0; i < 16; ++i) {
+        for (i = 0; i < this.index.length; ++i) {
             ChunkSection chunksection = chunk.getSections()[i];
-            int[] aint = this.e[i];
+            int[] aint = this.index[i];
 
-            this.e[i] = null;
+            this.index[i] = null;
             if (chunksection != null && aint != null && aint.length > 0) {
                 EnumDirection[] aenumdirection = EnumDirection.values();
                 DataPaletteBlock<IBlockData> datapaletteblock = chunksection.getBlocks();
@@ -164,7 +168,7 @@ public class ChunkConverter {
                     int j1 = l >> 8 & 15;
                     int k1 = l >> 4 & 15;
 
-                    blockposition_mutableblockposition.d(chunkcoordintpair.d() + i1, (i << 4) + j1, chunkcoordintpair.e() + k1);
+                    blockposition_mutableblockposition.d(chunkcoordintpair.d() + i1, chunksection.getYPosition() + j1, chunkcoordintpair.e() + k1);
                     IBlockData iblockdata = (IBlockData) datapaletteblock.a(l);
                     IBlockData iblockdata1 = iblockdata;
                     EnumDirection[] aenumdirection1 = aenumdirection;
@@ -174,7 +178,7 @@ public class ChunkConverter {
                         EnumDirection enumdirection = aenumdirection1[i2];
 
                         blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition_mutableblockposition, enumdirection);
-                        if (blockposition_mutableblockposition.getX() >> 4 == chunkcoordintpair.x && blockposition_mutableblockposition.getZ() >> 4 == chunkcoordintpair.z) {
+                        if (SectionPosition.a(blockposition_mutableblockposition.getX()) == chunkcoordintpair.x && SectionPosition.a(blockposition_mutableblockposition.getZ()) == chunkcoordintpair.z) {
                             iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_mutableblockposition, blockposition_mutableblockposition1);
                         }
                     }
@@ -184,18 +188,18 @@ public class ChunkConverter {
             }
         }
 
-        for (i = 0; i < this.e.length; ++i) {
-            if (this.e[i] != null) {
-                ChunkConverter.LOGGER.warn("Discarding update data for section {} for chunk ({} {})", i, chunkcoordintpair.x, chunkcoordintpair.z);
+        for (i = 0; i < this.index.length; ++i) {
+            if (this.index[i] != null) {
+                ChunkConverter.LOGGER.warn("Discarding update data for section {} for chunk ({} {})", world.getSectionYFromSectionIndex(i), chunkcoordintpair.x, chunkcoordintpair.z);
             }
 
-            this.e[i] = null;
+            this.index[i] = null;
         }
 
     }
 
     public boolean a() {
-        int[][] aint = this.e;
+        int[][] aint = this.index;
         int i = aint.length;
 
         for (int j = 0; j < i; ++j) {
@@ -206,7 +210,7 @@ public class ChunkConverter {
             }
         }
 
-        return this.d.isEmpty();
+        return this.sides.isEmpty();
     }
 
     public NBTTagCompound b() {
@@ -215,11 +219,11 @@ public class ChunkConverter {
 
         int i;
 
-        for (i = 0; i < this.e.length; ++i) {
+        for (i = 0; i < this.index.length; ++i) {
             String s = String.valueOf(i);
 
-            if (this.e[i] != null && this.e[i].length != 0) {
-                nbttagcompound1.setIntArray(s, this.e[i]);
+            if (this.index[i] != null && this.index[i].length != 0) {
+                nbttagcompound1.setIntArray(s, this.index[i]);
             }
         }
 
@@ -231,7 +235,7 @@ public class ChunkConverter {
 
         EnumDirection8 enumdirection8;
 
-        for (Iterator iterator = this.d.iterator(); iterator.hasNext(); i |= 1 << enumdirection8.ordinal()) {
+        for (Iterator iterator = this.sides.iterator(); iterator.hasNext(); i |= 1 << enumdirection8.ordinal()) {
             enumdirection8 = (EnumDirection8) iterator.next();
         }
 
@@ -239,7 +243,7 @@ public class ChunkConverter {
         return nbttagcompound;
     }
 
-    static enum Type implements ChunkConverter.a {
+    private static enum Type implements ChunkConverter.a {
 
         BLACKLIST(new Block[]{Blocks.OBSERVER, Blocks.NETHER_PORTAL, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER, Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.DRAGON_EGG, Blocks.GRAVEL, Blocks.SAND, Blocks.RED_SAND, Blocks.OAK_SIGN, Blocks.SPRUCE_SIGN, Blocks.BIRCH_SIGN, Blocks.ACACIA_SIGN, Blocks.JUNGLE_SIGN, Blocks.DARK_OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.SPRUCE_WALL_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.ACACIA_WALL_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.DARK_OAK_WALL_SIGN}) {
             @Override
@@ -256,13 +260,13 @@ public class ChunkConverter {
         CHEST(new Block[]{Blocks.CHEST, Blocks.TRAPPED_CHEST}) {
             @Override
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-                if (iblockdata1.a(iblockdata.getBlock()) && enumdirection.n().d() && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.c) == BlockPropertyChestType.SINGLE) {
+                if (iblockdata1.a(iblockdata.getBlock()) && enumdirection.n().d() && iblockdata.get(BlockChest.TYPE) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.TYPE) == BlockPropertyChestType.SINGLE) {
                     EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockChest.FACING);
 
                     if (enumdirection.n() != enumdirection1.n() && enumdirection1 == iblockdata1.get(BlockChest.FACING)) {
                         BlockPropertyChestType blockpropertychesttype = enumdirection == enumdirection1.g() ? BlockPropertyChestType.LEFT : BlockPropertyChestType.RIGHT;
 
-                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.c, blockpropertychesttype.b()), 18);
+                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.TYPE, blockpropertychesttype.a()), 18);
                         if (enumdirection1 == EnumDirection.NORTH || enumdirection1 == EnumDirection.EAST) {
                             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
                             TileEntity tileentity1 = generatoraccess.getTileEntity(blockposition1);
@@ -272,7 +276,7 @@ public class ChunkConverter {
                             }
                         }
 
-                        return (IBlockData) iblockdata.set(BlockChest.c, blockpropertychesttype);
+                        return (IBlockData) iblockdata.set(BlockChest.TYPE, blockpropertychesttype);
                     }
                 }
 
@@ -280,7 +284,7 @@ public class ChunkConverter {
             }
         },
         LEAVES(true, new Block[]{Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES}) {
-            private final ThreadLocal<List<ObjectSet<BlockPosition>>> g = ThreadLocal.withInitial(() -> {
+            private final ThreadLocal<List<ObjectSet<BlockPosition>>> queue = ThreadLocal.withInitial(() -> {
                 return Lists.newArrayListWithCapacity(7);
             });
 
@@ -289,8 +293,8 @@ public class ChunkConverter {
                 IBlockData iblockdata2 = iblockdata.updateState(enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
 
                 if (iblockdata != iblockdata2) {
-                    int i = (Integer) iblockdata2.get(BlockProperties.an);
-                    List<ObjectSet<BlockPosition>> list = (List) this.g.get();
+                    int i = (Integer) iblockdata2.get(BlockProperties.DISTANCE);
+                    List<ObjectSet<BlockPosition>> list = (List) this.queue.get();
 
                     if (list.isEmpty()) {
                         for (int j = 0; j < 7; ++j) {
@@ -307,7 +311,7 @@ public class ChunkConverter {
             @Override
             public void a(GeneratorAccess generatoraccess) {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-                List<ObjectSet<BlockPosition>> list = (List) this.g.get();
+                List<ObjectSet<BlockPosition>> list = (List) this.queue.get();
 
                 for (int i = 2; i < list.size(); ++i) {
                     int j = i - 1;
@@ -319,10 +323,10 @@ public class ChunkConverter {
                         BlockPosition blockposition = (BlockPosition) objectiterator.next();
                         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-                        if ((Integer) iblockdata.get(BlockProperties.an) >= j) {
-                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.an, j), 18);
+                        if ((Integer) iblockdata.get(BlockProperties.DISTANCE) >= j) {
+                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.DISTANCE, j), 18);
                             if (i != 7) {
-                                EnumDirection[] aenumdirection = null.f;
+                                EnumDirection[] aenumdirection = null.DIRECTIONS;
                                 int k = aenumdirection.length;
 
                                 for (int l = 0; l < k; ++l) {
@@ -331,7 +335,7 @@ public class ChunkConverter {
                                     blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
                                     IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition);
 
-                                    if (iblockdata1.b(BlockProperties.an) && (Integer) iblockdata.get(BlockProperties.an) > i) {
+                                    if (iblockdata1.b(BlockProperties.DISTANCE) && (Integer) iblockdata.get(BlockProperties.DISTANCE) > i) {
                                         objectset1.add(blockposition_mutableblockposition.immutableCopy());
                                     }
                                 }
@@ -347,7 +351,7 @@ public class ChunkConverter {
             @Override
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 if ((Integer) iblockdata.get(BlockStem.AGE) == 7) {
-                    BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).d();
+                    BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).c();
 
                     if (iblockdata1.a((Block) blockstemmed)) {
                         return (IBlockData) blockstemmed.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection);
@@ -358,24 +362,24 @@ public class ChunkConverter {
             }
         };
 
-        public static final EnumDirection[] f = EnumDirection.values();
+        public static final EnumDirection[] DIRECTIONS = EnumDirection.values();
 
-        private Type(Block... ablock) {
+        Type(Block... ablock) {
             this(false, ablock);
         }
 
-        private Type(boolean flag, Block... ablock) {
+        Type(boolean flag, Block... ablock) {
             Block[] ablock1 = ablock;
             int i = ablock.length;
 
             for (int j = 0; j < i; ++j) {
                 Block block = ablock1[j];
 
-                ChunkConverter.f.put(block, this);
+                ChunkConverter.MAP.put(block, this);
             }
 
             if (flag) {
-                ChunkConverter.g.add(this);
+                ChunkConverter.CHUNKY_FIXERS.add(this);
             }
 
         }

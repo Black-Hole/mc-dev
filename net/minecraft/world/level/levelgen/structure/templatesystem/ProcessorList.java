@@ -4,17 +4,17 @@ import java.util.List;
 
 public class ProcessorList {
 
-    private final List<DefinedStructureProcessor> a;
+    private final List<DefinedStructureProcessor> list;
 
     public ProcessorList(List<DefinedStructureProcessor> list) {
-        this.a = list;
+        this.list = list;
     }
 
     public List<DefinedStructureProcessor> a() {
-        return this.a;
+        return this.list;
     }
 
     public String toString() {
-        return "ProcessorList[" + this.a + "]";
+        return "ProcessorList[" + this.list + "]";
     }
 }

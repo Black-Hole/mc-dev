@@ -1,30 +1,32 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.item.ItemStack;
 
 public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
 
-    private ItemStack a;
-    private boolean b;
-    private int c;
+    private final ItemStack book;
+    private final boolean signing;
+    private final int slot;
 
-    public PacketPlayInBEdit() {}
+    public PacketPlayInBEdit(ItemStack itemstack, boolean flag, int i) {
+        this.book = itemstack.cloneItemStack();
+        this.signing = flag;
+        this.slot = i;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.n();
-        this.b = packetdataserializer.readBoolean();
-        this.c = packetdataserializer.i();
+    public PacketPlayInBEdit(PacketDataSerializer packetdataserializer) {
+        this.book = packetdataserializer.o();
+        this.signing = packetdataserializer.readBoolean();
+        this.slot = packetdataserializer.j();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.writeBoolean(this.b);
-        packetdataserializer.d(this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.book);
+        packetdataserializer.writeBoolean(this.signing);
+        packetdataserializer.d(this.slot);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -32,14 +34,14 @@ public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
     }
 
     public ItemStack b() {
-        return this.a;
+        return this.book;
     }
 
     public boolean c() {
-        return this.b;
+        return this.signing;
     }
 
     public int d() {
-        return this.c;
+        return this.slot;
     }
 }

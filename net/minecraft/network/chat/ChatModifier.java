@@ -18,30 +18,30 @@ import net.minecraft.util.ChatDeserializer;
 
 public class ChatModifier {
 
-    public static final ChatModifier a = new ChatModifier((ChatHexColor) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (ChatClickable) null, (ChatHoverable) null, (String) null, (MinecraftKey) null);
-    public static final MinecraftKey b = new MinecraftKey("minecraft", "default");
+    public static final ChatModifier EMPTY = new ChatModifier((ChatHexColor) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (ChatClickable) null, (ChatHoverable) null, (String) null, (MinecraftKey) null);
+    public static final MinecraftKey DEFAULT_FONT = new MinecraftKey("minecraft", "default");
     @Nullable
-    private final ChatHexColor color;
+    final ChatHexColor color;
     @Nullable
-    private final Boolean bold;
+    final Boolean bold;
     @Nullable
-    private final Boolean italic;
+    final Boolean italic;
     @Nullable
-    private final Boolean underlined;
+    final Boolean underlined;
     @Nullable
-    private final Boolean strikethrough;
+    final Boolean strikethrough;
     @Nullable
-    private final Boolean obfuscated;
+    final Boolean obfuscated;
     @Nullable
-    private final ChatClickable clickEvent;
+    final ChatClickable clickEvent;
     @Nullable
-    private final ChatHoverable hoverEvent;
+    final ChatHoverable hoverEvent;
     @Nullable
-    private final String insertion;
+    final String insertion;
     @Nullable
-    private final MinecraftKey font;
+    final MinecraftKey font;
 
-    private ChatModifier(@Nullable ChatHexColor chathexcolor, @Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4, @Nullable ChatClickable chatclickable, @Nullable ChatHoverable chathoverable, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
+    ChatModifier(@Nullable ChatHexColor chathexcolor, @Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4, @Nullable ChatClickable chatclickable, @Nullable ChatHoverable chathoverable, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
         this.color = chathexcolor;
         this.bold = obool;
         this.italic = obool1;
@@ -80,7 +80,7 @@ public class ChatModifier {
     }
 
     public boolean g() {
-        return this == ChatModifier.a;
+        return this == ChatModifier.EMPTY;
     }
 
     @Nullable
@@ -99,7 +99,7 @@ public class ChatModifier {
     }
 
     public MinecraftKey getFont() {
-        return this.font != null ? this.font : ChatModifier.b;
+        return this.font != null ? this.font : ChatModifier.DEFAULT_FONT;
     }
 
     public ChatModifier setColor(@Nullable ChatHexColor chathexcolor) {
@@ -110,12 +110,28 @@ public class ChatModifier {
         return this.setColor(enumchatformat != null ? ChatHexColor.a(enumchatformat) : null);
     }
 
+    public ChatModifier a(int i) {
+        return this.setColor(ChatHexColor.a(i));
+    }
+
     public ChatModifier setBold(@Nullable Boolean obool) {
         return new ChatModifier(this.color, obool, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
     public ChatModifier setItalic(@Nullable Boolean obool) {
         return new ChatModifier(this.color, this.bold, obool, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
+    }
+
+    public ChatModifier setUnderline(@Nullable Boolean obool) {
+        return new ChatModifier(this.color, this.bold, this.italic, obool, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
+    }
+
+    public ChatModifier setStrikethrough(@Nullable Boolean obool) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, obool, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
+    }
+
+    public ChatModifier setRandom(@Nullable Boolean obool) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, obool, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
     public ChatModifier setChatClickable(@Nullable ChatClickable chatclickable) {
@@ -128,6 +144,10 @@ public class ChatModifier {
 
     public ChatModifier setInsertion(@Nullable String s) {
         return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, s, this.font);
+    }
+
+    public ChatModifier a(@Nullable MinecraftKey minecraftkey) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, minecraftkey);
     }
 
     public ChatModifier b(EnumChatFormat enumchatformat) {
@@ -155,8 +175,46 @@ public class ChatModifier {
                 obool1 = true;
                 break;
             case RESET:
-                return ChatModifier.a;
+                return ChatModifier.EMPTY;
             default:
+                chathexcolor = ChatHexColor.a(enumchatformat);
+        }
+
+        return new ChatModifier(chathexcolor, obool, obool1, obool3, obool2, obool4, this.clickEvent, this.hoverEvent, this.insertion, this.font);
+    }
+
+    public ChatModifier c(EnumChatFormat enumchatformat) {
+        ChatHexColor chathexcolor = this.color;
+        Boolean obool = this.bold;
+        Boolean obool1 = this.italic;
+        Boolean obool2 = this.strikethrough;
+        Boolean obool3 = this.underlined;
+        Boolean obool4 = this.obfuscated;
+
+        switch (enumchatformat) {
+            case OBFUSCATED:
+                obool4 = true;
+                break;
+            case BOLD:
+                obool = true;
+                break;
+            case STRIKETHROUGH:
+                obool2 = true;
+                break;
+            case UNDERLINE:
+                obool3 = true;
+                break;
+            case ITALIC:
+                obool1 = true;
+                break;
+            case RESET:
+                return ChatModifier.EMPTY;
+            default:
+                obool4 = false;
+                obool = false;
+                obool2 = false;
+                obool3 = false;
+                obool1 = false;
                 chathexcolor = ChatHexColor.a(enumchatformat);
         }
 
@@ -193,7 +251,7 @@ public class ChatModifier {
                     obool1 = true;
                     break;
                 case RESET:
-                    return ChatModifier.a;
+                    return ChatModifier.EMPTY;
                 default:
                     chathexcolor = ChatHexColor.a(enumchatformat);
             }
@@ -203,11 +261,11 @@ public class ChatModifier {
     }
 
     public ChatModifier setChatModifier(ChatModifier chatmodifier) {
-        return this == ChatModifier.a ? chatmodifier : (chatmodifier == ChatModifier.a ? this : new ChatModifier(this.color != null ? this.color : chatmodifier.color, this.bold != null ? this.bold : chatmodifier.bold, this.italic != null ? this.italic : chatmodifier.italic, this.underlined != null ? this.underlined : chatmodifier.underlined, this.strikethrough != null ? this.strikethrough : chatmodifier.strikethrough, this.obfuscated != null ? this.obfuscated : chatmodifier.obfuscated, this.clickEvent != null ? this.clickEvent : chatmodifier.clickEvent, this.hoverEvent != null ? this.hoverEvent : chatmodifier.hoverEvent, this.insertion != null ? this.insertion : chatmodifier.insertion, this.font != null ? this.font : chatmodifier.font));
+        return this == ChatModifier.EMPTY ? chatmodifier : (chatmodifier == ChatModifier.EMPTY ? this : new ChatModifier(this.color != null ? this.color : chatmodifier.color, this.bold != null ? this.bold : chatmodifier.bold, this.italic != null ? this.italic : chatmodifier.italic, this.underlined != null ? this.underlined : chatmodifier.underlined, this.strikethrough != null ? this.strikethrough : chatmodifier.strikethrough, this.obfuscated != null ? this.obfuscated : chatmodifier.obfuscated, this.clickEvent != null ? this.clickEvent : chatmodifier.clickEvent, this.hoverEvent != null ? this.hoverEvent : chatmodifier.hoverEvent, this.insertion != null ? this.insertion : chatmodifier.insertion, this.font != null ? this.font : chatmodifier.font));
     }
 
     public String toString() {
-        return "Style{ color=" + this.color + ", bold=" + this.bold + ", italic=" + this.italic + ", underlined=" + this.underlined + ", strikethrough=" + this.strikethrough + ", obfuscated=" + this.obfuscated + ", clickEvent=" + this.getClickEvent() + ", hoverEvent=" + this.getHoverEvent() + ", insertion=" + this.getInsertion() + ", font=" + this.getFont() + '}';
+        return "Style{ color=" + this.color + ", bold=" + this.bold + ", italic=" + this.italic + ", underlined=" + this.underlined + ", strikethrough=" + this.strikethrough + ", obfuscated=" + this.obfuscated + ", clickEvent=" + this.getClickEvent() + ", hoverEvent=" + this.getHoverEvent() + ", insertion=" + this.getInsertion() + ", font=" + this.getFont() + "}";
     }
 
     public boolean equals(Object object) {

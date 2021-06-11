@@ -15,33 +15,33 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public class CriterionConditionEnchantments {
 
-    public static final CriterionConditionEnchantments a = new CriterionConditionEnchantments();
-    public static final CriterionConditionEnchantments[] b = new CriterionConditionEnchantments[0];
-    private final Enchantment c;
-    private final CriterionConditionValue.IntegerRange d;
+    public static final CriterionConditionEnchantments ANY = new CriterionConditionEnchantments();
+    public static final CriterionConditionEnchantments[] NONE = new CriterionConditionEnchantments[0];
+    private final Enchantment enchantment;
+    private final CriterionConditionValue.IntegerRange level;
 
     public CriterionConditionEnchantments() {
-        this.c = null;
-        this.d = CriterionConditionValue.IntegerRange.e;
+        this.enchantment = null;
+        this.level = CriterionConditionValue.IntegerRange.ANY;
     }
 
     public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-        this.c = enchantment;
-        this.d = criterionconditionvalue_integerrange;
+        this.enchantment = enchantment;
+        this.level = criterionconditionvalue_integerrange;
     }
 
     public boolean a(Map<Enchantment, Integer> map) {
-        if (this.c != null) {
-            if (!map.containsKey(this.c)) {
+        if (this.enchantment != null) {
+            if (!map.containsKey(this.enchantment)) {
                 return false;
             }
 
-            int i = (Integer) map.get(this.c);
+            int i = (Integer) map.get(this.enchantment);
 
-            if (this.d != null && !this.d.d(i)) {
+            if (this.level != null && !this.level.d(i)) {
                 return false;
             }
-        } else if (this.d != null) {
+        } else if (this.level != null) {
             Iterator iterator = map.values().iterator();
 
             Integer integer;
@@ -52,7 +52,7 @@ public class CriterionConditionEnchantments {
                 }
 
                 integer = (Integer) iterator.next();
-            } while (!this.d.d(integer));
+            } while (!this.level.d(integer));
 
             return true;
         }
@@ -61,16 +61,16 @@ public class CriterionConditionEnchantments {
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionEnchantments.a) {
+        if (this == CriterionConditionEnchantments.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (this.c != null) {
-                jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(this.c).toString());
+            if (this.enchantment != null) {
+                jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(this.enchantment).toString());
             }
 
-            jsonobject.add("levels", this.d.d());
+            jsonobject.add("levels", this.level.d());
             return jsonobject;
         }
     }
@@ -92,7 +92,7 @@ public class CriterionConditionEnchantments {
 
             return new CriterionConditionEnchantments(enchantment, criterionconditionvalue_integerrange);
         } else {
-            return CriterionConditionEnchantments.a;
+            return CriterionConditionEnchantments.ANY;
         }
     }
 
@@ -107,7 +107,7 @@ public class CriterionConditionEnchantments {
 
             return acriterionconditionenchantments;
         } else {
-            return CriterionConditionEnchantments.b;
+            return CriterionConditionEnchantments.NONE;
         }
     }
 }

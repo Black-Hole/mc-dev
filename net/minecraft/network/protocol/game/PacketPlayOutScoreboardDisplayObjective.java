@@ -1,6 +1,6 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -8,34 +8,40 @@ import net.minecraft.world.scores.ScoreboardObjective;
 
 public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private String b;
-
-    public PacketPlayOutScoreboardDisplayObjective() {}
+    private final int slot;
+    private final String objectiveName;
 
     public PacketPlayOutScoreboardDisplayObjective(int i, @Nullable ScoreboardObjective scoreboardobjective) {
-        this.a = i;
+        this.slot = i;
         if (scoreboardobjective == null) {
-            this.b = "";
+            this.objectiveName = "";
         } else {
-            this.b = scoreboardobjective.getName();
+            this.objectiveName = scoreboardobjective.getName();
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readByte();
-        this.b = packetdataserializer.e(16);
+    public PacketPlayOutScoreboardDisplayObjective(PacketDataSerializer packetdataserializer) {
+        this.slot = packetdataserializer.readByte();
+        this.objectiveName = packetdataserializer.e(16);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.a(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.slot);
+        packetdataserializer.a(this.objectiveName);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.slot;
+    }
+
+    @Nullable
+    public String c() {
+        return Objects.equals(this.objectiveName, "") ? null : this.objectiveName;
     }
 }

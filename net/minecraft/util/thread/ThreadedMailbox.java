@@ -1,56 +1,65 @@
 package net.minecraft.util.thread;
 
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2BooleanFunction;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.minecraft.SharedConstants;
+import net.minecraft.SystemUtils;
+import net.minecraft.util.profiling.metrics.MetricCategory;
+import net.minecraft.util.profiling.metrics.MetricSampler;
+import net.minecraft.util.profiling.metrics.MetricsRegistry;
+import net.minecraft.util.profiling.metrics.ProfilerMeasured;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
+public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoCloseable, Runnable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final AtomicInteger c = new AtomicInteger(0);
-    public final PairedQueue<? super T, ? extends Runnable> a;
-    private final Executor d;
-    private final String e;
+    private static final int CLOSED_BIT = 1;
+    private static final int SCHEDULED_BIT = 2;
+    private final AtomicInteger status = new AtomicInteger(0);
+    private final PairedQueue<? super T, ? extends Runnable> queue;
+    private final Executor dispatcher;
+    private final String name;
 
     public static ThreadedMailbox<Runnable> a(Executor executor, String s) {
         return new ThreadedMailbox<>(new PairedQueue.c<>(new ConcurrentLinkedQueue()), executor, s);
     }
 
     public ThreadedMailbox(PairedQueue<? super T, ? extends Runnable> pairedqueue, Executor executor, String s) {
-        this.d = executor;
-        this.a = pairedqueue;
-        this.e = s;
+        this.dispatcher = executor;
+        this.queue = pairedqueue;
+        this.name = s;
+        MetricsRegistry.INSTANCE.a((ProfilerMeasured) this);
     }
 
-    private boolean a() {
+    private boolean b() {
         int i;
 
         do {
-            i = this.c.get();
+            i = this.status.get();
             if ((i & 3) != 0) {
                 return false;
             }
-        } while (!this.c.compareAndSet(i, i | 2));
+        } while (!this.status.compareAndSet(i, i | 2));
 
         return true;
     }
 
-    private void b() {
+    private void c() {
         int i;
 
         do {
-            i = this.c.get();
-        } while (!this.c.compareAndSet(i, i & -3));
+            i = this.status.get();
+        } while (!this.status.compareAndSet(i, i & -3));
 
     }
 
-    private boolean c() {
-        return (this.c.get() & 1) != 0 ? false : !this.a.b();
+    private boolean d() {
+        return (this.status.get() & 1) != 0 ? false : !this.queue.b();
     }
 
     @Override
@@ -58,41 +67,25 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
         int i;
 
         do {
-            i = this.c.get();
-        } while (!this.c.compareAndSet(i, i | 1));
+            i = this.status.get();
+        } while (!this.status.compareAndSet(i, i | 1));
 
-    }
-
-    private boolean d() {
-        return (this.c.get() & 2) != 0;
     }
 
     private boolean e() {
-        if (!this.d()) {
+        return (this.status.get() & 2) != 0;
+    }
+
+    private boolean f() {
+        if (!this.e()) {
             return false;
         } else {
-            Runnable runnable = (Runnable) this.a.a();
+            Runnable runnable = (Runnable) this.queue.a();
 
             if (runnable == null) {
                 return false;
             } else {
-                Thread thread;
-                String s;
-
-                if (SharedConstants.d) {
-                    thread = Thread.currentThread();
-                    s = thread.getName();
-                    thread.setName(this.e);
-                } else {
-                    thread = null;
-                    s = null;
-                }
-
-                runnable.run();
-                if (thread != null) {
-                    thread.setName(s);
-                }
-
+                SystemUtils.a(this.name, runnable).run();
                 return true;
             }
         }
@@ -104,25 +97,25 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
                 return i == 0;
             });
         } finally {
-            this.b();
-            this.f();
+            this.c();
+            this.g();
         }
 
     }
 
     @Override
     public void a(T t0) {
-        this.a.a(t0);
-        this.f();
+        this.queue.a(t0);
+        this.g();
     }
 
-    private void f() {
-        if (this.c() && this.a()) {
+    private void g() {
+        if (this.d() && this.b()) {
             try {
-                this.d.execute(this);
+                this.dispatcher.execute(this);
             } catch (RejectedExecutionException rejectedexecutionexception) {
                 try {
-                    this.d.execute(this);
+                    this.dispatcher.execute(this);
                 } catch (RejectedExecutionException rejectedexecutionexception1) {
                     ThreadedMailbox.LOGGER.error("Cound not schedule mailbox", rejectedexecutionexception1);
                 }
@@ -134,19 +127,28 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
     private int a(Int2BooleanFunction int2booleanfunction) {
         int i;
 
-        for (i = 0; int2booleanfunction.get(i) && this.e(); ++i) {
+        for (i = 0; int2booleanfunction.get(i) && this.f(); ++i) {
             ;
         }
 
         return i;
     }
 
+    public int a() {
+        return this.queue.c();
+    }
+
     public String toString() {
-        return this.e + " " + this.c.get() + " " + this.a.b();
+        return this.name + " " + this.status.get() + " " + this.queue.b();
     }
 
     @Override
-    public String bj() {
-        return this.e;
+    public String bo() {
+        return this.name;
+    }
+
+    @Override
+    public List<MetricSampler> bl() {
+        return ImmutableList.of(MetricSampler.a(this.name + "-queue-size", MetricCategory.MAIL_BOXES, this::a));
     }
 }

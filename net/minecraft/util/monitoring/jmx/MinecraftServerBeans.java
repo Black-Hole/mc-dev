@@ -30,22 +30,20 @@ import org.apache.logging.log4j.Logger;
 public final class MinecraftServerBeans implements DynamicMBean {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final MinecraftServer b;
-    private final MBeanInfo c;
-    private final Map<String, MinecraftServerBeans.a> d;
+    private final MinecraftServer server;
+    private final MBeanInfo mBeanInfo;
+    private final Map<String, MinecraftServerBeans.a> attributeDescriptionByName;
 
     private MinecraftServerBeans(MinecraftServer minecraftserver) {
-        this.d = (Map) Stream.of(new MinecraftServerBeans.a("tickTimes", this::b, "Historical tick times (ms)", long[].class), new MinecraftServerBeans.a("averageTickTime", this::a, "Current average tick time (ms)", Long.TYPE)).collect(Collectors.toMap((minecraftserverbeans_a) -> {
-            return minecraftserverbeans_a.a;
+        this.attributeDescriptionByName = (Map) Stream.of(new MinecraftServerBeans.a("tickTimes", this::b, "Historical tick times (ms)", long[].class), new MinecraftServerBeans.a("averageTickTime", this::a, "Current average tick time (ms)", Long.TYPE)).collect(Collectors.toMap((minecraftserverbeans_a) -> {
+            return minecraftserverbeans_a.name;
         }, Function.identity()));
-        this.b = minecraftserver;
-        MBeanAttributeInfo[] ambeanattributeinfo = (MBeanAttributeInfo[]) this.d.values().stream().map((object) -> {
-            return ((MinecraftServerBeans.a) object).a();
-        }).toArray((i) -> {
+        this.server = minecraftserver;
+        MBeanAttributeInfo[] ambeanattributeinfo = (MBeanAttributeInfo[]) this.attributeDescriptionByName.values().stream().map(MinecraftServerBeans.a::a).toArray((i) -> {
             return new MBeanAttributeInfo[i];
         });
 
-        this.c = new MBeanInfo(MinecraftServerBeans.class.getSimpleName(), "metrics for dedicated server", ambeanattributeinfo, (MBeanConstructorInfo[]) null, (MBeanOperationInfo[]) null, new MBeanNotificationInfo[0]);
+        this.mBeanInfo = new MBeanInfo(MinecraftServerBeans.class.getSimpleName(), "metrics for dedicated server", ambeanattributeinfo, (MBeanConstructorInfo[]) null, (MBeanOperationInfo[]) null, new MBeanNotificationInfo[0]);
     }
 
     public static void a(MinecraftServer minecraftserver) {
@@ -58,29 +56,29 @@ public final class MinecraftServerBeans implements DynamicMBean {
     }
 
     private float a() {
-        return this.b.aO();
+        return this.server.aO();
     }
 
     private long[] b() {
-        return this.b.h;
+        return this.server.tickTimes;
     }
 
     @Nullable
     public Object getAttribute(String s) {
-        MinecraftServerBeans.a minecraftserverbeans_a = (MinecraftServerBeans.a) this.d.get(s);
+        MinecraftServerBeans.a minecraftserverbeans_a = (MinecraftServerBeans.a) this.attributeDescriptionByName.get(s);
 
-        return minecraftserverbeans_a == null ? null : minecraftserverbeans_a.b.get();
+        return minecraftserverbeans_a == null ? null : minecraftserverbeans_a.getter.get();
     }
 
     public void setAttribute(Attribute attribute) {}
 
     public AttributeList getAttributes(String[] astring) {
         Stream stream = Arrays.stream(astring);
-        Map map = this.d;
+        Map map = this.attributeDescriptionByName;
 
-        this.d.getClass();
+        Objects.requireNonNull(this.attributeDescriptionByName);
         List<Attribute> list = (List) stream.map(map::get).filter(Objects::nonNull).map((minecraftserverbeans_a) -> {
-            return new Attribute(minecraftserverbeans_a.a, minecraftserverbeans_a.b.get());
+            return new Attribute(minecraftserverbeans_a.name, minecraftserverbeans_a.getter.get());
         }).collect(Collectors.toList());
 
         return new AttributeList(list);
@@ -96,25 +94,25 @@ public final class MinecraftServerBeans implements DynamicMBean {
     }
 
     public MBeanInfo getMBeanInfo() {
-        return this.c;
+        return this.mBeanInfo;
     }
 
-    static final class a {
+    private static final class a {
 
-        private final String a;
-        private final Supplier<Object> b;
-        private final String c;
-        private final Class<?> d;
+        final String name;
+        final Supplier<Object> getter;
+        private final String description;
+        private final Class<?> type;
 
-        private a(String s, Supplier<Object> supplier, String s1, Class<?> oclass) {
-            this.a = s;
-            this.b = supplier;
-            this.c = s1;
-            this.d = oclass;
+        a(String s, Supplier<Object> supplier, String s1, Class<?> oclass) {
+            this.name = s;
+            this.getter = supplier;
+            this.description = s1;
+            this.type = oclass;
         }
 
         private MBeanAttributeInfo a() {
-            return new MBeanAttributeInfo(this.a, this.d.getSimpleName(), this.c, true, false, false);
+            return new MBeanAttributeInfo(this.name, this.type.getSimpleName(), this.description, true, false, false);
         }
     }
 }

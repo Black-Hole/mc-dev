@@ -7,24 +7,29 @@ import net.minecraft.world.level.saveddata.PersistentBase;
 
 public class ForcedChunk extends PersistentBase {
 
-    private LongSet a = new LongOpenHashSet();
+    public static final String FILE_ID = "chunks";
+    private static final String TAG_FORCED = "Forced";
+    private final LongSet chunks;
+
+    private ForcedChunk(LongSet longset) {
+        this.chunks = longset;
+    }
 
     public ForcedChunk() {
-        super("chunks");
+        this(new LongOpenHashSet());
+    }
+
+    public static ForcedChunk b(NBTTagCompound nbttagcompound) {
+        return new ForcedChunk(new LongOpenHashSet(nbttagcompound.getLongArray("Forced")));
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        this.a = new LongOpenHashSet(nbttagcompound.getLongArray("Forced"));
-    }
-
-    @Override
-    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.a("Forced", this.a.toLongArray());
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+        nbttagcompound.a("Forced", this.chunks.toLongArray());
         return nbttagcompound;
     }
 
     public LongSet a() {
-        return this.a;
+        return this.chunks;
     }
 }

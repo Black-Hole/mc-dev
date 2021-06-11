@@ -5,12 +5,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 
 public class WorldGenDecoratorDungeonConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public static final Codec<WorldGenDecoratorDungeonConfiguration> a = Codec.INT.fieldOf("chance").xmap(WorldGenDecoratorDungeonConfiguration::new, (worldgendecoratordungeonconfiguration) -> {
-        return worldgendecoratordungeonconfiguration.c;
+    public static final Codec<WorldGenDecoratorDungeonConfiguration> CODEC = Codec.INT.fieldOf("chance").xmap(WorldGenDecoratorDungeonConfiguration::new, (worldgendecoratordungeonconfiguration) -> {
+        return worldgendecoratordungeonconfiguration.chance;
     }).codec();
-    public final int c;
+    public final int chance;
 
     public WorldGenDecoratorDungeonConfiguration(int i) {
-        this.c = i;
+        this.chance = i;
     }
 }

@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -23,9 +24,11 @@ import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.server.level.LightEngineGraphSection;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.IWorldReader;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.ChunkSection;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -33,19 +36,23 @@ import net.minecraft.world.level.chunk.storage.RegionFileSection;
 
 public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
 
-    private final VillagePlace.a a = new VillagePlace.a();
-    private final LongSet b = new LongOpenHashSet();
+    public static final int MAX_VILLAGE_DISTANCE = 6;
+    public static final int VILLAGE_SECTION_SIZE = 1;
+    private final VillagePlace.a distanceTracker = new VillagePlace.a();
+    private final LongSet loadedChunks = new LongOpenHashSet();
 
-    public VillagePlace(File file, DataFixer datafixer, boolean flag) {
-        super(file, VillagePlaceSection::a, VillagePlaceSection::new, datafixer, DataFixTypes.POI_CHUNK, flag);
+    public VillagePlace(File file, DataFixer datafixer, boolean flag, LevelHeightAccessor levelheightaccessor) {
+        super(file, VillagePlaceSection::a, VillagePlaceSection::new, datafixer, DataFixTypes.POI_CHUNK, flag, levelheightaccessor);
     }
 
     public void a(BlockPosition blockposition, VillagePlaceType villageplacetype) {
-        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition, villageplacetype);
+        ((VillagePlaceSection) this.f(SectionPosition.c(blockposition))).a(blockposition, villageplacetype);
     }
 
     public void a(BlockPosition blockposition) {
-        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition);
+        this.d(SectionPosition.c(blockposition)).ifPresent((villageplacesection) -> {
+            villageplacesection.a(blockposition);
+        });
     }
 
     public long a(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
@@ -53,9 +60,8 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public boolean a(VillagePlaceType villageplacetype, BlockPosition blockposition) {
-        Optional<VillagePlaceType> optional = ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).d(blockposition);
-
-        return optional.isPresent() && ((VillagePlaceType) optional.get()).equals(villageplacetype);
+        Objects.requireNonNull(villageplacetype);
+        return this.a(blockposition, villageplacetype::equals);
     }
 
     public Stream<VillagePlaceRecord> b(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
@@ -78,8 +84,9 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         });
     }
 
+    @VisibleForDebug
     public Stream<VillagePlaceRecord> a(Predicate<VillagePlaceType> predicate, ChunkCoordIntPair chunkcoordintpair, VillagePlace.Occupancy villageplace_occupancy) {
-        return IntStream.range(0, 16).boxed().map((integer) -> {
+        return IntStream.range(this.levelHeightAccessor.getMinSection(), this.levelHeightAccessor.getMaxSection()).boxed().map((integer) -> {
             return this.d(SectionPosition.a(chunkcoordintpair, integer).s());
         }).filter(Optional::isPresent).flatMap((optional) -> {
             return ((VillagePlaceSection) optional.get()).a(predicate, villageplace_occupancy);
@@ -106,6 +113,12 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         }));
     }
 
+    public Optional<BlockPosition> d(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1).min(Comparator.comparingDouble((blockposition1) -> {
+            return blockposition1.j(blockposition);
+        }));
+    }
+
     public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i) {
         return this.c(predicate, blockposition, i, VillagePlace.Occupancy.HAS_SPACE).filter((villageplacerecord) -> {
             return predicate1.test(villageplacerecord.f());
@@ -125,53 +138,65 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public boolean b(BlockPosition blockposition) {
-        return ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).c(blockposition);
+        return (Boolean) this.d(SectionPosition.c(blockposition)).map((villageplacesection) -> {
+            return villageplacesection.c(blockposition);
+        }).orElseThrow(() -> {
+            return (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("POI never registered at " + blockposition)));
+        });
     }
 
     public boolean a(BlockPosition blockposition, Predicate<VillagePlaceType> predicate) {
-        return (Boolean) this.d(SectionPosition.a(blockposition).s()).map((villageplacesection) -> {
+        return (Boolean) this.d(SectionPosition.c(blockposition)).map((villageplacesection) -> {
             return villageplacesection.a(blockposition, predicate);
         }).orElse(false);
     }
 
     public Optional<VillagePlaceType> c(BlockPosition blockposition) {
-        VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(SectionPosition.a(blockposition).s());
+        return this.d(SectionPosition.c(blockposition)).flatMap((villageplacesection) -> {
+            return villageplacesection.d(blockposition);
+        });
+    }
 
-        return villageplacesection.d(blockposition);
+    @Deprecated
+    @VisibleForDebug
+    public int d(BlockPosition blockposition) {
+        return (Integer) this.d(SectionPosition.c(blockposition)).map((villageplacesection) -> {
+            return villageplacesection.b(blockposition);
+        }).orElse(0);
     }
 
     public int a(SectionPosition sectionposition) {
-        this.a.a();
-        return this.a.c(sectionposition.s());
+        this.distanceTracker.a();
+        return this.distanceTracker.c(sectionposition.s());
     }
 
-    private boolean f(long i) {
+    boolean g(long i) {
         Optional<VillagePlaceSection> optional = this.c(i);
 
         return optional == null ? false : (Boolean) optional.map((villageplacesection) -> {
-            return villageplacesection.a(VillagePlaceType.b, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
+            return villageplacesection.a(VillagePlaceType.ALL, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
         }).orElse(false);
     }
 
     @Override
     public void a(BooleanSupplier booleansupplier) {
         super.a(booleansupplier);
-        this.a.a();
+        this.distanceTracker.a();
     }
 
     @Override
     protected void a(long i) {
         super.a(i);
-        this.a.b(i, this.a.b(i), false);
+        this.distanceTracker.b(i, this.distanceTracker.b(i), false);
     }
 
     @Override
     protected void b(long i) {
-        this.a.b(i, this.a.b(i), false);
+        this.distanceTracker.b(i, this.distanceTracker.b(i), false);
     }
 
     public void a(ChunkCoordIntPair chunkcoordintpair, ChunkSection chunksection) {
-        SectionPosition sectionposition = SectionPosition.a(chunkcoordintpair, chunksection.getYPosition() >> 4);
+        SectionPosition sectionposition = SectionPosition.a(chunkcoordintpair, SectionPosition.a(chunksection.getYPosition()));
 
         SystemUtils.a(this.d(sectionposition.s()), (villageplacesection) -> {
             villageplacesection.a((biconsumer) -> {
@@ -182,8 +207,9 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
             });
         }, () -> {
             if (a(chunksection)) {
-                VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(sectionposition.s());
+                VillagePlaceSection villageplacesection = (VillagePlaceSection) this.f(sectionposition.s());
 
+                Objects.requireNonNull(villageplacesection);
                 this.a(chunksection, sectionposition, villageplacesection::a);
             }
 
@@ -191,9 +217,9 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     private static boolean a(ChunkSection chunksection) {
-        Set set = VillagePlaceType.x;
+        Set set = VillagePlaceType.ALL_STATES;
 
-        set.getClass();
+        Objects.requireNonNull(set);
         return chunksection.a(set::contains);
     }
 
@@ -208,44 +234,44 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public void a(IWorldReader iworldreader, BlockPosition blockposition, int i) {
-        SectionPosition.b(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).map((sectionposition) -> {
+        SectionPosition.a(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16), this.levelHeightAccessor.getMinSection(), this.levelHeightAccessor.getMaxSection()).map((sectionposition) -> {
             return Pair.of(sectionposition, this.d(sectionposition.s()));
         }).filter((pair) -> {
             return !(Boolean) ((Optional) pair.getSecond()).map(VillagePlaceSection::a).orElse(false);
         }).map((pair) -> {
             return ((SectionPosition) pair.getFirst()).r();
         }).filter((chunkcoordintpair) -> {
-            return this.b.add(chunkcoordintpair.pair());
+            return this.loadedChunks.add(chunkcoordintpair.pair());
         }).forEach((chunkcoordintpair) -> {
             iworldreader.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, ChunkStatus.EMPTY);
         });
     }
 
-    final class a extends LightEngineGraphSection {
+    private final class a extends LightEngineGraphSection {
 
-        private final Long2ByteMap b = new Long2ByteOpenHashMap();
+        private final Long2ByteMap levels = new Long2ByteOpenHashMap();
 
         protected a() {
             super(7, 16, 256);
-            this.b.defaultReturnValue((byte) 7);
+            this.levels.defaultReturnValue((byte) 7);
         }
 
         @Override
         protected int b(long i) {
-            return VillagePlace.this.f(i) ? 0 : 7;
+            return VillagePlace.this.g(i) ? 0 : 7;
         }
 
         @Override
         protected int c(long i) {
-            return this.b.get(i);
+            return this.levels.get(i);
         }
 
         @Override
         protected void a(long i, int j) {
             if (j > 6) {
-                this.b.remove(i);
+                this.levels.remove(i);
             } else {
-                this.b.put(i, (byte) j);
+                this.levels.put(i, (byte) j);
             }
 
         }
@@ -261,14 +287,14 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
             return true;
         });
 
-        private final Predicate<? super VillagePlaceRecord> d;
+        private final Predicate<? super VillagePlaceRecord> test;
 
         private Occupancy(Predicate predicate) {
-            this.d = predicate;
+            this.test = predicate;
         }
 
         public Predicate<? super VillagePlaceRecord> a() {
-            return this.d;
+            return this.test;
         }
     }
 }

@@ -4,6 +4,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.QuartPos;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.util.MathHelper;
@@ -26,12 +28,12 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
 
     int a(HeightMap.Type heightmap_type, int i, int j);
 
-    int c();
+    int n_();
 
-    BiomeManager d();
+    BiomeManager r_();
 
     default BiomeBase getBiome(BlockPosition blockposition) {
-        return this.d().a(blockposition);
+        return this.r_().a(blockposition);
     }
 
     default Stream<IBlockData> c(AxisAlignedBB axisalignedbb) {
@@ -46,20 +48,35 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
     }
 
     @Override
+    default int a(BlockPosition blockposition, ColorResolver colorresolver) {
+        return colorresolver.getColor(this.getBiome(blockposition), (double) blockposition.getX(), (double) blockposition.getZ());
+    }
+
+    @Override
     default BiomeBase getBiome(int i, int j, int k) {
-        IChunkAccess ichunkaccess = this.getChunkAt(i >> 2, k >> 2, ChunkStatus.BIOMES, false);
+        IChunkAccess ichunkaccess = this.getChunkAt(QuartPos.d(i), QuartPos.d(k), ChunkStatus.BIOMES, false);
 
         return ichunkaccess != null && ichunkaccess.getBiomeIndex() != null ? ichunkaccess.getBiomeIndex().getBiome(i, j, k) : this.a(i, j, k);
     }
 
     BiomeBase a(int i, int j, int k);
 
-    boolean s_();
+    boolean isClientSide();
 
     @Deprecated
     int getSeaLevel();
 
     DimensionManager getDimensionManager();
+
+    @Override
+    default int getMinBuildHeight() {
+        return this.getDimensionManager().getMinY();
+    }
+
+    @Override
+    default int getHeight() {
+        return this.getDimensionManager().getHeight();
+    }
 
     default BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
         return new BlockPosition(blockposition.getX(), this.a(heightmap_type, blockposition.getX(), blockposition.getZ()), blockposition.getZ());
@@ -69,13 +86,13 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.getType(blockposition).isAir();
     }
 
-    default boolean x(BlockPosition blockposition) {
+    default boolean y(BlockPosition blockposition) {
         if (blockposition.getY() >= this.getSeaLevel()) {
-            return this.e(blockposition);
+            return this.g(blockposition);
         } else {
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), this.getSeaLevel(), blockposition.getZ());
 
-            if (!this.e(blockposition1)) {
+            if (!this.g(blockposition1)) {
                 return false;
             } else {
                 for (blockposition1 = blockposition1.down(); blockposition1.getY() > blockposition.getY(); blockposition1 = blockposition1.down()) {
@@ -92,7 +109,7 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
     }
 
     @Deprecated
-    default float y(BlockPosition blockposition) {
+    default float z(BlockPosition blockposition) {
         return this.getDimensionManager().a(this.getLightLevel(blockposition));
     }
 
@@ -100,8 +117,8 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.getType(blockposition).c(this, blockposition, enumdirection);
     }
 
-    default IChunkAccess z(BlockPosition blockposition) {
-        return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+    default IChunkAccess A(BlockPosition blockposition) {
+        return this.getChunkAt(SectionPosition.a(blockposition.getX()), SectionPosition.a(blockposition.getZ()));
     }
 
     default IChunkAccess getChunkAt(int i, int j) {
@@ -118,17 +135,17 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.getChunkAt(i, j, ChunkStatus.EMPTY, false);
     }
 
-    default boolean A(BlockPosition blockposition) {
+    default boolean B(BlockPosition blockposition) {
         return this.getFluid(blockposition).a((Tag) TagsFluid.WATER);
     }
 
     default boolean containsLiquid(AxisAlignedBB axisalignedbb) {
         int i = MathHelper.floor(axisalignedbb.minX);
-        int j = MathHelper.f(axisalignedbb.maxX);
+        int j = MathHelper.e(axisalignedbb.maxX);
         int k = MathHelper.floor(axisalignedbb.minY);
-        int l = MathHelper.f(axisalignedbb.maxY);
+        int l = MathHelper.e(axisalignedbb.maxY);
         int i1 = MathHelper.floor(axisalignedbb.minZ);
-        int j1 = MathHelper.f(axisalignedbb.maxZ);
+        int j1 = MathHelper.e(axisalignedbb.maxZ);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int k1 = i; k1 < j; ++k1) {
@@ -147,7 +164,7 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
     }
 
     default int getLightLevel(BlockPosition blockposition) {
-        return this.c(blockposition, this.c());
+        return this.c(blockposition, this.n_());
     }
 
     default int c(BlockPosition blockposition, int i) {
@@ -155,8 +172,13 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
     }
 
     @Deprecated
+    default boolean e(int i, int j) {
+        return this.isChunkLoaded(SectionPosition.a(i), SectionPosition.a(j));
+    }
+
+    @Deprecated
     default boolean isLoaded(BlockPosition blockposition) {
-        return this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        return this.e(blockposition.getX(), blockposition.getZ());
     }
 
     @Deprecated
@@ -166,23 +188,24 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
 
     @Deprecated
     default boolean isAreaLoaded(int i, int j, int k, int l, int i1, int j1) {
-        if (i1 >= 0 && j < 256) {
-            i >>= 4;
-            k >>= 4;
-            l >>= 4;
-            j1 >>= 4;
+        return i1 >= this.getMinBuildHeight() && j < this.getMaxBuildHeight() ? this.b(i, k, l, j1) : false;
+    }
 
-            for (int k1 = i; k1 <= l; ++k1) {
-                for (int l1 = k; l1 <= j1; ++l1) {
-                    if (!this.isChunkLoaded(k1, l1)) {
-                        return false;
-                    }
+    @Deprecated
+    default boolean b(int i, int j, int k, int l) {
+        int i1 = SectionPosition.a(i);
+        int j1 = SectionPosition.a(k);
+        int k1 = SectionPosition.a(j);
+        int l1 = SectionPosition.a(l);
+
+        for (int i2 = i1; i2 <= j1; ++i2) {
+            for (int j2 = k1; j2 <= l1; ++j2) {
+                if (!this.isChunkLoaded(i2, j2)) {
+                    return false;
                 }
             }
-
-            return true;
-        } else {
-            return false;
         }
+
+        return true;
     }
 }

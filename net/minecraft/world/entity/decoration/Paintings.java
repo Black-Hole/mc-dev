@@ -4,49 +4,49 @@ import net.minecraft.core.IRegistry;
 
 public class Paintings {
 
-    public static final Paintings a = a("kebab", 16, 16);
-    public static final Paintings b = a("aztec", 16, 16);
-    public static final Paintings c = a("alban", 16, 16);
-    public static final Paintings d = a("aztec2", 16, 16);
-    public static final Paintings e = a("bomb", 16, 16);
-    public static final Paintings f = a("plant", 16, 16);
-    public static final Paintings g = a("wasteland", 16, 16);
-    public static final Paintings h = a("pool", 32, 16);
-    public static final Paintings i = a("courbet", 32, 16);
-    public static final Paintings j = a("sea", 32, 16);
-    public static final Paintings k = a("sunset", 32, 16);
-    public static final Paintings l = a("creebet", 32, 16);
-    public static final Paintings m = a("wanderer", 16, 32);
-    public static final Paintings n = a("graham", 16, 32);
-    public static final Paintings o = a("match", 32, 32);
-    public static final Paintings p = a("bust", 32, 32);
-    public static final Paintings q = a("stage", 32, 32);
-    public static final Paintings r = a("void", 32, 32);
-    public static final Paintings s = a("skull_and_roses", 32, 32);
-    public static final Paintings t = a("wither", 32, 32);
-    public static final Paintings u = a("fighters", 64, 32);
-    public static final Paintings v = a("pointer", 64, 64);
-    public static final Paintings w = a("pigscene", 64, 64);
-    public static final Paintings x = a("burning_skull", 64, 64);
-    public static final Paintings y = a("skeleton", 64, 48);
-    public static final Paintings z = a("donkey_kong", 64, 48);
-    private final int A;
-    private final int B;
+    public static final Paintings KEBAB = a("kebab", 16, 16);
+    public static final Paintings AZTEC = a("aztec", 16, 16);
+    public static final Paintings ALBAN = a("alban", 16, 16);
+    public static final Paintings AZTEC2 = a("aztec2", 16, 16);
+    public static final Paintings BOMB = a("bomb", 16, 16);
+    public static final Paintings PLANT = a("plant", 16, 16);
+    public static final Paintings WASTELAND = a("wasteland", 16, 16);
+    public static final Paintings POOL = a("pool", 32, 16);
+    public static final Paintings COURBET = a("courbet", 32, 16);
+    public static final Paintings SEA = a("sea", 32, 16);
+    public static final Paintings SUNSET = a("sunset", 32, 16);
+    public static final Paintings CREEBET = a("creebet", 32, 16);
+    public static final Paintings WANDERER = a("wanderer", 16, 32);
+    public static final Paintings GRAHAM = a("graham", 16, 32);
+    public static final Paintings MATCH = a("match", 32, 32);
+    public static final Paintings BUST = a("bust", 32, 32);
+    public static final Paintings STAGE = a("stage", 32, 32);
+    public static final Paintings VOID = a("void", 32, 32);
+    public static final Paintings SKULL_AND_ROSES = a("skull_and_roses", 32, 32);
+    public static final Paintings WITHER = a("wither", 32, 32);
+    public static final Paintings FIGHTERS = a("fighters", 64, 32);
+    public static final Paintings POINTER = a("pointer", 64, 64);
+    public static final Paintings PIGSCENE = a("pigscene", 64, 64);
+    public static final Paintings BURNING_SKULL = a("burning_skull", 64, 64);
+    public static final Paintings SKELETON = a("skeleton", 64, 48);
+    public static final Paintings DONKEY_KONG = a("donkey_kong", 64, 48);
+    private final int width;
+    private final int height;
 
     private static Paintings a(String s, int i, int j) {
         return (Paintings) IRegistry.a((IRegistry) IRegistry.MOTIVE, s, (Object) (new Paintings(i, j)));
     }
 
     public Paintings(int i, int j) {
-        this.A = i;
-        this.B = j;
+        this.width = i;
+        this.height = j;
     }
 
     public int getWidth() {
-        return this.A;
+        return this.width;
     }
 
     public int getHeight() {
-        return this.B;
+        return this.height;
     }
 }

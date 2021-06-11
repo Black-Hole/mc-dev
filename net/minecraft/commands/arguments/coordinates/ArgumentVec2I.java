@@ -20,8 +20,8 @@ import net.minecraft.server.level.BlockPosition2D;
 
 public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> b = Arrays.asList("0 0", "~ ~", "~1 ~-2", "^ ^", "^-1 ^0");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos2d.incomplete"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("0 0", "~ ~", "~1 ~-2", "^ ^", "^-1 ^0");
+    public static final SimpleCommandExceptionType ERROR_NOT_COMPLETE = new SimpleCommandExceptionType(new ChatMessage("argument.pos2d.incomplete"));
 
     public ArgumentVec2I() {}
 
@@ -39,7 +39,7 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
         int i = stringreader.getCursor();
 
         if (!stringreader.canRead()) {
-            throw ArgumentVec2I.a.createWithContext(stringreader);
+            throw ArgumentVec2I.ERROR_NOT_COMPLETE.createWithContext(stringreader);
         } else {
             ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader);
 
@@ -50,7 +50,7 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
                 return new VectorPosition(argumentparserposition, new ArgumentParserPosition(true, 0.0D), argumentparserposition1);
             } else {
                 stringreader.setCursor(i);
-                throw ArgumentVec2I.a.createWithContext(stringreader);
+                throw ArgumentVec2I.ERROR_NOT_COMPLETE.createWithContext(stringreader);
             }
         }
     }
@@ -63,7 +63,7 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
             Object object;
 
             if (!s.isEmpty() && s.charAt(0) == '^') {
-                object = Collections.singleton(ICompletionProvider.a.a);
+                object = Collections.singleton(ICompletionProvider.a.DEFAULT_LOCAL);
             } else {
                 object = ((ICompletionProvider) commandcontext.getSource()).s();
             }
@@ -73,6 +73,6 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentVec2I.b;
+        return ArgumentVec2I.EXAMPLES;
     }
 }

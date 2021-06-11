@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 import net.minecraft.SystemUtils;
 
 public interface Counter {
@@ -16,9 +17,12 @@ public interface Counter {
     Counter DISTANCE;
     Counter TIME;
 
+    String format(int i);
+
     static {
         NumberFormat numberformat = NumberFormat.getIntegerInstance(Locale.US);
 
+        Objects.requireNonNull(numberformat);
         DEFAULT = numberformat::format;
         DIVIDE_BY_TEN = (i) -> {
             return Counter.DECIMAL_FORMAT.format((double) i * 0.1D);

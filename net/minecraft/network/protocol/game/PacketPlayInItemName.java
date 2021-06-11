@@ -1,27 +1,23 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInItemName implements Packet<PacketListenerPlayIn> {
 
-    private String a;
-
-    public PacketPlayInItemName() {}
+    private final String name;
 
     public PacketPlayInItemName(String s) {
-        this.a = s;
+        this.name = s;
+    }
+
+    public PacketPlayInItemName(PacketDataSerializer packetdataserializer) {
+        this.name = packetdataserializer.p();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(32767);
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.name);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -29,6 +25,6 @@ public class PacketPlayInItemName implements Packet<PacketListenerPlayIn> {
     }
 
     public String b() {
-        return this.a;
+        return this.name;
     }
 }

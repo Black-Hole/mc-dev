@@ -12,6 +12,8 @@ import net.minecraft.server.level.WorldServer;
 
 public class CommandTime {
 
+    public CommandTime() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("time").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);

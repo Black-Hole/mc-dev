@@ -18,13 +18,13 @@ import net.minecraft.network.chat.ChatComponentText;
 
 public class GameTestHarnessTestFunctionArgument implements ArgumentType<GameTestHarnessTestFunction> {
 
-    private static final Collection<String> a = Arrays.asList("techtests.piston", "techtests");
+    private static final Collection<String> EXAMPLES = Arrays.asList("techtests.piston", "techtests");
 
     public GameTestHarnessTestFunctionArgument() {}
 
     public GameTestHarnessTestFunction parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
-        Optional<GameTestHarnessTestFunction> optional = GameTestHarnessRegistry.d(s);
+        Optional<GameTestHarnessTestFunction> optional = GameTestHarnessRegistry.e(s);
 
         if (optional.isPresent()) {
             return (GameTestHarnessTestFunction) optional.get();
@@ -50,6 +50,6 @@ public class GameTestHarnessTestFunctionArgument implements ArgumentType<GameTes
     }
 
     public Collection<String> getExamples() {
-        return GameTestHarnessTestFunctionArgument.a;
+        return GameTestHarnessTestFunctionArgument.EXAMPLES;
     }
 }

@@ -1,5 +1,7 @@
 package net.minecraft.advancements.critereon;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -7,8 +9,11 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,55 +32,55 @@ import net.minecraft.world.level.IMaterial;
 
 public class CriterionConditionItem {
 
-    public static final CriterionConditionItem a = new CriterionConditionItem();
+    public static final CriterionConditionItem ANY = new CriterionConditionItem();
     @Nullable
-    private final Tag<Item> b;
+    private final Tag<Item> tag;
     @Nullable
-    private final Item c;
-    private final CriterionConditionValue.IntegerRange d;
-    private final CriterionConditionValue.IntegerRange e;
-    private final CriterionConditionEnchantments[] f;
-    private final CriterionConditionEnchantments[] g;
+    private final Set<Item> items;
+    private final CriterionConditionValue.IntegerRange count;
+    private final CriterionConditionValue.IntegerRange durability;
+    private final CriterionConditionEnchantments[] enchantments;
+    private final CriterionConditionEnchantments[] storedEnchantments;
     @Nullable
-    private final PotionRegistry h;
-    private final CriterionConditionNBT i;
+    private final PotionRegistry potion;
+    private final CriterionConditionNBT nbt;
 
     public CriterionConditionItem() {
-        this.b = null;
-        this.c = null;
-        this.h = null;
-        this.d = CriterionConditionValue.IntegerRange.e;
-        this.e = CriterionConditionValue.IntegerRange.e;
-        this.f = CriterionConditionEnchantments.b;
-        this.g = CriterionConditionEnchantments.b;
-        this.i = CriterionConditionNBT.a;
+        this.tag = null;
+        this.items = null;
+        this.potion = null;
+        this.count = CriterionConditionValue.IntegerRange.ANY;
+        this.durability = CriterionConditionValue.IntegerRange.ANY;
+        this.enchantments = CriterionConditionEnchantments.NONE;
+        this.storedEnchantments = CriterionConditionEnchantments.NONE;
+        this.nbt = CriterionConditionNBT.ANY;
     }
 
-    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Item item, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionEnchantments[] acriterionconditionenchantments, CriterionConditionEnchantments[] acriterionconditionenchantments1, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
-        this.b = tag;
-        this.c = item;
-        this.d = criterionconditionvalue_integerrange;
-        this.e = criterionconditionvalue_integerrange1;
-        this.f = acriterionconditionenchantments;
-        this.g = acriterionconditionenchantments1;
-        this.h = potionregistry;
-        this.i = criterionconditionnbt;
+    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Set<Item> set, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionEnchantments[] acriterionconditionenchantments, CriterionConditionEnchantments[] acriterionconditionenchantments1, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
+        this.tag = tag;
+        this.items = set;
+        this.count = criterionconditionvalue_integerrange;
+        this.durability = criterionconditionvalue_integerrange1;
+        this.enchantments = acriterionconditionenchantments;
+        this.storedEnchantments = acriterionconditionenchantments1;
+        this.potion = potionregistry;
+        this.nbt = criterionconditionnbt;
     }
 
     public boolean a(ItemStack itemstack) {
-        if (this == CriterionConditionItem.a) {
+        if (this == CriterionConditionItem.ANY) {
             return true;
-        } else if (this.b != null && !this.b.isTagged(itemstack.getItem())) {
+        } else if (this.tag != null && !itemstack.a(this.tag)) {
             return false;
-        } else if (this.c != null && itemstack.getItem() != this.c) {
+        } else if (this.items != null && !this.items.contains(itemstack.getItem())) {
             return false;
-        } else if (!this.d.d(itemstack.getCount())) {
+        } else if (!this.count.d(itemstack.getCount())) {
             return false;
-        } else if (!this.e.c() && !itemstack.e()) {
+        } else if (!this.durability.c() && !itemstack.f()) {
             return false;
-        } else if (!this.e.d(itemstack.h() - itemstack.getDamage())) {
+        } else if (!this.durability.d(itemstack.i() - itemstack.getDamage())) {
             return false;
-        } else if (!this.i.a(itemstack)) {
+        } else if (!this.nbt.a(itemstack)) {
             return false;
         } else {
             Map map;
@@ -84,9 +89,9 @@ public class CriterionConditionItem {
             CriterionConditionEnchantments criterionconditionenchantments;
             int j;
 
-            if (this.f.length > 0) {
+            if (this.enchantments.length > 0) {
                 map = EnchantmentManager.a(itemstack.getEnchantments());
-                acriterionconditionenchantments = this.f;
+                acriterionconditionenchantments = this.enchantments;
                 i = acriterionconditionenchantments.length;
 
                 for (j = 0; j < i; ++j) {
@@ -97,9 +102,9 @@ public class CriterionConditionItem {
                 }
             }
 
-            if (this.g.length > 0) {
+            if (this.storedEnchantments.length > 0) {
                 map = EnchantmentManager.a(ItemEnchantedBook.d(itemstack));
-                acriterionconditionenchantments = this.g;
+                acriterionconditionenchantments = this.storedEnchantments;
                 i = acriterionconditionenchantments.length;
 
                 for (j = 0; j < i; ++j) {
@@ -112,7 +117,7 @@ public class CriterionConditionItem {
 
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
 
-            return this.h == null || this.h == potionregistry;
+            return this.potion == null || this.potion == potionregistry;
         }
     }
 
@@ -126,14 +131,23 @@ public class CriterionConditionItem {
                 throw new JsonParseException("Disallowed data tag found");
             } else {
                 CriterionConditionNBT criterionconditionnbt = CriterionConditionNBT.a(jsonobject.get("nbt"));
-                Item item = null;
+                Set<Item> set = null;
+                JsonArray jsonarray = ChatDeserializer.a(jsonobject, "items", (JsonArray) null);
 
-                if (jsonobject.has("item")) {
-                    MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "item"));
+                if (jsonarray != null) {
+                    Builder<Item> builder = ImmutableSet.builder();
+                    Iterator iterator = jsonarray.iterator();
 
-                    item = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
-                        return new JsonSyntaxException("Unknown item id '" + minecraftkey + "'");
-                    });
+                    while (iterator.hasNext()) {
+                        JsonElement jsonelement1 = (JsonElement) iterator.next();
+                        MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.a(jsonelement1, "item"));
+
+                        builder.add((Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
+                            return new JsonSyntaxException("Unknown item id '" + minecraftkey + "'");
+                        }));
+                    }
+
+                    set = builder.build();
                 }
 
                 Tag<Item> tag = null;
@@ -141,10 +155,9 @@ public class CriterionConditionItem {
                 if (jsonobject.has("tag")) {
                     MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                    tag = TagsInstance.a().getItemTags().a(minecraftkey1);
-                    if (tag == null) {
-                        throw new JsonSyntaxException("Unknown item tag '" + minecraftkey1 + "'");
-                    }
+                    tag = TagsInstance.a().a(IRegistry.ITEM_REGISTRY, minecraftkey1, (minecraftkey2) -> {
+                        return new JsonSyntaxException("Unknown item tag '" + minecraftkey2 + "'");
+                    });
                 }
 
                 PotionRegistry potionregistry = null;
@@ -160,39 +173,50 @@ public class CriterionConditionItem {
                 CriterionConditionEnchantments[] acriterionconditionenchantments = CriterionConditionEnchantments.b(jsonobject.get("enchantments"));
                 CriterionConditionEnchantments[] acriterionconditionenchantments1 = CriterionConditionEnchantments.b(jsonobject.get("stored_enchantments"));
 
-                return new CriterionConditionItem(tag, item, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, acriterionconditionenchantments1, potionregistry, criterionconditionnbt);
+                return new CriterionConditionItem(tag, set, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, acriterionconditionenchantments1, potionregistry, criterionconditionnbt);
             }
         } else {
-            return CriterionConditionItem.a;
+            return CriterionConditionItem.ANY;
         }
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionItem.a) {
+        if (this == CriterionConditionItem.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
-
-            if (this.c != null) {
-                jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.c).toString());
-            }
-
-            if (this.b != null) {
-                jsonobject.addProperty("tag", TagsInstance.a().getItemTags().b(this.b).toString());
-            }
-
-            jsonobject.add("count", this.d.d());
-            jsonobject.add("durability", this.e.d());
-            jsonobject.add("nbt", this.i.a());
             JsonArray jsonarray;
+
+            if (this.items != null) {
+                jsonarray = new JsonArray();
+                Iterator iterator = this.items.iterator();
+
+                while (iterator.hasNext()) {
+                    Item item = (Item) iterator.next();
+
+                    jsonarray.add(IRegistry.ITEM.getKey(item).toString());
+                }
+
+                jsonobject.add("items", jsonarray);
+            }
+
+            if (this.tag != null) {
+                jsonobject.addProperty("tag", TagsInstance.a().a(IRegistry.ITEM_REGISTRY, this.tag, () -> {
+                    return new IllegalStateException("Unknown item tag");
+                }).toString());
+            }
+
+            jsonobject.add("count", this.count.d());
+            jsonobject.add("durability", this.durability.d());
+            jsonobject.add("nbt", this.nbt.a());
             CriterionConditionEnchantments[] acriterionconditionenchantments;
             int i;
             CriterionConditionEnchantments criterionconditionenchantments;
             int j;
 
-            if (this.f.length > 0) {
+            if (this.enchantments.length > 0) {
                 jsonarray = new JsonArray();
-                acriterionconditionenchantments = this.f;
+                acriterionconditionenchantments = this.enchantments;
                 i = acriterionconditionenchantments.length;
 
                 for (j = 0; j < i; ++j) {
@@ -203,9 +227,9 @@ public class CriterionConditionItem {
                 jsonobject.add("enchantments", jsonarray);
             }
 
-            if (this.g.length > 0) {
+            if (this.storedEnchantments.length > 0) {
                 jsonarray = new JsonArray();
-                acriterionconditionenchantments = this.g;
+                acriterionconditionenchantments = this.storedEnchantments;
                 i = acriterionconditionenchantments.length;
 
                 for (j = 0; j < i; ++j) {
@@ -216,8 +240,8 @@ public class CriterionConditionItem {
                 jsonobject.add("stored_enchantments", jsonarray);
             }
 
-            if (this.h != null) {
-                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.h).toString());
+            if (this.potion != null) {
+                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.potion).toString());
             }
 
             return jsonobject;
@@ -241,50 +265,70 @@ public class CriterionConditionItem {
 
     public static class a {
 
-        private final List<CriterionConditionEnchantments> a = Lists.newArrayList();
-        private final List<CriterionConditionEnchantments> b = Lists.newArrayList();
+        private final List<CriterionConditionEnchantments> enchantments = Lists.newArrayList();
+        private final List<CriterionConditionEnchantments> storedEnchantments = Lists.newArrayList();
         @Nullable
-        private Item c;
+        private Set<Item> items;
         @Nullable
-        private Tag<Item> d;
-        private CriterionConditionValue.IntegerRange e;
-        private CriterionConditionValue.IntegerRange f;
+        private Tag<Item> tag;
+        private CriterionConditionValue.IntegerRange count;
+        private CriterionConditionValue.IntegerRange durability;
         @Nullable
-        private PotionRegistry g;
-        private CriterionConditionNBT h;
+        private PotionRegistry potion;
+        private CriterionConditionNBT nbt;
 
         private a() {
-            this.e = CriterionConditionValue.IntegerRange.e;
-            this.f = CriterionConditionValue.IntegerRange.e;
-            this.h = CriterionConditionNBT.a;
+            this.count = CriterionConditionValue.IntegerRange.ANY;
+            this.durability = CriterionConditionValue.IntegerRange.ANY;
+            this.nbt = CriterionConditionNBT.ANY;
         }
 
         public static CriterionConditionItem.a a() {
             return new CriterionConditionItem.a();
         }
 
-        public CriterionConditionItem.a a(IMaterial imaterial) {
-            this.c = imaterial.getItem();
+        public CriterionConditionItem.a a(IMaterial... aimaterial) {
+            this.items = (Set) Stream.of(aimaterial).map(IMaterial::getItem).collect(ImmutableSet.toImmutableSet());
             return this;
         }
 
         public CriterionConditionItem.a a(Tag<Item> tag) {
-            this.d = tag;
+            this.tag = tag;
+            return this;
+        }
+
+        public CriterionConditionItem.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.count = criterionconditionvalue_integerrange;
+            return this;
+        }
+
+        public CriterionConditionItem.a b(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.durability = criterionconditionvalue_integerrange;
+            return this;
+        }
+
+        public CriterionConditionItem.a a(PotionRegistry potionregistry) {
+            this.potion = potionregistry;
             return this;
         }
 
         public CriterionConditionItem.a a(NBTTagCompound nbttagcompound) {
-            this.h = new CriterionConditionNBT(nbttagcompound);
+            this.nbt = new CriterionConditionNBT(nbttagcompound);
             return this;
         }
 
         public CriterionConditionItem.a a(CriterionConditionEnchantments criterionconditionenchantments) {
-            this.a.add(criterionconditionenchantments);
+            this.enchantments.add(criterionconditionenchantments);
+            return this;
+        }
+
+        public CriterionConditionItem.a b(CriterionConditionEnchantments criterionconditionenchantments) {
+            this.storedEnchantments.add(criterionconditionenchantments);
             return this;
         }
 
         public CriterionConditionItem b() {
-            return new CriterionConditionItem(this.d, this.c, this.e, this.f, (CriterionConditionEnchantments[]) this.a.toArray(CriterionConditionEnchantments.b), (CriterionConditionEnchantments[]) this.b.toArray(CriterionConditionEnchantments.b), this.g, this.h);
+            return new CriterionConditionItem(this.tag, this.items, this.count, this.durability, (CriterionConditionEnchantments[]) this.enchantments.toArray(CriterionConditionEnchantments.NONE), (CriterionConditionEnchantments[]) this.storedEnchantments.toArray(CriterionConditionEnchantments.NONE), this.potion, this.nbt);
         }
     }
 }

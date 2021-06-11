@@ -1,7 +1,7 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
+import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.scores.ScoreboardObjective;
@@ -9,43 +9,62 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPlayOut> {
 
-    private String a;
-    private IChatBaseComponent b;
-    private IScoreboardCriteria.EnumScoreboardHealthDisplay c;
-    private int d;
-
-    public PacketPlayOutScoreboardObjective() {}
+    public static final int METHOD_ADD = 0;
+    public static final int METHOD_REMOVE = 1;
+    public static final int METHOD_CHANGE = 2;
+    private final String objectiveName;
+    private final IChatBaseComponent displayName;
+    private final IScoreboardCriteria.EnumScoreboardHealthDisplay renderType;
+    private final int method;
 
     public PacketPlayOutScoreboardObjective(ScoreboardObjective scoreboardobjective, int i) {
-        this.a = scoreboardobjective.getName();
-        this.b = scoreboardobjective.getDisplayName();
-        this.c = scoreboardobjective.getRenderType();
-        this.d = i;
+        this.objectiveName = scoreboardobjective.getName();
+        this.displayName = scoreboardobjective.getDisplayName();
+        this.renderType = scoreboardobjective.getRenderType();
+        this.method = i;
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(16);
-        this.d = packetdataserializer.readByte();
-        if (this.d == 0 || this.d == 2) {
-            this.b = packetdataserializer.h();
-            this.c = (IScoreboardCriteria.EnumScoreboardHealthDisplay) packetdataserializer.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.class);
+    public PacketPlayOutScoreboardObjective(PacketDataSerializer packetdataserializer) {
+        this.objectiveName = packetdataserializer.e(16);
+        this.method = packetdataserializer.readByte();
+        if (this.method != 0 && this.method != 2) {
+            this.displayName = ChatComponentText.EMPTY;
+            this.renderType = IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER;
+        } else {
+            this.displayName = packetdataserializer.i();
+            this.renderType = (IScoreboardCriteria.EnumScoreboardHealthDisplay) packetdataserializer.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.class);
         }
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.d);
-        if (this.d == 0 || this.d == 2) {
-            packetdataserializer.a(this.b);
-            packetdataserializer.a((Enum) this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.objectiveName);
+        packetdataserializer.writeByte(this.method);
+        if (this.method == 0 || this.method == 2) {
+            packetdataserializer.a(this.displayName);
+            packetdataserializer.a((Enum) this.renderType);
         }
 
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public String b() {
+        return this.objectiveName;
+    }
+
+    public IChatBaseComponent c() {
+        return this.displayName;
+    }
+
+    public int d() {
+        return this.method;
+    }
+
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay e() {
+        return this.renderType;
     }
 }

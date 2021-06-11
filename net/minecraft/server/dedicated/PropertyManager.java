@@ -31,29 +31,26 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
 
         try {
             InputStream inputstream = Files.newInputStream(path);
-            Throwable throwable = null;
 
             try {
                 properties.load(inputstream);
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (inputstream != null) {
-                    if (throwable != null) {
-                        try {
-                            inputstream.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         inputstream.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (inputstream != null) {
+                inputstream.close();
             }
         } catch (IOException ioexception) {
-            PropertyManager.LOGGER.error("Failed to load properties from file: " + path);
+            PropertyManager.LOGGER.error("Failed to load properties from file: {}", path);
         }
 
         return properties;
@@ -62,29 +59,26 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
     public void savePropertiesFile(Path path) {
         try {
             OutputStream outputstream = Files.newOutputStream(path);
-            Throwable throwable = null;
 
             try {
                 this.properties.store(outputstream, "Minecraft server properties");
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (outputstream != null) {
-                    if (throwable != null) {
-                        try {
-                            outputstream.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         outputstream.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (outputstream != null) {
+                outputstream.close();
             }
         } catch (IOException ioexception) {
-            PropertyManager.LOGGER.error("Failed to store properties to file: " + path);
+            PropertyManager.LOGGER.error("Failed to store properties to file: {}", path);
         }
 
     }
@@ -207,24 +201,24 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
 
     public class EditableProperty<V> implements Supplier<V> {
 
-        private final String b;
-        private final V c;
-        private final Function<V, String> d;
+        private final String key;
+        private final V value;
+        private final Function<V, String> serializer;
 
-        private EditableProperty(String s, Object object, Function function) {
-            this.b = s;
-            this.c = object;
-            this.d = function;
+        EditableProperty(String s, Object object, Function function) {
+            this.key = s;
+            this.value = object;
+            this.serializer = function;
         }
 
         public V get() {
-            return this.c;
+            return this.value;
         }
 
         public T set(IRegistryCustom iregistrycustom, V v0) {
             Properties properties = PropertyManager.this.a();
 
-            properties.put(this.b, this.d.apply(v0));
+            properties.put(this.key, this.serializer.apply(v0));
             return PropertyManager.this.reload(iregistrycustom, properties);
         }
     }

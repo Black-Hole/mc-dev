@@ -10,9 +10,9 @@ import net.minecraft.world.level.World;
 
 public class RecipeFireworks extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(Items.PAPER);
-    private static final RecipeItemStack b = RecipeItemStack.a(Items.GUNPOWDER);
-    private static final RecipeItemStack c = RecipeItemStack.a(Items.FIREWORK_STAR);
+    private static final RecipeItemStack PAPER_INGREDIENT = RecipeItemStack.a(Items.PAPER);
+    private static final RecipeItemStack GUNPOWDER_INGREDIENT = RecipeItemStack.a(Items.GUNPOWDER);
+    private static final RecipeItemStack STAR_INGREDIENT = RecipeItemStack.a(Items.FIREWORK_STAR);
 
     public RecipeFireworks(MinecraftKey minecraftkey) {
         super(minecraftkey);
@@ -26,18 +26,18 @@ public class RecipeFireworks extends IRecipeComplex {
             ItemStack itemstack = inventorycrafting.getItem(j);
 
             if (!itemstack.isEmpty()) {
-                if (RecipeFireworks.a.test(itemstack)) {
+                if (RecipeFireworks.PAPER_INGREDIENT.test(itemstack)) {
                     if (flag) {
                         return false;
                     }
 
                     flag = true;
-                } else if (RecipeFireworks.b.test(itemstack)) {
+                } else if (RecipeFireworks.GUNPOWDER_INGREDIENT.test(itemstack)) {
                     ++i;
                     if (i > 3) {
                         return false;
                     }
-                } else if (!RecipeFireworks.c.test(itemstack)) {
+                } else if (!RecipeFireworks.STAR_INGREDIENT.test(itemstack)) {
                     return false;
                 }
             }
@@ -56,9 +56,9 @@ public class RecipeFireworks extends IRecipeComplex {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
 
             if (!itemstack1.isEmpty()) {
-                if (RecipeFireworks.b.test(itemstack1)) {
+                if (RecipeFireworks.GUNPOWDER_INGREDIENT.test(itemstack1)) {
                     ++i;
-                } else if (RecipeFireworks.c.test(itemstack1)) {
+                } else if (RecipeFireworks.STAR_INGREDIENT.test(itemstack1)) {
                     NBTTagCompound nbttagcompound1 = itemstack1.b("Explosion");
 
                     if (nbttagcompound1 != null) {
@@ -77,12 +77,17 @@ public class RecipeFireworks extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public ItemStack getResult() {
         return new ItemStack(Items.FIREWORK_ROCKET);
     }
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.g;
+        return RecipeSerializer.FIREWORK_ROCKET;
     }
 }

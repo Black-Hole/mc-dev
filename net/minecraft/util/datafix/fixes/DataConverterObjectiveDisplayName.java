@@ -6,7 +6,6 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import java.util.Objects;
@@ -20,25 +19,19 @@ public class DataConverterObjectiveDisplayName extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.OBJECTIVE.typeName(), DSL.remainderType());
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.OBJECTIVE);
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.OBJECTIVE))) {
-            throw new IllegalStateException("Objective type is not what was expected.");
-        } else {
-            return this.fixTypeEverywhere("ObjectiveDisplayNameFix", type, (dynamicops) -> {
-                return (pair) -> {
-                    return pair.mapSecond((dynamic) -> {
-                        return dynamic.update("DisplayName", (dynamic1) -> {
-                            DataResult dataresult = dynamic1.asString().map((s) -> {
-                                return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
-                            });
-
-                            dynamic.getClass();
-                            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createString).result(), dynamic1);
-                        });
+        return this.fixTypeEverywhereTyped("ObjectiveDisplayNameFix", type, (typed) -> {
+            return typed.update(DSL.remainderFinder(), (dynamic) -> {
+                return dynamic.update("DisplayName", (dynamic1) -> {
+                    DataResult dataresult = dynamic1.asString().map((s) -> {
+                        return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
                     });
-                };
+
+                    Objects.requireNonNull(dynamic);
+                    return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createString).result(), dynamic1);
+                });
             });
-        }
+        });
     }
 }

@@ -28,15 +28,18 @@ import net.minecraft.world.phys.Vec3D;
 
 public class ItemTrident extends Item implements ItemVanishable {
 
-    private final Multimap<AttributeBase, AttributeModifier> a;
+    public static final int THROW_THRESHOLD_TIME = 10;
+    public static final float BASE_DAMAGE = 8.0F;
+    public static final float SHOOT_POWER = 2.5F;
+    private final Multimap<AttributeBase, AttributeModifier> defaultModifiers;
 
     public ItemTrident(Item.Info item_info) {
         super(item_info);
         Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
 
-        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTrident.f, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
-        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTrident.g, "Tool modifier", -2.9000000953674316D, AttributeModifier.Operation.ADDITION));
-        this.a = builder.build();
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTrident.BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTrident.BASE_ATTACK_SPEED_UUID, "Tool modifier", -2.9000000953674316D, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
     }
 
     @Override
@@ -45,12 +48,12 @@ public class ItemTrident extends Item implements ItemVanishable {
     }
 
     @Override
-    public EnumAnimation d_(ItemStack itemstack) {
+    public EnumAnimation c(ItemStack itemstack) {
         return EnumAnimation.SPEAR;
     }
 
     @Override
-    public int e_(ItemStack itemstack) {
+    public int b(ItemStack itemstack) {
         return 72000;
     }
 
@@ -58,7 +61,7 @@ public class ItemTrident extends Item implements ItemVanishable {
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {
         if (entityliving instanceof EntityHuman) {
             EntityHuman entityhuman = (EntityHuman) entityliving;
-            int j = this.e_(itemstack) - i;
+            int j = this.b(itemstack) - i;
 
             if (j >= 10) {
                 int k = EnchantmentManager.g(itemstack);
@@ -71,23 +74,23 @@ public class ItemTrident extends Item implements ItemVanishable {
                         if (k == 0) {
                             EntityThrownTrident entitythrowntrident = new EntityThrownTrident(world, entityhuman, itemstack);
 
-                            entitythrowntrident.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 2.5F + (float) k * 0.5F, 1.0F);
-                            if (entityhuman.abilities.canInstantlyBuild) {
-                                entitythrowntrident.fromPlayer = EntityArrow.PickupStatus.CREATIVE_ONLY;
+                            entitythrowntrident.a(entityhuman, entityhuman.getXRot(), entityhuman.getYRot(), 0.0F, 2.5F + (float) k * 0.5F, 1.0F);
+                            if (entityhuman.getAbilities().instabuild) {
+                                entitythrowntrident.pickup = EntityArrow.PickupStatus.CREATIVE_ONLY;
                             }
 
                             world.addEntity(entitythrowntrident);
-                            world.playSound((EntityHuman) null, (Entity) entitythrowntrident, SoundEffects.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                            if (!entityhuman.abilities.canInstantlyBuild) {
-                                entityhuman.inventory.f(itemstack);
+                            world.playSound((EntityHuman) null, (Entity) entitythrowntrident, SoundEffects.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            if (!entityhuman.getAbilities().instabuild) {
+                                entityhuman.getInventory().g(itemstack);
                             }
                         }
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
                     if (k > 0) {
-                        float f = entityhuman.yaw;
-                        float f1 = entityhuman.pitch;
+                        float f = entityhuman.getYRot();
+                        float f1 = entityhuman.getXRot();
                         float f2 = -MathHelper.sin(f * 0.017453292F) * MathHelper.cos(f1 * 0.017453292F);
                         float f3 = -MathHelper.sin(f1 * 0.017453292F);
                         float f4 = MathHelper.cos(f * 0.017453292F) * MathHelper.cos(f1 * 0.017453292F);
@@ -98,7 +101,7 @@ public class ItemTrident extends Item implements ItemVanishable {
                         f3 *= f6 / f5;
                         f4 *= f6 / f5;
                         entityhuman.i((double) f2, (double) f3, (double) f4);
-                        entityhuman.r(20);
+                        entityhuman.s(20);
                         if (entityhuman.isOnGround()) {
                             float f7 = 1.1999999F;
 
@@ -108,11 +111,11 @@ public class ItemTrident extends Item implements ItemVanishable {
                         SoundEffect soundeffect;
 
                         if (k >= 3) {
-                            soundeffect = SoundEffects.ITEM_TRIDENT_RIPTIDE_3;
+                            soundeffect = SoundEffects.TRIDENT_RIPTIDE_3;
                         } else if (k == 2) {
-                            soundeffect = SoundEffects.ITEM_TRIDENT_RIPTIDE_2;
+                            soundeffect = SoundEffects.TRIDENT_RIPTIDE_2;
                         } else {
-                            soundeffect = SoundEffects.ITEM_TRIDENT_RIPTIDE_1;
+                            soundeffect = SoundEffects.TRIDENT_RIPTIDE_1;
                         }
 
                         world.playSound((EntityHuman) null, (Entity) entityhuman, soundeffect, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -127,7 +130,7 @@ public class ItemTrident extends Item implements ItemVanishable {
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getDamage() >= itemstack.h() - 1) {
+        if (itemstack.getDamage() >= itemstack.i() - 1) {
             return InteractionResultWrapper.fail(itemstack);
         } else if (EnchantmentManager.g(itemstack) > 0 && !entityhuman.isInWaterOrRain()) {
             return InteractionResultWrapper.fail(itemstack);
@@ -158,7 +161,7 @@ public class ItemTrident extends Item implements ItemVanishable {
 
     @Override
     public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        return enumitemslot == EnumItemSlot.MAINHAND ? this.a : super.a(enumitemslot);
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.defaultModifiers : super.a(enumitemslot);
     }
 
     @Override

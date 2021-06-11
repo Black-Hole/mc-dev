@@ -1,14 +1,13 @@
 package net.minecraft.world.entity.animal;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
-import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.network.syncher.DataWatcherObject;
 import net.minecraft.network.syncher.DataWatcherRegistry;
-import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
@@ -34,20 +33,19 @@ import net.minecraft.world.entity.ai.navigation.NavigationAbstract;
 import net.minecraft.world.entity.ai.navigation.NavigationGuardian;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.Vec3D;
 
-public abstract class EntityFish extends EntityWaterAnimal {
+public abstract class EntityFish extends EntityWaterAnimal implements Bucketable {
 
-    private static final DataWatcherObject<Boolean> FROM_BUCKET = DataWatcher.a(EntityFish.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> FROM_BUCKET = DataWatcher.a(EntityFish.class, DataWatcherRegistry.BOOLEAN);
 
     public EntityFish(EntityTypes<? extends EntityFish> entitytypes, World world) {
         super(entitytypes, world);
-        this.moveController = new EntityFish.a(this);
+        this.moveControl = new EntityFish.a(this);
     }
 
     @Override
@@ -55,8 +53,8 @@ public abstract class EntityFish extends EntityWaterAnimal {
         return entitysize.height * 0.65F;
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 3.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 3.0D);
     }
 
     @Override
@@ -81,15 +79,17 @@ public abstract class EntityFish extends EntityWaterAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityFish.FROM_BUCKET, false);
+        this.entityData.register(EntityFish.FROM_BUCKET, false);
     }
 
+    @Override
     public boolean isFromBucket() {
-        return (Boolean) this.datawatcher.get(EntityFish.FROM_BUCKET);
+        return (Boolean) this.entityData.get(EntityFish.FROM_BUCKET);
     }
 
+    @Override
     public void setFromBucket(boolean flag) {
-        this.datawatcher.set(EntityFish.FROM_BUCKET, flag);
+        this.entityData.set(EntityFish.FROM_BUCKET, flag);
     }
 
     @Override
@@ -109,15 +109,15 @@ public abstract class EntityFish extends EntityWaterAnimal {
         super.initPathfinder();
         this.goalSelector.a(0, new PathfinderGoalPanic(this, 1.25D));
         PathfinderGoalSelector pathfindergoalselector = this.goalSelector;
-        Predicate predicate = IEntitySelector.g;
+        Predicate predicate = IEntitySelector.NO_SPECTATORS;
 
-        predicate.getClass();
+        Objects.requireNonNull(predicate);
         pathfindergoalselector.a(2, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, predicate::test));
         this.goalSelector.a(4, new EntityFish.b(this));
     }
 
     @Override
-    protected NavigationAbstract b(World world) {
+    protected NavigationAbstract a(World world) {
         return new NavigationGuardian(this, world);
     }
 
@@ -138,11 +138,11 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     public void movementTick() {
-        if (!this.isInWater() && this.onGround && this.v) {
+        if (!this.isInWater() && this.onGround && this.verticalCollision) {
             this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), 0.4000000059604645D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
-            this.impulse = true;
-            this.playSound(this.getSoundFlop(), this.getSoundVolume(), this.dH());
+            this.hasImpulse = true;
+            this.playSound(this.getSoundFlop(), this.getSoundVolume(), this.ep());
         }
 
         super.movementTick();
@@ -150,41 +150,25 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = entityhuman.b(enumhand);
-
-        if (itemstack.getItem() == Items.WATER_BUCKET && this.isAlive()) {
-            this.playSound(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
-            itemstack.subtract(1);
-            ItemStack itemstack1 = this.eK();
-
-            this.k(itemstack1);
-            if (!this.world.isClientSide) {
-                CriterionTriggers.j.a((EntityPlayer) entityhuman, itemstack1);
-            }
-
-            if (itemstack.isEmpty()) {
-                entityhuman.a(enumhand, itemstack1);
-            } else if (!entityhuman.inventory.pickup(itemstack1)) {
-                entityhuman.drop(itemstack1, false);
-            }
-
-            this.die();
-            return EnumInteractionResult.a(this.world.isClientSide);
-        } else {
-            return super.b(entityhuman, enumhand);
-        }
+        return (EnumInteractionResult) Bucketable.a(entityhuman, enumhand, this).orElse(super.b(entityhuman, enumhand));
     }
 
-    protected void k(ItemStack itemstack) {
-        if (this.hasCustomName()) {
-            itemstack.a(this.getCustomName());
-        }
-
+    @Override
+    public void setBucketName(ItemStack itemstack) {
+        Bucketable.a(this, itemstack);
     }
 
-    protected abstract ItemStack eK();
+    @Override
+    public void c(NBTTagCompound nbttagcompound) {
+        Bucketable.a(this, nbttagcompound);
+    }
 
-    protected boolean eL() {
+    @Override
+    public SoundEffect t() {
+        return SoundEffects.BUCKET_FILL_FISH;
+    }
+
+    protected boolean fv() {
         return true;
     }
 
@@ -192,66 +176,66 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     protected SoundEffect getSoundSwim() {
-        return SoundEffects.ENTITY_FISH_SWIM;
+        return SoundEffects.FISH_SWIM;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {}
 
-    static class a extends ControllerMove {
+    private static class a extends ControllerMove {
 
-        private final EntityFish i;
+        private final EntityFish fish;
 
         a(EntityFish entityfish) {
             super(entityfish);
-            this.i = entityfish;
+            this.fish = entityfish;
         }
 
         @Override
         public void a() {
-            if (this.i.a((Tag) TagsFluid.WATER)) {
-                this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
+            if (this.fish.a((Tag) TagsFluid.WATER)) {
+                this.fish.setMot(this.fish.getMot().add(0.0D, 0.005D, 0.0D));
             }
 
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
-                float f = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
+            if (this.operation == ControllerMove.Operation.MOVE_TO && !this.fish.getNavigation().m()) {
+                float f = (float) (this.speedModifier * this.fish.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.i.q(MathHelper.g(0.125F, this.i.dN(), f));
-                double d0 = this.b - this.i.locX();
-                double d1 = this.c - this.i.locY();
-                double d2 = this.d - this.i.locZ();
+                this.fish.r(MathHelper.h(0.125F, this.fish.ev(), f));
+                double d0 = this.wantedX - this.fish.locX();
+                double d1 = this.wantedY - this.fish.locY();
+                double d2 = this.wantedZ - this.fish.locZ();
 
                 if (d1 != 0.0D) {
-                    double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+                    double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                    this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dN() * (d1 / d3) * 0.1D, 0.0D));
+                    this.fish.setMot(this.fish.getMot().add(0.0D, (double) this.fish.ev() * (d1 / d3) * 0.1D, 0.0D));
                 }
 
                 if (d0 != 0.0D || d2 != 0.0D) {
                     float f1 = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
-                    this.i.yaw = this.a(this.i.yaw, f1, 90.0F);
-                    this.i.aA = this.i.yaw;
+                    this.fish.setYRot(this.a(this.fish.getYRot(), f1, 90.0F));
+                    this.fish.yBodyRot = this.fish.getYRot();
                 }
 
             } else {
-                this.i.q(0.0F);
+                this.fish.r(0.0F);
             }
         }
     }
 
-    static class b extends PathfinderGoalRandomSwim {
+    private static class b extends PathfinderGoalRandomSwim {
 
-        private final EntityFish h;
+        private final EntityFish fish;
 
         public b(EntityFish entityfish) {
             super(entityfish, 1.0D, 40);
-            this.h = entityfish;
+            this.fish = entityfish;
         }
 
         @Override
         public boolean a() {
-            return this.h.eL() && super.a();
+            return this.fish.fv() && super.a();
         }
     }
 }

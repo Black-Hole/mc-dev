@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -12,37 +11,50 @@ import org.apache.logging.log4j.Logger;
 public class PacketPlayOutBlockBreak implements Packet<PacketListenerPlayOut> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private BlockPosition c;
-    private IBlockData d;
-    PacketPlayInBlockDig.EnumPlayerDigType a;
-    private boolean e;
-
-    public PacketPlayOutBlockBreak() {}
+    private final BlockPosition pos;
+    private final IBlockData state;
+    private final PacketPlayInBlockDig.EnumPlayerDigType action;
+    private final boolean allGood;
 
     public PacketPlayOutBlockBreak(BlockPosition blockposition, IBlockData iblockdata, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, boolean flag, String s) {
-        this.c = blockposition.immutableCopy();
-        this.d = iblockdata;
-        this.a = packetplayinblockdig_enumplayerdigtype;
-        this.e = flag;
+        this.pos = blockposition.immutableCopy();
+        this.state = iblockdata;
+        this.action = packetplayinblockdig_enumplayerdigtype;
+        this.allGood = flag;
+    }
+
+    public PacketPlayOutBlockBreak(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.state = (IBlockData) Block.BLOCK_STATE_REGISTRY.fromId(packetdataserializer.j());
+        this.action = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
+        this.allGood = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.c = packetdataserializer.e();
-        this.d = (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i());
-        this.a = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
-        this.e = packetdataserializer.readBoolean();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.c);
-        packetdataserializer.d(Block.getCombinedId(this.d));
-        packetdataserializer.a((Enum) this.a);
-        packetdataserializer.writeBoolean(this.e);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
+        packetdataserializer.d(Block.getCombinedId(this.state));
+        packetdataserializer.a((Enum) this.action);
+        packetdataserializer.writeBoolean(this.allGood);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public IBlockData b() {
+        return this.state;
+    }
+
+    public BlockPosition c() {
+        return this.pos;
+    }
+
+    public boolean d() {
+        return this.allGood;
+    }
+
+    public PacketPlayInBlockDig.EnumPlayerDigType e() {
+        return this.action;
     }
 }

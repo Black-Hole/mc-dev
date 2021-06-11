@@ -11,24 +11,24 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenFeatureStateProviderRotatedBlock extends WorldGenFeatureStateProvider {
 
-    public static final Codec<WorldGenFeatureStateProviderRotatedBlock> b = IBlockData.b.fieldOf("state").xmap(BlockBase.BlockData::getBlock, Block::getBlockData).xmap(WorldGenFeatureStateProviderRotatedBlock::new, (worldgenfeaturestateproviderrotatedblock) -> {
-        return worldgenfeaturestateproviderrotatedblock.c;
+    public static final Codec<WorldGenFeatureStateProviderRotatedBlock> CODEC = IBlockData.CODEC.fieldOf("state").xmap(BlockBase.BlockData::getBlock, Block::getBlockData).xmap(WorldGenFeatureStateProviderRotatedBlock::new, (worldgenfeaturestateproviderrotatedblock) -> {
+        return worldgenfeaturestateproviderrotatedblock.block;
     }).codec();
-    private final Block c;
+    private final Block block;
 
     public WorldGenFeatureStateProviderRotatedBlock(Block block) {
-        this.c = block;
+        this.block = block;
     }
 
     @Override
     protected WorldGenFeatureStateProviders<?> a() {
-        return WorldGenFeatureStateProviders.e;
+        return WorldGenFeatureStateProviders.ROTATED_BLOCK_PROVIDER;
     }
 
     @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
         EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.a(random);
 
-        return (IBlockData) this.c.getBlockData().set(BlockRotatable.AXIS, enumdirection_enumaxis);
+        return (IBlockData) this.block.getBlockData().set(BlockRotatable.AXIS, enumdirection_enumaxis);
     }
 }

@@ -5,22 +5,28 @@ import net.minecraft.core.EnumDirection;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.item.context.BlockActionContext;
+import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockPropertyTrackPosition;
+import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 import net.minecraft.world.level.block.state.properties.IBlockState;
 import net.minecraft.world.level.material.EnumPistonReaction;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidTypes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
-public abstract class BlockMinecartTrackAbstract extends Block {
+public abstract class BlockMinecartTrackAbstract extends Block implements IBlockWaterlogged {
 
-    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
-    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    private final boolean c;
+    protected static final VoxelShape FLAT_AABB = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    protected static final VoxelShape HALF_BLOCK_AABB = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    private final boolean isStraight;
 
     public static boolean a(World world, BlockPosition blockposition) {
         return g(world.getType(blockposition));
@@ -32,23 +38,23 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     protected BlockMinecartTrackAbstract(boolean flag, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.c = flag;
+        this.isStraight = flag;
     }
 
     public boolean c() {
-        return this.c;
+        return this.isStraight;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         BlockPropertyTrackPosition blockpropertytrackposition = iblockdata.a((Block) this) ? (BlockPropertyTrackPosition) iblockdata.get(this.d()) : null;
 
-        return blockpropertytrackposition != null && blockpropertytrackposition.c() ? BlockMinecartTrackAbstract.b : BlockMinecartTrackAbstract.a;
+        return blockpropertytrackposition != null && blockpropertytrackposition.b() ? BlockMinecartTrackAbstract.HALF_BLOCK_AABB : BlockMinecartTrackAbstract.FLAT_AABB;
     }
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return c((IBlockAccess) iworldreader, blockposition.down());
+        return c(iworldreader, blockposition.down());
     }
 
     @Override
@@ -60,7 +66,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     protected IBlockData a(IBlockData iblockdata, World world, BlockPosition blockposition, boolean flag) {
         iblockdata = this.a(world, blockposition, iblockdata, true);
-        if (this.c) {
+        if (this.isStraight) {
             iblockdata.doPhysics(world, blockposition, this, blockposition, flag);
         }
 
@@ -83,18 +89,18 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     }
 
     private static boolean a(BlockPosition blockposition, World world, BlockPropertyTrackPosition blockpropertytrackposition) {
-        if (!c((IBlockAccess) world, blockposition.down())) {
+        if (!c(world, blockposition.down())) {
             return true;
         } else {
             switch (blockpropertytrackposition) {
                 case ASCENDING_EAST:
-                    return !c((IBlockAccess) world, blockposition.east());
+                    return !c(world, blockposition.east());
                 case ASCENDING_WEST:
-                    return !c((IBlockAccess) world, blockposition.west());
+                    return !c(world, blockposition.west());
                 case ASCENDING_NORTH:
-                    return !c((IBlockAccess) world, blockposition.north());
+                    return !c(world, blockposition.north());
                 case ASCENDING_SOUTH:
-                    return !c((IBlockAccess) world, blockposition.south());
+                    return !c(world, blockposition.south());
                 default:
                     return false;
             }
@@ -122,11 +128,11 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!flag) {
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
-            if (((BlockPropertyTrackPosition) iblockdata.get(this.d())).c()) {
+            if (((BlockPropertyTrackPosition) iblockdata.get(this.d())).b()) {
                 world.applyPhysics(blockposition.up(), this);
             }
 
-            if (this.c) {
+            if (this.isStraight) {
                 world.applyPhysics(blockposition, this);
                 world.applyPhysics(blockposition.down(), this);
             }
@@ -136,12 +142,28 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
+        boolean flag = fluid.getType() == FluidTypes.WATER;
         IBlockData iblockdata = super.getBlockData();
-        EnumDirection enumdirection = blockactioncontext.f();
-        boolean flag = enumdirection == EnumDirection.EAST || enumdirection == EnumDirection.WEST;
+        EnumDirection enumdirection = blockactioncontext.g();
+        boolean flag1 = enumdirection == EnumDirection.EAST || enumdirection == EnumDirection.WEST;
 
-        return (IBlockData) iblockdata.set(this.d(), flag ? BlockPropertyTrackPosition.EAST_WEST : BlockPropertyTrackPosition.NORTH_SOUTH);
+        return (IBlockData) ((IBlockData) iblockdata.set(this.d(), flag1 ? BlockPropertyTrackPosition.EAST_WEST : BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockMinecartTrackAbstract.WATERLOGGED, flag);
     }
 
     public abstract IBlockState<BlockPropertyTrackPosition> d();
+
+    @Override
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if ((Boolean) iblockdata.get(BlockMinecartTrackAbstract.WATERLOGGED)) {
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
+        }
+
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    @Override
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockMinecartTrackAbstract.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
+    }
 }

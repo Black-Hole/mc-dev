@@ -5,14 +5,14 @@ import org.apache.logging.log4j.Logger;
 
 public class ThreadNamedUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
-    private final Logger a;
+    private final Logger logger;
 
     public ThreadNamedUncaughtExceptionHandler(Logger logger) {
-        this.a = logger;
+        this.logger = logger;
     }
 
     public void uncaughtException(Thread thread, Throwable throwable) {
-        this.a.error("Caught previously unhandled exception :");
-        this.a.error(thread.getName(), throwable);
+        this.logger.error("Caught previously unhandled exception :");
+        this.logger.error(thread.getName(), throwable);
     }
 }

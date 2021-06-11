@@ -1,8 +1,9 @@
 package net.minecraft.world.level.levelgen.structure;
 
 import com.google.common.collect.ImmutableSet;
+import com.mojang.serialization.DataResult;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -10,8 +11,10 @@ import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.IRegistry;
+import net.minecraft.nbt.DynamicOpsNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.IBlockAccess;
@@ -30,140 +33,107 @@ import net.minecraft.world.level.block.entity.TileEntityDispenser;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.HeightMap;
+import net.minecraft.world.level.levelgen.feature.NoiseEffect;
 import net.minecraft.world.level.levelgen.feature.WorldGenFeatureStructurePieceType;
 import net.minecraft.world.level.material.Fluid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class StructurePiece {
 
-    protected static final IBlockData m = Blocks.CAVE_AIR.getBlockData();
-    protected StructureBoundingBox n;
+    private static final Logger LOGGER = LogManager.getLogger();
+    protected static final IBlockData CAVE_AIR = Blocks.CAVE_AIR.getBlockData();
+    protected StructureBoundingBox boundingBox;
     @Nullable
-    private EnumDirection a;
-    private EnumBlockMirror b;
-    private EnumBlockRotation c;
-    protected int o;
-    private final WorldGenFeatureStructurePieceType d;
-    private static final Set<Block> e = ImmutableSet.builder().add(Blocks.NETHER_BRICK_FENCE).add(Blocks.TORCH).add(Blocks.WALL_TORCH).add(Blocks.OAK_FENCE).add(Blocks.SPRUCE_FENCE).add(Blocks.DARK_OAK_FENCE).add(Blocks.ACACIA_FENCE).add(Blocks.BIRCH_FENCE).add(Blocks.JUNGLE_FENCE).add(Blocks.LADDER).add(Blocks.IRON_BARS).build();
+    private EnumDirection orientation;
+    private EnumBlockMirror mirror;
+    private EnumBlockRotation rotation;
+    protected int genDepth;
+    private final WorldGenFeatureStructurePieceType type;
+    private static final Set<Block> SHAPE_CHECK_BLOCKS = ImmutableSet.builder().add(Blocks.NETHER_BRICK_FENCE).add(Blocks.TORCH).add(Blocks.WALL_TORCH).add(Blocks.OAK_FENCE).add(Blocks.SPRUCE_FENCE).add(Blocks.DARK_OAK_FENCE).add(Blocks.ACACIA_FENCE).add(Blocks.BIRCH_FENCE).add(Blocks.JUNGLE_FENCE).add(Blocks.LADDER).add(Blocks.IRON_BARS).build();
 
-    protected StructurePiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, int i) {
-        this.d = worldgenfeaturestructurepiecetype;
-        this.o = i;
+    protected StructurePiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, int i, StructureBoundingBox structureboundingbox) {
+        this.type = worldgenfeaturestructurepiecetype;
+        this.genDepth = i;
+        this.boundingBox = structureboundingbox;
     }
 
     public StructurePiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, NBTTagCompound nbttagcompound) {
-        this(worldgenfeaturestructurepiecetype, nbttagcompound.getInt("GD"));
-        if (nbttagcompound.hasKey("BB")) {
-            this.n = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
-        }
+        int i = nbttagcompound.getInt("GD");
+        DataResult dataresult = StructureBoundingBox.CODEC.parse(DynamicOpsNBT.INSTANCE, nbttagcompound.get("BB"));
+        Logger logger = StructurePiece.LOGGER;
 
-        int i = nbttagcompound.getInt("O");
+        Objects.requireNonNull(logger);
+        this(worldgenfeaturestructurepiecetype, i, (StructureBoundingBox) dataresult.resultOrPartial(logger::error).orElseThrow(() -> {
+            return new IllegalArgumentException("Invalid boundingbox");
+        }));
+        int j = nbttagcompound.getInt("O");
 
-        this.a(i == -1 ? null : EnumDirection.fromType2(i));
+        this.a(j == -1 ? null : EnumDirection.fromType2(j));
     }
 
-    public final NBTTagCompound f() {
+    protected static StructureBoundingBox a(int i, int j, int k, EnumDirection enumdirection, int l, int i1, int j1) {
+        return enumdirection.n() == EnumDirection.EnumAxis.Z ? new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1) : new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
+    }
+
+    protected static EnumDirection b(Random random) {
+        return EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
+    }
+
+    public final NBTTagCompound a(WorldServer worldserver) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", IRegistry.STRUCTURE_PIECE.getKey(this.k()).toString());
-        nbttagcompound.set("BB", this.n.h());
-        EnumDirection enumdirection = this.i();
+        nbttagcompound.setString("id", IRegistry.STRUCTURE_PIECE.getKey(this.j()).toString());
+        DataResult dataresult = StructureBoundingBox.CODEC.encodeStart(DynamicOpsNBT.INSTANCE, this.boundingBox);
+        Logger logger = StructurePiece.LOGGER;
+
+        Objects.requireNonNull(logger);
+        dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
+            nbttagcompound.set("BB", nbtbase);
+        });
+        EnumDirection enumdirection = this.h();
 
         nbttagcompound.setInt("O", enumdirection == null ? -1 : enumdirection.get2DRotationValue());
-        nbttagcompound.setInt("GD", this.o);
-        this.a(nbttagcompound);
+        nbttagcompound.setInt("GD", this.genDepth);
+        this.a(worldserver, nbttagcompound);
         return nbttagcompound;
     }
 
-    protected abstract void a(NBTTagCompound nbttagcompound);
+    protected abstract void a(WorldServer worldserver, NBTTagCompound nbttagcompound);
 
-    public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {}
+    public NoiseEffect ad_() {
+        return NoiseEffect.BEARD;
+    }
+
+    public void a(StructurePiece structurepiece, StructurePieceAccessor structurepieceaccessor, Random random) {}
 
     public abstract boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition);
 
-    public StructureBoundingBox g() {
-        return this.n;
+    public StructureBoundingBox f() {
+        return this.boundingBox;
     }
 
-    public int h() {
-        return this.o;
+    public int g() {
+        return this.genDepth;
     }
 
     public boolean a(ChunkCoordIntPair chunkcoordintpair, int i) {
-        int j = chunkcoordintpair.x << 4;
-        int k = chunkcoordintpair.z << 4;
+        int j = chunkcoordintpair.d();
+        int k = chunkcoordintpair.e();
 
-        return this.n.a(j - i, k - i, j + 15 + i, k + 15 + i);
+        return this.boundingBox.a(j - i, k - i, j + 15 + i, k + 15 + i);
     }
 
-    public static StructurePiece a(List<StructurePiece> list, StructureBoundingBox structureboundingbox) {
-        Iterator iterator = list.iterator();
-
-        StructurePiece structurepiece;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            structurepiece = (StructurePiece) iterator.next();
-        } while (structurepiece.g() == null || !structurepiece.g().b(structureboundingbox));
-
-        return structurepiece;
+    public BlockPosition ae_() {
+        return new BlockPosition(this.boundingBox.f());
     }
 
-    protected boolean a(IBlockAccess iblockaccess, StructureBoundingBox structureboundingbox) {
-        int i = Math.max(this.n.a - 1, structureboundingbox.a);
-        int j = Math.max(this.n.b - 1, structureboundingbox.b);
-        int k = Math.max(this.n.c - 1, structureboundingbox.c);
-        int l = Math.min(this.n.d + 1, structureboundingbox.d);
-        int i1 = Math.min(this.n.e + 1, structureboundingbox.e);
-        int j1 = Math.min(this.n.f + 1, structureboundingbox.f);
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-
-        int k1;
-        int l1;
-
-        for (k1 = i; k1 <= l; ++k1) {
-            for (l1 = k; l1 <= j1; ++l1) {
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(k1, j, l1)).getMaterial().isLiquid()) {
-                    return true;
-                }
-
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(k1, i1, l1)).getMaterial().isLiquid()) {
-                    return true;
-                }
-            }
-        }
-
-        for (k1 = i; k1 <= l; ++k1) {
-            for (l1 = j; l1 <= i1; ++l1) {
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(k1, l1, k)).getMaterial().isLiquid()) {
-                    return true;
-                }
-
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(k1, l1, j1)).getMaterial().isLiquid()) {
-                    return true;
-                }
-            }
-        }
-
-        for (k1 = k; k1 <= j1; ++k1) {
-            for (l1 = j; l1 <= i1; ++l1) {
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(i, l1, k1)).getMaterial().isLiquid()) {
-                    return true;
-                }
-
-                if (iblockaccess.getType(blockposition_mutableblockposition.d(l, l1, k1)).getMaterial().isLiquid()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    protected BlockPosition.MutableBlockPosition c(int i, int j, int k) {
+        return new BlockPosition.MutableBlockPosition(this.a(i, k), this.a(j), this.b(i, k));
     }
 
     protected int a(int i, int j) {
-        EnumDirection enumdirection = this.i();
+        EnumDirection enumdirection = this.h();
 
         if (enumdirection == null) {
             return i;
@@ -171,90 +141,90 @@ public abstract class StructurePiece {
             switch (enumdirection) {
                 case NORTH:
                 case SOUTH:
-                    return this.n.a + i;
+                    return this.boundingBox.g() + i;
                 case WEST:
-                    return this.n.d - j;
+                    return this.boundingBox.j() - j;
                 case EAST:
-                    return this.n.a + j;
+                    return this.boundingBox.g() + j;
                 default:
                     return i;
             }
         }
     }
 
-    protected int d(int i) {
-        return this.i() == null ? i : i + this.n.b;
+    protected int a(int i) {
+        return this.h() == null ? i : i + this.boundingBox.h();
     }
 
     protected int b(int i, int j) {
-        EnumDirection enumdirection = this.i();
+        EnumDirection enumdirection = this.h();
 
         if (enumdirection == null) {
             return j;
         } else {
             switch (enumdirection) {
                 case NORTH:
-                    return this.n.f - j;
+                    return this.boundingBox.l() - j;
                 case SOUTH:
-                    return this.n.c + j;
+                    return this.boundingBox.i() + j;
                 case WEST:
                 case EAST:
-                    return this.n.c + i;
+                    return this.boundingBox.i() + i;
                 default:
                     return j;
             }
         }
     }
 
-    protected void a(GeneratorAccessSeed generatoraccessseed, IBlockData iblockdata, int i, int j, int k, StructureBoundingBox structureboundingbox) {
-        BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
+    protected void c(GeneratorAccessSeed generatoraccessseed, IBlockData iblockdata, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(i, j, k);
 
-        if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-            if (this.b != EnumBlockMirror.NONE) {
-                iblockdata = iblockdata.a(this.b);
+        if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
+            if (this.a((IWorldReader) generatoraccessseed, i, j, k, structureboundingbox)) {
+                if (this.mirror != EnumBlockMirror.NONE) {
+                    iblockdata = iblockdata.a(this.mirror);
+                }
+
+                if (this.rotation != EnumBlockRotation.NONE) {
+                    iblockdata = iblockdata.a(this.rotation);
+                }
+
+                generatoraccessseed.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);
+                Fluid fluid = generatoraccessseed.getFluid(blockposition_mutableblockposition);
+
+                if (!fluid.isEmpty()) {
+                    generatoraccessseed.getFluidTickList().a(blockposition_mutableblockposition, fluid.getType(), 0);
+                }
+
+                if (StructurePiece.SHAPE_CHECK_BLOCKS.contains(iblockdata.getBlock())) {
+                    generatoraccessseed.A(blockposition_mutableblockposition).e(blockposition_mutableblockposition);
+                }
+
             }
-
-            if (this.c != EnumBlockRotation.NONE) {
-                iblockdata = iblockdata.a(this.c);
-            }
-
-            generatoraccessseed.setTypeAndData(blockposition, iblockdata, 2);
-            Fluid fluid = generatoraccessseed.getFluid(blockposition);
-
-            if (!fluid.isEmpty()) {
-                generatoraccessseed.getFluidTickList().a(blockposition, fluid.getType(), 0);
-            }
-
-            if (StructurePiece.e.contains(iblockdata.getBlock())) {
-                generatoraccessseed.z(blockposition).e(blockposition);
-            }
-
         }
     }
 
-    protected IBlockData a(IBlockAccess iblockaccess, int i, int j, int k, StructureBoundingBox structureboundingbox) {
-        int l = this.a(i, k);
-        int i1 = this.d(j);
-        int j1 = this.b(i, k);
-        BlockPosition blockposition = new BlockPosition(l, i1, j1);
-
-        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? Blocks.AIR.getBlockData() : iblockaccess.getType(blockposition);
+    protected boolean a(IWorldReader iworldreader, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        return true;
     }
 
-    protected boolean a(IWorldReader iworldreader, int i, int j, int k, StructureBoundingBox structureboundingbox) {
-        int l = this.a(i, k);
-        int i1 = this.d(j + 1);
-        int j1 = this.b(i, k);
-        BlockPosition blockposition = new BlockPosition(l, i1, j1);
+    protected IBlockData a(IBlockAccess iblockaccess, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(i, j, k);
 
-        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? false : i1 < iworldreader.a(HeightMap.Type.OCEAN_FLOOR_WG, l, j1);
+        return !structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition) ? Blocks.AIR.getBlockData() : iblockaccess.getType(blockposition_mutableblockposition);
+    }
+
+    protected boolean b(IWorldReader iworldreader, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(i, j + 1, k);
+
+        return !structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition) ? false : blockposition_mutableblockposition.getY() < iworldreader.a(HeightMap.Type.OCEAN_FLOOR_WG, blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getZ());
     }
 
     protected void b(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    this.a(generatoraccessseed, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
+                    this.c(generatoraccessseed, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
                 }
             }
         }
@@ -267,9 +237,9 @@ public abstract class StructurePiece {
                 for (int i2 = k; i2 <= j1; ++i2) {
                     if (!flag || !this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox).isAir()) {
                         if (k1 != j && k1 != i1 && l1 != i && l1 != l && i2 != k && i2 != j1) {
-                            this.a(generatoraccessseed, iblockdata1, l1, k1, i2, structureboundingbox);
+                            this.c(generatoraccessseed, iblockdata1, l1, k1, i2, structureboundingbox);
                         } else {
-                            this.a(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
+                            this.c(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
                         }
                     }
                 }
@@ -278,13 +248,17 @@ public abstract class StructurePiece {
 
     }
 
+    protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, StructureBoundingBox structureboundingbox1, IBlockData iblockdata, IBlockData iblockdata1, boolean flag) {
+        this.a(generatoraccessseed, structureboundingbox, structureboundingbox1.g(), structureboundingbox1.h(), structureboundingbox1.i(), structureboundingbox1.j(), structureboundingbox1.k(), structureboundingbox1.l(), iblockdata, iblockdata1, flag);
+    }
+
     protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, boolean flag, Random random, StructurePiece.StructurePieceBlockSelector structurepiece_structurepieceblockselector) {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
                     if (!flag || !this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox).isAir()) {
                         structurepiece_structurepieceblockselector.a(random, l1, k1, i2, k1 == j || k1 == i1 || l1 == i || l1 == l || i2 == k || i2 == j1);
-                        this.a(generatoraccessseed, structurepiece_structurepieceblockselector.a(), l1, k1, i2, structureboundingbox);
+                        this.c(generatoraccessseed, structurepiece_structurepieceblockselector.a(), l1, k1, i2, structureboundingbox);
                     }
                 }
             }
@@ -292,15 +266,19 @@ public abstract class StructurePiece {
 
     }
 
+    protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, StructureBoundingBox structureboundingbox1, boolean flag, Random random, StructurePiece.StructurePieceBlockSelector structurepiece_structurepieceblockselector) {
+        this.a(generatoraccessseed, structureboundingbox, structureboundingbox1.g(), structureboundingbox1.h(), structureboundingbox1.i(), structureboundingbox1.j(), structureboundingbox1.k(), structureboundingbox1.l(), flag, random, structurepiece_structurepieceblockselector);
+    }
+
     protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, Random random, float f, int i, int j, int k, int l, int i1, int j1, IBlockData iblockdata, IBlockData iblockdata1, boolean flag, boolean flag1) {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    if (random.nextFloat() <= f && (!flag || !this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox).isAir()) && (!flag1 || this.a((IWorldReader) generatoraccessseed, l1, k1, i2, structureboundingbox))) {
+                    if (random.nextFloat() <= f && (!flag || !this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox).isAir()) && (!flag1 || this.b(generatoraccessseed, l1, k1, i2, structureboundingbox))) {
                         if (k1 != j && k1 != i1 && l1 != i && l1 != l && i2 != k && i2 != j1) {
-                            this.a(generatoraccessseed, iblockdata1, l1, k1, i2, structureboundingbox);
+                            this.c(generatoraccessseed, iblockdata1, l1, k1, i2, structureboundingbox);
                         } else {
-                            this.a(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
+                            this.c(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
                         }
                     }
                 }
@@ -311,7 +289,7 @@ public abstract class StructurePiece {
 
     protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, Random random, float f, int i, int j, int k, IBlockData iblockdata) {
         if (random.nextFloat() < f) {
-            this.a(generatoraccessseed, iblockdata, i, j, k, structureboundingbox);
+            this.c(generatoraccessseed, iblockdata, i, j, k, structureboundingbox);
         }
 
     }
@@ -336,7 +314,7 @@ public abstract class StructurePiece {
                         float f8 = f6 * f6 + f5 * f5 + f7 * f7;
 
                         if (f8 <= 1.05F) {
-                            this.a(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
+                            this.c(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
                         }
                     }
                 }
@@ -345,24 +323,24 @@ public abstract class StructurePiece {
 
     }
 
-    protected void b(GeneratorAccessSeed generatoraccessseed, IBlockData iblockdata, int i, int j, int k, StructureBoundingBox structureboundingbox) {
-        int l = this.a(i, k);
-        int i1 = this.d(j);
-        int j1 = this.b(i, k);
+    protected void a(GeneratorAccessSeed generatoraccessseed, IBlockData iblockdata, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(i, j, k);
 
-        if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-            while ((generatoraccessseed.isEmpty(new BlockPosition(l, i1, j1)) || generatoraccessseed.getType(new BlockPosition(l, i1, j1)).getMaterial().isLiquid()) && i1 > 1) {
-                generatoraccessseed.setTypeAndData(new BlockPosition(l, i1, j1), iblockdata, 2);
-                --i1;
+        if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
+            while (this.a(generatoraccessseed.getType(blockposition_mutableblockposition)) && blockposition_mutableblockposition.getY() > generatoraccessseed.getMinBuildHeight() + 1) {
+                generatoraccessseed.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);
+                blockposition_mutableblockposition.c(EnumDirection.DOWN);
             }
 
         }
     }
 
-    protected boolean a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, MinecraftKey minecraftkey) {
-        BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
+    protected boolean a(IBlockData iblockdata) {
+        return iblockdata.isAir() || iblockdata.getMaterial().isLiquid() || iblockdata.a(Blocks.GLOW_LICHEN) || iblockdata.a(Blocks.SEAGRASS) || iblockdata.a(Blocks.TALL_SEAGRASS);
+    }
 
-        return this.a(generatoraccessseed, structureboundingbox, random, blockposition, minecraftkey, (IBlockData) null);
+    protected boolean a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, MinecraftKey minecraftkey) {
+        return this.a(generatoraccessseed, structureboundingbox, random, this.c(i, j, k), minecraftkey, (IBlockData) null);
     }
 
     public static IBlockData a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
@@ -433,11 +411,11 @@ public abstract class StructurePiece {
     }
 
     protected boolean a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, MinecraftKey minecraftkey) {
-        BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(i, j, k);
 
-        if (structureboundingbox.b((BaseBlockPosition) blockposition) && !generatoraccessseed.getType(blockposition).a(Blocks.DISPENSER)) {
-            this.a(generatoraccessseed, (IBlockData) Blocks.DISPENSER.getBlockData().set(BlockDispenser.FACING, enumdirection), i, j, k, structureboundingbox);
-            TileEntity tileentity = generatoraccessseed.getTileEntity(blockposition);
+        if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition) && !generatoraccessseed.getType(blockposition_mutableblockposition).a(Blocks.DISPENSER)) {
+            this.c(generatoraccessseed, (IBlockData) Blocks.DISPENSER.getBlockData().set(BlockDispenser.FACING, enumdirection), i, j, k, structureboundingbox);
+            TileEntity tileentity = generatoraccessseed.getTileEntity(blockposition_mutableblockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
                 ((TileEntityDispenser) tileentity).setLootTable(minecraftkey, random.nextLong());
@@ -450,61 +428,65 @@ public abstract class StructurePiece {
     }
 
     public void a(int i, int j, int k) {
-        this.n.a(i, j, k);
+        this.boundingBox.a(i, j, k);
     }
 
     @Nullable
-    public EnumDirection i() {
-        return this.a;
+    public EnumDirection h() {
+        return this.orientation;
     }
 
     public void a(@Nullable EnumDirection enumdirection) {
-        this.a = enumdirection;
+        this.orientation = enumdirection;
         if (enumdirection == null) {
-            this.c = EnumBlockRotation.NONE;
-            this.b = EnumBlockMirror.NONE;
+            this.rotation = EnumBlockRotation.NONE;
+            this.mirror = EnumBlockMirror.NONE;
         } else {
             switch (enumdirection) {
                 case SOUTH:
-                    this.b = EnumBlockMirror.LEFT_RIGHT;
-                    this.c = EnumBlockRotation.NONE;
+                    this.mirror = EnumBlockMirror.LEFT_RIGHT;
+                    this.rotation = EnumBlockRotation.NONE;
                     break;
                 case WEST:
-                    this.b = EnumBlockMirror.LEFT_RIGHT;
-                    this.c = EnumBlockRotation.CLOCKWISE_90;
+                    this.mirror = EnumBlockMirror.LEFT_RIGHT;
+                    this.rotation = EnumBlockRotation.CLOCKWISE_90;
                     break;
                 case EAST:
-                    this.b = EnumBlockMirror.NONE;
-                    this.c = EnumBlockRotation.CLOCKWISE_90;
+                    this.mirror = EnumBlockMirror.NONE;
+                    this.rotation = EnumBlockRotation.CLOCKWISE_90;
                     break;
                 default:
-                    this.b = EnumBlockMirror.NONE;
-                    this.c = EnumBlockRotation.NONE;
+                    this.mirror = EnumBlockMirror.NONE;
+                    this.rotation = EnumBlockRotation.NONE;
             }
         }
 
     }
 
-    public EnumBlockRotation ap_() {
-        return this.c;
+    public EnumBlockRotation ac_() {
+        return this.rotation;
     }
 
-    public WorldGenFeatureStructurePieceType k() {
-        return this.d;
+    public EnumBlockMirror i() {
+        return this.mirror;
     }
 
-    public abstract static class StructurePieceBlockSelector {
+    public WorldGenFeatureStructurePieceType j() {
+        return this.type;
+    }
 
-        protected IBlockData a;
+    protected abstract static class StructurePieceBlockSelector {
+
+        protected IBlockData next;
 
         protected StructurePieceBlockSelector() {
-            this.a = Blocks.AIR.getBlockData();
+            this.next = Blocks.AIR.getBlockData();
         }
 
         public abstract void a(Random random, int i, int j, int k, boolean flag);
 
         public IBlockData a() {
-            return this.a;
+            return this.next;
         }
     }
 }

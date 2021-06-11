@@ -6,12 +6,20 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
 
 public class ChunkCoordIntPair {
 
-    public static final long a = pair(1875016, 1875016);
+    public static final long INVALID_CHUNK_POS = pair(1875016, 1875016);
+    private static final long COORD_BITS = 32L;
+    private static final long COORD_MASK = 4294967295L;
+    private static final int REGION_BITS = 5;
+    private static final int REGION_MASK = 31;
     public final int x;
     public final int z;
+    private static final int HASH_A = 1664525;
+    private static final int HASH_C = 1013904223;
+    private static final int HASH_Z_XOR = -559038737;
 
     public ChunkCoordIntPair(int i, int j) {
         this.x = i;
@@ -19,8 +27,8 @@ public class ChunkCoordIntPair {
     }
 
     public ChunkCoordIntPair(BlockPosition blockposition) {
-        this.x = blockposition.getX() >> 4;
-        this.z = blockposition.getZ() >> 4;
+        this.x = SectionPosition.a(blockposition.getX());
+        this.z = SectionPosition.a(blockposition.getZ());
     }
 
     public ChunkCoordIntPair(long i) {
@@ -34,6 +42,10 @@ public class ChunkCoordIntPair {
 
     public static long pair(int i, int j) {
         return (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
+    }
+
+    public static long a(BlockPosition blockposition) {
+        return pair(SectionPosition.a(blockposition.getX()), SectionPosition.a(blockposition.getZ()));
     }
 
     public static int getX(long i) {
@@ -63,20 +75,28 @@ public class ChunkCoordIntPair {
         }
     }
 
+    public int b() {
+        return this.a(8);
+    }
+
+    public int c() {
+        return this.b(8);
+    }
+
     public int d() {
-        return this.x << 4;
+        return SectionPosition.c(this.x);
     }
 
     public int e() {
-        return this.z << 4;
+        return SectionPosition.c(this.z);
     }
 
     public int f() {
-        return (this.x << 4) + 15;
+        return this.a(15);
     }
 
     public int g() {
-        return (this.z << 4) + 15;
+        return this.b(15);
     }
 
     public int getRegionX() {
@@ -93,6 +113,22 @@ public class ChunkCoordIntPair {
 
     public int k() {
         return this.z & 31;
+    }
+
+    public BlockPosition a(int i, int j, int k) {
+        return new BlockPosition(this.a(i), j, this.b(k));
+    }
+
+    public int a(int i) {
+        return SectionPosition.a(this.x, i);
+    }
+
+    public int b(int i) {
+        return SectionPosition.a(this.z, i);
+    }
+
+    public BlockPosition c(int i) {
+        return new BlockPosition(this.b(), i, this.c());
     }
 
     public String toString() {
@@ -119,27 +155,27 @@ public class ChunkCoordIntPair {
 
         return StreamSupport.stream(new AbstractSpliterator<ChunkCoordIntPair>((long) (i * j), 64) {
             @Nullable
-            private ChunkCoordIntPair e;
+            private ChunkCoordIntPair pos;
 
             public boolean tryAdvance(Consumer<? super ChunkCoordIntPair> consumer) {
-                if (this.e == null) {
-                    this.e = chunkcoordintpair;
+                if (this.pos == null) {
+                    this.pos = chunkcoordintpair;
                 } else {
-                    int i1 = this.e.x;
-                    int j1 = this.e.z;
+                    int i1 = this.pos.x;
+                    int j1 = this.pos.z;
 
                     if (i1 == chunkcoordintpair1.x) {
                         if (j1 == chunkcoordintpair1.z) {
                             return false;
                         }
 
-                        this.e = new ChunkCoordIntPair(chunkcoordintpair.x, j1 + l);
+                        this.pos = new ChunkCoordIntPair(chunkcoordintpair.x, j1 + l);
                     } else {
-                        this.e = new ChunkCoordIntPair(i1 + k, j1);
+                        this.pos = new ChunkCoordIntPair(i1 + k, j1);
                     }
                 }
 
-                consumer.accept(this.e);
+                consumer.accept(this.pos);
                 return true;
             }
         }, false);

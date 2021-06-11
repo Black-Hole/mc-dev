@@ -7,13 +7,21 @@ public enum EnumMainHand {
 
     LEFT(new ChatMessage("options.mainHand.left")), RIGHT(new ChatMessage("options.mainHand.right"));
 
-    private final IChatBaseComponent c;
+    private final IChatBaseComponent name;
 
     private EnumMainHand(IChatBaseComponent ichatbasecomponent) {
-        this.c = ichatbasecomponent;
+        this.name = ichatbasecomponent;
+    }
+
+    public EnumMainHand a() {
+        return this == EnumMainHand.LEFT ? EnumMainHand.RIGHT : EnumMainHand.LEFT;
     }
 
     public String toString() {
-        return this.c.getString();
+        return this.name.getString();
+    }
+
+    public IChatBaseComponent b() {
+        return this.name;
     }
 }

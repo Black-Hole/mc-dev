@@ -17,8 +17,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
 
-    private static final Collection<String> b = Arrays.asList("red", "green");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("red", "green");
+    public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.color.invalid", new Object[]{object});
     });
 
@@ -39,7 +39,7 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
         if (enumchatformat != null && !enumchatformat.isFormat()) {
             return enumchatformat;
         } else {
-            throw ArgumentChatFormat.a.create(s);
+            throw ArgumentChatFormat.ERROR_INVALID_VALUE.create(s);
         }
     }
 
@@ -48,6 +48,6 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentChatFormat.b;
+        return ArgumentChatFormat.EXAMPLES;
     }
 }

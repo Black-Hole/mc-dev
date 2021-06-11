@@ -6,11 +6,11 @@ import java.util.Arrays;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.EnumDirection;
 
-public final class VoxelShapeArray extends VoxelShape {
+public class VoxelShapeArray extends VoxelShape {
 
-    private final DoubleList b;
-    private final DoubleList c;
-    private final DoubleList d;
+    private final DoubleList xs;
+    private final DoubleList ys;
+    private final DoubleList zs;
 
     protected VoxelShapeArray(VoxelShapeDiscrete voxelshapediscrete, double[] adouble, double[] adouble1, double[] adouble2) {
         this(voxelshapediscrete, (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble, voxelshapediscrete.b() + 1)), (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble1, voxelshapediscrete.c() + 1)), (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble2, voxelshapediscrete.d() + 1)));
@@ -23,9 +23,9 @@ public final class VoxelShapeArray extends VoxelShape {
         int k = voxelshapediscrete.d() + 1;
 
         if (i == doublelist.size() && j == doublelist1.size() && k == doublelist2.size()) {
-            this.b = doublelist;
-            this.c = doublelist1;
-            this.d = doublelist2;
+            this.xs = doublelist;
+            this.ys = doublelist1;
+            this.zs = doublelist2;
         } else {
             throw (IllegalArgumentException) SystemUtils.c((Throwable) (new IllegalArgumentException("Lengths of point arrays must be consistent with the size of the VoxelShape.")));
         }
@@ -35,11 +35,11 @@ public final class VoxelShapeArray extends VoxelShape {
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         switch (enumdirection_enumaxis) {
             case X:
-                return this.b;
+                return this.xs;
             case Y:
-                return this.c;
+                return this.ys;
             case Z:
-                return this.d;
+                return this.zs;
             default:
                 throw new IllegalArgumentException();
         }

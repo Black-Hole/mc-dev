@@ -11,15 +11,15 @@ import net.minecraft.world.item.ItemStack;
 public class InventoryCrafting implements IInventory, AutoRecipeOutput {
 
     private final NonNullList<ItemStack> items;
-    private final int b;
-    private final int c;
-    public final Container container;
+    private final int width;
+    private final int height;
+    public final Container menu;
 
     public InventoryCrafting(Container container, int i, int j) {
-        this.items = NonNullList.a(i * j, ItemStack.b);
-        this.container = container;
-        this.b = i;
-        this.c = j;
+        this.items = NonNullList.a(i * j, ItemStack.EMPTY);
+        this.menu = container;
+        this.width = i;
+        this.height = j;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
 
     @Override
     public ItemStack getItem(int i) {
-        return i >= this.getSize() ? ItemStack.b : (ItemStack) this.items.get(i);
+        return i >= this.getSize() ? ItemStack.EMPTY : (ItemStack) this.items.get(i);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
         if (!itemstack.isEmpty()) {
-            this.container.a((IInventory) this);
+            this.menu.a((IInventory) this);
         }
 
         return itemstack;
@@ -68,7 +68,7 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
     @Override
     public void setItem(int i, ItemStack itemstack) {
         this.items.set(i, itemstack);
-        this.container.a((IInventory) this);
+        this.menu.a((IInventory) this);
     }
 
     @Override
@@ -85,11 +85,11 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
     }
 
     public int f() {
-        return this.c;
+        return this.height;
     }
 
     public int g() {
-        return this.b;
+        return this.width;
     }
 
     @Override

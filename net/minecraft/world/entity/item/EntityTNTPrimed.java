@@ -19,15 +19,14 @@ import net.minecraft.world.level.World;
 
 public class EntityTNTPrimed extends Entity {
 
-    private static final DataWatcherObject<Integer> FUSE_TICKS = DataWatcher.a(EntityTNTPrimed.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> DATA_FUSE_ID = DataWatcher.a(EntityTNTPrimed.class, DataWatcherRegistry.INT);
+    private static final int DEFAULT_FUSE_TIME = 80;
     @Nullable
-    public EntityLiving source;
-    private int fuseTicks;
+    public EntityLiving owner;
 
     public EntityTNTPrimed(EntityTypes<? extends EntityTNTPrimed> entitytypes, World world) {
         super(entitytypes, world);
-        this.fuseTicks = 80;
-        this.i = true;
+        this.blocksBuilding = true;
     }
 
     public EntityTNTPrimed(World world, double d0, double d1, double d2, @Nullable EntityLiving entityliving) {
@@ -37,25 +36,25 @@ public class EntityTNTPrimed extends Entity {
 
         this.setMot(-Math.sin(d3) * 0.02D, 0.20000000298023224D, -Math.cos(d3) * 0.02D);
         this.setFuseTicks(80);
-        this.lastX = d0;
-        this.lastY = d1;
-        this.lastZ = d2;
-        this.source = entityliving;
+        this.xo = d0;
+        this.yo = d1;
+        this.zo = d2;
+        this.owner = entityliving;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.datawatcher.register(EntityTNTPrimed.FUSE_TICKS, 80);
+        this.entityData.register(EntityTNTPrimed.DATA_FUSE_ID, 80);
     }
 
     @Override
-    protected boolean playStepSound() {
-        return false;
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.NONE;
     }
 
     @Override
     public boolean isInteractable() {
-        return !this.dead;
+        return !this.isRemoved();
     }
 
     @Override
@@ -70,16 +69,18 @@ public class EntityTNTPrimed extends Entity {
             this.setMot(this.getMot().d(0.7D, -0.5D, 0.7D));
         }
 
-        --this.fuseTicks;
-        if (this.fuseTicks <= 0) {
+        int i = this.getFuseTicks() - 1;
+
+        this.setFuseTicks(i);
+        if (i <= 0) {
             this.die();
-            if (!this.world.isClientSide) {
+            if (!this.level.isClientSide) {
                 this.explode();
             }
         } else {
-            this.aK();
-            if (this.world.isClientSide) {
-                this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
+            this.aR();
+            if (this.level.isClientSide) {
+                this.level.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
             }
         }
 
@@ -88,7 +89,7 @@ public class EntityTNTPrimed extends Entity {
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX(), this.e(0.0625D), this.locZ(), 4.0F, Explosion.Effect.BREAK);
+        this.level.explode(this, this.locX(), this.e(0.0625D), this.locZ(), 4.0F, Explosion.Effect.BREAK);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class EntityTNTPrimed extends Entity {
 
     @Nullable
     public EntityLiving getSource() {
-        return this.source;
+        return this.owner;
     }
 
     @Override
@@ -112,28 +113,15 @@ public class EntityTNTPrimed extends Entity {
     }
 
     public void setFuseTicks(int i) {
-        this.datawatcher.set(EntityTNTPrimed.FUSE_TICKS, i);
-        this.fuseTicks = i;
-    }
-
-    @Override
-    public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityTNTPrimed.FUSE_TICKS.equals(datawatcherobject)) {
-            this.fuseTicks = this.h();
-        }
-
-    }
-
-    public int h() {
-        return (Integer) this.datawatcher.get(EntityTNTPrimed.FUSE_TICKS);
+        this.entityData.set(EntityTNTPrimed.DATA_FUSE_ID, i);
     }
 
     public int getFuseTicks() {
-        return this.fuseTicks;
+        return (Integer) this.entityData.get(EntityTNTPrimed.DATA_FUSE_ID);
     }
 
     @Override
-    public Packet<?> P() {
+    public Packet<?> getPacket() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

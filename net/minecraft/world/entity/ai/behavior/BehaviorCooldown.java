@@ -8,6 +8,8 @@ import net.minecraft.world.entity.npc.EntityVillager;
 
 public class BehaviorCooldown extends Behavior<EntityVillager> {
 
+    private static final int SAFE_DISTANCE_FROM_DANGER = 36;
+
     public BehaviorCooldown() {
         super(ImmutableMap.of());
     }
@@ -25,7 +27,7 @@ public class BehaviorCooldown extends Behavior<EntityVillager> {
 
     private static boolean a(EntityVillager entityvillager) {
         return entityvillager.getBehaviorController().getMemory(MemoryModuleType.HURT_BY_ENTITY).filter((entityliving) -> {
-            return entityliving.h((Entity) entityvillager) <= 36.0D;
+            return entityliving.f((Entity) entityvillager) <= 36.0D;
         }).isPresent();
     }
 }

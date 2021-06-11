@@ -9,7 +9,8 @@ public class Particles {
     public static final ParticleType AMBIENT_ENTITY_EFFECT = a("ambient_entity_effect", false);
     public static final ParticleType ANGRY_VILLAGER = a("angry_villager", false);
     public static final ParticleType BARRIER = a("barrier", false);
-    public static final Particle<ParticleParamBlock> BLOCK = a("block", ParticleParamBlock.a, ParticleParamBlock::a);
+    public static final ParticleType LIGHT = a("light", false);
+    public static final Particle<ParticleParamBlock> BLOCK = a("block", ParticleParamBlock.DESERIALIZER, ParticleParamBlock::a);
     public static final ParticleType BUBBLE = a("bubble", false);
     public static final ParticleType CLOUD = a("cloud", false);
     public static final ParticleType CRIT = a("crit", false);
@@ -20,8 +21,11 @@ public class Particles {
     public static final ParticleType LANDING_LAVA = a("landing_lava", false);
     public static final ParticleType DRIPPING_WATER = a("dripping_water", false);
     public static final ParticleType FALLING_WATER = a("falling_water", false);
-    public static final Particle<ParticleParamRedstone> DUST = a("dust", ParticleParamRedstone.c, (particle) -> {
-        return ParticleParamRedstone.b;
+    public static final Particle<ParticleParamRedstone> DUST = a("dust", ParticleParamRedstone.DESERIALIZER, (particle) -> {
+        return ParticleParamRedstone.CODEC;
+    });
+    public static final Particle<DustColorTransitionOptions> DUST_COLOR_TRANSITION = a("dust_color_transition", DustColorTransitionOptions.DESERIALIZER, (particle) -> {
+        return DustColorTransitionOptions.CODEC;
     });
     public static final ParticleType EFFECT = a("effect", false);
     public static final ParticleType ELDER_GUARDIAN = a("elder_guardian", true);
@@ -31,7 +35,7 @@ public class Particles {
     public static final ParticleType ENTITY_EFFECT = a("entity_effect", false);
     public static final ParticleType EXPLOSION_EMITTER = a("explosion_emitter", true);
     public static final ParticleType EXPLOSION = a("explosion", true);
-    public static final Particle<ParticleParamBlock> FALLING_DUST = a("falling_dust", ParticleParamBlock.a, ParticleParamBlock::a);
+    public static final Particle<ParticleParamBlock> FALLING_DUST = a("falling_dust", ParticleParamBlock.DESERIALIZER, ParticleParamBlock::a);
     public static final ParticleType FIREWORK = a("firework", false);
     public static final ParticleType FISHING = a("fishing", false);
     public static final ParticleType FLAME = a("flame", false);
@@ -42,7 +46,10 @@ public class Particles {
     public static final ParticleType COMPOSTER = a("composter", false);
     public static final ParticleType HEART = a("heart", false);
     public static final ParticleType INSTANT_EFFECT = a("instant_effect", false);
-    public static final Particle<ParticleParamItem> ITEM = a("item", ParticleParamItem.a, ParticleParamItem::a);
+    public static final Particle<ParticleParamItem> ITEM = a("item", ParticleParamItem.DESERIALIZER, ParticleParamItem::a);
+    public static final Particle<VibrationParticleOption> VIBRATION = a("vibration", VibrationParticleOption.DESERIALIZER, (particle) -> {
+        return VibrationParticleOption.CODEC;
+    });
     public static final ParticleType ITEM_SLIME = a("item_slime", false);
     public static final ParticleType ITEM_SNOWBALL = a("item_snowball", false);
     public static final ParticleType LARGE_SMOKE = a("large_smoke", false);
@@ -72,15 +79,31 @@ public class Particles {
     public static final ParticleType FALLING_HONEY = a("falling_honey", false);
     public static final ParticleType LANDING_HONEY = a("landing_honey", false);
     public static final ParticleType FALLING_NECTAR = a("falling_nectar", false);
+    public static final ParticleType FALLING_SPORE_BLOSSOM = a("falling_spore_blossom", false);
     public static final ParticleType ASH = a("ash", false);
     public static final ParticleType CRIMSON_SPORE = a("crimson_spore", false);
     public static final ParticleType WARPED_SPORE = a("warped_spore", false);
+    public static final ParticleType SPORE_BLOSSOM_AIR = a("spore_blossom_air", false);
     public static final ParticleType DRIPPING_OBSIDIAN_TEAR = a("dripping_obsidian_tear", false);
     public static final ParticleType FALLING_OBSIDIAN_TEAR = a("falling_obsidian_tear", false);
     public static final ParticleType LANDING_OBSIDIAN_TEAR = a("landing_obsidian_tear", false);
     public static final ParticleType REVERSE_PORTAL = a("reverse_portal", false);
     public static final ParticleType WHITE_ASH = a("white_ash", false);
-    public static final Codec<ParticleParam> au = IRegistry.PARTICLE_TYPE.dispatch("type", ParticleParam::getParticle, Particle::e);
+    public static final ParticleType SMALL_FLAME = a("small_flame", false);
+    public static final ParticleType SNOWFLAKE = a("snowflake", false);
+    public static final ParticleType DRIPPING_DRIPSTONE_LAVA = a("dripping_dripstone_lava", false);
+    public static final ParticleType FALLING_DRIPSTONE_LAVA = a("falling_dripstone_lava", false);
+    public static final ParticleType DRIPPING_DRIPSTONE_WATER = a("dripping_dripstone_water", false);
+    public static final ParticleType FALLING_DRIPSTONE_WATER = a("falling_dripstone_water", false);
+    public static final ParticleType GLOW_SQUID_INK = a("glow_squid_ink", true);
+    public static final ParticleType GLOW = a("glow", true);
+    public static final ParticleType WAX_ON = a("wax_on", true);
+    public static final ParticleType WAX_OFF = a("wax_off", true);
+    public static final ParticleType ELECTRIC_SPARK = a("electric_spark", true);
+    public static final ParticleType SCRAPE = a("scrape", true);
+    public static final Codec<ParticleParam> CODEC = IRegistry.PARTICLE_TYPE.dispatch("type", ParticleParam::getParticle, Particle::e);
+
+    public Particles() {}
 
     private static ParticleType a(String s, boolean flag) {
         return (ParticleType) IRegistry.a(IRegistry.PARTICLE_TYPE, s, (Object) (new ParticleType(flag)));

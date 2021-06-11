@@ -11,51 +11,49 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityDamageSource extends DamageSource {
 
-    @Nullable
-    protected final Entity w;
-    private boolean x;
+    protected final Entity entity;
+    private boolean isThorns;
 
-    public EntityDamageSource(String s, @Nullable Entity entity) {
+    public EntityDamageSource(String s, Entity entity) {
         super(s);
-        this.w = entity;
+        this.entity = entity;
     }
 
-    public EntityDamageSource x() {
-        this.x = true;
+    public EntityDamageSource D() {
+        this.isThorns = true;
         return this;
     }
 
-    public boolean y() {
-        return this.x;
+    public boolean E() {
+        return this.isThorns;
     }
 
-    @Nullable
     @Override
     public Entity getEntity() {
-        return this.w;
+        return this.entity;
     }
 
     @Override
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        ItemStack itemstack = this.w instanceof EntityLiving ? ((EntityLiving) this.w).getItemInMainHand() : ItemStack.b;
-        String s = "death.attack." + this.translationIndex;
+        ItemStack itemstack = this.entity instanceof EntityLiving ? ((EntityLiving) this.entity).getItemInMainHand() : ItemStack.EMPTY;
+        String s = "death.attack." + this.msgId;
 
-        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s + ".item", new Object[]{entityliving.getScoreboardDisplayName(), this.w.getScoreboardDisplayName(), itemstack.C()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), this.w.getScoreboardDisplayName()});
+        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s + ".item", new Object[]{entityliving.getScoreboardDisplayName(), this.entity.getScoreboardDisplayName(), itemstack.G()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), this.entity.getScoreboardDisplayName()});
     }
 
     @Override
-    public boolean s() {
-        return this.w != null && this.w instanceof EntityLiving && !(this.w instanceof EntityHuman);
+    public boolean w() {
+        return this.entity instanceof EntityLiving && !(this.entity instanceof EntityHuman);
     }
 
     @Nullable
     @Override
-    public Vec3D w() {
-        return this.w != null ? this.w.getPositionVector() : null;
+    public Vec3D C() {
+        return this.entity.getPositionVector();
     }
 
     @Override
     public String toString() {
-        return "EntityDamageSource (" + this.w + ")";
+        return "EntityDamageSource (" + this.entity + ")";
     }
 }

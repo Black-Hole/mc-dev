@@ -16,51 +16,56 @@ import net.minecraft.world.level.World;
 
 public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
-    private static final DataWatcherObject<Byte> bo = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
-    protected int b;
-    private EntityIllagerWizard.Spell bp;
+    private static final DataWatcherObject<Byte> DATA_SPELL_CASTING_ID = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.BYTE);
+    protected int spellCastingTickCount;
+    private EntityIllagerWizard.Spell currentSpell;
 
     protected EntityIllagerWizard(EntityTypes<? extends EntityIllagerWizard> entitytypes, World world) {
         super(entitytypes, world);
-        this.bp = EntityIllagerWizard.Spell.NONE;
+        this.currentSpell = EntityIllagerWizard.Spell.NONE;
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityIllagerWizard.bo, (byte) 0);
+        this.entityData.register(EntityIllagerWizard.DATA_SPELL_CASTING_ID, (byte) 0);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.b = nbttagcompound.getInt("SpellTicks");
+        this.spellCastingTickCount = nbttagcompound.getInt("SpellTicks");
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("SpellTicks", this.b);
+        nbttagcompound.setInt("SpellTicks", this.spellCastingTickCount);
     }
 
-    public boolean eW() {
-        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.bo) > 0 : this.b > 0;
+    @Override
+    public EntityIllagerAbstract.a n() {
+        return this.fF() ? EntityIllagerAbstract.a.SPELLCASTING : (this.fM() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
+    }
+
+    public boolean fF() {
+        return this.level.isClientSide ? (Byte) this.entityData.get(EntityIllagerWizard.DATA_SPELL_CASTING_ID) > 0 : this.spellCastingTickCount > 0;
     }
 
     public void setSpell(EntityIllagerWizard.Spell entityillagerwizard_spell) {
-        this.bp = entityillagerwizard_spell;
-        this.datawatcher.set(EntityIllagerWizard.bo, (byte) entityillagerwizard_spell.g);
+        this.currentSpell = entityillagerwizard_spell;
+        this.entityData.set(EntityIllagerWizard.DATA_SPELL_CASTING_ID, (byte) entityillagerwizard_spell.id);
     }
 
     public EntityIllagerWizard.Spell getSpell() {
-        return !this.world.isClientSide ? this.bp : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.bo));
+        return !this.level.isClientSide ? this.currentSpell : EntityIllagerWizard.Spell.a((Byte) this.entityData.get(EntityIllagerWizard.DATA_SPELL_CASTING_ID));
     }
 
     @Override
     protected void mobTick() {
         super.mobTick();
-        if (this.b > 0) {
-            --this.b;
+        if (this.spellCastingTickCount > 0) {
+            --this.spellCastingTickCount;
         }
 
     }
@@ -68,23 +73,23 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide && this.eW()) {
+        if (this.level.isClientSide && this.fF()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
-            double d0 = entityillagerwizard_spell.h[0];
-            double d1 = entityillagerwizard_spell.h[1];
-            double d2 = entityillagerwizard_spell.h[2];
-            float f = this.aA * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
+            double d0 = entityillagerwizard_spell.spellColor[0];
+            double d1 = entityillagerwizard_spell.spellColor[1];
+            double d2 = entityillagerwizard_spell.spellColor[2];
+            float f = this.yBodyRot * 0.017453292F + MathHelper.cos((float) this.tickCount * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
 
-            this.world.addParticle(Particles.ENTITY_EFFECT, this.locX() + (double) f1 * 0.6D, this.locY() + 1.8D, this.locZ() + (double) f2 * 0.6D, d0, d1, d2);
-            this.world.addParticle(Particles.ENTITY_EFFECT, this.locX() - (double) f1 * 0.6D, this.locY() + 1.8D, this.locZ() - (double) f2 * 0.6D, d0, d1, d2);
+            this.level.addParticle(Particles.ENTITY_EFFECT, this.locX() + (double) f1 * 0.6D, this.locY() + 1.8D, this.locZ() + (double) f2 * 0.6D, d0, d1, d2);
+            this.level.addParticle(Particles.ENTITY_EFFECT, this.locX() - (double) f1 * 0.6D, this.locY() + 1.8D, this.locZ() - (double) f2 * 0.6D, d0, d1, d2);
         }
 
     }
 
-    protected int eY() {
-        return this.b;
+    protected int fH() {
+        return this.spellCastingTickCount;
     }
 
     protected abstract SoundEffect getSoundCastSpell();
@@ -93,12 +98,12 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         NONE(0, 0.0D, 0.0D, 0.0D), SUMMON_VEX(1, 0.7D, 0.7D, 0.8D), FANGS(2, 0.4D, 0.3D, 0.35D), WOLOLO(3, 0.7D, 0.5D, 0.2D), DISAPPEAR(4, 0.3D, 0.3D, 0.8D), BLINDNESS(5, 0.1D, 0.1D, 0.2D);
 
-        private final int g;
-        private final double[] h;
+        final int id;
+        final double[] spellColor;
 
         private Spell(int i, double d0, double d1, double d2) {
-            this.g = i;
-            this.h = new double[]{d0, d1, d2};
+            this.id = i;
+            this.spellColor = new double[]{d0, d1, d2};
         }
 
         public static EntityIllagerWizard.Spell a(int i) {
@@ -108,7 +113,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
             for (int k = 0; k < j; ++k) {
                 EntityIllagerWizard.Spell entityillagerwizard_spell = aentityillagerwizard_spell[k];
 
-                if (i == entityillagerwizard_spell.g) {
+                if (i == entityillagerwizard_spell.id) {
                     return entityillagerwizard_spell;
                 }
             }
@@ -117,10 +122,10 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         }
     }
 
-    public abstract class PathfinderGoalCastSpell extends PathfinderGoal {
+    protected abstract class PathfinderGoalCastSpell extends PathfinderGoal {
 
-        protected int b;
-        protected int c;
+        protected int attackWarmupDelay;
+        protected int nextAttackTickCount;
 
         protected PathfinderGoalCastSpell() {}
 
@@ -128,21 +133,21 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         public boolean a() {
             EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.eW() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
+            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.fF() ? false : EntityIllagerWizard.this.tickCount >= this.nextAttackTickCount) : false;
         }
 
         @Override
         public boolean b() {
             EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() && this.b > 0;
+            return entityliving != null && entityliving.isAlive() && this.attackWarmupDelay > 0;
         }
 
         @Override
         public void c() {
-            this.b = this.m();
-            EntityIllagerWizard.this.b = this.g();
-            this.c = EntityIllagerWizard.this.ticksLived + this.h();
+            this.attackWarmupDelay = this.m();
+            EntityIllagerWizard.this.spellCastingTickCount = this.g();
+            this.nextAttackTickCount = EntityIllagerWizard.this.tickCount + this.h();
             SoundEffect soundeffect = this.k();
 
             if (soundeffect != null) {
@@ -154,8 +159,8 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         @Override
         public void e() {
-            --this.b;
-            if (this.b == 0) {
+            --this.attackWarmupDelay;
+            if (this.attackWarmupDelay == 0) {
                 this.j();
                 EntityIllagerWizard.this.playSound(EntityIllagerWizard.this.getSoundCastSpell(), 1.0F, 1.0F);
             }
@@ -178,7 +183,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         protected abstract EntityIllagerWizard.Spell getCastSpell();
     }
 
-    public class b extends PathfinderGoal {
+    protected class b extends PathfinderGoal {
 
         public b() {
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
@@ -186,7 +191,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         @Override
         public boolean a() {
-            return EntityIllagerWizard.this.eY() > 0;
+            return EntityIllagerWizard.this.fH() > 0;
         }
 
         @Override
@@ -204,7 +209,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.Q(), (float) EntityIllagerWizard.this.O());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.eZ(), (float) EntityIllagerWizard.this.eY());
             }
 
         }

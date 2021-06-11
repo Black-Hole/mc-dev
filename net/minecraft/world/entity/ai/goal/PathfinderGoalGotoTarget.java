@@ -9,38 +9,41 @@ import net.minecraft.world.level.IWorldReader;
 
 public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
 
-    protected final EntityCreature a;
-    public final double b;
-    protected int c;
-    protected int d;
-    private int g;
-    protected BlockPosition e;
-    private boolean h;
-    private final int i;
-    private final int j;
-    protected int f;
+    private static final int GIVE_UP_TICKS = 1200;
+    private static final int STAY_TICKS = 1200;
+    private static final int INTERVAL_TICKS = 200;
+    protected final EntityCreature mob;
+    public final double speedModifier;
+    protected int nextStartTick;
+    protected int tryTicks;
+    private int maxStayTicks;
+    protected BlockPosition blockPos;
+    private boolean reachedTarget;
+    private final int searchRange;
+    private final int verticalSearchRange;
+    protected int verticalSearchStart;
 
     public PathfinderGoalGotoTarget(EntityCreature entitycreature, double d0, int i) {
         this(entitycreature, d0, i, 1);
     }
 
     public PathfinderGoalGotoTarget(EntityCreature entitycreature, double d0, int i, int j) {
-        this.e = BlockPosition.ZERO;
-        this.a = entitycreature;
-        this.b = d0;
-        this.i = i;
-        this.f = 0;
-        this.j = j;
+        this.blockPos = BlockPosition.ZERO;
+        this.mob = entitycreature;
+        this.speedModifier = d0;
+        this.searchRange = i;
+        this.verticalSearchStart = 0;
+        this.verticalSearchRange = j;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.JUMP));
     }
 
     @Override
     public boolean a() {
-        if (this.c > 0) {
-            --this.c;
+        if (this.nextStartTick > 0) {
+            --this.nextStartTick;
             return false;
         } else {
-            this.c = this.a(this.a);
+            this.nextStartTick = this.a(this.mob);
             return this.m();
         }
     }
@@ -51,18 +54,18 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.d >= -this.g && this.d <= 1200 && this.a(this.a.world, this.e);
+        return this.tryTicks >= -this.maxStayTicks && this.tryTicks <= 1200 && this.a(this.mob.level, this.blockPos);
     }
 
     @Override
     public void c() {
         this.g();
-        this.d = 0;
-        this.g = this.a.getRandom().nextInt(this.a.getRandom().nextInt(1200) + 1200) + 1200;
+        this.tryTicks = 0;
+        this.maxStayTicks = this.mob.getRandom().nextInt(this.mob.getRandom().nextInt(1200) + 1200) + 1200;
     }
 
     protected void g() {
-        this.a.getNavigation().a((double) ((float) this.e.getX()) + 0.5D, (double) (this.e.getY() + 1), (double) ((float) this.e.getZ()) + 0.5D, this.b);
+        this.mob.getNavigation().a((double) ((float) this.blockPos.getX()) + 0.5D, (double) (this.blockPos.getY() + 1), (double) ((float) this.blockPos.getZ()) + 0.5D, this.speedModifier);
     }
 
     public double h() {
@@ -70,47 +73,47 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
     }
 
     protected BlockPosition j() {
-        return this.e.up();
+        return this.blockPos.up();
     }
 
     @Override
     public void e() {
         BlockPosition blockposition = this.j();
 
-        if (!blockposition.a((IPosition) this.a.getPositionVector(), this.h())) {
-            this.h = false;
-            ++this.d;
+        if (!blockposition.a((IPosition) this.mob.getPositionVector(), this.h())) {
+            this.reachedTarget = false;
+            ++this.tryTicks;
             if (this.k()) {
-                this.a.getNavigation().a((double) ((float) blockposition.getX()) + 0.5D, (double) blockposition.getY(), (double) ((float) blockposition.getZ()) + 0.5D, this.b);
+                this.mob.getNavigation().a((double) ((float) blockposition.getX()) + 0.5D, (double) blockposition.getY(), (double) ((float) blockposition.getZ()) + 0.5D, this.speedModifier);
             }
         } else {
-            this.h = true;
-            --this.d;
+            this.reachedTarget = true;
+            --this.tryTicks;
         }
 
     }
 
     public boolean k() {
-        return this.d % 40 == 0;
+        return this.tryTicks % 40 == 0;
     }
 
     protected boolean l() {
-        return this.h;
+        return this.reachedTarget;
     }
 
     protected boolean m() {
-        int i = this.i;
-        int j = this.j;
-        BlockPosition blockposition = this.a.getChunkCoordinates();
+        int i = this.searchRange;
+        int j = this.verticalSearchRange;
+        BlockPosition blockposition = this.mob.getChunkCoordinates();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        for (int k = this.f; k <= j; k = k > 0 ? -k : 1 - k) {
+        for (int k = this.verticalSearchStart; k <= j; k = k > 0 ? -k : 1 - k) {
             for (int l = 0; l < i; ++l) {
                 for (int i1 = 0; i1 <= l; i1 = i1 > 0 ? -i1 : 1 - i1) {
                     for (int j1 = i1 < l && i1 > -l ? l : 0; j1 <= l; j1 = j1 > 0 ? -j1 : 1 - j1) {
                         blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, i1, k - 1, j1);
-                        if (this.a.a((BlockPosition) blockposition_mutableblockposition) && this.a(this.a.world, blockposition_mutableblockposition)) {
-                            this.e = blockposition_mutableblockposition;
+                        if (this.mob.a((BlockPosition) blockposition_mutableblockposition) && this.a(this.mob.level, blockposition_mutableblockposition)) {
+                            this.blockPos = blockposition_mutableblockposition;
                             return true;
                         }
                     }

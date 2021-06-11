@@ -2,9 +2,12 @@ package net.minecraft.world.scores.criteria;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import net.minecraft.EnumChatFormat;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
@@ -12,42 +15,60 @@ import net.minecraft.stats.StatisticWrapper;
 
 public class IScoreboardCriteria {
 
-    public static final Map<String, IScoreboardCriteria> criteria = Maps.newHashMap();
-    public static final IScoreboardCriteria DUMMY = new IScoreboardCriteria("dummy");
-    public static final IScoreboardCriteria TRIGGER = new IScoreboardCriteria("trigger");
-    public static final IScoreboardCriteria DEATH_COUNT = new IScoreboardCriteria("deathCount");
-    public static final IScoreboardCriteria PLAYER_KILL_COUNT = new IScoreboardCriteria("playerKillCount");
-    public static final IScoreboardCriteria TOTAL_KILL_COUNT = new IScoreboardCriteria("totalKillCount");
-    public static final IScoreboardCriteria HEALTH = new IScoreboardCriteria("health", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.HEARTS);
-    public static final IScoreboardCriteria FOOD = new IScoreboardCriteria("food", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
-    public static final IScoreboardCriteria AIR = new IScoreboardCriteria("air", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
-    public static final IScoreboardCriteria ARMOR = new IScoreboardCriteria("armor", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
-    public static final IScoreboardCriteria XP = new IScoreboardCriteria("xp", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
-    public static final IScoreboardCriteria LEVEL = new IScoreboardCriteria("level", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
-    public static final IScoreboardCriteria[] m = new IScoreboardCriteria[]{new IScoreboardCriteria("teamkill." + EnumChatFormat.BLACK.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_BLUE.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_GREEN.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_AQUA.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_RED.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_PURPLE.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.GOLD.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.GRAY.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.DARK_GRAY.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.BLUE.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.GREEN.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.AQUA.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.RED.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.LIGHT_PURPLE.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.YELLOW.f()), new IScoreboardCriteria("teamkill." + EnumChatFormat.WHITE.f())};
-    public static final IScoreboardCriteria[] n = new IScoreboardCriteria[]{new IScoreboardCriteria("killedByTeam." + EnumChatFormat.BLACK.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_BLUE.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_GREEN.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_AQUA.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_RED.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_PURPLE.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.GOLD.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.GRAY.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.DARK_GRAY.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.BLUE.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.GREEN.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.AQUA.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.RED.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.LIGHT_PURPLE.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.YELLOW.f()), new IScoreboardCriteria("killedByTeam." + EnumChatFormat.WHITE.f())};
-    private final String o;
-    private final boolean p;
-    private final IScoreboardCriteria.EnumScoreboardHealthDisplay q;
+    private static final Map<String, IScoreboardCriteria> CUSTOM_CRITERIA = Maps.newHashMap();
+    public static final Map<String, IScoreboardCriteria> CRITERIA_CACHE = Maps.newHashMap();
+    public static final IScoreboardCriteria DUMMY = b("dummy");
+    public static final IScoreboardCriteria TRIGGER = b("trigger");
+    public static final IScoreboardCriteria DEATH_COUNT = b("deathCount");
+    public static final IScoreboardCriteria KILL_COUNT_PLAYERS = b("playerKillCount");
+    public static final IScoreboardCriteria KILL_COUNT_ALL = b("totalKillCount");
+    public static final IScoreboardCriteria HEALTH = a("health", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.HEARTS);
+    public static final IScoreboardCriteria FOOD = a("food", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    public static final IScoreboardCriteria AIR = a("air", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    public static final IScoreboardCriteria ARMOR = a("armor", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    public static final IScoreboardCriteria EXPERIENCE = a("xp", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    public static final IScoreboardCriteria LEVEL = a("level", true, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    public static final IScoreboardCriteria[] TEAM_KILL = new IScoreboardCriteria[]{b("teamkill." + EnumChatFormat.BLACK.f()), b("teamkill." + EnumChatFormat.DARK_BLUE.f()), b("teamkill." + EnumChatFormat.DARK_GREEN.f()), b("teamkill." + EnumChatFormat.DARK_AQUA.f()), b("teamkill." + EnumChatFormat.DARK_RED.f()), b("teamkill." + EnumChatFormat.DARK_PURPLE.f()), b("teamkill." + EnumChatFormat.GOLD.f()), b("teamkill." + EnumChatFormat.GRAY.f()), b("teamkill." + EnumChatFormat.DARK_GRAY.f()), b("teamkill." + EnumChatFormat.BLUE.f()), b("teamkill." + EnumChatFormat.GREEN.f()), b("teamkill." + EnumChatFormat.AQUA.f()), b("teamkill." + EnumChatFormat.RED.f()), b("teamkill." + EnumChatFormat.LIGHT_PURPLE.f()), b("teamkill." + EnumChatFormat.YELLOW.f()), b("teamkill." + EnumChatFormat.WHITE.f())};
+    public static final IScoreboardCriteria[] KILLED_BY_TEAM = new IScoreboardCriteria[]{b("killedByTeam." + EnumChatFormat.BLACK.f()), b("killedByTeam." + EnumChatFormat.DARK_BLUE.f()), b("killedByTeam." + EnumChatFormat.DARK_GREEN.f()), b("killedByTeam." + EnumChatFormat.DARK_AQUA.f()), b("killedByTeam." + EnumChatFormat.DARK_RED.f()), b("killedByTeam." + EnumChatFormat.DARK_PURPLE.f()), b("killedByTeam." + EnumChatFormat.GOLD.f()), b("killedByTeam." + EnumChatFormat.GRAY.f()), b("killedByTeam." + EnumChatFormat.DARK_GRAY.f()), b("killedByTeam." + EnumChatFormat.BLUE.f()), b("killedByTeam." + EnumChatFormat.GREEN.f()), b("killedByTeam." + EnumChatFormat.AQUA.f()), b("killedByTeam." + EnumChatFormat.RED.f()), b("killedByTeam." + EnumChatFormat.LIGHT_PURPLE.f()), b("killedByTeam." + EnumChatFormat.YELLOW.f()), b("killedByTeam." + EnumChatFormat.WHITE.f())};
+    private final String name;
+    private final boolean readOnly;
+    private final IScoreboardCriteria.EnumScoreboardHealthDisplay renderType;
 
-    public IScoreboardCriteria(String s) {
+    private static IScoreboardCriteria a(String s, boolean flag, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
+        IScoreboardCriteria iscoreboardcriteria = new IScoreboardCriteria(s, flag, iscoreboardcriteria_enumscoreboardhealthdisplay);
+
+        IScoreboardCriteria.CUSTOM_CRITERIA.put(s, iscoreboardcriteria);
+        return iscoreboardcriteria;
+    }
+
+    private static IScoreboardCriteria b(String s) {
+        return a(s, false, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+    }
+
+    protected IScoreboardCriteria(String s) {
         this(s, false, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
     }
 
     protected IScoreboardCriteria(String s, boolean flag, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        this.o = s;
-        this.p = flag;
-        this.q = iscoreboardcriteria_enumscoreboardhealthdisplay;
-        IScoreboardCriteria.criteria.put(s, this);
+        this.name = s;
+        this.readOnly = flag;
+        this.renderType = iscoreboardcriteria_enumscoreboardhealthdisplay;
+        IScoreboardCriteria.CRITERIA_CACHE.put(s, this);
+    }
+
+    public static Set<String> c() {
+        return ImmutableSet.copyOf(IScoreboardCriteria.CUSTOM_CRITERIA.keySet());
     }
 
     public static Optional<IScoreboardCriteria> a(String s) {
-        if (IScoreboardCriteria.criteria.containsKey(s)) {
-            return Optional.of(IScoreboardCriteria.criteria.get(s));
+        IScoreboardCriteria iscoreboardcriteria = (IScoreboardCriteria) IScoreboardCriteria.CRITERIA_CACHE.get(s);
+
+        if (iscoreboardcriteria != null) {
+            return Optional.of(iscoreboardcriteria);
         } else {
             int i = s.indexOf(58);
 
-            return i < 0 ? Optional.empty() : IRegistry.STATS.getOptional(MinecraftKey.a(s.substring(0, i), '.')).flatMap((statisticwrapper) -> {
+            return i < 0 ? Optional.empty() : IRegistry.STAT_TYPE.getOptional(MinecraftKey.a(s.substring(0, i), '.')).flatMap((statisticwrapper) -> {
                 return a(statisticwrapper, MinecraftKey.a(s.substring(i + 1), '.'));
             });
         }
@@ -56,39 +77,39 @@ public class IScoreboardCriteria {
     private static <T> Optional<IScoreboardCriteria> a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
         Optional optional = statisticwrapper.getRegistry().getOptional(minecraftkey);
 
-        statisticwrapper.getClass();
+        Objects.requireNonNull(statisticwrapper);
         return optional.map(statisticwrapper::b);
     }
 
     public String getName() {
-        return this.o;
+        return this.name;
     }
 
     public boolean isReadOnly() {
-        return this.p;
+        return this.readOnly;
     }
 
-    public IScoreboardCriteria.EnumScoreboardHealthDisplay e() {
-        return this.q;
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay f() {
+        return this.renderType;
     }
 
     public static enum EnumScoreboardHealthDisplay {
 
         INTEGER("integer"), HEARTS("hearts");
 
-        private final String c;
-        private static final Map<String, IScoreboardCriteria.EnumScoreboardHealthDisplay> d;
+        private final String id;
+        private static final Map<String, IScoreboardCriteria.EnumScoreboardHealthDisplay> BY_ID;
 
         private EnumScoreboardHealthDisplay(String s) {
-            this.c = s;
+            this.id = s;
         }
 
         public String a() {
-            return this.c;
+            return this.id;
         }
 
         public static IScoreboardCriteria.EnumScoreboardHealthDisplay a(String s) {
-            return (IScoreboardCriteria.EnumScoreboardHealthDisplay) IScoreboardCriteria.EnumScoreboardHealthDisplay.d.getOrDefault(s, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+            return (IScoreboardCriteria.EnumScoreboardHealthDisplay) IScoreboardCriteria.EnumScoreboardHealthDisplay.BY_ID.getOrDefault(s, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
         }
 
         static {
@@ -99,10 +120,10 @@ public class IScoreboardCriteria {
             for (int j = 0; j < i; ++j) {
                 IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = aiscoreboardcriteria_enumscoreboardhealthdisplay[j];
 
-                builder.put(iscoreboardcriteria_enumscoreboardhealthdisplay.c, iscoreboardcriteria_enumscoreboardhealthdisplay);
+                builder.put(iscoreboardcriteria_enumscoreboardhealthdisplay.id, iscoreboardcriteria_enumscoreboardhealthdisplay);
             }
 
-            d = builder.build();
+            BY_ID = builder.build();
         }
     }
 }

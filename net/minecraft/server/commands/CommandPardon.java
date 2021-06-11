@@ -17,7 +17,9 @@ import net.minecraft.server.players.GameProfileBanList;
 
 public class CommandPardon {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.pardon.failed"));
+    private static final SimpleCommandExceptionType ERROR_NOT_BANNED = new SimpleCommandExceptionType(new ChatMessage("commands.pardon.failed"));
+
+    public CommandPardon() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pardon").requires((commandlistenerwrapper) -> {
@@ -45,7 +47,7 @@ public class CommandPardon {
         }
 
         if (i == 0) {
-            throw CommandPardon.a.create();
+            throw CommandPardon.ERROR_NOT_BANNED.create();
         } else {
             return i;
         }

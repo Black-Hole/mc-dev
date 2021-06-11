@@ -4,38 +4,37 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryTarget;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.VillagePlace;
 import net.minecraft.world.entity.npc.EntityVillager;
 import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorNearestVillage extends Behavior<EntityVillager> {
 
-    private final float b;
-    private final int c;
+    private final float speedModifier;
+    private final int closeEnoughDistance;
 
     public BehaviorNearestVillage(float f, int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.b = f;
-        this.c = i;
+        this.speedModifier = f;
+        this.closeEnoughDistance = i;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        return !worldserver.a_(entityvillager.getChunkCoordinates());
+        return !worldserver.b(entityvillager.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        VillagePlace villageplace = worldserver.y();
+        VillagePlace villageplace = worldserver.A();
         int j = villageplace.a(SectionPosition.a(entityvillager.getChunkCoordinates()));
         Vec3D vec3d = null;
 
         for (int k = 0; k < 5; ++k) {
-            Vec3D vec3d1 = RandomPositionGenerator.a((EntityCreature) entityvillager, 15, 7, (blockposition) -> {
-                return (double) (-worldserver.b(SectionPosition.a(blockposition)));
+            Vec3D vec3d1 = LandRandomPos.a(entityvillager, 15, 7, (blockposition) -> {
+                return (double) (-villageplace.a(SectionPosition.a(blockposition)));
             });
 
             if (vec3d1 != null) {
@@ -53,7 +52,7 @@ public class BehaviorNearestVillage extends Behavior<EntityVillager> {
         }
 
         if (vec3d != null) {
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.b, this.c)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.speedModifier, this.closeEnoughDistance)));
         }
 
     }

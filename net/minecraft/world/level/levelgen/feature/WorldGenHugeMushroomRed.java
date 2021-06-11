@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.GeneratorAccess;
+import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.BlockHugeMushroom;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureMushroomConfiguration;
@@ -18,8 +19,8 @@ public class WorldGenHugeMushroomRed extends WorldGenMushrooms {
     @Override
     protected void a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, int i, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
         for (int j = i - 3; j <= i; ++j) {
-            int k = j < i ? worldgenfeaturemushroomconfiguration.d : worldgenfeaturemushroomconfiguration.d - 1;
-            int l = worldgenfeaturemushroomconfiguration.d - 2;
+            int k = j < i ? worldgenfeaturemushroomconfiguration.foliageRadius : worldgenfeaturemushroomconfiguration.foliageRadius - 1;
+            int l = worldgenfeaturemushroomconfiguration.foliageRadius - 2;
 
             for (int i1 = -k; i1 <= k; ++i1) {
                 for (int j1 = -k; j1 <= k; ++j1) {
@@ -33,7 +34,13 @@ public class WorldGenHugeMushroomRed extends WorldGenMushrooms {
                     if (j >= i || flag4 != flag5) {
                         blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, i1, j, j1);
                         if (!generatoraccess.getType(blockposition_mutableblockposition).i(generatoraccess, blockposition_mutableblockposition)) {
-                            this.a(generatoraccess, blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) worldgenfeaturemushroomconfiguration.b.a(random, blockposition).set(BlockHugeMushroom.e, j >= i - 1)).set(BlockHugeMushroom.d, i1 < -l)).set(BlockHugeMushroom.b, i1 > l)).set(BlockHugeMushroom.a, j1 < -l)).set(BlockHugeMushroom.c, j1 > l));
+                            IBlockData iblockdata = worldgenfeaturemushroomconfiguration.capProvider.a(random, blockposition);
+
+                            if (iblockdata.b(BlockHugeMushroom.WEST) && iblockdata.b(BlockHugeMushroom.EAST) && iblockdata.b(BlockHugeMushroom.NORTH) && iblockdata.b(BlockHugeMushroom.SOUTH) && iblockdata.b(BlockHugeMushroom.UP)) {
+                                iblockdata = (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockHugeMushroom.UP, j >= i - 1)).set(BlockHugeMushroom.WEST, i1 < -l)).set(BlockHugeMushroom.EAST, i1 > l)).set(BlockHugeMushroom.NORTH, j1 < -l)).set(BlockHugeMushroom.SOUTH, j1 > l);
+                            }
+
+                            this.a((IWorldWriter) generatoraccess, blockposition_mutableblockposition, iblockdata);
                         }
                     }
                 }

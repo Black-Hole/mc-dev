@@ -2,6 +2,7 @@ package net.minecraft.world.level.levelgen.placement;
 
 import com.mojang.serialization.Codec;
 import java.util.BitSet;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -16,11 +17,11 @@ public class WorldGenDecoratorCarveMask extends WorldGenDecorator<WorldGenDecora
 
     public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, BlockPosition blockposition) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
-        BitSet bitset = worldgendecoratorcontext.a(chunkcoordintpair, worldgendecoratorcarvemaskconfiguration.c);
+        BitSet bitset = worldgendecoratorcontext.a(chunkcoordintpair, worldgendecoratorcarvemaskconfiguration.step);
+        IntStream intstream = IntStream.range(0, bitset.length());
 
-        return IntStream.range(0, bitset.length()).filter((i) -> {
-            return bitset.get(i) && random.nextFloat() < worldgendecoratorcarvemaskconfiguration.d;
-        }).mapToObj((i) -> {
+        Objects.requireNonNull(bitset);
+        return intstream.filter(bitset::get).mapToObj((i) -> {
             int j = i & 15;
             int k = i >> 4 & 15;
             int l = i >> 8;

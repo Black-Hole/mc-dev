@@ -7,22 +7,22 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorTarget implements BehaviorPosition {
 
-    private final BlockPosition a;
-    private final Vec3D b;
+    private final BlockPosition blockPos;
+    private final Vec3D centerPosition;
 
     public BehaviorTarget(BlockPosition blockposition) {
-        this.a = blockposition;
-        this.b = Vec3D.a((BaseBlockPosition) blockposition);
+        this.blockPos = blockposition;
+        this.centerPosition = Vec3D.a((BaseBlockPosition) blockposition);
     }
 
     @Override
     public Vec3D a() {
-        return this.b;
+        return this.centerPosition;
     }
 
     @Override
     public BlockPosition b() {
-        return this.a;
+        return this.blockPos;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class BehaviorTarget implements BehaviorPosition {
     }
 
     public String toString() {
-        return "BlockPosTracker{blockPos=" + this.a + ", centerPosition=" + this.b + '}';
+        return "BlockPosTracker{blockPos=" + this.blockPos + ", centerPosition=" + this.centerPosition + "}";
     }
 }

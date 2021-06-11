@@ -11,11 +11,12 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.Dynamic;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DataConverterAttributes extends DataFix {
 
-    private static final Map<String, String> a = ImmutableMap.builder().put("generic.maxHealth", "generic.max_health").put("Max Health", "generic.max_health").put("zombie.spawnReinforcements", "zombie.spawn_reinforcements").put("Spawn Reinforcements Chance", "zombie.spawn_reinforcements").put("horse.jumpStrength", "horse.jump_strength").put("Jump Strength", "horse.jump_strength").put("generic.followRange", "generic.follow_range").put("Follow Range", "generic.follow_range").put("generic.knockbackResistance", "generic.knockback_resistance").put("Knockback Resistance", "generic.knockback_resistance").put("generic.movementSpeed", "generic.movement_speed").put("Movement Speed", "generic.movement_speed").put("generic.flyingSpeed", "generic.flying_speed").put("Flying Speed", "generic.flying_speed").put("generic.attackDamage", "generic.attack_damage").put("generic.attackKnockback", "generic.attack_knockback").put("generic.attackSpeed", "generic.attack_speed").put("generic.armorToughness", "generic.armor_toughness").build();
+    private static final Map<String, String> RENAMES = ImmutableMap.builder().put("generic.maxHealth", "generic.max_health").put("Max Health", "generic.max_health").put("zombie.spawnReinforcements", "zombie.spawn_reinforcements").put("Spawn Reinforcements Chance", "zombie.spawn_reinforcements").put("horse.jumpStrength", "horse.jump_strength").put("Jump Strength", "horse.jump_strength").put("generic.followRange", "generic.follow_range").put("Follow Range", "generic.follow_range").put("generic.knockbackResistance", "generic.knockback_resistance").put("Knockback Resistance", "generic.knockback_resistance").put("generic.movementSpeed", "generic.movement_speed").put("Movement Speed", "generic.movement_speed").put("generic.flyingSpeed", "generic.flying_speed").put("Flying Speed", "generic.flying_speed").put("generic.attackDamage", "generic.attack_damage").put("generic.attackKnockback", "generic.attack_knockback").put("generic.attackSpeed", "generic.attack_speed").put("generic.armorToughness", "generic.armor_toughness").build();
 
     public DataConverterAttributes(Schema schema) {
         super(schema, false);
@@ -32,10 +33,10 @@ public class DataConverterAttributes extends DataFix {
 
     private static Dynamic<?> a(Dynamic<?> dynamic) {
         Optional optional = dynamic.asString().result().map((s) -> {
-            return (String) DataConverterAttributes.a.getOrDefault(s, s);
+            return (String) DataConverterAttributes.RENAMES.getOrDefault(s, s);
         });
 
-        dynamic.getClass();
+        Objects.requireNonNull(dynamic);
         return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createString), dynamic);
     }
 
@@ -48,7 +49,7 @@ public class DataConverterAttributes extends DataFix {
                     });
                 });
 
-                dynamic1.getClass();
+                Objects.requireNonNull(dynamic1);
                 return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1);
             });
         });
@@ -63,7 +64,7 @@ public class DataConverterAttributes extends DataFix {
                     });
                 });
 
-                dynamic1.getClass();
+                Objects.requireNonNull(dynamic1);
                 return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1);
             });
         });

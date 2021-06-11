@@ -6,51 +6,52 @@ import net.minecraft.world.phys.Vec3D;
 
 public interface ISteerable {
 
-    boolean O_();
+    boolean a();
 
-    void a_(Vec3D vec3d);
+    void a(Vec3D vec3d);
 
-    float N_();
+    float b();
 
     default boolean a(EntityInsentient entityinsentient, SaddleStorage saddlestorage, Vec3D vec3d) {
         if (!entityinsentient.isAlive()) {
             return false;
         } else {
-            Entity entity = entityinsentient.getPassengers().isEmpty() ? null : (Entity) entityinsentient.getPassengers().get(0);
+            Entity entity = entityinsentient.cB();
 
-            if (entityinsentient.isVehicle() && entityinsentient.er() && entity instanceof EntityHuman) {
-                entityinsentient.yaw = entity.yaw;
-                entityinsentient.lastYaw = entityinsentient.yaw;
-                entityinsentient.pitch = entity.pitch * 0.5F;
-                entityinsentient.setYawPitch(entityinsentient.yaw, entityinsentient.pitch);
-                entityinsentient.aA = entityinsentient.yaw;
-                entityinsentient.aC = entityinsentient.yaw;
-                entityinsentient.G = 1.0F;
-                entityinsentient.aE = entityinsentient.dN() * 0.1F;
-                if (saddlestorage.boosting && saddlestorage.currentBoostTicks++ > saddlestorage.boostTicks) {
+            if (entityinsentient.isVehicle() && entityinsentient.fc() && entity instanceof EntityHuman) {
+                entityinsentient.setYRot(entity.getYRot());
+                entityinsentient.yRotO = entityinsentient.getYRot();
+                entityinsentient.setXRot(entity.getXRot() * 0.5F);
+                entityinsentient.setYawPitch(entityinsentient.getYRot(), entityinsentient.getXRot());
+                entityinsentient.yBodyRot = entityinsentient.getYRot();
+                entityinsentient.yHeadRot = entityinsentient.getYRot();
+                entityinsentient.maxUpStep = 1.0F;
+                entityinsentient.flyingSpeed = entityinsentient.ev() * 0.1F;
+                if (saddlestorage.boosting && saddlestorage.boostTime++ > saddlestorage.boostTimeTotal) {
                     saddlestorage.boosting = false;
                 }
 
-                if (entityinsentient.cs()) {
-                    float f = this.N_();
+                if (entityinsentient.cH()) {
+                    float f = this.b();
 
                     if (saddlestorage.boosting) {
-                        f += f * 1.15F * MathHelper.sin((float) saddlestorage.currentBoostTicks / (float) saddlestorage.boostTicks * 3.1415927F);
+                        f += f * 1.15F * MathHelper.sin((float) saddlestorage.boostTime / (float) saddlestorage.boostTimeTotal * 3.1415927F);
                     }
 
-                    entityinsentient.q(f);
-                    this.a_(new Vec3D(0.0D, 0.0D, 1.0D));
-                    entityinsentient.aU = 0;
+                    entityinsentient.r(f);
+                    this.a(new Vec3D(0.0D, 0.0D, 1.0D));
+                    entityinsentient.lerpSteps = 0;
                 } else {
                     entityinsentient.a((EntityLiving) entityinsentient, false);
-                    entityinsentient.setMot(Vec3D.ORIGIN);
+                    entityinsentient.setMot(Vec3D.ZERO);
                 }
 
+                entityinsentient.as();
                 return true;
             } else {
-                entityinsentient.G = 0.5F;
-                entityinsentient.aE = 0.02F;
-                this.a_(vec3d);
+                entityinsentient.maxUpStep = 0.5F;
+                entityinsentient.flyingSpeed = 0.02F;
+                this.a(vec3d);
                 return false;
             }
         }

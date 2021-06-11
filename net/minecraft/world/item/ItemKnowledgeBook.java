@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ItemKnowledgeBook extends Item {
 
+    private static final String RECIPE_TAG = "Recipes";
     private static final Logger LOGGER = LogManager.getLogger();
 
     public ItemKnowledgeBook(Item.Info item_info) {
@@ -29,8 +30,8 @@ public class ItemKnowledgeBook extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
-        if (!entityhuman.abilities.canInstantlyBuild) {
-            entityhuman.a(enumhand, ItemStack.b);
+        if (!entityhuman.getAbilities().instabuild) {
+            entityhuman.a(enumhand, ItemStack.EMPTY);
         }
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Recipes", 9)) {
@@ -48,14 +49,14 @@ public class ItemKnowledgeBook extends Item {
                         return InteractionResultWrapper.fail(itemstack);
                     }
 
-                    list.add(optional.get());
+                    list.add((IRecipe) optional.get());
                 }
 
                 entityhuman.discoverRecipes(list);
                 entityhuman.b(StatisticList.ITEM_USED.b(this));
             }
 
-            return InteractionResultWrapper.a(itemstack, world.s_());
+            return InteractionResultWrapper.a(itemstack, world.isClientSide());
         } else {
             ItemKnowledgeBook.LOGGER.error("Tag not valid: {}", nbttagcompound);
             return InteractionResultWrapper.fail(itemstack);

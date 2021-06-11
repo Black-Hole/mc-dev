@@ -17,16 +17,16 @@ import org.apache.logging.log4j.Logger;
 public abstract class DataConverterUUIDBase extends DataFix {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    protected TypeReference b;
+    protected TypeReference typeReference;
 
     public DataConverterUUIDBase(Schema schema, TypeReference typereference) {
         super(schema, false);
-        this.b = typereference;
+        this.typeReference = typereference;
     }
 
     protected Typed<?> a(Typed<?> typed, String s, Function<Dynamic<?>, Dynamic<?>> function) {
-        Type<?> type = this.getInputSchema().getChoiceType(this.b, s);
-        Type<?> type1 = this.getOutputSchema().getChoiceType(this.b, s);
+        Type<?> type = this.getInputSchema().getChoiceType(this.typeReference, s);
+        Type<?> type1 = this.getOutputSchema().getChoiceType(this.typeReference, s);
 
         return typed.updateTyped(DSL.namedChoice(s, type), type1, (typed1) -> {
             return typed1.update(DSL.remainderFinder(), function);

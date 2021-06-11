@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import net.minecraft.core.BaseBlockPosition;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.InventorySubcontainer;
 import net.minecraft.world.entity.EntityExperienceOrb;
@@ -16,70 +18,73 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentManager;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3D;
 
 public class ContainerGrindstone extends Container {
 
-    private final IInventory resultInventory;
-    private final IInventory craftInventory;
-    private final ContainerAccess containerAccess;
+    public static final int MAX_NAME_LENGTH = 35;
+    public static final int INPUT_SLOT = 0;
+    public static final int ADDITIONAL_SLOT = 1;
+    public static final int RESULT_SLOT = 2;
+    private static final int INV_SLOT_START = 3;
+    private static final int INV_SLOT_END = 30;
+    private static final int USE_ROW_SLOT_START = 30;
+    private static final int USE_ROW_SLOT_END = 39;
+    private final IInventory resultSlots;
+    final IInventory repairSlots;
+    private final ContainerAccess access;
 
     public ContainerGrindstone(int i, PlayerInventory playerinventory) {
-        this(i, playerinventory, ContainerAccess.a);
+        this(i, playerinventory, ContainerAccess.NULL);
     }
 
     public ContainerGrindstone(int i, PlayerInventory playerinventory, final ContainerAccess containeraccess) {
         super(Containers.GRINDSTONE, i);
-        this.resultInventory = new InventoryCraftResult();
-        this.craftInventory = new InventorySubcontainer(2) {
+        this.resultSlots = new InventoryCraftResult();
+        this.repairSlots = new InventorySubcontainer(2) {
             @Override
             public void update() {
                 super.update();
                 ContainerGrindstone.this.a((IInventory) this);
             }
         };
-        this.containerAccess = containeraccess;
-        this.a(new Slot(this.craftInventory, 0, 49, 19) {
+        this.access = containeraccess;
+        this.a(new Slot(this.repairSlots, 0, 49, 19) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.e() || itemstack.getItem() == Items.ENCHANTED_BOOK || itemstack.hasEnchantments();
+                return itemstack.f() || itemstack.a(Items.ENCHANTED_BOOK) || itemstack.hasEnchantments();
             }
         });
-        this.a(new Slot(this.craftInventory, 1, 49, 40) {
+        this.a(new Slot(this.repairSlots, 1, 49, 40) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.e() || itemstack.getItem() == Items.ENCHANTED_BOOK || itemstack.hasEnchantments();
+                return itemstack.f() || itemstack.a(Items.ENCHANTED_BOOK) || itemstack.hasEnchantments();
             }
         });
-        this.a(new Slot(this.resultInventory, 2, 129, 34) {
+        this.a(new Slot(this.resultSlots, 2, 129, 34) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
             }
 
             @Override
-            public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+            public void a(EntityHuman entityhuman, ItemStack itemstack) {
                 containeraccess.a((world, blockposition) -> {
-                    int j = this.a(world);
-
-                    while (j > 0) {
-                        int k = EntityExperienceOrb.getOrbValue(j);
-
-                        j -= k;
-                        world.addEntity(new EntityExperienceOrb(world, (double) blockposition.getX(), (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, k));
+                    if (world instanceof WorldServer) {
+                        EntityExperienceOrb.a((WorldServer) world, Vec3D.a((BaseBlockPosition) blockposition), this.a(world));
                     }
 
                     world.triggerEffect(1042, blockposition, 0);
                 });
-                ContainerGrindstone.this.craftInventory.setItem(0, ItemStack.b);
-                ContainerGrindstone.this.craftInventory.setItem(1, ItemStack.b);
-                return itemstack;
+                ContainerGrindstone.this.repairSlots.setItem(0, ItemStack.EMPTY);
+                ContainerGrindstone.this.repairSlots.setItem(1, ItemStack.EMPTY);
             }
 
             private int a(World world) {
                 byte b0 = 0;
-                int j = b0 + this.e(ContainerGrindstone.this.craftInventory.getItem(0));
+                int j = b0 + this.f(ContainerGrindstone.this.repairSlots.getItem(0));
 
-                j += this.e(ContainerGrindstone.this.craftInventory.getItem(1));
+                j += this.f(ContainerGrindstone.this.repairSlots.getItem(1));
                 if (j > 0) {
                     int k = (int) Math.ceil((double) j / 2.0D);
 
@@ -89,7 +94,7 @@ public class ContainerGrindstone extends Container {
                 }
             }
 
-            private int e(ItemStack itemstack) {
+            private int f(ItemStack itemstack) {
                 int j = 0;
                 Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack);
                 Iterator iterator = map.entrySet().iterator();
@@ -125,24 +130,24 @@ public class ContainerGrindstone extends Container {
     @Override
     public void a(IInventory iinventory) {
         super.a(iinventory);
-        if (iinventory == this.craftInventory) {
-            this.e();
+        if (iinventory == this.repairSlots) {
+            this.i();
         }
 
     }
 
-    private void e() {
-        ItemStack itemstack = this.craftInventory.getItem(0);
-        ItemStack itemstack1 = this.craftInventory.getItem(1);
+    private void i() {
+        ItemStack itemstack = this.repairSlots.getItem(0);
+        ItemStack itemstack1 = this.repairSlots.getItem(1);
         boolean flag = !itemstack.isEmpty() || !itemstack1.isEmpty();
         boolean flag1 = !itemstack.isEmpty() && !itemstack1.isEmpty();
 
         if (flag) {
-            boolean flag2 = !itemstack.isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK && !itemstack.hasEnchantments() || !itemstack1.isEmpty() && itemstack1.getItem() != Items.ENCHANTED_BOOK && !itemstack1.hasEnchantments();
+            boolean flag2 = !itemstack.isEmpty() && !itemstack.a(Items.ENCHANTED_BOOK) && !itemstack.hasEnchantments() || !itemstack1.isEmpty() && !itemstack1.a(Items.ENCHANTED_BOOK) && !itemstack1.hasEnchantments();
 
             if (itemstack.getCount() > 1 || itemstack1.getCount() > 1 || !flag1 && flag2) {
-                this.resultInventory.setItem(0, ItemStack.b);
-                this.c();
+                this.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.d();
                 return;
             }
 
@@ -151,9 +156,9 @@ public class ContainerGrindstone extends Container {
             ItemStack itemstack2;
 
             if (flag1) {
-                if (itemstack.getItem() != itemstack1.getItem()) {
-                    this.resultInventory.setItem(0, ItemStack.b);
-                    this.c();
+                if (!itemstack.a(itemstack1.getItem())) {
+                    this.resultSlots.setItem(0, ItemStack.EMPTY);
+                    this.d();
                     return;
                 }
 
@@ -163,11 +168,11 @@ public class ContainerGrindstone extends Container {
                 int l = j + k + item.getMaxDurability() * 5 / 100;
 
                 i = Math.max(item.getMaxDurability() - l, 0);
-                itemstack2 = this.b(itemstack, itemstack1);
-                if (!itemstack2.e()) {
+                itemstack2 = this.a(itemstack, itemstack1);
+                if (!itemstack2.f()) {
                     if (!ItemStack.matches(itemstack, itemstack1)) {
-                        this.resultInventory.setItem(0, ItemStack.b);
-                        this.c();
+                        this.resultSlots.setItem(0, ItemStack.EMPTY);
+                        this.d();
                         return;
                     }
 
@@ -180,15 +185,15 @@ public class ContainerGrindstone extends Container {
                 itemstack2 = flag3 ? itemstack : itemstack1;
             }
 
-            this.resultInventory.setItem(0, this.a(itemstack2, i, b0));
+            this.resultSlots.setItem(0, this.a(itemstack2, i, b0));
         } else {
-            this.resultInventory.setItem(0, ItemStack.b);
+            this.resultSlots.setItem(0, ItemStack.EMPTY);
         }
 
-        this.c();
+        this.d();
     }
 
-    private ItemStack b(ItemStack itemstack, ItemStack itemstack1) {
+    private ItemStack a(ItemStack itemstack, ItemStack itemstack1) {
         ItemStack itemstack2 = itemstack.cloneItemStack();
         Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack1);
         Iterator iterator = map.entrySet().iterator();
@@ -223,7 +228,7 @@ public class ContainerGrindstone extends Container {
 
         EnchantmentManager.a(map, itemstack1);
         itemstack1.setRepairCost(0);
-        if (itemstack1.getItem() == Items.ENCHANTED_BOOK && map.size() == 0) {
+        if (itemstack1.a(Items.ENCHANTED_BOOK) && map.size() == 0) {
             itemstack1 = new ItemStack(Items.BOOK);
             if (itemstack.hasName()) {
                 itemstack1.a(itemstack.getName());
@@ -240,31 +245,31 @@ public class ContainerGrindstone extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.containerAccess.a((world, blockposition) -> {
-            this.a(entityhuman, world, this.craftInventory);
+        this.access.a((world, blockposition) -> {
+            this.a(entityhuman, this.repairSlots);
         });
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return a(this.containerAccess, entityhuman, Blocks.GRINDSTONE);
+        return a(this.access, entityhuman, Blocks.GRINDSTONE);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
-            ItemStack itemstack2 = this.craftInventory.getItem(0);
-            ItemStack itemstack3 = this.craftInventory.getItem(1);
+            ItemStack itemstack2 = this.repairSlots.getItem(0);
+            ItemStack itemstack3 = this.repairSlots.getItem(1);
 
             if (i == 2) {
                 if (!this.a(itemstack1, 3, 39, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.a(itemstack1, itemstack);
@@ -272,26 +277,26 @@ public class ContainerGrindstone extends Container {
                 if (!itemstack2.isEmpty() && !itemstack3.isEmpty()) {
                     if (i >= 3 && i < 30) {
                         if (!this.a(itemstack1, 30, 39, false)) {
-                            return ItemStack.b;
+                            return ItemStack.EMPTY;
                         }
                     } else if (i >= 30 && i < 39 && !this.a(itemstack1, 3, 30, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (!this.a(itemstack1, 0, 2, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.a(itemstack1, 3, 39, false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);

@@ -12,7 +12,7 @@ public class DataConverterSavedDataUUID extends DataConverterUUIDBase {
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("SavedDataUUIDFix", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("SavedDataUUIDFix", this.getInputSchema().getType(this.typeReference), (typed) -> {
             return typed.updateTyped(typed.getType().findField("data"), (typed1) -> {
                 return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     return dynamic.update("Raids", (dynamic1) -> {

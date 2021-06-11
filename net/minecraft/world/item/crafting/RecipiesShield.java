@@ -16,8 +16,8 @@ public class RecipiesShield extends IRecipeComplex {
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ItemStack itemstack = ItemStack.b;
-        ItemStack itemstack1 = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
+        ItemStack itemstack1 = ItemStack.EMPTY;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack2 = inventorycrafting.getItem(i);
@@ -30,7 +30,7 @@ public class RecipiesShield extends IRecipeComplex {
 
                     itemstack1 = itemstack2;
                 } else {
-                    if (itemstack2.getItem() != Items.SHIELD) {
+                    if (!itemstack2.a(Items.SHIELD)) {
                         return false;
                     }
 
@@ -55,8 +55,8 @@ public class RecipiesShield extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.b;
-        ItemStack itemstack1 = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
+        ItemStack itemstack1 = ItemStack.EMPTY;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack2 = inventorycrafting.getItem(i);
@@ -64,7 +64,7 @@ public class RecipiesShield extends IRecipeComplex {
             if (!itemstack2.isEmpty()) {
                 if (itemstack2.getItem() instanceof ItemBanner) {
                     itemstack = itemstack2;
-                } else if (itemstack2.getItem() == Items.SHIELD) {
+                } else if (itemstack2.a(Items.SHIELD)) {
                     itemstack1 = itemstack2.cloneItemStack();
                 }
             }
@@ -83,7 +83,12 @@ public class RecipiesShield extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.l;
+        return RecipeSerializer.SHIELD_DECORATION;
     }
 }

@@ -6,18 +6,18 @@ public enum BlockPropertyBedPart implements INamable {
 
     HEAD("head"), FOOT("foot");
 
-    private final String c;
+    private final String name;
 
     private BlockPropertyBedPart(String s) {
-        this.c = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.c;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.c;
+        return this.name;
     }
 }

@@ -18,7 +18,7 @@ public interface NBTTagType<T extends NBTBase> {
     static NBTTagType<NBTTagEnd> a(final int i) {
         return new NBTTagType<NBTTagEnd>() {
             @Override
-            public NBTTagEnd b(DataInput datainput, int j, NBTReadLimiter nbtreadlimiter) throws IOException {
+            public NBTTagEnd b(DataInput datainput, int j, NBTReadLimiter nbtreadlimiter) {
                 throw new IllegalArgumentException("Invalid tag id: " + i);
             }
 

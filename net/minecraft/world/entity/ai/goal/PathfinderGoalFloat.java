@@ -7,23 +7,23 @@ import net.minecraft.world.entity.EntityInsentient;
 
 public class PathfinderGoalFloat extends PathfinderGoal {
 
-    private final EntityInsentient a;
+    private final EntityInsentient mob;
 
     public PathfinderGoalFloat(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.mob = entityinsentient;
         this.a(EnumSet.of(PathfinderGoal.Type.JUMP));
         entityinsentient.getNavigation().d(true);
     }
 
     @Override
     public boolean a() {
-        return this.a.isInWater() && this.a.b((Tag) TagsFluid.WATER) > this.a.cx() || this.a.aQ();
+        return this.mob.isInWater() && this.mob.b((Tag) TagsFluid.WATER) > this.mob.cN() || this.mob.aX();
     }
 
     @Override
     public void e() {
-        if (this.a.getRandom().nextFloat() < 0.8F) {
-            this.a.getControllerJump().jump();
+        if (this.mob.getRandom().nextFloat() < 0.8F) {
+            this.mob.getControllerJump().jump();
         }
 
     }

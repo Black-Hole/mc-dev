@@ -18,7 +18,7 @@ public class BehaviorBellAlert extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        Raid raid = worldserver.b_(entityliving.getChunkCoordinates());
+        Raid raid = worldserver.c(entityliving.getChunkCoordinates());
 
         if (raid == null) {
             behaviorcontroller.a(Activity.HIDE);

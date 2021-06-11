@@ -3,6 +3,7 @@ package net.minecraft.world.level.lighting;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.SectionPosition;
+import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.chunk.NibbleArray;
 
 public interface LightEngineLayerEventListener extends ILightEngine {
@@ -30,6 +31,25 @@ public interface LightEngineLayerEventListener extends ILightEngine {
         }
 
         @Override
+        public void a(BlockPosition blockposition) {}
+
+        @Override
+        public void a(BlockPosition blockposition, int i) {}
+
+        @Override
+        public boolean z_() {
+            return false;
+        }
+
+        @Override
+        public int a(int i, boolean flag, boolean flag1) {
+            return i;
+        }
+
+        @Override
         public void a(SectionPosition sectionposition, boolean flag) {}
+
+        @Override
+        public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {}
     }
 }

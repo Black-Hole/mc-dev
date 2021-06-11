@@ -17,7 +17,7 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterFlattenSpawnEgg extends DataFix {
 
-    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:bat", "minecraft:bat_spawn_egg");
         hashmap.put("minecraft:blaze", "minecraft:blaze_spawn_egg");
         hashmap.put("minecraft:cave_spider", "minecraft:cave_spider_spawn_egg");
@@ -85,7 +85,7 @@ public class DataConverterFlattenSpawnEgg extends DataFix {
                 Optional<String> optional1 = typed2.getOptional(opticfinder1);
 
                 if (optional1.isPresent()) {
-                    return typed.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), DataConverterFlattenSpawnEgg.a.getOrDefault(optional1.get(), "minecraft:pig_spawn_egg")));
+                    return typed.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), (String) DataConverterFlattenSpawnEgg.MAP.getOrDefault(optional1.get(), "minecraft:pig_spawn_egg")));
                 }
             }
 

@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.IEntitySelector;
 import net.minecraft.world.entity.IShearable;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.BlockBeehive;
 import net.minecraft.world.level.block.BlockDispenser;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
@@ -31,7 +33,7 @@ public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
     protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
         WorldServer worldserver = isourceblock.getWorld();
 
-        if (!worldserver.s_()) {
+        if (!worldserver.isClientSide()) {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
 
             this.a(a((WorldServer) worldserver, blockposition) || b((WorldServer) worldserver, blockposition));
@@ -47,12 +49,13 @@ public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
         IBlockData iblockdata = worldserver.getType(blockposition);
 
         if (iblockdata.a((Tag) TagsBlock.BEEHIVES)) {
-            int i = (Integer) iblockdata.get(BlockBeehive.b);
+            int i = (Integer) iblockdata.get(BlockBeehive.HONEY_LEVEL);
 
             if (i >= 5) {
-                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.BEEHIVE_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 BlockBeehive.a((World) worldserver, blockposition);
-                ((BlockBeehive) iblockdata.getBlock()).a(worldserver, iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
+                ((BlockBeehive) iblockdata.getBlock()).a((World) worldserver, iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
+                worldserver.a((Entity) null, GameEvent.SHEAR, blockposition);
                 return true;
             }
         }
@@ -61,7 +64,7 @@ public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
     }
 
     private static boolean b(WorldServer worldserver, BlockPosition blockposition) {
-        List<EntityLiving> list = worldserver.a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.g);
+        List<EntityLiving> list = worldserver.a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.NO_SPECTATORS);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -72,6 +75,7 @@ public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
 
                 if (ishearable.canShear()) {
                     ishearable.shear(SoundCategory.BLOCKS);
+                    worldserver.a((Entity) null, GameEvent.SHEAR, blockposition);
                     return true;
                 }
             }

@@ -16,7 +16,7 @@ public abstract class DataConverterEntityNameAbstract extends DataConverterEntit
     protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
         Pair<String, Dynamic<?>> pair = this.a(s, (Dynamic) typed.getOrCreate(DSL.remainderFinder()));
 
-        return Pair.of(pair.getFirst(), typed.set(DSL.remainderFinder(), pair.getSecond()));
+        return Pair.of((String) pair.getFirst(), typed.set(DSL.remainderFinder(), (Dynamic) pair.getSecond()));
     }
 
     protected abstract Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic);

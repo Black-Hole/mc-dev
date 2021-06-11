@@ -1,17 +1,40 @@
 package net.minecraft.util;
 
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class MinecraftEncryption {
+
+    private static final String SYMMETRIC_ALGORITHM = "AES";
+    private static final int SYMMETRIC_BITS = 128;
+    private static final String ASYMMETRIC_ALGORITHM = "RSA";
+    private static final int ASYMMETRIC_BITS = 1024;
+    private static final String BYTE_ENCODING = "ISO_8859_1";
+    private static final String HASH_ALGORITHM = "SHA-1";
+
+    public MinecraftEncryption() {}
+
+    public static SecretKey a() throws CryptographyException {
+        try {
+            KeyGenerator keygenerator = KeyGenerator.getInstance("AES");
+
+            keygenerator.init(128);
+            return keygenerator.generateKey();
+        } catch (Exception exception) {
+            throw new CryptographyException(exception);
+        }
+    }
 
     public static KeyPair b() throws CryptographyException {
         try {
@@ -46,6 +69,17 @@ public class MinecraftEncryption {
         return messagedigest.digest();
     }
 
+    public static PublicKey a(byte[] abyte) throws CryptographyException {
+        try {
+            X509EncodedKeySpec x509encodedkeyspec = new X509EncodedKeySpec(abyte);
+            KeyFactory keyfactory = KeyFactory.getInstance("RSA");
+
+            return keyfactory.generatePublic(x509encodedkeyspec);
+        } catch (Exception exception) {
+            throw new CryptographyException(exception);
+        }
+    }
+
     public static SecretKey a(PrivateKey privatekey, byte[] abyte) throws CryptographyException {
         byte[] abyte1 = b(privatekey, abyte);
 
@@ -54,6 +88,10 @@ public class MinecraftEncryption {
         } catch (Exception exception) {
             throw new CryptographyException(exception);
         }
+    }
+
+    public static byte[] a(Key key, byte[] abyte) throws CryptographyException {
+        return a(1, key, abyte);
     }
 
     public static byte[] b(Key key, byte[] abyte) throws CryptographyException {

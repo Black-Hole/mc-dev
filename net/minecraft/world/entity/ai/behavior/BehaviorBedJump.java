@@ -14,16 +14,20 @@ import net.minecraft.world.entity.ai.memory.MemoryTarget;
 
 public class BehaviorBedJump extends Behavior<EntityInsentient> {
 
-    private final float b;
+    private static final int MAX_TIME_TO_REACH_BED = 100;
+    private static final int MIN_JUMPS = 3;
+    private static final int MAX_JUMPS = 6;
+    private static final int COOLDOWN_BETWEEN_JUMPS = 5;
+    private final float speedModifier;
     @Nullable
-    private BlockPosition c;
-    private int d;
-    private int e;
-    private int f;
+    private BlockPosition targetBed;
+    private int remainingTimeToReachBed;
+    private int remainingJumps;
+    private int remainingCooldownUntilNextJump;
 
     public BehaviorBedJump(float f) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_BED, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.b = f;
+        this.speedModifier = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
@@ -33,24 +37,24 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
     protected void a(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         super.a(worldserver, entityinsentient, i);
         this.a(entityinsentient).ifPresent((blockposition) -> {
-            this.c = blockposition;
-            this.d = 100;
-            this.e = 3 + worldserver.random.nextInt(4);
-            this.f = 0;
+            this.targetBed = blockposition;
+            this.remainingTimeToReachBed = 100;
+            this.remainingJumps = 3 + worldserver.random.nextInt(4);
+            this.remainingCooldownUntilNextJump = 0;
             this.a(entityinsentient, blockposition);
         });
     }
 
     protected void c(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         super.c(worldserver, entityinsentient, i);
-        this.c = null;
-        this.d = 0;
-        this.e = 0;
-        this.f = 0;
+        this.targetBed = null;
+        this.remainingTimeToReachBed = 0;
+        this.remainingJumps = 0;
+        this.remainingCooldownUntilNextJump = 0;
     }
 
     protected boolean b(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        return entityinsentient.isBaby() && this.c != null && this.a(worldserver, this.c) && !this.e(worldserver, entityinsentient) && !this.f(worldserver, entityinsentient);
+        return entityinsentient.isBaby() && this.targetBed != null && this.a(worldserver, this.targetBed) && !this.e(worldserver, entityinsentient) && !this.f(worldserver, entityinsentient);
     }
 
     @Override
@@ -60,21 +64,21 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
 
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         if (!this.c(worldserver, entityinsentient)) {
-            --this.d;
-        } else if (this.f > 0) {
-            --this.f;
+            --this.remainingTimeToReachBed;
+        } else if (this.remainingCooldownUntilNextJump > 0) {
+            --this.remainingCooldownUntilNextJump;
         } else {
             if (this.d(worldserver, entityinsentient)) {
                 entityinsentient.getControllerJump().jump();
-                --this.e;
-                this.f = 5;
+                --this.remainingJumps;
+                this.remainingCooldownUntilNextJump = 5;
             }
 
         }
     }
 
     private void a(EntityInsentient entityinsentient, BlockPosition blockposition) {
-        entityinsentient.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.b, 0)));
+        entityinsentient.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.speedModifier, 0)));
     }
 
     private boolean b(WorldServer worldserver, EntityInsentient entityinsentient) {
@@ -101,10 +105,10 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
     }
 
     private boolean e(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return !this.c(worldserver, entityinsentient) && this.d <= 0;
+        return !this.c(worldserver, entityinsentient) && this.remainingTimeToReachBed <= 0;
     }
 
     private boolean f(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return this.c(worldserver, entityinsentient) && this.e <= 0;
+        return this.c(worldserver, entityinsentient) && this.remainingJumps <= 0;
     }
 }

@@ -1,10 +1,8 @@
 package net.minecraft.network.protocol.game;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import java.io.IOException;
+import java.util.Map;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -13,12 +11,23 @@ import net.minecraft.stats.StatisticWrapper;
 
 public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
 
-    private Object2IntMap<Statistic<?>> a;
-
-    public PacketPlayOutStatistic() {}
+    private final Object2IntMap<Statistic<?>> stats;
 
     public PacketPlayOutStatistic(Object2IntMap<Statistic<?>> object2intmap) {
-        this.a = object2intmap;
+        this.stats = object2intmap;
+    }
+
+    public PacketPlayOutStatistic(PacketDataSerializer packetdataserializer) {
+        this.stats = (Object2IntMap) packetdataserializer.a(Object2IntOpenHashMap::new, (packetdataserializer1) -> {
+            int i = packetdataserializer1.j();
+            int j = packetdataserializer1.j();
+
+            return a((StatisticWrapper) IRegistry.STAT_TYPE.fromId(i), j);
+        }, PacketDataSerializer::j);
+    }
+
+    private static <T> Statistic<T> a(StatisticWrapper<T> statisticwrapper, int i) {
+        return statisticwrapper.b(statisticwrapper.getRegistry().fromId(i));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -26,41 +35,18 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        int i = packetdataserializer.i();
-
-        this.a = new Object2IntOpenHashMap(i);
-
-        for (int j = 0; j < i; ++j) {
-            this.a((StatisticWrapper) IRegistry.STATS.fromId(packetdataserializer.i()), packetdataserializer);
-        }
-
-    }
-
-    private <T> void a(StatisticWrapper<T> statisticwrapper, PacketDataSerializer packetdataserializer) {
-        int i = packetdataserializer.i();
-        int j = packetdataserializer.i();
-
-        this.a.put(statisticwrapper.b(statisticwrapper.getRegistry().fromId(i)), j);
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a.size());
-        ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
-
-        while (objectiterator.hasNext()) {
-            Entry<Statistic<?>> entry = (Entry) objectiterator.next();
-            Statistic<?> statistic = (Statistic) entry.getKey();
-
-            packetdataserializer.d(IRegistry.STATS.a((Object) statistic.getWrapper()));
-            packetdataserializer.d(this.a(statistic));
-            packetdataserializer.d(entry.getIntValue());
-        }
-
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Map) this.stats, (packetdataserializer1, statistic) -> {
+            packetdataserializer1.d(IRegistry.STAT_TYPE.getId(statistic.getWrapper()));
+            packetdataserializer1.d(this.a(statistic));
+        }, PacketDataSerializer::d);
     }
 
     private <T> int a(Statistic<T> statistic) {
-        return statistic.getWrapper().getRegistry().a(statistic.b());
+        return statistic.getWrapper().getRegistry().getId(statistic.b());
+    }
+
+    public Map<Statistic<?>, Integer> b() {
+        return this.stats;
     }
 }

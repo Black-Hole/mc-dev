@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import net.minecraft.SystemUtils;
@@ -17,36 +18,36 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockSprawling extends Block {
 
-    private static final EnumDirection[] i = EnumDirection.values();
-    public static final BlockStateBoolean a = BlockProperties.I;
-    public static final BlockStateBoolean b = BlockProperties.J;
-    public static final BlockStateBoolean c = BlockProperties.K;
-    public static final BlockStateBoolean d = BlockProperties.L;
-    public static final BlockStateBoolean e = BlockProperties.G;
-    public static final BlockStateBoolean f = BlockProperties.H;
-    public static final Map<EnumDirection, BlockStateBoolean> g = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumDirection.class), (enummap) -> {
-        enummap.put(EnumDirection.NORTH, BlockSprawling.a);
-        enummap.put(EnumDirection.EAST, BlockSprawling.b);
-        enummap.put(EnumDirection.SOUTH, BlockSprawling.c);
-        enummap.put(EnumDirection.WEST, BlockSprawling.d);
-        enummap.put(EnumDirection.UP, BlockSprawling.e);
-        enummap.put(EnumDirection.DOWN, BlockSprawling.f);
-    });
-    protected final VoxelShape[] h;
+    private static final EnumDirection[] DIRECTIONS = EnumDirection.values();
+    public static final BlockStateBoolean NORTH = BlockProperties.NORTH;
+    public static final BlockStateBoolean EAST = BlockProperties.EAST;
+    public static final BlockStateBoolean SOUTH = BlockProperties.SOUTH;
+    public static final BlockStateBoolean WEST = BlockProperties.WEST;
+    public static final BlockStateBoolean UP = BlockProperties.UP;
+    public static final BlockStateBoolean DOWN = BlockProperties.DOWN;
+    public static final Map<EnumDirection, BlockStateBoolean> PROPERTY_BY_DIRECTION = ImmutableMap.copyOf((Map) SystemUtils.a((Object) Maps.newEnumMap(EnumDirection.class), (enummap) -> {
+        enummap.put(EnumDirection.NORTH, BlockSprawling.NORTH);
+        enummap.put(EnumDirection.EAST, BlockSprawling.EAST);
+        enummap.put(EnumDirection.SOUTH, BlockSprawling.SOUTH);
+        enummap.put(EnumDirection.WEST, BlockSprawling.WEST);
+        enummap.put(EnumDirection.UP, BlockSprawling.UP);
+        enummap.put(EnumDirection.DOWN, BlockSprawling.DOWN);
+    }));
+    protected final VoxelShape[] shapeByIndex;
 
     protected BlockSprawling(float f, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.h = this.a(f);
+        this.shapeByIndex = this.a(f);
     }
 
     private VoxelShape[] a(float f) {
         float f1 = 0.5F - f;
         float f2 = 0.5F + f;
         VoxelShape voxelshape = Block.a((double) (f1 * 16.0F), (double) (f1 * 16.0F), (double) (f1 * 16.0F), (double) (f2 * 16.0F), (double) (f2 * 16.0F), (double) (f2 * 16.0F));
-        VoxelShape[] avoxelshape = new VoxelShape[BlockSprawling.i.length];
+        VoxelShape[] avoxelshape = new VoxelShape[BlockSprawling.DIRECTIONS.length];
 
-        for (int i = 0; i < BlockSprawling.i.length; ++i) {
-            EnumDirection enumdirection = BlockSprawling.i[i];
+        for (int i = 0; i < BlockSprawling.DIRECTIONS.length; ++i) {
+            EnumDirection enumdirection = BlockSprawling.DIRECTIONS[i];
 
             avoxelshape[i] = VoxelShapes.create(0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentZ() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentZ() * 0.5D));
         }
@@ -56,7 +57,7 @@ public class BlockSprawling extends Block {
         for (int j = 0; j < 64; ++j) {
             VoxelShape voxelshape1 = voxelshape;
 
-            for (int k = 0; k < BlockSprawling.i.length; ++k) {
+            for (int k = 0; k < BlockSprawling.DIRECTIONS.length; ++k) {
                 if ((j & 1 << k) != 0) {
                     voxelshape1 = VoxelShapes.a(voxelshape1, avoxelshape[k]);
                 }
@@ -69,20 +70,20 @@ public class BlockSprawling extends Block {
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.h[this.h(iblockdata)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.shapeByIndex[this.h(iblockdata)];
     }
 
     protected int h(IBlockData iblockdata) {
         int i = 0;
 
-        for (int j = 0; j < BlockSprawling.i.length; ++j) {
-            if ((Boolean) iblockdata.get((IBlockState) BlockSprawling.g.get(BlockSprawling.i[j]))) {
+        for (int j = 0; j < BlockSprawling.DIRECTIONS.length; ++j) {
+            if ((Boolean) iblockdata.get((IBlockState) BlockSprawling.PROPERTY_BY_DIRECTION.get(BlockSprawling.DIRECTIONS[j]))) {
                 i |= 1 << j;
             }
         }

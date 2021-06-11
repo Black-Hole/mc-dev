@@ -24,62 +24,63 @@ import net.minecraft.world.level.World;
 
 public class EntityHorseSkeleton extends EntityHorseAbstract {
 
-    private final PathfinderGoalHorseTrap bw = new PathfinderGoalHorseTrap(this);
-    private boolean bx;
-    private int by;
+    private final PathfinderGoalHorseTrap skeletonTrapGoal = new PathfinderGoalHorseTrap(this);
+    private static final int TRAP_MAX_LIFE = 18000;
+    private boolean isTrap;
+    private int trapTime;
 
     public EntityHorseSkeleton(EntityTypes<? extends EntityHorseSkeleton> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder eL() {
-        return fi().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder t() {
+        return fR().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
-    protected void eK() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fq());
+    protected void p() {
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
     }
 
     @Override
-    protected void eV() {}
+    protected void fE() {}
 
     @Override
     protected SoundEffect getSoundAmbient() {
         super.getSoundAmbient();
-        return this.a((Tag) TagsFluid.WATER) ? SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT_WATER : SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT;
+        return this.a((Tag) TagsFluid.WATER) ? SoundEffects.SKELETON_HORSE_AMBIENT_WATER : SoundEffects.SKELETON_HORSE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
-        return SoundEffects.ENTITY_SKELETON_HORSE_DEATH;
+        return SoundEffects.SKELETON_HORSE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
         super.getSoundHurt(damagesource);
-        return SoundEffects.ENTITY_SKELETON_HORSE_HURT;
+        return SoundEffects.SKELETON_HORSE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundSwim() {
         if (this.onGround) {
             if (!this.isVehicle()) {
-                return SoundEffects.ENTITY_SKELETON_HORSE_STEP_WATER;
+                return SoundEffects.SKELETON_HORSE_STEP_WATER;
             }
 
-            ++this.bv;
-            if (this.bv > 5 && this.bv % 3 == 0) {
-                return SoundEffects.ENTITY_SKELETON_HORSE_GALLOP_WATER;
+            ++this.gallopSoundCounter;
+            if (this.gallopSoundCounter > 5 && this.gallopSoundCounter % 3 == 0) {
+                return SoundEffects.SKELETON_HORSE_GALLOP_WATER;
             }
 
-            if (this.bv <= 5) {
-                return SoundEffects.ENTITY_SKELETON_HORSE_STEP_WATER;
+            if (this.gallopSoundCounter <= 5) {
+                return SoundEffects.SKELETON_HORSE_STEP_WATER;
             }
         }
 
-        return SoundEffects.ENTITY_SKELETON_HORSE_SWIM;
+        return SoundEffects.SKELETON_HORSE_SWIM;
     }
 
     @Override
@@ -93,11 +94,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fn() {
+    protected void fW() {
         if (this.isInWater()) {
-            this.playSound(SoundEffects.ENTITY_SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
+            this.playSound(SoundEffects.SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
         } else {
-            super.fn();
+            super.fW();
         }
 
     }
@@ -108,14 +109,14 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    public double bc() {
-        return super.bc() - 0.1875D;
+    public double bl() {
+        return super.bl() - 0.1875D;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.eM() && this.by++ >= 18000) {
+        if (this.fv() && this.trapTime++ >= 18000) {
             this.die();
         }
 
@@ -124,38 +125,38 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.eM());
-        nbttagcompound.setInt("SkeletonTrapTime", this.by);
+        nbttagcompound.setBoolean("SkeletonTrap", this.fv());
+        nbttagcompound.setInt("SkeletonTrapTime", this.trapTime);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.t(nbttagcompound.getBoolean("SkeletonTrap"));
-        this.by = nbttagcompound.getInt("SkeletonTrapTime");
+        this.v(nbttagcompound.getBoolean("SkeletonTrap"));
+        this.trapTime = nbttagcompound.getInt("SkeletonTrapTime");
     }
 
     @Override
-    public boolean bt() {
+    public boolean bC() {
         return true;
     }
 
     @Override
-    protected float dM() {
+    protected float eu() {
         return 0.96F;
     }
 
-    public boolean eM() {
-        return this.bx;
+    public boolean fv() {
+        return this.isTrap;
     }
 
-    public void t(boolean flag) {
-        if (flag != this.bx) {
-            this.bx = flag;
+    public void v(boolean flag) {
+        if (flag != this.isTrap) {
+            this.isTrap = flag;
             if (flag) {
-                this.goalSelector.a(1, this.bw);
+                this.goalSelector.a(1, this.skeletonTrapGoal);
             } else {
-                this.goalSelector.a((PathfinderGoal) this.bw);
+                this.goalSelector.a((PathfinderGoal) this.skeletonTrapGoal);
             }
 
         }
@@ -175,16 +176,16 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
             return super.b(entityhuman, enumhand);
-        } else if (entityhuman.eq()) {
+        } else if (entityhuman.eY()) {
             this.f(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         } else if (this.isVehicle()) {
             return super.b(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem() == Items.SADDLE && !this.hasSaddle()) {
+                if (itemstack.a(Items.SADDLE) && !this.hasSaddle()) {
                     this.f(entityhuman);
-                    return EnumInteractionResult.a(this.world.isClientSide);
+                    return EnumInteractionResult.a(this.level.isClientSide);
                 }
 
                 EnumInteractionResult enuminteractionresult = itemstack.a(entityhuman, (EntityLiving) this, enumhand);
@@ -195,7 +196,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             }
 
             this.h(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         }
     }
 }

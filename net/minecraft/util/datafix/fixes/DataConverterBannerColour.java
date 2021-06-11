@@ -6,6 +6,7 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 
 public class DataConverterBannerColour extends DataConverterNamedEntity {
 
@@ -26,7 +27,7 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
                 });
             });
 
-            dynamic1.getClass();
+            Objects.requireNonNull(dynamic1);
             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic1::createList).result(), dynamic1);
         });
         return dynamic;

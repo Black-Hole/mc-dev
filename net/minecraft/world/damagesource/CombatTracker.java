@@ -19,47 +19,50 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class CombatTracker {
 
-    private final List<CombatEntry> a = Lists.newArrayList();
-    private final EntityLiving b;
-    private int c;
-    private int d;
-    private int e;
-    private boolean f;
-    private boolean g;
-    private String h;
+    public static final int RESET_DAMAGE_STATUS_TIME = 100;
+    public static final int RESET_COMBAT_STATUS_TIME = 300;
+    private final List<CombatEntry> entries = Lists.newArrayList();
+    private final EntityLiving mob;
+    private int lastDamageTime;
+    private int combatStartTime;
+    private int combatEndTime;
+    private boolean inCombat;
+    private boolean takingDamage;
+    @Nullable
+    private String nextLocation;
 
     public CombatTracker(EntityLiving entityliving) {
-        this.b = entityliving;
+        this.mob = entityliving;
     }
 
     public void a() {
-        this.k();
-        Optional<BlockPosition> optional = this.b.dr();
+        this.l();
+        Optional<BlockPosition> optional = this.mob.ea();
 
         if (optional.isPresent()) {
-            IBlockData iblockdata = this.b.world.getType((BlockPosition) optional.get());
+            IBlockData iblockdata = this.mob.level.getType((BlockPosition) optional.get());
 
             if (!iblockdata.a(Blocks.LADDER) && !iblockdata.a((Tag) TagsBlock.TRAPDOORS)) {
                 if (iblockdata.a(Blocks.VINE)) {
-                    this.h = "vines";
+                    this.nextLocation = "vines";
                 } else if (!iblockdata.a(Blocks.WEEPING_VINES) && !iblockdata.a(Blocks.WEEPING_VINES_PLANT)) {
                     if (!iblockdata.a(Blocks.TWISTING_VINES) && !iblockdata.a(Blocks.TWISTING_VINES_PLANT)) {
                         if (iblockdata.a(Blocks.SCAFFOLDING)) {
-                            this.h = "scaffolding";
+                            this.nextLocation = "scaffolding";
                         } else {
-                            this.h = "other_climbable";
+                            this.nextLocation = "other_climbable";
                         }
                     } else {
-                        this.h = "twisting_vines";
+                        this.nextLocation = "twisting_vines";
                     }
                 } else {
-                    this.h = "weeping_vines";
+                    this.nextLocation = "weeping_vines";
                 }
             } else {
-                this.h = "ladder";
+                this.nextLocation = "ladder";
             }
-        } else if (this.b.isInWater()) {
-            this.h = "water";
+        } else if (this.mob.isInWater()) {
+            this.nextLocation = "water";
         }
 
     }
@@ -67,26 +70,26 @@ public class CombatTracker {
     public void trackDamage(DamageSource damagesource, float f, float f1) {
         this.g();
         this.a();
-        CombatEntry combatentry = new CombatEntry(damagesource, this.b.ticksLived, f, f1, this.h, this.b.fallDistance);
+        CombatEntry combatentry = new CombatEntry(damagesource, this.mob.tickCount, f, f1, this.nextLocation, this.mob.fallDistance);
 
-        this.a.add(combatentry);
-        this.c = this.b.ticksLived;
-        this.g = true;
-        if (combatentry.f() && !this.f && this.b.isAlive()) {
-            this.f = true;
-            this.d = this.b.ticksLived;
-            this.e = this.d;
-            this.b.enterCombat();
+        this.entries.add(combatentry);
+        this.lastDamageTime = this.mob.tickCount;
+        this.takingDamage = true;
+        if (combatentry.f() && !this.inCombat && this.mob.isAlive()) {
+            this.inCombat = true;
+            this.combatStartTime = this.mob.tickCount;
+            this.combatEndTime = this.combatStartTime;
+            this.mob.enterCombat();
         }
 
     }
 
     public IChatBaseComponent getDeathMessage() {
-        if (this.a.isEmpty()) {
-            return new ChatMessage("death.attack.generic", new Object[]{this.b.getScoreboardDisplayName()});
+        if (this.entries.isEmpty()) {
+            return new ChatMessage("death.attack.generic", new Object[]{this.mob.getScoreboardDisplayName()});
         } else {
-            CombatEntry combatentry = this.j();
-            CombatEntry combatentry1 = (CombatEntry) this.a.get(this.a.size() - 1);
+            CombatEntry combatentry = this.k();
+            CombatEntry combatentry1 = (CombatEntry) this.entries.get(this.entries.size() - 1);
             IChatBaseComponent ichatbasecomponent = combatentry1.h();
             Entity entity = combatentry1.a().getEntity();
             Object object;
@@ -95,31 +98,31 @@ public class CombatTracker {
                 IChatBaseComponent ichatbasecomponent1 = combatentry.h();
 
                 if (combatentry.a() != DamageSource.FALL && combatentry.a() != DamageSource.OUT_OF_WORLD) {
-                    if (ichatbasecomponent1 != null && (ichatbasecomponent == null || !ichatbasecomponent1.equals(ichatbasecomponent))) {
+                    if (ichatbasecomponent1 != null && !ichatbasecomponent1.equals(ichatbasecomponent)) {
                         Entity entity1 = combatentry.a().getEntity();
-                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).getItemInMainHand() : ItemStack.b;
+                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).getItemInMainHand() : ItemStack.EMPTY;
 
                         if (!itemstack.isEmpty() && itemstack.hasName()) {
-                            object = new ChatMessage("death.fell.assist.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.C()});
+                            object = new ChatMessage("death.fell.assist.item", new Object[]{this.mob.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.G()});
                         } else {
-                            object = new ChatMessage("death.fell.assist", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent1});
+                            object = new ChatMessage("death.fell.assist", new Object[]{this.mob.getScoreboardDisplayName(), ichatbasecomponent1});
                         }
                     } else if (ichatbasecomponent != null) {
-                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand() : ItemStack.b;
+                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand() : ItemStack.EMPTY;
 
                         if (!itemstack1.isEmpty() && itemstack1.hasName()) {
-                            object = new ChatMessage("death.fell.finish.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.C()});
+                            object = new ChatMessage("death.fell.finish.item", new Object[]{this.mob.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.G()});
                         } else {
-                            object = new ChatMessage("death.fell.finish", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent});
+                            object = new ChatMessage("death.fell.finish", new Object[]{this.mob.getScoreboardDisplayName(), ichatbasecomponent});
                         }
                     } else {
-                        object = new ChatMessage("death.fell.killer", new Object[]{this.b.getScoreboardDisplayName()});
+                        object = new ChatMessage("death.fell.killer", new Object[]{this.mob.getScoreboardDisplayName()});
                     }
                 } else {
-                    object = new ChatMessage("death.fell.accident." + this.a(combatentry), new Object[]{this.b.getScoreboardDisplayName()});
+                    object = new ChatMessage("death.fell.accident." + this.a(combatentry), new Object[]{this.mob.getScoreboardDisplayName()});
                 }
             } else {
-                object = combatentry1.a().getLocalizedDeathMessage(this.b);
+                object = combatentry1.a().getLocalizedDeathMessage(this.mob);
             }
 
             return (IChatBaseComponent) object;
@@ -132,7 +135,7 @@ public class CombatTracker {
         EntityHuman entityhuman = null;
         float f = 0.0F;
         float f1 = 0.0F;
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.entries.iterator();
 
         while (iterator.hasNext()) {
             CombatEntry combatentry = (CombatEntry) iterator.next();
@@ -156,15 +159,15 @@ public class CombatTracker {
     }
 
     @Nullable
-    private CombatEntry j() {
+    private CombatEntry k() {
         CombatEntry combatentry = null;
         CombatEntry combatentry1 = null;
         float f = 0.0F;
         float f1 = 0.0F;
 
-        for (int i = 0; i < this.a.size(); ++i) {
-            CombatEntry combatentry2 = (CombatEntry) this.a.get(i);
-            CombatEntry combatentry3 = i > 0 ? (CombatEntry) this.a.get(i - 1) : null;
+        for (int i = 0; i < this.entries.size(); ++i) {
+            CombatEntry combatentry2 = (CombatEntry) this.entries.get(i);
+            CombatEntry combatentry3 = i > 0 ? (CombatEntry) this.entries.get(i - 1) : null;
 
             if ((combatentry2.a() == DamageSource.FALL || combatentry2.a() == DamageSource.OUT_OF_WORLD) && combatentry2.j() > 0.0F && (combatentry == null || combatentry2.j() > f1)) {
                 if (i > 0) {
@@ -195,33 +198,54 @@ public class CombatTracker {
         return combatentry.g() == null ? "generic" : combatentry.g();
     }
 
-    public int f() {
-        return this.f ? this.b.ticksLived - this.d : this.e - this.d;
+    public boolean d() {
+        this.g();
+        return this.takingDamage;
     }
 
-    private void k() {
-        this.h = null;
+    public boolean e() {
+        this.g();
+        return this.inCombat;
+    }
+
+    public int f() {
+        return this.inCombat ? this.mob.tickCount - this.combatStartTime : this.combatEndTime - this.combatStartTime;
+    }
+
+    private void l() {
+        this.nextLocation = null;
     }
 
     public void g() {
-        int i = this.f ? 300 : 100;
+        int i = this.inCombat ? 300 : 100;
 
-        if (this.g && (!this.b.isAlive() || this.b.ticksLived - this.c > i)) {
-            boolean flag = this.f;
+        if (this.takingDamage && (!this.mob.isAlive() || this.mob.tickCount - this.lastDamageTime > i)) {
+            boolean flag = this.inCombat;
 
-            this.g = false;
-            this.f = false;
-            this.e = this.b.ticksLived;
+            this.takingDamage = false;
+            this.inCombat = false;
+            this.combatEndTime = this.mob.tickCount;
             if (flag) {
-                this.b.exitCombat();
+                this.mob.exitCombat();
             }
 
-            this.a.clear();
+            this.entries.clear();
         }
 
     }
 
     public EntityLiving h() {
-        return this.b;
+        return this.mob;
+    }
+
+    @Nullable
+    public CombatEntry i() {
+        return this.entries.isEmpty() ? null : (CombatEntry) this.entries.get(this.entries.size() - 1);
+    }
+
+    public int j() {
+        EntityLiving entityliving = this.c();
+
+        return entityliving == null ? -1 : entityliving.getId();
     }
 }

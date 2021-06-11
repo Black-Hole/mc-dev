@@ -4,6 +4,7 @@ import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.StructureManager;
@@ -12,35 +13,36 @@ import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.WorldGenFeatureStructurePieceType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 import net.minecraft.world.level.storage.loot.LootTables;
 
 public class WorldGenBuriedTreasurePieces {
+
+    public WorldGenBuriedTreasurePieces() {}
+
     public static class a extends StructurePiece {
 
         public a(BlockPosition blockposition) {
-            super(WorldGenFeatureStructurePieceType.aa, 0);
-            this.n = new StructureBoundingBox(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            super(WorldGenFeatureStructurePieceType.BURIED_TREASURE_PIECE, 0, new StructureBoundingBox(blockposition));
         }
 
-        public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.aa, nbttagcompound);
+        public a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.BURIED_TREASURE_PIECE, nbttagcompound);
         }
 
         @Override
-        protected void a(NBTTagCompound nbttagcompound) {}
+        protected void a(WorldServer worldserver, NBTTagCompound nbttagcompound) {}
 
         @Override
         public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
-            int i = generatoraccessseed.a(HeightMap.Type.OCEAN_FLOOR_WG, this.n.a, this.n.c);
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.n.a, i, this.n.c);
+            int i = generatoraccessseed.a(HeightMap.Type.OCEAN_FLOOR_WG, this.boundingBox.g(), this.boundingBox.i());
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.boundingBox.g(), i, this.boundingBox.i());
 
-            while (blockposition_mutableblockposition.getY() > 0) {
+            while (blockposition_mutableblockposition.getY() > generatoraccessseed.getMinBuildHeight()) {
                 IBlockData iblockdata = generatoraccessseed.getType(blockposition_mutableblockposition);
                 IBlockData iblockdata1 = generatoraccessseed.getType(blockposition_mutableblockposition.down());
 
                 if (iblockdata1 == Blocks.SANDSTONE.getBlockData() || iblockdata1 == Blocks.STONE.getBlockData() || iblockdata1 == Blocks.ANDESITE.getBlockData() || iblockdata1 == Blocks.GRANITE.getBlockData() || iblockdata1 == Blocks.DIORITE.getBlockData()) {
-                    IBlockData iblockdata2 = !iblockdata.isAir() && !this.a(iblockdata) ? iblockdata : Blocks.SAND.getBlockData();
+                    IBlockData iblockdata2 = !iblockdata.isAir() && !this.b(iblockdata) ? iblockdata : Blocks.SAND.getBlockData();
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int j = aenumdirection.length;
 
@@ -49,11 +51,11 @@ public class WorldGenBuriedTreasurePieces {
                         BlockPosition blockposition1 = blockposition_mutableblockposition.shift(enumdirection);
                         IBlockData iblockdata3 = generatoraccessseed.getType(blockposition1);
 
-                        if (iblockdata3.isAir() || this.a(iblockdata3)) {
+                        if (iblockdata3.isAir() || this.b(iblockdata3)) {
                             BlockPosition blockposition2 = blockposition1.down();
                             IBlockData iblockdata4 = generatoraccessseed.getType(blockposition2);
 
-                            if ((iblockdata4.isAir() || this.a(iblockdata4)) && enumdirection != EnumDirection.UP) {
+                            if ((iblockdata4.isAir() || this.b(iblockdata4)) && enumdirection != EnumDirection.UP) {
                                 generatoraccessseed.setTypeAndData(blockposition1, iblockdata1, 3);
                             } else {
                                 generatoraccessseed.setTypeAndData(blockposition1, iblockdata2, 3);
@@ -61,8 +63,8 @@ public class WorldGenBuriedTreasurePieces {
                         }
                     }
 
-                    this.n = new StructureBoundingBox(blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getY(), blockposition_mutableblockposition.getZ(), blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getY(), blockposition_mutableblockposition.getZ());
-                    return this.a(generatoraccessseed, structureboundingbox, random, blockposition_mutableblockposition, LootTables.G, (IBlockData) null);
+                    this.boundingBox = new StructureBoundingBox(blockposition_mutableblockposition);
+                    return this.a(generatoraccessseed, structureboundingbox, random, blockposition_mutableblockposition, LootTables.BURIED_TREASURE, (IBlockData) null);
                 }
 
                 blockposition_mutableblockposition.e(0, -1, 0);
@@ -71,7 +73,7 @@ public class WorldGenBuriedTreasurePieces {
             return false;
         }
 
-        private boolean a(IBlockData iblockdata) {
+        private boolean b(IBlockData iblockdata) {
             return iblockdata == Blocks.WATER.getBlockData() || iblockdata == Blocks.LAVA.getBlockData();
         }
     }

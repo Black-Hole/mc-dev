@@ -11,24 +11,24 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public abstract class LootEntryChildrenAbstract extends LootEntryAbstract {
 
-    protected final LootEntryAbstract[] c;
-    private final LootEntryChildren e;
+    protected final LootEntryAbstract[] children;
+    private final LootEntryChildren composedChildren;
 
     protected LootEntryChildrenAbstract(LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition) {
         super(alootitemcondition);
-        this.c = alootentryabstract;
-        this.e = this.a((LootEntryChildren[]) alootentryabstract);
+        this.children = alootentryabstract;
+        this.composedChildren = this.a((LootEntryChildren[]) alootentryabstract);
     }
 
     @Override
     public void a(LootCollector lootcollector) {
         super.a(lootcollector);
-        if (this.c.length == 0) {
+        if (this.children.length == 0) {
             lootcollector.a("Empty children list");
         }
 
-        for (int i = 0; i < this.c.length; ++i) {
-            this.c[i].a(lootcollector.b(".entry[" + i + "]"));
+        for (int i = 0; i < this.children.length; ++i) {
+            this.children[i].a(lootcollector.b(".entry[" + i + "]"));
         }
 
     }
@@ -37,13 +37,13 @@ public abstract class LootEntryChildrenAbstract extends LootEntryAbstract {
 
     @Override
     public final boolean expand(LootTableInfo loottableinfo, Consumer<LootEntry> consumer) {
-        return !this.a(loottableinfo) ? false : this.e.expand(loottableinfo, consumer);
+        return !this.a(loottableinfo) ? false : this.composedChildren.expand(loottableinfo, consumer);
     }
 
     public static <T extends LootEntryChildrenAbstract> LootEntryAbstract.Serializer<T> a(final LootEntryChildrenAbstract.a<T> lootentrychildrenabstract_a) {
         return new LootEntryAbstract.Serializer<T>() {
             public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
-                jsonobject.add("children", jsonserializationcontext.serialize(t0.c));
+                jsonobject.add("children", jsonserializationcontext.serialize(t0.children));
             }
 
             @Override

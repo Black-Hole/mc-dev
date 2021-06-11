@@ -36,18 +36,19 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityChicken extends EntityAnimal {
 
-    private static final RecipeItemStack bv = RecipeItemStack.a(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS);
-    public float bo;
-    public float bp;
-    public float bq;
-    public float br;
-    public float bs = 1.0F;
-    public int eggLayTime;
-    public boolean chickenJockey;
+    private static final RecipeItemStack FOOD_ITEMS = RecipeItemStack.a(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS);
+    public float flap;
+    public float flapSpeed;
+    public float oFlapSpeed;
+    public float oFlap;
+    public float flapping = 1.0F;
+    private float nextFlap = 1.0F;
+    public int eggTime;
+    public boolean isChickenJockey;
 
     public EntityChicken(EntityTypes<? extends EntityChicken> entitytypes, World world) {
         super(entitytypes, world);
-        this.eggLayTime = this.random.nextInt(6000) + 6000;
+        this.eggTime = this.random.nextInt(6000) + 6000;
         this.a(PathType.WATER, 0.0F);
     }
 
@@ -56,7 +57,7 @@ public class EntityChicken extends EntityAnimal {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.4D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, false, EntityChicken.bv));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, EntityChicken.FOOD_ITEMS, false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -68,60 +69,70 @@ public class EntityChicken extends EntityAnimal {
         return this.isBaby() ? entitysize.height * 0.85F : entitysize.height * 0.92F;
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+    public static AttributeProvider.Builder p() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        this.br = this.bo;
-        this.bq = this.bp;
-        this.bp = (float) ((double) this.bp + (double) (this.onGround ? -1 : 4) * 0.3D);
-        this.bp = MathHelper.a(this.bp, 0.0F, 1.0F);
-        if (!this.onGround && this.bs < 1.0F) {
-            this.bs = 1.0F;
+        this.oFlap = this.flap;
+        this.oFlapSpeed = this.flapSpeed;
+        this.flapSpeed = (float) ((double) this.flapSpeed + (double) (this.onGround ? -1 : 4) * 0.3D);
+        this.flapSpeed = MathHelper.a(this.flapSpeed, 0.0F, 1.0F);
+        if (!this.onGround && this.flapping < 1.0F) {
+            this.flapping = 1.0F;
         }
 
-        this.bs = (float) ((double) this.bs * 0.9D);
+        this.flapping = (float) ((double) this.flapping * 0.9D);
         Vec3D vec3d = this.getMot();
 
         if (!this.onGround && vec3d.y < 0.0D) {
             this.setMot(vec3d.d(1.0D, 0.6D, 1.0D));
         }
 
-        this.bo += this.bs * 2.0F;
-        if (!this.world.isClientSide && this.isAlive() && !this.isBaby() && !this.isChickenJockey() && --this.eggLayTime <= 0) {
-            this.playSound(SoundEffects.ENTITY_CHICKEN_EGG, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        this.flap += this.flapping * 2.0F;
+        if (!this.level.isClientSide && this.isAlive() && !this.isBaby() && !this.isChickenJockey() && --this.eggTime <= 0) {
+            this.playSound(SoundEffects.CHICKEN_EGG, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.a((IMaterial) Items.EGG);
-            this.eggLayTime = this.random.nextInt(6000) + 6000;
+            this.eggTime = this.random.nextInt(6000) + 6000;
         }
 
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    protected boolean aF() {
+        return this.flyDist > this.nextFlap;
+    }
+
+    @Override
+    protected void aE() {
+        this.nextFlap = this.flyDist + this.flapSpeed / 2.0F;
+    }
+
+    @Override
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_CHICKEN_AMBIENT;
+        return SoundEffects.CHICKEN_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_CHICKEN_HURT;
+        return SoundEffects.CHICKEN_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_CHICKEN_DEATH;
+        return SoundEffects.CHICKEN_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_CHICKEN_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.CHICKEN_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -130,8 +141,8 @@ public class EntityChicken extends EntityAnimal {
     }
 
     @Override
-    public boolean k(ItemStack itemstack) {
-        return EntityChicken.bv.test(itemstack);
+    public boolean n(ItemStack itemstack) {
+        return EntityChicken.FOOD_ITEMS.test(itemstack);
     }
 
     @Override
@@ -142,9 +153,9 @@ public class EntityChicken extends EntityAnimal {
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.chickenJockey = nbttagcompound.getBoolean("IsChickenJockey");
+        this.isChickenJockey = nbttagcompound.getBoolean("IsChickenJockey");
         if (nbttagcompound.hasKey("EggLayTime")) {
-            this.eggLayTime = nbttagcompound.getInt("EggLayTime");
+            this.eggTime = nbttagcompound.getInt("EggLayTime");
         }
 
     }
@@ -152,8 +163,8 @@ public class EntityChicken extends EntityAnimal {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setBoolean("IsChickenJockey", this.chickenJockey);
-        nbttagcompound.setInt("EggLayTime", this.eggLayTime);
+        nbttagcompound.setBoolean("IsChickenJockey", this.isChickenJockey);
+        nbttagcompound.setInt("EggLayTime", this.eggTime);
     }
 
     @Override
@@ -162,25 +173,25 @@ public class EntityChicken extends EntityAnimal {
     }
 
     @Override
-    public void k(Entity entity) {
-        super.k(entity);
-        float f = MathHelper.sin(this.aA * 0.017453292F);
-        float f1 = MathHelper.cos(this.aA * 0.017453292F);
+    public void i(Entity entity) {
+        super.i(entity);
+        float f = MathHelper.sin(this.yBodyRot * 0.017453292F);
+        float f1 = MathHelper.cos(this.yBodyRot * 0.017453292F);
         float f2 = 0.1F;
         float f3 = 0.0F;
 
-        entity.setPosition(this.locX() + (double) (0.1F * f), this.e(0.5D) + entity.bb() + 0.0D, this.locZ() - (double) (0.1F * f1));
+        entity.setPosition(this.locX() + (double) (0.1F * f), this.e(0.5D) + entity.bk() + 0.0D, this.locZ() - (double) (0.1F * f1));
         if (entity instanceof EntityLiving) {
-            ((EntityLiving) entity).aA = this.aA;
+            ((EntityLiving) entity).yBodyRot = this.yBodyRot;
         }
 
     }
 
     public boolean isChickenJockey() {
-        return this.chickenJockey;
+        return this.isChickenJockey;
     }
 
     public void setChickenJockey(boolean flag) {
-        this.chickenJockey = flag;
+        this.isChickenJockey = flag;
     }
 }

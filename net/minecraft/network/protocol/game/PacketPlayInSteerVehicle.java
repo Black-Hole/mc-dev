@@ -1,39 +1,44 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
 
-    private float a;
-    private float b;
-    private boolean c;
-    private boolean d;
+    private static final int FLAG_JUMPING = 1;
+    private static final int FLAG_SHIFT_KEY_DOWN = 2;
+    private final float xxa;
+    private final float zza;
+    private final boolean isJumping;
+    private final boolean isShiftKeyDown;
 
-    public PacketPlayInSteerVehicle() {}
+    public PacketPlayInSteerVehicle(float f, float f1, boolean flag, boolean flag1) {
+        this.xxa = f;
+        this.zza = f1;
+        this.isJumping = flag;
+        this.isShiftKeyDown = flag1;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readFloat();
-        this.b = packetdataserializer.readFloat();
+    public PacketPlayInSteerVehicle(PacketDataSerializer packetdataserializer) {
+        this.xxa = packetdataserializer.readFloat();
+        this.zza = packetdataserializer.readFloat();
         byte b0 = packetdataserializer.readByte();
 
-        this.c = (b0 & 1) > 0;
-        this.d = (b0 & 2) > 0;
+        this.isJumping = (b0 & 1) > 0;
+        this.isShiftKeyDown = (b0 & 2) > 0;
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeFloat(this.a);
-        packetdataserializer.writeFloat(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeFloat(this.xxa);
+        packetdataserializer.writeFloat(this.zza);
         byte b0 = 0;
 
-        if (this.c) {
+        if (this.isJumping) {
             b0 = (byte) (b0 | 1);
         }
 
-        if (this.d) {
+        if (this.isShiftKeyDown) {
             b0 = (byte) (b0 | 2);
         }
 
@@ -45,18 +50,18 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
     }
 
     public float b() {
-        return this.a;
+        return this.xxa;
     }
 
     public float c() {
-        return this.b;
+        return this.zza;
     }
 
     public boolean d() {
-        return this.c;
+        return this.isJumping;
     }
 
     public boolean e() {
-        return this.d;
+        return this.isShiftKeyDown;
     }
 }

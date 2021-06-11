@@ -1,11 +1,9 @@
 package net.minecraft.network.protocol.game;
 
 import com.google.common.collect.Lists;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -16,97 +14,84 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private final List<PacketPlayOutUpdateAttributes.AttributeSnapshot> b = Lists.newArrayList();
-
-    public PacketPlayOutUpdateAttributes() {}
+    private final int entityId;
+    private final List<PacketPlayOutUpdateAttributes.AttributeSnapshot> attributes;
 
     public PacketPlayOutUpdateAttributes(int i, Collection<AttributeModifiable> collection) {
-        this.a = i;
+        this.entityId = i;
+        this.attributes = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             AttributeModifiable attributemodifiable = (AttributeModifiable) iterator.next();
 
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributemodifiable.getAttribute(), attributemodifiable.getBaseValue(), attributemodifiable.getModifiers()));
+            this.attributes.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributemodifiable.getAttribute(), attributemodifiable.getBaseValue(), attributemodifiable.getModifiers()));
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        int i = packetdataserializer.readInt();
-
-        for (int j = 0; j < i; ++j) {
-            MinecraftKey minecraftkey = packetdataserializer.p();
+    public PacketPlayOutUpdateAttributes(PacketDataSerializer packetdataserializer) {
+        this.entityId = packetdataserializer.j();
+        this.attributes = packetdataserializer.a((packetdataserializer1) -> {
+            MinecraftKey minecraftkey = packetdataserializer1.q();
             AttributeBase attributebase = (AttributeBase) IRegistry.ATTRIBUTE.get(minecraftkey);
-            double d0 = packetdataserializer.readDouble();
-            List<AttributeModifier> list = Lists.newArrayList();
-            int k = packetdataserializer.i();
+            double d0 = packetdataserializer1.readDouble();
+            List<AttributeModifier> list = packetdataserializer1.a((packetdataserializer2) -> {
+                return new AttributeModifier(packetdataserializer2.l(), "Unknown synced attribute modifier", packetdataserializer2.readDouble(), AttributeModifier.Operation.a(packetdataserializer2.readByte()));
+            });
 
-            for (int l = 0; l < k; ++l) {
-                UUID uuid = packetdataserializer.k();
-
-                list.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), AttributeModifier.Operation.a(packetdataserializer.readByte())));
-            }
-
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributebase, d0, list));
-        }
-
+            return new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributebase, d0, list);
+        });
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.writeInt(this.b.size());
-        Iterator iterator = this.b.iterator();
-
-        while (iterator.hasNext()) {
-            PacketPlayOutUpdateAttributes.AttributeSnapshot packetplayoutupdateattributes_attributesnapshot = (PacketPlayOutUpdateAttributes.AttributeSnapshot) iterator.next();
-
-            packetdataserializer.a(IRegistry.ATTRIBUTE.getKey(packetplayoutupdateattributes_attributesnapshot.a()));
-            packetdataserializer.writeDouble(packetplayoutupdateattributes_attributesnapshot.b());
-            packetdataserializer.d(packetplayoutupdateattributes_attributesnapshot.c().size());
-            Iterator iterator1 = packetplayoutupdateattributes_attributesnapshot.c().iterator();
-
-            while (iterator1.hasNext()) {
-                AttributeModifier attributemodifier = (AttributeModifier) iterator1.next();
-
-                packetdataserializer.a(attributemodifier.getUniqueId());
-                packetdataserializer.writeDouble(attributemodifier.getAmount());
-                packetdataserializer.writeByte(attributemodifier.getOperation().a());
-            }
-        }
-
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.entityId);
+        packetdataserializer.a((Collection) this.attributes, (packetdataserializer1, packetplayoutupdateattributes_attributesnapshot) -> {
+            packetdataserializer1.a(IRegistry.ATTRIBUTE.getKey(packetplayoutupdateattributes_attributesnapshot.a()));
+            packetdataserializer1.writeDouble(packetplayoutupdateattributes_attributesnapshot.b());
+            packetdataserializer1.a(packetplayoutupdateattributes_attributesnapshot.c(), (packetdataserializer2, attributemodifier) -> {
+                packetdataserializer2.a(attributemodifier.getUniqueId());
+                packetdataserializer2.writeDouble(attributemodifier.getAmount());
+                packetdataserializer2.writeByte(attributemodifier.getOperation().a());
+            });
+        });
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    public class AttributeSnapshot {
+    public int b() {
+        return this.entityId;
+    }
 
-        private final AttributeBase b;
-        private final double c;
-        private final Collection<AttributeModifier> d;
+    public List<PacketPlayOutUpdateAttributes.AttributeSnapshot> c() {
+        return this.attributes;
+    }
 
-        public AttributeSnapshot(AttributeBase attributebase, double d0, Collection collection) {
-            this.b = attributebase;
-            this.c = d0;
-            this.d = collection;
+    public static class AttributeSnapshot {
+
+        private final AttributeBase attribute;
+        private final double base;
+        private final Collection<AttributeModifier> modifiers;
+
+        public AttributeSnapshot(AttributeBase attributebase, double d0, Collection<AttributeModifier> collection) {
+            this.attribute = attributebase;
+            this.base = d0;
+            this.modifiers = collection;
         }
 
         public AttributeBase a() {
-            return this.b;
+            return this.attribute;
         }
 
         public double b() {
-            return this.c;
+            return this.base;
         }
 
         public Collection<AttributeModifier> c() {
-            return this.d;
+            return this.modifiers;
         }
     }
 }

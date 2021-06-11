@@ -13,9 +13,9 @@ import net.minecraft.util.datafix.fixes.DataConverterTypes;
 
 public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
 
-    protected static final HookFunction b = new HookFunction() {
+    protected static final HookFunction ADD_NAMES = new HookFunction() {
         public <T> T apply(DynamicOps<T> dynamicops, T t0) {
-            return DataConverterSchemaV99.a(new Dynamic(dynamicops, t0), DataConverterSchemaV704.a, "minecraft:armor_stand");
+            return DataConverterSchemaV99.a(new Dynamic(dynamicops, t0), DataConverterSchemaV704.ITEM_TO_BLOCKENTITY, "minecraft:armor_stand");
         }
     };
 
@@ -174,7 +174,7 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
             return DSL.taggedChoiceLazy("id", a(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV705.b, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)))), DataConverterSchemaV705.ADD_NAMES, HookFunction.IDENTITY);
         });
     }
 }

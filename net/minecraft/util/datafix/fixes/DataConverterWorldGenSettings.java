@@ -11,17 +11,21 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class DataConverterWorldGenSettings extends DataFix {
 
-    private static final Splitter a = Splitter.on(';').limit(5);
-    private static final Splitter b = Splitter.on(',');
-    private static final Splitter c = Splitter.on('x').limit(2);
-    private static final Splitter d = Splitter.on('*').limit(2);
-    private static final Splitter e = Splitter.on(':').limit(3);
+    private static final String GENERATOR_OPTIONS = "generatorOptions";
+    @VisibleForTesting
+    static final String DEFAULT = "minecraft:bedrock,2*minecraft:dirt,minecraft:grass_block;1;village";
+    private static final Splitter SPLITTER = Splitter.on(';').limit(5);
+    private static final Splitter LAYER_SPLITTER = Splitter.on(',');
+    private static final Splitter OLD_AMOUNT_SPLITTER = Splitter.on('x').limit(2);
+    private static final Splitter AMOUNT_SPLITTER = Splitter.on('*').limit(2);
+    private static final Splitter BLOCK_SPLITTER = Splitter.on(':').limit(3);
 
     public DataConverterWorldGenSettings(Schema schema, boolean flag) {
         super(schema, flag);
@@ -37,7 +41,7 @@ public class DataConverterWorldGenSettings extends DataFix {
         return dynamic.get("generatorName").asString("").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic1) -> {
             DataResult dataresult = dynamic1.asString().map(this::a);
 
-            dynamic1.getClass();
+            Objects.requireNonNull(dynamic1);
             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic1::createString).result(), dynamic1);
         }) : dynamic;
     }
@@ -47,7 +51,7 @@ public class DataConverterWorldGenSettings extends DataFix {
         if (s.isEmpty()) {
             return "minecraft:bedrock,2*minecraft:dirt,minecraft:grass_block;1;village";
         } else {
-            Iterator<String> iterator = DataConverterWorldGenSettings.a.split(s).iterator();
+            Iterator<String> iterator = DataConverterWorldGenSettings.SPLITTER.split(s).iterator();
             String s1 = (String) iterator.next();
             int i;
             String s2;
@@ -62,9 +66,9 @@ public class DataConverterWorldGenSettings extends DataFix {
 
             if (i >= 0 && i <= 3) {
                 StringBuilder stringbuilder = new StringBuilder();
-                Splitter splitter = i < 3 ? DataConverterWorldGenSettings.c : DataConverterWorldGenSettings.d;
+                Splitter splitter = i < 3 ? DataConverterWorldGenSettings.OLD_AMOUNT_SPLITTER : DataConverterWorldGenSettings.AMOUNT_SPLITTER;
 
-                stringbuilder.append((String) StreamSupport.stream(DataConverterWorldGenSettings.b.split(s2).spliterator(), false).map((s3) -> {
+                stringbuilder.append((String) StreamSupport.stream(DataConverterWorldGenSettings.LAYER_SPLITTER.split(s2).spliterator(), false).map((s3) -> {
                     List<String> list = splitter.splitToList(s3);
                     int j;
                     String s4;
@@ -77,14 +81,15 @@ public class DataConverterWorldGenSettings extends DataFix {
                         s4 = (String) list.get(0);
                     }
 
-                    List<String> list1 = DataConverterWorldGenSettings.e.splitToList(s4);
+                    List<String> list1 = DataConverterWorldGenSettings.BLOCK_SPLITTER.splitToList(s4);
                     int k = ((String) list1.get(0)).equals("minecraft") ? 1 : 0;
                     String s5 = (String) list1.get(k);
                     int l = i == 3 ? DataConverterEntityBlockState.a("minecraft:" + s5) : NumberUtils.toInt(s5, 0);
                     int i1 = k + 1;
                     int j1 = list1.size() > i1 ? NumberUtils.toInt((String) list1.get(i1), 0) : 0;
+                    String s6 = j == 1 ? "" : j + "*";
 
-                    return (j == 1 ? "" : j + "*") + DataConverterFlattenData.b(l << 4 | j1).get("Name").asString("");
+                    return s6 + DataConverterFlattenData.b(l << 4 | j1).get("Name").asString("");
                 }).collect(Collectors.joining(",")));
 
                 while (iterator.hasNext()) {

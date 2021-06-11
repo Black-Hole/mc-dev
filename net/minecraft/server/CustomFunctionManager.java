@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -37,56 +38,59 @@ import org.apache.logging.log4j.Logger;
 public class CustomFunctionManager implements IReloadListener {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int b = "functions/".length();
-    private static final int c = ".mcfunction".length();
-    private volatile Map<MinecraftKey, CustomFunction> d = ImmutableMap.of();
-    private final TagDataPack<CustomFunction> e = new TagDataPack<>(this::a, "tags/functions", "function");
-    private volatile Tags<CustomFunction> f = Tags.c();
-    private final int g;
-    private final CommandDispatcher<CommandListenerWrapper> h;
+    private static final String FILE_EXTENSION = ".mcfunction";
+    private static final int PATH_PREFIX_LENGTH = "functions/".length();
+    private static final int PATH_SUFFIX_LENGTH = ".mcfunction".length();
+    private volatile Map<MinecraftKey, CustomFunction> functions = ImmutableMap.of();
+    private final TagDataPack<CustomFunction> tagsLoader = new TagDataPack<>(this::a, "tags/functions");
+    private volatile Tags<CustomFunction> tags = Tags.c();
+    private final int functionCompilationLevel;
+    private final CommandDispatcher<CommandListenerWrapper> dispatcher;
 
     public Optional<CustomFunction> a(MinecraftKey minecraftkey) {
-        return Optional.ofNullable(this.d.get(minecraftkey));
+        return Optional.ofNullable((CustomFunction) this.functions.get(minecraftkey));
     }
 
     public Map<MinecraftKey, CustomFunction> a() {
-        return this.d;
+        return this.functions;
     }
 
     public Tags<CustomFunction> b() {
-        return this.f;
+        return this.tags;
     }
 
     public Tag<CustomFunction> b(MinecraftKey minecraftkey) {
-        return this.f.b(minecraftkey);
+        return this.tags.b(minecraftkey);
     }
 
     public CustomFunctionManager(int i, CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
-        this.g = i;
-        this.h = commanddispatcher;
+        this.functionCompilationLevel = i;
+        this.dispatcher = commanddispatcher;
     }
 
     @Override
     public CompletableFuture<Void> a(IReloadListener.a ireloadlistener_a, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller, GameProfilerFiller gameprofilerfiller1, Executor executor, Executor executor1) {
-        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture = this.e.a(iresourcemanager, executor);
+        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture = CompletableFuture.supplyAsync(() -> {
+            return this.tagsLoader.a(iresourcemanager);
+        }, executor);
         CompletableFuture<Map<MinecraftKey, CompletableFuture<CustomFunction>>> completablefuture1 = CompletableFuture.supplyAsync(() -> {
             return iresourcemanager.a("functions", (s) -> {
                 return s.endsWith(".mcfunction");
             });
         }, executor).thenCompose((collection) -> {
             Map<MinecraftKey, CompletableFuture<CustomFunction>> map = Maps.newHashMap();
-            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.ORIGIN, Vec2F.a, (WorldServer) null, this.g, "", ChatComponentText.d, (MinecraftServer) null, (Entity) null);
+            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.NULL, Vec3D.ZERO, Vec2F.ZERO, (WorldServer) null, this.functionCompilationLevel, "", ChatComponentText.EMPTY, (MinecraftServer) null, (Entity) null);
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
                 String s = minecraftkey.getKey();
-                MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(CustomFunctionManager.b, s.length() - CustomFunctionManager.c));
+                MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(CustomFunctionManager.PATH_PREFIX_LENGTH, s.length() - CustomFunctionManager.PATH_SUFFIX_LENGTH));
 
                 map.put(minecraftkey1, CompletableFuture.supplyAsync(() -> {
                     List<String> list = a(iresourcemanager, minecraftkey);
 
-                    return CustomFunction.a(minecraftkey1, this.h, commandlistenerwrapper, list);
+                    return CustomFunction.a(minecraftkey1, this.dispatcher, commandlistenerwrapper, list);
                 }, executor));
             }
 
@@ -98,7 +102,7 @@ public class CustomFunctionManager implements IReloadListener {
         });
         CompletableFuture completablefuture2 = completablefuture.thenCombine(completablefuture1, Pair::of);
 
-        ireloadlistener_a.getClass();
+        Objects.requireNonNull(ireloadlistener_a);
         return completablefuture2.thenCompose(ireloadlistener_a::a).thenAcceptAsync((pair) -> {
             Map<MinecraftKey, CompletableFuture<CustomFunction>> map = (Map) pair.getSecond();
             Builder<MinecraftKey, CustomFunction> builder = ImmutableMap.builder();
@@ -114,36 +118,33 @@ public class CustomFunctionManager implements IReloadListener {
                     return null;
                 }).join();
             });
-            this.d = builder.build();
-            this.f = this.e.a((Map) pair.getFirst());
+            this.functions = builder.build();
+            this.tags = this.tagsLoader.a((Map) pair.getFirst());
         }, executor1);
     }
 
     private static List<String> a(IResourceManager iresourcemanager, MinecraftKey minecraftkey) {
         try {
             IResource iresource = iresourcemanager.a(minecraftkey);
-            Throwable throwable = null;
 
             List list;
 
             try {
                 list = IOUtils.readLines(iresource.b(), StandardCharsets.UTF_8);
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (iresource != null) {
-                    if (throwable != null) {
-                        try {
-                            iresource.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         iresource.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (iresource != null) {
+                iresource.close();
             }
 
             return list;

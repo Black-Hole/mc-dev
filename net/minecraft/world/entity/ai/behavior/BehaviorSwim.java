@@ -8,15 +8,15 @@ import net.minecraft.world.entity.EntityInsentient;
 
 public class BehaviorSwim extends Behavior<EntityInsentient> {
 
-    private final float b;
+    private final float chance;
 
     public BehaviorSwim(float f) {
         super(ImmutableMap.of());
-        this.b = f;
+        this.chance = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return entityinsentient.isInWater() && entityinsentient.b((Tag) TagsFluid.WATER) > entityinsentient.cx() || entityinsentient.aQ();
+        return entityinsentient.isInWater() && entityinsentient.b((Tag) TagsFluid.WATER) > entityinsentient.cN() || entityinsentient.aX();
     }
 
     protected boolean b(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
@@ -24,7 +24,7 @@ public class BehaviorSwim extends Behavior<EntityInsentient> {
     }
 
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        if (entityinsentient.getRandom().nextFloat() < this.b) {
+        if (entityinsentient.getRandom().nextFloat() < this.chance) {
             entityinsentient.getControllerJump().jump();
         }
 

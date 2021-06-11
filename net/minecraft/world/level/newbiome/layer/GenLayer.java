@@ -1,6 +1,5 @@
 package net.minecraft.world.level.newbiome.layer;
 
-import net.minecraft.SharedConstants;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.IRegistry;
 import net.minecraft.data.worldgen.biome.BiomeRegistry;
@@ -14,14 +13,14 @@ import org.apache.logging.log4j.Logger;
 public class GenLayer {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final AreaLazy b;
+    private final AreaLazy area;
 
     public GenLayer(AreaFactory<AreaLazy> areafactory) {
-        this.b = (AreaLazy) areafactory.make();
+        this.area = (AreaLazy) areafactory.make();
     }
 
     public BiomeBase a(IRegistry<BiomeBase> iregistry, int i, int j) {
-        int k = this.b.a(i, j);
+        int k = this.area.a(i, j);
         ResourceKey<BiomeBase> resourcekey = BiomeRegistry.a(k);
 
         if (resourcekey == null) {
@@ -30,12 +29,8 @@ public class GenLayer {
             BiomeBase biomebase = (BiomeBase) iregistry.a(resourcekey);
 
             if (biomebase == null) {
-                if (SharedConstants.d) {
-                    throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Unknown biome id: " + k)));
-                } else {
-                    GenLayer.LOGGER.warn("Unknown biome id: ", k);
-                    return (BiomeBase) iregistry.a(BiomeRegistry.a(0));
-                }
+                SystemUtils.a("Unknown biome id: " + k);
+                return (BiomeBase) iregistry.a(BiomeRegistry.a(0));
             } else {
                 return biomebase;
             }

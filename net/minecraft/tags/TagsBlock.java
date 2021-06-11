@@ -1,12 +1,11 @@
 package net.minecraft.tags;
 
-import java.util.List;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.core.IRegistry;
 import net.minecraft.world.level.block.Block;
 
 public final class TagsBlock {
 
-    protected static final TagUtil<Block> a = TagStatic.a(new MinecraftKey("block"), ITagRegistry::getBlockTags);
+    protected static final TagUtil<Block> HELPER = TagStatic.a(IRegistry.BLOCK_REGISTRY, "tags/blocks");
     public static final Tag.e<Block> WOOL = a("wool");
     public static final Tag.e<Block> PLANKS = a("planks");
     public static final Tag.e<Block> STONE_BRICKS = a("stone_bricks");
@@ -49,7 +48,16 @@ public final class TagsBlock {
     public static final Tag.e<Block> FLOWERS = a("flowers");
     public static final Tag.e<Block> PIGLIN_REPELLENTS = a("piglin_repellents");
     public static final Tag.e<Block> GOLD_ORES = a("gold_ores");
+    public static final Tag.e<Block> IRON_ORES = a("iron_ores");
+    public static final Tag.e<Block> DIAMOND_ORES = a("diamond_ores");
+    public static final Tag.e<Block> REDSTONE_ORES = a("redstone_ores");
+    public static final Tag.e<Block> LAPIS_ORES = a("lapis_ores");
+    public static final Tag.e<Block> COAL_ORES = a("coal_ores");
+    public static final Tag.e<Block> EMERALD_ORES = a("emerald_ores");
+    public static final Tag.e<Block> COPPER_ORES = a("copper_ores");
     public static final Tag.e<Block> NON_FLAMMABLE_WOOD = a("non_flammable_wood");
+    public static final Tag.e<Block> CANDLES = a("candles");
+    public static final Tag.e<Block> DIRT = a("dirt");
     public static final Tag.e<Block> FLOWER_POTS = a("flower_pots");
     public static final Tag.e<Block> ENDERMAN_HOLDABLE = a("enderman_holdable");
     public static final Tag.e<Block> ICE = a("ice");
@@ -85,24 +93,45 @@ public final class TagsBlock {
     public static final Tag.e<Block> CAMPFIRES = a("campfires");
     public static final Tag.e<Block> GUARDED_BY_PIGLINS = a("guarded_by_piglins");
     public static final Tag.e<Block> PREVENT_MOB_SPAWNING_INSIDE = a("prevent_mob_spawning_inside");
-    public static final Tag.e<Block> aB = a("fence_gates");
-    public static final Tag.e<Block> aC = a("unstable_bottom_center");
-    public static final Tag.e<Block> aD = a("mushroom_grow_block");
-    public static final Tag.e<Block> aE = a("infiniburn_overworld");
-    public static final Tag.e<Block> aF = a("infiniburn_nether");
-    public static final Tag.e<Block> aG = a("infiniburn_end");
-    public static final Tag.e<Block> aH = a("base_stone_overworld");
-    public static final Tag.e<Block> aI = a("base_stone_nether");
+    public static final Tag.e<Block> FENCE_GATES = a("fence_gates");
+    public static final Tag.e<Block> UNSTABLE_BOTTOM_CENTER = a("unstable_bottom_center");
+    public static final Tag.e<Block> MUSHROOM_GROW_BLOCK = a("mushroom_grow_block");
+    public static final Tag.e<Block> INFINIBURN_OVERWORLD = a("infiniburn_overworld");
+    public static final Tag.e<Block> INFINIBURN_NETHER = a("infiniburn_nether");
+    public static final Tag.e<Block> INFINIBURN_END = a("infiniburn_end");
+    public static final Tag.e<Block> BASE_STONE_OVERWORLD = a("base_stone_overworld");
+    public static final Tag.e<Block> STONE_ORE_REPLACEABLES = a("stone_ore_replaceables");
+    public static final Tag.e<Block> DEEPSLATE_ORE_REPLACEABLES = a("deepslate_ore_replaceables");
+    public static final Tag.e<Block> BASE_STONE_NETHER = a("base_stone_nether");
+    public static final Tag.e<Block> CANDLE_CAKES = a("candle_cakes");
+    public static final Tag.e<Block> CAULDRONS = a("cauldrons");
+    public static final Tag.e<Block> CRYSTAL_SOUND_BLOCKS = a("crystal_sound_blocks");
+    public static final Tag.e<Block> INSIDE_STEP_SOUND_BLOCKS = a("inside_step_sound_blocks");
+    public static final Tag.e<Block> OCCLUDES_VIBRATION_SIGNALS = a("occludes_vibration_signals");
+    public static final Tag.e<Block> DRIPSTONE_REPLACEABLE = a("dripstone_replaceable_blocks");
+    public static final Tag.e<Block> CAVE_VINES = a("cave_vines");
+    public static final Tag.e<Block> MOSS_REPLACEABLE = a("moss_replaceable");
+    public static final Tag.e<Block> LUSH_GROUND_REPLACEABLE = a("lush_ground_replaceable");
+    public static final Tag.e<Block> SMALL_DRIPLEAF_PLACEABLE = a("small_dripleaf_placeable");
+    public static final Tag.e<Block> SNOW = a("snow");
+    public static final Tag.e<Block> MINEABLE_WITH_AXE = a("mineable/axe");
+    public static final Tag.e<Block> MINEABLE_WITH_HOE = a("mineable/hoe");
+    public static final Tag.e<Block> MINEABLE_WITH_PICKAXE = a("mineable/pickaxe");
+    public static final Tag.e<Block> MINEABLE_WITH_SHOVEL = a("mineable/shovel");
+    public static final Tag.e<Block> NEEDS_DIAMOND_TOOL = a("needs_diamond_tool");
+    public static final Tag.e<Block> NEEDS_IRON_TOOL = a("needs_iron_tool");
+    public static final Tag.e<Block> NEEDS_STONE_TOOL = a("needs_stone_tool");
+    public static final Tag.e<Block> FEATURES_CANNOT_REPLACE = a("features_cannot_replace");
+    public static final Tag.e<Block> LAVA_POOL_STONE_CANNOT_REPLACE = a("lava_pool_stone_replaceables");
+    public static final Tag.e<Block> GEODE_INVALID_BLOCKS = a("geode_invalid_blocks");
+
+    private TagsBlock() {}
 
     private static Tag.e<Block> a(String s) {
-        return TagsBlock.a.a(s);
+        return TagsBlock.HELPER.a(s);
     }
 
     public static Tags<Block> a() {
-        return TagsBlock.a.b();
-    }
-
-    public static List<? extends Tag.e<Block>> b() {
-        return TagsBlock.a.c();
+        return TagsBlock.HELPER.b();
     }
 }

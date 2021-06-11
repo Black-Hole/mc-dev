@@ -5,6 +5,8 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class PistonUtil {
 
+    public PistonUtil() {}
+
     public static AxisAlignedBB a(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, double d0) {
         double d1 = d0 * (double) enumdirection.e().a();
         double d2 = Math.min(d1, 0.0D);

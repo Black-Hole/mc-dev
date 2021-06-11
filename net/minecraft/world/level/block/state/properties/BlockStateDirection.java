@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block.state.properties;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,6 +12,10 @@ public class BlockStateDirection extends BlockStateEnum<EnumDirection> {
 
     protected BlockStateDirection(String s, Collection<EnumDirection> collection) {
         super(s, EnumDirection.class, collection);
+    }
+
+    public static BlockStateDirection of(String s) {
+        return a(s, (Predicate) Predicates.alwaysTrue());
     }
 
     public static BlockStateDirection a(String s, Predicate<EnumDirection> predicate) {

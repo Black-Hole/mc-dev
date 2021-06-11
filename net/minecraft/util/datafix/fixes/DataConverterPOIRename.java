@@ -50,7 +50,7 @@ public abstract class DataConverterPOIRename extends DataFix {
                 return dynamic1.update("type", (dynamic2) -> {
                     DataResult dataresult = dynamic2.asString().map(this::a);
 
-                    dynamic2.getClass();
+                    Objects.requireNonNull(dynamic2);
                     return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic2::createString).result(), dynamic2);
                 });
             }));

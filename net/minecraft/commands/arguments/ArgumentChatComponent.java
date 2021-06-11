@@ -15,8 +15,8 @@ import net.minecraft.network.chat.IChatMutableComponent;
 
 public class ArgumentChatComponent implements ArgumentType<IChatBaseComponent> {
 
-    private static final Collection<String> b = Arrays.asList("\"hello world\"", "\"\"", "\"{\"text\":\"hello world\"}", "[\"\"]");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("\"hello world\"", "\"\"", "\"{\"text\":\"hello world\"}", "[\"\"]");
+    public static final DynamicCommandExceptionType ERROR_INVALID_JSON = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.component.invalid", new Object[]{object});
     });
 
@@ -35,18 +35,18 @@ public class ArgumentChatComponent implements ArgumentType<IChatBaseComponent> {
             IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(stringreader);
 
             if (ichatmutablecomponent == null) {
-                throw ArgumentChatComponent.a.createWithContext(stringreader, "empty");
+                throw ArgumentChatComponent.ERROR_INVALID_JSON.createWithContext(stringreader, "empty");
             } else {
                 return ichatmutablecomponent;
             }
         } catch (JsonParseException jsonparseexception) {
             String s = jsonparseexception.getCause() != null ? jsonparseexception.getCause().getMessage() : jsonparseexception.getMessage();
 
-            throw ArgumentChatComponent.a.createWithContext(stringreader, s);
+            throw ArgumentChatComponent.ERROR_INVALID_JSON.createWithContext(stringreader, s);
         }
     }
 
     public Collection<String> getExamples() {
-        return ArgumentChatComponent.b;
+        return ArgumentChatComponent.EXAMPLES;
     }
 }

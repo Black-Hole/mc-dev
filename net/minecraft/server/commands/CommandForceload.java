@@ -12,6 +12,7 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
 import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.BlockPosition2D;
@@ -21,14 +22,17 @@ import net.minecraft.world.level.World;
 
 public class CommandForceload {
 
-    private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final int MAX_CHUNK_LIMIT = 256;
+    private static final Dynamic2CommandExceptionType ERROR_TOO_MANY_CHUNKS = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.forceload.toobig", new Object[]{object, object1});
     });
-    private static final Dynamic2CommandExceptionType b = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final Dynamic2CommandExceptionType ERROR_NOT_TICKING = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.forceload.query.failure", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.added.failure"));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.removed.failure"));
+    private static final SimpleCommandExceptionType ERROR_ALL_ADDED = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.added.failure"));
+    private static final SimpleCommandExceptionType ERROR_NONE_REMOVED = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.removed.failure"));
+
+    public CommandForceload() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("forceload").requires((commandlistenerwrapper) -> {
@@ -51,7 +55,7 @@ public class CommandForceload {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition2D blockposition2d) throws CommandSyntaxException {
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition2d.a >> 4, blockposition2d.b >> 4);
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(SectionPosition.a(blockposition2d.x), SectionPosition.a(blockposition2d.z));
         WorldServer worldserver = commandlistenerwrapper.getWorld();
         ResourceKey<World> resourcekey = worldserver.getDimensionKey();
         boolean flag = worldserver.getForceLoadedChunks().contains(chunkcoordintpair.pair());
@@ -60,7 +64,7 @@ public class CommandForceload {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[]{chunkcoordintpair, resourcekey.a()}), false);
             return 1;
         } else {
-            throw CommandForceload.b.create(chunkcoordintpair, resourcekey.a());
+            throw CommandForceload.ERROR_NOT_TICKING.create(chunkcoordintpair, resourcekey.a());
         }
     }
 
@@ -98,20 +102,20 @@ public class CommandForceload {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition2D blockposition2d, BlockPosition2D blockposition2d1, boolean flag) throws CommandSyntaxException {
-        int i = Math.min(blockposition2d.a, blockposition2d1.a);
-        int j = Math.min(blockposition2d.b, blockposition2d1.b);
-        int k = Math.max(blockposition2d.a, blockposition2d1.a);
-        int l = Math.max(blockposition2d.b, blockposition2d1.b);
+        int i = Math.min(blockposition2d.x, blockposition2d1.x);
+        int j = Math.min(blockposition2d.z, blockposition2d1.z);
+        int k = Math.max(blockposition2d.x, blockposition2d1.x);
+        int l = Math.max(blockposition2d.z, blockposition2d1.z);
 
         if (i >= -30000000 && j >= -30000000 && k < 30000000 && l < 30000000) {
-            int i1 = i >> 4;
-            int j1 = j >> 4;
-            int k1 = k >> 4;
-            int l1 = l >> 4;
+            int i1 = SectionPosition.a(i);
+            int j1 = SectionPosition.a(j);
+            int k1 = SectionPosition.a(k);
+            int l1 = SectionPosition.a(l);
             long i2 = ((long) (k1 - i1) + 1L) * ((long) (l1 - j1) + 1L);
 
             if (i2 > 256L) {
-                throw CommandForceload.a.create(256, i2);
+                throw CommandForceload.ERROR_TOO_MANY_CHUNKS.create(256, i2);
             } else {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
                 ResourceKey<World> resourcekey = worldserver.getDimensionKey();
@@ -132,7 +136,7 @@ public class CommandForceload {
                 }
 
                 if (j2 == 0) {
-                    throw (flag ? CommandForceload.c : CommandForceload.d).create();
+                    throw (flag ? CommandForceload.ERROR_ALL_ADDED : CommandForceload.ERROR_NONE_REMOVED).create();
                 } else {
                     if (j2 == 1) {
                         commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".single", new Object[]{chunkcoordintpair, resourcekey.a()}), true);
@@ -147,7 +151,7 @@ public class CommandForceload {
                 }
             }
         } else {
-            throw ArgumentPosition.b.create();
+            throw ArgumentPosition.ERROR_OUT_OF_WORLD.create();
         }
     }
 }

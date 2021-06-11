@@ -13,23 +13,23 @@ import net.minecraft.world.phys.Vec3D;
 
 public class LootItemConditionLocationCheck implements LootItemCondition {
 
-    private final CriterionConditionLocation a;
-    private final BlockPosition b;
+    final CriterionConditionLocation predicate;
+    final BlockPosition offset;
 
-    private LootItemConditionLocationCheck(CriterionConditionLocation criterionconditionlocation, BlockPosition blockposition) {
-        this.a = criterionconditionlocation;
-        this.b = blockposition;
+    LootItemConditionLocationCheck(CriterionConditionLocation criterionconditionlocation, BlockPosition blockposition) {
+        this.predicate = criterionconditionlocation;
+        this.offset = blockposition;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.m;
+    public LootItemConditionType a() {
+        return LootItemConditions.LOCATION_CHECK;
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-        return vec3d != null && this.a.a(loottableinfo.getWorld(), vec3d.getX() + (double) this.b.getX(), vec3d.getY() + (double) this.b.getY(), vec3d.getZ() + (double) this.b.getZ());
+        return vec3d != null && this.predicate.a(loottableinfo.getWorld(), vec3d.getX() + (double) this.offset.getX(), vec3d.getY() + (double) this.offset.getY(), vec3d.getZ() + (double) this.offset.getZ());
     }
 
     public static LootItemCondition.a a(CriterionConditionLocation.a criterionconditionlocation_a) {
@@ -49,17 +49,17 @@ public class LootItemConditionLocationCheck implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionLocationCheck lootitemconditionlocationcheck, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("predicate", lootitemconditionlocationcheck.a.a());
-            if (lootitemconditionlocationcheck.b.getX() != 0) {
-                jsonobject.addProperty("offsetX", lootitemconditionlocationcheck.b.getX());
+            jsonobject.add("predicate", lootitemconditionlocationcheck.predicate.a());
+            if (lootitemconditionlocationcheck.offset.getX() != 0) {
+                jsonobject.addProperty("offsetX", lootitemconditionlocationcheck.offset.getX());
             }
 
-            if (lootitemconditionlocationcheck.b.getY() != 0) {
-                jsonobject.addProperty("offsetY", lootitemconditionlocationcheck.b.getY());
+            if (lootitemconditionlocationcheck.offset.getY() != 0) {
+                jsonobject.addProperty("offsetY", lootitemconditionlocationcheck.offset.getY());
             }
 
-            if (lootitemconditionlocationcheck.b.getZ() != 0) {
-                jsonobject.addProperty("offsetZ", lootitemconditionlocationcheck.b.getZ());
+            if (lootitemconditionlocationcheck.offset.getZ() != 0) {
+                jsonobject.addProperty("offsetZ", lootitemconditionlocationcheck.offset.getZ());
             }
 
         }

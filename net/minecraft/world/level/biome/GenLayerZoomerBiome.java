@@ -1,5 +1,7 @@
 package net.minecraft.world.level.biome;
 
+import net.minecraft.core.QuartPos;
+
 public enum GenLayerZoomerBiome implements GenLayerZoomer {
 
     INSTANCE;
@@ -8,6 +10,6 @@ public enum GenLayerZoomerBiome implements GenLayerZoomer {
 
     @Override
     public BiomeBase a(long i, int j, int k, int l, BiomeManager.Provider biomemanager_provider) {
-        return biomemanager_provider.getBiome(j >> 2, k >> 2, l >> 2);
+        return biomemanager_provider.getBiome(QuartPos.a(j), QuartPos.a(k), QuartPos.a(l));
     }
 }

@@ -1,7 +1,7 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import java.util.function.Supplier;
+import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -12,55 +12,86 @@ import net.minecraft.world.level.dimension.DimensionManager;
 
 public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
-    private DimensionManager a;
-    private ResourceKey<World> b;
-    private long c;
-    private EnumGamemode d;
-    private EnumGamemode e;
-    private boolean f;
-    private boolean g;
-    private boolean h;
+    private final DimensionManager dimensionType;
+    private final ResourceKey<World> dimension;
+    private final long seed;
+    private final EnumGamemode playerGameType;
+    @Nullable
+    private final EnumGamemode previousPlayerGameType;
+    private final boolean isDebug;
+    private final boolean isFlat;
+    private final boolean keepAllPlayerData;
 
-    public PacketPlayOutRespawn() {}
+    public PacketPlayOutRespawn(DimensionManager dimensionmanager, ResourceKey<World> resourcekey, long i, EnumGamemode enumgamemode, @Nullable EnumGamemode enumgamemode1, boolean flag, boolean flag1, boolean flag2) {
+        this.dimensionType = dimensionmanager;
+        this.dimension = resourcekey;
+        this.seed = i;
+        this.playerGameType = enumgamemode;
+        this.previousPlayerGameType = enumgamemode1;
+        this.isDebug = flag;
+        this.isFlat = flag1;
+        this.keepAllPlayerData = flag2;
+    }
 
-    public PacketPlayOutRespawn(DimensionManager dimensionmanager, ResourceKey<World> resourcekey, long i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, boolean flag, boolean flag1, boolean flag2) {
-        this.a = dimensionmanager;
-        this.b = resourcekey;
-        this.c = i;
-        this.d = enumgamemode;
-        this.e = enumgamemode1;
-        this.f = flag;
-        this.g = flag1;
-        this.h = flag2;
+    public PacketPlayOutRespawn(PacketDataSerializer packetdataserializer) {
+        this.dimensionType = (DimensionManager) ((Supplier) packetdataserializer.a(DimensionManager.CODEC)).get();
+        this.dimension = ResourceKey.a(IRegistry.DIMENSION_REGISTRY, packetdataserializer.q());
+        this.seed = packetdataserializer.readLong();
+        this.playerGameType = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
+        this.previousPlayerGameType = EnumGamemode.b(packetdataserializer.readByte());
+        this.isDebug = packetdataserializer.readBoolean();
+        this.isFlat = packetdataserializer.readBoolean();
+        this.keepAllPlayerData = packetdataserializer.readBoolean();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(DimensionManager.CODEC, (Object) (() -> {
+            return this.dimensionType;
+        }));
+        packetdataserializer.a(this.dimension.a());
+        packetdataserializer.writeLong(this.seed);
+        packetdataserializer.writeByte(this.playerGameType.getId());
+        packetdataserializer.writeByte(EnumGamemode.a(this.previousPlayerGameType));
+        packetdataserializer.writeBoolean(this.isDebug);
+        packetdataserializer.writeBoolean(this.isFlat);
+        packetdataserializer.writeBoolean(this.keepAllPlayerData);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (DimensionManager) ((Supplier) packetdataserializer.a(DimensionManager.n)).get();
-        this.b = ResourceKey.a(IRegistry.L, packetdataserializer.p());
-        this.c = packetdataserializer.readLong();
-        this.d = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        this.e = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        this.f = packetdataserializer.readBoolean();
-        this.g = packetdataserializer.readBoolean();
-        this.h = packetdataserializer.readBoolean();
+    public DimensionManager b() {
+        return this.dimensionType;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(DimensionManager.n, () -> {
-            return this.a;
-        });
-        packetdataserializer.a(this.b.a());
-        packetdataserializer.writeLong(this.c);
-        packetdataserializer.writeByte(this.d.getId());
-        packetdataserializer.writeByte(this.e.getId());
-        packetdataserializer.writeBoolean(this.f);
-        packetdataserializer.writeBoolean(this.g);
-        packetdataserializer.writeBoolean(this.h);
+    public ResourceKey<World> c() {
+        return this.dimension;
+    }
+
+    public long d() {
+        return this.seed;
+    }
+
+    public EnumGamemode e() {
+        return this.playerGameType;
+    }
+
+    @Nullable
+    public EnumGamemode f() {
+        return this.previousPlayerGameType;
+    }
+
+    public boolean g() {
+        return this.isDebug;
+    }
+
+    public boolean h() {
+        return this.isFlat;
+    }
+
+    public boolean i() {
+        return this.keepAllPlayerData;
     }
 }

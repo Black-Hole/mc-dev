@@ -7,33 +7,33 @@ import net.minecraft.world.entity.EntityInsentient;
 
 public class EntitySenses {
 
-    private final EntityInsentient a;
-    private final List<Entity> b = Lists.newArrayList();
-    private final List<Entity> c = Lists.newArrayList();
+    private final EntityInsentient mob;
+    private final List<Entity> seen = Lists.newArrayList();
+    private final List<Entity> unseen = Lists.newArrayList();
 
     public EntitySenses(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.mob = entityinsentient;
     }
 
     public void a() {
-        this.b.clear();
-        this.c.clear();
+        this.seen.clear();
+        this.unseen.clear();
     }
 
     public boolean a(Entity entity) {
-        if (this.b.contains(entity)) {
+        if (this.seen.contains(entity)) {
             return true;
-        } else if (this.c.contains(entity)) {
+        } else if (this.unseen.contains(entity)) {
             return false;
         } else {
-            this.a.world.getMethodProfiler().enter("canSee");
-            boolean flag = this.a.hasLineOfSight(entity);
+            this.mob.level.getMethodProfiler().enter("hasLineOfSight");
+            boolean flag = this.mob.hasLineOfSight(entity);
 
-            this.a.world.getMethodProfiler().exit();
+            this.mob.level.getMethodProfiler().exit();
             if (flag) {
-                this.b.add(entity);
+                this.seen.add(entity);
             } else {
-                this.c.add(entity);
+                this.unseen.add(entity);
             }
 
             return flag;

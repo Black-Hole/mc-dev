@@ -17,15 +17,15 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockDragonEgg extends BlockFalling {
 
-    protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+    protected static final VoxelShape SHAPE = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
     public BlockDragonEgg(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockDragonEgg.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockDragonEgg.SHAPE;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BlockDragonEgg extends BlockFalling {
 
     private void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         for (int i = 0; i < 1000; ++i) {
-            BlockPosition blockposition1 = blockposition.b(world.random.nextInt(16) - world.random.nextInt(16), world.random.nextInt(8) - world.random.nextInt(8), world.random.nextInt(16) - world.random.nextInt(16));
+            BlockPosition blockposition1 = blockposition.c(world.random.nextInt(16) - world.random.nextInt(16), world.random.nextInt(8) - world.random.nextInt(8), world.random.nextInt(16) - world.random.nextInt(16));
 
             if (world.getType(blockposition1).isAir()) {
                 if (world.isClientSide) {

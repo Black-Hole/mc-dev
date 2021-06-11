@@ -12,118 +12,118 @@ import net.minecraft.world.level.block.state.properties.BlockPropertyTrackPositi
 
 public class MinecartTrackLogic {
 
-    private final World a;
-    private final BlockPosition b;
-    private final BlockMinecartTrackAbstract c;
-    private IBlockData d;
-    private final boolean e;
-    private final List<BlockPosition> f = Lists.newArrayList();
+    private final World level;
+    private final BlockPosition pos;
+    private final BlockMinecartTrackAbstract block;
+    private IBlockData state;
+    private final boolean isStraight;
+    private final List<BlockPosition> connections = Lists.newArrayList();
 
     public MinecartTrackLogic(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.a = world;
-        this.b = blockposition;
-        this.d = iblockdata;
-        this.c = (BlockMinecartTrackAbstract) iblockdata.getBlock();
-        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.c.d());
+        this.level = world;
+        this.pos = blockposition;
+        this.state = iblockdata;
+        this.block = (BlockMinecartTrackAbstract) iblockdata.getBlock();
+        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.block.d());
 
-        this.e = this.c.c();
+        this.isStraight = this.block.c();
         this.a(blockpropertytrackposition);
     }
 
     public List<BlockPosition> a() {
-        return this.f;
+        return this.connections;
     }
 
     private void a(BlockPropertyTrackPosition blockpropertytrackposition) {
-        this.f.clear();
+        this.connections.clear();
         switch (blockpropertytrackposition) {
             case NORTH_SOUTH:
-                this.f.add(this.b.north());
-                this.f.add(this.b.south());
+                this.connections.add(this.pos.north());
+                this.connections.add(this.pos.south());
                 break;
             case EAST_WEST:
-                this.f.add(this.b.west());
-                this.f.add(this.b.east());
+                this.connections.add(this.pos.west());
+                this.connections.add(this.pos.east());
                 break;
             case ASCENDING_EAST:
-                this.f.add(this.b.west());
-                this.f.add(this.b.east().up());
+                this.connections.add(this.pos.west());
+                this.connections.add(this.pos.east().up());
                 break;
             case ASCENDING_WEST:
-                this.f.add(this.b.west().up());
-                this.f.add(this.b.east());
+                this.connections.add(this.pos.west().up());
+                this.connections.add(this.pos.east());
                 break;
             case ASCENDING_NORTH:
-                this.f.add(this.b.north().up());
-                this.f.add(this.b.south());
+                this.connections.add(this.pos.north().up());
+                this.connections.add(this.pos.south());
                 break;
             case ASCENDING_SOUTH:
-                this.f.add(this.b.north());
-                this.f.add(this.b.south().up());
+                this.connections.add(this.pos.north());
+                this.connections.add(this.pos.south().up());
                 break;
             case SOUTH_EAST:
-                this.f.add(this.b.east());
-                this.f.add(this.b.south());
+                this.connections.add(this.pos.east());
+                this.connections.add(this.pos.south());
                 break;
             case SOUTH_WEST:
-                this.f.add(this.b.west());
-                this.f.add(this.b.south());
+                this.connections.add(this.pos.west());
+                this.connections.add(this.pos.south());
                 break;
             case NORTH_WEST:
-                this.f.add(this.b.west());
-                this.f.add(this.b.north());
+                this.connections.add(this.pos.west());
+                this.connections.add(this.pos.north());
                 break;
             case NORTH_EAST:
-                this.f.add(this.b.east());
-                this.f.add(this.b.north());
+                this.connections.add(this.pos.east());
+                this.connections.add(this.pos.north());
         }
 
     }
 
     private void d() {
-        for (int i = 0; i < this.f.size(); ++i) {
-            MinecartTrackLogic minecarttracklogic = this.b((BlockPosition) this.f.get(i));
+        for (int i = 0; i < this.connections.size(); ++i) {
+            MinecartTrackLogic minecarttracklogic = this.b((BlockPosition) this.connections.get(i));
 
             if (minecarttracklogic != null && minecarttracklogic.a(this)) {
-                this.f.set(i, minecarttracklogic.b);
+                this.connections.set(i, minecarttracklogic.pos);
             } else {
-                this.f.remove(i--);
+                this.connections.remove(i--);
             }
         }
 
     }
 
     private boolean a(BlockPosition blockposition) {
-        return BlockMinecartTrackAbstract.a(this.a, blockposition) || BlockMinecartTrackAbstract.a(this.a, blockposition.up()) || BlockMinecartTrackAbstract.a(this.a, blockposition.down());
+        return BlockMinecartTrackAbstract.a(this.level, blockposition) || BlockMinecartTrackAbstract.a(this.level, blockposition.up()) || BlockMinecartTrackAbstract.a(this.level, blockposition.down());
     }
 
     @Nullable
     private MinecartTrackLogic b(BlockPosition blockposition) {
-        IBlockData iblockdata = this.a.getType(blockposition);
+        IBlockData iblockdata = this.level.getType(blockposition);
 
         if (BlockMinecartTrackAbstract.g(iblockdata)) {
-            return new MinecartTrackLogic(this.a, blockposition, iblockdata);
+            return new MinecartTrackLogic(this.level, blockposition, iblockdata);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
-            iblockdata = this.a.getType(blockposition1);
+            iblockdata = this.level.getType(blockposition1);
             if (BlockMinecartTrackAbstract.g(iblockdata)) {
-                return new MinecartTrackLogic(this.a, blockposition1, iblockdata);
+                return new MinecartTrackLogic(this.level, blockposition1, iblockdata);
             } else {
                 blockposition1 = blockposition.down();
-                iblockdata = this.a.getType(blockposition1);
-                return BlockMinecartTrackAbstract.g(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
+                iblockdata = this.level.getType(blockposition1);
+                return BlockMinecartTrackAbstract.g(iblockdata) ? new MinecartTrackLogic(this.level, blockposition1, iblockdata) : null;
             }
         }
     }
 
     private boolean a(MinecartTrackLogic minecarttracklogic) {
-        return this.c(minecarttracklogic.b);
+        return this.c(minecarttracklogic.pos);
     }
 
     private boolean c(BlockPosition blockposition) {
-        for (int i = 0; i < this.f.size(); ++i) {
-            BlockPosition blockposition1 = (BlockPosition) this.f.get(i);
+        for (int i = 0; i < this.connections.size(); ++i) {
+            BlockPosition blockposition1 = (BlockPosition) this.connections.get(i);
 
             if (blockposition1.getX() == blockposition.getX() && blockposition1.getZ() == blockposition.getZ()) {
                 return true;
@@ -140,7 +140,7 @@ public class MinecartTrackLogic {
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-            if (this.a(this.b.shift(enumdirection))) {
+            if (this.a(this.pos.shift(enumdirection))) {
                 ++i;
             }
         }
@@ -149,15 +149,15 @@ public class MinecartTrackLogic {
     }
 
     private boolean b(MinecartTrackLogic minecarttracklogic) {
-        return this.a(minecarttracklogic) || this.f.size() != 2;
+        return this.a(minecarttracklogic) || this.connections.size() != 2;
     }
 
     private void c(MinecartTrackLogic minecarttracklogic) {
-        this.f.add(minecarttracklogic.b);
-        BlockPosition blockposition = this.b.north();
-        BlockPosition blockposition1 = this.b.south();
-        BlockPosition blockposition2 = this.b.west();
-        BlockPosition blockposition3 = this.b.east();
+        this.connections.add(minecarttracklogic.pos);
+        BlockPosition blockposition = this.pos.north();
+        BlockPosition blockposition1 = this.pos.south();
+        BlockPosition blockposition2 = this.pos.west();
+        BlockPosition blockposition3 = this.pos.east();
         boolean flag = this.c(blockposition);
         boolean flag1 = this.c(blockposition1);
         boolean flag2 = this.c(blockposition2);
@@ -172,7 +172,7 @@ public class MinecartTrackLogic {
             blockpropertytrackposition = BlockPropertyTrackPosition.EAST_WEST;
         }
 
-        if (!this.e) {
+        if (!this.isStraight) {
             if (flag1 && flag3 && !flag && !flag2) {
                 blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_EAST;
             }
@@ -191,21 +191,21 @@ public class MinecartTrackLogic {
         }
 
         if (blockpropertytrackposition == BlockPropertyTrackPosition.NORTH_SOUTH) {
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition.up())) {
                 blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_NORTH;
             }
 
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition1.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition1.up())) {
                 blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_SOUTH;
             }
         }
 
         if (blockpropertytrackposition == BlockPropertyTrackPosition.EAST_WEST) {
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition3.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition3.up())) {
                 blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_EAST;
             }
 
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition2.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition2.up())) {
                 blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_WEST;
             }
         }
@@ -214,8 +214,8 @@ public class MinecartTrackLogic {
             blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
         }
 
-        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition);
-        this.a.setTypeAndData(this.b, this.d, 3);
+        this.state = (IBlockData) this.state.set(this.block.d(), blockpropertytrackposition);
+        this.level.setTypeAndData(this.pos, this.state, 3);
     }
 
     private boolean d(BlockPosition blockposition) {
@@ -230,10 +230,10 @@ public class MinecartTrackLogic {
     }
 
     public MinecartTrackLogic a(boolean flag, boolean flag1, BlockPropertyTrackPosition blockpropertytrackposition) {
-        BlockPosition blockposition = this.b.north();
-        BlockPosition blockposition1 = this.b.south();
-        BlockPosition blockposition2 = this.b.west();
-        BlockPosition blockposition3 = this.b.east();
+        BlockPosition blockposition = this.pos.north();
+        BlockPosition blockposition1 = this.pos.south();
+        BlockPosition blockposition2 = this.pos.west();
+        BlockPosition blockposition3 = this.pos.east();
         boolean flag2 = this.d(blockposition);
         boolean flag3 = this.d(blockposition1);
         boolean flag4 = this.d(blockposition2);
@@ -255,7 +255,7 @@ public class MinecartTrackLogic {
         boolean flag10 = flag2 && flag5;
         boolean flag11 = flag2 && flag4;
 
-        if (!this.e) {
+        if (!this.isStraight) {
             if (flag8 && !flag2 && !flag4) {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_EAST;
             }
@@ -282,7 +282,7 @@ public class MinecartTrackLogic {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.EAST_WEST;
             }
 
-            if (!this.e) {
+            if (!this.isStraight) {
                 if (flag) {
                     if (flag8) {
                         blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_EAST;
@@ -320,21 +320,21 @@ public class MinecartTrackLogic {
         }
 
         if (blockpropertytrackposition1 == BlockPropertyTrackPosition.NORTH_SOUTH) {
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition.up())) {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_NORTH;
             }
 
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition1.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition1.up())) {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_SOUTH;
             }
         }
 
         if (blockpropertytrackposition1 == BlockPropertyTrackPosition.EAST_WEST) {
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition3.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition3.up())) {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_EAST;
             }
 
-            if (BlockMinecartTrackAbstract.a(this.a, blockposition2.up())) {
+            if (BlockMinecartTrackAbstract.a(this.level, blockposition2.up())) {
                 blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_WEST;
             }
         }
@@ -344,12 +344,12 @@ public class MinecartTrackLogic {
         }
 
         this.a(blockpropertytrackposition1);
-        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition1);
-        if (flag1 || this.a.getType(this.b) != this.d) {
-            this.a.setTypeAndData(this.b, this.d, 3);
+        this.state = (IBlockData) this.state.set(this.block.d(), blockpropertytrackposition1);
+        if (flag1 || this.level.getType(this.pos) != this.state) {
+            this.level.setTypeAndData(this.pos, this.state, 3);
 
-            for (int i = 0; i < this.f.size(); ++i) {
-                MinecartTrackLogic minecarttracklogic = this.b((BlockPosition) this.f.get(i));
+            for (int i = 0; i < this.connections.size(); ++i) {
+                MinecartTrackLogic minecarttracklogic = this.b((BlockPosition) this.connections.get(i));
 
                 if (minecarttracklogic != null) {
                     minecarttracklogic.d();
@@ -364,6 +364,6 @@ public class MinecartTrackLogic {
     }
 
     public IBlockData c() {
-        return this.d;
+        return this.state;
     }
 }

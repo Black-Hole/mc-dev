@@ -13,7 +13,7 @@ public class DamageSourceNetherBed extends DamageSource {
 
     protected DamageSourceNetherBed() {
         super("badRespawnPoint");
-        this.r();
+        this.v();
         this.setExplosion();
     }
 

@@ -30,29 +30,31 @@ import org.apache.logging.log4j.Logger;
 public class RegistryGeneration {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<MinecraftKey, Supplier<?>> k = Maps.newLinkedHashMap();
-    private static final IRegistryWritable<IRegistryWritable<?>> l = new RegistryMaterials<>(ResourceKey.a(new MinecraftKey("root")), Lifecycle.experimental());
-    public static final IRegistry<? extends IRegistry<?>> b = RegistryGeneration.l;
-    public static final IRegistry<WorldGenSurfaceComposite<?>> c = a(IRegistry.as, () -> {
-        return WorldGenSurfaceComposites.p;
+    private static final Map<MinecraftKey, Supplier<?>> LOADERS = Maps.newLinkedHashMap();
+    private static final IRegistryWritable<IRegistryWritable<?>> WRITABLE_REGISTRY = new RegistryMaterials<>(ResourceKey.a(new MinecraftKey("root")), Lifecycle.experimental());
+    public static final IRegistry<? extends IRegistry<?>> REGISTRY = RegistryGeneration.WRITABLE_REGISTRY;
+    public static final IRegistry<WorldGenSurfaceComposite<?>> CONFIGURED_SURFACE_BUILDER = a(IRegistry.CONFIGURED_SURFACE_BUILDER_REGISTRY, () -> {
+        return WorldGenSurfaceComposites.NOPE;
     });
-    public static final IRegistry<WorldGenCarverWrapper<?>> d = a(IRegistry.at, () -> {
-        return WorldGenCarvers.a;
+    public static final IRegistry<WorldGenCarverWrapper<?>> CONFIGURED_CARVER = a(IRegistry.CONFIGURED_CARVER_REGISTRY, () -> {
+        return WorldGenCarvers.CAVE;
     });
-    public static final IRegistry<WorldGenFeatureConfigured<?, ?>> e = a(IRegistry.au, () -> {
+    public static final IRegistry<WorldGenFeatureConfigured<?, ?>> CONFIGURED_FEATURE = a(IRegistry.CONFIGURED_FEATURE_REGISTRY, () -> {
         return BiomeDecoratorGroups.OAK;
     });
-    public static final IRegistry<StructureFeature<?, ?>> f = a(IRegistry.av, () -> {
-        return StructureFeatures.b;
+    public static final IRegistry<StructureFeature<?, ?>> CONFIGURED_STRUCTURE_FEATURE = a(IRegistry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, () -> {
+        return StructureFeatures.MINESHAFT;
     });
-    public static final IRegistry<ProcessorList> g = a(IRegistry.aw, () -> {
-        return ProcessorLists.b;
+    public static final IRegistry<ProcessorList> PROCESSOR_LIST = a(IRegistry.PROCESSOR_LIST_REGISTRY, () -> {
+        return ProcessorLists.ZOMBIE_PLAINS;
     });
-    public static final IRegistry<WorldGenFeatureDefinedStructurePoolTemplate> h = a(IRegistry.ax, WorldGenFeaturePieces::a);
-    public static final IRegistry<BiomeBase> WORLDGEN_BIOME = a(IRegistry.ay, () -> {
-        return BiomeRegistry.a;
+    public static final IRegistry<WorldGenFeatureDefinedStructurePoolTemplate> TEMPLATE_POOL = a(IRegistry.TEMPLATE_POOL_REGISTRY, WorldGenFeaturePieces::a);
+    public static final IRegistry<BiomeBase> BIOME = a(IRegistry.BIOME_REGISTRY, () -> {
+        return BiomeRegistry.PLAINS;
     });
-    public static final IRegistry<GeneratorSettingBase> j = a(IRegistry.ar, GeneratorSettingBase::i);
+    public static final IRegistry<GeneratorSettingBase> NOISE_GENERATOR_SETTINGS = a(IRegistry.NOISE_GENERATOR_SETTINGS_REGISTRY, GeneratorSettingBase::o);
+
+    public RegistryGeneration() {}
 
     private static <T> IRegistry<T> a(ResourceKey<? extends IRegistry<T>> resourcekey, Supplier<T> supplier) {
         return a(resourcekey, Lifecycle.stable(), supplier);
@@ -65,8 +67,8 @@ public class RegistryGeneration {
     private static <T, R extends IRegistryWritable<T>> R a(ResourceKey<? extends IRegistry<T>> resourcekey, R r0, Supplier<T> supplier, Lifecycle lifecycle) {
         MinecraftKey minecraftkey = resourcekey.a();
 
-        RegistryGeneration.k.put(minecraftkey, supplier);
-        IRegistryWritable<R> iregistrywritable = RegistryGeneration.l;
+        RegistryGeneration.LOADERS.put(minecraftkey, supplier);
+        IRegistryWritable<R> iregistrywritable = RegistryGeneration.WRITABLE_REGISTRY;
 
         return (IRegistryWritable) iregistrywritable.a(resourcekey, (Object) r0, lifecycle);
     }
@@ -86,12 +88,12 @@ public class RegistryGeneration {
     public static void a() {}
 
     static {
-        RegistryGeneration.k.forEach((minecraftkey, supplier) -> {
+        RegistryGeneration.LOADERS.forEach((minecraftkey, supplier) -> {
             if (supplier.get() == null) {
                 RegistryGeneration.LOGGER.error("Unable to bootstrap registry '{}'", minecraftkey);
             }
 
         });
-        IRegistry.a(RegistryGeneration.l);
+        IRegistry.a(RegistryGeneration.WRITABLE_REGISTRY);
     }
 }

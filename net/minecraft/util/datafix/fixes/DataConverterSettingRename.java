@@ -9,22 +9,22 @@ import com.mojang.serialization.Dynamic;
 
 public class DataConverterSettingRename extends DataFix {
 
-    private final String a;
-    private final String b;
-    private final String c;
+    private final String fixName;
+    private final String fieldFrom;
+    private final String fieldTo;
 
     public DataConverterSettingRename(Schema schema, boolean flag, String s, String s1, String s2) {
         super(schema, flag);
-        this.a = s;
-        this.b = s1;
-        this.c = s2;
+        this.fixName = s;
+        this.fieldFrom = s1;
+        this.fieldTo = s2;
     }
 
     public TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped(this.a, this.getInputSchema().getType(DataConverterTypes.OPTIONS), (typed) -> {
+        return this.fixTypeEverywhereTyped(this.fixName, this.getInputSchema().getType(DataConverterTypes.OPTIONS), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
-                return (Dynamic) DataFixUtils.orElse(dynamic.get(this.b).result().map((dynamic1) -> {
-                    return dynamic.set(this.c, dynamic1).remove(this.b);
+                return (Dynamic) DataFixUtils.orElse(dynamic.get(this.fieldFrom).result().map((dynamic1) -> {
+                    return dynamic.set(this.fieldTo, dynamic1).remove(this.fieldFrom);
                 }), dynamic);
             });
         });

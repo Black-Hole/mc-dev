@@ -11,18 +11,18 @@ import com.mojang.serialization.DynamicOps;
 
 public abstract class DataConverterEntityName extends DataFix {
 
-    protected final String a;
+    protected final String name;
 
     public DataConverterEntityName(String s, Schema schema, boolean flag) {
         super(schema, flag);
-        this.a = s;
+        this.name = s;
     }
 
     public TypeRewriteRule makeRule() {
         TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
         TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
 
-        return this.fixTypeEverywhere(this.a, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
+        return this.fixTypeEverywhere(this.name, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {
                 String s = (String) pair.getFirst();
                 Type<?> type = (Type) taggedchoicetype.types().get(s);
@@ -32,7 +32,7 @@ public abstract class DataConverterEntityName extends DataFix {
                 if (!type1.equals(((Typed) pair1.getSecond()).getType(), true, true)) {
                     throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", type1, ((Typed) pair1.getSecond()).getType()));
                 } else {
-                    return Pair.of(pair1.getFirst(), ((Typed) pair1.getSecond()).getValue());
+                    return Pair.of((String) pair1.getFirst(), ((Typed) pair1.getSecond()).getValue());
                 }
             };
         });

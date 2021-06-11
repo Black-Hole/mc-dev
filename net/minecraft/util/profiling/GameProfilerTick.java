@@ -11,30 +11,40 @@ import org.apache.logging.log4j.Logger;
 public class GameProfilerTick {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final LongSupplier b;
-    private final long c;
-    private int d;
-    private final File e;
-    private GameProfilerFillerActive f;
+    private final LongSupplier realTime;
+    private final long saveThreshold;
+    private int tick;
+    private final File location;
+    private GameProfilerFillerActive profiler;
+
+    public GameProfilerTick(LongSupplier longsupplier, String s, long i) {
+        this.profiler = GameProfilerDisabled.INSTANCE;
+        this.realTime = longsupplier;
+        this.location = new File("debug", s);
+        this.saveThreshold = i;
+    }
 
     public GameProfilerFiller a() {
-        this.f = new MethodProfiler(this.b, () -> {
-            return this.d;
+        this.profiler = new MethodProfiler(this.realTime, () -> {
+            return this.tick;
         }, false);
-        ++this.d;
-        return this.f;
+        ++this.tick;
+        return this.profiler;
     }
 
     public void b() {
-        if (this.f != GameProfilerDisabled.a) {
-            MethodProfilerResults methodprofilerresults = this.f.d();
+        if (this.profiler != GameProfilerDisabled.INSTANCE) {
+            MethodProfilerResults methodprofilerresults = this.profiler.d();
 
-            this.f = GameProfilerDisabled.a;
-            if (methodprofilerresults.g() >= this.c) {
-                File file = new File(this.e, "tick-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
+            this.profiler = GameProfilerDisabled.INSTANCE;
+            if (methodprofilerresults.g() >= this.saveThreshold) {
+                File file = this.location;
+                SimpleDateFormat simpledateformat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+                Date date = new Date();
+                File file1 = new File(file, "tick-results-" + simpledateformat.format(date) + ".txt");
 
-                methodprofilerresults.a(file);
-                GameProfilerTick.LOGGER.info("Recorded long tick -- wrote info to: {}", file.getAbsolutePath());
+                methodprofilerresults.a(file1.toPath());
+                GameProfilerTick.LOGGER.info("Recorded long tick -- wrote info to: {}", file1.getAbsolutePath());
             }
 
         }

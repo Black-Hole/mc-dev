@@ -18,10 +18,11 @@ public class StatisticList {
     public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED_BY = a("killed_by", (IRegistry) IRegistry.ENTITY_TYPE);
     public static final StatisticWrapper<MinecraftKey> CUSTOM = a("custom", IRegistry.CUSTOM_STAT);
     public static final MinecraftKey LEAVE_GAME = a("leave_game", Counter.DEFAULT);
-    public static final MinecraftKey PLAY_ONE_MINUTE = a("play_one_minute", Counter.TIME);
+    public static final MinecraftKey PLAY_TIME = a("play_time", Counter.TIME);
+    public static final MinecraftKey TOTAL_WORLD_TIME = a("total_world_time", Counter.TIME);
     public static final MinecraftKey TIME_SINCE_DEATH = a("time_since_death", Counter.TIME);
     public static final MinecraftKey TIME_SINCE_REST = a("time_since_rest", Counter.TIME);
-    public static final MinecraftKey SNEAK_TIME = a("sneak_time", Counter.TIME);
+    public static final MinecraftKey CROUCH_TIME = a("sneak_time", Counter.TIME);
     public static final MinecraftKey WALK_ONE_CM = a("walk_one_cm", Counter.DISTANCE);
     public static final MinecraftKey CROUCH_ONE_CM = a("crouch_one_cm", Counter.DISTANCE);
     public static final MinecraftKey SPRINT_ONE_CM = a("sprint_one_cm", Counter.DISTANCE);
@@ -92,6 +93,8 @@ public class StatisticList {
     public static final MinecraftKey TARGET_HIT = a("target_hit", Counter.DEFAULT);
     public static final MinecraftKey INTERACT_WITH_SMITHING_TABLE = a("interact_with_smithing_table", Counter.DEFAULT);
 
+    public StatisticList() {}
+
     private static MinecraftKey a(String s, Counter counter) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
@@ -101,6 +104,6 @@ public class StatisticList {
     }
 
     private static <T> StatisticWrapper<T> a(String s, IRegistry<T> iregistry) {
-        return (StatisticWrapper) IRegistry.a(IRegistry.STATS, s, (Object) (new StatisticWrapper<>(iregistry)));
+        return (StatisticWrapper) IRegistry.a(IRegistry.STAT_TYPE, s, (Object) (new StatisticWrapper<>(iregistry)));
     }
 }

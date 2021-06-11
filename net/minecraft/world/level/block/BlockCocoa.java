@@ -23,15 +23,25 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.af;
-    protected static final VoxelShape[] b = new VoxelShape[]{Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
-    protected static final VoxelShape[] c = new VoxelShape[]{Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
-    protected static final VoxelShape[] d = new VoxelShape[]{Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
-    protected static final VoxelShape[] e = new VoxelShape[]{Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
+    public static final int MAX_AGE = 2;
+    public static final BlockStateInteger AGE = BlockProperties.AGE_2;
+    protected static final int AGE_0_WIDTH = 4;
+    protected static final int AGE_0_HEIGHT = 5;
+    protected static final int AGE_0_HALFWIDTH = 2;
+    protected static final int AGE_1_WIDTH = 6;
+    protected static final int AGE_1_HEIGHT = 7;
+    protected static final int AGE_1_HALFWIDTH = 3;
+    protected static final int AGE_2_WIDTH = 8;
+    protected static final int AGE_2_HEIGHT = 9;
+    protected static final int AGE_2_HALFWIDTH = 4;
+    protected static final VoxelShape[] EAST_AABB = new VoxelShape[]{Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] WEST_AABB = new VoxelShape[]{Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] NORTH_AABB = new VoxelShape[]{Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
+    protected static final VoxelShape[] SOUTH_AABB = new VoxelShape[]{Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
 
     public BlockCocoa(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
     }
 
     @Override
@@ -53,25 +63,25 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        Block block = iworldreader.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING))).getBlock();
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING)));
 
-        return block.a((Tag) TagsBlock.JUNGLE_LOGS);
+        return iblockdata1.a((Tag) TagsBlock.JUNGLE_LOGS);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
         switch ((EnumDirection) iblockdata.get(BlockCocoa.FACING)) {
             case SOUTH:
-                return BlockCocoa.e[i];
+                return BlockCocoa.SOUTH_AABB[i];
             case NORTH:
             default:
-                return BlockCocoa.d[i];
+                return BlockCocoa.NORTH_AABB[i];
             case WEST:
-                return BlockCocoa.c[i];
+                return BlockCocoa.WEST_AABB[i];
             case EAST:
-                return BlockCocoa.b[i];
+                return BlockCocoa.EAST_AABB[i];
         }
     }
 
@@ -81,7 +91,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         IBlockData iblockdata = this.getBlockData();
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {

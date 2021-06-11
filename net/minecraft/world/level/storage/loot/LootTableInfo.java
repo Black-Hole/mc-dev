@@ -8,6 +8,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -25,34 +27,42 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootTableInfo {
 
-    private final Random a;
+    private final Random random;
     private final float luck;
-    private final WorldServer world;
-    private final Function<MinecraftKey, LootTable> d;
-    private final Set<LootTable> e;
-    private final Function<MinecraftKey, LootItemCondition> f;
-    private final Set<LootItemCondition> g;
-    private final Map<LootContextParameter<?>, Object> h;
-    private final Map<MinecraftKey, LootTableInfo.b> i;
+    private final WorldServer level;
+    private final Function<MinecraftKey, LootTable> lootTables;
+    private final Set<LootTable> visitedTables = Sets.newLinkedHashSet();
+    private final Function<MinecraftKey, LootItemCondition> conditions;
+    private final Set<LootItemCondition> visitedConditions = Sets.newLinkedHashSet();
+    private final Map<LootContextParameter<?>, Object> params;
+    private final Map<MinecraftKey, LootTableInfo.b> dynamicDrops;
 
-    private LootTableInfo(Random random, float f, WorldServer worldserver, Function<MinecraftKey, LootTable> function, Function<MinecraftKey, LootItemCondition> function1, Map<LootContextParameter<?>, Object> map, Map<MinecraftKey, LootTableInfo.b> map1) {
-        this.e = Sets.newLinkedHashSet();
-        this.g = Sets.newLinkedHashSet();
-        this.a = random;
+    LootTableInfo(Random random, float f, WorldServer worldserver, Function<MinecraftKey, LootTable> function, Function<MinecraftKey, LootItemCondition> function1, Map<LootContextParameter<?>, Object> map, Map<MinecraftKey, LootTableInfo.b> map1) {
+        this.random = random;
         this.luck = f;
-        this.world = worldserver;
-        this.d = function;
-        this.f = function1;
-        this.h = ImmutableMap.copyOf(map);
-        this.i = ImmutableMap.copyOf(map1);
+        this.level = worldserver;
+        this.lootTables = function;
+        this.conditions = function1;
+        this.params = ImmutableMap.copyOf(map);
+        this.dynamicDrops = ImmutableMap.copyOf(map1);
     }
 
     public boolean hasContextParameter(LootContextParameter<?> lootcontextparameter) {
-        return this.h.containsKey(lootcontextparameter);
+        return this.params.containsKey(lootcontextparameter);
+    }
+
+    public <T> T b(LootContextParameter<T> lootcontextparameter) {
+        T t0 = this.params.get(lootcontextparameter);
+
+        if (t0 == null) {
+            throw new NoSuchElementException(lootcontextparameter.a().toString());
+        } else {
+            return t0;
+        }
     }
 
     public void a(MinecraftKey minecraftkey, Consumer<ItemStack> consumer) {
-        LootTableInfo.b loottableinfo_b = (LootTableInfo.b) this.i.get(minecraftkey);
+        LootTableInfo.b loottableinfo_b = (LootTableInfo.b) this.dynamicDrops.get(minecraftkey);
 
         if (loottableinfo_b != null) {
             loottableinfo_b.add(this, consumer);
@@ -62,35 +72,35 @@ public class LootTableInfo {
 
     @Nullable
     public <T> T getContextParameter(LootContextParameter<T> lootcontextparameter) {
-        return this.h.get(lootcontextparameter);
+        return this.params.get(lootcontextparameter);
     }
 
     public boolean a(LootTable loottable) {
-        return this.e.add(loottable);
+        return this.visitedTables.add(loottable);
     }
 
     public void b(LootTable loottable) {
-        this.e.remove(loottable);
+        this.visitedTables.remove(loottable);
     }
 
     public boolean a(LootItemCondition lootitemcondition) {
-        return this.g.add(lootitemcondition);
+        return this.visitedConditions.add(lootitemcondition);
     }
 
     public void b(LootItemCondition lootitemcondition) {
-        this.g.remove(lootitemcondition);
+        this.visitedConditions.remove(lootitemcondition);
     }
 
     public LootTable a(MinecraftKey minecraftkey) {
-        return (LootTable) this.d.apply(minecraftkey);
+        return (LootTable) this.lootTables.apply(minecraftkey);
     }
 
     public LootItemCondition b(MinecraftKey minecraftkey) {
-        return (LootItemCondition) this.f.apply(minecraftkey);
+        return (LootItemCondition) this.conditions.apply(minecraftkey);
     }
 
     public Random a() {
-        return this.a;
+        return this.random;
     }
 
     public float getLuck() {
@@ -98,23 +108,29 @@ public class LootTableInfo {
     }
 
     public WorldServer getWorld() {
-        return this.world;
+        return this.level;
+    }
+
+    @FunctionalInterface
+    public interface b {
+
+        void add(LootTableInfo loottableinfo, Consumer<ItemStack> consumer);
     }
 
     public static enum EntityTarget {
 
         THIS("this", LootContextParameters.THIS_ENTITY), KILLER("killer", LootContextParameters.KILLER_ENTITY), DIRECT_KILLER("direct_killer", LootContextParameters.DIRECT_KILLER_ENTITY), KILLER_PLAYER("killer_player", LootContextParameters.LAST_DAMAGE_PLAYER);
 
-        private final String e;
-        private final LootContextParameter<? extends Entity> f;
+        final String name;
+        private final LootContextParameter<? extends Entity> param;
 
         private EntityTarget(String s, LootContextParameter lootcontextparameter) {
-            this.e = s;
-            this.f = lootcontextparameter;
+            this.name = s;
+            this.param = lootcontextparameter;
         }
 
         public LootContextParameter<? extends Entity> a() {
-            return this.f;
+            return this.param;
         }
 
         public static LootTableInfo.EntityTarget a(String s) {
@@ -124,7 +140,7 @@ public class LootTableInfo {
             for (int j = 0; j < i; ++j) {
                 LootTableInfo.EntityTarget loottableinfo_entitytarget = aloottableinfo_entitytarget[j];
 
-                if (loottableinfo_entitytarget.e.equals(s)) {
+                if (loottableinfo_entitytarget.name.equals(s)) {
                     return loottableinfo_entitytarget;
                 }
             }
@@ -137,7 +153,7 @@ public class LootTableInfo {
             public a() {}
 
             public void write(JsonWriter jsonwriter, LootTableInfo.EntityTarget loottableinfo_entitytarget) throws IOException {
-                jsonwriter.value(loottableinfo_entitytarget.e);
+                jsonwriter.value(loottableinfo_entitytarget.name);
             }
 
             public LootTableInfo.EntityTarget read(JsonReader jsonreader) throws IOException {
@@ -148,24 +164,24 @@ public class LootTableInfo {
 
     public static class Builder {
 
-        private final WorldServer a;
-        private final Map<LootContextParameter<?>, Object> b = Maps.newIdentityHashMap();
-        private final Map<MinecraftKey, LootTableInfo.b> c = Maps.newHashMap();
-        private Random d;
-        private float e;
+        private final WorldServer level;
+        private final Map<LootContextParameter<?>, Object> params = Maps.newIdentityHashMap();
+        private final Map<MinecraftKey, LootTableInfo.b> dynamicDrops = Maps.newHashMap();
+        private Random random;
+        private float luck;
 
         public Builder(WorldServer worldserver) {
-            this.a = worldserver;
+            this.level = worldserver;
         }
 
         public LootTableInfo.Builder a(Random random) {
-            this.d = random;
+            this.random = random;
             return this;
         }
 
         public LootTableInfo.Builder a(long i) {
             if (i != 0L) {
-                this.d = new Random(i);
+                this.random = new Random(i);
             }
 
             return this;
@@ -173,50 +189,50 @@ public class LootTableInfo {
 
         public LootTableInfo.Builder a(long i, Random random) {
             if (i == 0L) {
-                this.d = random;
+                this.random = random;
             } else {
-                this.d = new Random(i);
+                this.random = new Random(i);
             }
 
             return this;
         }
 
         public LootTableInfo.Builder a(float f) {
-            this.e = f;
+            this.luck = f;
             return this;
         }
 
         public <T> LootTableInfo.Builder set(LootContextParameter<T> lootcontextparameter, T t0) {
-            this.b.put(lootcontextparameter, t0);
+            this.params.put(lootcontextparameter, t0);
             return this;
         }
 
         public <T> LootTableInfo.Builder setOptional(LootContextParameter<T> lootcontextparameter, @Nullable T t0) {
             if (t0 == null) {
-                this.b.remove(lootcontextparameter);
+                this.params.remove(lootcontextparameter);
             } else {
-                this.b.put(lootcontextparameter, t0);
+                this.params.put(lootcontextparameter, t0);
             }
 
             return this;
         }
 
         public LootTableInfo.Builder a(MinecraftKey minecraftkey, LootTableInfo.b loottableinfo_b) {
-            LootTableInfo.b loottableinfo_b1 = (LootTableInfo.b) this.c.put(minecraftkey, loottableinfo_b);
+            LootTableInfo.b loottableinfo_b1 = (LootTableInfo.b) this.dynamicDrops.put(minecraftkey, loottableinfo_b);
 
             if (loottableinfo_b1 != null) {
-                throw new IllegalStateException("Duplicated dynamic drop '" + this.c + "'");
+                throw new IllegalStateException("Duplicated dynamic drop '" + this.dynamicDrops + "'");
             } else {
                 return this;
             }
         }
 
         public WorldServer a() {
-            return this.a;
+            return this.level;
         }
 
         public <T> T a(LootContextParameter<T> lootcontextparameter) {
-            T t0 = this.b.get(lootcontextparameter);
+            T t0 = this.params.get(lootcontextparameter);
 
             if (t0 == null) {
                 throw new IllegalArgumentException("No parameter " + lootcontextparameter);
@@ -227,37 +243,39 @@ public class LootTableInfo {
 
         @Nullable
         public <T> T b(LootContextParameter<T> lootcontextparameter) {
-            return this.b.get(lootcontextparameter);
+            return this.params.get(lootcontextparameter);
         }
 
         public LootTableInfo build(LootContextParameterSet lootcontextparameterset) {
-            Set<LootContextParameter<?>> set = Sets.difference(this.b.keySet(), lootcontextparameterset.getOptional());
+            Set<LootContextParameter<?>> set = Sets.difference(this.params.keySet(), lootcontextparameterset.getOptional());
 
             if (!set.isEmpty()) {
                 throw new IllegalArgumentException("Parameters not allowed in this parameter set: " + set);
             } else {
-                Set<LootContextParameter<?>> set1 = Sets.difference(lootcontextparameterset.getRequired(), this.b.keySet());
+                Set<LootContextParameter<?>> set1 = Sets.difference(lootcontextparameterset.getRequired(), this.params.keySet());
 
                 if (!set1.isEmpty()) {
                     throw new IllegalArgumentException("Missing required parameters: " + set1);
                 } else {
-                    Random random = this.d;
+                    Random random = this.random;
 
                     if (random == null) {
                         random = new Random();
                     }
 
-                    MinecraftServer minecraftserver = this.a.getMinecraftServer();
+                    MinecraftServer minecraftserver = this.level.getMinecraftServer();
+                    float f = this.luck;
+                    WorldServer worldserver = this.level;
+                    LootTableRegistry loottableregistry = minecraftserver.getLootTableRegistry();
 
-                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.getLootPredicateManager()::a, this.b, this.c);
+                    Objects.requireNonNull(loottableregistry);
+                    Function function = loottableregistry::getLootTable;
+                    LootPredicateManager lootpredicatemanager = minecraftserver.getLootPredicateManager();
+
+                    Objects.requireNonNull(lootpredicatemanager);
+                    return new LootTableInfo(random, f, worldserver, function, lootpredicatemanager::a, this.params, this.dynamicDrops);
                 }
             }
         }
-    }
-
-    @FunctionalInterface
-    public interface b {
-
-        void add(LootTableInfo loottableinfo, Consumer<ItemStack> consumer);
     }
 }

@@ -1,27 +1,23 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
 
-    private PacketPlayInClientCommand.EnumClientCommand a;
-
-    public PacketPlayInClientCommand() {}
+    private final PacketPlayInClientCommand.EnumClientCommand action;
 
     public PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand packetplayinclientcommand_enumclientcommand) {
-        this.a = packetplayinclientcommand_enumclientcommand;
+        this.action = packetplayinclientcommand_enumclientcommand;
+    }
+
+    public PacketPlayInClientCommand(PacketDataSerializer packetdataserializer) {
+        this.action = (PacketPlayInClientCommand.EnumClientCommand) packetdataserializer.a(PacketPlayInClientCommand.EnumClientCommand.class);
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (PacketPlayInClientCommand.EnumClientCommand) packetdataserializer.a(PacketPlayInClientCommand.EnumClientCommand.class);
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.action);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -29,7 +25,7 @@ public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
     }
 
     public PacketPlayInClientCommand.EnumClientCommand b() {
-        return this.a;
+        return this.action;
     }
 
     public static enum EnumClientCommand {

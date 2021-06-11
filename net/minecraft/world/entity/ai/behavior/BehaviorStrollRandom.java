@@ -10,14 +10,17 @@ import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryTarget;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorStrollRandom extends Behavior<EntityCreature> {
 
-    private final float b;
-    private final int c;
-    private final int d;
+    private static final int MAX_XZ_DIST = 10;
+    private static final int MAX_Y_DIST = 7;
+    private final float speedModifier;
+    private final int maxXyDist;
+    private final int maxYDist;
 
     public BehaviorStrollRandom(float f) {
         this(f, 10, 7);
@@ -25,15 +28,15 @@ public class BehaviorStrollRandom extends Behavior<EntityCreature> {
 
     public BehaviorStrollRandom(float f, int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.b = f;
-        this.c = i;
-        this.d = j;
+        this.speedModifier = f;
+        this.maxXyDist = i;
+        this.maxYDist = j;
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
         BlockPosition blockposition = entitycreature.getChunkCoordinates();
 
-        if (worldserver.a_(blockposition)) {
+        if (worldserver.b(blockposition)) {
             this.a(entitycreature);
         } else {
             SectionPosition sectionposition = SectionPosition.a(blockposition);
@@ -49,18 +52,18 @@ public class BehaviorStrollRandom extends Behavior<EntityCreature> {
     }
 
     private void a(EntityCreature entitycreature, SectionPosition sectionposition) {
-        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, this.c, this.d, Vec3D.c((BaseBlockPosition) sectionposition.q())));
+        Optional<Vec3D> optional = Optional.ofNullable(DefaultRandomPos.a(entitycreature, this.maxXyDist, this.maxYDist, Vec3D.c((BaseBlockPosition) sectionposition.q()), 1.5707963705062866D));
 
         entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-            return new MemoryTarget(vec3d, this.b, 0);
+            return new MemoryTarget(vec3d, this.speedModifier, 0);
         }));
     }
 
     private void a(EntityCreature entitycreature) {
-        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, this.c, this.d));
+        Optional<Vec3D> optional = Optional.ofNullable(LandRandomPos.a(entitycreature, this.maxXyDist, this.maxYDist));
 
         entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-            return new MemoryTarget(vec3d, this.b, 0);
+            return new MemoryTarget(vec3d, this.speedModifier, 0);
         }));
     }
 }

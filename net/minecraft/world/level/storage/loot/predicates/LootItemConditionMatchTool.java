@@ -14,26 +14,26 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionMatchTool implements LootItemCondition {
 
-    private final CriterionConditionItem a;
+    final CriterionConditionItem predicate;
 
     public LootItemConditionMatchTool(CriterionConditionItem criterionconditionitem) {
-        this.a = criterionconditionitem;
+        this.predicate = criterionconditionitem;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.i;
+    public LootItemConditionType a() {
+        return LootItemConditions.MATCH_TOOL;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.TOOL);
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         ItemStack itemstack = (ItemStack) loottableinfo.getContextParameter(LootContextParameters.TOOL);
 
-        return itemstack != null && this.a.a(itemstack);
+        return itemstack != null && this.predicate.a(itemstack);
     }
 
     public static LootItemCondition.a a(CriterionConditionItem.a criterionconditionitem_a) {
@@ -47,7 +47,7 @@ public class LootItemConditionMatchTool implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionMatchTool lootitemconditionmatchtool, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("predicate", lootitemconditionmatchtool.a.a());
+            jsonobject.add("predicate", lootitemconditionmatchtool.predicate.a());
         }
 
         @Override

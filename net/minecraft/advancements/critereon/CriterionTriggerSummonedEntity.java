@@ -8,13 +8,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerSummonedEntity extends CriterionTriggerAbstract<CriterionTriggerSummonedEntity.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("summoned_entity");
+    static final MinecraftKey ID = new MinecraftKey("summoned_entity");
 
     public CriterionTriggerSummonedEntity() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerSummonedEntity.a;
+        return CriterionTriggerSummonedEntity.ID;
     }
 
     @Override
@@ -34,26 +34,26 @@ public class CriterionTriggerSummonedEntity extends CriterionTriggerAbstract<Cri
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b a;
+        private final CriterionConditionEntity.b entity;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1) {
-            super(CriterionTriggerSummonedEntity.a, criterionconditionentity_b);
-            this.a = criterionconditionentity_b1;
+            super(CriterionTriggerSummonedEntity.ID, criterionconditionentity_b);
+            this.entity = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerSummonedEntity.a a(CriterionConditionEntity.a criterionconditionentity_a) {
-            return new CriterionTriggerSummonedEntity.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
+            return new CriterionTriggerSummonedEntity.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
         }
 
         public boolean a(LootTableInfo loottableinfo) {
-            return this.a.a(loottableinfo);
+            return this.entity.a(loottableinfo);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("entity", this.a.a(lootserializationcontext));
+            jsonobject.add("entity", this.entity.a(lootserializationcontext));
             return jsonobject;
         }
     }

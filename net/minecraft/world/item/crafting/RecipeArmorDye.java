@@ -17,7 +17,7 @@ public class RecipeArmorDye extends IRecipeComplex {
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         List<ItemStack> list = Lists.newArrayList();
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
@@ -45,7 +45,7 @@ public class RecipeArmorDye extends IRecipeComplex {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         List<ItemDye> list = Lists.newArrayList();
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
@@ -55,13 +55,13 @@ public class RecipeArmorDye extends IRecipeComplex {
 
                 if (item instanceof IDyeable) {
                     if (!itemstack.isEmpty()) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
 
                     itemstack = itemstack1.cloneItemStack();
                 } else {
                     if (!(item instanceof ItemDye)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
 
                     list.add((ItemDye) item);
@@ -72,12 +72,17 @@ public class RecipeArmorDye extends IRecipeComplex {
         if (!itemstack.isEmpty() && !list.isEmpty()) {
             return IDyeable.a(itemstack, list);
         } else {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.c;
+        return RecipeSerializer.ARMOR_DYE;
     }
 }

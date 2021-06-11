@@ -15,7 +15,7 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterMaterialId extends DataFix {
 
-    public static final Int2ObjectMap<String> ID_MAPPING = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
+    public static final Int2ObjectMap<String> ITEM_NAMES = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
         int2objectopenhashmap.put(1, "minecraft:stone");
         int2objectopenhashmap.put(2, "minecraft:grass");
         int2objectopenhashmap.put(3, "minecraft:dirt");
@@ -339,7 +339,7 @@ public class DataConverterMaterialId extends DataFix {
     }
 
     public static String a(int i) {
-        return (String) DataConverterMaterialId.ID_MAPPING.get(i);
+        return (String) DataConverterMaterialId.ITEM_NAMES.get(i);
     }
 
     public TypeRewriteRule makeRule() {

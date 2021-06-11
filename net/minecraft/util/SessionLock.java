@@ -5,16 +5,19 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 public class SessionLock implements AutoCloseable {
 
-    private final FileChannel a;
-    private final FileLock b;
-    private static final ByteBuffer c;
+    public static final String LOCK_FILE = "session.lock";
+    private final FileChannel lockFile;
+    private final FileLock lock;
+    private static final ByteBuffer DUMMY;
 
     public static SessionLock a(Path path) throws IOException {
         Path path1 = path.resolve("session.lock");
@@ -26,7 +29,7 @@ public class SessionLock implements AutoCloseable {
         FileChannel filechannel = FileChannel.open(path1, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 
         try {
-            filechannel.write(SessionLock.c.duplicate());
+            filechannel.write(SessionLock.DUMMY.duplicate());
             filechannel.force(true);
             FileLock filelock = filechannel.tryLock();
 
@@ -47,18 +50,18 @@ public class SessionLock implements AutoCloseable {
     }
 
     private SessionLock(FileChannel filechannel, FileLock filelock) {
-        this.a = filechannel;
-        this.b = filelock;
+        this.lockFile = filechannel;
+        this.lock = filelock;
     }
 
     public void close() throws IOException {
         try {
-            if (this.b.isValid()) {
-                this.b.release();
+            if (this.lock.isValid()) {
+                this.lock.release();
             }
         } finally {
-            if (this.a.isOpen()) {
-                this.a.close();
+            if (this.lockFile.isOpen()) {
+                this.lockFile.close();
             }
 
         }
@@ -66,21 +69,75 @@ public class SessionLock implements AutoCloseable {
     }
 
     public boolean a() {
-        return this.b.isValid();
+        return this.lock.isValid();
+    }
+
+    public static boolean b(Path path) throws IOException {
+        Path path1 = path.resolve("session.lock");
+
+        try {
+            FileChannel filechannel = FileChannel.open(path1, StandardOpenOption.WRITE);
+
+            boolean flag;
+
+            try {
+                FileLock filelock = filechannel.tryLock();
+
+                try {
+                    flag = filelock == null;
+                } catch (Throwable throwable) {
+                    if (filelock != null) {
+                        try {
+                            filelock.close();
+                        } catch (Throwable throwable1) {
+                            throwable.addSuppressed(throwable1);
+                        }
+                    }
+
+                    throw throwable;
+                }
+
+                if (filelock != null) {
+                    filelock.close();
+                }
+            } catch (Throwable throwable2) {
+                if (filechannel != null) {
+                    try {
+                        filechannel.close();
+                    } catch (Throwable throwable3) {
+                        throwable2.addSuppressed(throwable3);
+                    }
+                }
+
+                throw throwable2;
+            }
+
+            if (filechannel != null) {
+                filechannel.close();
+            }
+
+            return flag;
+        } catch (AccessDeniedException accessdeniedexception) {
+            return true;
+        } catch (NoSuchFileException nosuchfileexception) {
+            return false;
+        }
     }
 
     static {
         byte[] abyte = "\u2603".getBytes(Charsets.UTF_8);
 
-        c = ByteBuffer.allocateDirect(abyte.length);
-        SessionLock.c.put(abyte);
-        SessionLock.c.flip();
+        DUMMY = ByteBuffer.allocateDirect(abyte.length);
+        SessionLock.DUMMY.put(abyte);
+        SessionLock.DUMMY.flip();
     }
 
     public static class ExceptionWorldConflict extends IOException {
 
         private ExceptionWorldConflict(Path path, String s) {
-            super(path.toAbsolutePath() + ": " + s);
+            Path path1 = path.toAbsolutePath();
+
+            super(path1 + ": " + s);
         }
 
         public static SessionLock.ExceptionWorldConflict a(Path path) {

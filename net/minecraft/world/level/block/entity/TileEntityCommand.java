@@ -19,11 +19,11 @@ import net.minecraft.world.phys.Vec3D;
 
 public class TileEntityCommand extends TileEntity {
 
-    private boolean a;
-    private boolean b;
-    private boolean c;
-    private boolean g;
-    private final CommandBlockListenerAbstract h = new CommandBlockListenerAbstract() {
+    private boolean powered;
+    private boolean auto;
+    private boolean conditionMet;
+    private boolean sendToClient;
+    private final CommandBlockListenerAbstract commandBlock = new CommandBlockListenerAbstract() {
         @Override
         public void setCommand(String s) {
             super.setCommand(s);
@@ -31,54 +31,59 @@ public class TileEntityCommand extends TileEntity {
         }
 
         @Override
-        public WorldServer d() {
-            return (WorldServer) TileEntityCommand.this.world;
+        public WorldServer e() {
+            return (WorldServer) TileEntityCommand.this.level;
         }
 
         @Override
-        public void e() {
-            IBlockData iblockdata = TileEntityCommand.this.world.getType(TileEntityCommand.this.position);
+        public void f() {
+            IBlockData iblockdata = TileEntityCommand.this.level.getType(TileEntityCommand.this.worldPosition);
 
-            this.d().notify(TileEntityCommand.this.position, iblockdata, iblockdata, 3);
+            this.e().notify(TileEntityCommand.this.worldPosition, iblockdata, iblockdata, 3);
+        }
+
+        @Override
+        public Vec3D g() {
+            return Vec3D.a((BaseBlockPosition) TileEntityCommand.this.worldPosition);
         }
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, Vec3D.a((BaseBlockPosition) TileEntityCommand.this.position), Vec2F.a, this.d(), 2, this.getName().getString(), this.getName(), this.d().getMinecraftServer(), (Entity) null);
+            return new CommandListenerWrapper(this, Vec3D.a((BaseBlockPosition) TileEntityCommand.this.worldPosition), Vec2F.ZERO, this.e(), 2, this.getName().getString(), this.getName(), this.e().getMinecraftServer(), (Entity) null);
         }
     };
 
-    public TileEntityCommand() {
-        super(TileEntityTypes.COMMAND_BLOCK);
+    public TileEntityCommand(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.COMMAND_BLOCK, blockposition, iblockdata);
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        this.h.a(nbttagcompound);
+        this.commandBlock.a(nbttagcompound);
         nbttagcompound.setBoolean("powered", this.f());
-        nbttagcompound.setBoolean("conditionMet", this.j());
+        nbttagcompound.setBoolean("conditionMet", this.i());
         nbttagcompound.setBoolean("auto", this.g());
         return nbttagcompound;
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.h.b(nbttagcompound);
-        this.a = nbttagcompound.getBoolean("powered");
-        this.c = nbttagcompound.getBoolean("conditionMet");
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.commandBlock.b(nbttagcompound);
+        this.powered = nbttagcompound.getBoolean("powered");
+        this.conditionMet = nbttagcompound.getBoolean("conditionMet");
         this.b(nbttagcompound.getBoolean("auto"));
     }
 
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        if (this.l()) {
+        if (this.s()) {
             this.c(false);
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
-            return new PacketPlayOutTileEntityData(this.position, 2, nbttagcompound);
+            return new PacketPlayOutTileEntityData(this.worldPosition, 2, nbttagcompound);
         } else {
             return null;
         }
@@ -90,95 +95,89 @@ public class TileEntityCommand extends TileEntity {
     }
 
     public CommandBlockListenerAbstract getCommandBlock() {
-        return this.h;
+        return this.commandBlock;
     }
 
     public void a(boolean flag) {
-        this.a = flag;
+        this.powered = flag;
     }
 
     public boolean f() {
-        return this.a;
+        return this.powered;
     }
 
     public boolean g() {
-        return this.b;
+        return this.auto;
     }
 
     public void b(boolean flag) {
-        boolean flag1 = this.b;
+        boolean flag1 = this.auto;
 
-        this.b = flag;
-        if (!flag1 && flag && !this.a && this.world != null && this.m() != TileEntityCommand.Type.SEQUENCE) {
-            this.y();
+        this.auto = flag;
+        if (!flag1 && flag && !this.powered && this.level != null && this.t() != TileEntityCommand.Type.SEQUENCE) {
+            this.v();
         }
 
     }
 
     public void h() {
-        TileEntityCommand.Type tileentitycommand_type = this.m();
+        TileEntityCommand.Type tileentitycommand_type = this.t();
 
-        if (tileentitycommand_type == TileEntityCommand.Type.AUTO && (this.a || this.b) && this.world != null) {
-            this.y();
+        if (tileentitycommand_type == TileEntityCommand.Type.AUTO && (this.powered || this.auto) && this.level != null) {
+            this.v();
         }
 
     }
 
-    private void y() {
+    private void v() {
         Block block = this.getBlock().getBlock();
 
         if (block instanceof BlockCommand) {
-            this.k();
-            this.world.getBlockTickList().a(this.position, block, 1);
+            this.j();
+            this.level.getBlockTickList().a(this.worldPosition, block, 1);
         }
 
+    }
+
+    public boolean i() {
+        return this.conditionMet;
     }
 
     public boolean j() {
-        return this.c;
-    }
+        this.conditionMet = true;
+        if (this.u()) {
+            BlockPosition blockposition = this.worldPosition.shift(((EnumDirection) this.level.getType(this.worldPosition).get(BlockCommand.FACING)).opposite());
 
-    public boolean k() {
-        this.c = true;
-        if (this.x()) {
-            BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
+            if (this.level.getType(blockposition).getBlock() instanceof BlockCommand) {
+                TileEntity tileentity = this.level.getTileEntity(blockposition);
 
-            if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
-                TileEntity tileentity = this.world.getTileEntity(blockposition);
-
-                this.c = tileentity instanceof TileEntityCommand && ((TileEntityCommand) tileentity).getCommandBlock().i() > 0;
+                this.conditionMet = tileentity instanceof TileEntityCommand && ((TileEntityCommand) tileentity).getCommandBlock().j() > 0;
             } else {
-                this.c = false;
+                this.conditionMet = false;
             }
         }
 
-        return this.c;
+        return this.conditionMet;
     }
 
-    public boolean l() {
-        return this.g;
+    public boolean s() {
+        return this.sendToClient;
     }
 
     public void c(boolean flag) {
-        this.g = flag;
+        this.sendToClient = flag;
     }
 
-    public TileEntityCommand.Type m() {
+    public TileEntityCommand.Type t() {
         IBlockData iblockdata = this.getBlock();
 
         return iblockdata.a(Blocks.COMMAND_BLOCK) ? TileEntityCommand.Type.REDSTONE : (iblockdata.a(Blocks.REPEATING_COMMAND_BLOCK) ? TileEntityCommand.Type.AUTO : (iblockdata.a(Blocks.CHAIN_COMMAND_BLOCK) ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
-    public boolean x() {
-        IBlockData iblockdata = this.world.getType(this.getPosition());
+    public boolean u() {
+        IBlockData iblockdata = this.level.getType(this.getPosition());
 
-        return iblockdata.getBlock() instanceof BlockCommand ? (Boolean) iblockdata.get(BlockCommand.b) : false;
-    }
-
-    @Override
-    public void r() {
-        this.invalidateBlockCache();
-        super.r();
+        return iblockdata.getBlock() instanceof BlockCommand ? (Boolean) iblockdata.get(BlockCommand.CONDITIONAL) : false;
     }
 
     public static enum Type {

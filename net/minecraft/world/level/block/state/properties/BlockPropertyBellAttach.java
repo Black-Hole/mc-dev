@@ -6,14 +6,14 @@ public enum BlockPropertyBellAttach implements INamable {
 
     FLOOR("floor"), CEILING("ceiling"), SINGLE_WALL("single_wall"), DOUBLE_WALL("double_wall");
 
-    private final String e;
+    private final String name;
 
     private BlockPropertyBellAttach(String s) {
-        this.e = s;
+        this.name = s;
     }
 
     @Override
     public String getName() {
-        return this.e;
+        return this.name;
     }
 }

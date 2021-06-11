@@ -19,10 +19,10 @@ import org.apache.logging.log4j.Logger;
 public abstract class ResourcePackAbstract implements IResourcePack {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    protected final File a;
+    protected final File file;
 
     public ResourcePackAbstract(File file) {
-        this.a = file;
+        this.file = file;
     }
 
     private static String c(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
@@ -45,38 +45,44 @@ public abstract class ResourcePackAbstract implements IResourcePack {
 
     protected abstract InputStream a(String s) throws IOException;
 
+    @Override
+    public InputStream b(String s) throws IOException {
+        if (!s.contains("/") && !s.contains("\\")) {
+            return this.a(s);
+        } else {
+            throw new IllegalArgumentException("Root resources can only be filenames, not paths (no / allowed!)");
+        }
+    }
+
     protected abstract boolean c(String s);
 
     protected void d(String s) {
-        ResourcePackAbstract.LOGGER.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", s, this.a);
+        ResourcePackAbstract.LOGGER.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", s, this.file);
     }
 
     @Nullable
     @Override
     public <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) throws IOException {
         InputStream inputstream = this.a("pack.mcmeta");
-        Throwable throwable = null;
 
         Object object;
 
         try {
             object = a(resourcepackmetaparser, inputstream);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
+        } catch (Throwable throwable) {
             if (inputstream != null) {
-                if (throwable != null) {
-                    try {
-                        inputstream.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
+                try {
                     inputstream.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
             }
 
+            throw throwable;
+        }
+
+        if (inputstream != null) {
+            inputstream.close();
         }
 
         return object;
@@ -88,27 +94,20 @@ public abstract class ResourcePackAbstract implements IResourcePack {
 
         try {
             BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
-            Throwable throwable = null;
 
             try {
                 jsonobject = ChatDeserializer.a((Reader) bufferedreader);
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (bufferedreader != null) {
-                    if (throwable != null) {
-                        try {
-                            bufferedreader.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
-                        bufferedreader.close();
-                    }
+            } catch (Throwable throwable) {
+                try {
+                    bufferedreader.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
 
+                throw throwable;
             }
+
+            bufferedreader.close();
         } catch (JsonParseException | IOException ioexception) {
             ResourcePackAbstract.LOGGER.error("Couldn't load {} metadata", resourcepackmetaparser.a(), ioexception);
             return null;
@@ -128,6 +127,6 @@ public abstract class ResourcePackAbstract implements IResourcePack {
 
     @Override
     public String a() {
-        return this.a.getName();
+        return this.file.getName();
     }
 }

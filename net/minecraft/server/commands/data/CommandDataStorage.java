@@ -11,6 +11,7 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.ICompletionProvider;
 import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
 import net.minecraft.commands.arguments.ArgumentNBTKey;
+import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -20,56 +21,56 @@ import net.minecraft.world.level.storage.PersistentCommandStorage;
 
 public class CommandDataStorage implements CommandDataAccessor {
 
-    private static final SuggestionProvider<CommandListenerWrapper> b = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(b(commandcontext).a(), suggestionsbuilder);
+    static final SuggestionProvider<CommandListenerWrapper> SUGGEST_STORAGE = (commandcontext, suggestionsbuilder) -> {
+        return ICompletionProvider.a(a(commandcontext).a(), suggestionsbuilder);
     };
-    public static final Function<String, CommandData.c> a = (s) -> {
+    public static final Function<String, CommandData.c> PROVIDER = (s) -> {
         return new CommandData.c() {
             @Override
             public CommandDataAccessor a(CommandContext<CommandListenerWrapper> commandcontext) {
-                return new CommandDataStorage(CommandDataStorage.b(commandcontext), ArgumentMinecraftKeyRegistered.e(commandcontext, s));
+                return new CommandDataStorage(CommandDataStorage.a(commandcontext), ArgumentMinecraftKeyRegistered.f(commandcontext, s));
             }
 
             @Override
             public ArgumentBuilder<CommandListenerWrapper, ?> a(ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, Function<ArgumentBuilder<CommandListenerWrapper, ?>, ArgumentBuilder<CommandListenerWrapper, ?>> function) {
-                return argumentbuilder.then(CommandDispatcher.a("storage").then((ArgumentBuilder) function.apply(CommandDispatcher.a(s, (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandDataStorage.b))));
+                return argumentbuilder.then(CommandDispatcher.a("storage").then((ArgumentBuilder) function.apply(CommandDispatcher.a(s, (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandDataStorage.SUGGEST_STORAGE))));
             }
         };
     };
-    private final PersistentCommandStorage c;
-    private final MinecraftKey d;
+    private final PersistentCommandStorage storage;
+    private final MinecraftKey id;
 
-    private static PersistentCommandStorage b(CommandContext<CommandListenerWrapper> commandcontext) {
-        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aI();
+    static PersistentCommandStorage a(CommandContext<CommandListenerWrapper> commandcontext) {
+        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aH();
     }
 
-    private CommandDataStorage(PersistentCommandStorage persistentcommandstorage, MinecraftKey minecraftkey) {
-        this.c = persistentcommandstorage;
-        this.d = minecraftkey;
+    CommandDataStorage(PersistentCommandStorage persistentcommandstorage, MinecraftKey minecraftkey) {
+        this.storage = persistentcommandstorage;
+        this.id = minecraftkey;
     }
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.c.a(this.d, nbttagcompound);
+        this.storage.a(this.id, nbttagcompound);
     }
 
     @Override
     public NBTTagCompound a() {
-        return this.c.a(this.d);
+        return this.storage.a(this.id);
     }
 
     @Override
     public IChatBaseComponent b() {
-        return new ChatMessage("commands.data.storage.modified", new Object[]{this.d});
+        return new ChatMessage("commands.data.storage.modified", new Object[]{this.id});
     }
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.storage.query", new Object[]{this.d, nbtbase.l()});
+        return new ChatMessage("commands.data.storage.query", new Object[]{this.id, GameProfileSerializer.c(nbtbase)});
     }
 
     @Override
-    public IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i) {
-        return new ChatMessage("commands.data.storage.get", new Object[]{argumentnbtkey_h, this.d, String.format(Locale.ROOT, "%.2f", d0), i});
+    public IChatBaseComponent a(ArgumentNBTKey.g argumentnbtkey_g, double d0, int i) {
+        return new ChatMessage("commands.data.storage.get", new Object[]{argumentnbtkey_g, this.id, String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

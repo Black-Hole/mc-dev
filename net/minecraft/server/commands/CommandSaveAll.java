@@ -10,7 +10,9 @@ import net.minecraft.server.MinecraftServer;
 
 public class CommandSaveAll {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.failed"));
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.save.failed"));
+
+    public CommandSaveAll() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("save-all").requires((commandlistenerwrapper) -> {
@@ -30,7 +32,7 @@ public class CommandSaveAll {
         boolean flag1 = minecraftserver.saveChunks(true, flag, true);
 
         if (!flag1) {
-            throw CommandSaveAll.a.create();
+            throw CommandSaveAll.ERROR_FAILED.create();
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.success"), true);
             return 1;

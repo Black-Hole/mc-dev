@@ -6,7 +6,7 @@ import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
 
 public class DragonControllerPhase<T extends IDragonController> {
 
-    private static DragonControllerPhase<?>[] l = new DragonControllerPhase[0];
+    private static DragonControllerPhase<?>[] phases = new DragonControllerPhase[0];
     public static final DragonControllerPhase<DragonControllerHold> HOLDING_PATTERN = a(DragonControllerHold.class, "HoldingPattern");
     public static final DragonControllerPhase<DragonControllerStrafe> STRAFE_PLAYER = a(DragonControllerStrafe.class, "StrafePlayer");
     public static final DragonControllerPhase<DragonControllerLandingFly> LANDING_APPROACH = a(DragonControllerLandingFly.class, "LandingApproach");
@@ -17,15 +17,15 @@ public class DragonControllerPhase<T extends IDragonController> {
     public static final DragonControllerPhase<DragonControllerLandedAttack> SITTING_ATTACKING = a(DragonControllerLandedAttack.class, "SittingAttacking");
     public static final DragonControllerPhase<DragonControllerCharge> CHARGING_PLAYER = a(DragonControllerCharge.class, "ChargingPlayer");
     public static final DragonControllerPhase<DragonControllerDying> DYING = a(DragonControllerDying.class, "Dying");
-    public static final DragonControllerPhase<DragonControllerHover> HOVER = a(DragonControllerHover.class, "Hover");
-    private final Class<? extends IDragonController> m;
-    private final int n;
-    private final String o;
+    public static final DragonControllerPhase<DragonControllerHover> HOVERING = a(DragonControllerHover.class, "Hover");
+    private final Class<? extends IDragonController> instanceClass;
+    private final int id;
+    private final String name;
 
     private DragonControllerPhase(int i, Class<? extends IDragonController> oclass, String s) {
-        this.n = i;
-        this.m = oclass;
-        this.o = s;
+        this.id = i;
+        this.instanceClass = oclass;
+        this.name = s;
     }
 
     public IDragonController a(EntityEnderDragon entityenderdragon) {
@@ -39,30 +39,30 @@ public class DragonControllerPhase<T extends IDragonController> {
     }
 
     protected Constructor<? extends IDragonController> a() throws NoSuchMethodException {
-        return this.m.getConstructor(EntityEnderDragon.class);
+        return this.instanceClass.getConstructor(EntityEnderDragon.class);
     }
 
     public int b() {
-        return this.n;
+        return this.id;
     }
 
     public String toString() {
-        return this.o + " (#" + this.n + ")";
+        return this.name + " (#" + this.id + ")";
     }
 
     public static DragonControllerPhase<?> getById(int i) {
-        return i >= 0 && i < DragonControllerPhase.l.length ? DragonControllerPhase.l[i] : DragonControllerPhase.HOLDING_PATTERN;
+        return i >= 0 && i < DragonControllerPhase.phases.length ? DragonControllerPhase.phases[i] : DragonControllerPhase.HOLDING_PATTERN;
     }
 
     public static int c() {
-        return DragonControllerPhase.l.length;
+        return DragonControllerPhase.phases.length;
     }
 
     private static <T extends IDragonController> DragonControllerPhase<T> a(Class<T> oclass, String s) {
-        DragonControllerPhase<T> dragoncontrollerphase = new DragonControllerPhase<>(DragonControllerPhase.l.length, oclass, s);
+        DragonControllerPhase<T> dragoncontrollerphase = new DragonControllerPhase<>(DragonControllerPhase.phases.length, oclass, s);
 
-        DragonControllerPhase.l = (DragonControllerPhase[]) Arrays.copyOf(DragonControllerPhase.l, DragonControllerPhase.l.length + 1);
-        DragonControllerPhase.l[dragoncontrollerphase.b()] = dragoncontrollerphase;
+        DragonControllerPhase.phases = (DragonControllerPhase[]) Arrays.copyOf(DragonControllerPhase.phases, DragonControllerPhase.phases.length + 1);
+        DragonControllerPhase.phases[dragoncontrollerphase.b()] = dragoncontrollerphase;
         return dragoncontrollerphase;
     }
 }

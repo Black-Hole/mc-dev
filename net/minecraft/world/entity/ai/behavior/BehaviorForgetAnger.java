@@ -17,7 +17,7 @@ public class BehaviorForgetAnger<E extends EntityInsentient> extends Behavior<E>
 
     protected void a(WorldServer worldserver, E e0, long i) {
         BehaviorUtil.a((EntityLiving) e0, MemoryModuleType.ANGRY_AT).ifPresent((entityliving) -> {
-            if (entityliving.dl() && (entityliving.getEntityType() != EntityTypes.PLAYER || worldserver.getGameRules().getBoolean(GameRules.FORGIVE_DEAD_PLAYERS))) {
+            if (entityliving.dV() && (entityliving.getEntityType() != EntityTypes.PLAYER || worldserver.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS))) {
                 e0.getBehaviorController().removeMemory(MemoryModuleType.ANGRY_AT);
             }
 

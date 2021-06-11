@@ -26,18 +26,18 @@ import org.apache.logging.log4j.Logger;
 public class LightEngineThreaded extends LightEngine implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final ThreadedMailbox<Runnable> b;
-    private final ObjectList<Pair<LightEngineThreaded.Update, Runnable>> c = new ObjectArrayList();
-    private final PlayerChunkMap d;
-    private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> e;
-    private volatile int f = 5;
-    private final AtomicBoolean g = new AtomicBoolean();
+    private final ThreadedMailbox<Runnable> taskMailbox;
+    private final ObjectList<Pair<LightEngineThreaded.Update, Runnable>> lightTasks = new ObjectArrayList();
+    private final PlayerChunkMap chunkMap;
+    private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> sorterMailbox;
+    private volatile int taskPerBatch = 5;
+    private final AtomicBoolean scheduled = new AtomicBoolean();
 
     public LightEngineThreaded(ILightAccess ilightaccess, PlayerChunkMap playerchunkmap, boolean flag, ThreadedMailbox<Runnable> threadedmailbox, Mailbox<ChunkTaskQueueSorter.a<Runnable>> mailbox) {
         super(ilightaccess, true, flag);
-        this.d = playerchunkmap;
-        this.e = mailbox;
-        this.b = threadedmailbox;
+        this.chunkMap = playerchunkmap;
+        this.sorterMailbox = mailbox;
+        this.taskMailbox = threadedmailbox;
     }
 
     public void close() {}
@@ -56,7 +56,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     public void a(BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.immutableCopy();
 
-        this.a(blockposition.getX() >> 4, blockposition.getZ() >> 4, LightEngineThreaded.Update.POST_UPDATE, SystemUtils.a(() -> {
+        this.a(SectionPosition.a(blockposition.getX()), SectionPosition.a(blockposition.getZ()), LightEngineThreaded.Update.POST_UPDATE, SystemUtils.a(() -> {
             super.a(blockposition1);
         }, () -> {
             return "checkBlock " + blockposition1;
@@ -72,17 +72,17 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
 
             int i;
 
-            for (i = -1; i < 17; ++i) {
+            for (i = this.c(); i < this.d(); ++i) {
                 super.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null, true);
                 super.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null, true);
             }
 
-            for (i = 0; i < 16; ++i) {
+            for (i = this.levelHeightAccessor.getMinSection(); i < this.levelHeightAccessor.getMaxSection(); ++i) {
                 super.a(SectionPosition.a(chunkcoordintpair, i), true);
             }
 
         }, () -> {
-            return "updateChunkStatus " + chunkcoordintpair + " " + true;
+            return "updateChunkStatus " + chunkcoordintpair + " true";
         }));
     }
 
@@ -118,14 +118,14 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     private void a(int i, int j, LightEngineThreaded.Update lightenginethreaded_update, Runnable runnable) {
-        this.a(i, j, this.d.c(ChunkCoordIntPair.pair(i, j)), lightenginethreaded_update, runnable);
+        this.a(i, j, this.chunkMap.c(ChunkCoordIntPair.pair(i, j)), lightenginethreaded_update, runnable);
     }
 
     private void a(int i, int j, IntSupplier intsupplier, LightEngineThreaded.Update lightenginethreaded_update, Runnable runnable) {
-        this.e.a(ChunkTaskQueueSorter.a(() -> {
-            this.c.add(Pair.of(lightenginethreaded_update, runnable));
-            if (this.c.size() >= this.f) {
-                this.b();
+        this.sorterMailbox.a(ChunkTaskQueueSorter.a(() -> {
+            this.lightTasks.add(Pair.of(lightenginethreaded_update, runnable));
+            if (this.lightTasks.size() >= this.taskPerBatch) {
+                this.e();
             }
 
         }, ChunkCoordIntPair.pair(i, j), intsupplier));
@@ -149,22 +149,24 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
         this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
             ChunkSection[] achunksection = ichunkaccess.getSections();
 
-            for (int i = 0; i < 16; ++i) {
+            for (int i = 0; i < ichunkaccess.getSectionsCount(); ++i) {
                 ChunkSection chunksection = achunksection[i];
 
                 if (!ChunkSection.a(chunksection)) {
-                    super.a(SectionPosition.a(chunkcoordintpair, i), false);
+                    int j = this.levelHeightAccessor.getSectionYFromSectionIndex(i);
+
+                    super.a(SectionPosition.a(chunkcoordintpair, j), false);
                 }
             }
 
             super.a(chunkcoordintpair, true);
             if (!flag) {
-                ichunkaccess.m().forEach((blockposition) -> {
-                    super.a(blockposition, ichunkaccess.g(blockposition));
+                ichunkaccess.n().forEach((blockposition) -> {
+                    super.a(blockposition, ichunkaccess.h(blockposition));
                 });
             }
 
-            this.d.c(chunkcoordintpair);
+            this.chunkMap.c(chunkcoordintpair);
         }, () -> {
             return "lightChunk " + chunkcoordintpair + " " + flag;
         }));
@@ -178,18 +180,18 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     public void queueUpdate() {
-        if ((!this.c.isEmpty() || super.a()) && this.g.compareAndSet(false, true)) {
-            this.b.a((Object) (() -> {
-                this.b();
-                this.g.set(false);
+        if ((!this.lightTasks.isEmpty() || super.z_()) && this.scheduled.compareAndSet(false, true)) {
+            this.taskMailbox.a((Object) (() -> {
+                this.e();
+                this.scheduled.set(false);
             }));
         }
 
     }
 
-    private void b() {
-        int i = Math.min(this.c.size(), this.f);
-        ObjectListIterator<Pair<LightEngineThreaded.Update, Runnable>> objectlistiterator = this.c.iterator();
+    private void e() {
+        int i = Math.min(this.lightTasks.size(), this.taskPerBatch);
+        ObjectListIterator<Pair<LightEngineThreaded.Update, Runnable>> objectlistiterator = this.lightTasks.iterator();
 
         Pair pair;
         int j;
@@ -216,10 +218,10 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     public void a(int i) {
-        this.f = i;
+        this.taskPerBatch = i;
     }
 
-    static enum Update {
+    private static enum Update {
 
         PRE_UPDATE, POST_UPDATE;
 

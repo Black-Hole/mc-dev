@@ -16,7 +16,9 @@ import net.minecraft.server.players.PlayerList;
 
 public class CommandOp {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.op.failed"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_OP = new SimpleCommandExceptionType(new ChatMessage("commands.op.failed"));
+
+    public CommandOp() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("op").requires((commandlistenerwrapper) -> {
@@ -50,7 +52,7 @@ public class CommandOp {
         }
 
         if (i == 0) {
-            throw CommandOp.a.create();
+            throw CommandOp.ERROR_ALREADY_OP.create();
         } else {
             return i;
         }

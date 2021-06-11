@@ -4,34 +4,34 @@ import net.minecraft.world.entity.monster.EntityZombie;
 
 public class PathfinderGoalZombieAttack extends PathfinderGoalMeleeAttack {
 
-    private final EntityZombie b;
-    private int c;
+    private final EntityZombie zombie;
+    private int raiseArmTicks;
 
     public PathfinderGoalZombieAttack(EntityZombie entityzombie, double d0, boolean flag) {
         super(entityzombie, d0, flag);
-        this.b = entityzombie;
+        this.zombie = entityzombie;
     }
 
     @Override
     public void c() {
         super.c();
-        this.c = 0;
+        this.raiseArmTicks = 0;
     }
 
     @Override
     public void d() {
         super.d();
-        this.b.setAggressive(false);
+        this.zombie.setAggressive(false);
     }
 
     @Override
     public void e() {
         super.e();
-        ++this.c;
-        if (this.c >= 5 && this.j() < this.k() / 2) {
-            this.b.setAggressive(true);
+        ++this.raiseArmTicks;
+        if (this.raiseArmTicks >= 5 && this.j() < this.k() / 2) {
+            this.zombie.setAggressive(true);
         } else {
-            this.b.setAggressive(false);
+            this.zombie.setAggressive(false);
         }
 
     }

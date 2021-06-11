@@ -15,12 +15,17 @@ public abstract class BlockGlassAbstract extends BlockHalfTransparent {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public float b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return 1.0F;
+    }
+
+    @Override
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 }

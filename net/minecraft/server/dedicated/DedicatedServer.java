@@ -7,11 +7,14 @@ import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.datafixers.DataFixer;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -19,15 +22,16 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-import net.minecraft.CrashReport;
 import net.minecraft.DefaultUncaughtExceptionHandler;
 import net.minecraft.SharedConstants;
+import net.minecraft.SystemReport;
 import net.minecraft.SystemUtils;
 import net.minecraft.ThreadNamedUncaughtExceptionHandler;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.DataPackResources;
 import net.minecraft.server.IMinecraftServer;
 import net.minecraft.server.MinecraftServer;
@@ -62,23 +66,28 @@ import org.apache.logging.log4j.Logger;
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final Pattern k = Pattern.compile("^[a-fA-F0-9]{40}$");
-    private final List<ServerCommand> serverCommandQueue = Collections.synchronizedList(Lists.newArrayList());
-    private RemoteStatusListener remoteStatusListener;
-    public final RemoteControlCommandListener remoteControlCommandListener;
-    private RemoteControlListener remoteControlListener;
-    public DedicatedServerSettings propertyManager;
+    static final Logger LOGGER = LogManager.getLogger();
+    private static final int CONVERSION_RETRY_DELAY_MS = 5000;
+    private static final int CONVERSION_RETRIES = 2;
+    private static final Pattern SHA1 = Pattern.compile("^[a-fA-F0-9]{40}$");
+    private final List<ServerCommand> consoleInput = Collections.synchronizedList(Lists.newArrayList());
+    private RemoteStatusListener queryThreadGs4;
+    public final RemoteControlCommandListener rconConsoleSource;
+    private RemoteControlListener rconThread;
+    public DedicatedServerSettings settings;
     @Nullable
-    private ServerGUI q;
+    private ServerGUI gui;
     @Nullable
-    private final TextFilter r;
+    private final TextFilter textFilterClient;
+    @Nullable
+    private final IChatBaseComponent resourcePackPrompt;
 
     public DedicatedServer(Thread thread, IRegistryCustom.Dimension iregistrycustom_dimension, Convertable.ConversionSession convertable_conversionsession, ResourcePackRepository resourcepackrepository, DataPackResources datapackresources, SaveData savedata, DedicatedServerSettings dedicatedserversettings, DataFixer datafixer, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory) {
         super(thread, iregistrycustom_dimension, convertable_conversionsession, savedata, resourcepackrepository, Proxy.NO_PROXY, datafixer, datapackresources, minecraftsessionservice, gameprofilerepository, usercache, worldloadlistenerfactory);
-        this.propertyManager = dedicatedserversettings;
-        this.remoteControlCommandListener = new RemoteControlCommandListener(this);
-        this.r = null;
+        this.settings = dedicatedserversettings;
+        this.rconConsoleSource = new RemoteControlCommandListener(this);
+        this.textFilterClient = TextFilter.a(dedicatedserversettings.getProperties().textFilteringConfig);
+        this.resourcePackPrompt = a(dedicatedserversettings);
     }
 
     @Override
@@ -103,13 +112,13 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         thread.setDaemon(true);
         thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(DedicatedServer.LOGGER));
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version " + SharedConstants.getGameVersion().getName());
+        DedicatedServer.LOGGER.info("Starting minecraft server version {}", SharedConstants.getGameVersion().getName());
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
 
         DedicatedServer.LOGGER.info("Loading properties");
-        DedicatedServerProperties dedicatedserverproperties = this.propertyManager.getProperties();
+        DedicatedServerProperties dedicatedserverproperties = this.settings.getProperties();
 
         if (this.isEmbeddedServer()) {
             this.a_("127.0.0.1");
@@ -121,12 +130,11 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         this.setPVP(dedicatedserverproperties.pvp);
         this.setAllowFlight(dedicatedserverproperties.allowFlight);
-        this.setResourcePack(dedicatedserverproperties.resourcePack, this.ba());
+        this.setResourcePack(dedicatedserverproperties.resourcePack, this.bf());
         this.setMotd(dedicatedserverproperties.motd);
-        this.setForceGamemode(dedicatedserverproperties.forceGamemode);
         super.setIdleTimeout((Integer) dedicatedserverproperties.playerIdleTimeout.get());
-        this.i(dedicatedserverproperties.enforceWhitelist);
-        this.saveData.setGameType(dedicatedserverproperties.gamemode);
+        this.h(dedicatedserverproperties.enforceWhitelist);
+        this.worldData.setGameType(dedicatedserverproperties.gamemode);
         DedicatedServer.LOGGER.info("Default game type: {}", dedicatedserverproperties.gamemode);
         InetAddress inetaddress = null;
 
@@ -138,7 +146,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             this.setPort(dedicatedserverproperties.serverPort);
         }
 
-        this.P();
+        this.Q();
         DedicatedServer.LOGGER.info("Starting Minecraft server on {}:{}", this.getServerIp().isEmpty() ? "*" : this.getServerIp(), this.getPort());
 
         try {
@@ -164,10 +172,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         if (!NameReferencingFileConverter.e(this)) {
             return false;
         } else {
-            this.a((PlayerList) (new DedicatedPlayerList(this, this.customRegistry, this.worldNBTStorage)));
+            this.a((PlayerList) (new DedicatedPlayerList(this, this.registryHolder, this.playerDataStorage)));
             long i = SystemUtils.getMonotonicNanos();
 
-            this.c(dedicatedserverproperties.maxBuildHeight);
             TileEntitySkull.a(this.getUserCache());
             TileEntitySkull.a(this.getMinecraftSessionService());
             UserCache.a(this.getOnlineMode());
@@ -178,17 +185,17 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
             DedicatedServer.LOGGER.info("Done ({})! For help, type \"help\"", s);
             if (dedicatedserverproperties.announcePlayerAchievements != null) {
-                ((GameRules.GameRuleBoolean) this.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS)).a(dedicatedserverproperties.announcePlayerAchievements, (MinecraftServer) this);
+                ((GameRules.GameRuleBoolean) this.getGameRules().get(GameRules.RULE_ANNOUNCE_ADVANCEMENTS)).a(dedicatedserverproperties.announcePlayerAchievements, (MinecraftServer) this);
             }
 
             if (dedicatedserverproperties.enableQuery) {
                 DedicatedServer.LOGGER.info("Starting GS4 status listener");
-                this.remoteStatusListener = RemoteStatusListener.a((IMinecraftServer) this);
+                this.queryThreadGs4 = RemoteStatusListener.a((IMinecraftServer) this);
             }
 
             if (dedicatedserverproperties.enableRcon) {
                 DedicatedServer.LOGGER.info("Starting remote control listener");
-                this.remoteControlListener = RemoteControlListener.a((IMinecraftServer) this);
+                this.rconThread = RemoteControlListener.a((IMinecraftServer) this);
             }
 
             if (this.getMaxTickTime() > 0L) {
@@ -200,9 +207,10 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 thread1.start();
             }
 
-            Items.AIR.a(CreativeModeTab.g, NonNullList.a());
+            Items.AIR.a(CreativeModeTab.TAB_SEARCH, NonNullList.a());
             if (dedicatedserverproperties.enableJmxMonitoring) {
                 MinecraftServerBeans.a((MinecraftServer) this);
+                DedicatedServer.LOGGER.info("JMX monitoring enabled");
             }
 
             return true;
@@ -216,16 +224,16 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public boolean getSpawnMonsters() {
-        return this.propertyManager.getProperties().spawnMonsters && super.getSpawnMonsters();
+        return this.settings.getProperties().spawnMonsters && super.getSpawnMonsters();
     }
 
     @Override
     public boolean getSpawnNPCs() {
-        return this.propertyManager.getProperties().spawnNpcs && super.getSpawnNPCs();
+        return this.settings.getProperties().spawnNpcs && super.getSpawnNPCs();
     }
 
-    public String ba() {
-        DedicatedServerProperties dedicatedserverproperties = this.propertyManager.getProperties();
+    public String bf() {
+        DedicatedServerProperties dedicatedserverproperties = this.settings.getProperties();
         String s;
 
         if (!dedicatedserverproperties.resourcePackSha1.isEmpty()) {
@@ -240,7 +248,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             s = "";
         }
 
-        if (!s.isEmpty() && !DedicatedServer.k.matcher(s).matches()) {
+        if (!s.isEmpty() && !DedicatedServer.SHA1.matcher(s).matches()) {
             DedicatedServer.LOGGER.warn("Invalid sha1 for ressource-pack-sha1");
         }
 
@@ -253,7 +261,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public DedicatedServerProperties getDedicatedServerProperties() {
-        return this.propertyManager.getProperties();
+        return this.settings.getProperties();
     }
 
     @Override
@@ -267,15 +275,49 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public CrashReport b(CrashReport crashreport) {
-        crashreport = super.b(crashreport);
-        crashreport.g().a("Is Modded", () -> {
+    public SystemReport a(SystemReport systemreport) {
+        systemreport.a("Is Modded", () -> {
             return (String) this.getModded().orElse("Unknown (can't tell)");
         });
-        crashreport.g().a("Type", () -> {
+        systemreport.a("Type", () -> {
             return "Dedicated Server (map_server.txt)";
         });
-        return crashreport;
+        return systemreport;
+    }
+
+    @Override
+    public void a(Path path) throws IOException {
+        DedicatedServerProperties dedicatedserverproperties = this.getDedicatedServerProperties();
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
+
+        try {
+            bufferedwriter.write(String.format("sync-chunk-writes=%s%n", dedicatedserverproperties.syncChunkWrites));
+            bufferedwriter.write(String.format("gamemode=%s%n", dedicatedserverproperties.gamemode));
+            bufferedwriter.write(String.format("spawn-monsters=%s%n", dedicatedserverproperties.spawnMonsters));
+            bufferedwriter.write(String.format("entity-broadcast-range-percentage=%d%n", dedicatedserverproperties.entityBroadcastRangePercentage));
+            bufferedwriter.write(String.format("max-world-size=%d%n", dedicatedserverproperties.maxWorldSize));
+            bufferedwriter.write(String.format("spawn-npcs=%s%n", dedicatedserverproperties.spawnNpcs));
+            bufferedwriter.write(String.format("view-distance=%d%n", dedicatedserverproperties.viewDistance));
+            bufferedwriter.write(String.format("spawn-animals=%s%n", dedicatedserverproperties.spawnAnimals));
+            bufferedwriter.write(String.format("generate-structures=%s%n", dedicatedserverproperties.a((IRegistryCustom) this.registryHolder).shouldGenerateMapFeatures()));
+            bufferedwriter.write(String.format("use-native=%s%n", dedicatedserverproperties.useNativeTransport));
+            bufferedwriter.write(String.format("rate-limit=%d%n", dedicatedserverproperties.rateLimitPacketsPerSecond));
+        } catch (Throwable throwable) {
+            if (bufferedwriter != null) {
+                try {
+                    bufferedwriter.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
+                }
+            }
+
+            throw throwable;
+        }
+
+        if (bufferedwriter != null) {
+            bufferedwriter.close();
+        }
+
     }
 
     @Override
@@ -287,20 +329,20 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public void exit() {
-        if (this.r != null) {
-            this.r.close();
+        if (this.textFilterClient != null) {
+            this.textFilterClient.close();
         }
 
-        if (this.q != null) {
-            this.q.b();
+        if (this.gui != null) {
+            this.gui.b();
         }
 
-        if (this.remoteControlListener != null) {
-            this.remoteControlListener.b();
+        if (this.rconThread != null) {
+            this.rconThread.b();
         }
 
-        if (this.remoteStatusListener != null) {
-            this.remoteStatusListener.b();
+        if (this.queryThreadGs4 != null) {
+            this.queryThreadGs4.b();
         }
 
     }
@@ -318,36 +360,41 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        mojangstatisticsgenerator.a("whitelist_enabled", this.getPlayerList().getHasWhitelist());
-        mojangstatisticsgenerator.a("whitelist_count", this.getPlayerList().getWhitelisted().length);
+        mojangstatisticsgenerator.a("whitelist_enabled", (Object) this.getPlayerList().getHasWhitelist());
+        mojangstatisticsgenerator.a("whitelist_count", (Object) this.getPlayerList().getWhitelisted().length);
         super.a(mojangstatisticsgenerator);
     }
 
+    @Override
+    public boolean V() {
+        return this.getDedicatedServerProperties().snooperEnabled;
+    }
+
     public void issueCommand(String s, CommandListenerWrapper commandlistenerwrapper) {
-        this.serverCommandQueue.add(new ServerCommand(s, commandlistenerwrapper));
+        this.consoleInput.add(new ServerCommand(s, commandlistenerwrapper));
     }
 
     public void handleCommandQueue() {
-        while (!this.serverCommandQueue.isEmpty()) {
-            ServerCommand servercommand = (ServerCommand) this.serverCommandQueue.remove(0);
+        while (!this.consoleInput.isEmpty()) {
+            ServerCommand servercommand = (ServerCommand) this.consoleInput.remove(0);
 
-            this.getCommandDispatcher().a(servercommand.source, servercommand.command);
+            this.getCommandDispatcher().a(servercommand.source, servercommand.msg);
         }
 
     }
 
     @Override
-    public boolean j() {
+    public boolean k() {
         return true;
     }
 
     @Override
-    public int k() {
-        return this.getDedicatedServerProperties().rateLimit;
+    public int l() {
+        return this.getDedicatedServerProperties().rateLimitPacketsPerSecond;
     }
 
     @Override
-    public boolean l() {
+    public boolean m() {
         return this.getDedicatedServerProperties().useNativeTransport;
     }
 
@@ -357,40 +404,35 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public boolean n() {
+    public boolean o() {
         return true;
     }
 
     @Override
-    public String h_() {
+    public String b() {
         return this.getServerIp();
     }
 
     @Override
-    public int p() {
+    public int d() {
         return this.getPort();
     }
 
     @Override
-    public String i_() {
+    public String q() {
         return this.getMotd();
     }
 
-    public void bd() {
-        if (this.q == null) {
-            this.q = ServerGUI.a(this);
+    public void bi() {
+        if (this.gui == null) {
+            this.gui = ServerGUI.a(this);
         }
 
     }
 
     @Override
     public boolean ah() {
-        return this.q != null;
-    }
-
-    @Override
-    public boolean a(EnumGamemode enumgamemode, boolean flag, int i) {
-        return false;
+        return this.gui != null;
     }
 
     @Override
@@ -424,30 +466,30 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public boolean am() {
+    public boolean al() {
         return this.getDedicatedServerProperties().enableStatus;
     }
 
     @Override
-    public int g() {
+    public int h() {
         return this.getDedicatedServerProperties().opPermissionLevel;
     }
 
     @Override
-    public int h() {
+    public int i() {
         return this.getDedicatedServerProperties().functionPermissionLevel;
     }
 
     @Override
     public void setIdleTimeout(int i) {
         super.setIdleTimeout(i);
-        this.propertyManager.setProperty((dedicatedserverproperties) -> {
+        this.settings.setProperty((dedicatedserverproperties) -> {
             return (DedicatedServerProperties) dedicatedserverproperties.playerIdleTimeout.set(this.getCustomRegistry(), i);
         });
     }
 
     @Override
-    public boolean i() {
+    public boolean j() {
         return this.getDedicatedServerProperties().broadcastRconToOps;
     }
 
@@ -457,12 +499,12 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public int au() {
+    public int at() {
         return this.getDedicatedServerProperties().maxWorldSize;
     }
 
     @Override
-    public int ax() {
+    public int aw() {
         return this.getDedicatedServerProperties().networkCompressionThreshold;
     }
 
@@ -474,7 +516,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the user banlist, retrying in a few seconds");
-                this.bo();
+                this.bt();
             }
 
             flag = NameReferencingFileConverter.a((MinecraftServer) this);
@@ -485,7 +527,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag1 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the ip banlist, retrying in a few seconds");
-                this.bo();
+                this.bt();
             }
 
             flag1 = NameReferencingFileConverter.b((MinecraftServer) this);
@@ -496,10 +538,10 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag2 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the op list, retrying in a few seconds");
-                this.bo();
+                this.bt();
             }
 
-            flag2 = NameReferencingFileConverter.c((MinecraftServer) this);
+            flag2 = NameReferencingFileConverter.c(this);
         }
 
         boolean flag3 = false;
@@ -507,7 +549,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag3 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the whitelist, retrying in a few seconds");
-                this.bo();
+                this.bt();
             }
 
             flag3 = NameReferencingFileConverter.d(this);
@@ -518,7 +560,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag4 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the player save files, retrying in a few seconds");
-                this.bo();
+                this.bt();
             }
 
             flag4 = NameReferencingFileConverter.a(this);
@@ -527,7 +569,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         return flag || flag1 || flag2 || flag3 || flag4;
     }
 
-    private void bo() {
+    private void bt() {
         try {
             Thread.sleep(5000L);
         } catch (InterruptedException interruptedexception) {
@@ -546,15 +588,15 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public String executeRemoteCommand(String s) {
-        this.remoteControlCommandListener.clearMessages();
+        this.rconConsoleSource.clearMessages();
         this.executeSync(() -> {
-            this.getCommandDispatcher().a(this.remoteControlCommandListener.getWrapper(), s);
+            this.getCommandDispatcher().a(this.rconConsoleSource.getWrapper(), s);
         });
-        return this.remoteControlCommandListener.getMessages();
+        return this.rconConsoleSource.getMessages();
     }
 
     public void setHasWhitelist(boolean flag) {
-        this.propertyManager.setProperty((dedicatedserverproperties) -> {
+        this.settings.setProperty((dedicatedserverproperties) -> {
             return (DedicatedServerProperties) dedicatedserverproperties.whiteList.set(this.getCustomRegistry(), flag);
         });
     }
@@ -577,17 +619,48 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public String getWorld() {
-        return this.convertable.getLevelName();
+        return this.storageSource.getLevelName();
     }
 
     @Override
     public boolean isSyncChunkWrites() {
-        return this.propertyManager.getProperties().syncChunkWrites;
+        return this.settings.getProperties().syncChunkWrites;
+    }
+
+    @Override
+    public ITextFilter a(EntityPlayer entityplayer) {
+        return this.textFilterClient != null ? this.textFilterClient.a(entityplayer.getProfile()) : ITextFilter.DUMMY;
+    }
+
+    @Override
+    public boolean aY() {
+        return this.settings.getProperties().requireResourcePack;
     }
 
     @Nullable
     @Override
-    public ITextFilter a(EntityPlayer entityplayer) {
-        return this.r != null ? this.r.a(entityplayer.getProfile()) : null;
+    public EnumGamemode aZ() {
+        return this.settings.getProperties().forceGameMode ? this.worldData.getGameType() : null;
+    }
+
+    @Nullable
+    private static IChatBaseComponent a(DedicatedServerSettings dedicatedserversettings) {
+        String s = dedicatedserversettings.getProperties().resourcePackPrompt;
+
+        if (!Strings.isNullOrEmpty(s)) {
+            try {
+                return IChatBaseComponent.ChatSerializer.a(s);
+            } catch (Exception exception) {
+                DedicatedServer.LOGGER.warn("Failed to parse resource pack prompt '{}'", s, exception);
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public IChatBaseComponent bb() {
+        return this.resourcePackPrompt;
     }
 }

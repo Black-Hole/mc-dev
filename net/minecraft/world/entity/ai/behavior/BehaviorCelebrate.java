@@ -21,7 +21,7 @@ import net.minecraft.world.item.Items;
 public class BehaviorCelebrate extends Behavior<EntityVillager> {
 
     @Nullable
-    private Raid b;
+    private Raid currentRaid;
 
     public BehaviorCelebrate(int i, int j) {
         super(ImmutableMap.of(), i, j);
@@ -30,16 +30,16 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         BlockPosition blockposition = entityvillager.getChunkCoordinates();
 
-        this.b = worldserver.b_(blockposition);
-        return this.b != null && this.b.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
+        this.currentRaid = worldserver.c(blockposition);
+        return this.currentRaid != null && this.currentRaid.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
     }
 
     protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.b != null && !this.b.isStopped();
+        return this.currentRaid != null && !this.currentRaid.isStopped();
     }
 
     protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.b = null;
+        this.currentRaid = null;
         entityvillager.getBehaviorController().a(worldserver.getDayTime(), worldserver.getTime());
     }
 
@@ -47,16 +47,16 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.eR();
+            entityvillager.fA();
         }
 
         if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, entityvillager.getChunkCoordinates())) {
             EnumColor enumcolor = (EnumColor) SystemUtils.a((Object[]) EnumColor.values(), random);
             int j = random.nextInt(3);
             ItemStack itemstack = this.a(enumcolor, j);
-            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.world, entityvillager, entityvillager.locX(), entityvillager.getHeadY(), entityvillager.locZ(), itemstack);
+            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.level, entityvillager, entityvillager.locX(), entityvillager.getHeadY(), entityvillager.locZ(), itemstack);
 
-            entityvillager.world.addEntity(entityfireworks);
+            entityvillager.level.addEntity(entityfireworks);
         }
 
     }

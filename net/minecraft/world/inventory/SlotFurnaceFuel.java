@@ -6,24 +6,24 @@ import net.minecraft.world.item.Items;
 
 public class SlotFurnaceFuel extends Slot {
 
-    private final ContainerFurnace a;
+    private final ContainerFurnace menu;
 
     public SlotFurnaceFuel(ContainerFurnace containerfurnace, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
-        this.a = containerfurnace;
+        this.menu = containerfurnace;
     }
 
     @Override
     public boolean isAllowed(ItemStack itemstack) {
-        return this.a.b(itemstack) || c_(itemstack);
+        return this.menu.d(itemstack) || c(itemstack);
     }
 
     @Override
     public int getMaxStackSize(ItemStack itemstack) {
-        return c_(itemstack) ? 1 : super.getMaxStackSize(itemstack);
+        return c(itemstack) ? 1 : super.getMaxStackSize(itemstack);
     }
 
-    public static boolean c_(ItemStack itemstack) {
-        return itemstack.getItem() == Items.BUCKET;
+    public static boolean c(ItemStack itemstack) {
+        return itemstack.a(Items.BUCKET);
     }
 }

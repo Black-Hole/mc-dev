@@ -8,6 +8,8 @@ interface VoxelShapeMerger {
 
     boolean a(VoxelShapeMerger.a voxelshapemerger_a);
 
+    int size();
+
     public interface a {
 
         boolean merge(int i, int j, int k);

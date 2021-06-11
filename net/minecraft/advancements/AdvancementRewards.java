@@ -26,24 +26,28 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class AdvancementRewards {
 
-    public static final AdvancementRewards a = new AdvancementRewards(0, new MinecraftKey[0], new MinecraftKey[0], CustomFunction.a.a);
-    private final int b;
-    private final MinecraftKey[] c;
-    private final MinecraftKey[] d;
-    private final CustomFunction.a e;
+    public static final AdvancementRewards EMPTY = new AdvancementRewards(0, new MinecraftKey[0], new MinecraftKey[0], CustomFunction.a.NONE);
+    private final int experience;
+    private final MinecraftKey[] loot;
+    private final MinecraftKey[] recipes;
+    private final CustomFunction.a function;
 
     public AdvancementRewards(int i, MinecraftKey[] aminecraftkey, MinecraftKey[] aminecraftkey1, CustomFunction.a customfunction_a) {
-        this.b = i;
-        this.c = aminecraftkey;
-        this.d = aminecraftkey1;
-        this.e = customfunction_a;
+        this.experience = i;
+        this.loot = aminecraftkey;
+        this.recipes = aminecraftkey1;
+        this.function = customfunction_a;
+    }
+
+    public MinecraftKey[] a() {
+        return this.recipes;
     }
 
     public void a(EntityPlayer entityplayer) {
-        entityplayer.giveExp(this.b);
+        entityplayer.giveExp(this.experience);
         LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entityplayer).set(LootContextParameters.ORIGIN, entityplayer.getPositionVector()).a(entityplayer.getRandom()).build(LootContextParameterSets.ADVANCEMENT_REWARD);
         boolean flag = false;
-        MinecraftKey[] aminecraftkey = this.c;
+        MinecraftKey[] aminecraftkey = this.loot;
         int i = aminecraftkey.length;
 
         for (int j = 0; j < i; ++j) {
@@ -53,14 +57,14 @@ public class AdvancementRewards {
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
 
-                if (entityplayer.g(itemstack)) {
-                    entityplayer.world.playSound((EntityHuman) null, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ(), SoundEffects.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                if (entityplayer.j(itemstack)) {
+                    entityplayer.level.playSound((EntityHuman) null, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ(), SoundEffects.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     flag = true;
                 } else {
                     EntityItem entityitem = entityplayer.drop(itemstack, false);
 
                     if (entityitem != null) {
-                        entityitem.n();
+                        entityitem.o();
                         entityitem.setOwner(entityplayer.getUniqueID());
                     }
                 }
@@ -68,32 +72,32 @@ public class AdvancementRewards {
         }
 
         if (flag) {
-            entityplayer.defaultContainer.c();
+            entityplayer.containerMenu.d();
         }
 
-        if (this.d.length > 0) {
-            entityplayer.a(this.d);
+        if (this.recipes.length > 0) {
+            entityplayer.a(this.recipes);
         }
 
         MinecraftServer minecraftserver = entityplayer.server;
 
-        this.e.a(minecraftserver.getFunctionData()).ifPresent((customfunction) -> {
+        this.function.a(minecraftserver.getFunctionData()).ifPresent((customfunction) -> {
             minecraftserver.getFunctionData().a(customfunction, entityplayer.getCommandListener().a().a(2));
         });
     }
 
     public String toString() {
-        return "AdvancementRewards{experience=" + this.b + ", loot=" + Arrays.toString(this.c) + ", recipes=" + Arrays.toString(this.d) + ", function=" + this.e + '}';
+        return "AdvancementRewards{experience=" + this.experience + ", loot=" + Arrays.toString(this.loot) + ", recipes=" + Arrays.toString(this.recipes) + ", function=" + this.function + "}";
     }
 
     public JsonElement b() {
-        if (this == AdvancementRewards.a) {
+        if (this == AdvancementRewards.EMPTY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (this.b != 0) {
-                jsonobject.addProperty("experience", this.b);
+            if (this.experience != 0) {
+                jsonobject.addProperty("experience", this.experience);
             }
 
             JsonArray jsonarray;
@@ -102,9 +106,9 @@ public class AdvancementRewards {
             MinecraftKey minecraftkey;
             int j;
 
-            if (this.c.length > 0) {
+            if (this.loot.length > 0) {
                 jsonarray = new JsonArray();
-                aminecraftkey = this.c;
+                aminecraftkey = this.loot;
                 i = aminecraftkey.length;
 
                 for (j = 0; j < i; ++j) {
@@ -115,9 +119,9 @@ public class AdvancementRewards {
                 jsonobject.add("loot", jsonarray);
             }
 
-            if (this.d.length > 0) {
+            if (this.recipes.length > 0) {
                 jsonarray = new JsonArray();
-                aminecraftkey = this.d;
+                aminecraftkey = this.recipes;
                 i = aminecraftkey.length;
 
                 for (j = 0; j < i; ++j) {
@@ -128,8 +132,8 @@ public class AdvancementRewards {
                 jsonobject.add("recipes", jsonarray);
             }
 
-            if (this.e.a() != null) {
-                jsonobject.addProperty("function", this.e.a().toString());
+            if (this.function.a() != null) {
+                jsonobject.addProperty("function", this.function.a().toString());
             }
 
             return jsonobject;
@@ -157,7 +161,7 @@ public class AdvancementRewards {
         if (jsonobject.has("function")) {
             customfunction_a = new CustomFunction.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "function")));
         } else {
-            customfunction_a = CustomFunction.a.a;
+            customfunction_a = CustomFunction.a.NONE;
         }
 
         return new AdvancementRewards(i, aminecraftkey, aminecraftkey1, customfunction_a);
@@ -165,11 +169,11 @@ public class AdvancementRewards {
 
     public static class a {
 
-        private int a;
-        private final List<MinecraftKey> b = Lists.newArrayList();
-        private final List<MinecraftKey> c = Lists.newArrayList();
+        private int experience;
+        private final List<MinecraftKey> loot = Lists.newArrayList();
+        private final List<MinecraftKey> recipes = Lists.newArrayList();
         @Nullable
-        private MinecraftKey d;
+        private MinecraftKey function;
 
         public a() {}
 
@@ -178,7 +182,16 @@ public class AdvancementRewards {
         }
 
         public AdvancementRewards.a b(int i) {
-            this.a += i;
+            this.experience += i;
+            return this;
+        }
+
+        public static AdvancementRewards.a a(MinecraftKey minecraftkey) {
+            return (new AdvancementRewards.a()).b(minecraftkey);
+        }
+
+        public AdvancementRewards.a b(MinecraftKey minecraftkey) {
+            this.loot.add(minecraftkey);
             return this;
         }
 
@@ -187,12 +200,21 @@ public class AdvancementRewards {
         }
 
         public AdvancementRewards.a d(MinecraftKey minecraftkey) {
-            this.c.add(minecraftkey);
+            this.recipes.add(minecraftkey);
+            return this;
+        }
+
+        public static AdvancementRewards.a e(MinecraftKey minecraftkey) {
+            return (new AdvancementRewards.a()).f(minecraftkey);
+        }
+
+        public AdvancementRewards.a f(MinecraftKey minecraftkey) {
+            this.function = minecraftkey;
             return this;
         }
 
         public AdvancementRewards a() {
-            return new AdvancementRewards(this.a, (MinecraftKey[]) this.b.toArray(new MinecraftKey[0]), (MinecraftKey[]) this.c.toArray(new MinecraftKey[0]), this.d == null ? CustomFunction.a.a : new CustomFunction.a(this.d));
+            return new AdvancementRewards(this.experience, (MinecraftKey[]) this.loot.toArray(new MinecraftKey[0]), (MinecraftKey[]) this.recipes.toArray(new MinecraftKey[0]), this.function == null ? CustomFunction.a.NONE : new CustomFunction.a(this.function));
         }
     }
 }

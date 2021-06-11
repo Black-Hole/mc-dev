@@ -10,71 +10,82 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
 
-    protected final EntityInsentient a;
-    protected Entity b;
-    protected final float c;
-    private int g;
-    protected final float d;
-    protected final Class<? extends EntityLiving> e;
-    protected final PathfinderTargetCondition f;
+    public static final float DEFAULT_PROBABILITY = 0.02F;
+    protected final EntityInsentient mob;
+    protected Entity lookAt;
+    protected final float lookDistance;
+    private int lookTime;
+    protected final float probability;
+    private final boolean onlyHorizontal;
+    protected final Class<? extends EntityLiving> lookAtType;
+    protected final PathfinderTargetCondition lookAtContext;
 
     public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f) {
         this(entityinsentient, oclass, f, 0.02F);
     }
 
     public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f, float f1) {
-        this.a = entityinsentient;
-        this.e = oclass;
-        this.c = f;
-        this.d = f1;
+        this(entityinsentient, oclass, f, f1, false);
+    }
+
+    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f, float f1, boolean flag) {
+        this.mob = entityinsentient;
+        this.lookAtType = oclass;
+        this.lookDistance = f;
+        this.probability = f1;
+        this.onlyHorizontal = flag;
         this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
         if (oclass == EntityHuman.class) {
-            this.f = (new PathfinderTargetCondition()).a((double) f).b().a().d().a((entityliving) -> {
+            this.lookAtContext = PathfinderTargetCondition.b().a((double) f).a((entityliving) -> {
                 return IEntitySelector.b(entityinsentient).test(entityliving);
             });
         } else {
-            this.f = (new PathfinderTargetCondition()).a((double) f).b().a().d();
+            this.lookAtContext = PathfinderTargetCondition.b().a((double) f);
         }
 
     }
 
     @Override
     public boolean a() {
-        if (this.a.getRandom().nextFloat() >= this.d) {
+        if (this.mob.getRandom().nextFloat() >= this.probability) {
             return false;
         } else {
-            if (this.a.getGoalTarget() != null) {
-                this.b = this.a.getGoalTarget();
+            if (this.mob.getGoalTarget() != null) {
+                this.lookAt = this.mob.getGoalTarget();
             }
 
-            if (this.e == EntityHuman.class) {
-                this.b = this.a.world.a(this.f, this.a, this.a.locX(), this.a.getHeadY(), this.a.locZ());
+            if (this.lookAtType == EntityHuman.class) {
+                this.lookAt = this.mob.level.a(this.lookAtContext, this.mob, this.mob.locX(), this.mob.getHeadY(), this.mob.locZ());
             } else {
-                this.b = this.a.world.b(this.e, this.f, this.a, this.a.locX(), this.a.getHeadY(), this.a.locZ(), this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
+                this.lookAt = this.mob.level.a(this.mob.level.a(this.lookAtType, this.mob.getBoundingBox().grow((double) this.lookDistance, 3.0D, (double) this.lookDistance), (entityliving) -> {
+                    return true;
+                }), this.lookAtContext, (EntityLiving) this.mob, this.mob.locX(), this.mob.getHeadY(), this.mob.locZ());
             }
 
-            return this.b != null;
+            return this.lookAt != null;
         }
     }
 
     @Override
     public boolean b() {
-        return !this.b.isAlive() ? false : (this.a.h(this.b) > (double) (this.c * this.c) ? false : this.g > 0);
+        return !this.lookAt.isAlive() ? false : (this.mob.f(this.lookAt) > (double) (this.lookDistance * this.lookDistance) ? false : this.lookTime > 0);
     }
 
     @Override
     public void c() {
-        this.g = 40 + this.a.getRandom().nextInt(40);
+        this.lookTime = 40 + this.mob.getRandom().nextInt(40);
     }
 
     @Override
     public void d() {
-        this.b = null;
+        this.lookAt = null;
     }
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX(), this.b.getHeadY(), this.b.locZ());
-        --this.g;
+        double d0 = this.onlyHorizontal ? this.mob.getHeadY() : this.lookAt.getHeadY();
+
+        this.mob.getControllerLook().a(this.lookAt.locX(), d0, this.lookAt.locZ());
+        --this.lookTime;
     }
 }

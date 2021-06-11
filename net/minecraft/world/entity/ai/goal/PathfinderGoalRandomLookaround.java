@@ -5,38 +5,38 @@ import net.minecraft.world.entity.EntityInsentient;
 
 public class PathfinderGoalRandomLookaround extends PathfinderGoal {
 
-    private final EntityInsentient a;
-    private double b;
-    private double c;
-    private int d;
+    private final EntityInsentient mob;
+    private double relX;
+    private double relZ;
+    private int lookTime;
 
     public PathfinderGoalRandomLookaround(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.mob = entityinsentient;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
     @Override
     public boolean a() {
-        return this.a.getRandom().nextFloat() < 0.02F;
+        return this.mob.getRandom().nextFloat() < 0.02F;
     }
 
     @Override
     public boolean b() {
-        return this.d >= 0;
+        return this.lookTime >= 0;
     }
 
     @Override
     public void c() {
-        double d0 = 6.283185307179586D * this.a.getRandom().nextDouble();
+        double d0 = 6.283185307179586D * this.mob.getRandom().nextDouble();
 
-        this.b = Math.cos(d0);
-        this.c = Math.sin(d0);
-        this.d = 20 + this.a.getRandom().nextInt(20);
+        this.relX = Math.cos(d0);
+        this.relZ = Math.sin(d0);
+        this.lookTime = 20 + this.mob.getRandom().nextInt(20);
     }
 
     @Override
     public void e() {
-        --this.d;
-        this.a.getControllerLook().a(this.a.locX() + this.b, this.a.getHeadY(), this.a.locZ() + this.c);
+        --this.lookTime;
+        this.mob.getControllerLook().a(this.mob.locX() + this.relX, this.mob.getHeadY(), this.mob.locZ() + this.relZ);
     }
 }

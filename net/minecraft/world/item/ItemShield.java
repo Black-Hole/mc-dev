@@ -1,5 +1,9 @@
 package net.minecraft.world.item;
 
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsItem;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.InteractionResultWrapper;
@@ -10,23 +14,38 @@ import net.minecraft.world.level.block.BlockDispenser;
 
 public class ItemShield extends Item {
 
+    public static final int EFFECTIVE_BLOCK_DELAY = 5;
+    public static final float MINIMUM_DURABILITY_DAMAGE = 3.0F;
+    public static final String TAG_BASE_COLOR = "Base";
+
     public ItemShield(Item.Info item_info) {
         super(item_info);
-        BlockDispenser.a((IMaterial) this, ItemArmor.a);
+        BlockDispenser.a((IMaterial) this, ItemArmor.DISPENSE_ITEM_BEHAVIOR);
     }
 
     @Override
-    public String f(ItemStack itemstack) {
-        return itemstack.b("BlockEntityTag") != null ? this.getName() + '.' + d(itemstack).c() : super.f(itemstack);
+    public String j(ItemStack itemstack) {
+        if (itemstack.b("BlockEntityTag") != null) {
+            String s = this.getName();
+
+            return s + "." + d(itemstack).b();
+        } else {
+            return super.j(itemstack);
+        }
     }
 
     @Override
-    public EnumAnimation d_(ItemStack itemstack) {
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        ItemBanner.a(itemstack, list);
+    }
+
+    @Override
+    public EnumAnimation c(ItemStack itemstack) {
         return EnumAnimation.BLOCK;
     }
 
     @Override
-    public int e_(ItemStack itemstack) {
+    public int b(ItemStack itemstack) {
         return 72000;
     }
 
@@ -40,7 +59,7 @@ public class ItemShield extends Item {
 
     @Override
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return TagsItem.PLANKS.isTagged(itemstack1.getItem()) || super.a(itemstack, itemstack1);
+        return itemstack1.a((Tag) TagsItem.PLANKS) || super.a(itemstack, itemstack1);
     }
 
     public static EnumColor d(ItemStack itemstack) {

@@ -7,25 +7,26 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class ArgumentParserPosition {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.double"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.int"));
-    private final boolean c;
-    private final double d;
+    private static final char PREFIX_RELATIVE = '~';
+    public static final SimpleCommandExceptionType ERROR_EXPECTED_DOUBLE = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.double"));
+    public static final SimpleCommandExceptionType ERROR_EXPECTED_INT = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.int"));
+    private final boolean relative;
+    private final double value;
 
     public ArgumentParserPosition(boolean flag, double d0) {
-        this.c = flag;
-        this.d = d0;
+        this.relative = flag;
+        this.value = d0;
     }
 
     public double a(double d0) {
-        return this.c ? this.d + d0 : this.d;
+        return this.relative ? this.value + d0 : this.value;
     }
 
     public static ArgumentParserPosition a(StringReader stringreader, boolean flag) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == '^') {
-            throw ArgumentVec3.b.createWithContext(stringreader);
+            throw ArgumentVec3.ERROR_MIXED_TYPE.createWithContext(stringreader);
         } else if (!stringreader.canRead()) {
-            throw ArgumentParserPosition.a.createWithContext(stringreader);
+            throw ArgumentParserPosition.ERROR_EXPECTED_DOUBLE.createWithContext(stringreader);
         } else {
             boolean flag1 = b(stringreader);
             int i = stringreader.getCursor();
@@ -46,9 +47,9 @@ public class ArgumentParserPosition {
 
     public static ArgumentParserPosition a(StringReader stringreader) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == '^') {
-            throw ArgumentVec3.b.createWithContext(stringreader);
+            throw ArgumentVec3.ERROR_MIXED_TYPE.createWithContext(stringreader);
         } else if (!stringreader.canRead()) {
-            throw ArgumentParserPosition.b.createWithContext(stringreader);
+            throw ArgumentParserPosition.ERROR_EXPECTED_INT.createWithContext(stringreader);
         } else {
             boolean flag = b(stringreader);
             double d0;
@@ -84,19 +85,19 @@ public class ArgumentParserPosition {
         } else {
             ArgumentParserPosition argumentparserposition = (ArgumentParserPosition) object;
 
-            return this.c != argumentparserposition.c ? false : Double.compare(argumentparserposition.d, this.d) == 0;
+            return this.relative != argumentparserposition.relative ? false : Double.compare(argumentparserposition.value, this.value) == 0;
         }
     }
 
     public int hashCode() {
-        int i = this.c ? 1 : 0;
-        long j = Double.doubleToLongBits(this.d);
+        int i = this.relative ? 1 : 0;
+        long j = Double.doubleToLongBits(this.value);
 
         i = 31 * i + (int) (j ^ j >>> 32);
         return i;
     }
 
     public boolean a() {
-        return this.c;
+        return this.relative;
     }
 }

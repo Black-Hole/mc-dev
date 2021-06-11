@@ -8,9 +8,7 @@ import net.minecraft.core.EnumDirection;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class WorldGenFeatureBasaltPillar extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
@@ -19,7 +17,12 @@ public class WorldGenFeatureBasaltPillar extends WorldGenerator<WorldGenFeatureE
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
+
         if (generatoraccessseed.isEmpty(blockposition) && !generatoraccessseed.isEmpty(blockposition.up())) {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = blockposition.i();
@@ -29,7 +32,7 @@ public class WorldGenFeatureBasaltPillar extends WorldGenerator<WorldGenFeatureE
             boolean flag3 = true;
 
             while (generatoraccessseed.isEmpty(blockposition_mutableblockposition)) {
-                if (World.isOutsideWorld(blockposition_mutableblockposition)) {
+                if (generatoraccessseed.isOutsideWorld(blockposition_mutableblockposition)) {
                     return true;
                 }
 
@@ -54,7 +57,7 @@ public class WorldGenFeatureBasaltPillar extends WorldGenerator<WorldGenFeatureE
                     int k = MathHelper.a(i) * MathHelper.a(j);
 
                     if (random.nextInt(10) < 10 - k) {
-                        blockposition_mutableblockposition2.g(blockposition_mutableblockposition.b(i, 0, j));
+                        blockposition_mutableblockposition2.g(blockposition_mutableblockposition.c(i, 0, j));
                         int l = 3;
 
                         while (generatoraccessseed.isEmpty(blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition_mutableblockposition2, EnumDirection.DOWN))) {

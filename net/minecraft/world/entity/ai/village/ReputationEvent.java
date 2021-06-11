@@ -2,11 +2,11 @@ package net.minecraft.world.entity.ai.village;
 
 public interface ReputationEvent {
 
-    ReputationEvent a = a("zombie_villager_cured");
-    ReputationEvent b = a("golem_killed");
-    ReputationEvent c = a("villager_hurt");
-    ReputationEvent d = a("villager_killed");
-    ReputationEvent e = a("trade");
+    ReputationEvent ZOMBIE_VILLAGER_CURED = a("zombie_villager_cured");
+    ReputationEvent GOLEM_KILLED = a("golem_killed");
+    ReputationEvent VILLAGER_HURT = a("villager_hurt");
+    ReputationEvent VILLAGER_KILLED = a("villager_killed");
+    ReputationEvent TRADE = a("trade");
 
     static ReputationEvent a(final String s) {
         return new ReputationEvent() {

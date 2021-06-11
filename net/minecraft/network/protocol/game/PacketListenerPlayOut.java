@@ -8,6 +8,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutSpawnEntityExperienceOrb packetplayoutspawnentityexperienceorb);
 
+    void a(ClientboundAddVibrationSignalPacket clientboundaddvibrationsignalpacket);
+
     void a(PacketPlayOutSpawnEntityLiving packetplayoutspawnentityliving);
 
     void a(PacketPlayOutScoreboardObjective packetplayoutscoreboardobjective);
@@ -37,8 +39,6 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutMultiBlockChange packetplayoutmultiblockchange);
 
     void a(PacketPlayOutMap packetplayoutmap);
-
-    void a(PacketPlayOutTransaction packetplayouttransaction);
 
     void a(PacketPlayOutCloseWindow packetplayoutclosewindow);
 
@@ -79,6 +79,8 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutPosition packetplayoutposition);
 
     void a(PacketPlayOutWorldParticles packetplayoutworldparticles);
+
+    void a(ClientboundPingPacket clientboundpingpacket);
 
     void a(PacketPlayOutAbilities packetplayoutabilities);
 
@@ -130,15 +132,27 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutTags packetplayouttags);
 
-    void a(PacketPlayOutCombatEvent packetplayoutcombatevent);
+    void a(ClientboundPlayerCombatEndPacket clientboundplayercombatendpacket);
+
+    void a(ClientboundPlayerCombatEnterPacket clientboundplayercombatenterpacket);
+
+    void a(ClientboundPlayerCombatKillPacket clientboundplayercombatkillpacket);
 
     void a(PacketPlayOutServerDifficulty packetplayoutserverdifficulty);
 
     void a(PacketPlayOutCamera packetplayoutcamera);
 
-    void a(PacketPlayOutWorldBorder packetplayoutworldborder);
+    void a(ClientboundInitializeBorderPacket clientboundinitializeborderpacket);
 
-    void a(PacketPlayOutTitle packetplayouttitle);
+    void a(ClientboundSetBorderLerpSizePacket clientboundsetborderlerpsizepacket);
+
+    void a(ClientboundSetBorderSizePacket clientboundsetbordersizepacket);
+
+    void a(ClientboundSetBorderWarningDelayPacket clientboundsetborderwarningdelaypacket);
+
+    void a(ClientboundSetBorderWarningDistancePacket clientboundsetborderwarningdistancepacket);
+
+    void a(ClientboundSetBorderCenterPacket clientboundsetbordercenterpacket);
 
     void a(PacketPlayOutPlayerListHeaderFooter packetplayoutplayerlistheaderfooter);
 
@@ -181,4 +195,14 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutViewCentre packetplayoutviewcentre);
 
     void a(PacketPlayOutBlockBreak packetplayoutblockbreak);
+
+    void a(ClientboundSetActionBarTextPacket clientboundsetactionbartextpacket);
+
+    void a(ClientboundSetSubtitleTextPacket clientboundsetsubtitletextpacket);
+
+    void a(ClientboundSetTitleTextPacket clientboundsettitletextpacket);
+
+    void a(ClientboundSetTitlesAnimationPacket clientboundsettitlesanimationpacket);
+
+    void a(ClientboundClearTitlesPacket clientboundcleartitlespacket);
 }

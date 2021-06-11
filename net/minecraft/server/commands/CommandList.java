@@ -8,12 +8,13 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.network.chat.ChatComponentUtils;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.player.EntityHuman;
 
 public class CommandList {
+
+    public CommandList() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("list").executes((commandcontext) -> {
@@ -36,9 +37,9 @@ public class CommandList {
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
         List<EntityPlayer> list = playerlist.getPlayers();
-        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.b(list, function);
+        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[]{list.size(), playerlist.getMaxPlayers(), ichatmutablecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[]{list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);
         return list.size();
     }
 }

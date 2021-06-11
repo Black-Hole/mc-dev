@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatDeserializer;
@@ -20,16 +21,16 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionSetContents extends LootItemFunctionConditional {
 
-    private final List<LootEntryAbstract> a;
+    final List<LootEntryAbstract> entries;
 
-    private LootItemFunctionSetContents(LootItemCondition[] alootitemcondition, List<LootEntryAbstract> list) {
+    LootItemFunctionSetContents(LootItemCondition[] alootitemcondition, List<LootEntryAbstract> list) {
         super(alootitemcondition);
-        this.a = ImmutableList.copyOf(list);
+        this.entries = ImmutableList.copyOf(list);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.n;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_CONTENTS;
     }
 
     @Override
@@ -39,9 +40,9 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
         } else {
             NonNullList<ItemStack> nonnulllist = NonNullList.a();
 
-            this.a.forEach((lootentryabstract) -> {
+            this.entries.forEach((lootentryabstract) -> {
                 lootentryabstract.expand(loottableinfo, (lootentry) -> {
-                    nonnulllist.getClass();
+                    Objects.requireNonNull(nonnulllist);
                     lootentry.a(LootTable.a(nonnulllist::add), loottableinfo);
                 });
             });
@@ -59,8 +60,8 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
     public void a(LootCollector lootcollector) {
         super.a(lootcollector);
 
-        for (int i = 0; i < this.a.size(); ++i) {
-            ((LootEntryAbstract) this.a.get(i)).a(lootcollector.b(".entry[" + i + "]"));
+        for (int i = 0; i < this.entries.size(); ++i) {
+            ((LootEntryAbstract) this.entries.get(i)).a(lootcollector.b(".entry[" + i + "]"));
         }
 
     }
@@ -69,26 +70,9 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
         return new LootItemFunctionSetContents.a();
     }
 
-    public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetContents> {
-
-        public b() {}
-
-        public void a(JsonObject jsonobject, LootItemFunctionSetContents lootitemfunctionsetcontents, JsonSerializationContext jsonserializationcontext) {
-            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetcontents, jsonserializationcontext);
-            jsonobject.add("entries", jsonserializationcontext.serialize(lootitemfunctionsetcontents.a));
-        }
-
-        @Override
-        public LootItemFunctionSetContents b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            LootEntryAbstract[] alootentryabstract = (LootEntryAbstract[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LootEntryAbstract[].class);
-
-            return new LootItemFunctionSetContents(alootitemcondition, Arrays.asList(alootentryabstract));
-        }
-    }
-
     public static class a extends LootItemFunctionConditional.a<LootItemFunctionSetContents.a> {
 
-        private final List<LootEntryAbstract> a = Lists.newArrayList();
+        private final List<LootEntryAbstract> entries = Lists.newArrayList();
 
         public a() {}
 
@@ -98,13 +82,30 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
         }
 
         public LootItemFunctionSetContents.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
-            this.a.add(lootentryabstract_a.b());
+            this.entries.add(lootentryabstract_a.b());
             return this;
         }
 
         @Override
         public LootItemFunction b() {
-            return new LootItemFunctionSetContents(this.g(), this.a);
+            return new LootItemFunctionSetContents(this.g(), this.entries);
+        }
+    }
+
+    public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetContents> {
+
+        public b() {}
+
+        public void a(JsonObject jsonobject, LootItemFunctionSetContents lootitemfunctionsetcontents, JsonSerializationContext jsonserializationcontext) {
+            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetcontents, jsonserializationcontext);
+            jsonobject.add("entries", jsonserializationcontext.serialize(lootitemfunctionsetcontents.entries));
+        }
+
+        @Override
+        public LootItemFunctionSetContents b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+            LootEntryAbstract[] alootentryabstract = (LootEntryAbstract[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LootEntryAbstract[].class);
+
+            return new LootItemFunctionSetContents(alootitemcondition, Arrays.asList(alootentryabstract));
         }
     }
 }

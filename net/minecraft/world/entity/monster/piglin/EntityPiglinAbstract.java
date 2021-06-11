@@ -22,38 +22,39 @@ import net.minecraft.world.level.pathfinder.PathType;
 
 public abstract class EntityPiglinAbstract extends EntityMonster {
 
-    protected static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityPiglinAbstract.class, DataWatcherRegistry.i);
-    public int conversionTicks = 0;
+    protected static final DataWatcherObject<Boolean> DATA_IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinAbstract.class, DataWatcherRegistry.BOOLEAN);
+    protected static final int CONVERSION_TIME = 300;
+    public int timeInOverworld;
 
     public EntityPiglinAbstract(EntityTypes<? extends EntityPiglinAbstract> entitytypes, World world) {
         super(entitytypes, world);
         this.setCanPickupLoot(true);
-        this.eS();
+        this.fB();
         this.a(PathType.DANGER_FIRE, 16.0F);
         this.a(PathType.DAMAGE_FIRE, -1.0F);
     }
 
-    private void eS() {
+    private void fB() {
         if (PathfinderGoalUtil.a(this)) {
             ((Navigation) this.getNavigation()).a(true);
         }
 
     }
 
-    protected abstract boolean m();
+    protected abstract boolean n();
 
     public void setImmuneToZombification(boolean flag) {
-        this.getDataWatcher().set(EntityPiglinAbstract.b, flag);
+        this.getDataWatcher().set(EntityPiglinAbstract.DATA_IMMUNE_TO_ZOMBIFICATION, flag);
     }
 
     public boolean isImmuneToZombification() {
-        return (Boolean) this.getDataWatcher().get(EntityPiglinAbstract.b);
+        return (Boolean) this.getDataWatcher().get(EntityPiglinAbstract.DATA_IMMUNE_TO_ZOMBIFICATION);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPiglinAbstract.b, false);
+        this.entityData.register(EntityPiglinAbstract.DATA_IMMUNE_TO_ZOMBIFICATION, false);
     }
 
     @Override
@@ -63,11 +64,11 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
             nbttagcompound.setBoolean("IsImmuneToZombification", true);
         }
 
-        nbttagcompound.setInt("TimeInOverworld", this.conversionTicks);
+        nbttagcompound.setInt("TimeInOverworld", this.timeInOverworld);
     }
 
     @Override
-    public double bb() {
+    public double bk() {
         return this.isBaby() ? -0.05D : -0.45D;
     }
 
@@ -75,27 +76,27 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.setImmuneToZombification(nbttagcompound.getBoolean("IsImmuneToZombification"));
-        this.conversionTicks = nbttagcompound.getInt("TimeInOverworld");
+        this.timeInOverworld = nbttagcompound.getInt("TimeInOverworld");
     }
 
     @Override
     protected void mobTick() {
         super.mobTick();
         if (this.isConverting()) {
-            ++this.conversionTicks;
+            ++this.timeInOverworld;
         } else {
-            this.conversionTicks = 0;
+            this.timeInOverworld = 0;
         }
 
-        if (this.conversionTicks > 300) {
-            this.eP();
-            this.c((WorldServer) this.world);
+        if (this.timeInOverworld > 300) {
+            this.fy();
+            this.c((WorldServer) this.level);
         }
 
     }
 
     public boolean isConverting() {
-        return !this.world.getDimensionManager().isPiglinSafe() && !this.isImmuneToZombification() && !this.isNoAI();
+        return !this.level.getDimensionManager().isPiglinSafe() && !this.isImmuneToZombification() && !this.isNoAI();
     }
 
     protected void c(WorldServer worldserver) {
@@ -107,33 +108,35 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
 
     }
 
-    public boolean eM() {
+    public boolean fv() {
         return !this.isBaby();
     }
+
+    public abstract EntityPiglinArmPose fw();
 
     @Nullable
     @Override
     public EntityLiving getGoalTarget() {
-        return (EntityLiving) this.bg.getMemory(MemoryModuleType.ATTACK_TARGET).orElse((Object) null);
+        return (EntityLiving) this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse((Object) null);
     }
 
-    protected boolean eO() {
+    protected boolean fx() {
         return this.getItemInMainHand().getItem() instanceof ItemToolMaterial;
     }
 
     @Override
-    public void F() {
+    public void K() {
         if (PiglinAI.d(this)) {
-            super.F();
+            super.K();
         }
 
     }
 
     @Override
-    protected void M() {
-        super.M();
+    protected void R() {
+        super.R();
         PacketDebug.a((EntityLiving) this);
     }
 
-    protected abstract void eP();
+    protected abstract void fy();
 }

@@ -7,4 +7,6 @@ public interface WorldGenSurfaceConfiguration {
     IBlockData a();
 
     IBlockData b();
+
+    IBlockData c();
 }

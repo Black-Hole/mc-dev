@@ -2,7 +2,7 @@ package net.minecraft.world.inventory;
 
 public abstract class ContainerProperty {
 
-    private int a;
+    private int prevValue;
 
     public ContainerProperty() {}
 
@@ -36,16 +36,16 @@ public abstract class ContainerProperty {
 
     public static ContainerProperty a() {
         return new ContainerProperty() {
-            private int a;
+            private int value;
 
             @Override
             public int get() {
-                return this.a;
+                return this.value;
             }
 
             @Override
             public void set(int i) {
-                this.a = i;
+                this.value = i;
             }
         };
     }
@@ -56,9 +56,9 @@ public abstract class ContainerProperty {
 
     public boolean c() {
         int i = this.get();
-        boolean flag = i != this.a;
+        boolean flag = i != this.prevValue;
 
-        this.a = i;
+        this.prevValue = i;
         return flag;
     }
 }

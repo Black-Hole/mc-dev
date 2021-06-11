@@ -2,87 +2,82 @@ package net.minecraft.world.entity.ai.targeting;
 
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 
 public class PathfinderTargetCondition {
 
-    public static final PathfinderTargetCondition a = new PathfinderTargetCondition();
-    private double b = -1.0D;
-    private boolean c;
-    private boolean d;
-    private boolean e;
-    private boolean f;
-    private boolean g = true;
-    private Predicate<EntityLiving> h;
+    public static final PathfinderTargetCondition DEFAULT = a();
+    private static final double MIN_VISIBILITY_DISTANCE_FOR_INVISIBLE_TARGET = 2.0D;
+    private final boolean isCombat;
+    private double range = -1.0D;
+    private boolean checkLineOfSight = true;
+    private boolean testInvisible = true;
+    private Predicate<EntityLiving> selector;
 
-    public PathfinderTargetCondition() {}
-
-    public PathfinderTargetCondition a(double d0) {
-        this.b = d0;
-        return this;
+    private PathfinderTargetCondition(boolean flag) {
+        this.isCombat = flag;
     }
 
-    public PathfinderTargetCondition a() {
-        this.c = true;
-        return this;
+    public static PathfinderTargetCondition a() {
+        return new PathfinderTargetCondition(true);
     }
 
-    public PathfinderTargetCondition b() {
-        this.d = true;
-        return this;
+    public static PathfinderTargetCondition b() {
+        return new PathfinderTargetCondition(false);
     }
 
     public PathfinderTargetCondition c() {
-        this.e = true;
+        PathfinderTargetCondition pathfindertargetcondition = this.isCombat ? a() : b();
+
+        pathfindertargetcondition.range = this.range;
+        pathfindertargetcondition.checkLineOfSight = this.checkLineOfSight;
+        pathfindertargetcondition.testInvisible = this.testInvisible;
+        pathfindertargetcondition.selector = this.selector;
+        return pathfindertargetcondition;
+    }
+
+    public PathfinderTargetCondition a(double d0) {
+        this.range = d0;
         return this;
     }
 
     public PathfinderTargetCondition d() {
-        this.f = true;
+        this.checkLineOfSight = false;
         return this;
     }
 
     public PathfinderTargetCondition e() {
-        this.g = false;
+        this.testInvisible = false;
         return this;
     }
 
     public PathfinderTargetCondition a(@Nullable Predicate<EntityLiving> predicate) {
-        this.h = predicate;
+        this.selector = predicate;
         return this;
     }
 
     public boolean a(@Nullable EntityLiving entityliving, EntityLiving entityliving1) {
         if (entityliving == entityliving1) {
             return false;
-        } else if (entityliving1.isSpectator()) {
+        } else if (!entityliving1.dO()) {
             return false;
-        } else if (!entityliving1.isAlive()) {
-            return false;
-        } else if (!this.c && entityliving1.isInvulnerable()) {
-            return false;
-        } else if (this.h != null && !this.h.test(entityliving1)) {
+        } else if (this.selector != null && !this.selector.test(entityliving1)) {
             return false;
         } else {
-            if (entityliving != null) {
-                if (!this.f) {
-                    if (!entityliving.c(entityliving1)) {
-                        return false;
-                    }
-
-                    if (!entityliving.a(entityliving1.getEntityType())) {
-                        return false;
-                    }
+            if (entityliving == null) {
+                if (this.isCombat && (!entityliving1.dN() || entityliving1.level.getDifficulty() == EnumDifficulty.PEACEFUL)) {
+                    return false;
                 }
-
-                if (!this.d && entityliving.r(entityliving1)) {
+            } else {
+                if (this.isCombat && (!entityliving.c(entityliving1) || !entityliving.a(entityliving1.getEntityType()) || entityliving.p(entityliving1))) {
                     return false;
                 }
 
-                if (this.b > 0.0D) {
-                    double d0 = this.g ? entityliving1.A(entityliving) : 1.0D;
-                    double d1 = Math.max(this.b * d0, 2.0D);
+                if (this.range > 0.0D) {
+                    double d0 = this.testInvisible ? entityliving1.y(entityliving) : 1.0D;
+                    double d1 = Math.max(this.range * d0, 2.0D);
                     double d2 = entityliving.h(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
 
                     if (d2 > d1 * d1) {
@@ -90,7 +85,7 @@ public class PathfinderTargetCondition {
                     }
                 }
 
-                if (!this.e && entityliving instanceof EntityInsentient && !((EntityInsentient) entityliving).getEntitySenses().a(entityliving1)) {
+                if (this.checkLineOfSight && entityliving instanceof EntityInsentient && !((EntityInsentient) entityliving).getEntitySenses().a(entityliving1)) {
                     return false;
                 }
             }

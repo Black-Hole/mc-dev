@@ -13,18 +13,19 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryTarget;
 import net.minecraft.world.entity.ai.navigation.NavigationAbstract;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import net.minecraft.world.phys.Vec3D;
 
 public class BehavorMove extends Behavior<EntityInsentient> {
 
-    private int b;
+    private static final int MAX_COOLDOWN_BEFORE_RETRYING = 40;
+    private int remainingCooldown;
     @Nullable
-    private PathEntity c;
+    private PathEntity path;
     @Nullable
-    private BlockPosition d;
-    private float e;
+    private BlockPosition lastTargetPos;
+    private float speedModifier;
 
     public BehavorMove() {
         this(150, 250);
@@ -35,8 +36,8 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        if (this.b > 0) {
-            --this.b;
+        if (this.remainingCooldown > 0) {
+            --this.remainingCooldown;
             return false;
         } else {
             BehaviorController<?> behaviorcontroller = entityinsentient.getBehaviorController();
@@ -44,7 +45,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
             boolean flag = this.a(entityinsentient, memorytarget);
 
             if (!flag && this.a(entityinsentient, memorytarget, worldserver.getTime())) {
-                this.d = memorytarget.a().b();
+                this.lastTargetPos = memorytarget.a().b();
                 return true;
             } else {
                 behaviorcontroller.removeMemory(MemoryModuleType.WALK_TARGET);
@@ -58,7 +59,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     }
 
     protected boolean b(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        if (this.c != null && this.d != null) {
+        if (this.path != null && this.lastTargetPos != null) {
             Optional<MemoryTarget> optional = entityinsentient.getBehaviorController().getMemory(MemoryModuleType.WALK_TARGET);
             NavigationAbstract navigationabstract = entityinsentient.getNavigation();
 
@@ -70,34 +71,34 @@ public class BehavorMove extends Behavior<EntityInsentient> {
 
     protected void c(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         if (entityinsentient.getBehaviorController().hasMemory(MemoryModuleType.WALK_TARGET) && !this.a(entityinsentient, (MemoryTarget) entityinsentient.getBehaviorController().getMemory(MemoryModuleType.WALK_TARGET).get()) && entityinsentient.getNavigation().t()) {
-            this.b = worldserver.getRandom().nextInt(40);
+            this.remainingCooldown = worldserver.getRandom().nextInt(40);
         }
 
         entityinsentient.getNavigation().o();
         entityinsentient.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
         entityinsentient.getBehaviorController().removeMemory(MemoryModuleType.PATH);
-        this.c = null;
+        this.path = null;
     }
 
     protected void a(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        entityinsentient.getBehaviorController().setMemory(MemoryModuleType.PATH, (Object) this.c);
-        entityinsentient.getNavigation().a(this.c, (double) this.e);
+        entityinsentient.getBehaviorController().setMemory(MemoryModuleType.PATH, (Object) this.path);
+        entityinsentient.getNavigation().a(this.path, (double) this.speedModifier);
     }
 
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         PathEntity pathentity = entityinsentient.getNavigation().k();
         BehaviorController<?> behaviorcontroller = entityinsentient.getBehaviorController();
 
-        if (this.c != pathentity) {
-            this.c = pathentity;
+        if (this.path != pathentity) {
+            this.path = pathentity;
             behaviorcontroller.setMemory(MemoryModuleType.PATH, (Object) pathentity);
         }
 
-        if (pathentity != null && this.d != null) {
+        if (pathentity != null && this.lastTargetPos != null) {
             MemoryTarget memorytarget = (MemoryTarget) behaviorcontroller.getMemory(MemoryModuleType.WALK_TARGET).get();
 
-            if (memorytarget.a().b().j(this.d) > 4.0D && this.a(entityinsentient, memorytarget, worldserver.getTime())) {
-                this.d = memorytarget.a().b();
+            if (memorytarget.a().b().j(this.lastTargetPos) > 4.0D && this.a(entityinsentient, memorytarget, worldserver.getTime())) {
+                this.lastTargetPos = memorytarget.a().b();
                 this.a(worldserver, entityinsentient, i);
             }
 
@@ -107,14 +108,14 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     private boolean a(EntityInsentient entityinsentient, MemoryTarget memorytarget, long i) {
         BlockPosition blockposition = memorytarget.a().b();
 
-        this.c = entityinsentient.getNavigation().a(blockposition, 0);
-        this.e = memorytarget.b();
+        this.path = entityinsentient.getNavigation().a(blockposition, 0);
+        this.speedModifier = memorytarget.b();
         BehaviorController<?> behaviorcontroller = entityinsentient.getBehaviorController();
 
         if (this.a(entityinsentient, memorytarget)) {
             behaviorcontroller.removeMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
         } else {
-            boolean flag = this.c != null && this.c.j();
+            boolean flag = this.path != null && this.path.j();
 
             if (flag) {
                 behaviorcontroller.removeMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
@@ -122,15 +123,15 @@ public class BehavorMove extends Behavior<EntityInsentient> {
                 behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, (Object) i);
             }
 
-            if (this.c != null) {
+            if (this.path != null) {
                 return true;
             }
 
-            Vec3D vec3d = RandomPositionGenerator.b((EntityCreature) entityinsentient, 10, 7, Vec3D.c((BaseBlockPosition) blockposition));
+            Vec3D vec3d = DefaultRandomPos.a((EntityCreature) entityinsentient, 10, 7, Vec3D.c((BaseBlockPosition) blockposition), 1.5707963705062866D);
 
             if (vec3d != null) {
-                this.c = entityinsentient.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 0);
-                return this.c != null;
+                this.path = entityinsentient.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 0);
+                return this.path != null;
             }
         }
 

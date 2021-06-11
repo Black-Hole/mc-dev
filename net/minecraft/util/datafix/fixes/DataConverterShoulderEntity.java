@@ -7,16 +7,16 @@ import com.mojang.datafixers.schemas.Schema;
 
 public class DataConverterShoulderEntity extends DataFix {
 
-    private final String a;
-    private final TypeReference b;
+    private final String name;
+    private final TypeReference type;
 
     public DataConverterShoulderEntity(Schema schema, String s, TypeReference typereference) {
         super(schema, true);
-        this.a = s;
-        this.b = typereference;
+        this.name = s;
+        this.type = typereference;
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.writeAndRead(this.a, this.getInputSchema().getType(this.b), this.getOutputSchema().getType(this.b));
+        return this.writeAndRead(this.name, this.getInputSchema().getType(this.type), this.getOutputSchema().getType(this.type));
     }
 }

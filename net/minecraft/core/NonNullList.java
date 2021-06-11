@@ -10,8 +10,8 @@ import org.apache.commons.lang3.Validate;
 
 public class NonNullList<E> extends AbstractList<E> {
 
-    private final List<E> a;
-    private final E b;
+    private final List<E> list;
+    private final E defaultValue;
 
     public static <E> NonNullList<E> a() {
         return new NonNullList<>();
@@ -35,39 +35,39 @@ public class NonNullList<E> extends AbstractList<E> {
     }
 
     protected NonNullList(List<E> list, @Nullable E e0) {
-        this.a = list;
-        this.b = e0;
+        this.list = list;
+        this.defaultValue = e0;
     }
 
     @Nonnull
     public E get(int i) {
-        return this.a.get(i);
+        return this.list.get(i);
     }
 
     public E set(int i, E e0) {
         Validate.notNull(e0);
-        return this.a.set(i, e0);
+        return this.list.set(i, e0);
     }
 
     public void add(int i, E e0) {
         Validate.notNull(e0);
-        this.a.add(i, e0);
+        this.list.add(i, e0);
     }
 
     public E remove(int i) {
-        return this.a.remove(i);
+        return this.list.remove(i);
     }
 
     public int size() {
-        return this.a.size();
+        return this.list.size();
     }
 
     public void clear() {
-        if (this.b == null) {
+        if (this.defaultValue == null) {
             super.clear();
         } else {
             for (int i = 0; i < this.size(); ++i) {
-                this.set(i, this.b);
+                this.set(i, this.defaultValue);
             }
         }
 

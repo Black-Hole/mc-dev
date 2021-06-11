@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -10,33 +9,38 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
 
-    private BlockPosition a;
-    public IBlockData block;
-
-    public PacketPlayOutBlockChange() {}
+    private final BlockPosition pos;
+    public final IBlockData blockState;
 
     public PacketPlayOutBlockChange(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a = blockposition;
-        this.block = iblockdata;
+        this.pos = blockposition;
+        this.blockState = iblockdata;
     }
 
     public PacketPlayOutBlockChange(IBlockAccess iblockaccess, BlockPosition blockposition) {
         this(blockposition, iblockaccess.getType(blockposition));
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.block = (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i());
+    public PacketPlayOutBlockChange(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.blockState = (IBlockData) Block.BLOCK_STATE_REGISTRY.fromId(packetdataserializer.j());
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.d(Block.getCombinedId(this.block));
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
+        packetdataserializer.d(Block.getCombinedId(this.blockState));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public IBlockData b() {
+        return this.blockState;
+    }
+
+    public BlockPosition c() {
+        return this.pos;
     }
 }

@@ -15,8 +15,8 @@ import net.minecraft.world.level.WorldAccess;
 
 public abstract class EntityFishSchool extends EntityFish {
 
-    private EntityFishSchool b;
-    private int c = 1;
+    private EntityFishSchool leader;
+    private int schoolSize = 1;
 
     public EntityFishSchool(EntityTypes<? extends EntityFishSchool> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,75 +30,75 @@ public abstract class EntityFishSchool extends EntityFish {
 
     @Override
     public int getMaxSpawnGroup() {
-        return this.eN();
+        return this.fx();
     }
 
-    public int eN() {
+    public int fx() {
         return super.getMaxSpawnGroup();
     }
 
     @Override
-    protected boolean eL() {
-        return !this.eO();
+    protected boolean fv() {
+        return !this.fy();
     }
 
-    public boolean eO() {
-        return this.b != null && this.b.isAlive();
+    public boolean fy() {
+        return this.leader != null && this.leader.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
-        this.b = entityfishschool;
-        entityfishschool.eU();
+        this.leader = entityfishschool;
+        entityfishschool.fE();
         return entityfishschool;
     }
 
-    public void eP() {
-        this.b.eV();
-        this.b = null;
+    public void fz() {
+        this.leader.fF();
+        this.leader = null;
     }
 
-    private void eU() {
-        ++this.c;
+    private void fE() {
+        ++this.schoolSize;
     }
 
-    private void eV() {
-        --this.c;
+    private void fF() {
+        --this.schoolSize;
     }
 
-    public boolean eQ() {
-        return this.eR() && this.c < this.eN();
+    public boolean fA() {
+        return this.fB() && this.schoolSize < this.fx();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.eR() && this.world.random.nextInt(200) == 1) {
-            List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
+        if (this.fB() && this.level.random.nextInt(200) == 1) {
+            List<? extends EntityFish> list = this.level.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
-                this.c = 1;
+                this.schoolSize = 1;
             }
         }
 
     }
 
-    public boolean eR() {
-        return this.c > 1;
+    public boolean fB() {
+        return this.schoolSize > 1;
     }
 
-    public boolean eS() {
-        return this.h((Entity) this.b) <= 121.0D;
+    public boolean fC() {
+        return this.f((Entity) this.leader) <= 121.0D;
     }
 
-    public void eT() {
-        if (this.eO()) {
-            this.getNavigation().a((Entity) this.b, 1.0D);
+    public void fD() {
+        if (this.fy()) {
+            this.getNavigation().a((Entity) this.leader, 1.0D);
         }
 
     }
 
-    public void a(Stream<EntityFishSchool> stream) {
-        stream.limit((long) (this.eN() - this.c)).filter((entityfishschool) -> {
+    public void a(Stream<? extends EntityFishSchool> stream) {
+        stream.limit((long) (this.fx() - this.schoolSize)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);
@@ -112,7 +112,7 @@ public abstract class EntityFishSchool extends EntityFish {
         if (groupdataentity == null) {
             groupdataentity = new EntityFishSchool.a(this);
         } else {
-            this.a(((EntityFishSchool.a) groupdataentity).a);
+            this.a(((EntityFishSchool.a) groupdataentity).leader);
         }
 
         return (GroupDataEntity) groupdataentity;
@@ -120,10 +120,10 @@ public abstract class EntityFishSchool extends EntityFish {
 
     public static class a implements GroupDataEntity {
 
-        public final EntityFishSchool a;
+        public final EntityFishSchool leader;
 
         public a(EntityFishSchool entityfishschool) {
-            this.a = entityfishschool;
+            this.leader = entityfishschool;
         }
     }
 }

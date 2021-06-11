@@ -21,32 +21,39 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewer;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.BlockBrewingStand;
 import net.minecraft.world.level.block.state.IBlockData;
 
-public class TileEntityBrewingStand extends TileEntityContainer implements IWorldInventory, ITickable {
+public class TileEntityBrewingStand extends TileEntityContainer implements IWorldInventory {
 
-    private static final int[] b = new int[]{3};
-    private static final int[] c = new int[]{0, 1, 2, 3};
-    private static final int[] g = new int[]{0, 1, 2, 4};
+    private static final int INGREDIENT_SLOT = 3;
+    private static final int FUEL_SLOT = 4;
+    private static final int[] SLOTS_FOR_UP = new int[]{3};
+    private static final int[] SLOTS_FOR_DOWN = new int[]{0, 1, 2, 3};
+    private static final int[] SLOTS_FOR_SIDES = new int[]{0, 1, 2, 4};
+    public static final int FUEL_USES = 20;
+    public static final int DATA_BREW_TIME = 0;
+    public static final int DATA_FUEL_USES = 1;
+    public static final int NUM_DATA_VALUES = 2;
     private NonNullList<ItemStack> items;
     public int brewTime;
-    private boolean[] j;
-    private Item k;
-    public int fuelLevel;
-    protected final IContainerProperties a;
+    private boolean[] lastPotionCount;
+    private Item ingredient;
+    public int fuel;
+    protected final IContainerProperties dataAccess;
 
-    public TileEntityBrewingStand() {
-        super(TileEntityTypes.BREWING_STAND);
-        this.items = NonNullList.a(5, ItemStack.b);
-        this.a = new IContainerProperties() {
+    public TileEntityBrewingStand(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.BREWING_STAND, blockposition, iblockdata);
+        this.items = NonNullList.a(5, ItemStack.EMPTY);
+        this.dataAccess = new IContainerProperties() {
             @Override
             public int getProperty(int i) {
                 switch (i) {
                     case 0:
                         return TileEntityBrewingStand.this.brewTime;
                     case 1:
-                        return TileEntityBrewingStand.this.fuelLevel;
+                        return TileEntityBrewingStand.this.fuel;
                     default:
                         return 0;
                 }
@@ -59,7 +66,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
                         TileEntityBrewingStand.this.brewTime = j;
                         break;
                     case 1:
-                        TileEntityBrewingStand.this.fuelLevel = j;
+                        TileEntityBrewingStand.this.fuel = j;
                 }
 
             }
@@ -98,63 +105,57 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return false;
     }
 
-    @Override
-    public void tick() {
-        ItemStack itemstack = (ItemStack) this.items.get(4);
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityBrewingStand tileentitybrewingstand) {
+        ItemStack itemstack = (ItemStack) tileentitybrewingstand.items.get(4);
 
-        if (this.fuelLevel <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
-            this.fuelLevel = 20;
+        if (tileentitybrewingstand.fuel <= 0 && itemstack.a(Items.BLAZE_POWDER)) {
+            tileentitybrewingstand.fuel = 20;
             itemstack.subtract(1);
-            this.update();
+            a(world, blockposition, iblockdata);
         }
 
-        boolean flag = this.h();
-        boolean flag1 = this.brewTime > 0;
-        ItemStack itemstack1 = (ItemStack) this.items.get(3);
+        boolean flag = a(tileentitybrewingstand.items);
+        boolean flag1 = tileentitybrewingstand.brewTime > 0;
+        ItemStack itemstack1 = (ItemStack) tileentitybrewingstand.items.get(3);
 
         if (flag1) {
-            --this.brewTime;
-            boolean flag2 = this.brewTime == 0;
+            --tileentitybrewingstand.brewTime;
+            boolean flag2 = tileentitybrewingstand.brewTime == 0;
 
             if (flag2 && flag) {
-                this.j();
-                this.update();
-            } else if (!flag) {
-                this.brewTime = 0;
-                this.update();
-            } else if (this.k != itemstack1.getItem()) {
-                this.brewTime = 0;
-                this.update();
+                a(world, blockposition, tileentitybrewingstand.items);
+                a(world, blockposition, iblockdata);
+            } else if (!flag || !itemstack1.a(tileentitybrewingstand.ingredient)) {
+                tileentitybrewingstand.brewTime = 0;
+                a(world, blockposition, iblockdata);
             }
-        } else if (flag && this.fuelLevel > 0) {
-            --this.fuelLevel;
-            this.brewTime = 400;
-            this.k = itemstack1.getItem();
-            this.update();
+        } else if (flag && tileentitybrewingstand.fuel > 0) {
+            --tileentitybrewingstand.fuel;
+            tileentitybrewingstand.brewTime = 400;
+            tileentitybrewingstand.ingredient = itemstack1.getItem();
+            a(world, blockposition, iblockdata);
         }
 
-        if (!this.world.isClientSide) {
-            boolean[] aboolean = this.f();
+        boolean[] aboolean = tileentitybrewingstand.f();
 
-            if (!Arrays.equals(aboolean, this.j)) {
-                this.j = aboolean;
-                IBlockData iblockdata = this.world.getType(this.getPosition());
+        if (!Arrays.equals(aboolean, tileentitybrewingstand.lastPotionCount)) {
+            tileentitybrewingstand.lastPotionCount = aboolean;
+            IBlockData iblockdata1 = iblockdata;
 
-                if (!(iblockdata.getBlock() instanceof BlockBrewingStand)) {
-                    return;
-                }
-
-                for (int i = 0; i < BlockBrewingStand.HAS_BOTTLE.length; ++i) {
-                    iblockdata = (IBlockData) iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], aboolean[i]);
-                }
-
-                this.world.setTypeAndData(this.position, iblockdata, 2);
+            if (!(iblockdata.getBlock() instanceof BlockBrewingStand)) {
+                return;
             }
+
+            for (int i = 0; i < BlockBrewingStand.HAS_BOTTLE.length; ++i) {
+                iblockdata1 = (IBlockData) iblockdata1.set(BlockBrewingStand.HAS_BOTTLE[i], aboolean[i]);
+            }
+
+            world.setTypeAndData(blockposition, iblockdata1, 2);
         }
 
     }
 
-    public boolean[] f() {
+    private boolean[] f() {
         boolean[] aboolean = new boolean[3];
 
         for (int i = 0; i < 3; ++i) {
@@ -166,8 +167,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return aboolean;
     }
 
-    private boolean h() {
-        ItemStack itemstack = (ItemStack) this.items.get(3);
+    private static boolean a(NonNullList<ItemStack> nonnulllist) {
+        ItemStack itemstack = (ItemStack) nonnulllist.get(3);
 
         if (itemstack.isEmpty()) {
             return false;
@@ -175,7 +176,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             return false;
         } else {
             for (int i = 0; i < 3; ++i) {
-                ItemStack itemstack1 = (ItemStack) this.items.get(i);
+                ItemStack itemstack1 = (ItemStack) nonnulllist.get(i);
 
                 if (!itemstack1.isEmpty() && PotionBrewer.a(itemstack1, itemstack)) {
                     return true;
@@ -186,37 +187,35 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         }
     }
 
-    private void j() {
-        ItemStack itemstack = (ItemStack) this.items.get(3);
+    private static void a(World world, BlockPosition blockposition, NonNullList<ItemStack> nonnulllist) {
+        ItemStack itemstack = (ItemStack) nonnulllist.get(3);
 
         for (int i = 0; i < 3; ++i) {
-            this.items.set(i, PotionBrewer.d(itemstack, (ItemStack) this.items.get(i)));
+            nonnulllist.set(i, PotionBrewer.d(itemstack, (ItemStack) nonnulllist.get(i)));
         }
 
         itemstack.subtract(1);
-        BlockPosition blockposition = this.getPosition();
-
-        if (itemstack.getItem().p()) {
+        if (itemstack.getItem().s()) {
             ItemStack itemstack1 = new ItemStack(itemstack.getItem().getCraftingRemainingItem());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
-            } else if (!this.world.isClientSide) {
-                InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
+            } else {
+                InventoryUtils.dropItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
             }
         }
 
-        this.items.set(3, itemstack);
-        this.world.triggerEffect(1035, blockposition, 0);
+        nonnulllist.set(3, itemstack);
+        world.triggerEffect(1035, blockposition, 0);
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.b);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.EMPTY);
         ContainerUtil.b(nbttagcompound, this.items);
         this.brewTime = nbttagcompound.getShort("BrewTime");
-        this.fuelLevel = nbttagcompound.getByte("Fuel");
+        this.fuel = nbttagcompound.getByte("Fuel");
     }
 
     @Override
@@ -224,13 +223,13 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         super.save(nbttagcompound);
         nbttagcompound.setShort("BrewTime", (short) this.brewTime);
         ContainerUtil.a(nbttagcompound, this.items);
-        nbttagcompound.setByte("Fuel", (byte) this.fuelLevel);
+        nbttagcompound.setByte("Fuel", (byte) this.fuel);
         return nbttagcompound;
     }
 
     @Override
     public ItemStack getItem(int i) {
-        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.b;
+        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.EMPTY;
     }
 
     @Override
@@ -253,23 +252,17 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.h((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.level.getTileEntity(this.worldPosition) != this ? false : entityhuman.h((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
     public boolean b(int i, ItemStack itemstack) {
-        if (i == 3) {
-            return PotionBrewer.a(itemstack);
-        } else {
-            Item item = itemstack.getItem();
-
-            return i == 4 ? item == Items.BLAZE_POWDER : (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) && this.getItem(i).isEmpty();
-        }
+        return i == 3 ? PotionBrewer.a(itemstack) : (i == 4 ? itemstack.a(Items.BLAZE_POWDER) : (itemstack.a(Items.POTION) || itemstack.a(Items.SPLASH_POTION) || itemstack.a(Items.LINGERING_POTION) || itemstack.a(Items.GLASS_BOTTLE)) && this.getItem(i).isEmpty());
     }
 
     @Override
     public int[] getSlotsForFace(EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.b : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.c : TileEntityBrewingStand.g);
+        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.SLOTS_FOR_UP : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.SLOTS_FOR_DOWN : TileEntityBrewingStand.SLOTS_FOR_SIDES);
     }
 
     @Override
@@ -279,7 +272,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     public boolean canTakeItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
-        return i == 3 ? itemstack.getItem() == Items.GLASS_BOTTLE : true;
+        return i == 3 ? itemstack.a(Items.GLASS_BOTTLE) : true;
     }
 
     @Override
@@ -289,6 +282,6 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     protected Container createContainer(int i, PlayerInventory playerinventory) {
-        return new ContainerBrewingStand(i, playerinventory, this, this.a);
+        return new ContainerBrewingStand(i, playerinventory, this, this.dataAccess);
     }
 }

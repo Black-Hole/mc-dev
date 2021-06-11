@@ -36,11 +36,11 @@ public class ItemEnderEye extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.a(Blocks.END_PORTAL_FRAME) && !(Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)) {
+        if (iblockdata.a(Blocks.END_PORTAL_FRAME) && !(Boolean) iblockdata.get(BlockEnderPortalFrame.HAS_EYE)) {
             if (world.isClientSide) {
                 return EnumInteractionResult.SUCCESS;
             } else {
-                IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockEnderPortalFrame.EYE, true);
+                IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockEnderPortalFrame.HAS_EYE, true);
 
                 Block.a(iblockdata, iblockdata1, world, blockposition);
                 world.setTypeAndData(blockposition, iblockdata1, 2);
@@ -50,15 +50,15 @@ public class ItemEnderEye extends Item {
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.c().a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
-                    BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().b(-3, 0, -3);
+                    BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().c(-3, 0, -3);
 
                     for (int i = 0; i < 3; ++i) {
                         for (int j = 0; j < 3; ++j) {
-                            world.setTypeAndData(blockposition1.b(i, 0, j), Blocks.END_PORTAL.getBlockData(), 2);
+                            world.setTypeAndData(blockposition1.c(i, 0, j), Blocks.END_PORTAL.getBlockData(), 2);
                         }
                     }
 
-                    world.b(1038, blockposition1.b(1, 0, 1), 0);
+                    world.b(1038, blockposition1.c(1, 0, 1), 0);
                 }
 
                 return EnumInteractionResult.CONSUME;
@@ -87,12 +87,12 @@ public class ItemEnderEye extends Item {
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
                     if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.m.a((EntityPlayer) entityhuman, blockposition);
+                        CriterionTriggers.USED_ENDER_EYE.a((EntityPlayer) entityhuman, blockposition);
                     }
 
-                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.RANDOM.nextFloat() * 0.4F + 0.8F));
+                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, entityhuman.getChunkCoordinates(), 0);
-                    if (!entityhuman.abilities.canInstantlyBuild) {
+                    if (!entityhuman.getAbilities().instabuild) {
                         itemstack.subtract(1);
                     }
 

@@ -11,38 +11,29 @@ import org.apache.logging.log4j.Logger;
 public abstract class PersistentBase {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final String id;
-    private boolean c;
+    private boolean dirty;
 
-    public PersistentBase(String s) {
-        this.id = s;
-    }
+    public PersistentBase() {}
 
-    public abstract void a(NBTTagCompound nbttagcompound);
-
-    public abstract NBTTagCompound b(NBTTagCompound nbttagcompound);
+    public abstract NBTTagCompound a(NBTTagCompound nbttagcompound);
 
     public void b() {
         this.a(true);
     }
 
     public void a(boolean flag) {
-        this.c = flag;
+        this.dirty = flag;
     }
 
     public boolean c() {
-        return this.c;
-    }
-
-    public String getId() {
-        return this.id;
+        return this.dirty;
     }
 
     public void a(File file) {
         if (this.c()) {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            nbttagcompound.set("data", this.b(new NBTTagCompound()));
+            nbttagcompound.set("data", this.a(new NBTTagCompound()));
             nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
 
             try {

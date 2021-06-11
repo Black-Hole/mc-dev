@@ -11,6 +11,8 @@ import net.minecraft.world.level.World;
 
 public class ItemMilkBucket extends Item {
 
+    private static final int DRINK_DURATION = 32;
+
     public ItemMilkBucket(Item.Info item_info) {
         super(item_info);
     }
@@ -20,11 +22,11 @@ public class ItemMilkBucket extends Item {
         if (entityliving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
-            CriterionTriggers.z.a(entityplayer, itemstack);
+            CriterionTriggers.CONSUME_ITEM.a(entityplayer, itemstack);
             entityplayer.b(StatisticList.ITEM_USED.b(this));
         }
 
-        if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
+        if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).getAbilities().instabuild) {
             itemstack.subtract(1);
         }
 
@@ -36,12 +38,12 @@ public class ItemMilkBucket extends Item {
     }
 
     @Override
-    public int e_(ItemStack itemstack) {
+    public int b(ItemStack itemstack) {
         return 32;
     }
 
     @Override
-    public EnumAnimation d_(ItemStack itemstack) {
+    public EnumAnimation c(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 

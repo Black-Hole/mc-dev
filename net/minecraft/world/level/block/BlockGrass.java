@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
 import net.minecraft.world.level.levelgen.feature.WorldGenFlowers;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureConfiguration;
 
 public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragilePlantElement {
 
@@ -39,7 +40,7 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
 
             while (true) {
                 if (j < i / 16) {
-                    blockposition2 = blockposition2.b(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
+                    blockposition2 = blockposition2.c(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
                     if (worldserver.getType(blockposition2.down()).a((Block) this) && !worldserver.getType(blockposition2).r(worldserver, blockposition2)) {
                         ++j;
                         continue;
@@ -63,10 +64,7 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                                     break label38;
                                 }
 
-                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) list.get(0);
-                                WorldGenFlowers worldgenflowers = (WorldGenFlowers) worldgenfeatureconfigured.e;
-
-                                iblockdata3 = worldgenflowers.b(random, blockposition2, worldgenfeatureconfigured.c());
+                                iblockdata3 = a(random, blockposition2, (WorldGenFeatureConfigured) list.get(0));
                             } else {
                                 iblockdata3 = iblockdata1;
                             }
@@ -83,5 +81,11 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
             }
         }
 
+    }
+
+    private static <U extends WorldGenFeatureConfiguration> IBlockData a(Random random, BlockPosition blockposition, WorldGenFeatureConfigured<U, ?> worldgenfeatureconfigured) {
+        WorldGenFlowers<U> worldgenflowers = (WorldGenFlowers) worldgenfeatureconfigured.feature;
+
+        return worldgenflowers.b(random, blockposition, worldgenfeatureconfigured.c());
     }
 }

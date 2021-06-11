@@ -1,9 +1,10 @@
 package net.minecraft.network.protocol.game;
 
 import com.google.common.collect.Lists;
-import java.io.IOException;
-import java.util.Iterator;
+import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -14,146 +15,119 @@ import net.minecraft.world.level.lighting.LightEngine;
 
 public class PacketPlayOutLightUpdate implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private int b;
-    private int c;
-    private int d;
-    private int e;
-    private int f;
-    private List<byte[]> g;
-    private List<byte[]> h;
-    private boolean i;
+    private final int x;
+    private final int z;
+    private final BitSet skyYMask;
+    private final BitSet blockYMask;
+    private final BitSet emptySkyYMask;
+    private final BitSet emptyBlockYMask;
+    private final List<byte[]> skyUpdates;
+    private final List<byte[]> blockUpdates;
+    private final boolean trustEdges;
 
-    public PacketPlayOutLightUpdate() {}
+    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, @Nullable BitSet bitset, @Nullable BitSet bitset1, boolean flag) {
+        this.x = chunkcoordintpair.x;
+        this.z = chunkcoordintpair.z;
+        this.trustEdges = flag;
+        this.skyYMask = new BitSet();
+        this.blockYMask = new BitSet();
+        this.emptySkyYMask = new BitSet();
+        this.emptyBlockYMask = new BitSet();
+        this.skyUpdates = Lists.newArrayList();
+        this.blockUpdates = Lists.newArrayList();
 
-    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, boolean flag) {
-        this.a = chunkcoordintpair.x;
-        this.b = chunkcoordintpair.z;
-        this.i = flag;
-        this.g = Lists.newArrayList();
-        this.h = Lists.newArrayList();
-
-        for (int i = 0; i < 18; ++i) {
-            NibbleArray nibblearray = lightengine.a(EnumSkyBlock.SKY).a(SectionPosition.a(chunkcoordintpair, -1 + i));
-            NibbleArray nibblearray1 = lightengine.a(EnumSkyBlock.BLOCK).a(SectionPosition.a(chunkcoordintpair, -1 + i));
-
-            if (nibblearray != null) {
-                if (nibblearray.c()) {
-                    this.e |= 1 << i;
-                } else {
-                    this.c |= 1 << i;
-                    this.g.add(nibblearray.asBytes().clone());
-                }
+        for (int i = 0; i < lightengine.b(); ++i) {
+            if (bitset == null || bitset.get(i)) {
+                a(chunkcoordintpair, lightengine, EnumSkyBlock.SKY, i, this.skyYMask, this.emptySkyYMask, this.skyUpdates);
             }
 
-            if (nibblearray1 != null) {
-                if (nibblearray1.c()) {
-                    this.f |= 1 << i;
-                } else {
-                    this.d |= 1 << i;
-                    this.h.add(nibblearray1.asBytes().clone());
-                }
+            if (bitset1 == null || bitset1.get(i)) {
+                a(chunkcoordintpair, lightengine, EnumSkyBlock.BLOCK, i, this.blockYMask, this.emptyBlockYMask, this.blockUpdates);
             }
         }
 
     }
 
-    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, int i, int j, boolean flag) {
-        this.a = chunkcoordintpair.x;
-        this.b = chunkcoordintpair.z;
-        this.i = flag;
-        this.c = i;
-        this.d = j;
-        this.g = Lists.newArrayList();
-        this.h = Lists.newArrayList();
+    private static void a(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, EnumSkyBlock enumskyblock, int i, BitSet bitset, BitSet bitset1, List<byte[]> list) {
+        NibbleArray nibblearray = lightengine.a(enumskyblock).a(SectionPosition.a(chunkcoordintpair, lightengine.c() + i));
 
-        for (int k = 0; k < 18; ++k) {
-            NibbleArray nibblearray;
-
-            if ((this.c & 1 << k) != 0) {
-                nibblearray = lightengine.a(EnumSkyBlock.SKY).a(SectionPosition.a(chunkcoordintpair, -1 + k));
-                if (nibblearray != null && !nibblearray.c()) {
-                    this.g.add(nibblearray.asBytes().clone());
-                } else {
-                    this.c &= ~(1 << k);
-                    if (nibblearray != null) {
-                        this.e |= 1 << k;
-                    }
-                }
-            }
-
-            if ((this.d & 1 << k) != 0) {
-                nibblearray = lightengine.a(EnumSkyBlock.BLOCK).a(SectionPosition.a(chunkcoordintpair, -1 + k));
-                if (nibblearray != null && !nibblearray.c()) {
-                    this.h.add(nibblearray.asBytes().clone());
-                } else {
-                    this.d &= ~(1 << k);
-                    if (nibblearray != null) {
-                        this.f |= 1 << k;
-                    }
-                }
+        if (nibblearray != null) {
+            if (nibblearray.c()) {
+                bitset1.set(i);
+            } else {
+                bitset.set(i);
+                list.add((byte[]) nibblearray.asBytes().clone());
             }
         }
 
+    }
+
+    public PacketPlayOutLightUpdate(PacketDataSerializer packetdataserializer) {
+        this.x = packetdataserializer.j();
+        this.z = packetdataserializer.j();
+        this.trustEdges = packetdataserializer.readBoolean();
+        this.skyYMask = packetdataserializer.t();
+        this.blockYMask = packetdataserializer.t();
+        this.emptySkyYMask = packetdataserializer.t();
+        this.emptyBlockYMask = packetdataserializer.t();
+        this.skyUpdates = packetdataserializer.a((packetdataserializer1) -> {
+            return packetdataserializer1.b(2048);
+        });
+        this.blockUpdates = packetdataserializer.a((packetdataserializer1) -> {
+            return packetdataserializer1.b(2048);
+        });
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.i();
-        this.i = packetdataserializer.readBoolean();
-        this.c = packetdataserializer.i();
-        this.d = packetdataserializer.i();
-        this.e = packetdataserializer.i();
-        this.f = packetdataserializer.i();
-        this.g = Lists.newArrayList();
-
-        int i;
-
-        for (i = 0; i < 18; ++i) {
-            if ((this.c & 1 << i) != 0) {
-                this.g.add(packetdataserializer.b(2048));
-            }
-        }
-
-        this.h = Lists.newArrayList();
-
-        for (i = 0; i < 18; ++i) {
-            if ((this.d & 1 << i) != 0) {
-                this.h.add(packetdataserializer.b(2048));
-            }
-        }
-
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.d(this.b);
-        packetdataserializer.writeBoolean(this.i);
-        packetdataserializer.d(this.c);
-        packetdataserializer.d(this.d);
-        packetdataserializer.d(this.e);
-        packetdataserializer.d(this.f);
-        Iterator iterator = this.g.iterator();
-
-        byte[] abyte;
-
-        while (iterator.hasNext()) {
-            abyte = (byte[]) iterator.next();
-            packetdataserializer.a(abyte);
-        }
-
-        iterator = this.h.iterator();
-
-        while (iterator.hasNext()) {
-            abyte = (byte[]) iterator.next();
-            packetdataserializer.a(abyte);
-        }
-
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.x);
+        packetdataserializer.d(this.z);
+        packetdataserializer.writeBoolean(this.trustEdges);
+        packetdataserializer.a(this.skyYMask);
+        packetdataserializer.a(this.blockYMask);
+        packetdataserializer.a(this.emptySkyYMask);
+        packetdataserializer.a(this.emptyBlockYMask);
+        packetdataserializer.a((Collection) this.skyUpdates, PacketDataSerializer::a);
+        packetdataserializer.a((Collection) this.blockUpdates, PacketDataSerializer::a);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.x;
+    }
+
+    public int c() {
+        return this.z;
+    }
+
+    public BitSet d() {
+        return this.skyYMask;
+    }
+
+    public BitSet e() {
+        return this.emptySkyYMask;
+    }
+
+    public List<byte[]> f() {
+        return this.skyUpdates;
+    }
+
+    public BitSet g() {
+        return this.blockYMask;
+    }
+
+    public BitSet h() {
+        return this.emptyBlockYMask;
+    }
+
+    public List<byte[]> i() {
+        return this.blockUpdates;
+    }
+
+    public boolean j() {
+        return this.trustEdges;
     }
 }

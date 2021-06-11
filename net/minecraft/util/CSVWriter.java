@@ -11,12 +11,14 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 public class CSVWriter {
 
-    private final Writer a;
-    private final int b;
+    private static final String LINE_SEPARATOR = "\r\n";
+    private static final String FIELD_SEPARATOR = ",";
+    private final Writer output;
+    private final int columnCount;
 
-    private CSVWriter(Writer writer, List<String> list) throws IOException {
-        this.a = writer;
-        this.b = list.size();
+    CSVWriter(Writer writer, List<String> list) throws IOException {
+        this.output = writer;
+        this.columnCount = list.size();
         this.a(list.stream());
     }
 
@@ -25,15 +27,18 @@ public class CSVWriter {
     }
 
     public void a(Object... aobject) throws IOException {
-        if (aobject.length != this.b) {
-            throw new IllegalArgumentException("Invalid number of columns, expected " + this.b + ", but got " + aobject.length);
+        if (aobject.length != this.columnCount) {
+            throw new IllegalArgumentException("Invalid number of columns, expected " + this.columnCount + ", but got " + aobject.length);
         } else {
             this.a(Stream.of(aobject));
         }
     }
 
     private void a(Stream<?> stream) throws IOException {
-        this.a.write((String) stream.map(CSVWriter::a).collect(Collectors.joining(",")) + "\r\n");
+        Writer writer = this.output;
+        Stream stream1 = stream.map(CSVWriter::a);
+
+        writer.write((String) stream1.collect(Collectors.joining(",")) + "\r\n");
     }
 
     private static String a(@Nullable Object object) {
@@ -42,17 +47,17 @@ public class CSVWriter {
 
     public static class a {
 
-        private final List<String> a = Lists.newArrayList();
+        private final List<String> headers = Lists.newArrayList();
 
         public a() {}
 
         public CSVWriter.a a(String s) {
-            this.a.add(s);
+            this.headers.add(s);
             return this;
         }
 
         public CSVWriter a(Writer writer) throws IOException {
-            return new CSVWriter(writer, this.a);
+            return new CSVWriter(writer, this.headers);
         }
     }
 }

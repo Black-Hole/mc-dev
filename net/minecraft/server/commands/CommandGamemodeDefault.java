@@ -11,6 +11,8 @@ import net.minecraft.world.level.EnumGamemode;
 
 public class CommandGamemodeDefault {
 
+    public CommandGamemodeDefault() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("defaultgamemode").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
@@ -21,11 +23,9 @@ public class CommandGamemodeDefault {
         for (int j = 0; j < i; ++j) {
             EnumGamemode enumgamemode = aenumgamemode[j];
 
-            if (enumgamemode != EnumGamemode.NOT_SET) {
-                literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a(enumgamemode.b()).executes((commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), enumgamemode);
-                }));
-            }
+            literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a(enumgamemode.b()).executes((commandcontext) -> {
+                return a((CommandListenerWrapper) commandcontext.getSource(), enumgamemode);
+            }));
         }
 
         commanddispatcher.register(literalargumentbuilder);
@@ -36,14 +36,15 @@ public class CommandGamemodeDefault {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
         minecraftserver.a(enumgamemode);
-        if (minecraftserver.getForceGamemode()) {
+        EnumGamemode enumgamemode1 = minecraftserver.aZ();
+
+        if (enumgamemode1 != null) {
             Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                if (entityplayer.playerInteractManager.getGameMode() != enumgamemode) {
-                    entityplayer.a(enumgamemode);
+                if (entityplayer.a(enumgamemode1)) {
                     ++i;
                 }
             }

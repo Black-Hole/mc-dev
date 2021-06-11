@@ -2,6 +2,8 @@ package net.minecraft.data.worldgen;
 
 public class WorldGenFeatureVillages {
 
+    public WorldGenFeatureVillages() {}
+
     public static void a() {
         WorldGenFeatureVillagePlain.a();
         WorldGenFeatureVillageSnowy.a();

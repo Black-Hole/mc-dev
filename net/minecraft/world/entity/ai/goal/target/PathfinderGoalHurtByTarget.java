@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTameableAnimal;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.IEntitySelector;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
 import net.minecraft.world.level.GameRules;
@@ -15,28 +16,29 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
-    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).c().e();
-    private boolean b;
-    private int c;
-    private final Class<?>[] d;
-    private Class<?>[] i;
+    private static final PathfinderTargetCondition HURT_BY_TARGETING = PathfinderTargetCondition.a().d().e();
+    private static final int ALERT_RANGE_Y = 10;
+    private boolean alertSameType;
+    private int timestamp;
+    private final Class<?>[] toIgnoreDamage;
+    private Class<?>[] toIgnoreAlert;
 
     public PathfinderGoalHurtByTarget(EntityCreature entitycreature, Class<?>... aclass) {
         super(entitycreature, true);
-        this.d = aclass;
+        this.toIgnoreDamage = aclass;
         this.a(EnumSet.of(PathfinderGoal.Type.TARGET));
     }
 
     @Override
     public boolean a() {
-        int i = this.e.da();
-        EntityLiving entityliving = this.e.getLastDamager();
+        int i = this.mob.dH();
+        EntityLiving entityliving = this.mob.getLastDamager();
 
-        if (i != this.c && entityliving != null) {
-            if (entityliving.getEntityType() == EntityTypes.PLAYER && this.e.world.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER)) {
+        if (i != this.timestamp && entityliving != null) {
+            if (entityliving.getEntityType() == EntityTypes.PLAYER && this.mob.level.getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
                 return false;
             } else {
-                Class[] aclass = this.d;
+                Class[] aclass = this.toIgnoreDamage;
                 int j = aclass.length;
 
                 for (int k = 0; k < j; ++k) {
@@ -47,7 +49,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
                     }
                 }
 
-                return this.a(entityliving, PathfinderGoalHurtByTarget.a);
+                return this.a(entityliving, PathfinderGoalHurtByTarget.HURT_BY_TARGETING);
             }
         } else {
             return false;
@@ -55,18 +57,18 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     }
 
     public PathfinderGoalHurtByTarget a(Class<?>... aclass) {
-        this.b = true;
-        this.i = aclass;
+        this.alertSameType = true;
+        this.toIgnoreAlert = aclass;
         return this;
     }
 
     @Override
     public void c() {
-        this.e.setGoalTarget(this.e.getLastDamager());
-        this.g = this.e.getGoalTarget();
-        this.c = this.e.da();
-        this.h = 300;
-        if (this.b) {
+        this.mob.setGoalTarget(this.mob.getLastDamager());
+        this.targetMob = this.mob.getGoalTarget();
+        this.timestamp = this.mob.dH();
+        this.unseenMemoryTicks = 300;
+        if (this.alertSameType) {
             this.g();
         }
 
@@ -75,17 +77,17 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
     protected void g() {
         double d0 = this.k();
-        AxisAlignedBB axisalignedbb = AxisAlignedBB.a(this.e.getPositionVector()).grow(d0, 10.0D, d0);
-        List<EntityInsentient> list = this.e.world.b(this.e.getClass(), axisalignedbb);
+        AxisAlignedBB axisalignedbb = AxisAlignedBB.a(this.mob.getPositionVector()).grow(d0, 10.0D, d0);
+        List<? extends EntityInsentient> list = this.mob.level.a(this.mob.getClass(), axisalignedbb, IEntitySelector.NO_SPECTATORS);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             EntityInsentient entityinsentient = (EntityInsentient) iterator.next();
 
-            if (this.e != entityinsentient && entityinsentient.getGoalTarget() == null && (!(this.e instanceof EntityTameableAnimal) || ((EntityTameableAnimal) this.e).getOwner() == ((EntityTameableAnimal) entityinsentient).getOwner()) && !entityinsentient.r(this.e.getLastDamager())) {
-                if (this.i != null) {
+            if (this.mob != entityinsentient && entityinsentient.getGoalTarget() == null && (!(this.mob instanceof EntityTameableAnimal) || ((EntityTameableAnimal) this.mob).getOwner() == ((EntityTameableAnimal) entityinsentient).getOwner()) && !entityinsentient.p(this.mob.getLastDamager())) {
+                if (this.toIgnoreAlert != null) {
                     boolean flag = false;
-                    Class[] aclass = this.i;
+                    Class[] aclass = this.toIgnoreAlert;
                     int i = aclass.length;
 
                     for (int j = 0; j < i; ++j) {
@@ -102,7 +104,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
                     }
                 }
 
-                this.a(entityinsentient, this.e.getLastDamager());
+                this.a(entityinsentient, this.mob.getLastDamager());
             }
         }
 

@@ -1,31 +1,31 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutKickDisconnect implements Packet<PacketListenerPlayOut> {
 
-    private IChatBaseComponent a;
-
-    public PacketPlayOutKickDisconnect() {}
+    private final IChatBaseComponent reason;
 
     public PacketPlayOutKickDisconnect(IChatBaseComponent ichatbasecomponent) {
-        this.a = ichatbasecomponent;
+        this.reason = ichatbasecomponent;
+    }
+
+    public PacketPlayOutKickDisconnect(PacketDataSerializer packetdataserializer) {
+        this.reason = packetdataserializer.i();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.h();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.reason);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public IChatBaseComponent b() {
+        return this.reason;
     }
 }

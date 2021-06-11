@@ -16,21 +16,21 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionRandomChanceWithLooting implements LootItemCondition {
 
-    private final float a;
-    private final float b;
+    final float percent;
+    final float lootingMultiplier;
 
-    private LootItemConditionRandomChanceWithLooting(float f, float f1) {
-        this.a = f;
-        this.b = f1;
+    LootItemConditionRandomChanceWithLooting(float f, float f1) {
+        this.percent = f;
+        this.lootingMultiplier = f1;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.d;
+    public LootItemConditionType a() {
+        return LootItemConditions.RANDOM_CHANCE_WITH_LOOTING;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.KILLER_ENTITY);
     }
 
@@ -42,7 +42,7 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
             i = EnchantmentManager.g((EntityLiving) entity);
         }
 
-        return loottableinfo.a().nextFloat() < this.a + (float) i * this.b;
+        return loottableinfo.a().nextFloat() < this.percent + (float) i * this.lootingMultiplier;
     }
 
     public static LootItemCondition.a a(float f, float f1) {
@@ -56,8 +56,8 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionRandomChanceWithLooting lootitemconditionrandomchancewithlooting, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("chance", lootitemconditionrandomchancewithlooting.a);
-            jsonobject.addProperty("looting_multiplier", lootitemconditionrandomchancewithlooting.b);
+            jsonobject.addProperty("chance", lootitemconditionrandomchancewithlooting.percent);
+            jsonobject.addProperty("looting_multiplier", lootitemconditionrandomchancewithlooting.lootingMultiplier);
         }
 
         @Override

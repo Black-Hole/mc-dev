@@ -11,43 +11,46 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Stream;
 import net.minecraft.util.ChatDeserializer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootSerializer;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
-import net.minecraft.world.level.storage.loot.LootValueBounds;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.ScoreboardObjective;
 
 public class LootItemConditionEntityScore implements LootItemCondition {
 
-    private final Map<String, LootValueBounds> a;
-    private final LootTableInfo.EntityTarget b;
+    final Map<String, IntRange> scores;
+    final LootTableInfo.EntityTarget entityTarget;
 
-    private LootItemConditionEntityScore(Map<String, LootValueBounds> map, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        this.a = ImmutableMap.copyOf(map);
-        this.b = loottableinfo_entitytarget;
+    LootItemConditionEntityScore(Map<String, IntRange> map, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        this.scores = ImmutableMap.copyOf(map);
+        this.entityTarget = loottableinfo_entitytarget;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.g;
+    public LootItemConditionType a() {
+        return LootItemConditions.ENTITY_SCORES;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(this.b.a());
+    public Set<LootContextParameter<?>> b() {
+        return (Set) Stream.concat(Stream.of(this.entityTarget.a()), this.scores.values().stream().flatMap((intrange) -> {
+            return intrange.a().stream();
+        })).collect(ImmutableSet.toImmutableSet());
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
+        Entity entity = (Entity) loottableinfo.getContextParameter(this.entityTarget.a());
 
         if (entity == null) {
             return false;
         } else {
-            Scoreboard scoreboard = entity.world.getScoreboard();
-            Iterator iterator = this.a.entrySet().iterator();
+            Scoreboard scoreboard = entity.level.getScoreboard();
+            Iterator iterator = this.scores.entrySet().iterator();
 
             Entry entry;
 
@@ -57,13 +60,13 @@ public class LootItemConditionEntityScore implements LootItemCondition {
                 }
 
                 entry = (Entry) iterator.next();
-            } while (this.a(entity, scoreboard, (String) entry.getKey(), (LootValueBounds) entry.getValue()));
+            } while (this.a(loottableinfo, entity, scoreboard, (String) entry.getKey(), (IntRange) entry.getValue()));
 
             return false;
         }
     }
 
-    protected boolean a(Entity entity, Scoreboard scoreboard, String s, LootValueBounds lootvaluebounds) {
+    protected boolean a(LootTableInfo loottableinfo, Entity entity, Scoreboard scoreboard, String s, IntRange intrange) {
         ScoreboardObjective scoreboardobjective = scoreboard.getObjective(s);
 
         if (scoreboardobjective == null) {
@@ -71,7 +74,31 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         } else {
             String s1 = entity.getName();
 
-            return !scoreboard.b(s1, scoreboardobjective) ? false : lootvaluebounds.a(scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective).getScore());
+            return !scoreboard.b(s1, scoreboardobjective) ? false : intrange.b(loottableinfo, scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective).getScore());
+        }
+    }
+
+    public static LootItemConditionEntityScore.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        return new LootItemConditionEntityScore.a(loottableinfo_entitytarget);
+    }
+
+    public static class a implements LootItemCondition.a {
+
+        private final Map<String, IntRange> scores = Maps.newHashMap();
+        private final LootTableInfo.EntityTarget entityTarget;
+
+        public a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+            this.entityTarget = loottableinfo_entitytarget;
+        }
+
+        public LootItemConditionEntityScore.a a(String s, IntRange intrange) {
+            this.scores.put(s, intrange);
+            return this;
+        }
+
+        @Override
+        public LootItemCondition build() {
+            return new LootItemConditionEntityScore(this.scores, this.entityTarget);
         }
     }
 
@@ -81,28 +108,28 @@ public class LootItemConditionEntityScore implements LootItemCondition {
 
         public void a(JsonObject jsonobject, LootItemConditionEntityScore lootitemconditionentityscore, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject1 = new JsonObject();
-            Iterator iterator = lootitemconditionentityscore.a.entrySet().iterator();
+            Iterator iterator = lootitemconditionentityscore.scores.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry<String, LootValueBounds> entry = (Entry) iterator.next();
+                Entry<String, IntRange> entry = (Entry) iterator.next();
 
                 jsonobject1.add((String) entry.getKey(), jsonserializationcontext.serialize(entry.getValue()));
             }
 
             jsonobject.add("scores", jsonobject1);
-            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityscore.b));
+            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityscore.entityTarget));
         }
 
         @Override
         public LootItemConditionEntityScore a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "scores").entrySet();
-            Map<String, LootValueBounds> map = Maps.newLinkedHashMap();
+            Map<String, IntRange> map = Maps.newLinkedHashMap();
             Iterator iterator = set.iterator();
 
             while (iterator.hasNext()) {
                 Entry<String, JsonElement> entry = (Entry) iterator.next();
 
-                map.put(entry.getKey(), ChatDeserializer.a((JsonElement) entry.getValue(), "score", jsondeserializationcontext, LootValueBounds.class));
+                map.put((String) entry.getKey(), (IntRange) ChatDeserializer.a((JsonElement) entry.getValue(), "score", jsondeserializationcontext, IntRange.class));
             }
 
             return new LootItemConditionEntityScore(map, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));

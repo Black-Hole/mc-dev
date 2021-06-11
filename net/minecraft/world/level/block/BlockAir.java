@@ -15,12 +15,12 @@ public class BlockAir extends Block {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 }

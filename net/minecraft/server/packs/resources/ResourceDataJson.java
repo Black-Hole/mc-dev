@@ -21,42 +21,40 @@ import org.apache.logging.log4j.Logger;
 public abstract class ResourceDataJson extends ResourceDataAbstract<Map<MinecraftKey, JsonElement>> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int b = ".json".length();
-    private final Gson c;
-    private final String d;
+    private static final String PATH_SUFFIX = ".json";
+    private static final int PATH_SUFFIX_LENGTH = ".json".length();
+    private final Gson gson;
+    private final String directory;
 
     public ResourceDataJson(Gson gson, String s) {
-        this.c = gson;
-        this.d = s;
+        this.gson = gson;
+        this.directory = s;
     }
 
     @Override
     protected Map<MinecraftKey, JsonElement> b(IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
         Map<MinecraftKey, JsonElement> map = Maps.newHashMap();
-        int i = this.d.length() + 1;
-        Iterator iterator = iresourcemanager.a(this.d, (s) -> {
+        int i = this.directory.length() + 1;
+        Iterator iterator = iresourcemanager.a(this.directory, (s) -> {
             return s.endsWith(".json");
         }).iterator();
 
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
             String s = minecraftkey.getKey();
-            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(i, s.length() - ResourceDataJson.b));
+            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(i, s.length() - ResourceDataJson.PATH_SUFFIX_LENGTH));
 
             try {
                 IResource iresource = iresourcemanager.a(minecraftkey);
-                Throwable throwable = null;
 
                 try {
                     InputStream inputstream = iresource.b();
-                    Throwable throwable1 = null;
 
                     try {
                         BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
-                        Throwable throwable2 = null;
 
                         try {
-                            JsonElement jsonelement = (JsonElement) ChatDeserializer.a(this.c, (Reader) bufferedreader, JsonElement.class);
+                            JsonElement jsonelement = (JsonElement) ChatDeserializer.a(this.gson, (Reader) bufferedreader, JsonElement.class);
 
                             if (jsonelement != null) {
                                 JsonElement jsonelement1 = (JsonElement) map.put(minecraftkey1, jsonelement);
@@ -67,56 +65,46 @@ public abstract class ResourceDataJson extends ResourceDataAbstract<Map<Minecraf
                             } else {
                                 ResourceDataJson.LOGGER.error("Couldn't load data file {} from {} as it's null or empty", minecraftkey1, minecraftkey);
                             }
-                        } catch (Throwable throwable3) {
-                            throwable2 = throwable3;
-                            throw throwable3;
-                        } finally {
-                            if (bufferedreader != null) {
-                                if (throwable2 != null) {
-                                    try {
-                                        bufferedreader.close();
-                                    } catch (Throwable throwable4) {
-                                        throwable2.addSuppressed(throwable4);
-                                    }
-                                } else {
-                                    bufferedreader.close();
-                                }
-                            }
-
-                        }
-                    } catch (Throwable throwable5) {
-                        throwable1 = throwable5;
-                        throw throwable5;
-                    } finally {
-                        if (inputstream != null) {
-                            if (throwable1 != null) {
-                                try {
-                                    inputstream.close();
-                                } catch (Throwable throwable6) {
-                                    throwable1.addSuppressed(throwable6);
-                                }
-                            } else {
-                                inputstream.close();
-                            }
-                        }
-
-                    }
-                } catch (Throwable throwable7) {
-                    throwable = throwable7;
-                    throw throwable7;
-                } finally {
-                    if (iresource != null) {
-                        if (throwable != null) {
+                        } catch (Throwable throwable) {
                             try {
-                                iresource.close();
-                            } catch (Throwable throwable8) {
-                                throwable.addSuppressed(throwable8);
+                                bufferedreader.close();
+                            } catch (Throwable throwable1) {
+                                throwable.addSuppressed(throwable1);
                             }
-                        } else {
+
+                            throw throwable;
+                        }
+
+                        bufferedreader.close();
+                    } catch (Throwable throwable2) {
+                        if (inputstream != null) {
+                            try {
+                                inputstream.close();
+                            } catch (Throwable throwable3) {
+                                throwable2.addSuppressed(throwable3);
+                            }
+                        }
+
+                        throw throwable2;
+                    }
+
+                    if (inputstream != null) {
+                        inputstream.close();
+                    }
+                } catch (Throwable throwable4) {
+                    if (iresource != null) {
+                        try {
                             iresource.close();
+                        } catch (Throwable throwable5) {
+                            throwable4.addSuppressed(throwable5);
                         }
                     }
 
+                    throw throwable4;
+                }
+
+                if (iresource != null) {
+                    iresource.close();
                 }
             } catch (IllegalArgumentException | IOException | JsonParseException jsonparseexception) {
                 ResourceDataJson.LOGGER.error("Couldn't parse data file {} from {}", minecraftkey1, minecraftkey, jsonparseexception);

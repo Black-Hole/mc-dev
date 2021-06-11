@@ -5,15 +5,15 @@ import net.minecraft.world.item.ItemStack;
 
 public abstract class IRecipeComplex implements RecipeCrafting {
 
-    private final MinecraftKey a;
+    private final MinecraftKey id;
 
     public IRecipeComplex(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
+        this.id = minecraftkey;
     }
 
     @Override
     public MinecraftKey getKey() {
-        return this.a;
+        return this.id;
     }
 
     @Override
@@ -23,6 +23,6 @@ public abstract class IRecipeComplex implements RecipeCrafting {
 
     @Override
     public ItemStack getResult() {
-        return ItemStack.b;
+        return ItemStack.EMPTY;
     }
 }

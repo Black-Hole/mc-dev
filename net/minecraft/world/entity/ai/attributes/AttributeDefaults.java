@@ -2,14 +2,16 @@ package net.minecraft.world.entity.ai.attributes;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
-import net.minecraft.SharedConstants;
+import net.minecraft.SystemUtils;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.RegistryBlocks;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumCreatureType;
+import net.minecraft.world.entity.GlowSquid;
 import net.minecraft.world.entity.ambient.EntityBat;
 import net.minecraft.world.entity.animal.EntityBee;
 import net.minecraft.world.entity.animal.EntityCat;
@@ -30,6 +32,8 @@ import net.minecraft.world.entity.animal.EntitySnowman;
 import net.minecraft.world.entity.animal.EntitySquid;
 import net.minecraft.world.entity.animal.EntityTurtle;
 import net.minecraft.world.entity.animal.EntityWolf;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.animal.horse.EntityHorseAbstract;
 import net.minecraft.world.entity.animal.horse.EntityHorseChestedAbstract;
 import net.minecraft.world.entity.animal.horse.EntityHorseSkeleton;
@@ -74,31 +78,29 @@ import org.apache.logging.log4j.Logger;
 public class AttributeDefaults {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<EntityTypes<? extends EntityLiving>, AttributeProvider> b = ImmutableMap.builder().put(EntityTypes.ARMOR_STAND, EntityLiving.cL().a()).put(EntityTypes.BAT, EntityBat.m().a()).put(EntityTypes.BEE, EntityBee.eZ().a()).put(EntityTypes.BLAZE, EntityBlaze.m().a()).put(EntityTypes.CAT, EntityCat.fa().a()).put(EntityTypes.CAVE_SPIDER, EntityCaveSpider.m().a()).put(EntityTypes.CHICKEN, EntityChicken.eK().a()).put(EntityTypes.COD, EntityFish.m().a()).put(EntityTypes.COW, EntityCow.eK().a()).put(EntityTypes.CREEPER, EntityCreeper.m().a()).put(EntityTypes.DOLPHIN, EntityDolphin.eM().a()).put(EntityTypes.DONKEY, EntityHorseChestedAbstract.eL().a()).put(EntityTypes.DROWNED, EntityZombie.eS().a()).put(EntityTypes.ELDER_GUARDIAN, EntityGuardianElder.m().a()).put(EntityTypes.ENDERMAN, EntityEnderman.m().a()).put(EntityTypes.ENDERMITE, EntityEndermite.m().a()).put(EntityTypes.ENDER_DRAGON, EntityEnderDragon.m().a()).put(EntityTypes.EVOKER, EntityEvoker.eK().a()).put(EntityTypes.FOX, EntityFox.eK().a()).put(EntityTypes.GHAST, EntityGhast.eJ().a()).put(EntityTypes.GIANT, EntityGiantZombie.m().a()).put(EntityTypes.GUARDIAN, EntityGuardian.eM().a()).put(EntityTypes.HOGLIN, EntityHoglin.eK().a()).put(EntityTypes.HORSE, EntityHorseAbstract.fi().a()).put(EntityTypes.HUSK, EntityZombie.eS().a()).put(EntityTypes.ILLUSIONER, EntityIllagerIllusioner.eK().a()).put(EntityTypes.IRON_GOLEM, EntityIronGolem.m().a()).put(EntityTypes.LLAMA, EntityLlama.fw().a()).put(EntityTypes.MAGMA_CUBE, EntityMagmaCube.m().a()).put(EntityTypes.MOOSHROOM, EntityCow.eK().a()).put(EntityTypes.MULE, EntityHorseChestedAbstract.eL().a()).put(EntityTypes.OCELOT, EntityOcelot.eK().a()).put(EntityTypes.PANDA, EntityPanda.eY().a()).put(EntityTypes.PARROT, EntityParrot.eU().a()).put(EntityTypes.PHANTOM, EntityMonster.eR().a()).put(EntityTypes.PIG, EntityPig.eK().a()).put(EntityTypes.PIGLIN, EntityPiglin.eT().a()).put(EntityTypes.PIGLIN_BRUTE, EntityPiglinBrute.eS().a()).put(EntityTypes.PILLAGER, EntityPillager.eK().a()).put(EntityTypes.PLAYER, EntityHuman.ep().a()).put(EntityTypes.POLAR_BEAR, EntityPolarBear.eK().a()).put(EntityTypes.PUFFERFISH, EntityFish.m().a()).put(EntityTypes.RABBIT, EntityRabbit.eL().a()).put(EntityTypes.RAVAGER, EntityRavager.m().a()).put(EntityTypes.SALMON, EntityFish.m().a()).put(EntityTypes.SHEEP, EntitySheep.eK().a()).put(EntityTypes.SHULKER, EntityShulker.m().a()).put(EntityTypes.SILVERFISH, EntitySilverfish.m().a()).put(EntityTypes.SKELETON, EntitySkeletonAbstract.m().a()).put(EntityTypes.SKELETON_HORSE, EntityHorseSkeleton.eL().a()).put(EntityTypes.SLIME, EntityMonster.eR().a()).put(EntityTypes.SNOW_GOLEM, EntitySnowman.m().a()).put(EntityTypes.SPIDER, EntitySpider.eK().a()).put(EntityTypes.SQUID, EntitySquid.m().a()).put(EntityTypes.STRAY, EntitySkeletonAbstract.m().a()).put(EntityTypes.STRIDER, EntityStrider.eM().a()).put(EntityTypes.TRADER_LLAMA, EntityLlama.fw().a()).put(EntityTypes.TROPICAL_FISH, EntityFish.m().a()).put(EntityTypes.TURTLE, EntityTurtle.eM().a()).put(EntityTypes.VEX, EntityVex.m().a()).put(EntityTypes.VILLAGER, EntityVillager.eY().a()).put(EntityTypes.VINDICATOR, EntityVindicator.eK().a()).put(EntityTypes.WANDERING_TRADER, EntityInsentient.p().a()).put(EntityTypes.WITCH, EntityWitch.eK().a()).put(EntityTypes.WITHER, EntityWither.eK().a()).put(EntityTypes.WITHER_SKELETON, EntitySkeletonAbstract.m().a()).put(EntityTypes.WOLF, EntityWolf.eU().a()).put(EntityTypes.ZOGLIN, EntityZoglin.m().a()).put(EntityTypes.ZOMBIE, EntityZombie.eS().a()).put(EntityTypes.ZOMBIE_HORSE, EntityHorseZombie.eL().a()).put(EntityTypes.ZOMBIE_VILLAGER, EntityZombie.eS().a()).put(EntityTypes.ZOMBIFIED_PIGLIN, EntityPigZombie.eW().a()).build();
+    private static final Map<EntityTypes<? extends EntityLiving>, AttributeProvider> SUPPLIERS = ImmutableMap.builder().put(EntityTypes.ARMOR_STAND, EntityLiving.dq().a()).put(EntityTypes.AXOLOTL, Axolotl.fE().a()).put(EntityTypes.BAT, EntityBat.n().a()).put(EntityTypes.BEE, EntityBee.fI().a()).put(EntityTypes.BLAZE, EntityBlaze.n().a()).put(EntityTypes.CAT, EntityCat.fJ().a()).put(EntityTypes.CAVE_SPIDER, EntityCaveSpider.n().a()).put(EntityTypes.CHICKEN, EntityChicken.p().a()).put(EntityTypes.COD, EntityFish.n().a()).put(EntityTypes.COW, EntityCow.p().a()).put(EntityTypes.CREEPER, EntityCreeper.n().a()).put(EntityTypes.DOLPHIN, EntityDolphin.fv().a()).put(EntityTypes.DONKEY, EntityHorseChestedAbstract.t().a()).put(EntityTypes.DROWNED, EntityZombie.fB().a()).put(EntityTypes.ELDER_GUARDIAN, EntityGuardianElder.n().a()).put(EntityTypes.ENDERMAN, EntityEnderman.n().a()).put(EntityTypes.ENDERMITE, EntityEndermite.n().a()).put(EntityTypes.ENDER_DRAGON, EntityEnderDragon.n().a()).put(EntityTypes.EVOKER, EntityEvoker.p().a()).put(EntityTypes.FOX, EntityFox.p().a()).put(EntityTypes.GHAST, EntityGhast.t().a()).put(EntityTypes.GIANT, EntityGiantZombie.n().a()).put(EntityTypes.GLOW_SQUID, GlowSquid.fv().a()).put(EntityTypes.GOAT, Goat.p().a()).put(EntityTypes.GUARDIAN, EntityGuardian.fv().a()).put(EntityTypes.HOGLIN, EntityHoglin.p().a()).put(EntityTypes.HORSE, EntityHorseAbstract.fR().a()).put(EntityTypes.HUSK, EntityZombie.fB().a()).put(EntityTypes.ILLUSIONER, EntityIllagerIllusioner.p().a()).put(EntityTypes.IRON_GOLEM, EntityIronGolem.n().a()).put(EntityTypes.LLAMA, EntityLlama.gf().a()).put(EntityTypes.MAGMA_CUBE, EntityMagmaCube.n().a()).put(EntityTypes.MOOSHROOM, EntityCow.p().a()).put(EntityTypes.MULE, EntityHorseChestedAbstract.t().a()).put(EntityTypes.OCELOT, EntityOcelot.p().a()).put(EntityTypes.PANDA, EntityPanda.fH().a()).put(EntityTypes.PARROT, EntityParrot.fD().a()).put(EntityTypes.PHANTOM, EntityMonster.fA().a()).put(EntityTypes.PIG, EntityPig.p().a()).put(EntityTypes.PIGLIN, EntityPiglin.fB().a()).put(EntityTypes.PIGLIN_BRUTE, EntityPiglinBrute.fB().a()).put(EntityTypes.PILLAGER, EntityPillager.p().a()).put(EntityTypes.PLAYER, EntityHuman.eX().a()).put(EntityTypes.POLAR_BEAR, EntityPolarBear.p().a()).put(EntityTypes.PUFFERFISH, EntityFish.n().a()).put(EntityTypes.RABBIT, EntityRabbit.t().a()).put(EntityTypes.RAVAGER, EntityRavager.n().a()).put(EntityTypes.SALMON, EntityFish.n().a()).put(EntityTypes.SHEEP, EntitySheep.p().a()).put(EntityTypes.SHULKER, EntityShulker.n().a()).put(EntityTypes.SILVERFISH, EntitySilverfish.n().a()).put(EntityTypes.SKELETON, EntitySkeletonAbstract.n().a()).put(EntityTypes.SKELETON_HORSE, EntityHorseSkeleton.t().a()).put(EntityTypes.SLIME, EntityMonster.fA().a()).put(EntityTypes.SNOW_GOLEM, EntitySnowman.n().a()).put(EntityTypes.SPIDER, EntitySpider.p().a()).put(EntityTypes.SQUID, EntitySquid.fv().a()).put(EntityTypes.STRAY, EntitySkeletonAbstract.n().a()).put(EntityTypes.STRIDER, EntityStrider.fv().a()).put(EntityTypes.TRADER_LLAMA, EntityLlama.gf().a()).put(EntityTypes.TROPICAL_FISH, EntityFish.n().a()).put(EntityTypes.TURTLE, EntityTurtle.fv().a()).put(EntityTypes.VEX, EntityVex.n().a()).put(EntityTypes.VILLAGER, EntityVillager.fH().a()).put(EntityTypes.VINDICATOR, EntityVindicator.p().a()).put(EntityTypes.WANDERING_TRADER, EntityInsentient.w().a()).put(EntityTypes.WITCH, EntityWitch.p().a()).put(EntityTypes.WITHER, EntityWither.p().a()).put(EntityTypes.WITHER_SKELETON, EntitySkeletonAbstract.n().a()).put(EntityTypes.WOLF, EntityWolf.fD().a()).put(EntityTypes.ZOGLIN, EntityZoglin.n().a()).put(EntityTypes.ZOMBIE, EntityZombie.fB().a()).put(EntityTypes.ZOMBIE_HORSE, EntityHorseZombie.t().a()).put(EntityTypes.ZOMBIE_VILLAGER, EntityZombie.fB().a()).put(EntityTypes.ZOMBIFIED_PIGLIN, EntityPigZombie.fF().a()).build();
+
+    public AttributeDefaults() {}
 
     public static AttributeProvider a(EntityTypes<? extends EntityLiving> entitytypes) {
-        return (AttributeProvider) AttributeDefaults.b.get(entitytypes);
+        return (AttributeProvider) AttributeDefaults.SUPPLIERS.get(entitytypes);
     }
 
     public static boolean b(EntityTypes<?> entitytypes) {
-        return AttributeDefaults.b.containsKey(entitytypes);
+        return AttributeDefaults.SUPPLIERS.containsKey(entitytypes);
     }
 
     public static void a() {
         Stream stream = IRegistry.ENTITY_TYPE.g().filter((entitytypes) -> {
-            return entitytypes.e() != EnumCreatureType.MISC;
+            return entitytypes.f() != EnumCreatureType.MISC;
         }).filter((entitytypes) -> {
             return !b(entitytypes);
         });
         RegistryBlocks registryblocks = IRegistry.ENTITY_TYPE;
 
-        registryblocks.getClass();
+        Objects.requireNonNull(registryblocks);
         stream.map(registryblocks::getKey).forEach((minecraftkey) -> {
-            if (SharedConstants.d) {
-                throw new IllegalStateException("Entity " + minecraftkey + " has no attributes");
-            } else {
-                AttributeDefaults.LOGGER.error("Entity {} has no attributes", minecraftkey);
-            }
+            SystemUtils.a("Entity " + minecraftkey + " has no attributes");
         });
     }
 }

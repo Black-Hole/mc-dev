@@ -13,7 +13,7 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.Map;
-import javax.annotation.Nullable;
+import java.util.Optional;
 import net.minecraft.FileUtils;
 import net.minecraft.ResourceKeyInvalidException;
 import net.minecraft.nbt.GameProfileSerializer;
@@ -31,120 +31,111 @@ import org.apache.logging.log4j.Logger;
 public class DefinedStructureManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Map<MinecraftKey, DefinedStructure> b = Maps.newHashMap();
-    private final DataFixer c;
-    private IResourceManager d;
-    private final Path e;
+    private static final String STRUCTURE_DIRECTORY_NAME = "structures";
+    private static final String STRUCTURE_FILE_EXTENSION = ".nbt";
+    private static final String STRUCTURE_TEXT_FILE_EXTENSION = ".snbt";
+    private final Map<MinecraftKey, Optional<DefinedStructure>> structureRepository = Maps.newConcurrentMap();
+    private final DataFixer fixerUpper;
+    private IResourceManager resourceManager;
+    private final Path generatedDir;
 
     public DefinedStructureManager(IResourceManager iresourcemanager, Convertable.ConversionSession convertable_conversionsession, DataFixer datafixer) {
-        this.d = iresourcemanager;
-        this.c = datafixer;
-        this.e = convertable_conversionsession.getWorldFolder(SavedFile.GENERATED).normalize();
+        this.resourceManager = iresourcemanager;
+        this.fixerUpper = datafixer;
+        this.generatedDir = convertable_conversionsession.getWorldFolder(SavedFile.GENERATED_DIR).normalize();
     }
 
     public DefinedStructure a(MinecraftKey minecraftkey) {
-        DefinedStructure definedstructure = this.b(minecraftkey);
+        Optional<DefinedStructure> optional = this.b(minecraftkey);
 
-        if (definedstructure == null) {
-            definedstructure = new DefinedStructure();
-            this.b.put(minecraftkey, definedstructure);
+        if (optional.isPresent()) {
+            return (DefinedStructure) optional.get();
+        } else {
+            DefinedStructure definedstructure = new DefinedStructure();
+
+            this.structureRepository.put(minecraftkey, Optional.of(definedstructure));
+            return definedstructure;
         }
-
-        return definedstructure;
     }
 
-    @Nullable
-    public DefinedStructure b(MinecraftKey minecraftkey) {
-        return (DefinedStructure) this.b.computeIfAbsent(minecraftkey, (minecraftkey1) -> {
-            DefinedStructure definedstructure = this.f(minecraftkey1);
+    public Optional<DefinedStructure> b(MinecraftKey minecraftkey) {
+        return (Optional) this.structureRepository.computeIfAbsent(minecraftkey, (minecraftkey1) -> {
+            Optional<DefinedStructure> optional = this.f(minecraftkey1);
 
-            return definedstructure != null ? definedstructure : this.e(minecraftkey1);
+            return optional.isPresent() ? optional : this.e(minecraftkey1);
         });
     }
 
     public void a(IResourceManager iresourcemanager) {
-        this.d = iresourcemanager;
-        this.b.clear();
+        this.resourceManager = iresourcemanager;
+        this.structureRepository.clear();
     }
 
-    @Nullable
-    private DefinedStructure e(MinecraftKey minecraftkey) {
+    private Optional<DefinedStructure> e(MinecraftKey minecraftkey) {
         MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), "structures/" + minecraftkey.getKey() + ".nbt");
 
         try {
-            IResource iresource = this.d.a(minecraftkey1);
-            Throwable throwable = null;
+            IResource iresource = this.resourceManager.a(minecraftkey1);
 
-            DefinedStructure definedstructure;
+            Optional optional;
 
             try {
-                definedstructure = this.a(iresource.b());
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+                optional = Optional.of(this.a(iresource.b()));
+            } catch (Throwable throwable) {
                 if (iresource != null) {
-                    if (throwable != null) {
-                        try {
-                            iresource.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         iresource.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
             }
 
-            return definedstructure;
+            if (iresource != null) {
+                iresource.close();
+            }
+
+            return optional;
         } catch (FileNotFoundException filenotfoundexception) {
-            return null;
-        } catch (Throwable throwable3) {
-            DefinedStructureManager.LOGGER.error("Couldn't load structure {}: {}", minecraftkey, throwable3.toString());
-            return null;
+            return Optional.empty();
+        } catch (Throwable throwable2) {
+            DefinedStructureManager.LOGGER.error("Couldn't load structure {}: {}", minecraftkey, throwable2.toString());
+            return Optional.empty();
         }
     }
 
-    @Nullable
-    private DefinedStructure f(MinecraftKey minecraftkey) {
-        if (!this.e.toFile().isDirectory()) {
-            return null;
+    private Optional<DefinedStructure> f(MinecraftKey minecraftkey) {
+        if (!this.generatedDir.toFile().isDirectory()) {
+            return Optional.empty();
         } else {
             Path path = this.b(minecraftkey, ".nbt");
 
             try {
                 FileInputStream fileinputstream = new FileInputStream(path.toFile());
-                Throwable throwable = null;
 
-                DefinedStructure definedstructure;
+                Optional optional;
 
                 try {
-                    definedstructure = this.a((InputStream) fileinputstream);
-                } catch (Throwable throwable1) {
-                    throwable = throwable1;
-                    throw throwable1;
-                } finally {
-                    if (fileinputstream != null) {
-                        if (throwable != null) {
-                            try {
-                                fileinputstream.close();
-                            } catch (Throwable throwable2) {
-                                throwable.addSuppressed(throwable2);
-                            }
-                        } else {
-                            fileinputstream.close();
-                        }
+                    optional = Optional.of(this.a((InputStream) fileinputstream));
+                } catch (Throwable throwable) {
+                    try {
+                        fileinputstream.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
 
+                    throw throwable;
                 }
 
-                return definedstructure;
+                fileinputstream.close();
+                return optional;
             } catch (FileNotFoundException filenotfoundexception) {
-                return null;
+                return Optional.empty();
             } catch (IOException ioexception) {
                 DefinedStructureManager.LOGGER.error("Couldn't load structure from {}", path, ioexception);
-                return null;
+                return Optional.empty();
             }
         }
     }
@@ -162,16 +153,17 @@ public class DefinedStructureManager {
 
         DefinedStructure definedstructure = new DefinedStructure();
 
-        definedstructure.b(GameProfileSerializer.a(this.c, DataFixTypes.STRUCTURE, nbttagcompound, nbttagcompound.getInt("DataVersion")));
+        definedstructure.b(GameProfileSerializer.a(this.fixerUpper, DataFixTypes.STRUCTURE, nbttagcompound, nbttagcompound.getInt("DataVersion")));
         return definedstructure;
     }
 
     public boolean c(MinecraftKey minecraftkey) {
-        DefinedStructure definedstructure = (DefinedStructure) this.b.get(minecraftkey);
+        Optional<DefinedStructure> optional = (Optional) this.structureRepository.get(minecraftkey);
 
-        if (definedstructure == null) {
+        if (!optional.isPresent()) {
             return false;
         } else {
+            DefinedStructure definedstructure = (DefinedStructure) optional.get();
             Path path = this.b(minecraftkey, ".nbt");
             Path path1 = path.getParent();
 
@@ -189,30 +181,22 @@ public class DefinedStructureManager {
 
                 try {
                     FileOutputStream fileoutputstream = new FileOutputStream(path.toFile());
-                    Throwable throwable = null;
 
                     try {
                         NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);
-                    } catch (Throwable throwable1) {
-                        throwable = throwable1;
-                        throw throwable1;
-                    } finally {
-                        if (fileoutputstream != null) {
-                            if (throwable != null) {
-                                try {
-                                    fileoutputstream.close();
-                                } catch (Throwable throwable2) {
-                                    throwable.addSuppressed(throwable2);
-                                }
-                            } else {
-                                fileoutputstream.close();
-                            }
+                    } catch (Throwable throwable) {
+                        try {
+                            fileoutputstream.close();
+                        } catch (Throwable throwable1) {
+                            throwable.addSuppressed(throwable1);
                         }
 
+                        throw throwable;
                     }
 
+                    fileoutputstream.close();
                     return true;
-                } catch (Throwable throwable3) {
+                } catch (Throwable throwable2) {
                     return false;
                 }
             }
@@ -221,7 +205,7 @@ public class DefinedStructureManager {
 
     public Path a(MinecraftKey minecraftkey, String s) {
         try {
-            Path path = this.e.resolve(minecraftkey.getNamespace());
+            Path path = this.generatedDir.resolve(minecraftkey.getNamespace());
             Path path1 = path.resolve("structures");
 
             return FileUtils.b(path1, minecraftkey.getKey(), s);
@@ -236,7 +220,7 @@ public class DefinedStructureManager {
         } else {
             Path path = this.a(minecraftkey, s);
 
-            if (path.startsWith(this.e) && FileUtils.a(path) && FileUtils.b(path)) {
+            if (path.startsWith(this.generatedDir) && FileUtils.a(path) && FileUtils.b(path)) {
                 return path;
             } else {
                 throw new ResourceKeyInvalidException("Invalid resource path: " + path);
@@ -245,6 +229,6 @@ public class DefinedStructureManager {
     }
 
     public void d(MinecraftKey minecraftkey) {
-        this.b.remove(minecraftkey);
+        this.structureRepository.remove(minecraftkey);
     }
 }

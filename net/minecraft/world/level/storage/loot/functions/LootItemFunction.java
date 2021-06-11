@@ -8,11 +8,11 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public interface LootItemFunction extends LootItemUser, BiFunction<ItemStack, LootTableInfo, ItemStack> {
 
-    LootItemFunctionType b();
+    LootItemFunctionType a();
 
     static Consumer<ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction, Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
         return (itemstack) -> {
-            consumer.accept(bifunction.apply(itemstack, loottableinfo));
+            consumer.accept((ItemStack) bifunction.apply(itemstack, loottableinfo));
         };
     }
 

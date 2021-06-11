@@ -19,8 +19,8 @@ import net.minecraft.world.effect.MobEffectList;
 
 public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
 
-    private static final Collection<String> b = Arrays.asList("spooky", "effect");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("spooky", "effect");
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_EFFECT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("effect.effectNotFound", new Object[]{object});
     });
 
@@ -30,7 +30,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
         return new ArgumentMobEffect();
     }
 
-    public static MobEffectList a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+    public static MobEffectList a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return (MobEffectList) commandcontext.getArgument(s, MobEffectList.class);
     }
 
@@ -38,7 +38,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
 
         return (MobEffectList) IRegistry.MOB_EFFECT.getOptional(minecraftkey).orElseThrow(() -> {
-            return ArgumentMobEffect.a.create(minecraftkey);
+            return ArgumentMobEffect.ERROR_UNKNOWN_EFFECT.create(minecraftkey);
         });
     }
 
@@ -47,6 +47,6 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentMobEffect.b;
+        return ArgumentMobEffect.EXAMPLES;
     }
 }

@@ -2,12 +2,13 @@ package net.minecraft.world.entity.ai.goal;
 
 import javax.annotation.Nullable;
 import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalRandomStrollLand extends PathfinderGoalRandomStroll {
 
-    protected final float h;
+    public static final float PROBABILITY = 0.001F;
+    protected final float probability;
 
     public PathfinderGoalRandomStrollLand(EntityCreature entitycreature, double d0) {
         this(entitycreature, d0, 0.001F);
@@ -15,18 +16,18 @@ public class PathfinderGoalRandomStrollLand extends PathfinderGoalRandomStroll {
 
     public PathfinderGoalRandomStrollLand(EntityCreature entitycreature, double d0, float f) {
         super(entitycreature, d0);
-        this.h = f;
+        this.probability = f;
     }
 
     @Nullable
     @Override
     protected Vec3D g() {
-        if (this.a.aH()) {
-            Vec3D vec3d = RandomPositionGenerator.b(this.a, 15, 7);
+        if (this.mob.aO()) {
+            Vec3D vec3d = LandRandomPos.a(this.mob, 15, 7);
 
             return vec3d == null ? super.g() : vec3d;
         } else {
-            return this.a.getRandom().nextFloat() >= this.h ? RandomPositionGenerator.b(this.a, 10, 7) : super.g();
+            return this.mob.getRandom().nextFloat() >= this.probability ? LandRandomPos.a(this.mob, 10, 7) : super.g();
         }
     }
 }

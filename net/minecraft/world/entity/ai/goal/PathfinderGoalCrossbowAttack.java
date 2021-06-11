@@ -1,7 +1,8 @@
 package net.minecraft.world.entity.ai.goal;
 
 import java.util.EnumSet;
-import net.minecraft.util.IntRange;
+import net.minecraft.util.TimeRange;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.monster.EntityMonster;
@@ -14,20 +15,20 @@ import net.minecraft.world.item.Items;
 
 public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntity & ICrossbow> extends PathfinderGoal {
 
-    public static final IntRange a = new IntRange(20, 40);
-    private final T b;
-    private PathfinderGoalCrossbowAttack.State c;
-    private final double d;
-    private final float e;
-    private int f;
-    private int g;
-    private int h;
+    public static final UniformInt PATHFINDING_DELAY_RANGE = TimeRange.a(1, 2);
+    private final T mob;
+    private PathfinderGoalCrossbowAttack.State crossbowState;
+    private final double speedModifier;
+    private final float attackRadiusSqr;
+    private int seeTime;
+    private int attackDelay;
+    private int updatePathDelay;
 
     public PathfinderGoalCrossbowAttack(T t0, double d0, float f) {
-        this.c = PathfinderGoalCrossbowAttack.State.UNCHARGED;
-        this.b = t0;
-        this.d = d0;
-        this.e = f * f;
+        this.crossbowState = PathfinderGoalCrossbowAttack.State.UNCHARGED;
+        this.mob = t0;
+        this.speedModifier = d0;
+        this.attackRadiusSqr = f * f;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
@@ -37,106 +38,106 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
     }
 
     private boolean g() {
-        return this.b.a(Items.CROSSBOW);
+        return this.mob.a(Items.CROSSBOW);
     }
 
     @Override
     public boolean b() {
-        return this.h() && (this.a() || !this.b.getNavigation().m()) && this.g();
+        return this.h() && (this.a() || !this.mob.getNavigation().m()) && this.g();
     }
 
     private boolean h() {
-        return this.b.getGoalTarget() != null && this.b.getGoalTarget().isAlive();
+        return this.mob.getGoalTarget() != null && this.mob.getGoalTarget().isAlive();
     }
 
     @Override
     public void d() {
         super.d();
-        this.b.setAggressive(false);
-        this.b.setGoalTarget((EntityLiving) null);
-        this.f = 0;
-        if (this.b.isHandRaised()) {
-            this.b.clearActiveItem();
-            ((ICrossbow) this.b).b(false);
-            ItemCrossbow.a(this.b.getActiveItem(), false);
+        this.mob.setAggressive(false);
+        this.mob.setGoalTarget((EntityLiving) null);
+        this.seeTime = 0;
+        if (this.mob.isHandRaised()) {
+            this.mob.clearActiveItem();
+            ((ICrossbow) this.mob).b(false);
+            ItemCrossbow.a(this.mob.getActiveItem(), false);
         }
 
     }
 
     @Override
     public void e() {
-        EntityLiving entityliving = this.b.getGoalTarget();
+        EntityLiving entityliving = this.mob.getGoalTarget();
 
         if (entityliving != null) {
-            boolean flag = this.b.getEntitySenses().a(entityliving);
-            boolean flag1 = this.f > 0;
+            boolean flag = this.mob.getEntitySenses().a(entityliving);
+            boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
-                this.f = 0;
+                this.seeTime = 0;
             }
 
             if (flag) {
-                ++this.f;
+                ++this.seeTime;
             } else {
-                --this.f;
+                --this.seeTime;
             }
 
-            double d0 = this.b.h((Entity) entityliving);
-            boolean flag2 = (d0 > (double) this.e || this.f < 5) && this.g == 0;
+            double d0 = this.mob.f((Entity) entityliving);
+            boolean flag2 = (d0 > (double) this.attackRadiusSqr || this.seeTime < 5) && this.attackDelay == 0;
 
             if (flag2) {
-                --this.h;
-                if (this.h <= 0) {
-                    this.b.getNavigation().a((Entity) entityliving, this.j() ? this.d : this.d * 0.5D);
-                    this.h = PathfinderGoalCrossbowAttack.a.a(this.b.getRandom());
+                --this.updatePathDelay;
+                if (this.updatePathDelay <= 0) {
+                    this.mob.getNavigation().a((Entity) entityliving, this.j() ? this.speedModifier : this.speedModifier * 0.5D);
+                    this.updatePathDelay = PathfinderGoalCrossbowAttack.PATHFINDING_DELAY_RANGE.a(this.mob.getRandom());
                 }
             } else {
-                this.h = 0;
-                this.b.getNavigation().o();
+                this.updatePathDelay = 0;
+                this.mob.getNavigation().o();
             }
 
-            this.b.getControllerLook().a(entityliving, 30.0F, 30.0F);
-            if (this.c == PathfinderGoalCrossbowAttack.State.UNCHARGED) {
+            this.mob.getControllerLook().a(entityliving, 30.0F, 30.0F);
+            if (this.crossbowState == PathfinderGoalCrossbowAttack.State.UNCHARGED) {
                 if (!flag2) {
-                    this.b.c(ProjectileHelper.a((EntityLiving) this.b, Items.CROSSBOW));
-                    this.c = PathfinderGoalCrossbowAttack.State.CHARGING;
-                    ((ICrossbow) this.b).b(true);
+                    this.mob.c(ProjectileHelper.a((EntityLiving) this.mob, Items.CROSSBOW));
+                    this.crossbowState = PathfinderGoalCrossbowAttack.State.CHARGING;
+                    ((ICrossbow) this.mob).b(true);
                 }
-            } else if (this.c == PathfinderGoalCrossbowAttack.State.CHARGING) {
-                if (!this.b.isHandRaised()) {
-                    this.c = PathfinderGoalCrossbowAttack.State.UNCHARGED;
+            } else if (this.crossbowState == PathfinderGoalCrossbowAttack.State.CHARGING) {
+                if (!this.mob.isHandRaised()) {
+                    this.crossbowState = PathfinderGoalCrossbowAttack.State.UNCHARGED;
                 }
 
-                int i = this.b.ea();
-                ItemStack itemstack = this.b.getActiveItem();
+                int i = this.mob.eI();
+                ItemStack itemstack = this.mob.getActiveItem();
 
-                if (i >= ItemCrossbow.g(itemstack)) {
-                    this.b.releaseActiveItem();
-                    this.c = PathfinderGoalCrossbowAttack.State.CHARGED;
-                    this.g = 20 + this.b.getRandom().nextInt(20);
-                    ((ICrossbow) this.b).b(false);
+                if (i >= ItemCrossbow.k(itemstack)) {
+                    this.mob.releaseActiveItem();
+                    this.crossbowState = PathfinderGoalCrossbowAttack.State.CHARGED;
+                    this.attackDelay = 20 + this.mob.getRandom().nextInt(20);
+                    ((ICrossbow) this.mob).b(false);
                 }
-            } else if (this.c == PathfinderGoalCrossbowAttack.State.CHARGED) {
-                --this.g;
-                if (this.g == 0) {
-                    this.c = PathfinderGoalCrossbowAttack.State.READY_TO_ATTACK;
+            } else if (this.crossbowState == PathfinderGoalCrossbowAttack.State.CHARGED) {
+                --this.attackDelay;
+                if (this.attackDelay == 0) {
+                    this.crossbowState = PathfinderGoalCrossbowAttack.State.READY_TO_ATTACK;
                 }
-            } else if (this.c == PathfinderGoalCrossbowAttack.State.READY_TO_ATTACK && flag) {
-                ((IRangedEntity) this.b).a(entityliving, 1.0F);
-                ItemStack itemstack1 = this.b.b(ProjectileHelper.a((EntityLiving) this.b, Items.CROSSBOW));
+            } else if (this.crossbowState == PathfinderGoalCrossbowAttack.State.READY_TO_ATTACK && flag) {
+                ((IRangedEntity) this.mob).a(entityliving, 1.0F);
+                ItemStack itemstack1 = this.mob.b(ProjectileHelper.a((EntityLiving) this.mob, Items.CROSSBOW));
 
                 ItemCrossbow.a(itemstack1, false);
-                this.c = PathfinderGoalCrossbowAttack.State.UNCHARGED;
+                this.crossbowState = PathfinderGoalCrossbowAttack.State.UNCHARGED;
             }
 
         }
     }
 
     private boolean j() {
-        return this.c == PathfinderGoalCrossbowAttack.State.UNCHARGED;
+        return this.crossbowState == PathfinderGoalCrossbowAttack.State.UNCHARGED;
     }
 
-    static enum State {
+    private static enum State {
 
         UNCHARGED, CHARGING, CHARGED, READY_TO_ATTACK;
 

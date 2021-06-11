@@ -10,16 +10,16 @@ import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
 
 public class EntityComplexPart extends Entity {
 
-    public final EntityEnderDragon owner;
-    public final String c;
-    private final EntitySize d;
+    public final EntityEnderDragon parentMob;
+    public final String name;
+    private final EntitySize size;
 
     public EntityComplexPart(EntityEnderDragon entityenderdragon, String s, float f, float f1) {
-        super(entityenderdragon.getEntityType(), entityenderdragon.world);
-        this.d = EntitySize.b(f, f1);
+        super(entityenderdragon.getEntityType(), entityenderdragon.level);
+        this.size = EntitySize.b(f, f1);
         this.updateSize();
-        this.owner = entityenderdragon;
-        this.c = s;
+        this.parentMob = entityenderdragon;
+        this.name = s;
     }
 
     @Override
@@ -38,21 +38,26 @@ public class EntityComplexPart extends Entity {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        return this.isInvulnerable(damagesource) ? false : this.owner.a(this, damagesource, f);
+        return this.isInvulnerable(damagesource) ? false : this.parentMob.a(this, damagesource, f);
     }
 
     @Override
-    public boolean s(Entity entity) {
-        return this == entity || this.owner == entity;
+    public boolean q(Entity entity) {
+        return this == entity || this.parentMob == entity;
     }
 
     @Override
-    public Packet<?> P() {
+    public Packet<?> getPacket() {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public EntitySize a(EntityPose entitypose) {
-        return this.d;
+        return this.size;
+    }
+
+    @Override
+    public boolean dm() {
+        return false;
     }
 }

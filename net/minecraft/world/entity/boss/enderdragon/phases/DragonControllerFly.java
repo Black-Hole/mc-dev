@@ -12,9 +12,9 @@ import net.minecraft.world.phys.Vec3D;
 
 public class DragonControllerFly extends AbstractDragonController {
 
-    private boolean b;
-    private PathEntity c;
-    private Vec3D d;
+    private boolean firstTick;
+    private PathEntity currentPath;
+    private Vec3D targetLocation;
 
     public DragonControllerFly(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -22,14 +22,14 @@ public class DragonControllerFly extends AbstractDragonController {
 
     @Override
     public void c() {
-        if (!this.b && this.c != null) {
-            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
+        if (!this.firstTick && this.currentPath != null) {
+            BlockPosition blockposition = this.dragon.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.END_PODIUM_LOCATION);
 
-            if (!blockposition.a((IPosition) this.a.getPositionVector(), 10.0D)) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
+            if (!blockposition.a((IPosition) this.dragon.getPositionVector(), 10.0D)) {
+                this.dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
             }
         } else {
-            this.b = false;
+            this.firstTick = false;
             this.j();
         }
 
@@ -37,17 +37,17 @@ public class DragonControllerFly extends AbstractDragonController {
 
     @Override
     public void d() {
-        this.b = true;
-        this.c = null;
-        this.d = null;
+        this.firstTick = true;
+        this.currentPath = null;
+        this.targetLocation = null;
     }
 
     private void j() {
-        int i = this.a.eI();
-        Vec3D vec3d = this.a.x(1.0F);
-        int j = this.a.p(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+        int i = this.dragon.p();
+        Vec3D vec3d = this.dragon.y(1.0F);
+        int j = this.dragon.q(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
-        if (this.a.getEnderDragonBattle() != null && this.a.getEnderDragonBattle().c() > 0) {
+        if (this.dragon.getEnderDragonBattle() != null && this.dragon.getEnderDragonBattle().c() > 0) {
             j %= 12;
             if (j < 0) {
                 j += 12;
@@ -58,25 +58,25 @@ public class DragonControllerFly extends AbstractDragonController {
             j += 12;
         }
 
-        this.c = this.a.a(i, j, (PathPoint) null);
+        this.currentPath = this.dragon.a(i, j, (PathPoint) null);
         this.k();
     }
 
     private void k() {
-        if (this.c != null) {
-            this.c.a();
-            if (!this.c.c()) {
-                BlockPosition blockposition = this.c.g();
+        if (this.currentPath != null) {
+            this.currentPath.a();
+            if (!this.currentPath.c()) {
+                BlockPosition blockposition = this.currentPath.g();
 
-                this.c.a();
+                this.currentPath.a();
 
                 double d0;
 
                 do {
-                    d0 = (double) ((float) blockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+                    d0 = (double) ((float) blockposition.getY() + this.dragon.getRandom().nextFloat() * 20.0F);
                 } while (d0 < (double) blockposition.getY());
 
-                this.d = new Vec3D((double) blockposition.getX(), d0, (double) blockposition.getZ());
+                this.targetLocation = new Vec3D((double) blockposition.getX(), d0, (double) blockposition.getZ());
             }
         }
 
@@ -85,7 +85,7 @@ public class DragonControllerFly extends AbstractDragonController {
     @Nullable
     @Override
     public Vec3D g() {
-        return this.d;
+        return this.targetLocation;
     }
 
     @Override

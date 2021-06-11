@@ -17,6 +17,7 @@ import net.minecraft.world.entity.animal.EntityPolarBear;
 import net.minecraft.world.entity.animal.EntityRabbit;
 import net.minecraft.world.entity.animal.EntitySquid;
 import net.minecraft.world.entity.animal.EntityTurtle;
+import net.minecraft.world.entity.animal.EntityWaterAnimal;
 import net.minecraft.world.entity.monster.EntityDrowned;
 import net.minecraft.world.entity.monster.EntityEndermite;
 import net.minecraft.world.entity.monster.EntityGhast;
@@ -37,10 +38,12 @@ import net.minecraft.world.level.levelgen.HeightMap;
 
 public class EntityPositionTypes {
 
-    private static final Map<EntityTypes<?>, EntityPositionTypes.a> a = Maps.newHashMap();
+    private static final Map<EntityTypes<?>, EntityPositionTypes.a> DATA_BY_TYPE = Maps.newHashMap();
+
+    public EntityPositionTypes() {}
 
     private static <T extends EntityInsentient> void a(EntityTypes<T> entitytypes, EntityPositionTypes.Surface entitypositiontypes_surface, HeightMap.Type heightmap_type, EntityPositionTypes.b<T> entitypositiontypes_b) {
-        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.put(entitytypes, new EntityPositionTypes.a(heightmap_type, entitypositiontypes_surface, entitypositiontypes_b));
+        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.DATA_BY_TYPE.put(entitytypes, new EntityPositionTypes.a(heightmap_type, entitypositiontypes_surface, entitypositiontypes_b));
 
         if (entitypositiontypes_a != null) {
             throw new IllegalStateException("Duplicate registration for type " + IRegistry.ENTITY_TYPE.getKey(entitytypes));
@@ -48,24 +51,25 @@ public class EntityPositionTypes {
     }
 
     public static EntityPositionTypes.Surface a(EntityTypes<?> entitytypes) {
-        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
+        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.DATA_BY_TYPE.get(entitytypes);
 
-        return entitypositiontypes_a == null ? EntityPositionTypes.Surface.NO_RESTRICTIONS : entitypositiontypes_a.b;
+        return entitypositiontypes_a == null ? EntityPositionTypes.Surface.NO_RESTRICTIONS : entitypositiontypes_a.placement;
     }
 
     public static HeightMap.Type b(@Nullable EntityTypes<?> entitytypes) {
-        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
+        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.DATA_BY_TYPE.get(entitytypes);
 
-        return entitypositiontypes_a == null ? HeightMap.Type.MOTION_BLOCKING_NO_LEAVES : entitypositiontypes_a.a;
+        return entitypositiontypes_a == null ? HeightMap.Type.MOTION_BLOCKING_NO_LEAVES : entitypositiontypes_a.heightMap;
     }
 
     public static <T extends Entity> boolean a(EntityTypes<T> entitytypes, WorldAccess worldaccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
+        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.DATA_BY_TYPE.get(entitytypes);
 
-        return entitypositiontypes_a == null || entitypositiontypes_a.c.test(entitytypes, worldaccess, enummobspawn, blockposition, random);
+        return entitypositiontypes_a == null || entitypositiontypes_a.predicate.test(entitytypes, worldaccess, enummobspawn, blockposition, random);
     }
 
     static {
+        a(EntityTypes.AXOLOTL, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityWaterAnimal::a);
         a(EntityTypes.COD, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityFish::b);
         a(EntityTypes.DOLPHIN, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityDolphin::b);
         a(EntityTypes.DROWNED, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityDrowned::a);
@@ -86,6 +90,8 @@ public class EntityPositionTypes {
         a(EntityTypes.ENDER_DRAGON, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityInsentient::a);
         a(EntityTypes.GHAST, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityGhast::b);
         a(EntityTypes.GIANT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityMonster::b);
+        a(EntityTypes.GLOW_SQUID, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityWaterAnimal::a);
+        a(EntityTypes.GOAT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityAnimal::b);
         a(EntityTypes.HORSE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityAnimal::b);
         a(EntityTypes.HUSK, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityZombieHusk::a);
         a(EntityTypes.IRON_GOLEM, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityInsentient::a);
@@ -135,24 +141,24 @@ public class EntityPositionTypes {
         a(EntityTypes.WANDERING_TRADER, EntityPositionTypes.Surface.NO_RESTRICTIONS, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, EntityInsentient::a);
     }
 
+    private static class a {
+
+        final HeightMap.Type heightMap;
+        final EntityPositionTypes.Surface placement;
+        final EntityPositionTypes.b<?> predicate;
+
+        public a(HeightMap.Type heightmap_type, EntityPositionTypes.Surface entitypositiontypes_surface, EntityPositionTypes.b<?> entitypositiontypes_b) {
+            this.heightMap = heightmap_type;
+            this.placement = entitypositiontypes_surface;
+            this.predicate = entitypositiontypes_b;
+        }
+    }
+
     public static enum Surface {
 
         ON_GROUND, IN_WATER, NO_RESTRICTIONS, IN_LAVA;
 
         private Surface() {}
-    }
-
-    static class a {
-
-        private final HeightMap.Type a;
-        private final EntityPositionTypes.Surface b;
-        private final EntityPositionTypes.b<?> c;
-
-        public a(HeightMap.Type heightmap_type, EntityPositionTypes.Surface entitypositiontypes_surface, EntityPositionTypes.b<?> entitypositiontypes_b) {
-            this.a = heightmap_type;
-            this.b = entitypositiontypes_surface;
-            this.c = entitypositiontypes_b;
-        }
     }
 
     @FunctionalInterface

@@ -42,22 +42,22 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_WITHER_SKELETON_AMBIENT;
+        return SoundEffects.WITHER_SKELETON_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_WITHER_SKELETON_HURT;
+        return SoundEffects.WITHER_SKELETON_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_WITHER_SKELETON_DEATH;
+        return SoundEffects.WITHER_SKELETON_DEATH;
     }
 
     @Override
-    SoundEffect eK() {
-        return SoundEffects.ENTITY_WITHER_SKELETON_STEP;
+    SoundEffect p() {
+        return SoundEffects.WITHER_SKELETON_STEP;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.eL();
+        this.t();
         return groupdataentity1;
     }
 
@@ -105,7 +105,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
             return false;
         } else {
             if (entity instanceof EntityLiving) {
-                ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.WITHER, 200));
+                ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.WITHER, 200), this);
             }
 
             return true;
@@ -121,7 +121,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
-    public boolean d(MobEffect mobeffect) {
-        return mobeffect.getMobEffect() == MobEffects.WITHER ? false : super.d(mobeffect);
+    public boolean c(MobEffect mobeffect) {
+        return mobeffect.getMobEffect() == MobEffects.WITHER ? false : super.c(mobeffect);
     }
 }

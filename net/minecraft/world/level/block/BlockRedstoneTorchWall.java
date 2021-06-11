@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block;
 
+import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
@@ -18,21 +19,21 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
 
-    public static final BlockStateDirection b = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean c = BlockRedstoneTorch.LIT;
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    public static final BlockStateBoolean LIT = BlockRedstoneTorch.LIT;
 
     protected BlockRedstoneTorchWall(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorchWall.b, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.c, true));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockRedstoneTorchWall.FACING, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.LIT, true));
     }
 
     @Override
-    public String i() {
+    public String h() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockTorchWall.h(iblockdata);
     }
 
@@ -51,19 +52,32 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = Blocks.WALL_TORCH.getPlacedState(blockactioncontext);
 
-        return iblockdata == null ? null : (IBlockData) this.getBlockData().set(BlockRedstoneTorchWall.b, iblockdata.get(BlockRedstoneTorchWall.b));
+        return iblockdata == null ? null : (IBlockData) this.getBlockData().set(BlockRedstoneTorchWall.FACING, (EnumDirection) iblockdata.get(BlockRedstoneTorchWall.FACING));
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockRedstoneTorchWall.LIT)) {
+            EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockRedstoneTorchWall.FACING)).opposite();
+            double d0 = 0.27D;
+            double d1 = (double) blockposition.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.2D + 0.27D * (double) enumdirection.getAdjacentX();
+            double d2 = (double) blockposition.getY() + 0.7D + (random.nextDouble() - 0.5D) * 0.2D + 0.22D;
+            double d3 = (double) blockposition.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.2D + 0.27D * (double) enumdirection.getAdjacentZ();
+
+            world.addParticle(this.flameParticle, d1, d2, d3, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     @Override
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockRedstoneTorchWall.b)).opposite();
+        EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockRedstoneTorchWall.FACING)).opposite();
 
         return world.isBlockFacePowered(blockposition.shift(enumdirection), enumdirection);
     }
 
     @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return (Boolean) iblockdata.get(BlockRedstoneTorchWall.c) && iblockdata.get(BlockRedstoneTorchWall.b) != enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockRedstoneTorchWall.LIT) && iblockdata.get(BlockRedstoneTorchWall.FACING) != enumdirection ? 15 : 0;
     }
 
     @Override
@@ -78,6 +92,6 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockRedstoneTorchWall.b, BlockRedstoneTorchWall.c);
+        blockstatelist_a.a(BlockRedstoneTorchWall.FACING, BlockRedstoneTorchWall.LIT);
     }
 }

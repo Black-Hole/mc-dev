@@ -20,59 +20,59 @@ import net.minecraft.world.BossBattle;
 
 public class BossBattleCustom extends BossBattleServer {
 
-    private final MinecraftKey h;
-    private final Set<UUID> i = Sets.newHashSet();
-    private int j;
-    private int k = 100;
+    private final MinecraftKey id;
+    private final Set<UUID> players = Sets.newHashSet();
+    private int value;
+    private int max = 100;
 
     public BossBattleCustom(MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) {
         super(ichatbasecomponent, BossBattle.BarColor.WHITE, BossBattle.BarStyle.PROGRESS);
-        this.h = minecraftkey;
+        this.id = minecraftkey;
         this.setProgress(0.0F);
     }
 
     public MinecraftKey getKey() {
-        return this.h;
+        return this.id;
     }
 
     @Override
     public void addPlayer(EntityPlayer entityplayer) {
         super.addPlayer(entityplayer);
-        this.i.add(entityplayer.getUniqueID());
+        this.players.add(entityplayer.getUniqueID());
     }
 
     public void a(UUID uuid) {
-        this.i.add(uuid);
+        this.players.add(uuid);
     }
 
     @Override
     public void removePlayer(EntityPlayer entityplayer) {
         super.removePlayer(entityplayer);
-        this.i.remove(entityplayer.getUniqueID());
+        this.players.remove(entityplayer.getUniqueID());
     }
 
     @Override
     public void b() {
         super.b();
-        this.i.clear();
+        this.players.clear();
     }
 
     public int c() {
-        return this.j;
+        return this.value;
     }
 
     public int d() {
-        return this.k;
+        return this.max;
     }
 
     public void a(int i) {
-        this.j = i;
-        this.setProgress(MathHelper.a((float) i / (float) this.k, 0.0F, 1.0F));
+        this.value = i;
+        this.setProgress(MathHelper.a((float) i / (float) this.max, 0.0F, 1.0F));
     }
 
     public void b(int i) {
-        this.k = i;
-        this.setProgress(MathHelper.a((float) this.j / (float) i, 0.0F, 1.0F));
+        this.max = i;
+        this.setProgress(MathHelper.a((float) this.value / (float) i, 0.0F, 1.0F));
     }
 
     public final IChatBaseComponent e() {
@@ -84,7 +84,7 @@ public class BossBattleCustom extends BossBattleServer {
     public boolean a(Collection<EntityPlayer> collection) {
         Set<UUID> set = Sets.newHashSet();
         Set<EntityPlayer> set1 = Sets.newHashSet();
-        Iterator iterator = this.i.iterator();
+        Iterator iterator = this.players.iterator();
 
         UUID uuid;
         boolean flag;
@@ -120,7 +120,7 @@ public class BossBattleCustom extends BossBattleServer {
         while (iterator.hasNext()) {
             entityplayer1 = (EntityPlayer) iterator.next();
             flag = false;
-            iterator1 = this.i.iterator();
+            iterator1 = this.players.iterator();
 
             while (true) {
                 if (iterator1.hasNext()) {
@@ -157,7 +157,7 @@ public class BossBattleCustom extends BossBattleServer {
                     this.removePlayer(entityplayer2);
                 }
 
-                this.i.remove(uuid);
+                this.players.remove(uuid);
                 break;
             }
         }
@@ -175,17 +175,17 @@ public class BossBattleCustom extends BossBattleServer {
     public NBTTagCompound f() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("Name", IChatBaseComponent.ChatSerializer.a(this.title));
+        nbttagcompound.setString("Name", IChatBaseComponent.ChatSerializer.a(this.name));
         nbttagcompound.setBoolean("Visible", this.g());
-        nbttagcompound.setInt("Value", this.j);
-        nbttagcompound.setInt("Max", this.k);
+        nbttagcompound.setInt("Value", this.value);
+        nbttagcompound.setInt("Max", this.max);
         nbttagcompound.setString("Color", this.l().b());
         nbttagcompound.setString("Overlay", this.m().a());
         nbttagcompound.setBoolean("DarkenScreen", this.isDarkenSky());
         nbttagcompound.setBoolean("PlayBossMusic", this.isPlayMusic());
         nbttagcompound.setBoolean("CreateWorldFog", this.isCreateFog());
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.i.iterator();
+        Iterator iterator = this.players.iterator();
 
         while (iterator.hasNext()) {
             UUID uuid = (UUID) iterator.next();
@@ -218,7 +218,7 @@ public class BossBattleCustom extends BossBattleServer {
     }
 
     public void c(EntityPlayer entityplayer) {
-        if (this.i.contains(entityplayer.getUniqueID())) {
+        if (this.players.contains(entityplayer.getUniqueID())) {
             this.addPlayer(entityplayer);
         }
 

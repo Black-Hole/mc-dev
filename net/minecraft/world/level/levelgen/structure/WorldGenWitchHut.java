@@ -5,6 +5,7 @@ import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumMobSpawn;
 import net.minecraft.world.entity.GroupDataEntity;
@@ -21,28 +22,27 @@ import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockPropertyStairsShape;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.WorldGenFeatureStructurePieceType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 
 public class WorldGenWitchHut extends WorldGenScatteredPiece {
 
-    private boolean e;
-    private boolean f;
+    private boolean spawnedWitch;
+    private boolean spawnedCat;
 
     public WorldGenWitchHut(Random random, int i, int j) {
-        super(WorldGenFeatureStructurePieceType.K, random, i, 64, j, 7, 7, 9);
+        super(WorldGenFeatureStructurePieceType.SWAMPLAND_HUT, i, 64, j, 7, 7, 9, b(random));
     }
 
-    public WorldGenWitchHut(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-        super(WorldGenFeatureStructurePieceType.K, nbttagcompound);
-        this.e = nbttagcompound.getBoolean("Witch");
-        this.f = nbttagcompound.getBoolean("Cat");
+    public WorldGenWitchHut(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+        super(WorldGenFeatureStructurePieceType.SWAMPLAND_HUT, nbttagcompound);
+        this.spawnedWitch = nbttagcompound.getBoolean("Witch");
+        this.spawnedCat = nbttagcompound.getBoolean("Cat");
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-        nbttagcompound.setBoolean("Witch", this.e);
-        nbttagcompound.setBoolean("Cat", this.f);
+    protected void a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+        super.a(worldserver, nbttagcompound);
+        nbttagcompound.setBoolean("Witch", this.spawnedWitch);
+        nbttagcompound.setBoolean("Cat", this.spawnedCat);
     }
 
     @Override
@@ -61,16 +61,16 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
             this.a(generatoraccessseed, structureboundingbox, 5, 0, 2, 5, 3, 2, Blocks.OAK_LOG.getBlockData(), Blocks.OAK_LOG.getBlockData(), false);
             this.a(generatoraccessseed, structureboundingbox, 1, 0, 7, 1, 3, 7, Blocks.OAK_LOG.getBlockData(), Blocks.OAK_LOG.getBlockData(), false);
             this.a(generatoraccessseed, structureboundingbox, 5, 0, 7, 5, 3, 7, Blocks.OAK_LOG.getBlockData(), Blocks.OAK_LOG.getBlockData(), false);
-            this.a(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 2, 3, 2, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 3, 3, 7, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.AIR.getBlockData(), 1, 3, 4, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.AIR.getBlockData(), 5, 3, 4, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.AIR.getBlockData(), 5, 3, 5, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.POTTED_RED_MUSHROOM.getBlockData(), 1, 3, 5, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.CRAFTING_TABLE.getBlockData(), 3, 2, 6, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.CAULDRON.getBlockData(), 4, 2, 6, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 1, 2, 1, structureboundingbox);
-            this.a(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 5, 2, 1, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 2, 3, 2, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 3, 3, 7, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.AIR.getBlockData(), 1, 3, 4, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.AIR.getBlockData(), 5, 3, 4, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.AIR.getBlockData(), 5, 3, 5, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.POTTED_RED_MUSHROOM.getBlockData(), 1, 3, 5, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.CRAFTING_TABLE.getBlockData(), 3, 2, 6, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.CAULDRON.getBlockData(), 4, 2, 6, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 1, 2, 1, structureboundingbox);
+            this.c(generatoraccessseed, Blocks.OAK_FENCE.getBlockData(), 5, 2, 1, structureboundingbox);
             IBlockData iblockdata = (IBlockData) Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
             IBlockData iblockdata1 = (IBlockData) Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.EAST);
             IBlockData iblockdata2 = (IBlockData) Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.WEST);
@@ -80,32 +80,27 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
             this.a(generatoraccessseed, structureboundingbox, 0, 4, 2, 0, 4, 7, iblockdata1, iblockdata1, false);
             this.a(generatoraccessseed, structureboundingbox, 6, 4, 2, 6, 4, 7, iblockdata2, iblockdata2, false);
             this.a(generatoraccessseed, structureboundingbox, 0, 4, 8, 6, 4, 8, iblockdata3, iblockdata3, false);
-            this.a(generatoraccessseed, (IBlockData) iblockdata.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT), 0, 4, 1, structureboundingbox);
-            this.a(generatoraccessseed, (IBlockData) iblockdata.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT), 6, 4, 1, structureboundingbox);
-            this.a(generatoraccessseed, (IBlockData) iblockdata3.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT), 0, 4, 8, structureboundingbox);
-            this.a(generatoraccessseed, (IBlockData) iblockdata3.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT), 6, 4, 8, structureboundingbox);
+            this.c(generatoraccessseed, (IBlockData) iblockdata.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT), 0, 4, 1, structureboundingbox);
+            this.c(generatoraccessseed, (IBlockData) iblockdata.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT), 6, 4, 1, structureboundingbox);
+            this.c(generatoraccessseed, (IBlockData) iblockdata3.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT), 0, 4, 8, structureboundingbox);
+            this.c(generatoraccessseed, (IBlockData) iblockdata3.set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT), 6, 4, 8, structureboundingbox);
 
-            int i;
-            int j;
-
-            for (j = 2; j <= 7; j += 5) {
-                for (i = 1; i <= 5; i += 4) {
-                    this.b(generatoraccessseed, Blocks.OAK_LOG.getBlockData(), i, -1, j, structureboundingbox);
+            for (int i = 2; i <= 7; i += 5) {
+                for (int j = 1; j <= 5; j += 4) {
+                    this.a(generatoraccessseed, Blocks.OAK_LOG.getBlockData(), j, -1, i, structureboundingbox);
                 }
             }
 
-            if (!this.e) {
-                j = this.a(2, 5);
-                i = this.d(2);
-                int k = this.b(2, 5);
+            if (!this.spawnedWitch) {
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(2, 2, 5);
 
-                if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(j, i, k)))) {
-                    this.e = true;
-                    EntityWitch entitywitch = (EntityWitch) EntityTypes.WITCH.a((World) generatoraccessseed.getMinecraftWorld());
+                if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
+                    this.spawnedWitch = true;
+                    EntityWitch entitywitch = (EntityWitch) EntityTypes.WITCH.a((World) generatoraccessseed.getLevel());
 
                     entitywitch.setPersistent();
-                    entitywitch.setPositionRotation((double) j + 0.5D, (double) i, (double) k + 0.5D, 0.0F, 0.0F);
-                    entitywitch.prepare(generatoraccessseed, generatoraccessseed.getDamageScaler(new BlockPosition(j, i, k)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                    entitywitch.setPositionRotation((double) blockposition_mutableblockposition.getX() + 0.5D, (double) blockposition_mutableblockposition.getY(), (double) blockposition_mutableblockposition.getZ() + 0.5D, 0.0F, 0.0F);
+                    entitywitch.prepare(generatoraccessseed, generatoraccessseed.getDamageScaler(blockposition_mutableblockposition), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
                     generatoraccessseed.addAllEntities(entitywitch);
                 }
             }
@@ -116,18 +111,16 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
     }
 
     private void a(WorldAccess worldaccess, StructureBoundingBox structureboundingbox) {
-        if (!this.f) {
-            int i = this.a(2, 5);
-            int j = this.d(2);
-            int k = this.b(2, 5);
+        if (!this.spawnedCat) {
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.c(2, 2, 5);
 
-            if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(i, j, k)))) {
-                this.f = true;
-                EntityCat entitycat = (EntityCat) EntityTypes.CAT.a((World) worldaccess.getMinecraftWorld());
+            if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
+                this.spawnedCat = true;
+                EntityCat entitycat = (EntityCat) EntityTypes.CAT.a((World) worldaccess.getLevel());
 
                 entitycat.setPersistent();
-                entitycat.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
-                entitycat.prepare(worldaccess, worldaccess.getDamageScaler(new BlockPosition(i, j, k)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                entitycat.setPositionRotation((double) blockposition_mutableblockposition.getX() + 0.5D, (double) blockposition_mutableblockposition.getY(), (double) blockposition_mutableblockposition.getZ() + 0.5D, 0.0F, 0.0F);
+                entitycat.prepare(worldaccess, worldaccess.getDamageScaler(blockposition_mutableblockposition), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
                 worldaccess.addAllEntities(entitycat);
             }
         }

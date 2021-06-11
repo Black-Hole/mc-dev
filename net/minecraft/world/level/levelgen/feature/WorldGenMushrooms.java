@@ -9,9 +9,8 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureMushroomConfiguration;
 
 public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMushroomConfiguration> {
@@ -24,7 +23,7 @@ public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMu
         for (int j = 0; j < i; ++j) {
             blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, j);
             if (!generatoraccess.getType(blockposition_mutableblockposition).i(generatoraccess, blockposition_mutableblockposition)) {
-                this.a(generatoraccess, blockposition_mutableblockposition, worldgenfeaturemushroomconfiguration.c.a(random, blockposition));
+                this.a((IWorldWriter) generatoraccess, blockposition_mutableblockposition, worldgenfeaturemushroomconfiguration.stemProvider.a(random, blockposition));
             }
         }
 
@@ -43,20 +42,20 @@ public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMu
     protected boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, int i, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
         int j = blockposition.getY();
 
-        if (j >= 1 && j + i + 1 < 256) {
-            Block block = generatoraccess.getType(blockposition.down()).getBlock();
+        if (j >= generatoraccess.getMinBuildHeight() + 1 && j + i + 1 < generatoraccess.getMaxBuildHeight()) {
+            IBlockData iblockdata = generatoraccess.getType(blockposition.down());
 
-            if (!b(block) && !block.a((Tag) TagsBlock.aD)) {
+            if (!b(iblockdata) && !iblockdata.a((Tag) TagsBlock.MUSHROOM_GROW_BLOCK)) {
                 return false;
             } else {
                 for (int k = 0; k <= i; ++k) {
-                    int l = this.a(-1, -1, worldgenfeaturemushroomconfiguration.d, k);
+                    int l = this.a(-1, -1, worldgenfeaturemushroomconfiguration.foliageRadius, k);
 
                     for (int i1 = -l; i1 <= l; ++i1) {
                         for (int j1 = -l; j1 <= l; ++j1) {
-                            IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, i1, k, j1));
+                            IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, i1, k, j1));
 
-                            if (!iblockdata.isAir() && !iblockdata.a((Tag) TagsBlock.LEAVES)) {
+                            if (!iblockdata1.isAir() && !iblockdata1.a((Tag) TagsBlock.LEAVES)) {
                                 return false;
                             }
                         }
@@ -70,7 +69,12 @@ public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMu
         }
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureMushroomConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+        WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration = (WorldGenFeatureMushroomConfiguration) featureplacecontext.e();
         int i = this.a(random);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 

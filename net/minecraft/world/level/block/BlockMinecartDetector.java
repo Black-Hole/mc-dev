@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
-import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
@@ -28,12 +27,13 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.ad;
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.RAIL_SHAPE_STRAIGHT;
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
+    private static final int PRESSED_CHECK_PERIOD = 20;
 
     public BlockMinecartDetector(BlockBase.Info blockbase_info) {
         super(true, blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockMinecartDetector.WATERLOGGED, false));
     }
 
     @Override
@@ -71,7 +71,9 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         if (this.canPlace(iblockdata, world, blockposition)) {
             boolean flag = (Boolean) iblockdata.get(BlockMinecartDetector.POWERED);
             boolean flag1 = false;
-            List<EntityMinecartAbstract> list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
+            List<EntityMinecartAbstract> list = this.a(world, blockposition, EntityMinecartAbstract.class, (entity) -> {
+                return true;
+            });
 
             if (!list.isEmpty()) {
                 flag1 = true;
@@ -122,7 +124,9 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!iblockdata1.a(iblockdata.getBlock())) {
-            this.a(world, blockposition, this.a(iblockdata, world, blockposition, flag));
+            IBlockData iblockdata2 = this.a(iblockdata, world, blockposition, flag);
+
+            this.a(world, blockposition, iblockdata2);
         }
     }
 
@@ -139,13 +143,15 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         if ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
-            List<EntityMinecartCommandBlock> list = this.a(world, blockposition, EntityMinecartCommandBlock.class, (Predicate) null);
+            List<EntityMinecartCommandBlock> list = this.a(world, blockposition, EntityMinecartCommandBlock.class, (entity) -> {
+                return true;
+            });
 
             if (!list.isEmpty()) {
-                return ((EntityMinecartCommandBlock) list.get(0)).getCommandBlock().i();
+                return ((EntityMinecartCommandBlock) list.get(0)).getCommandBlock().j();
             }
 
-            List<EntityMinecartAbstract> list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.d);
+            List<EntityMinecartAbstract> list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.CONTAINER_ENTITY_SELECTOR);
 
             if (!list1.isEmpty()) {
                 return Container.b((IInventory) list1.get(0));
@@ -155,7 +161,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         return 0;
     }
 
-    protected <T extends EntityMinecartAbstract> List<T> a(World world, BlockPosition blockposition, Class<T> oclass, @Nullable Predicate<Entity> predicate) {
+    private <T extends EntityMinecartAbstract> List<T> a(World world, BlockPosition blockposition, Class<T> oclass, Predicate<Entity> predicate) {
         return world.a(oclass, this.a(blockposition), predicate);
     }
 
@@ -286,6 +292,6 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockMinecartDetector.SHAPE, BlockMinecartDetector.POWERED);
+        blockstatelist_a.a(BlockMinecartDetector.SHAPE, BlockMinecartDetector.POWERED, BlockMinecartDetector.WATERLOGGED);
     }
 }

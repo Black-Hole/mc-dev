@@ -1,41 +1,47 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutUpdateTime implements Packet<PacketListenerPlayOut> {
 
-    private long a;
-    private long b;
-
-    public PacketPlayOutUpdateTime() {}
+    private final long gameTime;
+    private final long dayTime;
 
     public PacketPlayOutUpdateTime(long i, long j, boolean flag) {
-        this.a = i;
-        this.b = j;
+        this.gameTime = i;
+        long k = j;
+
         if (!flag) {
-            this.b = -this.b;
-            if (this.b == 0L) {
-                this.b = -1L;
+            k = -j;
+            if (k == 0L) {
+                k = -1L;
             }
         }
 
+        this.dayTime = k;
+    }
+
+    public PacketPlayOutUpdateTime(PacketDataSerializer packetdataserializer) {
+        this.gameTime = packetdataserializer.readLong();
+        this.dayTime = packetdataserializer.readLong();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readLong();
-        this.b = packetdataserializer.readLong();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeLong(this.a);
-        packetdataserializer.writeLong(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeLong(this.gameTime);
+        packetdataserializer.writeLong(this.dayTime);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public long b() {
+        return this.gameTime;
+    }
+
+    public long c() {
+        return this.dayTime;
     }
 }

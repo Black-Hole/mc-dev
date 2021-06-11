@@ -14,15 +14,15 @@ import net.minecraft.world.level.block.entity.TileEntityBanner;
 
 public class MapIconBanner {
 
-    private final BlockPosition a;
-    private final EnumColor b;
+    private final BlockPosition pos;
+    private final EnumColor color;
     @Nullable
-    private final IChatBaseComponent c;
+    private final IChatBaseComponent name;
 
     public MapIconBanner(BlockPosition blockposition, EnumColor enumcolor, @Nullable IChatBaseComponent ichatbasecomponent) {
-        this.a = blockposition;
-        this.b = enumcolor;
-        this.c = ichatbasecomponent;
+        this.pos = blockposition;
+        this.color = enumcolor;
+        this.name = ichatbasecomponent;
     }
 
     public static MapIconBanner a(NBTTagCompound nbttagcompound) {
@@ -39,9 +39,7 @@ public class MapIconBanner {
 
         if (tileentity instanceof TileEntityBanner) {
             TileEntityBanner tileentitybanner = (TileEntityBanner) tileentity;
-            EnumColor enumcolor = tileentitybanner.a(() -> {
-                return iblockaccess.getType(blockposition);
-            });
+            EnumColor enumcolor = tileentitybanner.g();
             IChatBaseComponent ichatbasecomponent = tileentitybanner.hasCustomName() ? tileentitybanner.getCustomName() : null;
 
             return new MapIconBanner(blockposition, enumcolor, ichatbasecomponent);
@@ -51,11 +49,15 @@ public class MapIconBanner {
     }
 
     public BlockPosition a() {
-        return this.a;
+        return this.pos;
+    }
+
+    public EnumColor b() {
+        return this.color;
     }
 
     public MapIcon.Type c() {
-        switch (this.b) {
+        switch (this.color) {
             case WHITE:
                 return MapIcon.Type.BANNER_WHITE;
             case ORANGE:
@@ -94,7 +96,7 @@ public class MapIconBanner {
 
     @Nullable
     public IChatBaseComponent d() {
-        return this.c;
+        return this.name;
     }
 
     public boolean equals(Object object) {
@@ -103,29 +105,31 @@ public class MapIconBanner {
         } else if (object != null && this.getClass() == object.getClass()) {
             MapIconBanner mapiconbanner = (MapIconBanner) object;
 
-            return Objects.equals(this.a, mapiconbanner.a) && this.b == mapiconbanner.b && Objects.equals(this.c, mapiconbanner.c);
+            return Objects.equals(this.pos, mapiconbanner.pos) && this.color == mapiconbanner.color && Objects.equals(this.name, mapiconbanner.name);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{this.a, this.b, this.c});
+        return Objects.hash(new Object[]{this.pos, this.color, this.name});
     }
 
     public NBTTagCompound e() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.set("Pos", GameProfileSerializer.a(this.a));
-        nbttagcompound.setString("Color", this.b.c());
-        if (this.c != null) {
-            nbttagcompound.setString("Name", IChatBaseComponent.ChatSerializer.a(this.c));
+        nbttagcompound.set("Pos", GameProfileSerializer.a(this.pos));
+        nbttagcompound.setString("Color", this.color.b());
+        if (this.name != null) {
+            nbttagcompound.setString("Name", IChatBaseComponent.ChatSerializer.a(this.name));
         }
 
         return nbttagcompound;
     }
 
     public String f() {
-        return "banner-" + this.a.getX() + "," + this.a.getY() + "," + this.a.getZ();
+        int i = this.pos.getX();
+
+        return "banner-" + i + "," + this.pos.getY() + "," + this.pos.getZ();
     }
 }

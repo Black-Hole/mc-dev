@@ -1,17 +1,24 @@
 package net.minecraft.world.item;
 
+import net.minecraft.resources.MinecraftKey;
+
 public class ItemHorseArmor extends Item {
 
-    private final int a;
-    private final String b;
+    private static final String TEX_FOLDER = "textures/entity/horse/";
+    private final int protection;
+    private final String texture;
 
     public ItemHorseArmor(int i, String s, Item.Info item_info) {
         super(item_info);
-        this.a = i;
-        this.b = "textures/entity/horse/armor/horse_armor_" + s + ".png";
+        this.protection = i;
+        this.texture = "textures/entity/horse/armor/horse_armor_" + s + ".png";
     }
 
-    public int g() {
-        return this.a;
+    public MinecraftKey i() {
+        return new MinecraftKey(this.texture);
+    }
+
+    public int j() {
+        return this.protection;
     }
 }

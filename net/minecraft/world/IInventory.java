@@ -7,6 +7,8 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IInventory extends Clearable {
 
+    int LARGE_MAX_STACK_SIZE = 64;
+
     int getSize();
 
     boolean isEmpty();

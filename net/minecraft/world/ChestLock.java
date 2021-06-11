@@ -7,7 +7,8 @@ import net.minecraft.world.item.ItemStack;
 @Immutable
 public class ChestLock {
 
-    public static final ChestLock a = new ChestLock("");
+    public static final ChestLock NO_LOCK = new ChestLock("");
+    public static final String TAG_LOCK = "Lock";
     public final String key;
 
     public ChestLock(String s) {
@@ -26,6 +27,6 @@ public class ChestLock {
     }
 
     public static ChestLock b(NBTTagCompound nbttagcompound) {
-        return nbttagcompound.hasKeyOfType("Lock", 8) ? new ChestLock(nbttagcompound.getString("Lock")) : ChestLock.a;
+        return nbttagcompound.hasKeyOfType("Lock", 8) ? new ChestLock(nbttagcompound.getString("Lock")) : ChestLock.NO_LOCK;
     }
 }

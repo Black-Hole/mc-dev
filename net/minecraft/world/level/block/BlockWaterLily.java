@@ -16,7 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockWaterLily extends BlockPlant {
 
-    protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.5D, 15.0D);
+    protected static final VoxelShape AABB = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.5D, 15.0D);
 
     protected BlockWaterLily(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -32,12 +32,12 @@ public class BlockWaterLily extends BlockPlant {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockWaterLily.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockWaterLily.AABB;
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         Fluid fluid = iblockaccess.getFluid(blockposition);
         Fluid fluid1 = iblockaccess.getFluid(blockposition.up());
 

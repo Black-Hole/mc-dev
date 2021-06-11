@@ -2,9 +2,9 @@ package net.minecraft.world.level.levelgen;
 
 import java.util.Random;
 
-public class SeededRandom extends Random {
+public class SeededRandom extends Random implements RandomSource {
 
-    private int a;
+    private int count;
 
     public SeededRandom() {}
 
@@ -12,15 +12,12 @@ public class SeededRandom extends Random {
         super(i);
     }
 
-    public void a(int i) {
-        for (int j = 0; j < i; ++j) {
-            this.next(1);
-        }
-
+    public int a() {
+        return this.count;
     }
 
-    protected int next(int i) {
-        ++this.a;
+    public int next(int i) {
+        ++this.count;
         return super.next(i);
     }
 
@@ -59,6 +56,17 @@ public class SeededRandom extends Random {
     }
 
     public long a(long i, int j, int k, int l) {
+        this.setSeed(i);
+        long i1 = this.nextLong();
+        long j1 = this.nextLong();
+        long k1 = this.nextLong();
+        long l1 = (long) j * i1 ^ (long) k * j1 ^ (long) l * k1 ^ i;
+
+        this.setSeed(l1);
+        return l1;
+    }
+
+    public long b(long i, int j, int k, int l) {
         long i1 = (long) j * 341873128712L + (long) k * 132897987541L + i + (long) l;
 
         this.setSeed(i1);

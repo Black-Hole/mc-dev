@@ -40,39 +40,48 @@ import org.apache.logging.log4j.Logger;
 
 public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final RegistryReadOps.b c;
-    private final IRegistryCustom.Dimension d;
-    private final Map<ResourceKey<? extends IRegistry<?>>, RegistryReadOps.a<?>> e;
-    private final RegistryReadOps<JsonElement> f;
+    static final Logger LOGGER = LogManager.getLogger();
+    private static final String JSON = ".json";
+    private final RegistryReadOps.b resources;
+    private final IRegistryCustom registryAccess;
+    private final Map<ResourceKey<? extends IRegistry<?>>, RegistryReadOps.a<?>> readCache;
+    private final RegistryReadOps<JsonElement> jsonOps;
 
-    public static <T> RegistryReadOps<T> a(DynamicOps<T> dynamicops, IResourceManager iresourcemanager, IRegistryCustom.Dimension iregistrycustom_dimension) {
-        return a(dynamicops, RegistryReadOps.b.a(iresourcemanager), iregistrycustom_dimension);
+    public static <T> RegistryReadOps<T> a(DynamicOps<T> dynamicops, IResourceManager iresourcemanager, IRegistryCustom iregistrycustom) {
+        return a(dynamicops, RegistryReadOps.b.a(iresourcemanager), iregistrycustom);
     }
 
-    public static <T> RegistryReadOps<T> a(DynamicOps<T> dynamicops, RegistryReadOps.b registryreadops_b, IRegistryCustom.Dimension iregistrycustom_dimension) {
-        RegistryReadOps<T> registryreadops = new RegistryReadOps<>(dynamicops, registryreadops_b, iregistrycustom_dimension, Maps.newIdentityHashMap());
+    public static <T> RegistryReadOps<T> a(DynamicOps<T> dynamicops, RegistryReadOps.b registryreadops_b, IRegistryCustom iregistrycustom) {
+        RegistryReadOps<T> registryreadops = new RegistryReadOps<>(dynamicops, registryreadops_b, iregistrycustom, Maps.newIdentityHashMap());
 
-        IRegistryCustom.a(iregistrycustom_dimension, registryreadops);
+        IRegistryCustom.a(iregistrycustom, registryreadops);
         return registryreadops;
     }
 
-    private RegistryReadOps(DynamicOps<T> dynamicops, RegistryReadOps.b registryreadops_b, IRegistryCustom.Dimension iregistrycustom_dimension, IdentityHashMap<ResourceKey<? extends IRegistry<?>>, RegistryReadOps.a<?>> identityhashmap) {
+    public static <T> RegistryReadOps<T> b(DynamicOps<T> dynamicops, IResourceManager iresourcemanager, IRegistryCustom iregistrycustom) {
+        return b(dynamicops, RegistryReadOps.b.a(iresourcemanager), iregistrycustom);
+    }
+
+    public static <T> RegistryReadOps<T> b(DynamicOps<T> dynamicops, RegistryReadOps.b registryreadops_b, IRegistryCustom iregistrycustom) {
+        return new RegistryReadOps<>(dynamicops, registryreadops_b, iregistrycustom, Maps.newIdentityHashMap());
+    }
+
+    private RegistryReadOps(DynamicOps<T> dynamicops, RegistryReadOps.b registryreadops_b, IRegistryCustom iregistrycustom, IdentityHashMap<ResourceKey<? extends IRegistry<?>>, RegistryReadOps.a<?>> identityhashmap) {
         super(dynamicops);
-        this.c = registryreadops_b;
-        this.d = iregistrycustom_dimension;
-        this.e = identityhashmap;
-        this.f = dynamicops == JsonOps.INSTANCE ? this : new RegistryReadOps<>(JsonOps.INSTANCE, registryreadops_b, iregistrycustom_dimension, identityhashmap);
+        this.resources = registryreadops_b;
+        this.registryAccess = iregistrycustom;
+        this.readCache = identityhashmap;
+        this.jsonOps = dynamicops == JsonOps.INSTANCE ? this : new RegistryReadOps<>(JsonOps.INSTANCE, registryreadops_b, iregistrycustom, identityhashmap);
     }
 
     protected <E> DataResult<Pair<Supplier<E>, T>> a(T t0, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec, boolean flag) {
-        Optional<IRegistryWritable<E>> optional = this.d.a(resourcekey);
+        Optional<IRegistryWritable<E>> optional = this.registryAccess.a(resourcekey);
 
         if (!optional.isPresent()) {
             return DataResult.error("Unknown registry: " + resourcekey);
         } else {
             IRegistryWritable<E> iregistrywritable = (IRegistryWritable) optional.get();
-            DataResult<Pair<MinecraftKey, T>> dataresult = MinecraftKey.a.decode(this.a, t0);
+            DataResult<Pair<MinecraftKey, T>> dataresult = MinecraftKey.CODEC.decode(this.delegate, t0);
 
             if (!dataresult.result().isPresent()) {
                 return !flag ? DataResult.error("Inline definitions not allowed here") : codec.decode(this, t0).map((pair) -> {
@@ -94,7 +103,7 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
     }
 
     public <E> DataResult<RegistryMaterials<E>> a(RegistryMaterials<E> registrymaterials, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec) {
-        Collection<MinecraftKey> collection = this.c.a(resourcekey);
+        Collection<MinecraftKey> collection = this.resources.a(resourcekey);
         DataResult<RegistryMaterials<E>> dataresult = DataResult.success(registrymaterials, Lifecycle.stable());
         String s = resourcekey.a().getKey() + "/";
         Iterator iterator = collection.iterator();
@@ -122,10 +131,10 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
         return dataresult.setPartial(registrymaterials);
     }
 
-    private <E> DataResult<Supplier<E>> a(ResourceKey<? extends IRegistry<E>> resourcekey, IRegistryWritable<E> iregistrywritable, Codec<E> codec, MinecraftKey minecraftkey) {
-        ResourceKey<E> resourcekey1 = ResourceKey.a(resourcekey, minecraftkey);
+    private <E> DataResult<Supplier<E>> a(ResourceKey<? extends IRegistry<E>> resourcekey, final IRegistryWritable<E> iregistrywritable, Codec<E> codec, MinecraftKey minecraftkey) {
+        final ResourceKey<E> resourcekey1 = ResourceKey.a(resourcekey, minecraftkey);
         RegistryReadOps.a<E> registryreadops_a = this.b(resourcekey);
-        DataResult<Supplier<E>> dataresult = (DataResult) registryreadops_a.a.get(resourcekey1);
+        DataResult<Supplier<E>> dataresult = (DataResult) registryreadops_a.values.get(resourcekey1);
 
         if (dataresult != null) {
             return dataresult;
@@ -140,43 +149,50 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
                 }
             });
 
-            registryreadops_a.a.put(resourcekey1, DataResult.success(supplier));
-            DataResult<Pair<E, OptionalInt>> dataresult1 = this.c.a(this.f, resourcekey, resourcekey1, codec);
-            Optional<Pair<E, OptionalInt>> optional = dataresult1.result();
+            registryreadops_a.values.put(resourcekey1, DataResult.success(supplier));
+            Optional<DataResult<Pair<E, OptionalInt>>> optional = this.resources.a(this.jsonOps, resourcekey, resourcekey1, codec);
+            DataResult dataresult1;
 
-            if (optional.isPresent()) {
-                Pair<E, OptionalInt> pair = (Pair) optional.get();
+            if (!optional.isPresent()) {
+                dataresult1 = DataResult.success(new Supplier<E>() {
+                    public E get() {
+                        return iregistrywritable.a(resourcekey1);
+                    }
 
-                iregistrywritable.a((OptionalInt) pair.getSecond(), resourcekey1, pair.getFirst(), dataresult1.lifecycle());
-            }
-
-            DataResult dataresult2;
-
-            if (!optional.isPresent() && iregistrywritable.a(resourcekey1) != null) {
-                dataresult2 = DataResult.success(() -> {
-                    return iregistrywritable.a(resourcekey1);
+                    public String toString() {
+                        return resourcekey1.toString();
+                    }
                 }, Lifecycle.stable());
             } else {
-                dataresult2 = dataresult1.map((pair1) -> {
+                DataResult<Pair<E, OptionalInt>> dataresult2 = (DataResult) optional.get();
+                Optional<Pair<E, OptionalInt>> optional1 = dataresult2.result();
+
+                if (optional1.isPresent()) {
+                    Pair<E, OptionalInt> pair = (Pair) optional1.get();
+
+                    iregistrywritable.a((OptionalInt) pair.getSecond(), resourcekey1, pair.getFirst(), dataresult2.lifecycle());
+                }
+
+                dataresult1 = dataresult2.map((pair1) -> {
                     return () -> {
                         return iregistrywritable.a(resourcekey1);
                     };
                 });
             }
 
-            registryreadops_a.a.put(resourcekey1, dataresult2);
-            return dataresult2;
+            registryreadops_a.values.put(resourcekey1, dataresult1);
+            return dataresult1;
         }
     }
 
     private <E> RegistryReadOps.a<E> b(ResourceKey<? extends IRegistry<E>> resourcekey) {
-        return (RegistryReadOps.a) this.e.computeIfAbsent(resourcekey, (resourcekey1) -> {
+        return (RegistryReadOps.a) this.readCache.computeIfAbsent(resourcekey, (resourcekey1) -> {
             return new RegistryReadOps.a<>();
         });
     }
 
     protected <E> DataResult<IRegistry<E>> a(ResourceKey<? extends IRegistry<E>> resourcekey) {
-        return (DataResult) this.d.a(resourcekey).map((iregistrywritable) -> {
+        return (DataResult) this.registryAccess.a(resourcekey).map((iregistrywritable) -> {
             return DataResult.success(iregistrywritable, iregistrywritable.b());
         }).orElseGet(() -> {
             return DataResult.error("Unknown registry: " + resourcekey);
@@ -187,7 +203,7 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
 
         Collection<MinecraftKey> a(ResourceKey<? extends IRegistry<?>> resourcekey);
 
-        <E> DataResult<Pair<E, OptionalInt>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder);
+        <E> Optional<DataResult<Pair<E, OptionalInt>>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder);
 
         static RegistryReadOps.b a(final IResourceManager iresourcemanager) {
             return new RegistryReadOps.b() {
@@ -199,65 +215,61 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
                 }
 
                 @Override
-                public <E> DataResult<Pair<E, OptionalInt>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder) {
+                public <E> Optional<DataResult<Pair<E, OptionalInt>>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder) {
                     MinecraftKey minecraftkey = resourcekey1.a();
-                    MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), resourcekey.a().getKey() + "/" + minecraftkey.getKey() + ".json");
+                    String s = minecraftkey.getNamespace();
+                    String s1 = resourcekey.a().getKey();
+                    MinecraftKey minecraftkey1 = new MinecraftKey(s, s1 + "/" + minecraftkey.getKey() + ".json");
 
-                    try {
-                        IResource iresource = iresourcemanager.a(minecraftkey1);
-                        Throwable throwable = null;
-
-                        DataResult dataresult;
-
+                    if (!iresourcemanager.b(minecraftkey1)) {
+                        return Optional.empty();
+                    } else {
                         try {
-                            InputStreamReader inputstreamreader = new InputStreamReader(iresource.b(), StandardCharsets.UTF_8);
-                            Throwable throwable1 = null;
+                            IResource iresource = iresourcemanager.a(minecraftkey1);
+
+                            Optional optional;
 
                             try {
-                                JsonParser jsonparser = new JsonParser();
-                                JsonElement jsonelement = jsonparser.parse(inputstreamreader);
+                                InputStreamReader inputstreamreader = new InputStreamReader(iresource.b(), StandardCharsets.UTF_8);
 
-                                dataresult = decoder.parse(dynamicops, jsonelement).map((object) -> {
-                                    return Pair.of(object, OptionalInt.empty());
-                                });
-                            } catch (Throwable throwable2) {
-                                throwable1 = throwable2;
-                                throw throwable2;
-                            } finally {
-                                if (inputstreamreader != null) {
-                                    if (throwable1 != null) {
-                                        try {
-                                            inputstreamreader.close();
-                                        } catch (Throwable throwable3) {
-                                            throwable1.addSuppressed(throwable3);
-                                        }
-                                    } else {
+                                try {
+                                    JsonParser jsonparser = new JsonParser();
+                                    JsonElement jsonelement = jsonparser.parse(inputstreamreader);
+
+                                    optional = Optional.of(decoder.parse(dynamicops, jsonelement).map((object) -> {
+                                        return Pair.of(object, OptionalInt.empty());
+                                    }));
+                                } catch (Throwable throwable) {
+                                    try {
                                         inputstreamreader.close();
+                                    } catch (Throwable throwable1) {
+                                        throwable.addSuppressed(throwable1);
                                     }
+
+                                    throw throwable;
                                 }
 
-                            }
-                        } catch (Throwable throwable4) {
-                            throwable = throwable4;
-                            throw throwable4;
-                        } finally {
-                            if (iresource != null) {
-                                if (throwable != null) {
+                                inputstreamreader.close();
+                            } catch (Throwable throwable2) {
+                                if (iresource != null) {
                                     try {
                                         iresource.close();
-                                    } catch (Throwable throwable5) {
-                                        throwable.addSuppressed(throwable5);
+                                    } catch (Throwable throwable3) {
+                                        throwable2.addSuppressed(throwable3);
                                     }
-                                } else {
-                                    iresource.close();
                                 }
+
+                                throw throwable2;
                             }
 
-                        }
+                            if (iresource != null) {
+                                iresource.close();
+                            }
 
-                        return dataresult;
-                    } catch (JsonIOException | JsonSyntaxException | IOException ioexception) {
-                        return DataResult.error("Failed to parse " + minecraftkey1 + " file: " + ioexception.getMessage());
+                            return optional;
+                        } catch (JsonIOException | JsonSyntaxException | IOException ioexception) {
+                            return Optional.of(DataResult.error("Failed to parse " + minecraftkey1 + " file: " + ioexception.getMessage()));
+                        }
                     }
                 }
 
@@ -269,9 +281,9 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
 
         public static final class a implements RegistryReadOps.b {
 
-            private final Map<ResourceKey<?>, JsonElement> a = Maps.newIdentityHashMap();
-            private final Object2IntMap<ResourceKey<?>> b = new Object2IntOpenCustomHashMap(SystemUtils.k());
-            private final Map<ResourceKey<?>, Lifecycle> c = Maps.newIdentityHashMap();
+            private final Map<ResourceKey<?>, JsonElement> data = Maps.newIdentityHashMap();
+            private final Object2IntMap<ResourceKey<?>> ids = new Object2IntOpenCustomHashMap(SystemUtils.k());
+            private final Map<ResourceKey<?>, Lifecycle> lifecycles = Maps.newIdentityHashMap();
 
             public a() {}
 
@@ -282,38 +294,39 @@ public class RegistryReadOps<T> extends DynamicOpsWrapper<T> {
                 if (optional.isPresent()) {
                     RegistryReadOps.LOGGER.error("Error adding element: {}", ((PartialResult) optional.get()).message());
                 } else {
-                    this.a.put(resourcekey, dataresult.result().get());
-                    this.b.put(resourcekey, i);
-                    this.c.put(resourcekey, lifecycle);
+                    this.data.put(resourcekey, (JsonElement) dataresult.result().get());
+                    this.ids.put(resourcekey, i);
+                    this.lifecycles.put(resourcekey, lifecycle);
                 }
             }
 
             @Override
             public Collection<MinecraftKey> a(ResourceKey<? extends IRegistry<?>> resourcekey) {
-                return (Collection) this.a.keySet().stream().filter((resourcekey1) -> {
+                return (Collection) this.data.keySet().stream().filter((resourcekey1) -> {
                     return resourcekey1.a(resourcekey);
                 }).map((resourcekey1) -> {
-                    return new MinecraftKey(resourcekey1.a().getNamespace(), resourcekey.a().getKey() + "/" + resourcekey1.a().getKey() + ".json");
+                    String s = resourcekey1.a().getNamespace();
+                    String s1 = resourcekey.a().getKey();
+
+                    return new MinecraftKey(s, s1 + "/" + resourcekey1.a().getKey() + ".json");
                 }).collect(Collectors.toList());
             }
 
             @Override
-            public <E> DataResult<Pair<E, OptionalInt>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder) {
-                JsonElement jsonelement = (JsonElement) this.a.get(resourcekey1);
+            public <E> Optional<DataResult<Pair<E, OptionalInt>>> a(DynamicOps<JsonElement> dynamicops, ResourceKey<? extends IRegistry<E>> resourcekey, ResourceKey<E> resourcekey1, Decoder<E> decoder) {
+                JsonElement jsonelement = (JsonElement) this.data.get(resourcekey1);
 
-                return jsonelement == null ? DataResult.error("Unknown element: " + resourcekey1) : decoder.parse(dynamicops, jsonelement).setLifecycle((Lifecycle) this.c.get(resourcekey1)).map((object) -> {
-                    return Pair.of(object, OptionalInt.of(this.b.getInt(resourcekey1)));
-                });
+                return jsonelement == null ? Optional.of(DataResult.error("Unknown element: " + resourcekey1)) : Optional.of(decoder.parse(dynamicops, jsonelement).setLifecycle((Lifecycle) this.lifecycles.get(resourcekey1)).map((object) -> {
+                    return Pair.of(object, OptionalInt.of(this.ids.getInt(resourcekey1)));
+                }));
             }
         }
     }
 
-    static final class a<E> {
+    private static final class a<E> {
 
-        private final Map<ResourceKey<E>, DataResult<Supplier<E>>> a;
+        final Map<ResourceKey<E>, DataResult<Supplier<E>>> values = Maps.newIdentityHashMap();
 
-        private a() {
-            this.a = Maps.newIdentityHashMap();
-        }
+        a() {}
     }
 }

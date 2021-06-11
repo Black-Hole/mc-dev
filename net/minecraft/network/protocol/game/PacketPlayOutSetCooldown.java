@@ -1,35 +1,39 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.item.Item;
 
 public class PacketPlayOutSetCooldown implements Packet<PacketListenerPlayOut> {
 
-    private Item a;
-    private int b;
-
-    public PacketPlayOutSetCooldown() {}
+    private final Item item;
+    private final int duration;
 
     public PacketPlayOutSetCooldown(Item item, int i) {
-        this.a = item;
-        this.b = i;
+        this.item = item;
+        this.duration = i;
+    }
+
+    public PacketPlayOutSetCooldown(PacketDataSerializer packetdataserializer) {
+        this.item = Item.getById(packetdataserializer.j());
+        this.duration = packetdataserializer.j();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = Item.getById(packetdataserializer.i());
-        this.b = packetdataserializer.i();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(Item.getId(this.a));
-        packetdataserializer.d(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(Item.getId(this.item));
+        packetdataserializer.d(this.duration);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public Item b() {
+        return this.item;
+    }
+
+    public int c() {
+        return this.duration;
     }
 }

@@ -12,7 +12,7 @@ public class DataConverterMiscUUID extends DataConverterUUIDBase {
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("LevelUUIDFix", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("LevelUUIDFix", this.getInputSchema().getType(this.typeReference), (typed) -> {
             return typed.updateTyped(DSL.remainderFinder(), (typed1) -> {
                 return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     dynamic = this.d(dynamic);

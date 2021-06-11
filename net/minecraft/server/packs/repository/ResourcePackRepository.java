@@ -14,56 +14,59 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+import net.minecraft.server.packs.EnumResourcePackType;
 import net.minecraft.server.packs.IResourcePack;
 
 public class ResourcePackRepository implements AutoCloseable {
 
-    private final Set<ResourcePackSource> a;
-    private Map<String, ResourcePackLoader> b;
-    private List<ResourcePackLoader> c;
-    private final ResourcePackLoader.a d;
+    private final Set<ResourcePackSource> sources;
+    private Map<String, ResourcePackLoader> available;
+    private List<ResourcePackLoader> selected;
+    private final ResourcePackLoader.a constructor;
 
     public ResourcePackRepository(ResourcePackLoader.a resourcepackloader_a, ResourcePackSource... aresourcepacksource) {
-        this.b = ImmutableMap.of();
-        this.c = ImmutableList.of();
-        this.d = resourcepackloader_a;
-        this.a = ImmutableSet.copyOf(aresourcepacksource);
+        this.available = ImmutableMap.of();
+        this.selected = ImmutableList.of();
+        this.constructor = resourcepackloader_a;
+        this.sources = ImmutableSet.copyOf(aresourcepacksource);
     }
 
-    public ResourcePackRepository(ResourcePackSource... aresourcepacksource) {
-        this(ResourcePackLoader::new, aresourcepacksource);
+    public ResourcePackRepository(EnumResourcePackType enumresourcepacktype, ResourcePackSource... aresourcepacksource) {
+        this((s, ichatbasecomponent, flag, supplier, resourcepackinfo, resourcepackloader_position, packsource) -> {
+            return new ResourcePackLoader(s, ichatbasecomponent, flag, supplier, resourcepackinfo, enumresourcepacktype, resourcepackloader_position, packsource);
+        }, aresourcepacksource);
     }
 
     public void a() {
-        List<String> list = (List) this.c.stream().map(ResourcePackLoader::e).collect(ImmutableList.toImmutableList());
+        List<String> list = (List) this.selected.stream().map(ResourcePackLoader::e).collect(ImmutableList.toImmutableList());
 
         this.close();
-        this.b = this.g();
-        this.c = this.b((Collection) list);
+        this.available = this.g();
+        this.selected = this.b((Collection) list);
     }
 
     private Map<String, ResourcePackLoader> g() {
         Map<String, ResourcePackLoader> map = Maps.newTreeMap();
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.sources.iterator();
 
         while (iterator.hasNext()) {
             ResourcePackSource resourcepacksource = (ResourcePackSource) iterator.next();
 
             resourcepacksource.a((resourcepackloader) -> {
-                ResourcePackLoader resourcepackloader1 = (ResourcePackLoader) map.put(resourcepackloader.e(), resourcepackloader);
-            }, this.d);
+                map.put(resourcepackloader.e(), resourcepackloader);
+            }, this.constructor);
         }
 
         return ImmutableMap.copyOf(map);
     }
 
     public void a(Collection<String> collection) {
-        this.c = this.b(collection);
+        this.selected = this.b(collection);
     }
 
     private List<ResourcePackLoader> b(Collection<String> collection) {
         List<ResourcePackLoader> list = (List) this.c(collection).collect(Collectors.toList());
-        Iterator iterator = this.b.values().iterator();
+        Iterator iterator = this.available.values().iterator();
 
         while (iterator.hasNext()) {
             ResourcePackLoader resourcepackloader = (ResourcePackLoader) iterator.next();
@@ -78,42 +81,42 @@ public class ResourcePackRepository implements AutoCloseable {
 
     private Stream<ResourcePackLoader> c(Collection<String> collection) {
         Stream stream = collection.stream();
-        Map map = this.b;
+        Map map = this.available;
 
-        this.b.getClass();
+        Objects.requireNonNull(this.available);
         return stream.map(map::get).filter(Objects::nonNull);
     }
 
     public Collection<String> b() {
-        return this.b.keySet();
+        return this.available.keySet();
     }
 
     public Collection<ResourcePackLoader> c() {
-        return this.b.values();
+        return this.available.values();
     }
 
     public Collection<String> d() {
-        return (Collection) this.c.stream().map(ResourcePackLoader::e).collect(ImmutableSet.toImmutableSet());
+        return (Collection) this.selected.stream().map(ResourcePackLoader::e).collect(ImmutableSet.toImmutableSet());
     }
 
     public Collection<ResourcePackLoader> e() {
-        return this.c;
+        return this.selected;
     }
 
     @Nullable
     public ResourcePackLoader a(String s) {
-        return (ResourcePackLoader) this.b.get(s);
+        return (ResourcePackLoader) this.available.get(s);
     }
 
     public void close() {
-        this.b.values().forEach(ResourcePackLoader::close);
+        this.available.values().forEach(ResourcePackLoader::close);
     }
 
     public boolean b(String s) {
-        return this.b.containsKey(s);
+        return this.available.containsKey(s);
     }
 
     public List<IResourcePack> f() {
-        return (List) this.c.stream().map(ResourcePackLoader::d).collect(ImmutableList.toImmutableList());
+        return (List) this.selected.stream().map(ResourcePackLoader::d).collect(ImmutableList.toImmutableList());
     }
 }

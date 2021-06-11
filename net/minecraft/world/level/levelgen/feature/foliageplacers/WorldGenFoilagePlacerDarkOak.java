@@ -3,43 +3,43 @@ package net.minecraft.world.level.levelgen.feature.foliageplacers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.util.IntSpread;
-import net.minecraft.world.level.VirtualLevelWritable;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.VirtualLevelReadable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class WorldGenFoilagePlacerDarkOak extends WorldGenFoilagePlacer {
 
-    public static final Codec<WorldGenFoilagePlacerDarkOak> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenFoilagePlacerDarkOak> CODEC = RecordCodecBuilder.create((instance) -> {
         return b(instance).apply(instance, WorldGenFoilagePlacerDarkOak::new);
     });
 
-    public WorldGenFoilagePlacerDarkOak(IntSpread intspread, IntSpread intspread1) {
-        super(intspread, intspread1);
+    public WorldGenFoilagePlacerDarkOak(IntProvider intprovider, IntProvider intprovider1) {
+        super(intprovider, intprovider1);
     }
 
     @Override
     protected WorldGenFoilagePlacers<?> a() {
-        return WorldGenFoilagePlacers.i;
+        return WorldGenFoilagePlacers.DARK_OAK_FOLIAGE_PLACER;
     }
 
     @Override
-    protected void a(VirtualLevelWritable virtuallevelwritable, Random random, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration, int i, WorldGenFoilagePlacer.b worldgenfoilageplacer_b, int j, int k, Set<BlockPosition> set, int l, StructureBoundingBox structureboundingbox) {
-        BlockPosition blockposition = worldgenfoilageplacer_b.a().up(l);
-        boolean flag = worldgenfoilageplacer_b.c();
+    protected void a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration, int i, WorldGenFoilagePlacer.a worldgenfoilageplacer_a, int j, int k, int l) {
+        BlockPosition blockposition = worldgenfoilageplacer_a.a().up(l);
+        boolean flag = worldgenfoilageplacer_a.c();
 
         if (flag) {
-            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, set, -1, flag, structureboundingbox);
-            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + 3, set, 0, flag, structureboundingbox);
-            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, set, 1, flag, structureboundingbox);
+            this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, -1, flag);
+            this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + 3, 0, flag);
+            this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, 1, flag);
             if (random.nextBoolean()) {
-                this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k, set, 2, flag, structureboundingbox);
+                this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k, 2, flag);
             }
         } else {
-            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, set, -1, flag, structureboundingbox);
-            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, blockposition, k + 1, set, 0, flag, structureboundingbox);
+            this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + 2, -1, flag);
+            this.a(virtuallevelreadable, biconsumer, random, worldgenfeaturetreeconfiguration, blockposition, k + 1, 0, flag);
         }
 
     }

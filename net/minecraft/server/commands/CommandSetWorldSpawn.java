@@ -12,6 +12,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class CommandSetWorldSpawn {
 
+    public CommandSetWorldSpawn() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("setworldspawn").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);

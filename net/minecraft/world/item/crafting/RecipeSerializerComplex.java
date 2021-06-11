@@ -7,20 +7,20 @@ import net.minecraft.resources.MinecraftKey;
 
 public class RecipeSerializerComplex<T extends IRecipe<?>> implements RecipeSerializer<T> {
 
-    private final Function<MinecraftKey, T> v;
+    private final Function<MinecraftKey, T> constructor;
 
     public RecipeSerializerComplex(Function<MinecraftKey, T> function) {
-        this.v = function;
+        this.constructor = function;
     }
 
     @Override
     public T a(MinecraftKey minecraftkey, JsonObject jsonobject) {
-        return (IRecipe) this.v.apply(minecraftkey);
+        return (IRecipe) this.constructor.apply(minecraftkey);
     }
 
     @Override
     public T a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-        return (IRecipe) this.v.apply(minecraftkey);
+        return (IRecipe) this.constructor.apply(minecraftkey);
     }
 
     @Override

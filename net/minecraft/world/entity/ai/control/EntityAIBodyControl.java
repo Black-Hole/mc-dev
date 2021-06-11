@@ -3,31 +3,34 @@ package net.minecraft.world.entity.ai.control;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.EntityInsentient;
 
-public class EntityAIBodyControl {
+public class EntityAIBodyControl implements Control {
 
-    private final EntityInsentient a;
-    private int b;
-    private float c;
+    private final EntityInsentient mob;
+    private static final int HEAD_STABLE_ANGLE = 15;
+    private static final int DELAY_UNTIL_STARTING_TO_FACE_FORWARD = 10;
+    private static final int HOW_LONG_IT_TAKES_TO_FACE_FORWARD = 10;
+    private int headStableTime;
+    private float lastStableYHeadRot;
 
     public EntityAIBodyControl(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.mob = entityinsentient;
     }
 
     public void a() {
         if (this.f()) {
-            this.a.aA = this.a.yaw;
+            this.mob.yBodyRot = this.mob.getYRot();
             this.c();
-            this.c = this.a.aC;
-            this.b = 0;
+            this.lastStableYHeadRot = this.mob.yHeadRot;
+            this.headStableTime = 0;
         } else {
             if (this.e()) {
-                if (Math.abs(this.a.aC - this.c) > 15.0F) {
-                    this.b = 0;
-                    this.c = this.a.aC;
+                if (Math.abs(this.mob.yHeadRot - this.lastStableYHeadRot) > 15.0F) {
+                    this.headStableTime = 0;
+                    this.lastStableYHeadRot = this.mob.yHeadRot;
                     this.b();
                 } else {
-                    ++this.b;
-                    if (this.b > 10) {
+                    ++this.headStableTime;
+                    if (this.headStableTime > 10) {
                         this.d();
                     }
                 }
@@ -37,28 +40,28 @@ public class EntityAIBodyControl {
     }
 
     private void b() {
-        this.a.aA = MathHelper.b(this.a.aA, this.a.aC, (float) this.a.Q());
+        this.mob.yBodyRot = MathHelper.c(this.mob.yBodyRot, this.mob.yHeadRot, (float) this.mob.eZ());
     }
 
     private void c() {
-        this.a.aC = MathHelper.b(this.a.aC, this.a.aA, (float) this.a.Q());
+        this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.eZ());
     }
 
     private void d() {
-        int i = this.b - 10;
+        int i = this.headStableTime - 10;
         float f = MathHelper.a((float) i / 10.0F, 0.0F, 1.0F);
-        float f1 = (float) this.a.Q() * (1.0F - f);
+        float f1 = (float) this.mob.eZ() * (1.0F - f);
 
-        this.a.aA = MathHelper.b(this.a.aA, this.a.aC, f1);
+        this.mob.yBodyRot = MathHelper.c(this.mob.yBodyRot, this.mob.yHeadRot, f1);
     }
 
     private boolean e() {
-        return this.a.getPassengers().isEmpty() || !(this.a.getPassengers().get(0) instanceof EntityInsentient);
+        return !(this.mob.cB() instanceof EntityInsentient);
     }
 
     private boolean f() {
-        double d0 = this.a.locX() - this.a.lastX;
-        double d1 = this.a.locZ() - this.a.lastZ;
+        double d0 = this.mob.locX() - this.mob.xo;
+        double d1 = this.mob.locZ() - this.mob.zo;
 
         return d0 * d0 + d1 * d1 > 2.500000277905201E-7D;
     }

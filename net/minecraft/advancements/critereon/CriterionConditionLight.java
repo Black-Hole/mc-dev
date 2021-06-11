@@ -10,24 +10,24 @@ import net.minecraft.util.ChatDeserializer;
 
 public class CriterionConditionLight {
 
-    public static final CriterionConditionLight a = new CriterionConditionLight(CriterionConditionValue.IntegerRange.e);
-    private final CriterionConditionValue.IntegerRange b;
+    public static final CriterionConditionLight ANY = new CriterionConditionLight(CriterionConditionValue.IntegerRange.ANY);
+    private final CriterionConditionValue.IntegerRange composite;
 
-    private CriterionConditionLight(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-        this.b = criterionconditionvalue_integerrange;
+    CriterionConditionLight(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+        this.composite = criterionconditionvalue_integerrange;
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition) {
-        return this == CriterionConditionLight.a ? true : (!worldserver.p(blockposition) ? false : this.b.d(worldserver.getLightLevel(blockposition)));
+        return this == CriterionConditionLight.ANY ? true : (!worldserver.o(blockposition) ? false : this.composite.d(worldserver.getLightLevel(blockposition)));
     }
 
     public JsonElement a() {
-        if (this == CriterionConditionLight.a) {
+        if (this == CriterionConditionLight.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("light", this.b.d());
+            jsonobject.add("light", this.composite.d());
             return jsonobject;
         }
     }
@@ -39,7 +39,29 @@ public class CriterionConditionLight {
 
             return new CriterionConditionLight(criterionconditionvalue_integerrange);
         } else {
-            return CriterionConditionLight.a;
+            return CriterionConditionLight.ANY;
+        }
+    }
+
+    public static class a {
+
+        private CriterionConditionValue.IntegerRange composite;
+
+        public a() {
+            this.composite = CriterionConditionValue.IntegerRange.ANY;
+        }
+
+        public static CriterionConditionLight.a a() {
+            return new CriterionConditionLight.a();
+        }
+
+        public CriterionConditionLight.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.composite = criterionconditionvalue_integerrange;
+            return this;
+        }
+
+        public CriterionConditionLight b() {
+            return new CriterionConditionLight(this.composite);
         }
     }
 }

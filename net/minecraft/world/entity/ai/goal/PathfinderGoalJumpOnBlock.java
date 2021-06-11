@@ -15,34 +15,34 @@ import net.minecraft.world.level.block.state.properties.BlockPropertyBedPart;
 
 public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
 
-    private final EntityCat g;
+    private final EntityCat cat;
 
     public PathfinderGoalJumpOnBlock(EntityCat entitycat, double d0) {
         super(entitycat, d0, 8);
-        this.g = entitycat;
+        this.cat = entitycat;
     }
 
     @Override
     public boolean a() {
-        return this.g.isTamed() && !this.g.isWillSit() && super.a();
+        return this.cat.isTamed() && !this.cat.isWillSit() && super.a();
     }
 
     @Override
     public void c() {
         super.c();
-        this.g.setSitting(false);
+        this.cat.setSitting(false);
     }
 
     @Override
     public void d() {
         super.d();
-        this.g.setSitting(false);
+        this.cat.setSitting(false);
     }
 
     @Override
     public void e() {
         super.e();
-        this.g.setSitting(this.l());
+        this.cat.setSitting(this.l());
     }
 
     @Override

@@ -7,41 +7,41 @@ import net.minecraft.world.entity.EntityTameableAnimal;
 
 public class PathfinderGoalSit extends PathfinderGoal {
 
-    private final EntityTameableAnimal entity;
+    private final EntityTameableAnimal mob;
 
     public PathfinderGoalSit(EntityTameableAnimal entitytameableanimal) {
-        this.entity = entitytameableanimal;
+        this.mob = entitytameableanimal;
         this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean b() {
-        return this.entity.isWillSit();
+        return this.mob.isWillSit();
     }
 
     @Override
     public boolean a() {
-        if (!this.entity.isTamed()) {
+        if (!this.mob.isTamed()) {
             return false;
-        } else if (this.entity.aH()) {
+        } else if (this.mob.aO()) {
             return false;
-        } else if (!this.entity.isOnGround()) {
+        } else if (!this.mob.isOnGround()) {
             return false;
         } else {
-            EntityLiving entityliving = this.entity.getOwner();
+            EntityLiving entityliving = this.mob.getOwner();
 
-            return entityliving == null ? true : (this.entity.h((Entity) entityliving) < 144.0D && entityliving.getLastDamager() != null ? false : this.entity.isWillSit());
+            return entityliving == null ? true : (this.mob.f((Entity) entityliving) < 144.0D && entityliving.getLastDamager() != null ? false : this.mob.isWillSit());
         }
     }
 
     @Override
     public void c() {
-        this.entity.getNavigation().o();
-        this.entity.setSitting(true);
+        this.mob.getNavigation().o();
+        this.mob.setSitting(true);
     }
 
     @Override
     public void d() {
-        this.entity.setSitting(false);
+        this.mob.setSitting(false);
     }
 }

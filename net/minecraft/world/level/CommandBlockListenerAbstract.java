@@ -17,11 +17,12 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.UtilColor;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.phys.Vec3D;
 
 public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
-    private static final SimpleDateFormat b = new SimpleDateFormat("HH:mm:ss");
-    private static final IChatBaseComponent c = new ChatComponentText("@");
+    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
+    private static final IChatBaseComponent DEFAULT_NAME = new ChatComponentText("@");
     private long lastExecution = -1L;
     private boolean updateLastExecution = true;
     private int successCount;
@@ -29,13 +30,13 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     @Nullable
     private IChatBaseComponent lastOutput;
     private String command = "";
-    private IChatBaseComponent customName;
+    private IChatBaseComponent name;
 
     public CommandBlockListenerAbstract() {
-        this.customName = CommandBlockListenerAbstract.c;
+        this.name = CommandBlockListenerAbstract.DEFAULT_NAME;
     }
 
-    public int i() {
+    public int j() {
         return this.successCount;
     }
 
@@ -43,14 +44,14 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         this.successCount = i;
     }
 
-    public IChatBaseComponent j() {
-        return this.lastOutput == null ? ChatComponentText.d : this.lastOutput;
+    public IChatBaseComponent k() {
+        return this.lastOutput == null ? ChatComponentText.EMPTY : this.lastOutput;
     }
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         nbttagcompound.setString("Command", this.command);
         nbttagcompound.setInt("SuccessCount", this.successCount);
-        nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.customName));
+        nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.name));
         nbttagcompound.setBoolean("TrackOutput", this.trackOutput);
         if (this.lastOutput != null && this.trackOutput) {
             nbttagcompound.setString("LastOutput", IChatBaseComponent.ChatSerializer.a(this.lastOutput));
@@ -114,7 +115,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 return true;
             } else {
                 this.successCount = 0;
-                MinecraftServer minecraftserver = this.d().getMinecraftServer();
+                MinecraftServer minecraftserver = this.e().getMinecraftServer();
 
                 if (minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.command)) {
                     try {
@@ -153,14 +154,14 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public IChatBaseComponent getName() {
-        return this.customName;
+        return this.name;
     }
 
     public void setName(@Nullable IChatBaseComponent ichatbasecomponent) {
         if (ichatbasecomponent != null) {
-            this.customName = ichatbasecomponent;
+            this.name = ichatbasecomponent;
         } else {
-            this.customName = CommandBlockListenerAbstract.c;
+            this.name = CommandBlockListenerAbstract.DEFAULT_NAME;
         }
 
     }
@@ -168,15 +169,18 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     @Override
     public void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid) {
         if (this.trackOutput) {
-            this.lastOutput = (new ChatComponentText("[" + CommandBlockListenerAbstract.b.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
-            this.e();
+            SimpleDateFormat simpledateformat = CommandBlockListenerAbstract.TIME_FORMAT;
+            Date date = new Date();
+
+            this.lastOutput = (new ChatComponentText("[" + simpledateformat.format(date) + "] ")).addSibling(ichatbasecomponent);
+            this.f();
         }
 
     }
 
-    public abstract WorldServer d();
+    public abstract WorldServer e();
 
-    public abstract void e();
+    public abstract void f();
 
     public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
         this.lastOutput = ichatbasecomponent;
@@ -184,6 +188,10 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     public void a(boolean flag) {
         this.trackOutput = flag;
+    }
+
+    public boolean n() {
+        return this.trackOutput;
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman) {
@@ -194,15 +202,17 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 entityhuman.a(this);
             }
 
-            return EnumInteractionResult.a(entityhuman.world.isClientSide);
+            return EnumInteractionResult.a(entityhuman.level.isClientSide);
         }
     }
+
+    public abstract Vec3D g();
 
     public abstract CommandListenerWrapper getWrapper();
 
     @Override
     public boolean shouldSendSuccess() {
-        return this.d().getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK) && this.trackOutput;
+        return this.e().getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK) && this.trackOutput;
     }
 
     @Override
@@ -212,6 +222,6 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     @Override
     public boolean shouldBroadcastCommands() {
-        return this.d().getGameRules().getBoolean(GameRules.COMMAND_BLOCK_OUTPUT);
+        return this.e().getGameRules().getBoolean(GameRules.RULE_COMMANDBLOCKOUTPUT);
     }
 }

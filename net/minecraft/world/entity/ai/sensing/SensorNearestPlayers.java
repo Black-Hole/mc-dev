@@ -3,6 +3,7 @@ package net.minecraft.world.entity.ai.sensing;
 import com.google.common.collect.ImmutableSet;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,27 +22,29 @@ public class SensorNearestPlayers extends Sensor<EntityLiving> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER);
     }
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
-        Stream stream = worldserver.getPlayers().stream().filter(IEntitySelector.g).filter((entityplayer) -> {
+        Stream stream = worldserver.getPlayers().stream().filter(IEntitySelector.NO_SPECTATORS).filter((entityplayer) -> {
             return entityliving.a((Entity) entityplayer, 16.0D);
         });
 
-        entityliving.getClass();
-        List<EntityHuman> list = (List) stream.sorted(Comparator.comparingDouble(entityliving::h)).collect(Collectors.toList());
+        Objects.requireNonNull(entityliving);
+        List<EntityHuman> list = (List) stream.sorted(Comparator.comparingDouble(entityliving::f)).collect(Collectors.toList());
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_PLAYERS, (Object) list);
         List<EntityHuman> list1 = (List) list.stream().filter((entityhuman) -> {
-            return a(entityliving, (EntityLiving) entityhuman);
+            return b(entityliving, (EntityLiving) entityhuman);
         }).collect(Collectors.toList());
 
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER, (Object) (list1.isEmpty() ? null : (EntityHuman) list1.get(0)));
-        Optional<EntityHuman> optional = list1.stream().filter(IEntitySelector.f).findFirst();
+        Optional<EntityHuman> optional = list1.stream().filter((entityhuman) -> {
+            return c(entityliving, entityhuman);
+        }).findFirst();
 
-        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, optional);
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, optional);
     }
 }

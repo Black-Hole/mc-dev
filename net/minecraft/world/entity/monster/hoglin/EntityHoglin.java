@@ -49,16 +49,24 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
 
-    private static final DataWatcherObject<Boolean> bq = DataWatcher.a(EntityHoglin.class, DataWatcherRegistry.i);
-    private int br;
-    public int conversionTicks = 0;
-    public boolean cannotBeHunted = false;
-    protected static final ImmutableList<? extends SensorType<? extends Sensor<? super EntityHoglin>>> bo = ImmutableList.of(SensorType.c, SensorType.d, SensorType.n, SensorType.m);
-    protected static final ImmutableList<? extends MemoryModuleType<?>> bp = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULY, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
+    private static final DataWatcherObject<Boolean> DATA_IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglin.class, DataWatcherRegistry.BOOLEAN);
+    private static final float PROBABILITY_OF_SPAWNING_AS_BABY = 0.2F;
+    private static final int MAX_HEALTH = 40;
+    private static final float MOVEMENT_SPEED_WHEN_FIGHTING = 0.3F;
+    private static final int ATTACK_KNOCKBACK = 1;
+    private static final float KNOCKBACK_RESISTANCE = 0.6F;
+    private static final int ATTACK_DAMAGE = 6;
+    private static final float BABY_ATTACK_DAMAGE = 0.5F;
+    private static final int CONVERSION_TIME = 300;
+    private int attackAnimationRemainingTicks;
+    public int timeInOverworld;
+    public boolean cannotBeHunted;
+    protected static final ImmutableList<? extends SensorType<? extends Sensor<? super EntityHoglin>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ADULT, SensorType.HOGLIN_SPECIFIC_SENSOR);
+    protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.BREED_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, new MemoryModuleType[]{MemoryModuleType.AVOID_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_ADULT_HOGLINS, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_REPELLENT, MemoryModuleType.PACIFIED});
 
     public EntityHoglin(EntityTypes<? extends EntityHoglin> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 5;
+        this.xpReward = 5;
     }
 
     @Override
@@ -66,8 +74,8 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
         return !this.isLeashed();
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
+    public static AttributeProvider.Builder p() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
@@ -75,9 +83,9 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
         if (!(entity instanceof EntityLiving)) {
             return false;
         } else {
-            this.br = 10;
-            this.world.broadcastEntityEffect(this, (byte) 4);
-            this.playSound(SoundEffects.ENTITY_HOGLIN_ATTACK, 1.0F, this.dH());
+            this.attackAnimationRemainingTicks = 10;
+            this.level.broadcastEntityEffect(this, (byte) 4);
+            this.playSound(SoundEffects.HOGLIN_ATTACK, 1.0F, this.ep());
             HoglinAI.a(this, (EntityLiving) entity);
             return IOglin.a(this, (EntityLiving) entity);
         }
@@ -85,7 +93,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
 
     @Override
     protected void e(EntityLiving entityliving) {
-        if (this.eL()) {
+        if (this.t()) {
             IOglin.b(this, entityliving);
         }
 
@@ -95,7 +103,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     public boolean damageEntity(DamageSource damagesource, float f) {
         boolean flag = super.damageEntity(damagesource, f);
 
-        if (this.world.isClientSide) {
+        if (this.level.isClientSide) {
             return false;
         } else {
             if (flag && damagesource.getEntity() instanceof EntityLiving) {
@@ -107,13 +115,13 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    protected BehaviorController.b<EntityHoglin> cK() {
-        return BehaviorController.a((Collection) EntityHoglin.bp, (Collection) EntityHoglin.bo);
+    protected BehaviorController.b<EntityHoglin> dp() {
+        return BehaviorController.a((Collection) EntityHoglin.MEMORY_TYPES, (Collection) EntityHoglin.SENSOR_TYPES);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        return HoglinAI.a(this.cK().a(dynamic));
+        return HoglinAI.a(this.dp().a(dynamic));
     }
 
     @Override
@@ -123,38 +131,38 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
 
     @Override
     protected void mobTick() {
-        this.world.getMethodProfiler().enter("hoglinBrain");
-        this.getBehaviorController().a((WorldServer) this.world, (EntityLiving) this);
-        this.world.getMethodProfiler().exit();
+        this.level.getMethodProfiler().enter("hoglinBrain");
+        this.getBehaviorController().a((WorldServer) this.level, (EntityLiving) this);
+        this.level.getMethodProfiler().exit();
         HoglinAI.a(this);
         if (this.isConverting()) {
-            ++this.conversionTicks;
-            if (this.conversionTicks > 300) {
-                this.a(SoundEffects.ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED);
-                this.c((WorldServer) this.world);
+            ++this.timeInOverworld;
+            if (this.timeInOverworld > 300) {
+                this.a(SoundEffects.HOGLIN_CONVERTED_TO_ZOMBIFIED);
+                this.c((WorldServer) this.level);
             }
         } else {
-            this.conversionTicks = 0;
+            this.timeInOverworld = 0;
         }
 
     }
 
     @Override
     public void movementTick() {
-        if (this.br > 0) {
-            --this.br;
+        if (this.attackAnimationRemainingTicks > 0) {
+            --this.attackAnimationRemainingTicks;
         }
 
         super.movementTick();
     }
 
     @Override
-    protected void m() {
+    protected void n() {
         if (this.isBaby()) {
-            this.f = 3;
+            this.xpReward = 3;
             this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(0.5D);
         } else {
-            this.f = 5;
+            this.xpReward = 5;
             this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
         }
 
@@ -185,7 +193,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public double bc() {
+    public double bl() {
         return (double) this.getHeight() - (this.isBaby() ? 0.2D : 0.15D);
     }
 
@@ -201,13 +209,29 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
+    public void a(byte b0) {
+        if (b0 == 4) {
+            this.attackAnimationRemainingTicks = 10;
+            this.playSound(SoundEffects.HOGLIN_ATTACK, 1.0F, this.ep());
+        } else {
+            super.a(b0);
+        }
+
+    }
+
+    @Override
+    public int fv() {
+        return this.attackAnimationRemainingTicks;
+    }
+
+    @Override
     protected boolean isDropExperience() {
         return true;
     }
 
     @Override
     protected int getExpValue(EntityHuman entityhuman) {
-        return this.f;
+        return this.xpReward;
     }
 
     private void c(WorldServer worldserver) {
@@ -220,18 +244,18 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public boolean k(ItemStack itemstack) {
-        return itemstack.getItem() == Items.bw;
+    public boolean n(ItemStack itemstack) {
+        return itemstack.a(Items.CRIMSON_FUNGUS);
     }
 
-    public boolean eL() {
+    public boolean t() {
         return !this.isBaby();
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHoglin.bq, false);
+        this.entityData.register(EntityHoglin.DATA_IMMUNE_TO_ZOMBIFICATION, false);
     }
 
     @Override
@@ -241,7 +265,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
             nbttagcompound.setBoolean("IsImmuneToZombification", true);
         }
 
-        nbttagcompound.setInt("TimeInOverworld", this.conversionTicks);
+        nbttagcompound.setInt("TimeInOverworld", this.timeInOverworld);
         if (this.cannotBeHunted) {
             nbttagcompound.setBoolean("CannotBeHunted", true);
         }
@@ -252,28 +276,28 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.setImmuneToZombification(nbttagcompound.getBoolean("IsImmuneToZombification"));
-        this.conversionTicks = nbttagcompound.getInt("TimeInOverworld");
-        this.u(nbttagcompound.getBoolean("CannotBeHunted"));
+        this.timeInOverworld = nbttagcompound.getInt("TimeInOverworld");
+        this.w(nbttagcompound.getBoolean("CannotBeHunted"));
     }
 
     public void setImmuneToZombification(boolean flag) {
-        this.getDataWatcher().set(EntityHoglin.bq, flag);
+        this.getDataWatcher().set(EntityHoglin.DATA_IMMUNE_TO_ZOMBIFICATION, flag);
     }
 
     public boolean isImmuneToZombification() {
-        return (Boolean) this.getDataWatcher().get(EntityHoglin.bq);
+        return (Boolean) this.getDataWatcher().get(EntityHoglin.DATA_IMMUNE_TO_ZOMBIFICATION);
     }
 
     public boolean isConverting() {
-        return !this.world.getDimensionManager().isPiglinSafe() && !this.isImmuneToZombification() && !this.isNoAI();
+        return !this.level.getDimensionManager().isPiglinSafe() && !this.isImmuneToZombification() && !this.isNoAI();
     }
 
-    private void u(boolean flag) {
+    private void w(boolean flag) {
         this.cannotBeHunted = flag;
     }
 
-    public boolean eO() {
-        return this.eL() && !this.cannotBeHunted;
+    public boolean fx() {
+        return this.t() && !this.cannotBeHunted;
     }
 
     @Nullable
@@ -289,8 +313,8 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public boolean eP() {
-        return !HoglinAI.c(this) && super.eP();
+    public boolean fy() {
+        return !HoglinAI.c(this) && super.fy();
     }
 
     @Override
@@ -300,41 +324,41 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.world.isClientSide ? null : (SoundEffect) HoglinAI.b(this).orElse((Object) null);
+        return this.level.isClientSide ? null : (SoundEffect) HoglinAI.b(this).orElse((Object) null);
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_HOGLIN_HURT;
+        return SoundEffects.HOGLIN_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_HOGLIN_DEATH;
+        return SoundEffects.HOGLIN_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSwim() {
-        return SoundEffects.ENTITY_HOSTILE_SWIM;
+        return SoundEffects.HOSTILE_SWIM;
     }
 
     @Override
     protected SoundEffect getSoundSplash() {
-        return SoundEffects.ENTITY_HOSTILE_SPLASH;
+        return SoundEffects.HOSTILE_SPLASH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_HOGLIN_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.HOGLIN_STEP, 0.15F, 1.0F);
     }
 
     protected void a(SoundEffect soundeffect) {
-        this.playSound(soundeffect, this.getSoundVolume(), this.dH());
+        this.playSound(soundeffect, this.getSoundVolume(), this.ep());
     }
 
     @Override
-    protected void M() {
-        super.M();
+    protected void R() {
+        super.R();
         PacketDebug.a((EntityLiving) this);
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.IRecipe;
 import net.minecraft.world.item.crafting.RecipeStonecutting;
 import net.minecraft.world.item.crafting.Recipes;
 import net.minecraft.world.level.World;
@@ -18,67 +17,73 @@ import net.minecraft.world.level.block.Blocks;
 
 public class ContainerStonecutter extends Container {
 
-    private final ContainerAccess containerAccess;
-    private final ContainerProperty containerProperty;
-    private final World world;
-    private List<RecipeStonecutting> i;
-    private ItemStack j;
-    private long k;
-    final Slot c;
-    final Slot d;
-    private Runnable l;
-    public final IInventory inventory;
-    private final InventoryCraftResult resultInventory;
+    public static final int INPUT_SLOT = 0;
+    public static final int RESULT_SLOT = 1;
+    private static final int INV_SLOT_START = 2;
+    private static final int INV_SLOT_END = 29;
+    private static final int USE_ROW_SLOT_START = 29;
+    private static final int USE_ROW_SLOT_END = 38;
+    private final ContainerAccess access;
+    private final ContainerProperty selectedRecipeIndex;
+    private final World level;
+    private List<RecipeStonecutting> recipes;
+    private ItemStack input;
+    long lastSoundTime;
+    final Slot inputSlot;
+    final Slot resultSlot;
+    Runnable slotUpdateListener;
+    public final IInventory container;
+    final InventoryCraftResult resultContainer;
 
     public ContainerStonecutter(int i, PlayerInventory playerinventory) {
-        this(i, playerinventory, ContainerAccess.a);
+        this(i, playerinventory, ContainerAccess.NULL);
     }
 
     public ContainerStonecutter(int i, PlayerInventory playerinventory, final ContainerAccess containeraccess) {
         super(Containers.STONECUTTER, i);
-        this.containerProperty = ContainerProperty.a();
-        this.i = Lists.newArrayList();
-        this.j = ItemStack.b;
-        this.l = () -> {
+        this.selectedRecipeIndex = ContainerProperty.a();
+        this.recipes = Lists.newArrayList();
+        this.input = ItemStack.EMPTY;
+        this.slotUpdateListener = () -> {
         };
-        this.inventory = new InventorySubcontainer(1) {
+        this.container = new InventorySubcontainer(1) {
             @Override
             public void update() {
                 super.update();
                 ContainerStonecutter.this.a((IInventory) this);
-                ContainerStonecutter.this.l.run();
+                ContainerStonecutter.this.slotUpdateListener.run();
             }
         };
-        this.resultInventory = new InventoryCraftResult();
-        this.containerAccess = containeraccess;
-        this.world = playerinventory.player.world;
-        this.c = this.a(new Slot(this.inventory, 0, 20, 33));
-        this.d = this.a(new Slot(this.resultInventory, 1, 143, 33) {
+        this.resultContainer = new InventoryCraftResult();
+        this.access = containeraccess;
+        this.level = playerinventory.player.level;
+        this.inputSlot = this.a(new Slot(this.container, 0, 20, 33));
+        this.resultSlot = this.a(new Slot(this.resultContainer, 1, 143, 33) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
             }
 
             @Override
-            public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-                itemstack.a(entityhuman.world, entityhuman, itemstack.getCount());
-                ContainerStonecutter.this.resultInventory.b(entityhuman);
-                ItemStack itemstack1 = ContainerStonecutter.this.c.a(1);
+            public void a(EntityHuman entityhuman, ItemStack itemstack) {
+                itemstack.a(entityhuman.level, entityhuman, itemstack.getCount());
+                ContainerStonecutter.this.resultContainer.awardUsedRecipes(entityhuman);
+                ItemStack itemstack1 = ContainerStonecutter.this.inputSlot.a(1);
 
                 if (!itemstack1.isEmpty()) {
-                    ContainerStonecutter.this.i();
+                    ContainerStonecutter.this.m();
                 }
 
                 containeraccess.a((world, blockposition) -> {
                     long j = world.getTime();
 
-                    if (ContainerStonecutter.this.k != j) {
+                    if (ContainerStonecutter.this.lastSoundTime != j) {
                         world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_STONECUTTER_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        ContainerStonecutter.this.k = j;
+                        ContainerStonecutter.this.lastSoundTime = j;
                     }
 
                 });
-                return super.a(entityhuman, itemstack);
+                super.a(entityhuman, itemstack);
             }
         });
 
@@ -94,60 +99,76 @@ public class ContainerStonecutter extends Container {
             this.a(new Slot(playerinventory, j, 8 + j * 18, 142));
         }
 
-        this.a(this.containerProperty);
+        this.a(this.selectedRecipeIndex);
+    }
+
+    public int i() {
+        return this.selectedRecipeIndex.get();
+    }
+
+    public List<RecipeStonecutting> j() {
+        return this.recipes;
+    }
+
+    public int k() {
+        return this.recipes.size();
+    }
+
+    public boolean l() {
+        return this.inputSlot.hasItem() && !this.recipes.isEmpty();
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return a(this.containerAccess, entityhuman, Blocks.STONECUTTER);
+        return a(this.access, entityhuman, Blocks.STONECUTTER);
     }
 
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
         if (this.d(i)) {
-            this.containerProperty.set(i);
-            this.i();
+            this.selectedRecipeIndex.set(i);
+            this.m();
         }
 
         return true;
     }
 
     private boolean d(int i) {
-        return i >= 0 && i < this.i.size();
+        return i >= 0 && i < this.recipes.size();
     }
 
     @Override
     public void a(IInventory iinventory) {
-        ItemStack itemstack = this.c.getItem();
+        ItemStack itemstack = this.inputSlot.getItem();
 
-        if (itemstack.getItem() != this.j.getItem()) {
-            this.j = itemstack.cloneItemStack();
+        if (!itemstack.a(this.input.getItem())) {
+            this.input = itemstack.cloneItemStack();
             this.a(iinventory, itemstack);
         }
 
     }
 
     private void a(IInventory iinventory, ItemStack itemstack) {
-        this.i.clear();
-        this.containerProperty.set(-1);
-        this.d.set(ItemStack.b);
+        this.recipes.clear();
+        this.selectedRecipeIndex.set(-1);
+        this.resultSlot.set(ItemStack.EMPTY);
         if (!itemstack.isEmpty()) {
-            this.i = this.world.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.world);
+            this.recipes = this.level.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.level);
         }
 
     }
 
-    private void i() {
-        if (!this.i.isEmpty() && this.d(this.containerProperty.get())) {
-            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.i.get(this.containerProperty.get());
+    void m() {
+        if (!this.recipes.isEmpty() && this.d(this.selectedRecipeIndex.get())) {
+            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.recipes.get(this.selectedRecipeIndex.get());
 
-            this.resultInventory.a((IRecipe) recipestonecutting);
-            this.d.set(recipestonecutting.a(this.inventory));
+            this.resultContainer.setRecipeUsed(recipestonecutting);
+            this.resultSlot.set(recipestonecutting.a(this.container));
         } else {
-            this.d.set(ItemStack.b);
+            this.resultSlot.set(ItemStack.EMPTY);
         }
 
-        this.c();
+        this.d();
     }
 
     @Override
@@ -155,14 +176,18 @@ public class ContainerStonecutter extends Container {
         return Containers.STONECUTTER;
     }
 
+    public void a(Runnable runnable) {
+        this.slotUpdateListener = runnable;
+    }
+
     @Override
     public boolean a(ItemStack itemstack, Slot slot) {
-        return slot.inventory != this.resultInventory && super.a(itemstack, slot);
+        return slot.container != this.resultContainer && super.a(itemstack, slot);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -171,39 +196,39 @@ public class ContainerStonecutter extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 1) {
-                item.b(itemstack1, entityhuman.world, entityhuman);
+                item.b(itemstack1, entityhuman.level, entityhuman);
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i == 0) {
                 if (!this.a(itemstack1, 2, 38, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
-            } else if (this.world.getCraftingManager().craft(Recipes.STONECUTTING, new InventorySubcontainer(new ItemStack[]{itemstack1}), this.world).isPresent()) {
+            } else if (this.level.getCraftingManager().craft(Recipes.STONECUTTING, new InventorySubcontainer(new ItemStack[]{itemstack1}), this.level).isPresent()) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (i >= 2 && i < 29) {
                 if (!this.a(itemstack1, 29, 38, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (i >= 29 && i < 38 && !this.a(itemstack1, 2, 29, false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             }
 
             slot.d();
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);
-            this.c();
+            this.d();
         }
 
         return itemstack;
@@ -212,9 +237,9 @@ public class ContainerStonecutter extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.resultInventory.splitWithoutUpdate(1);
-        this.containerAccess.a((world, blockposition) -> {
-            this.a(entityhuman, entityhuman.world, this.inventory);
+        this.resultContainer.splitWithoutUpdate(1);
+        this.access.a((world, blockposition) -> {
+            this.a(entityhuman, this.container);
         });
     }
 }

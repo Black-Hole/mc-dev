@@ -10,6 +10,7 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.util.ChatDeserializer;
@@ -36,9 +37,9 @@ public class DataConverterBook extends DataFix {
                                 object = new ChatComponentText(s);
                             } else {
                                 try {
-                                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s, IChatBaseComponent.class, true);
+                                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.GSON, s, IChatBaseComponent.class, true);
                                     if (object == null) {
-                                        object = ChatComponentText.d;
+                                        object = ChatComponentText.EMPTY;
                                     }
                                 } catch (JsonParseException jsonparseexception) {
                                     ;
@@ -65,7 +66,7 @@ public class DataConverterBook extends DataFix {
                                 }
                             }
                         } else {
-                            object = ChatComponentText.d;
+                            object = ChatComponentText.EMPTY;
                         }
 
                         return dynamic2.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
@@ -73,7 +74,7 @@ public class DataConverterBook extends DataFix {
                 });
             });
 
-            dynamic.getClass();
+            Objects.requireNonNull(dynamic);
             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createList).result(), dynamic.emptyList());
         });
     }

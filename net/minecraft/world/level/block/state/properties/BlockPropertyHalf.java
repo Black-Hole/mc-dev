@@ -6,18 +6,18 @@ public enum BlockPropertyHalf implements INamable {
 
     TOP("top"), BOTTOM("bottom");
 
-    private final String c;
+    private final String name;
 
     private BlockPropertyHalf(String s) {
-        this.c = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.c;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.c;
+        return this.name;
     }
 }

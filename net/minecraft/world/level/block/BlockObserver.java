@@ -16,16 +16,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 
 public class BlockObserver extends BlockDirectional {
 
-    public static final BlockStateBoolean b = BlockProperties.w;
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
 
     public BlockObserver(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockObserver.FACING, EnumDirection.SOUTH)).set(BlockObserver.b, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockObserver.FACING, EnumDirection.SOUTH)).set(BlockObserver.POWERED, false));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockObserver.FACING, BlockObserver.b);
+        blockstatelist_a.a(BlockObserver.FACING, BlockObserver.POWERED);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class BlockObserver extends BlockDirectional {
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if ((Boolean) iblockdata.get(BlockObserver.b)) {
-            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false), 2);
+        if ((Boolean) iblockdata.get(BlockObserver.POWERED)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.POWERED, false), 2);
         } else {
-            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, true), 2);
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.POWERED, true), 2);
             worldserver.getBlockTickList().a(blockposition, this, 2);
         }
 
@@ -52,7 +52,7 @@ public class BlockObserver extends BlockDirectional {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (iblockdata.get(BlockObserver.FACING) == enumdirection && !(Boolean) iblockdata.get(BlockObserver.b)) {
+        if (iblockdata.get(BlockObserver.FACING) == enumdirection && !(Boolean) iblockdata.get(BlockObserver.POWERED)) {
             this.a(generatoraccess, blockposition);
         }
 
@@ -60,7 +60,7 @@ public class BlockObserver extends BlockDirectional {
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!generatoraccess.s_() && !generatoraccess.getBlockTickList().a(blockposition, this)) {
+        if (!generatoraccess.isClientSide() && !generatoraccess.getBlockTickList().a(blockposition, this)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 2);
         }
 
@@ -86,14 +86,14 @@ public class BlockObserver extends BlockDirectional {
 
     @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return (Boolean) iblockdata.get(BlockObserver.b) && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockObserver.POWERED) && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!iblockdata.a(iblockdata1.getBlock())) {
-            if (!world.s_() && (Boolean) iblockdata.get(BlockObserver.b) && !world.getBlockTickList().a(blockposition, this)) {
-                IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.b, false);
+            if (!world.isClientSide() && (Boolean) iblockdata.get(BlockObserver.POWERED) && !world.getBlockTickList().a(blockposition, this)) {
+                IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.POWERED, false);
 
                 world.setTypeAndData(blockposition, iblockdata2, 18);
                 this.a(world, blockposition, iblockdata2);
@@ -105,8 +105,8 @@ public class BlockObserver extends BlockDirectional {
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!iblockdata.a(iblockdata1.getBlock())) {
-            if (!world.isClientSide && (Boolean) iblockdata.get(BlockObserver.b) && world.getBlockTickList().a(blockposition, this)) {
-                this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false));
+            if (!world.isClientSide && (Boolean) iblockdata.get(BlockObserver.POWERED) && world.getBlockTickList().a(blockposition, this)) {
+                this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.POWERED, false));
             }
 
         }

@@ -8,8 +8,6 @@ import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockActionContext;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityStructure;
@@ -21,17 +19,18 @@ import net.minecraft.world.level.block.state.properties.BlockPropertyStructureMo
 import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 
-public class BlockStructure extends BlockTileEntity {
+public class BlockStructure extends BlockTileEntity implements GameMasterBlock {
 
-    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aM;
+    public static final BlockStateEnum<BlockPropertyStructureMode> MODE = BlockProperties.STRUCTUREBLOCK_MODE;
 
     protected BlockStructure(BlockBase.Info blockbase_info) {
         super(blockbase_info);
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockStructure.MODE, BlockPropertyStructureMode.LOAD));
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityStructure();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityStructure(blockposition, iblockdata);
     }
 
     @Override
@@ -56,18 +55,13 @@ public class BlockStructure extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
     @Override
-    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockStructure.a, BlockPropertyStructureMode.DATA);
-    }
-
-    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockStructure.a);
+        blockstatelist_a.a(BlockStructure.MODE);
     }
 
     @Override
@@ -78,7 +72,7 @@ public class BlockStructure extends BlockTileEntity {
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                 boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag2 = tileentitystructure.G();
+                boolean flag2 = tileentitystructure.C();
 
                 if (flag1 && !flag2) {
                     tileentitystructure.c(true);
@@ -100,7 +94,7 @@ public class BlockStructure extends BlockTileEntity {
                 tileentitystructure.a(worldserver, false);
                 break;
             case CORNER:
-                tileentitystructure.E();
+                tileentitystructure.A();
             case DATA:
         }
 

@@ -2,56 +2,57 @@ package net.minecraft.world.entity.schedule;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ScheduleBuilder {
 
-    private final Schedule a;
-    private final List<ScheduleBuilder.a> b = Lists.newArrayList();
+    private final Schedule schedule;
+    private final List<ScheduleBuilder.a> transitions = Lists.newArrayList();
 
     public ScheduleBuilder(Schedule schedule) {
-        this.a = schedule;
+        this.schedule = schedule;
     }
 
     public ScheduleBuilder a(int i, Activity activity) {
-        this.b.add(new ScheduleBuilder.a(i, activity));
+        this.transitions.add(new ScheduleBuilder.a(i, activity));
         return this;
     }
 
     public Schedule a() {
-        Set set = (Set) this.b.stream().map(ScheduleBuilder.a::b).collect(Collectors.toSet());
-        Schedule schedule = this.a;
+        Set set = (Set) this.transitions.stream().map(ScheduleBuilder.a::b).collect(Collectors.toSet());
+        Schedule schedule = this.schedule;
 
-        this.a.getClass();
+        Objects.requireNonNull(this.schedule);
         set.forEach(schedule::a);
-        this.b.forEach((schedulebuilder_a) -> {
+        this.transitions.forEach((schedulebuilder_a) -> {
             Activity activity = schedulebuilder_a.b();
 
-            this.a.c(activity).forEach((scheduleactivity) -> {
+            this.schedule.c(activity).forEach((scheduleactivity) -> {
                 scheduleactivity.a(schedulebuilder_a.a(), 0.0F);
             });
-            this.a.b(activity).a(schedulebuilder_a.a(), 1.0F);
+            this.schedule.b(activity).a(schedulebuilder_a.a(), 1.0F);
         });
-        return this.a;
+        return this.schedule;
     }
 
-    static class a {
+    private static class a {
 
-        private final int a;
-        private final Activity b;
+        private final int time;
+        private final Activity activity;
 
         public a(int i, Activity activity) {
-            this.a = i;
-            this.b = activity;
+            this.time = i;
+            this.activity = activity;
         }
 
         public int a() {
-            return this.a;
+            return this.time;
         }
 
         public Activity b() {
-            return this.b;
+            return this.activity;
         }
     }
 }

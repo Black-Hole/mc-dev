@@ -8,41 +8,41 @@ import net.minecraft.core.IRegistry;
 
 public class ResourceKey<T> {
 
-    private static final Map<String, ResourceKey<?>> a = Collections.synchronizedMap(Maps.newIdentityHashMap());
-    private final MinecraftKey b;
-    private final MinecraftKey c;
+    private static final Map<String, ResourceKey<?>> VALUES = Collections.synchronizedMap(Maps.newIdentityHashMap());
+    private final MinecraftKey registryName;
+    private final MinecraftKey location;
 
     public static <T> ResourceKey<T> a(ResourceKey<? extends IRegistry<T>> resourcekey, MinecraftKey minecraftkey) {
-        return a(resourcekey.c, minecraftkey);
+        return a(resourcekey.location, minecraftkey);
     }
 
     public static <T> ResourceKey<IRegistry<T>> a(MinecraftKey minecraftkey) {
-        return a(IRegistry.d, minecraftkey);
+        return a(IRegistry.ROOT_REGISTRY_NAME, minecraftkey);
     }
 
     private static <T> ResourceKey<T> a(MinecraftKey minecraftkey, MinecraftKey minecraftkey1) {
         String s = (minecraftkey + ":" + minecraftkey1).intern();
 
-        return (ResourceKey) ResourceKey.a.computeIfAbsent(s, (s1) -> {
+        return (ResourceKey) ResourceKey.VALUES.computeIfAbsent(s, (s1) -> {
             return new ResourceKey<>(minecraftkey, minecraftkey1);
         });
     }
 
     private ResourceKey(MinecraftKey minecraftkey, MinecraftKey minecraftkey1) {
-        this.b = minecraftkey;
-        this.c = minecraftkey1;
+        this.registryName = minecraftkey;
+        this.location = minecraftkey1;
     }
 
     public String toString() {
-        return "ResourceKey[" + this.b + " / " + this.c + ']';
+        return "ResourceKey[" + this.registryName + " / " + this.location + "]";
     }
 
     public boolean a(ResourceKey<? extends IRegistry<?>> resourcekey) {
-        return this.b.equals(resourcekey.a());
+        return this.registryName.equals(resourcekey.a());
     }
 
     public MinecraftKey a() {
-        return this.c;
+        return this.location;
     }
 
     public static <T> Function<MinecraftKey, ResourceKey<T>> b(ResourceKey<? extends IRegistry<T>> resourcekey) {

@@ -14,10 +14,10 @@ import org.apache.logging.log4j.Logger;
 public class AttributeModifier {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final double b;
-    private final AttributeModifier.Operation c;
-    private final Supplier<String> d;
-    private final UUID e;
+    private final double amount;
+    private final AttributeModifier.Operation operation;
+    private final Supplier<String> nameGetter;
+    private final UUID id;
 
     public AttributeModifier(String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
         this(MathHelper.a((Random) ThreadLocalRandom.current()), () -> {
@@ -32,26 +32,26 @@ public class AttributeModifier {
     }
 
     public AttributeModifier(UUID uuid, Supplier<String> supplier, double d0, AttributeModifier.Operation attributemodifier_operation) {
-        this.e = uuid;
-        this.d = supplier;
-        this.b = d0;
-        this.c = attributemodifier_operation;
+        this.id = uuid;
+        this.nameGetter = supplier;
+        this.amount = d0;
+        this.operation = attributemodifier_operation;
     }
 
     public UUID getUniqueId() {
-        return this.e;
+        return this.id;
     }
 
     public String getName() {
-        return (String) this.d.get();
+        return (String) this.nameGetter.get();
     }
 
     public AttributeModifier.Operation getOperation() {
-        return this.c;
+        return this.operation;
     }
 
     public double getAmount() {
-        return this.b;
+        return this.amount;
     }
 
     public boolean equals(Object object) {
@@ -60,27 +60,27 @@ public class AttributeModifier {
         } else if (object != null && this.getClass() == object.getClass()) {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
-            return Objects.equals(this.e, attributemodifier.e);
+            return Objects.equals(this.id, attributemodifier.id);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return this.e.hashCode();
+        return this.id.hashCode();
     }
 
     public String toString() {
-        return "AttributeModifier{amount=" + this.b + ", operation=" + this.c + ", name='" + (String) this.d.get() + '\'' + ", id=" + this.e + '}';
+        return "AttributeModifier{amount=" + this.amount + ", operation=" + this.operation + ", name='" + (String) this.nameGetter.get() + "', id=" + this.id + "}";
     }
 
     public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("Name", this.getName());
-        nbttagcompound.setDouble("Amount", this.b);
-        nbttagcompound.setInt("Operation", this.c.a());
-        nbttagcompound.a("UUID", this.e);
+        nbttagcompound.setDouble("Amount", this.amount);
+        nbttagcompound.setInt("Operation", this.operation.a());
+        nbttagcompound.a("UUID", this.id);
         return nbttagcompound;
     }
 
@@ -101,20 +101,20 @@ public class AttributeModifier {
 
         ADDITION(0), MULTIPLY_BASE(1), MULTIPLY_TOTAL(2);
 
-        private static final AttributeModifier.Operation[] d = new AttributeModifier.Operation[]{AttributeModifier.Operation.ADDITION, AttributeModifier.Operation.MULTIPLY_BASE, AttributeModifier.Operation.MULTIPLY_TOTAL};
-        private final int e;
+        private static final AttributeModifier.Operation[] OPERATIONS = new AttributeModifier.Operation[]{AttributeModifier.Operation.ADDITION, AttributeModifier.Operation.MULTIPLY_BASE, AttributeModifier.Operation.MULTIPLY_TOTAL};
+        private final int value;
 
         private Operation(int i) {
-            this.e = i;
+            this.value = i;
         }
 
         public int a() {
-            return this.e;
+            return this.value;
         }
 
         public static AttributeModifier.Operation a(int i) {
-            if (i >= 0 && i < AttributeModifier.Operation.d.length) {
-                return AttributeModifier.Operation.d[i];
+            if (i >= 0 && i < AttributeModifier.Operation.OPERATIONS.length) {
+                return AttributeModifier.Operation.OPERATIONS[i];
             } else {
                 throw new IllegalArgumentException("No operation with value " + i);
             }

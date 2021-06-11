@@ -9,43 +9,43 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class ShapeDetectorBlock {
 
-    private final IWorldReader a;
-    private final BlockPosition b;
-    private final boolean c;
-    private IBlockData d;
-    private TileEntity e;
-    private boolean f;
+    private final IWorldReader level;
+    private final BlockPosition pos;
+    private final boolean loadChunks;
+    private IBlockData state;
+    private TileEntity entity;
+    private boolean cachedEntity;
 
     public ShapeDetectorBlock(IWorldReader iworldreader, BlockPosition blockposition, boolean flag) {
-        this.a = iworldreader;
-        this.b = blockposition.immutableCopy();
-        this.c = flag;
+        this.level = iworldreader;
+        this.pos = blockposition.immutableCopy();
+        this.loadChunks = flag;
     }
 
     public IBlockData a() {
-        if (this.d == null && (this.c || this.a.isLoaded(this.b))) {
-            this.d = this.a.getType(this.b);
+        if (this.state == null && (this.loadChunks || this.level.isLoaded(this.pos))) {
+            this.state = this.level.getType(this.pos);
         }
 
-        return this.d;
+        return this.state;
     }
 
     @Nullable
     public TileEntity b() {
-        if (this.e == null && !this.f) {
-            this.e = this.a.getTileEntity(this.b);
-            this.f = true;
+        if (this.entity == null && !this.cachedEntity) {
+            this.entity = this.level.getTileEntity(this.pos);
+            this.cachedEntity = true;
         }
 
-        return this.e;
+        return this.entity;
     }
 
     public IWorldReader c() {
-        return this.a;
+        return this.level;
     }
 
     public BlockPosition getPosition() {
-        return this.b;
+        return this.pos;
     }
 
     public static Predicate<ShapeDetectorBlock> a(Predicate<IBlockData> predicate) {

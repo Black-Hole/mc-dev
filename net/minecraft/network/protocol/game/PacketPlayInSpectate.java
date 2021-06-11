@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
@@ -10,22 +9,19 @@ import net.minecraft.world.entity.Entity;
 
 public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
 
-    private UUID a;
-
-    public PacketPlayInSpectate() {}
+    private final UUID uuid;
 
     public PacketPlayInSpectate(UUID uuid) {
-        this.a = uuid;
+        this.uuid = uuid;
+    }
+
+    public PacketPlayInSpectate(PacketDataSerializer packetdataserializer) {
+        this.uuid = packetdataserializer.l();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.k();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.uuid);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -34,6 +30,6 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
 
     @Nullable
     public Entity a(WorldServer worldserver) {
-        return worldserver.getEntity(this.a);
+        return worldserver.getEntity(this.uuid);
     }
 }

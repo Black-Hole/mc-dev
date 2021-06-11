@@ -1,30 +1,33 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.world.item.crafting.IRecipe;
 
 public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private MinecraftKey b;
-    private boolean c;
+    private final int containerId;
+    private final MinecraftKey recipe;
+    private final boolean shiftDown;
 
-    public PacketPlayInAutoRecipe() {}
+    public PacketPlayInAutoRecipe(int i, IRecipe<?> irecipe, boolean flag) {
+        this.containerId = i;
+        this.recipe = irecipe.getKey();
+        this.shiftDown = flag;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readByte();
-        this.b = packetdataserializer.p();
-        this.c = packetdataserializer.readBoolean();
+    public PacketPlayInAutoRecipe(PacketDataSerializer packetdataserializer) {
+        this.containerId = packetdataserializer.readByte();
+        this.recipe = packetdataserializer.q();
+        this.shiftDown = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.writeBoolean(this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.containerId);
+        packetdataserializer.a(this.recipe);
+        packetdataserializer.writeBoolean(this.shiftDown);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -32,14 +35,14 @@ public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
     }
 
     public int b() {
-        return this.a;
+        return this.containerId;
     }
 
     public MinecraftKey c() {
-        return this.b;
+        return this.recipe;
     }
 
     public boolean d() {
-        return this.c;
+        return this.shiftDown;
     }
 }

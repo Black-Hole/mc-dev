@@ -15,32 +15,32 @@ public class EntitySalmon extends EntityFishSchool {
     }
 
     @Override
-    public int eN() {
+    public int fx() {
         return 5;
     }
 
     @Override
-    protected ItemStack eK() {
+    public ItemStack getBucketItem() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_SALMON_AMBIENT;
+        return SoundEffects.SALMON_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_SALMON_DEATH;
+        return SoundEffects.SALMON_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_SALMON_HURT;
+        return SoundEffects.SALMON_HURT;
     }
 
     @Override
     protected SoundEffect getSoundFlop() {
-        return SoundEffects.ENTITY_SALMON_FLOP;
+        return SoundEffects.SALMON_FLOP;
     }
 }

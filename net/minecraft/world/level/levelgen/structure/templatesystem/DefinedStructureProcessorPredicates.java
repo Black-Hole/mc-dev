@@ -11,28 +11,28 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class DefinedStructureProcessorPredicates {
 
-    public static final Codec<DefinedStructureProcessorPredicates> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(DefinedStructureRuleTest.c.fieldOf("input_predicate").forGetter((definedstructureprocessorpredicates) -> {
-            return definedstructureprocessorpredicates.b;
-        }), DefinedStructureRuleTest.c.fieldOf("location_predicate").forGetter((definedstructureprocessorpredicates) -> {
-            return definedstructureprocessorpredicates.c;
-        }), PosRuleTest.c.optionalFieldOf("position_predicate", PosRuleTestTrue.b).forGetter((definedstructureprocessorpredicates) -> {
-            return definedstructureprocessorpredicates.d;
-        }), IBlockData.b.fieldOf("output_state").forGetter((definedstructureprocessorpredicates) -> {
-            return definedstructureprocessorpredicates.e;
-        }), NBTTagCompound.a.optionalFieldOf("output_nbt").forGetter((definedstructureprocessorpredicates) -> {
-            return Optional.ofNullable(definedstructureprocessorpredicates.f);
+    public static final Codec<DefinedStructureProcessorPredicates> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(DefinedStructureRuleTest.CODEC.fieldOf("input_predicate").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.inputPredicate;
+        }), DefinedStructureRuleTest.CODEC.fieldOf("location_predicate").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.locPredicate;
+        }), PosRuleTest.CODEC.optionalFieldOf("position_predicate", PosRuleTestTrue.INSTANCE).forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.posPredicate;
+        }), IBlockData.CODEC.fieldOf("output_state").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.outputState;
+        }), NBTTagCompound.CODEC.optionalFieldOf("output_nbt").forGetter((definedstructureprocessorpredicates) -> {
+            return Optional.ofNullable(definedstructureprocessorpredicates.outputTag);
         })).apply(instance, DefinedStructureProcessorPredicates::new);
     });
-    private final DefinedStructureRuleTest b;
-    private final DefinedStructureRuleTest c;
-    private final PosRuleTest d;
-    private final IBlockData e;
+    private final DefinedStructureRuleTest inputPredicate;
+    private final DefinedStructureRuleTest locPredicate;
+    private final PosRuleTest posPredicate;
+    private final IBlockData outputState;
     @Nullable
-    private final NBTTagCompound f;
+    private final NBTTagCompound outputTag;
 
     public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, IBlockData iblockdata) {
-        this(definedstructureruletest, definedstructureruletest1, PosRuleTestTrue.b, iblockdata, Optional.empty());
+        this(definedstructureruletest, definedstructureruletest1, PosRuleTestTrue.INSTANCE, iblockdata, Optional.empty());
     }
 
     public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, PosRuleTest posruletest, IBlockData iblockdata) {
@@ -40,23 +40,23 @@ public class DefinedStructureProcessorPredicates {
     }
 
     public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, PosRuleTest posruletest, IBlockData iblockdata, Optional<NBTTagCompound> optional) {
-        this.b = definedstructureruletest;
-        this.c = definedstructureruletest1;
-        this.d = posruletest;
-        this.e = iblockdata;
-        this.f = (NBTTagCompound) optional.orElse((Object) null);
+        this.inputPredicate = definedstructureruletest;
+        this.locPredicate = definedstructureruletest1;
+        this.posPredicate = posruletest;
+        this.outputState = iblockdata;
+        this.outputTag = (NBTTagCompound) optional.orElse((Object) null);
     }
 
     public boolean a(IBlockData iblockdata, IBlockData iblockdata1, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, Random random) {
-        return this.b.a(iblockdata, random) && this.c.a(iblockdata1, random) && this.d.a(blockposition, blockposition1, blockposition2, random);
+        return this.inputPredicate.a(iblockdata, random) && this.locPredicate.a(iblockdata1, random) && this.posPredicate.a(blockposition, blockposition1, blockposition2, random);
     }
 
     public IBlockData a() {
-        return this.e;
+        return this.outputState;
     }
 
     @Nullable
     public NBTTagCompound b() {
-        return this.f;
+        return this.outputTag;
     }
 }

@@ -11,25 +11,28 @@ import net.minecraft.world.item.ItemStack;
 
 public class EnchantmentWeaponDamage extends Enchantment {
 
-    private static final String[] d = new String[]{"all", "undead", "arthropods"};
-    private static final int[] e = new int[]{1, 5, 5};
-    private static final int[] f = new int[]{11, 8, 8};
-    private static final int[] g = new int[]{20, 20, 20};
-    public final int a;
+    public static final int ALL = 0;
+    public static final int UNDEAD = 1;
+    public static final int ARTHROPODS = 2;
+    private static final String[] NAMES = new String[]{"all", "undead", "arthropods"};
+    private static final int[] MIN_COST = new int[]{1, 5, 5};
+    private static final int[] LEVEL_COST = new int[]{11, 8, 8};
+    private static final int[] LEVEL_COST_SPAN = new int[]{20, 20, 20};
+    public final int type;
 
     public EnchantmentWeaponDamage(Enchantment.Rarity enchantment_rarity, int i, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.WEAPON, aenumitemslot);
-        this.a = i;
+        this.type = i;
     }
 
     @Override
     public int a(int i) {
-        return EnchantmentWeaponDamage.e[this.a] + (i - 1) * EnchantmentWeaponDamage.f[this.a];
+        return EnchantmentWeaponDamage.MIN_COST[this.type] + (i - 1) * EnchantmentWeaponDamage.LEVEL_COST[this.type];
     }
 
     @Override
     public int b(int i) {
-        return this.a(i) + EnchantmentWeaponDamage.g[this.a];
+        return this.a(i) + EnchantmentWeaponDamage.LEVEL_COST_SPAN[this.type];
     }
 
     @Override
@@ -39,7 +42,7 @@ public class EnchantmentWeaponDamage extends Enchantment {
 
     @Override
     public float a(int i, EnumMonsterType enummonstertype) {
-        return this.a == 0 ? 1.0F + (float) Math.max(0, i - 1) * 0.5F : (this.a == 1 && enummonstertype == EnumMonsterType.UNDEAD ? (float) i * 2.5F : (this.a == 2 && enummonstertype == EnumMonsterType.ARTHROPOD ? (float) i * 2.5F : 0.0F));
+        return this.type == 0 ? 1.0F + (float) Math.max(0, i - 1) * 0.5F : (this.type == 1 && enummonstertype == EnumMonsterType.UNDEAD ? (float) i * 2.5F : (this.type == 2 && enummonstertype == EnumMonsterType.ARTHROPOD ? (float) i * 2.5F : 0.0F));
     }
 
     @Override
@@ -57,10 +60,10 @@ public class EnchantmentWeaponDamage extends Enchantment {
         if (entity instanceof EntityLiving) {
             EntityLiving entityliving1 = (EntityLiving) entity;
 
-            if (this.a == 2 && entityliving1.getMonsterType() == EnumMonsterType.ARTHROPOD) {
+            if (this.type == 2 && i > 0 && entityliving1.getMonsterType() == EnumMonsterType.ARTHROPOD) {
                 int j = 20 + entityliving.getRandom().nextInt(10 * i);
 
-                entityliving1.addEffect(new MobEffect(MobEffects.SLOWER_MOVEMENT, j, 3));
+                entityliving1.addEffect(new MobEffect(MobEffects.MOVEMENT_SLOWDOWN, j, 3));
             }
         }
 

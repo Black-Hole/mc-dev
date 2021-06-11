@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -28,9 +29,10 @@ import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.tags.TagsItem;
-import net.minecraft.util.IntRange;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.TimeRange;
+import net.minecraft.util.VisibleForDebug;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -54,13 +56,16 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoalBreed;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalFloat;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalFollowParent;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalMeleeAttack;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalTempt;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalNearestAttackableTarget;
 import net.minecraft.world.entity.ai.goal.target.PathfinderGoalUniversalAngerReset;
 import net.minecraft.world.entity.ai.navigation.NavigationAbstract;
 import net.minecraft.world.entity.ai.navigation.NavigationFlying;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.AirRandomPos;
+import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.ai.village.poi.VillagePlace;
 import net.minecraft.world.entity.ai.village.poi.VillagePlaceRecord;
 import net.minecraft.world.entity.ai.village.poi.VillagePlaceType;
@@ -75,6 +80,7 @@ import net.minecraft.world.level.block.BlockStem;
 import net.minecraft.world.level.block.BlockSweetBerryBush;
 import net.minecraft.world.level.block.BlockTallPlant;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IBlockFragilePlantElement;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import net.minecraft.world.level.block.entity.TileEntityTypes;
@@ -88,31 +94,57 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityBird {
 
-    private static final DataWatcherObject<Byte> bo = DataWatcher.a(EntityBee.class, DataWatcherRegistry.a);
-    private static final DataWatcherObject<Integer> bp = DataWatcher.a(EntityBee.class, DataWatcherRegistry.b);
-    private static final IntRange bq = TimeRange.a(20, 39);
-    private UUID br;
-    private float bs;
-    private float bt;
-    private int bu;
-    private int ticksSincePollination;
-    public int cannotEnterHiveTicks;
+    public static final float FLAP_DEGREES_PER_TICK = 120.32113F;
+    public static final int TICKS_PER_FLAP = MathHelper.f(1.4959966F);
+    private static final DataWatcherObject<Byte> DATA_FLAGS_ID = DataWatcher.a(EntityBee.class, DataWatcherRegistry.BYTE);
+    private static final DataWatcherObject<Integer> DATA_REMAINING_ANGER_TIME = DataWatcher.a(EntityBee.class, DataWatcherRegistry.INT);
+    private static final int FLAG_ROLL = 2;
+    private static final int FLAG_HAS_STUNG = 4;
+    private static final int FLAG_HAS_NECTAR = 8;
+    private static final int STING_DEATH_COUNTDOWN = 1200;
+    private static final int TICKS_BEFORE_GOING_TO_KNOWN_FLOWER = 2400;
+    private static final int TICKS_WITHOUT_NECTAR_BEFORE_GOING_HOME = 3600;
+    private static final int MIN_ATTACK_DIST = 4;
+    private static final int MAX_CROPS_GROWABLE = 10;
+    private static final int POISON_SECONDS_NORMAL = 10;
+    private static final int POISON_SECONDS_HARD = 18;
+    private static final int TOO_FAR_DISTANCE = 32;
+    private static final int HIVE_CLOSE_ENOUGH_DISTANCE = 2;
+    private static final int PATHFIND_TO_HIVE_WHEN_CLOSER_THAN = 16;
+    private static final int HIVE_SEARCH_DISTANCE = 20;
+    public static final String TAG_CROPS_GROWN_SINCE_POLLINATION = "CropsGrownSincePollination";
+    public static final String TAG_CANNOT_ENTER_HIVE_TICKS = "CannotEnterHiveTicks";
+    public static final String TAG_TICKS_SINCE_POLLINATION = "TicksSincePollination";
+    public static final String TAG_HAS_STUNG = "HasStung";
+    public static final String TAG_HAS_NECTAR = "HasNectar";
+    public static final String TAG_FLOWER_POS = "FlowerPos";
+    public static final String TAG_HIVE_POS = "HivePos";
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeRange.a(20, 39);
+    private UUID persistentAngerTarget;
+    private float rollAmount;
+    private float rollAmountO;
+    private int timeSinceSting;
+    int ticksWithoutNectarSinceExitingHive;
+    public int stayOutOfHiveCountdown;
     private int numCropsGrownSincePollination;
-    private int by = 0;
-    private int bz = 0;
+    private static final int COOLDOWN_BEFORE_LOCATING_NEW_HIVE = 200;
+    int remainingCooldownBeforeLocatingNewHive;
+    private static final int COOLDOWN_BEFORE_LOCATING_NEW_FLOWER = 200;
+    int remainingCooldownBeforeLocatingNewFlower;
     @Nullable
-    private BlockPosition flowerPos = null;
+    BlockPosition savedFlowerPos;
     @Nullable
-    public BlockPosition hivePos = null;
-    private EntityBee.k bC;
-    private EntityBee.e bD;
-    private EntityBee.f bE;
-    private int bF;
+    public BlockPosition hivePos;
+    EntityBee.k beePollinateGoal;
+    EntityBee.e goToHiveGoal;
+    private EntityBee.f goToKnownFlowerGoal;
+    private int underWaterTicks;
 
     public EntityBee(EntityTypes<? extends EntityBee> entitytypes, World world) {
         super(entitytypes, world);
-        this.moveController = new ControllerMoveFlying(this, 20, true);
-        this.lookController = new EntityBee.j(this);
+        this.remainingCooldownBeforeLocatingNewFlower = MathHelper.nextInt(this.random, 20, 60);
+        this.moveControl = new ControllerMoveFlying(this, 20, true);
+        this.lookControl = new EntityBee.j(this);
         this.a(PathType.DANGER_FIRE, -1.0F);
         this.a(PathType.WATER, -1.0F);
         this.a(PathType.WATER_BORDER, 16.0F);
@@ -123,8 +155,8 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityBee.bo, (byte) 0);
-        this.datawatcher.register(EntityBee.bp, 0);
+        this.entityData.register(EntityBee.DATA_FLAGS_ID, (byte) 0);
+        this.entityData.register(EntityBee.DATA_REMAINING_ANGER_TIME, 0);
     }
 
     @Override
@@ -138,14 +170,14 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         this.goalSelector.a(1, new EntityBee.d());
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, RecipeItemStack.a((Tag) TagsItem.FLOWERS), false));
-        this.bC = new EntityBee.k();
-        this.goalSelector.a(4, this.bC);
+        this.beePollinateGoal = new EntityBee.k();
+        this.goalSelector.a(4, this.beePollinateGoal);
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.25D));
         this.goalSelector.a(5, new EntityBee.i());
-        this.bD = new EntityBee.e();
-        this.goalSelector.a(5, this.bD);
-        this.bE = new EntityBee.f();
-        this.goalSelector.a(6, this.bE);
+        this.goToHiveGoal = new EntityBee.e();
+        this.goalSelector.a(5, this.goToHiveGoal);
+        this.goToKnownFlowerGoal = new EntityBee.f();
+        this.goalSelector.a(6, this.goToKnownFlowerGoal);
         this.goalSelector.a(7, new EntityBee.g());
         this.goalSelector.a(8, new EntityBee.l());
         this.goalSelector.a(9, new PathfinderGoalFloat(this));
@@ -167,8 +199,8 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         nbttagcompound.setBoolean("HasNectar", this.hasNectar());
         nbttagcompound.setBoolean("HasStung", this.hasStung());
-        nbttagcompound.setInt("TicksSincePollination", this.ticksSincePollination);
-        nbttagcompound.setInt("CannotEnterHiveTicks", this.cannotEnterHiveTicks);
+        nbttagcompound.setInt("TicksSincePollination", this.ticksWithoutNectarSinceExitingHive);
+        nbttagcompound.setInt("CannotEnterHiveTicks", this.stayOutOfHiveCountdown);
         nbttagcompound.setInt("CropsGrownSincePollination", this.numCropsGrownSincePollination);
         this.c(nbttagcompound);
     }
@@ -180,18 +212,18 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             this.hivePos = GameProfileSerializer.b(nbttagcompound.getCompound("HivePos"));
         }
 
-        this.flowerPos = null;
+        this.savedFlowerPos = null;
         if (nbttagcompound.hasKey("FlowerPos")) {
-            this.flowerPos = GameProfileSerializer.b(nbttagcompound.getCompound("FlowerPos"));
+            this.savedFlowerPos = GameProfileSerializer.b(nbttagcompound.getCompound("FlowerPos"));
         }
 
         super.loadData(nbttagcompound);
         this.setHasNectar(nbttagcompound.getBoolean("HasNectar"));
         this.setHasStung(nbttagcompound.getBoolean("HasStung"));
-        this.ticksSincePollination = nbttagcompound.getInt("TicksSincePollination");
-        this.cannotEnterHiveTicks = nbttagcompound.getInt("CannotEnterHiveTicks");
+        this.ticksWithoutNectarSinceExitingHive = nbttagcompound.getInt("TicksSincePollination");
+        this.stayOutOfHiveCountdown = nbttagcompound.getInt("CannotEnterHiveTicks");
         this.numCropsGrownSincePollination = nbttagcompound.getInt("CropsGrownSincePollination");
-        this.a((WorldServer) this.world, nbttagcompound);
+        this.a(this.level, nbttagcompound);
     }
 
     @Override
@@ -201,23 +233,23 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         if (flag) {
             this.a((EntityLiving) this, entity);
             if (entity instanceof EntityLiving) {
-                ((EntityLiving) entity).q(((EntityLiving) entity).dz() + 1);
+                ((EntityLiving) entity).r(((EntityLiving) entity).eh() + 1);
                 byte b0 = 0;
 
-                if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+                if (this.level.getDifficulty() == EnumDifficulty.NORMAL) {
                     b0 = 10;
-                } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+                } else if (this.level.getDifficulty() == EnumDifficulty.HARD) {
                     b0 = 18;
                 }
 
                 if (b0 > 0) {
-                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.POISON, b0 * 20, 0));
+                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.POISON, b0 * 20, 0), this);
                 }
             }
 
             this.setHasStung(true);
             this.pacify();
-            this.playSound(SoundEffects.ENTITY_BEE_STING, 1.0F, 1.0F);
+            this.playSound(SoundEffects.BEE_STING, 1.0F, 1.0F);
         }
 
         return flag;
@@ -228,18 +260,18 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         super.tick();
         if (this.hasNectar() && this.getNumCropsGrownSincePollination() < 10 && this.random.nextFloat() < 0.05F) {
             for (int i = 0; i < this.random.nextInt(2) + 1; ++i) {
-                this.a(this.world, this.locX() - 0.30000001192092896D, this.locX() + 0.30000001192092896D, this.locZ() - 0.30000001192092896D, this.locZ() + 0.30000001192092896D, this.e(0.5D), Particles.FALLING_NECTAR);
+                this.a(this.level, this.locX() - 0.30000001192092896D, this.locX() + 0.30000001192092896D, this.locZ() - 0.30000001192092896D, this.locZ() + 0.30000001192092896D, this.e(0.5D), Particles.FALLING_NECTAR);
             }
         }
 
-        this.fe();
+        this.fN();
     }
 
     private void a(World world, double d0, double d1, double d2, double d3, double d4, ParticleParam particleparam) {
         world.addParticle(particleparam, MathHelper.d(world.random.nextDouble(), d0, d1), d4, MathHelper.d(world.random.nextDouble(), d2, d3), 0.0D, 0.0D, 0.0D);
     }
 
-    private void h(BlockPosition blockposition) {
+    void h(BlockPosition blockposition) {
         Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
         byte b0 = 0;
         BlockPosition blockposition1 = this.getChunkCoordinates();
@@ -260,7 +292,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             k = l / 2;
         }
 
-        Vec3D vec3d1 = RandomPositionGenerator.b(this, j, k, b0, vec3d, 0.3141592741012573D);
+        Vec3D vec3d1 = AirRandomPos.a(this, j, k, b0, vec3d, 0.3141592741012573D);
 
         if (vec3d1 != null) {
             this.navigation.a(0.5F);
@@ -270,41 +302,55 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     @Nullable
     public BlockPosition getFlowerPos() {
-        return this.flowerPos;
+        return this.savedFlowerPos;
     }
 
     public boolean hasFlowerPos() {
-        return this.flowerPos != null;
+        return this.savedFlowerPos != null;
     }
 
     public void setFlowerPos(BlockPosition blockposition) {
-        this.flowerPos = blockposition;
+        this.savedFlowerPos = blockposition;
+    }
+
+    @VisibleForDebug
+    public int fv() {
+        return Math.max(this.goToHiveGoal.travellingTicks, this.goToKnownFlowerGoal.travellingTicks);
+    }
+
+    @VisibleForDebug
+    public List<BlockPosition> fw() {
+        return this.goToHiveGoal.blacklistedTargets;
     }
 
     private boolean canPollinate() {
-        return this.ticksSincePollination > 3600;
+        return this.ticksWithoutNectarSinceExitingHive > 3600;
     }
 
-    private boolean fd() {
-        if (this.cannotEnterHiveTicks <= 0 && !this.bC.k() && !this.hasStung() && this.getGoalTarget() == null) {
-            boolean flag = this.canPollinate() || this.world.isRaining() || this.world.isNight() || this.hasNectar();
+    boolean fM() {
+        if (this.stayOutOfHiveCountdown <= 0 && !this.beePollinateGoal.k() && !this.hasStung() && this.getGoalTarget() == null) {
+            boolean flag = this.canPollinate() || this.level.isRaining() || this.level.isNight() || this.hasNectar();
 
-            return flag && !this.ff();
+            return flag && !this.fO();
         } else {
             return false;
         }
     }
 
     public void setCannotEnterHiveTicks(int i) {
-        this.cannotEnterHiveTicks = i;
+        this.stayOutOfHiveCountdown = i;
     }
 
-    private void fe() {
-        this.bt = this.bs;
-        if (this.fk()) {
-            this.bs = Math.min(1.0F, this.bs + 0.2F);
+    public float z(float f) {
+        return MathHelper.h(f, this.rollAmountO, this.rollAmount);
+    }
+
+    private void fN() {
+        this.rollAmountO = this.rollAmount;
+        if (this.fT()) {
+            this.rollAmount = Math.min(1.0F, this.rollAmount + 0.2F);
         } else {
-            this.bs = Math.max(0.0F, this.bs - 0.24F);
+            this.rollAmount = Math.max(0.0F, this.rollAmount - 0.24F);
         }
 
     }
@@ -313,42 +359,42 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     protected void mobTick() {
         boolean flag = this.hasStung();
 
-        if (this.aH()) {
-            ++this.bF;
+        if (this.aO()) {
+            ++this.underWaterTicks;
         } else {
-            this.bF = 0;
+            this.underWaterTicks = 0;
         }
 
-        if (this.bF > 20) {
+        if (this.underWaterTicks > 20) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
         if (flag) {
-            ++this.bu;
-            if (this.bu % 5 == 0 && this.random.nextInt(MathHelper.clamp(1200 - this.bu, 1, 1200)) == 0) {
+            ++this.timeSinceSting;
+            if (this.timeSinceSting % 5 == 0 && this.random.nextInt(MathHelper.clamp(1200 - this.timeSinceSting, 1, 1200)) == 0) {
                 this.damageEntity(DamageSource.GENERIC, this.getHealth());
             }
         }
 
         if (!this.hasNectar()) {
-            ++this.ticksSincePollination;
+            ++this.ticksWithoutNectarSinceExitingHive;
         }
 
-        if (!this.world.isClientSide) {
-            this.a((WorldServer) this.world, false);
+        if (!this.level.isClientSide) {
+            this.a((WorldServer) this.level, false);
         }
 
     }
 
-    public void eO() {
-        this.ticksSincePollination = 0;
+    public void fx() {
+        this.ticksWithoutNectarSinceExitingHive = 0;
     }
 
-    private boolean ff() {
+    private boolean fO() {
         if (this.hivePos == null) {
             return false;
         } else {
-            TileEntity tileentity = this.world.getTileEntity(this.hivePos);
+            TileEntity tileentity = this.level.getTileEntity(this.hivePos);
 
             return tileentity instanceof TileEntityBeehive && ((TileEntityBeehive) tileentity).d();
         }
@@ -356,158 +402,165 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     @Override
     public int getAnger() {
-        return (Integer) this.datawatcher.get(EntityBee.bp);
+        return (Integer) this.entityData.get(EntityBee.DATA_REMAINING_ANGER_TIME);
     }
 
     @Override
     public void setAnger(int i) {
-        this.datawatcher.set(EntityBee.bp, i);
+        this.entityData.set(EntityBee.DATA_REMAINING_ANGER_TIME, i);
     }
 
     @Override
     public UUID getAngerTarget() {
-        return this.br;
+        return this.persistentAngerTarget;
     }
 
     @Override
     public void setAngerTarget(@Nullable UUID uuid) {
-        this.br = uuid;
+        this.persistentAngerTarget = uuid;
     }
 
     @Override
     public void anger() {
-        this.setAnger(EntityBee.bq.a(this.random));
+        this.setAnger(EntityBee.PERSISTENT_ANGER_TIME.a(this.random));
     }
 
     private boolean i(BlockPosition blockposition) {
-        TileEntity tileentity = this.world.getTileEntity(blockposition);
+        TileEntity tileentity = this.level.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityBeehive ? !((TileEntityBeehive) tileentity).isFull() : false;
     }
 
+    @VisibleForDebug
     public boolean hasHivePos() {
         return this.hivePos != null;
     }
 
     @Nullable
+    @VisibleForDebug
     public BlockPosition getHivePos() {
         return this.hivePos;
     }
 
+    @VisibleForDebug
+    public PathfinderGoalSelector fF() {
+        return this.goalSelector;
+    }
+
     @Override
-    protected void M() {
-        super.M();
+    protected void R() {
+        super.R();
         PacketDebug.a(this);
     }
 
-    private int getNumCropsGrownSincePollination() {
+    int getNumCropsGrownSincePollination() {
         return this.numCropsGrownSincePollination;
     }
 
-    private void fh() {
+    private void fQ() {
         this.numCropsGrownSincePollination = 0;
     }
 
-    private void fi() {
+    void fR() {
         ++this.numCropsGrownSincePollination;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.world.isClientSide) {
-            if (this.cannotEnterHiveTicks > 0) {
-                --this.cannotEnterHiveTicks;
+        if (!this.level.isClientSide) {
+            if (this.stayOutOfHiveCountdown > 0) {
+                --this.stayOutOfHiveCountdown;
             }
 
-            if (this.by > 0) {
-                --this.by;
+            if (this.remainingCooldownBeforeLocatingNewHive > 0) {
+                --this.remainingCooldownBeforeLocatingNewHive;
             }
 
-            if (this.bz > 0) {
-                --this.bz;
+            if (this.remainingCooldownBeforeLocatingNewFlower > 0) {
+                --this.remainingCooldownBeforeLocatingNewFlower;
             }
 
-            boolean flag = this.isAngry() && !this.hasStung() && this.getGoalTarget() != null && this.getGoalTarget().h((Entity) this) < 4.0D;
+            boolean flag = this.isAngry() && !this.hasStung() && this.getGoalTarget() != null && this.getGoalTarget().f((Entity) this) < 4.0D;
 
-            this.v(flag);
-            if (this.ticksLived % 20 == 0 && !this.fj()) {
+            this.x(flag);
+            if (this.tickCount % 20 == 0 && !this.fS()) {
                 this.hivePos = null;
             }
         }
 
     }
 
-    private boolean fj() {
+    boolean fS() {
         if (!this.hasHivePos()) {
             return false;
         } else {
-            TileEntity tileentity = this.world.getTileEntity(this.hivePos);
+            TileEntity tileentity = this.level.getTileEntity(this.hivePos);
 
             return tileentity != null && tileentity.getTileType() == TileEntityTypes.BEEHIVE;
         }
     }
 
     public boolean hasNectar() {
-        return this.u(8);
+        return this.v(8);
     }
 
     public void setHasNectar(boolean flag) {
         if (flag) {
-            this.eO();
+            this.fx();
         }
 
         this.d(8, flag);
     }
 
     public boolean hasStung() {
-        return this.u(4);
+        return this.v(4);
     }
 
     public void setHasStung(boolean flag) {
         this.d(4, flag);
     }
 
-    private boolean fk() {
-        return this.u(2);
+    private boolean fT() {
+        return this.v(2);
     }
 
-    private void v(boolean flag) {
+    private void x(boolean flag) {
         this.d(2, flag);
     }
 
-    private boolean j(BlockPosition blockposition) {
+    boolean j(BlockPosition blockposition) {
         return !this.b(blockposition, 32);
     }
 
     private void d(int i, boolean flag) {
         if (flag) {
-            this.datawatcher.set(EntityBee.bo, (byte) ((Byte) this.datawatcher.get(EntityBee.bo) | i));
+            this.entityData.set(EntityBee.DATA_FLAGS_ID, (byte) ((Byte) this.entityData.get(EntityBee.DATA_FLAGS_ID) | i));
         } else {
-            this.datawatcher.set(EntityBee.bo, (byte) ((Byte) this.datawatcher.get(EntityBee.bo) & ~i));
+            this.entityData.set(EntityBee.DATA_FLAGS_ID, (byte) ((Byte) this.entityData.get(EntityBee.DATA_FLAGS_ID) & ~i));
         }
 
     }
 
-    private boolean u(int i) {
-        return ((Byte) this.datawatcher.get(EntityBee.bo) & i) != 0;
+    private boolean v(int i) {
+        return ((Byte) this.entityData.get(EntityBee.DATA_FLAGS_ID) & i) != 0;
     }
 
-    public static AttributeProvider.Builder eZ() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FLYING_SPEED, 0.6000000238418579D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
+    public static AttributeProvider.Builder fI() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FLYING_SPEED, 0.6000000238418579D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
     }
 
     @Override
-    protected NavigationAbstract b(World world) {
+    protected NavigationAbstract a(World world) {
         NavigationFlying navigationflying = new NavigationFlying(this, world) {
             @Override
             public boolean a(BlockPosition blockposition) {
-                return !this.b.getType(blockposition.down()).isAir();
+                return !this.level.getType(blockposition.down()).isAir();
             }
 
             @Override
             public void c() {
-                if (!EntityBee.this.bC.k()) {
+                if (!EntityBee.this.beePollinateGoal.k()) {
                     super.c();
                 }
             }
@@ -520,12 +573,12 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     }
 
     @Override
-    public boolean k(ItemStack itemstack) {
-        return itemstack.getItem().a((Tag) TagsItem.FLOWERS);
+    public boolean n(ItemStack itemstack) {
+        return itemstack.a((Tag) TagsItem.FLOWERS);
     }
 
-    private boolean k(BlockPosition blockposition) {
-        return this.world.p(blockposition) && this.world.getType(blockposition).getBlock().a((Tag) TagsBlock.FLOWERS);
+    boolean k(BlockPosition blockposition) {
+        return this.level.o(blockposition) && this.level.getType(blockposition).a((Tag) TagsBlock.FLOWERS);
     }
 
     @Override
@@ -538,12 +591,12 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_BEE_HURT;
+        return SoundEffects.BEE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_BEE_DEATH;
+        return SoundEffects.BEE_DEATH;
     }
 
     @Override
@@ -562,7 +615,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
@@ -570,13 +623,18 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     @Override
-    protected boolean az() {
-        return true;
+    public boolean aF() {
+        return this.fJ() && this.tickCount % EntityBee.TICKS_PER_FLAP == 0;
     }
 
-    public void fb() {
+    @Override
+    public boolean fJ() {
+        return !this.onGround;
+    }
+
+    public void fK() {
         this.setHasNectar(false);
-        this.fh();
+        this.fQ();
     }
 
     @Override
@@ -584,10 +642,8 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            Entity entity = damagesource.getEntity();
-
-            if (!this.world.isClientSide) {
-                this.bC.l();
+            if (!this.level.isClientSide) {
+                this.beePollinateGoal.l();
             }
 
             return super.damageEntity(damagesource, f);
@@ -604,20 +660,241 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         this.setMot(this.getMot().add(0.0D, 0.01D, 0.0D));
     }
 
-    private boolean b(BlockPosition blockposition, int i) {
+    @Override
+    public Vec3D cu() {
+        return new Vec3D(0.0D, (double) (0.5F * this.getHeadHeight()), (double) (this.getWidth() * 0.2F));
+    }
+
+    boolean b(BlockPosition blockposition, int i) {
         return blockposition.a((BaseBlockPosition) this.getChunkCoordinates(), (double) i);
     }
 
-    class d extends EntityBee.a {
+    private class k extends EntityBee.a {
 
-        private d() {
-            super(null);
+        private static final int MIN_POLLINATION_TICKS = 400;
+        private static final int MIN_FIND_FLOWER_RETRY_COOLDOWN = 20;
+        private static final int MAX_FIND_FLOWER_RETRY_COOLDOWN = 60;
+        private final Predicate<IBlockData> VALID_POLLINATION_BLOCKS = (iblockdata) -> {
+            return iblockdata.a((Tag) TagsBlock.FLOWERS) ? (iblockdata.a(Blocks.SUNFLOWER) ? iblockdata.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.UPPER : true) : false;
+        };
+        private static final double ARRIVAL_THRESHOLD = 0.1D;
+        private static final int POSITION_CHANGE_CHANCE = 25;
+        private static final float SPEED_MODIFIER = 0.35F;
+        private static final float HOVER_HEIGHT_WITHIN_FLOWER = 0.6F;
+        private static final float HOVER_POS_OFFSET = 0.33333334F;
+        private int successfulPollinatingTicks;
+        private int lastSoundPlayedTick;
+        private boolean pollinating;
+        private Vec3D hoverPos;
+        private int pollinatingTicks;
+        private static final int MAX_POLLINATING_TICKS = 600;
+
+        k() {
+            super();
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean g() {
-            if (EntityBee.this.hasHivePos() && EntityBee.this.fd() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
-                TileEntity tileentity = EntityBee.this.world.getTileEntity(EntityBee.this.hivePos);
+            if (EntityBee.this.remainingCooldownBeforeLocatingNewFlower > 0) {
+                return false;
+            } else if (EntityBee.this.hasNectar()) {
+                return false;
+            } else if (EntityBee.this.level.isRaining()) {
+                return false;
+            } else {
+                Optional<BlockPosition> optional = this.o();
+
+                if (optional.isPresent()) {
+                    EntityBee.this.savedFlowerPos = (BlockPosition) optional.get();
+                    EntityBee.this.navigation.a((double) EntityBee.this.savedFlowerPos.getX() + 0.5D, (double) EntityBee.this.savedFlowerPos.getY() + 0.5D, (double) EntityBee.this.savedFlowerPos.getZ() + 0.5D, 1.2000000476837158D);
+                    return true;
+                } else {
+                    EntityBee.this.remainingCooldownBeforeLocatingNewFlower = MathHelper.nextInt(EntityBee.this.random, 20, 60);
+                    return false;
+                }
+            }
+        }
+
+        @Override
+        public boolean h() {
+            if (!this.pollinating) {
+                return false;
+            } else if (!EntityBee.this.hasFlowerPos()) {
+                return false;
+            } else if (EntityBee.this.level.isRaining()) {
+                return false;
+            } else if (this.j()) {
+                return EntityBee.this.random.nextFloat() < 0.2F;
+            } else if (EntityBee.this.tickCount % 20 == 0 && !EntityBee.this.k(EntityBee.this.savedFlowerPos)) {
+                EntityBee.this.savedFlowerPos = null;
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        private boolean j() {
+            return this.successfulPollinatingTicks > 400;
+        }
+
+        boolean k() {
+            return this.pollinating;
+        }
+
+        void l() {
+            this.pollinating = false;
+        }
+
+        @Override
+        public void c() {
+            this.successfulPollinatingTicks = 0;
+            this.pollinatingTicks = 0;
+            this.lastSoundPlayedTick = 0;
+            this.pollinating = true;
+            EntityBee.this.fx();
+        }
+
+        @Override
+        public void d() {
+            if (this.j()) {
+                EntityBee.this.setHasNectar(true);
+            }
+
+            this.pollinating = false;
+            EntityBee.this.navigation.o();
+            EntityBee.this.remainingCooldownBeforeLocatingNewFlower = 200;
+        }
+
+        @Override
+        public void e() {
+            ++this.pollinatingTicks;
+            if (this.pollinatingTicks > 600) {
+                EntityBee.this.savedFlowerPos = null;
+            } else {
+                Vec3D vec3d = Vec3D.c((BaseBlockPosition) EntityBee.this.savedFlowerPos).add(0.0D, 0.6000000238418579D, 0.0D);
+
+                if (vec3d.f(EntityBee.this.getPositionVector()) > 1.0D) {
+                    this.hoverPos = vec3d;
+                    this.m();
+                } else {
+                    if (this.hoverPos == null) {
+                        this.hoverPos = vec3d;
+                    }
+
+                    boolean flag = EntityBee.this.getPositionVector().f(this.hoverPos) <= 0.1D;
+                    boolean flag1 = true;
+
+                    if (!flag && this.pollinatingTicks > 600) {
+                        EntityBee.this.savedFlowerPos = null;
+                    } else {
+                        if (flag) {
+                            boolean flag2 = EntityBee.this.random.nextInt(25) == 0;
+
+                            if (flag2) {
+                                this.hoverPos = new Vec3D(vec3d.getX() + (double) this.n(), vec3d.getY(), vec3d.getZ() + (double) this.n());
+                                EntityBee.this.navigation.o();
+                            } else {
+                                flag1 = false;
+                            }
+
+                            EntityBee.this.getControllerLook().a(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+                        }
+
+                        if (flag1) {
+                            this.m();
+                        }
+
+                        ++this.successfulPollinatingTicks;
+                        if (EntityBee.this.random.nextFloat() < 0.05F && this.successfulPollinatingTicks > this.lastSoundPlayedTick + 60) {
+                            this.lastSoundPlayedTick = this.successfulPollinatingTicks;
+                            EntityBee.this.playSound(SoundEffects.BEE_POLLINATE, 1.0F, 1.0F);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private void m() {
+            EntityBee.this.getControllerMove().a(this.hoverPos.getX(), this.hoverPos.getY(), this.hoverPos.getZ(), 0.3499999940395355D);
+        }
+
+        private float n() {
+            return (EntityBee.this.random.nextFloat() * 2.0F - 1.0F) * 0.33333334F;
+        }
+
+        private Optional<BlockPosition> o() {
+            return this.a(this.VALID_POLLINATION_BLOCKS, 5.0D);
+        }
+
+        private Optional<BlockPosition> a(Predicate<IBlockData> predicate, double d0) {
+            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+            for (int i = 0; (double) i <= d0; i = i > 0 ? -i : 1 - i) {
+                for (int j = 0; (double) j < d0; ++j) {
+                    for (int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
+                        for (int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
+                            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, k, i - 1, l);
+                            if (blockposition.a((BaseBlockPosition) blockposition_mutableblockposition, d0) && predicate.test(EntityBee.this.level.getType(blockposition_mutableblockposition))) {
+                                return Optional.of(blockposition_mutableblockposition);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Optional.empty();
+        }
+    }
+
+    private class j extends ControllerLook {
+
+        j(EntityInsentient entityinsentient) {
+            super(entityinsentient);
+        }
+
+        @Override
+        public void a() {
+            if (!EntityBee.this.isAngry()) {
+                super.a();
+            }
+        }
+
+        @Override
+        protected boolean c() {
+            return !EntityBee.this.beePollinateGoal.k();
+        }
+    }
+
+    private class b extends PathfinderGoalMeleeAttack {
+
+        b(EntityCreature entitycreature, double d0, boolean flag) {
+            super(entitycreature, d0, flag);
+        }
+
+        @Override
+        public boolean a() {
+            return super.a() && EntityBee.this.isAngry() && !EntityBee.this.hasStung();
+        }
+
+        @Override
+        public boolean b() {
+            return super.b() && EntityBee.this.isAngry() && !EntityBee.this.hasStung();
+        }
+    }
+
+    private class d extends EntityBee.a {
+
+        d() {
+            super();
+        }
+
+        @Override
+        public boolean g() {
+            if (EntityBee.this.hasHivePos() && EntityBee.this.fM() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
+                TileEntity tileentity = EntityBee.this.level.getTileEntity(EntityBee.this.hivePos);
 
                 if (tileentity instanceof TileEntityBeehive) {
                     TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
@@ -640,7 +917,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public void c() {
-            TileEntity tileentity = EntityBee.this.world.getTileEntity(EntityBee.this.hivePos);
+            TileEntity tileentity = EntityBee.this.level.getTileEntity(EntityBee.this.hivePos);
 
             if (tileentity instanceof TileEntityBeehive) {
                 TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
@@ -651,32 +928,249 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         }
     }
 
-    class b extends PathfinderGoalMeleeAttack {
+    private class i extends EntityBee.a {
 
-        b(EntityCreature entitycreature, double d0, boolean flag) {
-            super(entitycreature, d0, flag);
-        }
-
-        @Override
-        public boolean a() {
-            return super.a() && EntityBee.this.isAngry() && !EntityBee.this.hasStung();
-        }
-
-        @Override
-        public boolean b() {
-            return super.b() && EntityBee.this.isAngry() && !EntityBee.this.hasStung();
-        }
-    }
-
-    class g extends EntityBee.a {
-
-        private g() {
-            super(null);
+        i() {
+            super();
         }
 
         @Override
         public boolean g() {
-            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.fj());
+            return EntityBee.this.remainingCooldownBeforeLocatingNewHive == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.fM();
+        }
+
+        @Override
+        public boolean h() {
+            return false;
+        }
+
+        @Override
+        public void c() {
+            EntityBee.this.remainingCooldownBeforeLocatingNewHive = 200;
+            List<BlockPosition> list = this.j();
+
+            if (!list.isEmpty()) {
+                Iterator iterator = list.iterator();
+
+                BlockPosition blockposition;
+
+                do {
+                    if (!iterator.hasNext()) {
+                        EntityBee.this.goToHiveGoal.j();
+                        EntityBee.this.hivePos = (BlockPosition) list.get(0);
+                        return;
+                    }
+
+                    blockposition = (BlockPosition) iterator.next();
+                } while (EntityBee.this.goToHiveGoal.b(blockposition));
+
+                EntityBee.this.hivePos = blockposition;
+            }
+        }
+
+        private List<BlockPosition> j() {
+            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
+            VillagePlace villageplace = ((WorldServer) EntityBee.this.level).A();
+            Stream<VillagePlaceRecord> stream = villageplace.c((villageplacetype) -> {
+                return villageplacetype == VillagePlaceType.BEEHIVE || villageplacetype == VillagePlaceType.BEE_NEST;
+            }, blockposition, 20, VillagePlace.Occupancy.ANY);
+
+            return (List) stream.map(VillagePlaceRecord::f).filter(EntityBee.this::i).sorted(Comparator.comparingDouble((blockposition1) -> {
+                return blockposition1.j(blockposition);
+            })).collect(Collectors.toList());
+        }
+    }
+
+    @VisibleForDebug
+    public class e extends EntityBee.a {
+
+        public static final int MAX_TRAVELLING_TICKS = 600;
+        int travellingTicks;
+        private static final int MAX_BLACKLISTED_TARGETS = 3;
+        final List<BlockPosition> blacklistedTargets;
+        @Nullable
+        private PathEntity lastPath;
+        private static final int TICKS_BEFORE_HIVE_DROP = 60;
+        private int ticksStuck;
+
+        e() {
+            super();
+            this.travellingTicks = EntityBee.this.level.random.nextInt(10);
+            this.blacklistedTargets = Lists.newArrayList();
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean g() {
+            return EntityBee.this.hivePos != null && !EntityBee.this.fk() && EntityBee.this.fM() && !this.d(EntityBee.this.hivePos) && EntityBee.this.level.getType(EntityBee.this.hivePos).a((Tag) TagsBlock.BEEHIVES);
+        }
+
+        @Override
+        public boolean h() {
+            return this.g();
+        }
+
+        @Override
+        public void c() {
+            this.travellingTicks = 0;
+            this.ticksStuck = 0;
+            super.c();
+        }
+
+        @Override
+        public void d() {
+            this.travellingTicks = 0;
+            this.ticksStuck = 0;
+            EntityBee.this.navigation.o();
+            EntityBee.this.navigation.g();
+        }
+
+        @Override
+        public void e() {
+            if (EntityBee.this.hivePos != null) {
+                ++this.travellingTicks;
+                if (this.travellingTicks > 600) {
+                    this.k();
+                } else if (!EntityBee.this.navigation.n()) {
+                    if (!EntityBee.this.b(EntityBee.this.hivePos, 16)) {
+                        if (EntityBee.this.j(EntityBee.this.hivePos)) {
+                            this.l();
+                        } else {
+                            EntityBee.this.h(EntityBee.this.hivePos);
+                        }
+                    } else {
+                        boolean flag = this.a(EntityBee.this.hivePos);
+
+                        if (!flag) {
+                            this.k();
+                        } else if (this.lastPath != null && EntityBee.this.navigation.k().a(this.lastPath)) {
+                            ++this.ticksStuck;
+                            if (this.ticksStuck > 60) {
+                                this.l();
+                                this.ticksStuck = 0;
+                            }
+                        } else {
+                            this.lastPath = EntityBee.this.navigation.k();
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private boolean a(BlockPosition blockposition) {
+            EntityBee.this.navigation.a(10.0F);
+            EntityBee.this.navigation.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
+            return EntityBee.this.navigation.k() != null && EntityBee.this.navigation.k().j();
+        }
+
+        boolean b(BlockPosition blockposition) {
+            return this.blacklistedTargets.contains(blockposition);
+        }
+
+        private void c(BlockPosition blockposition) {
+            this.blacklistedTargets.add(blockposition);
+
+            while (this.blacklistedTargets.size() > 3) {
+                this.blacklistedTargets.remove(0);
+            }
+
+        }
+
+        void j() {
+            this.blacklistedTargets.clear();
+        }
+
+        private void k() {
+            if (EntityBee.this.hivePos != null) {
+                this.c(EntityBee.this.hivePos);
+            }
+
+            this.l();
+        }
+
+        private void l() {
+            EntityBee.this.hivePos = null;
+            EntityBee.this.remainingCooldownBeforeLocatingNewHive = 200;
+        }
+
+        private boolean d(BlockPosition blockposition) {
+            if (EntityBee.this.b(blockposition, 2)) {
+                return true;
+            } else {
+                PathEntity pathentity = EntityBee.this.navigation.k();
+
+                return pathentity != null && pathentity.m().equals(blockposition) && pathentity.j() && pathentity.c();
+            }
+        }
+    }
+
+    public class f extends EntityBee.a {
+
+        private static final int MAX_TRAVELLING_TICKS = 600;
+        int travellingTicks;
+
+        f() {
+            super();
+            this.travellingTicks = EntityBee.this.level.random.nextInt(10);
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean g() {
+            return EntityBee.this.savedFlowerPos != null && !EntityBee.this.fk() && this.j() && EntityBee.this.k(EntityBee.this.savedFlowerPos) && !EntityBee.this.b(EntityBee.this.savedFlowerPos, 2);
+        }
+
+        @Override
+        public boolean h() {
+            return this.g();
+        }
+
+        @Override
+        public void c() {
+            this.travellingTicks = 0;
+            super.c();
+        }
+
+        @Override
+        public void d() {
+            this.travellingTicks = 0;
+            EntityBee.this.navigation.o();
+            EntityBee.this.navigation.g();
+        }
+
+        @Override
+        public void e() {
+            if (EntityBee.this.savedFlowerPos != null) {
+                ++this.travellingTicks;
+                if (this.travellingTicks > 600) {
+                    EntityBee.this.savedFlowerPos = null;
+                } else if (!EntityBee.this.navigation.n()) {
+                    if (EntityBee.this.j(EntityBee.this.savedFlowerPos)) {
+                        EntityBee.this.savedFlowerPos = null;
+                    } else {
+                        EntityBee.this.h(EntityBee.this.savedFlowerPos);
+                    }
+                }
+            }
+        }
+
+        private boolean j() {
+            return EntityBee.this.ticksWithoutNectarSinceExitingHive > 2400;
+        }
+    }
+
+    private class g extends EntityBee.a {
+
+        static final int GROW_CHANCE = 30;
+
+        g() {
+            super();
+        }
+
+        @Override
+        public boolean g() {
+            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.fS());
         }
 
         @Override
@@ -689,12 +1183,12 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             if (EntityBee.this.random.nextInt(30) == 0) {
                 for (int i = 1; i <= 2; ++i) {
                     BlockPosition blockposition = EntityBee.this.getChunkCoordinates().down(i);
-                    IBlockData iblockdata = EntityBee.this.world.getType(blockposition);
+                    IBlockData iblockdata = EntityBee.this.level.getType(blockposition);
                     Block block = iblockdata.getBlock();
                     boolean flag = false;
                     BlockStateInteger blockstateinteger = null;
 
-                    if (block.a((Tag) TagsBlock.BEE_GROWABLES)) {
+                    if (iblockdata.a((Tag) TagsBlock.BEE_GROWABLES)) {
                         if (block instanceof BlockCrops) {
                             BlockCrops blockcrops = (BlockCrops) block;
 
@@ -711,19 +1205,21 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
                                     flag = true;
                                     blockstateinteger = BlockStem.AGE;
                                 }
-                            } else if (block == Blocks.SWEET_BERRY_BUSH) {
-                                j = (Integer) iblockdata.get(BlockSweetBerryBush.a);
+                            } else if (iblockdata.a(Blocks.SWEET_BERRY_BUSH)) {
+                                j = (Integer) iblockdata.get(BlockSweetBerryBush.AGE);
                                 if (j < 3) {
                                     flag = true;
-                                    blockstateinteger = BlockSweetBerryBush.a;
+                                    blockstateinteger = BlockSweetBerryBush.AGE;
                                 }
+                            } else if (iblockdata.a(Blocks.CAVE_VINES) || iblockdata.a(Blocks.CAVE_VINES_PLANT)) {
+                                ((IBlockFragilePlantElement) iblockdata.getBlock()).a((WorldServer) EntityBee.this.level, EntityBee.this.random, blockposition, iblockdata);
                             }
                         }
 
                         if (flag) {
-                            EntityBee.this.world.triggerEffect(2005, blockposition, 0);
-                            EntityBee.this.world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(blockstateinteger, (Integer) iblockdata.get(blockstateinteger) + 1));
-                            EntityBee.this.fi();
+                            EntityBee.this.level.triggerEffect(2005, blockposition, 0);
+                            EntityBee.this.level.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(blockstateinteger, (Integer) iblockdata.get(blockstateinteger) + 1));
+                            EntityBee.this.fR();
                         }
                     }
                 }
@@ -732,428 +1228,9 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         }
     }
 
-    class i extends EntityBee.a {
+    private class l extends PathfinderGoal {
 
-        private i() {
-            super(null);
-        }
-
-        @Override
-        public boolean g() {
-            return EntityBee.this.by == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.fd();
-        }
-
-        @Override
-        public boolean h() {
-            return false;
-        }
-
-        @Override
-        public void c() {
-            EntityBee.this.by = 200;
-            List<BlockPosition> list = this.j();
-
-            if (!list.isEmpty()) {
-                Iterator iterator = list.iterator();
-
-                BlockPosition blockposition;
-
-                do {
-                    if (!iterator.hasNext()) {
-                        EntityBee.this.bD.j();
-                        EntityBee.this.hivePos = (BlockPosition) list.get(0);
-                        return;
-                    }
-
-                    blockposition = (BlockPosition) iterator.next();
-                } while (EntityBee.this.bD.b(blockposition));
-
-                EntityBee.this.hivePos = blockposition;
-            }
-        }
-
-        private List<BlockPosition> j() {
-            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
-            VillagePlace villageplace = ((WorldServer) EntityBee.this.world).y();
-            Stream<VillagePlaceRecord> stream = villageplace.c((villageplacetype) -> {
-                return villageplacetype == VillagePlaceType.t || villageplacetype == VillagePlaceType.u;
-            }, blockposition, 20, VillagePlace.Occupancy.ANY);
-
-            return (List) stream.map(VillagePlaceRecord::f).filter((blockposition1) -> {
-                return EntityBee.this.i(blockposition1);
-            }).sorted(Comparator.comparingDouble((blockposition1) -> {
-                return blockposition1.j(blockposition);
-            })).collect(Collectors.toList());
-        }
-    }
-
-    class k extends EntityBee.a {
-
-        private final Predicate<IBlockData> c = (iblockdata) -> {
-            return iblockdata.a((Tag) TagsBlock.TALL_FLOWERS) ? (iblockdata.a(Blocks.SUNFLOWER) ? iblockdata.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.UPPER : true) : iblockdata.a((Tag) TagsBlock.SMALL_FLOWERS);
-        };
-        private int d = 0;
-        private int e = 0;
-        private boolean f;
-        private Vec3D g;
-        private int h = 0;
-
-        k() {
-            super(null);
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean g() {
-            if (EntityBee.this.bz > 0) {
-                return false;
-            } else if (EntityBee.this.hasNectar()) {
-                return false;
-            } else if (EntityBee.this.world.isRaining()) {
-                return false;
-            } else if (EntityBee.this.random.nextFloat() < 0.7F) {
-                return false;
-            } else {
-                Optional<BlockPosition> optional = this.o();
-
-                if (optional.isPresent()) {
-                    EntityBee.this.flowerPos = (BlockPosition) optional.get();
-                    EntityBee.this.navigation.a((double) EntityBee.this.flowerPos.getX() + 0.5D, (double) EntityBee.this.flowerPos.getY() + 0.5D, (double) EntityBee.this.flowerPos.getZ() + 0.5D, 1.2000000476837158D);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        @Override
-        public boolean h() {
-            if (!this.f) {
-                return false;
-            } else if (!EntityBee.this.hasFlowerPos()) {
-                return false;
-            } else if (EntityBee.this.world.isRaining()) {
-                return false;
-            } else if (this.j()) {
-                return EntityBee.this.random.nextFloat() < 0.2F;
-            } else if (EntityBee.this.ticksLived % 20 == 0 && !EntityBee.this.k(EntityBee.this.flowerPos)) {
-                EntityBee.this.flowerPos = null;
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        private boolean j() {
-            return this.d > 400;
-        }
-
-        private boolean k() {
-            return this.f;
-        }
-
-        private void l() {
-            this.f = false;
-        }
-
-        @Override
-        public void c() {
-            this.d = 0;
-            this.h = 0;
-            this.e = 0;
-            this.f = true;
-            EntityBee.this.eO();
-        }
-
-        @Override
-        public void d() {
-            if (this.j()) {
-                EntityBee.this.setHasNectar(true);
-            }
-
-            this.f = false;
-            EntityBee.this.navigation.o();
-            EntityBee.this.bz = 200;
-        }
-
-        @Override
-        public void e() {
-            ++this.h;
-            if (this.h > 600) {
-                EntityBee.this.flowerPos = null;
-            } else {
-                Vec3D vec3d = Vec3D.c((BaseBlockPosition) EntityBee.this.flowerPos).add(0.0D, 0.6000000238418579D, 0.0D);
-
-                if (vec3d.f(EntityBee.this.getPositionVector()) > 1.0D) {
-                    this.g = vec3d;
-                    this.m();
-                } else {
-                    if (this.g == null) {
-                        this.g = vec3d;
-                    }
-
-                    boolean flag = EntityBee.this.getPositionVector().f(this.g) <= 0.1D;
-                    boolean flag1 = true;
-
-                    if (!flag && this.h > 600) {
-                        EntityBee.this.flowerPos = null;
-                    } else {
-                        if (flag) {
-                            boolean flag2 = EntityBee.this.random.nextInt(25) == 0;
-
-                            if (flag2) {
-                                this.g = new Vec3D(vec3d.getX() + (double) this.n(), vec3d.getY(), vec3d.getZ() + (double) this.n());
-                                EntityBee.this.navigation.o();
-                            } else {
-                                flag1 = false;
-                            }
-
-                            EntityBee.this.getControllerLook().a(vec3d.getX(), vec3d.getY(), vec3d.getZ());
-                        }
-
-                        if (flag1) {
-                            this.m();
-                        }
-
-                        ++this.d;
-                        if (EntityBee.this.random.nextFloat() < 0.05F && this.d > this.e + 60) {
-                            this.e = this.d;
-                            EntityBee.this.playSound(SoundEffects.ENTITY_BEE_POLLINATE, 1.0F, 1.0F);
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private void m() {
-            EntityBee.this.getControllerMove().a(this.g.getX(), this.g.getY(), this.g.getZ(), 0.3499999940395355D);
-        }
-
-        private float n() {
-            return (EntityBee.this.random.nextFloat() * 2.0F - 1.0F) * 0.33333334F;
-        }
-
-        private Optional<BlockPosition> o() {
-            return this.a(this.c, 5.0D);
-        }
-
-        private Optional<BlockPosition> a(Predicate<IBlockData> predicate, double d0) {
-            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-
-            for (int i = 0; (double) i <= d0; i = i > 0 ? -i : 1 - i) {
-                for (int j = 0; (double) j < d0; ++j) {
-                    for (int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
-                        for (int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
-                            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, k, i - 1, l);
-                            if (blockposition.a((BaseBlockPosition) blockposition_mutableblockposition, d0) && predicate.test(EntityBee.this.world.getType(blockposition_mutableblockposition))) {
-                                return Optional.of(blockposition_mutableblockposition);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return Optional.empty();
-        }
-    }
-
-    class j extends ControllerLook {
-
-        j(EntityInsentient entityinsentient) {
-            super(entityinsentient);
-        }
-
-        @Override
-        public void a() {
-            if (!EntityBee.this.isAngry()) {
-                super.a();
-            }
-        }
-
-        @Override
-        protected boolean b() {
-            return !EntityBee.this.bC.k();
-        }
-    }
-
-    public class f extends EntityBee.a {
-
-        private int c;
-
-        f() {
-            super(null);
-            this.c = EntityBee.this.world.random.nextInt(10);
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean g() {
-            return EntityBee.this.flowerPos != null && !EntityBee.this.ez() && this.j() && EntityBee.this.k(EntityBee.this.flowerPos) && !EntityBee.this.b(EntityBee.this.flowerPos, 2);
-        }
-
-        @Override
-        public boolean h() {
-            return this.g();
-        }
-
-        @Override
-        public void c() {
-            this.c = 0;
-            super.c();
-        }
-
-        @Override
-        public void d() {
-            this.c = 0;
-            EntityBee.this.navigation.o();
-            EntityBee.this.navigation.g();
-        }
-
-        @Override
-        public void e() {
-            if (EntityBee.this.flowerPos != null) {
-                ++this.c;
-                if (this.c > 600) {
-                    EntityBee.this.flowerPos = null;
-                } else if (!EntityBee.this.navigation.n()) {
-                    if (EntityBee.this.j(EntityBee.this.flowerPos)) {
-                        EntityBee.this.flowerPos = null;
-                    } else {
-                        EntityBee.this.h(EntityBee.this.flowerPos);
-                    }
-                }
-            }
-        }
-
-        private boolean j() {
-            return EntityBee.this.ticksSincePollination > 2400;
-        }
-    }
-
-    public class e extends EntityBee.a {
-
-        private int c;
-        private List<BlockPosition> d;
-        @Nullable
-        private PathEntity e;
-        private int f;
-
-        e() {
-            super(null);
-            this.c = EntityBee.this.world.random.nextInt(10);
-            this.d = Lists.newArrayList();
-            this.e = null;
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean g() {
-            return EntityBee.this.hivePos != null && !EntityBee.this.ez() && EntityBee.this.fd() && !this.d(EntityBee.this.hivePos) && EntityBee.this.world.getType(EntityBee.this.hivePos).a((Tag) TagsBlock.BEEHIVES);
-        }
-
-        @Override
-        public boolean h() {
-            return this.g();
-        }
-
-        @Override
-        public void c() {
-            this.c = 0;
-            this.f = 0;
-            super.c();
-        }
-
-        @Override
-        public void d() {
-            this.c = 0;
-            this.f = 0;
-            EntityBee.this.navigation.o();
-            EntityBee.this.navigation.g();
-        }
-
-        @Override
-        public void e() {
-            if (EntityBee.this.hivePos != null) {
-                ++this.c;
-                if (this.c > 600) {
-                    this.k();
-                } else if (!EntityBee.this.navigation.n()) {
-                    if (!EntityBee.this.b(EntityBee.this.hivePos, 16)) {
-                        if (EntityBee.this.j(EntityBee.this.hivePos)) {
-                            this.l();
-                        } else {
-                            EntityBee.this.h(EntityBee.this.hivePos);
-                        }
-                    } else {
-                        boolean flag = this.a(EntityBee.this.hivePos);
-
-                        if (!flag) {
-                            this.k();
-                        } else if (this.e != null && EntityBee.this.navigation.k().a(this.e)) {
-                            ++this.f;
-                            if (this.f > 60) {
-                                this.l();
-                                this.f = 0;
-                            }
-                        } else {
-                            this.e = EntityBee.this.navigation.k();
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private boolean a(BlockPosition blockposition) {
-            EntityBee.this.navigation.a(10.0F);
-            EntityBee.this.navigation.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
-            return EntityBee.this.navigation.k() != null && EntityBee.this.navigation.k().j();
-        }
-
-        private boolean b(BlockPosition blockposition) {
-            return this.d.contains(blockposition);
-        }
-
-        private void c(BlockPosition blockposition) {
-            this.d.add(blockposition);
-
-            while (this.d.size() > 3) {
-                this.d.remove(0);
-            }
-
-        }
-
-        private void j() {
-            this.d.clear();
-        }
-
-        private void k() {
-            if (EntityBee.this.hivePos != null) {
-                this.c(EntityBee.this.hivePos);
-            }
-
-            this.l();
-        }
-
-        private void l() {
-            EntityBee.this.hivePos = null;
-            EntityBee.this.by = 200;
-        }
-
-        private boolean d(BlockPosition blockposition) {
-            if (EntityBee.this.b(blockposition, 2)) {
-                return true;
-            } else {
-                PathEntity pathentity = EntityBee.this.navigation.k();
-
-                return pathentity != null && pathentity.m().equals(blockposition) && pathentity.j() && pathentity.c();
-            }
-        }
-    }
-
-    class l extends PathfinderGoal {
+        private static final int WANDER_THRESHOLD = 22;
 
         l() {
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
@@ -1183,24 +1260,75 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         private Vec3D g() {
             Vec3D vec3d;
 
-            if (EntityBee.this.fj() && !EntityBee.this.b(EntityBee.this.hivePos, 22)) {
+            if (EntityBee.this.fS() && !EntityBee.this.b(EntityBee.this.hivePos, 22)) {
                 Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) EntityBee.this.hivePos);
 
                 vec3d = vec3d1.d(EntityBee.this.getPositionVector()).d();
             } else {
-                vec3d = EntityBee.this.f(0.0F);
+                vec3d = EntityBee.this.e(0.0F);
             }
 
             boolean flag = true;
-            Vec3D vec3d2 = RandomPositionGenerator.a(EntityBee.this, 8, 7, vec3d, 1.5707964F, 2, 1);
+            Vec3D vec3d2 = HoverRandomPos.a(EntityBee.this, 8, 7, vec3d.x, vec3d.z, 1.5707964F, 3, 1);
 
-            return vec3d2 != null ? vec3d2 : RandomPositionGenerator.a((EntityCreature) EntityBee.this, 8, 4, -2, vec3d, 1.5707963705062866D);
+            return vec3d2 != null ? vec3d2 : AirAndWaterRandomPos.a(EntityBee.this, 8, 4, -2, vec3d.x, vec3d.z, 1.5707963705062866D);
         }
     }
 
-    abstract class a extends PathfinderGoal {
+    private class h extends PathfinderGoalHurtByTarget {
 
-        private a() {}
+        h(EntityBee entitybee) {
+            super(entitybee);
+        }
+
+        @Override
+        public boolean b() {
+            return EntityBee.this.isAngry() && super.b();
+        }
+
+        @Override
+        protected void a(EntityInsentient entityinsentient, EntityLiving entityliving) {
+            if (entityinsentient instanceof EntityBee && this.mob.hasLineOfSight(entityliving)) {
+                entityinsentient.setGoalTarget(entityliving);
+            }
+
+        }
+    }
+
+    private static class c extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
+
+        c(EntityBee entitybee) {
+            Objects.requireNonNull(entitybee);
+            super(entitybee, EntityHuman.class, 10, true, false, entitybee::a_);
+        }
+
+        @Override
+        public boolean a() {
+            return this.h() && super.a();
+        }
+
+        @Override
+        public boolean b() {
+            boolean flag = this.h();
+
+            if (flag && this.mob.getGoalTarget() != null) {
+                return super.b();
+            } else {
+                this.targetMob = null;
+                return false;
+            }
+        }
+
+        private boolean h() {
+            EntityBee entitybee = (EntityBee) this.mob;
+
+            return entitybee.isAngry() && !entitybee.hasStung();
+        }
+    }
+
+    private abstract class a extends PathfinderGoal {
+
+        a() {}
 
         public abstract boolean g();
 
@@ -1214,56 +1342,6 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         @Override
         public boolean b() {
             return this.h() && !EntityBee.this.isAngry();
-        }
-    }
-
-    static class c extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
-
-        c(EntityBee entitybee) {
-            super(entitybee, EntityHuman.class, 10, true, false, entitybee::a_);
-        }
-
-        @Override
-        public boolean a() {
-            return this.h() && super.a();
-        }
-
-        @Override
-        public boolean b() {
-            boolean flag = this.h();
-
-            if (flag && this.e.getGoalTarget() != null) {
-                return super.b();
-            } else {
-                this.g = null;
-                return false;
-            }
-        }
-
-        private boolean h() {
-            EntityBee entitybee = (EntityBee) this.e;
-
-            return entitybee.isAngry() && !entitybee.hasStung();
-        }
-    }
-
-    class h extends PathfinderGoalHurtByTarget {
-
-        h(EntityBee entitybee) {
-            super(entitybee);
-        }
-
-        @Override
-        public boolean b() {
-            return EntityBee.this.isAngry() && super.b();
-        }
-
-        @Override
-        protected void a(EntityInsentient entityinsentient, EntityLiving entityliving) {
-            if (entityinsentient instanceof EntityBee && this.e.hasLineOfSight(entityliving)) {
-                entityinsentient.setGoalTarget(entityliving);
-            }
-
         }
     }
 }

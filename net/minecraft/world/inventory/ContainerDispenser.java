@@ -8,16 +8,21 @@ import net.minecraft.world.item.ItemStack;
 
 public class ContainerDispenser extends Container {
 
-    public final IInventory items;
+    private static final int SLOT_COUNT = 9;
+    private static final int INV_SLOT_START = 9;
+    private static final int INV_SLOT_END = 36;
+    private static final int USE_ROW_SLOT_START = 36;
+    private static final int USE_ROW_SLOT_END = 45;
+    public final IInventory dispenser;
 
     public ContainerDispenser(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, new InventorySubcontainer(9));
     }
 
     public ContainerDispenser(int i, PlayerInventory playerinventory, IInventory iinventory) {
-        super(Containers.GENERIC_3X3, i);
+        super(Containers.GENERIC_3x3, i);
         a(iinventory, 9);
-        this.items = iinventory;
+        this.dispenser = iinventory;
         iinventory.startOpen(playerinventory.player);
 
         int j;
@@ -43,12 +48,12 @@ public class ContainerDispenser extends Container {
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return this.items.a(entityhuman);
+        return this.dispenser.a(entityhuman);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -57,20 +62,20 @@ public class ContainerDispenser extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < 9) {
                 if (!this.a(itemstack1, 9, 45, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.a(itemstack1, 0, 9, false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -82,6 +87,6 @@ public class ContainerDispenser extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.items.closeContainer(entityhuman);
+        this.dispenser.closeContainer(entityhuman);
     }
 }

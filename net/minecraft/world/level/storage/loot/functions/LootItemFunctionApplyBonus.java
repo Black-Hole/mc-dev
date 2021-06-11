@@ -22,23 +22,23 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
-    private static final Map<MinecraftKey, LootItemFunctionApplyBonus.c> a = Maps.newHashMap();
-    private final Enchantment b;
-    private final LootItemFunctionApplyBonus.b d;
+    static final Map<MinecraftKey, LootItemFunctionApplyBonus.c> FORMULAS = Maps.newHashMap();
+    final Enchantment enchantment;
+    final LootItemFunctionApplyBonus.b formula;
 
-    private LootItemFunctionApplyBonus(LootItemCondition[] alootitemcondition, Enchantment enchantment, LootItemFunctionApplyBonus.b lootitemfunctionapplybonus_b) {
+    LootItemFunctionApplyBonus(LootItemCondition[] alootitemcondition, Enchantment enchantment, LootItemFunctionApplyBonus.b lootitemfunctionapplybonus_b) {
         super(alootitemcondition);
-        this.b = enchantment;
-        this.d = lootitemfunctionapplybonus_b;
+        this.enchantment = enchantment;
+        this.formula = lootitemfunctionapplybonus_b;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.p;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.APPLY_BONUS;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.TOOL);
     }
 
@@ -47,8 +47,8 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
         ItemStack itemstack1 = (ItemStack) loottableinfo.getContextParameter(LootContextParameters.TOOL);
 
         if (itemstack1 != null) {
-            int i = EnchantmentManager.getEnchantmentLevel(this.b, itemstack1);
-            int j = this.d.a(loottableinfo.a(), itemstack.getCount(), i);
+            int i = EnchantmentManager.getEnchantmentLevel(this.enchantment, itemstack1);
+            int j = this.formula.a(loottableinfo.a(), itemstack.getCount(), i);
 
             itemstack.setCount(j);
         }
@@ -81,58 +81,56 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
     }
 
     static {
-        LootItemFunctionApplyBonus.a.put(LootItemFunctionApplyBonus.a.a, LootItemFunctionApplyBonus.a::a);
-        LootItemFunctionApplyBonus.a.put(LootItemFunctionApplyBonus.d.a, LootItemFunctionApplyBonus.d::a);
-        LootItemFunctionApplyBonus.a.put(LootItemFunctionApplyBonus.f.a, LootItemFunctionApplyBonus.f::a);
+        LootItemFunctionApplyBonus.FORMULAS.put(LootItemFunctionApplyBonus.a.TYPE, LootItemFunctionApplyBonus.a::a);
+        LootItemFunctionApplyBonus.FORMULAS.put(LootItemFunctionApplyBonus.d.TYPE, LootItemFunctionApplyBonus.d::a);
+        LootItemFunctionApplyBonus.FORMULAS.put(LootItemFunctionApplyBonus.f.TYPE, LootItemFunctionApplyBonus.f::a);
     }
 
-    public static class e extends LootItemFunctionConditional.c<LootItemFunctionApplyBonus> {
+    private interface b {
 
-        public e() {}
+        int a(Random random, int i, int j);
 
-        public void a(JsonObject jsonobject, LootItemFunctionApplyBonus lootitemfunctionapplybonus, JsonSerializationContext jsonserializationcontext) {
-            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionapplybonus, jsonserializationcontext);
-            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemfunctionapplybonus.b).toString());
-            jsonobject.addProperty("formula", lootitemfunctionapplybonus.d.a().toString());
-            JsonObject jsonobject1 = new JsonObject();
+        void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext);
 
-            lootitemfunctionapplybonus.d.a(jsonobject1, jsonserializationcontext);
-            if (jsonobject1.size() > 0) {
-                jsonobject.add("parameters", jsonobject1);
-            }
+        MinecraftKey a();
+    }
 
+    private static final class f implements LootItemFunctionApplyBonus.b {
+
+        public static final MinecraftKey TYPE = new MinecraftKey("uniform_bonus_count");
+        private final int bonusMultiplier;
+
+        public f(int i) {
+            this.bonusMultiplier = i;
         }
 
         @Override
-        public LootItemFunctionApplyBonus b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "enchantment"));
-            Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
-                return new JsonParseException("Invalid enchantment id: " + minecraftkey);
-            });
-            MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "formula"));
-            LootItemFunctionApplyBonus.c lootitemfunctionapplybonus_c = (LootItemFunctionApplyBonus.c) LootItemFunctionApplyBonus.a.get(minecraftkey1);
+        public int a(Random random, int i, int j) {
+            return i + random.nextInt(this.bonusMultiplier * j + 1);
+        }
 
-            if (lootitemfunctionapplybonus_c == null) {
-                throw new JsonParseException("Invalid formula id: " + minecraftkey1);
-            } else {
-                LootItemFunctionApplyBonus.b lootitemfunctionapplybonus_b;
+        @Override
+        public void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {
+            jsonobject.addProperty("bonusMultiplier", this.bonusMultiplier);
+        }
 
-                if (jsonobject.has("parameters")) {
-                    lootitemfunctionapplybonus_b = lootitemfunctionapplybonus_c.deserialize(ChatDeserializer.t(jsonobject, "parameters"), jsondeserializationcontext);
-                } else {
-                    lootitemfunctionapplybonus_b = lootitemfunctionapplybonus_c.deserialize(new JsonObject(), jsondeserializationcontext);
-                }
+        public static LootItemFunctionApplyBonus.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+            int i = ChatDeserializer.n(jsonobject, "bonusMultiplier");
 
-                return new LootItemFunctionApplyBonus(alootitemcondition, enchantment, lootitemfunctionapplybonus_b);
-            }
+            return new LootItemFunctionApplyBonus.f(i);
+        }
+
+        @Override
+        public MinecraftKey a() {
+            return LootItemFunctionApplyBonus.f.TYPE;
         }
     }
 
-    static final class d implements LootItemFunctionApplyBonus.b {
+    private static final class d implements LootItemFunctionApplyBonus.b {
 
-        public static final MinecraftKey a = new MinecraftKey("ore_drops");
+        public static final MinecraftKey TYPE = new MinecraftKey("ore_drops");
 
-        private d() {}
+        d() {}
 
         @Override
         public int a(Random random, int i, int j) {
@@ -158,56 +156,25 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
         @Override
         public MinecraftKey a() {
-            return LootItemFunctionApplyBonus.d.a;
+            return LootItemFunctionApplyBonus.d.TYPE;
         }
     }
 
-    static final class f implements LootItemFunctionApplyBonus.b {
+    private static final class a implements LootItemFunctionApplyBonus.b {
 
-        public static final MinecraftKey a = new MinecraftKey("uniform_bonus_count");
-        private final int b;
-
-        public f(int i) {
-            this.b = i;
-        }
-
-        @Override
-        public int a(Random random, int i, int j) {
-            return i + random.nextInt(this.b * j + 1);
-        }
-
-        @Override
-        public void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("bonusMultiplier", this.b);
-        }
-
-        public static LootItemFunctionApplyBonus.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            int i = ChatDeserializer.n(jsonobject, "bonusMultiplier");
-
-            return new LootItemFunctionApplyBonus.f(i);
-        }
-
-        @Override
-        public MinecraftKey a() {
-            return LootItemFunctionApplyBonus.f.a;
-        }
-    }
-
-    static final class a implements LootItemFunctionApplyBonus.b {
-
-        public static final MinecraftKey a = new MinecraftKey("binomial_with_bonus_count");
-        private final int b;
-        private final float c;
+        public static final MinecraftKey TYPE = new MinecraftKey("binomial_with_bonus_count");
+        private final int extraRounds;
+        private final float probability;
 
         public a(int i, float f) {
-            this.b = i;
-            this.c = f;
+            this.extraRounds = i;
+            this.probability = f;
         }
 
         @Override
         public int a(Random random, int i, int j) {
-            for (int k = 0; k < j + this.b; ++k) {
-                if (random.nextFloat() < this.c) {
+            for (int k = 0; k < j + this.extraRounds; ++k) {
+                if (random.nextFloat() < this.probability) {
                     ++i;
                 }
             }
@@ -217,8 +184,8 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
         @Override
         public void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("extra", this.b);
-            jsonobject.addProperty("probability", this.c);
+            jsonobject.addProperty("extra", this.extraRounds);
+            jsonobject.addProperty("probability", this.probability);
         }
 
         public static LootItemFunctionApplyBonus.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
@@ -230,21 +197,54 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
         @Override
         public MinecraftKey a() {
-            return LootItemFunctionApplyBonus.a.a;
+            return LootItemFunctionApplyBonus.a.TYPE;
         }
     }
 
-    interface c {
+    private interface c {
 
         LootItemFunctionApplyBonus.b deserialize(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext);
     }
 
-    interface b {
+    public static class e extends LootItemFunctionConditional.c<LootItemFunctionApplyBonus> {
 
-        int a(Random random, int i, int j);
+        public e() {}
 
-        void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext);
+        public void a(JsonObject jsonobject, LootItemFunctionApplyBonus lootitemfunctionapplybonus, JsonSerializationContext jsonserializationcontext) {
+            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionapplybonus, jsonserializationcontext);
+            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemfunctionapplybonus.enchantment).toString());
+            jsonobject.addProperty("formula", lootitemfunctionapplybonus.formula.a().toString());
+            JsonObject jsonobject1 = new JsonObject();
 
-        MinecraftKey a();
+            lootitemfunctionapplybonus.formula.a(jsonobject1, jsonserializationcontext);
+            if (jsonobject1.size() > 0) {
+                jsonobject.add("parameters", jsonobject1);
+            }
+
+        }
+
+        @Override
+        public LootItemFunctionApplyBonus b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+            MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "enchantment"));
+            Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
+                return new JsonParseException("Invalid enchantment id: " + minecraftkey);
+            });
+            MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "formula"));
+            LootItemFunctionApplyBonus.c lootitemfunctionapplybonus_c = (LootItemFunctionApplyBonus.c) LootItemFunctionApplyBonus.FORMULAS.get(minecraftkey1);
+
+            if (lootitemfunctionapplybonus_c == null) {
+                throw new JsonParseException("Invalid formula id: " + minecraftkey1);
+            } else {
+                LootItemFunctionApplyBonus.b lootitemfunctionapplybonus_b;
+
+                if (jsonobject.has("parameters")) {
+                    lootitemfunctionapplybonus_b = lootitemfunctionapplybonus_c.deserialize(ChatDeserializer.t(jsonobject, "parameters"), jsondeserializationcontext);
+                } else {
+                    lootitemfunctionapplybonus_b = lootitemfunctionapplybonus_c.deserialize(new JsonObject(), jsondeserializationcontext);
+                }
+
+                return new LootItemFunctionApplyBonus(alootitemcondition, enchantment, lootitemfunctionapplybonus_b);
+            }
+        }
     }
 }

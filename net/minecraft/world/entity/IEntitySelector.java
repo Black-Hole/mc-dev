@@ -3,7 +3,6 @@ package net.minecraft.world.entity;
 import com.google.common.base.Predicates;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
@@ -11,23 +10,24 @@ import net.minecraft.world.scores.ScoreboardTeamBase;
 
 public final class IEntitySelector {
 
-    public static final Predicate<Entity> a = Entity::isAlive;
-    public static final Predicate<EntityLiving> b = EntityLiving::isAlive;
-    public static final Predicate<Entity> c = (entity) -> {
+    public static final Predicate<Entity> ENTITY_STILL_ALIVE = Entity::isAlive;
+    public static final Predicate<Entity> LIVING_ENTITY_STILL_ALIVE = (entity) -> {
+        return entity.isAlive() && entity instanceof EntityLiving;
+    };
+    public static final Predicate<Entity> ENTITY_NOT_BEING_RIDDEN = (entity) -> {
         return entity.isAlive() && !entity.isVehicle() && !entity.isPassenger();
     };
-    public static final Predicate<Entity> d = (entity) -> {
+    public static final Predicate<Entity> CONTAINER_ENTITY_SELECTOR = (entity) -> {
         return entity instanceof IInventory && entity.isAlive();
     };
-    public static final Predicate<Entity> e = (entity) -> {
+    public static final Predicate<Entity> NO_CREATIVE_OR_SPECTATOR = (entity) -> {
         return !(entity instanceof EntityHuman) || !entity.isSpectator() && !((EntityHuman) entity).isCreative();
     };
-    public static final Predicate<Entity> f = (entity) -> {
-        return !(entity instanceof EntityHuman) || !entity.isSpectator() && !((EntityHuman) entity).isCreative() && entity.world.getDifficulty() != EnumDifficulty.PEACEFUL;
-    };
-    public static final Predicate<Entity> g = (entity) -> {
+    public static final Predicate<Entity> NO_SPECTATORS = (entity) -> {
         return !entity.isSpectator();
     };
+
+    private IEntitySelector() {}
 
     public static Predicate<Entity> a(double d0, double d1, double d2, double d3) {
         double d4 = d3 * d3;
@@ -41,10 +41,10 @@ public final class IEntitySelector {
         ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
-        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.g.and((entity1) -> {
+        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.NO_SPECTATORS.and((entity1) -> {
             if (!entity1.isCollidable()) {
                 return false;
-            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ez())) {
+            } else if (entity.level.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).fh())) {
                 return false;
             } else {
                 ScoreboardTeamBase scoreboardteambase1 = entity1.getScoreboardTeam();
@@ -80,10 +80,10 @@ public final class IEntitySelector {
 
     public static class EntitySelectorEquipable implements Predicate<Entity> {
 
-        private final ItemStack a;
+        private final ItemStack itemStack;
 
         public EntitySelectorEquipable(ItemStack itemstack) {
-            this.a = itemstack;
+            this.itemStack = itemstack;
         }
 
         public boolean test(@Nullable Entity entity) {
@@ -94,7 +94,7 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return entityliving.e(this.a);
+                return entityliving.g(this.itemStack);
             }
         }
     }

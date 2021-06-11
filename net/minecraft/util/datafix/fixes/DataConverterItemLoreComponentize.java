@@ -9,6 +9,7 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 import java.util.stream.Stream;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.IChatBaseComponent;
@@ -30,7 +31,7 @@ public class DataConverterItemLoreComponentize extends DataFix {
                         return dynamic1.update("Lore", (dynamic2) -> {
                             DataResult dataresult = dynamic2.asStreamOpt().map(DataConverterItemLoreComponentize::a);
 
-                            dynamic2.getClass();
+                            Objects.requireNonNull(dynamic2);
                             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic2::createList).result(), dynamic2);
                         });
                     });
@@ -43,7 +44,7 @@ public class DataConverterItemLoreComponentize extends DataFix {
         return stream.map((dynamic) -> {
             DataResult dataresult = dynamic.asString().map(DataConverterItemLoreComponentize::a);
 
-            dynamic.getClass();
+            Objects.requireNonNull(dynamic);
             return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createString).result(), dynamic);
         });
     }

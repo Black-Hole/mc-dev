@@ -9,6 +9,11 @@ public enum EnumAxisCycle {
         }
 
         @Override
+        public double a(double d0, double d1, double d2, EnumDirection.EnumAxis enumdirection_enumaxis) {
+            return enumdirection_enumaxis.a(d0, d1, d2);
+        }
+
+        @Override
         public EnumDirection.EnumAxis a(EnumDirection.EnumAxis enumdirection_enumaxis) {
             return enumdirection_enumaxis;
         }
@@ -25,8 +30,13 @@ public enum EnumAxisCycle {
         }
 
         @Override
+        public double a(double d0, double d1, double d2, EnumDirection.EnumAxis enumdirection_enumaxis) {
+            return enumdirection_enumaxis.a(d2, d0, d1);
+        }
+
+        @Override
         public EnumDirection.EnumAxis a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return null.d[Math.floorMod(enumdirection_enumaxis.ordinal() + 1, 3)];
+            return null.AXIS_VALUES[Math.floorMod(enumdirection_enumaxis.ordinal() + 1, 3)];
         }
 
         @Override
@@ -41,8 +51,13 @@ public enum EnumAxisCycle {
         }
 
         @Override
+        public double a(double d0, double d1, double d2, EnumDirection.EnumAxis enumdirection_enumaxis) {
+            return enumdirection_enumaxis.a(d1, d2, d0);
+        }
+
+        @Override
         public EnumDirection.EnumAxis a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return null.d[Math.floorMod(enumdirection_enumaxis.ordinal() - 1, 3)];
+            return null.AXIS_VALUES[Math.floorMod(enumdirection_enumaxis.ordinal() - 1, 3)];
         }
 
         @Override
@@ -51,18 +66,20 @@ public enum EnumAxisCycle {
         }
     };
 
-    public static final EnumDirection.EnumAxis[] d = EnumDirection.EnumAxis.values();
-    public static final EnumAxisCycle[] e = values();
+    public static final EnumDirection.EnumAxis[] AXIS_VALUES = EnumDirection.EnumAxis.values();
+    public static final EnumAxisCycle[] VALUES = values();
 
-    private EnumAxisCycle() {}
+    EnumAxisCycle() {}
 
     public abstract int a(int i, int j, int k, EnumDirection.EnumAxis enumdirection_enumaxis);
+
+    public abstract double a(double d0, double d1, double d2, EnumDirection.EnumAxis enumdirection_enumaxis);
 
     public abstract EnumDirection.EnumAxis a(EnumDirection.EnumAxis enumdirection_enumaxis);
 
     public abstract EnumAxisCycle a();
 
     public static EnumAxisCycle a(EnumDirection.EnumAxis enumdirection_enumaxis, EnumDirection.EnumAxis enumdirection_enumaxis1) {
-        return EnumAxisCycle.e[Math.floorMod(enumdirection_enumaxis1.ordinal() - enumdirection_enumaxis.ordinal(), 3)];
+        return EnumAxisCycle.VALUES[Math.floorMod(enumdirection_enumaxis1.ordinal() - enumdirection_enumaxis.ordinal(), 3)];
     }
 }

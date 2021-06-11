@@ -1,10 +1,13 @@
 package net.minecraft.world.level.levelgen.feature;
 
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import java.util.List;
 import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import net.minecraft.world.level.block.EnumBlockRotation;
@@ -12,12 +15,14 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.SeededRandom;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.WorldGenEndCityPieces;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 
 public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
+
+    private static final int RANDOM_SALT = 10387313;
 
     public WorldGenEndCity(Codec<WorldGenFeatureEmptyConfiguration> codec) {
         super(codec);
@@ -28,8 +33,8 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
         return false;
     }
 
-    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return b(j, k, chunkgenerator) >= 60;
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair1, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration, LevelHeightAccessor levelheightaccessor) {
+        return a(chunkcoordintpair, chunkgenerator, levelheightaccessor) >= 60;
     }
 
     @Override
@@ -37,8 +42,8 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
         return WorldGenEndCity.a::new;
     }
 
-    private static int b(int i, int j, ChunkGenerator chunkgenerator) {
-        Random random = new Random((long) (i + j * 10387313));
+    static int a(ChunkCoordIntPair chunkcoordintpair, ChunkGenerator chunkgenerator, LevelHeightAccessor levelheightaccessor) {
+        Random random = new Random((long) (chunkcoordintpair.x + chunkcoordintpair.z * 10387313));
         EnumBlockRotation enumblockrotation = EnumBlockRotation.a(random);
         byte b0 = 5;
         byte b1 = 5;
@@ -52,31 +57,32 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
             b1 = -5;
         }
 
-        int k = (i << 4) + 7;
-        int l = (j << 4) + 7;
-        int i1 = chunkgenerator.c(k, l, HeightMap.Type.WORLD_SURFACE_WG);
-        int j1 = chunkgenerator.c(k, l + b1, HeightMap.Type.WORLD_SURFACE_WG);
-        int k1 = chunkgenerator.c(k + b0, l, HeightMap.Type.WORLD_SURFACE_WG);
-        int l1 = chunkgenerator.c(k + b0, l + b1, HeightMap.Type.WORLD_SURFACE_WG);
+        int i = chunkcoordintpair.a(7);
+        int j = chunkcoordintpair.b(7);
+        int k = chunkgenerator.c(i, j, HeightMap.Type.WORLD_SURFACE_WG, levelheightaccessor);
+        int l = chunkgenerator.c(i, j + b1, HeightMap.Type.WORLD_SURFACE_WG, levelheightaccessor);
+        int i1 = chunkgenerator.c(i + b0, j, HeightMap.Type.WORLD_SURFACE_WG, levelheightaccessor);
+        int j1 = chunkgenerator.c(i + b0, j + b1, HeightMap.Type.WORLD_SURFACE_WG, levelheightaccessor);
 
-        return Math.min(Math.min(i1, j1), Math.min(k1, l1));
+        return Math.min(Math.min(k, l), Math.min(i1, j1));
     }
 
     public static class a extends StructureStart<WorldGenFeatureEmptyConfiguration> {
 
-        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, ChunkCoordIntPair chunkcoordintpair, int i, long j) {
+            super(structuregenerator, chunkcoordintpair, i, j);
         }
 
-        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
-            int k = WorldGenEndCity.b(i, j, chunkgenerator);
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration, LevelHeightAccessor levelheightaccessor) {
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.random);
+            int i = WorldGenEndCity.a(chunkcoordintpair, chunkgenerator, levelheightaccessor);
 
-            if (k >= 60) {
-                BlockPosition blockposition = new BlockPosition(i * 16 + 8, k, j * 16 + 8);
+            if (i >= 60) {
+                BlockPosition blockposition = chunkcoordintpair.c(i);
+                List<StructurePiece> list = Lists.newArrayList();
 
-                WorldGenEndCityPieces.a(definedstructuremanager, blockposition, enumblockrotation, this.b, this.d);
-                this.b();
+                WorldGenEndCityPieces.a(definedstructuremanager, blockposition, enumblockrotation, list, this.random);
+                list.forEach(this::a);
             }
         }
     }

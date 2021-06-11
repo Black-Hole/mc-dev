@@ -12,13 +12,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorRetreat<E extends EntityInsentient> extends Behavior<E> {
 
-    private final int b;
-    private final float c;
+    private final int tooCloseDistance;
+    private final float strafeSpeed;
 
     public BehaviorRetreat(int i, float f) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
-        this.b = i;
-        this.c = f;
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT));
+        this.tooCloseDistance = i;
+        this.strafeSpeed = f;
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
@@ -27,16 +27,16 @@ public class BehaviorRetreat<E extends EntityInsentient> extends Behavior<E> {
 
     protected void a(WorldServer worldserver, E e0, long i) {
         e0.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(this.c(e0), true)));
-        e0.getControllerMove().a(-this.c, 0.0F);
-        e0.yaw = MathHelper.b(e0.yaw, e0.aC, 0.0F);
+        e0.getControllerMove().a(-this.strafeSpeed, 0.0F);
+        e0.setYRot(MathHelper.c(e0.getYRot(), e0.yHeadRot, 0.0F));
     }
 
     private boolean a(E e0) {
-        return ((List) e0.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).get()).contains(this.c(e0));
+        return ((List) e0.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).get()).contains(this.c(e0));
     }
 
     private boolean b(E e0) {
-        return this.c(e0).a((Entity) e0, (double) this.b);
+        return this.c(e0).a((Entity) e0, (double) this.tooCloseDistance);
     }
 
     private EntityLiving c(E e0) {

@@ -2,59 +2,77 @@ package net.minecraft.world.phys.shapes;
 
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleLists;
 
-public final class VoxelShapeMergerList implements VoxelShapeMerger {
+public class VoxelShapeMergerList implements VoxelShapeMerger {
 
-    private final DoubleArrayList a;
-    private final IntArrayList b;
-    private final IntArrayList c;
+    private static final DoubleList EMPTY = DoubleLists.unmodifiable(DoubleArrayList.wrap(new double[]{0.0D}));
+    private final double[] result;
+    private final int[] firstIndices;
+    private final int[] secondIndices;
+    private final int resultLength;
 
-    protected VoxelShapeMergerList(DoubleList doublelist, DoubleList doublelist1, boolean flag, boolean flag1) {
-        int i = 0;
-        int j = 0;
+    public VoxelShapeMergerList(DoubleList doublelist, DoubleList doublelist1, boolean flag, boolean flag1) {
         double d0 = Double.NaN;
-        int k = doublelist.size();
-        int l = doublelist1.size();
-        int i1 = k + l;
+        int i = doublelist.size();
+        int j = doublelist1.size();
+        int k = i + j;
 
-        this.a = new DoubleArrayList(i1);
-        this.b = new IntArrayList(i1);
-        this.c = new IntArrayList(i1);
+        this.result = new double[k];
+        this.firstIndices = new int[k];
+        this.secondIndices = new int[k];
+        boolean flag2 = !flag;
+        boolean flag3 = !flag1;
+        int l = 0;
+        int i1 = 0;
+        int j1 = 0;
 
         while (true) {
-            boolean flag2 = i < k;
-            boolean flag3 = j < l;
+            boolean flag4 = i1 >= i;
+            boolean flag5 = j1 >= j;
 
-            if (!flag2 && !flag3) {
-                if (this.a.isEmpty()) {
-                    this.a.add(Math.min(doublelist.getDouble(k - 1), doublelist1.getDouble(l - 1)));
-                }
-
+            if (flag4 && flag5) {
+                this.resultLength = Math.max(1, l);
                 return;
             }
 
-            boolean flag4 = flag2 && (!flag3 || doublelist.getDouble(i) < doublelist1.getDouble(j) + 1.0E-7D);
-            double d1 = flag4 ? doublelist.getDouble(i++) : doublelist1.getDouble(j++);
+            boolean flag6 = !flag4 && (flag5 || doublelist.getDouble(i1) < doublelist1.getDouble(j1) + 1.0E-7D);
 
-            if ((i != 0 && flag2 || flag4 || flag1) && (j != 0 && flag3 || !flag4 || flag)) {
-                if (d0 < d1 - 1.0E-7D) {
-                    this.b.add(i - 1);
-                    this.c.add(j - 1);
-                    this.a.add(d1);
-                    d0 = d1;
-                } else if (!this.a.isEmpty()) {
-                    this.b.set(this.b.size() - 1, i - 1);
-                    this.c.set(this.c.size() - 1, j - 1);
+            if (flag6) {
+                ++i1;
+                if (flag2 && (j1 == 0 || flag5)) {
+                    continue;
                 }
+            } else {
+                ++j1;
+                if (flag3 && (i1 == 0 || flag4)) {
+                    continue;
+                }
+            }
+
+            int k1 = i1 - 1;
+            int l1 = j1 - 1;
+            double d1 = flag6 ? doublelist.getDouble(k1) : doublelist1.getDouble(l1);
+
+            if (d0 < d1 - 1.0E-7D) {
+                this.firstIndices[l] = k1;
+                this.secondIndices[l] = l1;
+                this.result[l] = d1;
+                ++l;
+                d0 = d1;
+            } else {
+                this.firstIndices[l - 1] = k1;
+                this.secondIndices[l - 1] = l1;
             }
         }
     }
 
     @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
-        for (int i = 0; i < this.a.size() - 1; ++i) {
-            if (!voxelshapemerger_a.merge(this.b.getInt(i), this.c.getInt(i), i)) {
+        int i = this.resultLength - 1;
+
+        for (int j = 0; j < i; ++j) {
+            if (!voxelshapemerger_a.merge(this.firstIndices[j], this.secondIndices[j], j)) {
                 return false;
             }
         }
@@ -63,7 +81,12 @@ public final class VoxelShapeMergerList implements VoxelShapeMerger {
     }
 
     @Override
+    public int size() {
+        return this.resultLength;
+    }
+
+    @Override
     public DoubleList a() {
-        return this.a;
+        return (DoubleList) (this.resultLength <= 1 ? VoxelShapeMergerList.EMPTY : DoubleArrayList.wrap(this.result, this.resultLength));
     }
 }

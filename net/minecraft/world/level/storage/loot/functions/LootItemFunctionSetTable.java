@@ -14,18 +14,18 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
-    private final MinecraftKey a;
-    private final long b;
+    final MinecraftKey name;
+    final long seed;
 
-    private LootItemFunctionSetTable(LootItemCondition[] alootitemcondition, MinecraftKey minecraftkey, long i) {
+    LootItemFunctionSetTable(LootItemCondition[] alootitemcondition, MinecraftKey minecraftkey, long i) {
         super(alootitemcondition);
-        this.a = minecraftkey;
-        this.b = i;
+        this.name = minecraftkey;
+        this.seed = i;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.q;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_LOOT_TABLE;
     }
 
     @Override
@@ -35,9 +35,9 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
         } else {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            nbttagcompound.setString("LootTable", this.a.toString());
-            if (this.b != 0L) {
-                nbttagcompound.setLong("LootTableSeed", this.b);
+            nbttagcompound.setString("LootTable", this.name.toString());
+            if (this.seed != 0L) {
+                nbttagcompound.setLong("LootTableSeed", this.seed);
             }
 
             itemstack.getOrCreateTag().set("BlockEntityTag", nbttagcompound);
@@ -47,19 +47,31 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
     @Override
     public void a(LootCollector lootcollector) {
-        if (lootcollector.a(this.a)) {
-            lootcollector.a("Table " + this.a + " is recursively called");
+        if (lootcollector.a(this.name)) {
+            lootcollector.a("Table " + this.name + " is recursively called");
         } else {
             super.a(lootcollector);
-            LootTable loottable = lootcollector.c(this.a);
+            LootTable loottable = lootcollector.c(this.name);
 
             if (loottable == null) {
-                lootcollector.a("Unknown loot table called " + this.a);
+                lootcollector.a("Unknown loot table called " + this.name);
             } else {
-                loottable.a(lootcollector.a("->{" + this.a + "}", this.a));
+                loottable.a(lootcollector.a("->{" + this.name + "}", this.name));
             }
 
         }
+    }
+
+    public static LootItemFunctionConditional.a<?> a(MinecraftKey minecraftkey) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionSetTable(alootitemcondition, minecraftkey, 0L);
+        });
+    }
+
+    public static LootItemFunctionConditional.a<?> a(MinecraftKey minecraftkey, long i) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionSetTable(alootitemcondition, minecraftkey, i);
+        });
     }
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetTable> {
@@ -68,9 +80,9 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
         public void a(JsonObject jsonobject, LootItemFunctionSetTable lootitemfunctionsettable, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsettable, jsonserializationcontext);
-            jsonobject.addProperty("name", lootitemfunctionsettable.a.toString());
-            if (lootitemfunctionsettable.b != 0L) {
-                jsonobject.addProperty("seed", lootitemfunctionsettable.b);
+            jsonobject.addProperty("name", lootitemfunctionsettable.name.toString());
+            if (lootitemfunctionsettable.seed != 0L) {
+                jsonobject.addProperty("seed", lootitemfunctionsettable.seed);
             }
 
         }

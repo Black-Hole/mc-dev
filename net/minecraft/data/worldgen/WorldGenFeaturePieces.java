@@ -9,18 +9,20 @@ import net.minecraft.world.level.levelgen.feature.structures.WorldGenFeatureDefi
 
 public class WorldGenFeaturePieces {
 
-    public static final ResourceKey<WorldGenFeatureDefinedStructurePoolTemplate> a = ResourceKey.a(IRegistry.ax, new MinecraftKey("empty"));
-    private static final WorldGenFeatureDefinedStructurePoolTemplate b = a(new WorldGenFeatureDefinedStructurePoolTemplate(WorldGenFeaturePieces.a.a(), WorldGenFeaturePieces.a.a(), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID));
+    public static final ResourceKey<WorldGenFeatureDefinedStructurePoolTemplate> EMPTY = ResourceKey.a(IRegistry.TEMPLATE_POOL_REGISTRY, new MinecraftKey("empty"));
+    private static final WorldGenFeatureDefinedStructurePoolTemplate BUILTIN_EMPTY = a(new WorldGenFeatureDefinedStructurePoolTemplate(WorldGenFeaturePieces.EMPTY.a(), WorldGenFeaturePieces.EMPTY.a(), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID));
+
+    public WorldGenFeaturePieces() {}
 
     public static WorldGenFeatureDefinedStructurePoolTemplate a(WorldGenFeatureDefinedStructurePoolTemplate worldgenfeaturedefinedstructurepooltemplate) {
-        return (WorldGenFeatureDefinedStructurePoolTemplate) RegistryGeneration.a(RegistryGeneration.h, worldgenfeaturedefinedstructurepooltemplate.b(), (Object) worldgenfeaturedefinedstructurepooltemplate);
+        return (WorldGenFeatureDefinedStructurePoolTemplate) RegistryGeneration.a(RegistryGeneration.TEMPLATE_POOL, worldgenfeaturedefinedstructurepooltemplate.b(), (Object) worldgenfeaturedefinedstructurepooltemplate);
     }
 
     public static WorldGenFeatureDefinedStructurePoolTemplate a() {
         WorldGenFeatureBastionPieces.a();
         WorldGenFeaturePillagerOutpostPieces.a();
         WorldGenFeatureVillages.a();
-        return WorldGenFeaturePieces.b;
+        return WorldGenFeaturePieces.BUILTIN_EMPTY;
     }
 
     static {

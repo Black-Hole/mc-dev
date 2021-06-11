@@ -7,11 +7,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -30,15 +31,18 @@ import javax.annotation.Nullable;
 import net.minecraft.SystemUtils;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.packs.metadata.ResourcePackMetaParser;
+import net.minecraft.server.packs.metadata.pack.ResourcePackInfo;
+import net.minecraft.server.packs.resources.IResource;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ResourcePackVanilla implements IResourcePack {
+public class ResourcePackVanilla implements IResourcePack, ResourceProvider {
 
-    public static Path a;
+    public static Path generatedDir;
     private static final Logger LOGGER = LogManager.getLogger();
-    public static Class<?> b;
-    private static final Map<EnumResourcePackType, FileSystem> e = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    public static Class<?> clientObject;
+    private static final Map<EnumResourcePackType, FileSystem> JAR_FILESYSTEM_BY_TYPE = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         Class oclass = ResourcePackVanilla.class;
 
         synchronized (ResourcePackVanilla.class) {
@@ -57,7 +61,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
                         try {
                             filesystem = FileSystems.getFileSystem(uri);
-                        } catch (FileSystemNotFoundException filesystemnotfoundexception) {
+                        } catch (Exception exception) {
                             filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
                         }
 
@@ -70,16 +74,19 @@ public class ResourcePackVanilla implements IResourcePack {
 
         }
     });
-    public final Set<String> c;
+    public final ResourcePackInfo packMetadata;
+    public final Set<String> namespaces;
 
-    public ResourcePackVanilla(String... astring) {
-        this.c = ImmutableSet.copyOf(astring);
+    public ResourcePackVanilla(ResourcePackInfo resourcepackinfo, String... astring) {
+        this.packMetadata = resourcepackinfo;
+        this.namespaces = ImmutableSet.copyOf(astring);
     }
 
+    @Override
     public InputStream b(String s) throws IOException {
         if (!s.contains("/") && !s.contains("\\")) {
-            if (ResourcePackVanilla.a != null) {
-                Path path = ResourcePackVanilla.a.resolve(s);
+            if (ResourcePackVanilla.generatedDir != null) {
+                Path path = ResourcePackVanilla.generatedDir.resolve(s);
 
                 if (Files.exists(path, new LinkOption[0])) {
                     return Files.newInputStream(path);
@@ -108,9 +115,9 @@ public class ResourcePackVanilla implements IResourcePack {
         Set<MinecraftKey> set = Sets.newHashSet();
         URI uri;
 
-        if (ResourcePackVanilla.a != null) {
+        if (ResourcePackVanilla.generatedDir != null) {
             try {
-                a(set, i, s, ResourcePackVanilla.a.resolve(enumresourcepacktype.a()), s1, predicate);
+                a(set, i, s, ResourcePackVanilla.generatedDir.resolve(enumresourcepacktype.a()), s1, predicate);
             } catch (IOException ioexception) {
                 ;
             }
@@ -119,7 +126,7 @@ public class ResourcePackVanilla implements IResourcePack {
                 Enumeration enumeration = null;
 
                 try {
-                    enumeration = ResourcePackVanilla.b.getClassLoader().getResources(enumresourcepacktype.a() + "/");
+                    enumeration = ResourcePackVanilla.clientObject.getClassLoader().getResources(enumresourcepacktype.a() + "/");
                 } catch (IOException ioexception1) {
                     ;
                 }
@@ -152,7 +159,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
                 a(set, i, s, path, s1, predicate);
             } else if ("jar".equals(uri.getScheme())) {
-                Path path1 = ((FileSystem) ResourcePackVanilla.e.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a());
+                Path path1 = ((FileSystem) ResourcePackVanilla.JAR_FILESYSTEM_BY_TYPE.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a());
 
                 a(set, i, "minecraft", path1, s1, predicate);
             } else {
@@ -169,31 +176,31 @@ public class ResourcePackVanilla implements IResourcePack {
 
     private static void a(Collection<MinecraftKey> collection, int i, String s, Path path, String s1, Predicate<String> predicate) throws IOException {
         Path path1 = path.resolve(s);
-        Stream<Path> stream = Files.walk(path1.resolve(s1), i, new FileVisitOption[0]);
-        Throwable throwable = null;
+        Stream stream = Files.walk(path1.resolve(s1), i, new FileVisitOption[0]);
 
         try {
-            stream.filter((path2) -> {
+            Stream stream1 = stream.filter((path2) -> {
                 return !path2.endsWith(".mcmeta") && Files.isRegularFile(path2, new LinkOption[0]) && predicate.test(path2.getFileName().toString());
             }).map((path2) -> {
                 return new MinecraftKey(s, path1.relativize(path2).toString().replaceAll("\\\\", "/"));
-            }).forEach(collection::add);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
+            });
+
+            Objects.requireNonNull(collection);
+            stream1.forEach(collection::add);
+        } catch (Throwable throwable) {
             if (stream != null) {
-                if (throwable != null) {
-                    try {
-                        stream.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
+                try {
                     stream.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
             }
 
+            throw throwable;
+        }
+
+        if (stream != null) {
+            stream.close();
         }
 
     }
@@ -202,12 +209,14 @@ public class ResourcePackVanilla implements IResourcePack {
     protected InputStream c(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
         String s = d(enumresourcepacktype, minecraftkey);
 
-        if (ResourcePackVanilla.a != null) {
-            Path path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
+        if (ResourcePackVanilla.generatedDir != null) {
+            Path path = ResourcePackVanilla.generatedDir;
+            String s1 = enumresourcepacktype.a();
+            Path path1 = path.resolve(s1 + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
 
-            if (Files.exists(path, new LinkOption[0])) {
+            if (Files.exists(path1, new LinkOption[0])) {
                 try {
-                    return Files.newInputStream(path);
+                    return Files.newInputStream(path1);
                 } catch (IOException ioexception) {
                     ;
                 }
@@ -224,7 +233,9 @@ public class ResourcePackVanilla implements IResourcePack {
     }
 
     private static String d(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
-        return "/" + enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey();
+        String s = enumresourcepacktype.a();
+
+        return "/" + s + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey();
     }
 
     private static boolean a(String s, @Nullable URL url) throws IOException {
@@ -240,10 +251,12 @@ public class ResourcePackVanilla implements IResourcePack {
     public boolean b(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
         String s = d(enumresourcepacktype, minecraftkey);
 
-        if (ResourcePackVanilla.a != null) {
-            Path path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
+        if (ResourcePackVanilla.generatedDir != null) {
+            Path path = ResourcePackVanilla.generatedDir;
+            String s1 = enumresourcepacktype.a();
+            Path path1 = path.resolve(s1 + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
 
-            if (Files.exists(path, new LinkOption[0])) {
+            if (Files.exists(path1, new LinkOption[0])) {
                 return true;
             }
         }
@@ -259,7 +272,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
     @Override
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
-        return this.c;
+        return this.namespaces;
     }
 
     @Nullable
@@ -267,34 +280,50 @@ public class ResourcePackVanilla implements IResourcePack {
     public <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) throws IOException {
         try {
             InputStream inputstream = this.b("pack.mcmeta");
-            Throwable throwable = null;
 
-            Object object;
+            label52:
+            {
+                Object object;
 
-            try {
-                object = ResourcePackAbstract.a(resourcepackmetaparser, inputstream);
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (inputstream != null) {
-                    if (throwable != null) {
+                try {
+                    if (inputstream == null) {
+                        break label52;
+                    }
+
+                    T t0 = ResourcePackAbstract.a(resourcepackmetaparser, inputstream);
+
+                    if (t0 == null) {
+                        break label52;
+                    }
+
+                    object = t0;
+                } catch (Throwable throwable) {
+                    if (inputstream != null) {
                         try {
                             inputstream.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
+                        } catch (Throwable throwable1) {
+                            throwable.addSuppressed(throwable1);
                         }
-                    } else {
-                        inputstream.close();
                     }
+
+                    throw throwable;
                 }
 
+                if (inputstream != null) {
+                    inputstream.close();
+                }
+
+                return object;
             }
 
-            return object;
+            if (inputstream != null) {
+                inputstream.close();
+            }
         } catch (FileNotFoundException | RuntimeException runtimeexception) {
-            return null;
+            ;
         }
+
+        return resourcepackmetaparser == ResourcePackInfo.SERIALIZER ? this.packMetadata : null;
     }
 
     @Override
@@ -304,4 +333,51 @@ public class ResourcePackVanilla implements IResourcePack {
 
     @Override
     public void close() {}
+
+    @Override
+    public IResource a(final MinecraftKey minecraftkey) throws IOException {
+        return new IResource() {
+            @Nullable
+            InputStream inputStream;
+
+            public void close() throws IOException {
+                if (this.inputStream != null) {
+                    this.inputStream.close();
+                }
+
+            }
+
+            @Override
+            public MinecraftKey a() {
+                return minecraftkey;
+            }
+
+            @Override
+            public InputStream b() {
+                try {
+                    this.inputStream = ResourcePackVanilla.this.a(EnumResourcePackType.CLIENT_RESOURCES, minecraftkey);
+                } catch (IOException ioexception) {
+                    throw new UncheckedIOException("Could not get client resource from vanilla pack", ioexception);
+                }
+
+                return this.inputStream;
+            }
+
+            @Override
+            public boolean c() {
+                return false;
+            }
+
+            @Nullable
+            @Override
+            public <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) {
+                return null;
+            }
+
+            @Override
+            public String d() {
+                return minecraftkey.toString();
+            }
+        };
+    }
 }

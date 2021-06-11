@@ -9,7 +9,6 @@ import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 import net.minecraft.util.datafix.fixes.DataConverterTypes;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class DataConverterSchemaV99 extends Schema {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<String, String> c = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    static final Map<String, String> ITEM_TO_BLOCKENTITY = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:furnace", "Furnace");
         hashmap.put("minecraft:lit_furnace", "Furnace");
         hashmap.put("minecraft:chest", "Chest");
@@ -54,9 +53,9 @@ public class DataConverterSchemaV99 extends Schema {
         hashmap.put("minecraft:end_gateway", "EndGateway");
         hashmap.put("minecraft:shield", "Banner");
     });
-    protected static final HookFunction a = new HookFunction() {
+    protected static final HookFunction ADD_NAMES = new HookFunction() {
         public <T> T apply(DynamicOps<T> dynamicops, T t0) {
-            return DataConverterSchemaV99.a(new Dynamic(dynamicops, t0), DataConverterSchemaV99.c, "ArmorStand");
+            return DataConverterSchemaV99.a(new Dynamic(dynamicops, t0), DataConverterSchemaV99.ITEM_TO_BLOCKENTITY, "ArmorStand");
         }
     };
 
@@ -250,7 +249,7 @@ public class DataConverterSchemaV99 extends Schema {
             return DSL.taggedChoiceLazy("id", DSL.string(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.ITEM_NAME.in(schema)), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV99.a, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.ITEM_NAME.in(schema)), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)))), DataConverterSchemaV99.ADD_NAMES, HookFunction.IDENTITY);
         });
         schema.registerType(false, DataConverterTypes.OPTIONS, DSL::remainder);
         schema.registerType(false, DataConverterTypes.BLOCK_NAME, () -> {
@@ -269,24 +268,31 @@ public class DataConverterSchemaV99 extends Schema {
         schema.registerType(true, DataConverterTypes.UNTAGGED_SPAWNER, DSL::remainder);
         schema.registerType(false, DataConverterTypes.POI_CHUNK, DSL::remainder);
         schema.registerType(true, DataConverterTypes.WORLD_GEN_SETTINGS, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.ENTITY_CHUNK, () -> {
+            return DSL.optionalFields("Entities", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)));
+        });
     }
 
     protected static <T> T a(Dynamic<T> dynamic, Map<String, String> map, String s) {
         return dynamic.update("tag", (dynamic1) -> {
             return dynamic1.update("BlockEntityTag", (dynamic2) -> {
-                String s1 = dynamic.get("id").asString("");
-                String s2 = (String) map.get(DataConverterSchemaNamed.a(s1));
+                String s1 = (String) dynamic.get("id").asString().result().map(DataConverterSchemaNamed::a).orElse("minecraft:air");
 
-                if (s2 == null) {
+                if (!"minecraft:air".equals(s1)) {
+                    String s2 = (String) map.get(s1);
+
+                    if (s2 != null) {
+                        return dynamic2.set("id", dynamic.createString(s2));
+                    }
+
                     DataConverterSchemaV99.LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", s1);
-                    return dynamic2;
-                } else {
-                    return dynamic2.set("id", dynamic.createString(s2));
                 }
+
+                return dynamic2;
             }).update("EntityTag", (dynamic2) -> {
                 String s1 = dynamic.get("id").asString("");
 
-                return Objects.equals(DataConverterSchemaNamed.a(s1), "minecraft:armor_stand") ? dynamic2.set("id", dynamic.createString(s)) : dynamic2;
+                return "minecraft:armor_stand".equals(DataConverterSchemaNamed.a(s1)) ? dynamic2.set("id", dynamic.createString(s)) : dynamic2;
             });
         }).getValue();
     }

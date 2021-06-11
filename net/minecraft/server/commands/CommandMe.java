@@ -12,10 +12,11 @@ import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.server.network.ITextFilter;
 import net.minecraft.world.entity.Entity;
 
 public class CommandMe {
+
+    public CommandMe() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("me").then(net.minecraft.commands.CommandDispatcher.a("action", (ArgumentType) StringArgumentType.greedyString()).executes((commandcontext) -> {
@@ -25,21 +26,23 @@ public class CommandMe {
 
             if (entity != null) {
                 if (entity instanceof EntityPlayer) {
-                    ITextFilter itextfilter = ((EntityPlayer) entity).Q();
+                    EntityPlayer entityplayer = (EntityPlayer) entity;
 
-                    if (itextfilter != null) {
-                        itextfilter.a(s).thenAcceptAsync((optional) -> {
-                            optional.ifPresent((s1) -> {
-                                minecraftserver.getPlayerList().sendMessage(a(commandcontext, s1), ChatMessageType.CHAT, entity.getUniqueID());
-                            });
-                        }, minecraftserver);
-                        return 1;
-                    }
+                    entityplayer.Q().a(s).thenAcceptAsync((itextfilter_a) -> {
+                        String s1 = itextfilter_a.b();
+                        IChatBaseComponent ichatbasecomponent = s1.isEmpty() ? null : a(commandcontext, s1);
+                        IChatBaseComponent ichatbasecomponent1 = a(commandcontext, itextfilter_a.a());
+
+                        minecraftserver.getPlayerList().a(ichatbasecomponent1, (entityplayer1) -> {
+                            return entityplayer.b(entityplayer1) ? ichatbasecomponent : ichatbasecomponent1;
+                        }, ChatMessageType.CHAT, entity.getUniqueID());
+                    }, minecraftserver);
+                    return 1;
                 }
 
                 minecraftserver.getPlayerList().sendMessage(a(commandcontext, s), ChatMessageType.CHAT, entity.getUniqueID());
             } else {
-                minecraftserver.getPlayerList().sendMessage(a(commandcontext, s), ChatMessageType.SYSTEM, SystemUtils.b);
+                minecraftserver.getPlayerList().sendMessage(a(commandcontext, s), ChatMessageType.SYSTEM, SystemUtils.NIL_UUID);
             }
 
             return 1;

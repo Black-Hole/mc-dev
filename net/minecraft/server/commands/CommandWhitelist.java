@@ -19,10 +19,12 @@ import net.minecraft.server.players.WhiteListEntry;
 
 public class CommandWhitelist {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOn"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOff"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.add.failed"));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.remove.failed"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_ENABLED = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOn"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_DISABLED = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOff"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_WHITELISTED = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.add.failed"));
+    private static final SimpleCommandExceptionType ERROR_NOT_WHITELISTED = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.remove.failed"));
+
+    public CommandWhitelist() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("whitelist").requires((commandlistenerwrapper) -> {
@@ -77,7 +79,7 @@ public class CommandWhitelist {
         }
 
         if (i == 0) {
-            throw CommandWhitelist.c.create();
+            throw CommandWhitelist.ERROR_ALREADY_WHITELISTED.create();
         } else {
             return i;
         }
@@ -101,7 +103,7 @@ public class CommandWhitelist {
         }
 
         if (i == 0) {
-            throw CommandWhitelist.d.create();
+            throw CommandWhitelist.ERROR_NOT_WHITELISTED.create();
         } else {
             commandlistenerwrapper.getServer().a(commandlistenerwrapper);
             return i;
@@ -112,7 +114,7 @@ public class CommandWhitelist {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
 
         if (playerlist.getHasWhitelist()) {
-            throw CommandWhitelist.a.create();
+            throw CommandWhitelist.ERROR_ALREADY_ENABLED.create();
         } else {
             playerlist.setHasWhitelist(true);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.enabled"), true);
@@ -125,7 +127,7 @@ public class CommandWhitelist {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
 
         if (!playerlist.getHasWhitelist()) {
-            throw CommandWhitelist.b.create();
+            throw CommandWhitelist.ERROR_ALREADY_DISABLED.create();
         } else {
             playerlist.setHasWhitelist(false);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.disabled"), true);

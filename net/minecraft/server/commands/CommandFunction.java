@@ -15,17 +15,19 @@ import net.minecraft.server.CustomFunctionData;
 
 public class CommandFunction {
 
-    public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+    public static final SuggestionProvider<CommandListenerWrapper> SUGGEST_FUNCTION = (commandcontext, suggestionsbuilder) -> {
         CustomFunctionData customfunctiondata = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData();
 
-        ICompletionProvider.a(customfunctiondata.g(), suggestionsbuilder, "#");
-        return ICompletionProvider.a(customfunctiondata.f(), suggestionsbuilder);
+        ICompletionProvider.a(customfunctiondata.f(), suggestionsbuilder, "#");
+        return ICompletionProvider.a(customfunctiondata.e(), suggestionsbuilder);
     };
+
+    public CommandFunction() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("function").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) ArgumentTag.a()).suggests(CommandFunction.a).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) ArgumentTag.a()).suggests(CommandFunction.SUGGEST_FUNCTION).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentTag.a(commandcontext, "name"));
         })));
     }

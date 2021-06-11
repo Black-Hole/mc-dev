@@ -5,9 +5,9 @@ import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
 
 public interface WorldGenFeatureConfiguration {
 
-    WorldGenFeatureEmptyConfiguration k = WorldGenFeatureEmptyConfiguration.b;
+    WorldGenFeatureEmptyConfiguration NONE = WorldGenFeatureEmptyConfiguration.INSTANCE;
 
-    default Stream<WorldGenFeatureConfigured<?, ?>> an_() {
+    default Stream<WorldGenFeatureConfigured<?, ?>> ab_() {
         return Stream.empty();
     }
 }

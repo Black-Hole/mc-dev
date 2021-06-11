@@ -6,10 +6,10 @@ public enum BlockPropertyWallHeight implements INamable {
 
     NONE("none"), LOW("low"), TALL("tall");
 
-    private final String d;
+    private final String name;
 
     private BlockPropertyWallHeight(String s) {
-        this.d = s;
+        this.name = s;
     }
 
     public String toString() {
@@ -18,6 +18,6 @@ public enum BlockPropertyWallHeight implements INamable {
 
     @Override
     public String getName() {
-        return this.d;
+        return this.name;
     }
 }

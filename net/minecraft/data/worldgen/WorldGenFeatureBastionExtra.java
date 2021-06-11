@@ -8,6 +8,8 @@ import net.minecraft.world.level.levelgen.feature.structures.WorldGenFeatureDefi
 
 public class WorldGenFeatureBastionExtra {
 
+    public WorldGenFeatureBastionExtra() {}
+
     public static void a() {}
 
     static {

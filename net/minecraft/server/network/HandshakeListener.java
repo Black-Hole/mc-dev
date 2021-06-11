@@ -13,20 +13,20 @@ import net.minecraft.server.MinecraftServer;
 
 public class HandshakeListener implements PacketHandshakingInListener {
 
-    private static final IChatBaseComponent a = new ChatComponentText("Ignoring status request");
-    private final MinecraftServer b;
-    private final NetworkManager c;
+    private static final IChatBaseComponent IGNORE_STATUS_REASON = new ChatComponentText("Ignoring status request");
+    private final MinecraftServer server;
+    private final NetworkManager connection;
 
     public HandshakeListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-        this.b = minecraftserver;
-        this.c = networkmanager;
+        this.server = minecraftserver;
+        this.connection = networkmanager;
     }
 
     @Override
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
         switch (packethandshakinginsetprotocol.b()) {
             case LOGIN:
-                this.c.setProtocol(EnumProtocol.LOGIN);
+                this.connection.setProtocol(EnumProtocol.LOGIN);
                 if (packethandshakinginsetprotocol.c() != SharedConstants.getGameVersion().getProtocolVersion()) {
                     ChatMessage chatmessage;
 
@@ -36,18 +36,18 @@ public class HandshakeListener implements PacketHandshakingInListener {
                         chatmessage = new ChatMessage("multiplayer.disconnect.incompatible", new Object[]{SharedConstants.getGameVersion().getName()});
                     }
 
-                    this.c.sendPacket(new PacketLoginOutDisconnect(chatmessage));
-                    this.c.close(chatmessage);
+                    this.connection.sendPacket(new PacketLoginOutDisconnect(chatmessage));
+                    this.connection.close(chatmessage);
                 } else {
-                    this.c.setPacketListener(new LoginListener(this.b, this.c));
+                    this.connection.setPacketListener(new LoginListener(this.server, this.connection));
                 }
                 break;
             case STATUS:
-                if (this.b.am()) {
-                    this.c.setProtocol(EnumProtocol.STATUS);
-                    this.c.setPacketListener(new PacketStatusListener(this.b, this.c));
+                if (this.server.al()) {
+                    this.connection.setProtocol(EnumProtocol.STATUS);
+                    this.connection.setPacketListener(new PacketStatusListener(this.server, this.connection));
                 } else {
-                    this.c.close(HandshakeListener.a);
+                    this.connection.close(HandshakeListener.IGNORE_STATUS_REASON);
                 }
                 break;
             default:
@@ -61,6 +61,6 @@ public class HandshakeListener implements PacketHandshakingInListener {
 
     @Override
     public NetworkManager a() {
-        return this.c;
+        return this.connection;
     }
 }

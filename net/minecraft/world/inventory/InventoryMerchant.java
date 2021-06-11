@@ -14,25 +14,25 @@ import net.minecraft.world.item.trading.MerchantRecipeList;
 public class InventoryMerchant implements IInventory {
 
     private final IMerchant merchant;
-    private final NonNullList<ItemStack> itemsInSlots;
+    private final NonNullList<ItemStack> itemStacks;
     @Nullable
-    private MerchantRecipe recipe;
-    public int selectedIndex;
-    private int e;
+    private MerchantRecipe activeOffer;
+    public int selectionHint;
+    private int futureXp;
 
     public InventoryMerchant(IMerchant imerchant) {
-        this.itemsInSlots = NonNullList.a(3, ItemStack.b);
+        this.itemStacks = NonNullList.a(3, ItemStack.EMPTY);
         this.merchant = imerchant;
     }
 
     @Override
     public int getSize() {
-        return this.itemsInSlots.size();
+        return this.itemStacks.size();
     }
 
     @Override
     public boolean isEmpty() {
-        Iterator iterator = this.itemsInSlots.iterator();
+        Iterator iterator = this.itemStacks.iterator();
 
         ItemStack itemstack;
 
@@ -49,17 +49,17 @@ public class InventoryMerchant implements IInventory {
 
     @Override
     public ItemStack getItem(int i) {
-        return (ItemStack) this.itemsInSlots.get(i);
+        return (ItemStack) this.itemStacks.get(i);
     }
 
     @Override
     public ItemStack splitStack(int i, int j) {
-        ItemStack itemstack = (ItemStack) this.itemsInSlots.get(i);
+        ItemStack itemstack = (ItemStack) this.itemStacks.get(i);
 
         if (i == 2 && !itemstack.isEmpty()) {
-            return ContainerUtil.a(this.itemsInSlots, i, itemstack.getCount());
+            return ContainerUtil.a(this.itemStacks, i, itemstack.getCount());
         } else {
-            ItemStack itemstack1 = ContainerUtil.a(this.itemsInSlots, i, j);
+            ItemStack itemstack1 = ContainerUtil.a(this.itemStacks, i, j);
 
             if (!itemstack1.isEmpty() && this.d(i)) {
                 this.f();
@@ -75,12 +75,12 @@ public class InventoryMerchant implements IInventory {
 
     @Override
     public ItemStack splitWithoutUpdate(int i) {
-        return ContainerUtil.a(this.itemsInSlots, i);
+        return ContainerUtil.a(this.itemStacks, i);
     }
 
     @Override
     public void setItem(int i, ItemStack itemstack) {
-        this.itemsInSlots.set(i, itemstack);
+        this.itemStacks.set(i, itemstack);
         if (!itemstack.isEmpty() && itemstack.getCount() > this.getMaxStackSize()) {
             itemstack.setCount(this.getMaxStackSize());
         }
@@ -102,58 +102,62 @@ public class InventoryMerchant implements IInventory {
     }
 
     public void f() {
-        this.recipe = null;
+        this.activeOffer = null;
         ItemStack itemstack;
         ItemStack itemstack1;
 
-        if (((ItemStack) this.itemsInSlots.get(0)).isEmpty()) {
-            itemstack = (ItemStack) this.itemsInSlots.get(1);
-            itemstack1 = ItemStack.b;
+        if (((ItemStack) this.itemStacks.get(0)).isEmpty()) {
+            itemstack = (ItemStack) this.itemStacks.get(1);
+            itemstack1 = ItemStack.EMPTY;
         } else {
-            itemstack = (ItemStack) this.itemsInSlots.get(0);
-            itemstack1 = (ItemStack) this.itemsInSlots.get(1);
+            itemstack = (ItemStack) this.itemStacks.get(0);
+            itemstack1 = (ItemStack) this.itemStacks.get(1);
         }
 
         if (itemstack.isEmpty()) {
-            this.setItem(2, ItemStack.b);
-            this.e = 0;
+            this.setItem(2, ItemStack.EMPTY);
+            this.futureXp = 0;
         } else {
             MerchantRecipeList merchantrecipelist = this.merchant.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                MerchantRecipe merchantrecipe = merchantrecipelist.a(itemstack, itemstack1, this.selectedIndex);
+                MerchantRecipe merchantrecipe = merchantrecipelist.a(itemstack, itemstack1, this.selectionHint);
 
                 if (merchantrecipe == null || merchantrecipe.isFullyUsed()) {
-                    this.recipe = merchantrecipe;
-                    merchantrecipe = merchantrecipelist.a(itemstack1, itemstack, this.selectedIndex);
+                    this.activeOffer = merchantrecipe;
+                    merchantrecipe = merchantrecipelist.a(itemstack1, itemstack, this.selectionHint);
                 }
 
                 if (merchantrecipe != null && !merchantrecipe.isFullyUsed()) {
-                    this.recipe = merchantrecipe;
+                    this.activeOffer = merchantrecipe;
                     this.setItem(2, merchantrecipe.f());
-                    this.e = merchantrecipe.getXp();
+                    this.futureXp = merchantrecipe.getXp();
                 } else {
-                    this.setItem(2, ItemStack.b);
-                    this.e = 0;
+                    this.setItem(2, ItemStack.EMPTY);
+                    this.futureXp = 0;
                 }
             }
 
-            this.merchant.k(this.getItem(2));
+            this.merchant.m(this.getItem(2));
         }
     }
 
     @Nullable
     public MerchantRecipe getRecipe() {
-        return this.recipe;
+        return this.activeOffer;
     }
 
     public void c(int i) {
-        this.selectedIndex = i;
+        this.selectionHint = i;
         this.f();
     }
 
     @Override
     public void clear() {
-        this.itemsInSlots.clear();
+        this.itemStacks.clear();
+    }
+
+    public int h() {
+        return this.futureXp;
     }
 }

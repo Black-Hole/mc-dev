@@ -8,7 +8,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class ContainerShulkerBox extends Container {
 
-    private final IInventory c;
+    private static final int CONTAINER_SIZE = 27;
+    private final IInventory container;
 
     public ContainerShulkerBox(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, new InventorySubcontainer(27));
@@ -17,7 +18,7 @@ public class ContainerShulkerBox extends Container {
     public ContainerShulkerBox(int i, PlayerInventory playerinventory, IInventory iinventory) {
         super(Containers.SHULKER_BOX, i);
         a(iinventory, 27);
-        this.c = iinventory;
+        this.container = iinventory;
         iinventory.startOpen(playerinventory.player);
         boolean flag = true;
         boolean flag1 = true;
@@ -45,28 +46,28 @@ public class ContainerShulkerBox extends Container {
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return this.c.a(entityhuman);
+        return this.container.a(entityhuman);
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
-            if (i < this.c.getSize()) {
-                if (!this.a(itemstack1, this.c.getSize(), this.slots.size(), true)) {
-                    return ItemStack.b;
+            if (i < this.container.getSize()) {
+                if (!this.a(itemstack1, this.container.getSize(), this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
                 }
-            } else if (!this.a(itemstack1, 0, this.c.getSize(), false)) {
-                return ItemStack.b;
+            } else if (!this.a(itemstack1, 0, this.container.getSize(), false)) {
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
@@ -78,6 +79,6 @@ public class ContainerShulkerBox extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.c.closeContainer(entityhuman);
+        this.container.closeContainer(entityhuman);
     }
 }

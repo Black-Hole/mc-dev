@@ -7,6 +7,9 @@ import com.mojang.serialization.Dynamic;
 
 public class DataConverterVillagerFollowRange extends DataConverterNamedEntity {
 
+    private static final double ORIGINAL_VALUE = 16.0D;
+    private static final double NEW_BASE_VALUE = 48.0D;
+
     public DataConverterVillagerFollowRange(Schema schema) {
         super(schema, false, "Villager Follow Range Fix", DataConverterTypes.ENTITY, "minecraft:villager");
     }

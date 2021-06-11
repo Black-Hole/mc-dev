@@ -6,14 +6,14 @@ public enum BlockPropertyAttachPosition implements INamable {
 
     FLOOR("floor"), WALL("wall"), CEILING("ceiling");
 
-    private final String d;
+    private final String name;
 
     private BlockPropertyAttachPosition(String s) {
-        this.d = s;
+        this.name = s;
     }
 
     @Override
     public String getName() {
-        return this.d;
+        return this.name;
     }
 }

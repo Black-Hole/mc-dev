@@ -2,6 +2,8 @@ package net.minecraft.world.level.block;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IWorldReader;
@@ -15,8 +17,8 @@ public class BlockPlant extends Block {
         super(blockbase_info);
     }
 
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.a(Blocks.GRASS_BLOCK) || iblockdata.a(Blocks.DIRT) || iblockdata.a(Blocks.COARSE_DIRT) || iblockdata.a(Blocks.PODZOL) || iblockdata.a(Blocks.FARMLAND);
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a((Tag) TagsBlock.DIRT) || iblockdata.a(Blocks.FARMLAND);
     }
 
     @Override
@@ -28,16 +30,16 @@ public class BlockPlant extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return this.c(iworldreader.getType(blockposition1), (IBlockAccess) iworldreader, blockposition1);
+        return this.d(iworldreader.getType(blockposition1), iworldreader, blockposition1);
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.getFluid().isEmpty();
     }
 
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
-        return pathmode == PathMode.AIR && !this.at ? true : super.a(iblockdata, iblockaccess, blockposition, pathmode);
+        return pathmode == PathMode.AIR && !this.hasCollision ? true : super.a(iblockdata, iblockaccess, blockposition, pathmode);
     }
 }

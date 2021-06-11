@@ -5,6 +5,9 @@ import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer5;
 import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer7;
 
 public class GenLayerSpecial {
+
+    public GenLayerSpecial() {}
+
     public static enum Special3 implements AreaTransformer5 {
 
         INSTANCE;

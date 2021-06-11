@@ -14,21 +14,21 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public abstract class BlockBannerAbstract extends BlockTileEntity {
 
-    private final EnumColor a;
+    private final EnumColor color;
 
     protected BlockBannerAbstract(EnumColor enumcolor, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.a = enumcolor;
+        this.color = enumcolor;
     }
 
     @Override
-    public boolean ai_() {
+    public boolean W_() {
         return true;
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityBanner(this.a);
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityBanner(blockposition, iblockdata, this.color);
     }
 
     @Override
@@ -43,7 +43,14 @@ public abstract class BlockBannerAbstract extends BlockTileEntity {
 
     }
 
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+
+        return tileentity instanceof TileEntityBanner ? ((TileEntityBanner) tileentity).f() : super.a(iblockaccess, blockposition, iblockdata);
+    }
+
     public EnumColor getColor() {
-        return this.a;
+        return this.color;
     }
 }

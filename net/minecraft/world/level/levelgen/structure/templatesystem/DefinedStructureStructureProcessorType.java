@@ -8,25 +8,26 @@ import net.minecraft.resources.RegistryFileCodec;
 
 public interface DefinedStructureStructureProcessorType<P extends DefinedStructureProcessor> {
 
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlockIgnore> a = a("block_ignore", DefinedStructureProcessorBlockIgnore.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorRotation> b = a("block_rot", DefinedStructureProcessorRotation.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorGravity> c = a("gravity", DefinedStructureProcessorGravity.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorJigsawReplacement> d = a("jigsaw_replacement", DefinedStructureProcessorJigsawReplacement.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorRule> e = a("rule", DefinedStructureProcessorRule.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorNop> f = a("nop", DefinedStructureProcessorNop.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlockAge> g = a("block_age", DefinedStructureProcessorBlockAge.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlackstoneReplace> h = a("blackstone_replace", DefinedStructureProcessorBlackstoneReplace.a);
-    DefinedStructureStructureProcessorType<DefinedStructureProcessorLavaSubmergedBlock> i = a("lava_submerged_block", DefinedStructureProcessorLavaSubmergedBlock.a);
-    Codec<DefinedStructureProcessor> j = IRegistry.STRUCTURE_PROCESSOR.dispatch("processor_type", DefinedStructureProcessor::a, DefinedStructureStructureProcessorType::codec);
-    Codec<ProcessorList> k = DefinedStructureStructureProcessorType.j.listOf().xmap(ProcessorList::new, ProcessorList::a);
-    Codec<ProcessorList> l = Codec.either(DefinedStructureStructureProcessorType.k.fieldOf("processors").codec(), DefinedStructureStructureProcessorType.k).xmap((either) -> {
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlockIgnore> BLOCK_IGNORE = a("block_ignore", DefinedStructureProcessorBlockIgnore.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorRotation> BLOCK_ROT = a("block_rot", DefinedStructureProcessorRotation.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorGravity> GRAVITY = a("gravity", DefinedStructureProcessorGravity.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorJigsawReplacement> JIGSAW_REPLACEMENT = a("jigsaw_replacement", DefinedStructureProcessorJigsawReplacement.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorRule> RULE = a("rule", DefinedStructureProcessorRule.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorNop> NOP = a("nop", DefinedStructureProcessorNop.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlockAge> BLOCK_AGE = a("block_age", DefinedStructureProcessorBlockAge.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorBlackstoneReplace> BLACKSTONE_REPLACE = a("blackstone_replace", DefinedStructureProcessorBlackstoneReplace.CODEC);
+    DefinedStructureStructureProcessorType<DefinedStructureProcessorLavaSubmergedBlock> LAVA_SUBMERGED_BLOCK = a("lava_submerged_block", DefinedStructureProcessorLavaSubmergedBlock.CODEC);
+    DefinedStructureStructureProcessorType<ProtectedBlockProcessor> PROTECTED_BLOCKS = a("protected_blocks", ProtectedBlockProcessor.CODEC);
+    Codec<DefinedStructureProcessor> SINGLE_CODEC = IRegistry.STRUCTURE_PROCESSOR.dispatch("processor_type", DefinedStructureProcessor::a, DefinedStructureStructureProcessorType::codec);
+    Codec<ProcessorList> LIST_OBJECT_CODEC = DefinedStructureStructureProcessorType.SINGLE_CODEC.listOf().xmap(ProcessorList::new, ProcessorList::a);
+    Codec<ProcessorList> DIRECT_CODEC = Codec.either(DefinedStructureStructureProcessorType.LIST_OBJECT_CODEC.fieldOf("processors").codec(), DefinedStructureStructureProcessorType.LIST_OBJECT_CODEC).xmap((either) -> {
         return (ProcessorList) either.map((processorlist) -> {
             return processorlist;
         }, (processorlist) -> {
             return processorlist;
         });
     }, Either::left);
-    Codec<Supplier<ProcessorList>> m = RegistryFileCodec.a(IRegistry.aw, DefinedStructureStructureProcessorType.l);
+    Codec<Supplier<ProcessorList>> LIST_CODEC = RegistryFileCodec.a(IRegistry.PROCESSOR_LIST_REGISTRY, DefinedStructureStructureProcessorType.DIRECT_CODEC);
 
     Codec<P> codec();
 

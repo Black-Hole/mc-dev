@@ -12,37 +12,37 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class BossBattleCustomData {
 
-    private final Map<MinecraftKey, BossBattleCustom> a = Maps.newHashMap();
+    private final Map<MinecraftKey, BossBattleCustom> events = Maps.newHashMap();
 
     public BossBattleCustomData() {}
 
     @Nullable
     public BossBattleCustom a(MinecraftKey minecraftkey) {
-        return (BossBattleCustom) this.a.get(minecraftkey);
+        return (BossBattleCustom) this.events.get(minecraftkey);
     }
 
     public BossBattleCustom register(MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) {
         BossBattleCustom bossbattlecustom = new BossBattleCustom(minecraftkey, ichatbasecomponent);
 
-        this.a.put(minecraftkey, bossbattlecustom);
+        this.events.put(minecraftkey, bossbattlecustom);
         return bossbattlecustom;
     }
 
     public void remove(BossBattleCustom bossbattlecustom) {
-        this.a.remove(bossbattlecustom.getKey());
+        this.events.remove(bossbattlecustom.getKey());
     }
 
     public Collection<MinecraftKey> a() {
-        return this.a.keySet();
+        return this.events.keySet();
     }
 
     public Collection<BossBattleCustom> getBattles() {
-        return this.a.values();
+        return this.events.values();
     }
 
     public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.events.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();
@@ -60,13 +60,13 @@ public class BossBattleCustomData {
             String s = (String) iterator.next();
             MinecraftKey minecraftkey = new MinecraftKey(s);
 
-            this.a.put(minecraftkey, BossBattleCustom.a(nbttagcompound.getCompound(s), minecraftkey));
+            this.events.put(minecraftkey, BossBattleCustom.a(nbttagcompound.getCompound(s), minecraftkey));
         }
 
     }
 
     public void a(EntityPlayer entityplayer) {
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.events.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();
@@ -77,7 +77,7 @@ public class BossBattleCustomData {
     }
 
     public void b(EntityPlayer entityplayer) {
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.events.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();

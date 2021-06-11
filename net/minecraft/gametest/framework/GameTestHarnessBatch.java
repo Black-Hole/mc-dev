@@ -7,32 +7,43 @@ import net.minecraft.server.level.WorldServer;
 
 public class GameTestHarnessBatch {
 
-    private final String a;
-    private final Collection<GameTestHarnessTestFunction> b;
+    public static final String DEFAULT_BATCH_NAME = "defaultBatch";
+    private final String name;
+    private final Collection<GameTestHarnessTestFunction> testFunctions;
     @Nullable
-    private final Consumer<WorldServer> c;
+    private final Consumer<WorldServer> beforeBatchFunction;
+    @Nullable
+    private final Consumer<WorldServer> afterBatchFunction;
 
-    public GameTestHarnessBatch(String s, Collection<GameTestHarnessTestFunction> collection, @Nullable Consumer<WorldServer> consumer) {
+    public GameTestHarnessBatch(String s, Collection<GameTestHarnessTestFunction> collection, @Nullable Consumer<WorldServer> consumer, @Nullable Consumer<WorldServer> consumer1) {
         if (collection.isEmpty()) {
             throw new IllegalArgumentException("A GameTestBatch must include at least one TestFunction!");
         } else {
-            this.a = s;
-            this.b = collection;
-            this.c = consumer;
+            this.name = s;
+            this.testFunctions = collection;
+            this.beforeBatchFunction = consumer;
+            this.afterBatchFunction = consumer1;
         }
     }
 
     public String a() {
-        return this.a;
+        return this.name;
     }
 
     public Collection<GameTestHarnessTestFunction> b() {
-        return this.b;
+        return this.testFunctions;
     }
 
     public void a(WorldServer worldserver) {
-        if (this.c != null) {
-            this.c.accept(worldserver);
+        if (this.beforeBatchFunction != null) {
+            this.beforeBatchFunction.accept(worldserver);
+        }
+
+    }
+
+    public void b(WorldServer worldserver) {
+        if (this.afterBatchFunction != null) {
+            this.afterBatchFunction.accept(worldserver);
         }
 
     }

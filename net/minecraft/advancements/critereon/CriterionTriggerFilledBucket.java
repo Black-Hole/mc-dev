@@ -7,13 +7,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<CriterionTriggerFilledBucket.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("filled_bucket");
+    static final MinecraftKey ID = new MinecraftKey("filled_bucket");
 
     public CriterionTriggerFilledBucket() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerFilledBucket.a;
+        return CriterionTriggerFilledBucket.ID;
     }
 
     @Override
@@ -31,26 +31,26 @@ public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<Crite
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerFilledBucket.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
+            super(CriterionTriggerFilledBucket.ID, criterionconditionentity_b);
+            this.item = criterionconditionitem;
         }
 
         public static CriterionTriggerFilledBucket.a a(CriterionConditionItem criterionconditionitem) {
-            return new CriterionTriggerFilledBucket.a(CriterionConditionEntity.b.a, criterionconditionitem);
+            return new CriterionTriggerFilledBucket.a(CriterionConditionEntity.b.ANY, criterionconditionitem);
         }
 
         public boolean a(ItemStack itemstack) {
-            return this.a.a(itemstack);
+            return this.item.a(itemstack);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.a.a());
+            jsonobject.add("item", this.item.a());
             return jsonobject;
         }
     }

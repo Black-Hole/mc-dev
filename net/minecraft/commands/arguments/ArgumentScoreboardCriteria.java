@@ -23,8 +23,8 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCriteria> {
 
-    private static final Collection<String> b = Arrays.asList("foo", "foo.bar.baz", "minecraft:foo");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("foo", "foo.bar.baz", "minecraft:foo");
+    public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.criteria.invalid", new Object[]{object});
     });
 
@@ -49,13 +49,13 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
 
         return (IScoreboardCriteria) IScoreboardCriteria.a(s).orElseThrow(() -> {
             stringreader.setCursor(i);
-            return ArgumentScoreboardCriteria.a.create(s);
+            return ArgumentScoreboardCriteria.ERROR_INVALID_VALUE.create(s);
         });
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        List<String> list = Lists.newArrayList(IScoreboardCriteria.criteria.keySet());
-        Iterator iterator = IRegistry.STATS.iterator();
+        List<String> list = Lists.newArrayList(IScoreboardCriteria.c());
+        Iterator iterator = IRegistry.STAT_TYPE.iterator();
 
         while (iterator.hasNext()) {
             StatisticWrapper<?> statisticwrapper = (StatisticWrapper) iterator.next();
@@ -77,6 +77,6 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
     }
 
     public Collection<String> getExamples() {
-        return ArgumentScoreboardCriteria.b;
+        return ArgumentScoreboardCriteria.EXAMPLES;
     }
 }

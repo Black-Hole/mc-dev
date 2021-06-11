@@ -14,7 +14,7 @@ public abstract class EntityGolem extends EntityCreature {
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
@@ -37,7 +37,7 @@ public abstract class EntityGolem extends EntityCreature {
     }
 
     @Override
-    public int D() {
+    public int J() {
         return 120;
     }
 

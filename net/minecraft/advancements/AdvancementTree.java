@@ -7,30 +7,30 @@ import javax.annotation.Nullable;
 
 public class AdvancementTree {
 
-    private final Advancement a;
-    private final AdvancementTree b;
-    private final AdvancementTree c;
-    private final int d;
-    private final List<AdvancementTree> e = Lists.newArrayList();
-    private AdvancementTree f;
-    private AdvancementTree g;
-    private int h;
-    private float i;
-    private float j;
-    private float k;
-    private float l;
+    private final Advancement advancement;
+    private final AdvancementTree parent;
+    private final AdvancementTree previousSibling;
+    private final int childIndex;
+    private final List<AdvancementTree> children = Lists.newArrayList();
+    private AdvancementTree ancestor;
+    private AdvancementTree thread;
+    private int x;
+    private float y;
+    private float mod;
+    private float change;
+    private float shift;
 
     public AdvancementTree(Advancement advancement, @Nullable AdvancementTree advancementtree, @Nullable AdvancementTree advancementtree1, int i, int j) {
         if (advancement.c() == null) {
             throw new IllegalArgumentException("Can't position an invisible advancement!");
         } else {
-            this.a = advancement;
-            this.b = advancementtree;
-            this.c = advancementtree1;
-            this.d = i;
-            this.f = this;
-            this.h = j;
-            this.i = -1.0F;
+            this.advancement = advancement;
+            this.parent = advancementtree;
+            this.previousSibling = advancementtree1;
+            this.childIndex = i;
+            this.ancestor = this;
+            this.x = j;
+            this.y = -1.0F;
             AdvancementTree advancementtree2 = null;
 
             Advancement advancement1;
@@ -47,8 +47,8 @@ public class AdvancementTree {
         Advancement advancement1;
 
         if (advancement.c() != null) {
-            advancementtree = new AdvancementTree(advancement, this, advancementtree, this.e.size() + 1, this.h + 1);
-            this.e.add(advancementtree);
+            advancementtree = new AdvancementTree(advancement, this, advancementtree, this.children.size() + 1, this.x + 1);
+            this.children.add(advancementtree);
         } else {
             for (Iterator iterator = advancement.e().iterator(); iterator.hasNext(); advancementtree = this.a(advancement1, advancementtree)) {
                 advancement1 = (Advancement) iterator.next();
@@ -59,11 +59,11 @@ public class AdvancementTree {
     }
 
     private void a() {
-        if (this.e.isEmpty()) {
-            if (this.c != null) {
-                this.i = this.c.i + 1.0F;
+        if (this.children.isEmpty()) {
+            if (this.previousSibling != null) {
+                this.y = this.previousSibling.y + 1.0F;
             } else {
-                this.i = 0.0F;
+                this.y = 0.0F;
             }
 
         } else {
@@ -71,34 +71,34 @@ public class AdvancementTree {
 
             AdvancementTree advancementtree1;
 
-            for (Iterator iterator = this.e.iterator(); iterator.hasNext(); advancementtree = advancementtree1.a(advancementtree == null ? advancementtree1 : advancementtree)) {
+            for (Iterator iterator = this.children.iterator(); iterator.hasNext(); advancementtree = advancementtree1.a(advancementtree == null ? advancementtree1 : advancementtree)) {
                 advancementtree1 = (AdvancementTree) iterator.next();
                 advancementtree1.a();
             }
 
             this.b();
-            float f = (((AdvancementTree) this.e.get(0)).i + ((AdvancementTree) this.e.get(this.e.size() - 1)).i) / 2.0F;
+            float f = (((AdvancementTree) this.children.get(0)).y + ((AdvancementTree) this.children.get(this.children.size() - 1)).y) / 2.0F;
 
-            if (this.c != null) {
-                this.i = this.c.i + 1.0F;
-                this.j = this.i - f;
+            if (this.previousSibling != null) {
+                this.y = this.previousSibling.y + 1.0F;
+                this.mod = this.y - f;
             } else {
-                this.i = f;
+                this.y = f;
             }
 
         }
     }
 
     private float a(float f, int i, float f1) {
-        this.i += f;
-        this.h = i;
-        if (this.i < f1) {
-            f1 = this.i;
+        this.y += f;
+        this.x = i;
+        if (this.y < f1) {
+            f1 = this.y;
         }
 
         AdvancementTree advancementtree;
 
-        for (Iterator iterator = this.e.iterator(); iterator.hasNext(); f1 = advancementtree.a(f + this.j, i + 1, f1)) {
+        for (Iterator iterator = this.children.iterator(); iterator.hasNext(); f1 = advancementtree.a(f + this.mod, i + 1, f1)) {
             advancementtree = (AdvancementTree) iterator.next();
         }
 
@@ -106,8 +106,8 @@ public class AdvancementTree {
     }
 
     private void a(float f) {
-        this.i += f;
-        Iterator iterator = this.e.iterator();
+        this.y += f;
+        Iterator iterator = this.children.iterator();
 
         while (iterator.hasNext()) {
             AdvancementTree advancementtree = (AdvancementTree) iterator.next();
@@ -121,48 +121,48 @@ public class AdvancementTree {
         float f = 0.0F;
         float f1 = 0.0F;
 
-        for (int i = this.e.size() - 1; i >= 0; --i) {
-            AdvancementTree advancementtree = (AdvancementTree) this.e.get(i);
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            AdvancementTree advancementtree = (AdvancementTree) this.children.get(i);
 
-            advancementtree.i += f;
-            advancementtree.j += f;
-            f1 += advancementtree.k;
-            f += advancementtree.l + f1;
+            advancementtree.y += f;
+            advancementtree.mod += f;
+            f1 += advancementtree.change;
+            f += advancementtree.shift + f1;
         }
 
     }
 
     @Nullable
     private AdvancementTree c() {
-        return this.g != null ? this.g : (!this.e.isEmpty() ? (AdvancementTree) this.e.get(0) : null);
+        return this.thread != null ? this.thread : (!this.children.isEmpty() ? (AdvancementTree) this.children.get(0) : null);
     }
 
     @Nullable
     private AdvancementTree d() {
-        return this.g != null ? this.g : (!this.e.isEmpty() ? (AdvancementTree) this.e.get(this.e.size() - 1) : null);
+        return this.thread != null ? this.thread : (!this.children.isEmpty() ? (AdvancementTree) this.children.get(this.children.size() - 1) : null);
     }
 
     private AdvancementTree a(AdvancementTree advancementtree) {
-        if (this.c == null) {
+        if (this.previousSibling == null) {
             return advancementtree;
         } else {
             AdvancementTree advancementtree1 = this;
             AdvancementTree advancementtree2 = this;
-            AdvancementTree advancementtree3 = this.c;
-            AdvancementTree advancementtree4 = (AdvancementTree) this.b.e.get(0);
-            float f = this.j;
-            float f1 = this.j;
-            float f2 = advancementtree3.j;
+            AdvancementTree advancementtree3 = this.previousSibling;
+            AdvancementTree advancementtree4 = (AdvancementTree) this.parent.children.get(0);
+            float f = this.mod;
+            float f1 = this.mod;
+            float f2 = advancementtree3.mod;
 
             float f3;
 
-            for (f3 = advancementtree4.j; advancementtree3.d() != null && advancementtree1.c() != null; f1 += advancementtree2.j) {
+            for (f3 = advancementtree4.mod; advancementtree3.d() != null && advancementtree1.c() != null; f1 += advancementtree2.mod) {
                 advancementtree3 = advancementtree3.d();
                 advancementtree1 = advancementtree1.c();
                 advancementtree4 = advancementtree4.c();
                 advancementtree2 = advancementtree2.d();
-                advancementtree2.f = this;
-                float f4 = advancementtree3.i + f2 - (advancementtree1.i + f) + 1.0F;
+                advancementtree2.ancestor = this;
+                float f4 = advancementtree3.y + f2 - (advancementtree1.y + f) + 1.0F;
 
                 if (f4 > 0.0F) {
                     advancementtree3.a(this, advancementtree).a(this, f4);
@@ -170,18 +170,18 @@ public class AdvancementTree {
                     f1 += f4;
                 }
 
-                f2 += advancementtree3.j;
-                f += advancementtree1.j;
-                f3 += advancementtree4.j;
+                f2 += advancementtree3.mod;
+                f += advancementtree1.mod;
+                f3 += advancementtree4.mod;
             }
 
             if (advancementtree3.d() != null && advancementtree2.d() == null) {
-                advancementtree2.g = advancementtree3.d();
-                advancementtree2.j += f2 - f1;
+                advancementtree2.thread = advancementtree3.d();
+                advancementtree2.mod += f2 - f1;
             } else {
                 if (advancementtree1.c() != null && advancementtree4.c() == null) {
-                    advancementtree4.g = advancementtree1.c();
-                    advancementtree4.j += f - f3;
+                    advancementtree4.thread = advancementtree1.c();
+                    advancementtree4.mod += f - f3;
                 }
 
                 advancementtree = this;
@@ -192,29 +192,29 @@ public class AdvancementTree {
     }
 
     private void a(AdvancementTree advancementtree, float f) {
-        float f1 = (float) (advancementtree.d - this.d);
+        float f1 = (float) (advancementtree.childIndex - this.childIndex);
 
         if (f1 != 0.0F) {
-            advancementtree.k -= f / f1;
-            this.k += f / f1;
+            advancementtree.change -= f / f1;
+            this.change += f / f1;
         }
 
-        advancementtree.l += f;
-        advancementtree.i += f;
-        advancementtree.j += f;
+        advancementtree.shift += f;
+        advancementtree.y += f;
+        advancementtree.mod += f;
     }
 
     private AdvancementTree a(AdvancementTree advancementtree, AdvancementTree advancementtree1) {
-        return this.f != null && advancementtree.b.e.contains(this.f) ? this.f : advancementtree1;
+        return this.ancestor != null && advancementtree.parent.children.contains(this.ancestor) ? this.ancestor : advancementtree1;
     }
 
     private void e() {
-        if (this.a.c() != null) {
-            this.a.c().a((float) this.h, this.i);
+        if (this.advancement.c() != null) {
+            this.advancement.c().a((float) this.x, this.y);
         }
 
-        if (!this.e.isEmpty()) {
-            Iterator iterator = this.e.iterator();
+        if (!this.children.isEmpty()) {
+            Iterator iterator = this.children.iterator();
 
             while (iterator.hasNext()) {
                 AdvancementTree advancementtree = (AdvancementTree) iterator.next();
@@ -232,7 +232,7 @@ public class AdvancementTree {
             AdvancementTree advancementtree = new AdvancementTree(advancement, (AdvancementTree) null, (AdvancementTree) null, 1, 0);
 
             advancementtree.a();
-            float f = advancementtree.a(0.0F, 0, advancementtree.i);
+            float f = advancementtree.a(0.0F, 0, advancementtree.y);
 
             if (f < 0.0F) {
                 advancementtree.a(-f);

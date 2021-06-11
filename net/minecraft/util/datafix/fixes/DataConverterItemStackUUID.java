@@ -17,7 +17,7 @@ public class DataConverterItemStackUUID extends DataConverterUUIDBase {
     public TypeRewriteRule makeRule() {
         OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
 
-        return this.fixTypeEverywhereTyped("ItemStackUUIDFix", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("ItemStackUUIDFix", this.getInputSchema().getType(this.typeReference), (typed) -> {
             OpticFinder<?> opticfinder1 = typed.getType().findField("tag");
 
             return typed.updateTyped(opticfinder1, (typed1) -> {

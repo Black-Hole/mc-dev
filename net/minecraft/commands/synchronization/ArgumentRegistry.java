@@ -64,21 +64,23 @@ import org.apache.logging.log4j.Logger;
 public class ArgumentRegistry {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<Class<?>, ArgumentRegistry.a<?>> b = Maps.newHashMap();
-    private static final Map<MinecraftKey, ArgumentRegistry.a<?>> c = Maps.newHashMap();
+    private static final Map<Class<?>, ArgumentRegistry.a<?>> BY_CLASS = Maps.newHashMap();
+    private static final Map<MinecraftKey, ArgumentRegistry.a<?>> BY_NAME = Maps.newHashMap();
+
+    public ArgumentRegistry() {}
 
     public static <T extends ArgumentType<?>> void a(String s, Class<T> oclass, ArgumentSerializer<T> argumentserializer) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
-        if (ArgumentRegistry.b.containsKey(oclass)) {
+        if (ArgumentRegistry.BY_CLASS.containsKey(oclass)) {
             throw new IllegalArgumentException("Class " + oclass.getName() + " already has a serializer!");
-        } else if (ArgumentRegistry.c.containsKey(minecraftkey)) {
+        } else if (ArgumentRegistry.BY_NAME.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("'" + minecraftkey + "' is already a registered serializer!");
         } else {
             ArgumentRegistry.a<T> argumentregistry_a = new ArgumentRegistry.a<>(oclass, argumentserializer, minecraftkey);
 
-            ArgumentRegistry.b.put(oclass, argumentregistry_a);
-            ArgumentRegistry.c.put(minecraftkey, argumentregistry_a);
+            ArgumentRegistry.BY_CLASS.put(oclass, argumentregistry_a);
+            ArgumentRegistry.BY_NAME.put(minecraftkey, argumentregistry_a);
         }
     }
 
@@ -122,7 +124,7 @@ public class ArgumentRegistry {
         a("dimension", ArgumentDimension.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(ArgumentDimension::a)));
         a("time", ArgumentTime.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(ArgumentTime::a)));
         a("uuid", ArgumentUUID.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(ArgumentUUID::a)));
-        if (SharedConstants.d) {
+        if (SharedConstants.IS_RUNNING_IN_IDE) {
             a("test_argument", GameTestHarnessTestFunctionArgument.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(GameTestHarnessTestFunctionArgument::a)));
             a("test_class", GameTestHarnessTestClassArgument.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(GameTestHarnessTestClassArgument::a)));
         }
@@ -131,12 +133,12 @@ public class ArgumentRegistry {
 
     @Nullable
     private static ArgumentRegistry.a<?> a(MinecraftKey minecraftkey) {
-        return (ArgumentRegistry.a) ArgumentRegistry.c.get(minecraftkey);
+        return (ArgumentRegistry.a) ArgumentRegistry.BY_NAME.get(minecraftkey);
     }
 
     @Nullable
     private static ArgumentRegistry.a<?> b(ArgumentType<?> argumenttype) {
-        return (ArgumentRegistry.a) ArgumentRegistry.b.get(argumenttype.getClass());
+        return (ArgumentRegistry.a) ArgumentRegistry.BY_CLASS.get(argumenttype.getClass());
     }
 
     public static <T extends ArgumentType<?>> void a(PacketDataSerializer packetdataserializer, T t0) {
@@ -146,21 +148,21 @@ public class ArgumentRegistry {
             ArgumentRegistry.LOGGER.error("Could not serialize {} ({}) - will not be sent to client!", t0, t0.getClass());
             packetdataserializer.a(new MinecraftKey(""));
         } else {
-            packetdataserializer.a(argumentregistry_a.c);
-            argumentregistry_a.b.a(t0, packetdataserializer);
+            packetdataserializer.a(argumentregistry_a.name);
+            argumentregistry_a.serializer.a(t0, packetdataserializer);
         }
     }
 
     @Nullable
     public static ArgumentType<?> a(PacketDataSerializer packetdataserializer) {
-        MinecraftKey minecraftkey = packetdataserializer.p();
+        MinecraftKey minecraftkey = packetdataserializer.q();
         ArgumentRegistry.a<?> argumentregistry_a = a(minecraftkey);
 
         if (argumentregistry_a == null) {
             ArgumentRegistry.LOGGER.error("Could not deserialize {}", minecraftkey);
             return null;
         } else {
-            return argumentregistry_a.b.b(packetdataserializer);
+            return argumentregistry_a.serializer.b(packetdataserializer);
         }
     }
 
@@ -172,10 +174,10 @@ public class ArgumentRegistry {
             jsonobject.addProperty("type", "unknown");
         } else {
             jsonobject.addProperty("type", "argument");
-            jsonobject.addProperty("parser", argumentregistry_a.c.toString());
+            jsonobject.addProperty("parser", argumentregistry_a.name.toString());
             JsonObject jsonobject1 = new JsonObject();
 
-            argumentregistry_a.b.a(t0, jsonobject1);
+            argumentregistry_a.serializer.a(t0, jsonobject1);
             if (jsonobject1.size() > 0) {
                 jsonobject.add("properties", jsonobject1);
             }
@@ -264,16 +266,16 @@ public class ArgumentRegistry {
         }
     }
 
-    static class a<T extends ArgumentType<?>> {
+    private static class a<T extends ArgumentType<?>> {
 
-        public final Class<T> a;
-        public final ArgumentSerializer<T> b;
-        public final MinecraftKey c;
+        public final Class<T> clazz;
+        public final ArgumentSerializer<T> serializer;
+        public final MinecraftKey name;
 
-        private a(Class<T> oclass, ArgumentSerializer<T> argumentserializer, MinecraftKey minecraftkey) {
-            this.a = oclass;
-            this.b = argumentserializer;
-            this.c = minecraftkey;
+        a(Class<T> oclass, ArgumentSerializer<T> argumentserializer, MinecraftKey minecraftkey) {
+            this.clazz = oclass;
+            this.serializer = argumentserializer;
+            this.name = minecraftkey;
         }
     }
 }

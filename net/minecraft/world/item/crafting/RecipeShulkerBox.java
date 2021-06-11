@@ -44,7 +44,7 @@ public class RecipeShulkerBox extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         ItemDye itemdye = (ItemDye) Items.WHITE_DYE;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
@@ -71,7 +71,12 @@ public class RecipeShulkerBox extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.m;
+        return RecipeSerializer.SHULKER_BOX_COLORING;
     }
 }

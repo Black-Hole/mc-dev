@@ -7,19 +7,19 @@ import net.minecraft.core.BlockPosition;
 
 public class WorldGenEndGatewayConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenEndGatewayConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(BlockPosition.a.optionalFieldOf("exit").forGetter((worldgenendgatewayconfiguration) -> {
-            return worldgenendgatewayconfiguration.b;
+    public static final Codec<WorldGenEndGatewayConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(BlockPosition.CODEC.optionalFieldOf("exit").forGetter((worldgenendgatewayconfiguration) -> {
+            return worldgenendgatewayconfiguration.exit;
         }), Codec.BOOL.fieldOf("exact").forGetter((worldgenendgatewayconfiguration) -> {
-            return worldgenendgatewayconfiguration.c;
+            return worldgenendgatewayconfiguration.exact;
         })).apply(instance, WorldGenEndGatewayConfiguration::new);
     });
-    private final Optional<BlockPosition> b;
-    private final boolean c;
+    private final Optional<BlockPosition> exit;
+    private final boolean exact;
 
     private WorldGenEndGatewayConfiguration(Optional<BlockPosition> optional, boolean flag) {
-        this.b = optional;
-        this.c = flag;
+        this.exit = optional;
+        this.exact = flag;
     }
 
     public static WorldGenEndGatewayConfiguration a(BlockPosition blockposition, boolean flag) {
@@ -31,10 +31,10 @@ public class WorldGenEndGatewayConfiguration implements WorldGenFeatureConfigura
     }
 
     public Optional<BlockPosition> c() {
-        return this.b;
+        return this.exit;
     }
 
     public boolean d() {
-        return this.c;
+        return this.exact;
     }
 }

@@ -13,26 +13,27 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionUser;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class LootEntryAbstract implements LootEntryChildren {
 
-    protected final LootItemCondition[] d;
-    private final Predicate<LootTableInfo> c;
+    protected final LootItemCondition[] conditions;
+    private final Predicate<LootTableInfo> compositeCondition;
 
     protected LootEntryAbstract(LootItemCondition[] alootitemcondition) {
-        this.d = alootitemcondition;
-        this.c = LootItemConditions.a((Predicate[]) alootitemcondition);
+        this.conditions = alootitemcondition;
+        this.compositeCondition = LootItemConditions.a((Predicate[]) alootitemcondition);
     }
 
     public void a(LootCollector lootcollector) {
-        for (int i = 0; i < this.d.length; ++i) {
-            this.d[i].a(lootcollector.b(".condition[" + i + "]"));
+        for (int i = 0; i < this.conditions.length; ++i) {
+            this.conditions[i].a(lootcollector.b(".condition[" + i + "]"));
         }
 
     }
 
     protected final boolean a(LootTableInfo loottableinfo) {
-        return this.c.test(loottableinfo);
+        return this.compositeCondition.test(loottableinfo);
     }
 
     public abstract LootEntryType a();
@@ -41,7 +42,13 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
 
         public Serializer() {}
 
-        public final void serializeType(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {}
+        public final void b(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
+            if (!ArrayUtils.isEmpty(t0.conditions)) {
+                jsonobject.add("conditions", jsonserializationcontext.serialize(t0.conditions));
+            }
+
+            this.serializeType(jsonobject, t0, jsonserializationcontext);
+        }
 
         @Override
         public final T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
@@ -57,7 +64,7 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
 
     public abstract static class a<T extends LootEntryAbstract.a<T>> implements LootItemConditionUser<T> {
 
-        private final List<LootItemCondition> a = Lists.newArrayList();
+        private final List<LootItemCondition> conditions = Lists.newArrayList();
 
         public a() {}
 
@@ -65,7 +72,7 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
 
         @Override
         public T b(LootItemCondition.a lootitemcondition_a) {
-            this.a.add(lootitemcondition_a.build());
+            this.conditions.add(lootitemcondition_a.build());
             return this.d();
         }
 
@@ -75,11 +82,19 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
         }
 
         protected LootItemCondition[] f() {
-            return (LootItemCondition[]) this.a.toArray(new LootItemCondition[0]);
+            return (LootItemCondition[]) this.conditions.toArray(new LootItemCondition[0]);
         }
 
         public LootEntryAlternatives.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
             return new LootEntryAlternatives.a(new LootEntryAbstract.a[]{this, lootentryabstract_a});
+        }
+
+        public LootEntryGroup.a b(LootEntryAbstract.a<?> lootentryabstract_a) {
+            return new LootEntryGroup.a(new LootEntryAbstract.a[]{this, lootentryabstract_a});
+        }
+
+        public LootEntrySequence.a c(LootEntryAbstract.a<?> lootentryabstract_a) {
+            return new LootEntrySequence.a(new LootEntryAbstract.a[]{this, lootentryabstract_a});
         }
 
         public abstract LootEntryAbstract b();

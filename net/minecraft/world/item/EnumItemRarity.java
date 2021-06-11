@@ -6,9 +6,9 @@ public enum EnumItemRarity {
 
     COMMON(EnumChatFormat.WHITE), UNCOMMON(EnumChatFormat.YELLOW), RARE(EnumChatFormat.AQUA), EPIC(EnumChatFormat.LIGHT_PURPLE);
 
-    public final EnumChatFormat e;
+    public final EnumChatFormat color;
 
     private EnumItemRarity(EnumChatFormat enumchatformat) {
-        this.e = enumchatformat;
+        this.color = enumchatformat;
     }
 }

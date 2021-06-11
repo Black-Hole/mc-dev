@@ -4,13 +4,17 @@ import net.minecraft.world.level.dimension.DimensionManager;
 
 public interface IWorldTime extends IWorldReader {
 
-    long ac();
+    long ae();
 
-    default float af() {
-        return DimensionManager.e[this.getDimensionManager().b(this.ac())];
+    default float ak() {
+        return DimensionManager.MOON_BRIGHTNESS_PER_PHASE[this.getDimensionManager().b(this.ae())];
     }
 
     default float f(float f) {
-        return this.getDimensionManager().a(this.ac());
+        return this.getDimensionManager().a(this.ae());
+    }
+
+    default int al() {
+        return this.getDimensionManager().b(this.ae());
     }
 }

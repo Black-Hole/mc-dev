@@ -19,7 +19,7 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterEntityBlockState extends DataFix {
 
-    private static final Map<String, Integer> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, Integer> MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:air", 0);
         hashmap.put("minecraft:stone", 1);
         hashmap.put("minecraft:grass", 2);
@@ -281,7 +281,7 @@ public class DataConverterEntityBlockState extends DataFix {
     }
 
     public static int a(String s) {
-        Integer integer = (Integer) DataConverterEntityBlockState.a.get(s);
+        Integer integer = (Integer) DataConverterEntityBlockState.MAP.get(s);
 
         return integer == null ? 0 : integer;
     }

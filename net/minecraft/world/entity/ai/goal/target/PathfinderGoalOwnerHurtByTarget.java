@@ -8,28 +8,28 @@ import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
 
 public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
 
-    private final EntityTameableAnimal a;
-    private EntityLiving b;
-    private int c;
+    private final EntityTameableAnimal tameAnimal;
+    private EntityLiving ownerLastHurtBy;
+    private int timestamp;
 
     public PathfinderGoalOwnerHurtByTarget(EntityTameableAnimal entitytameableanimal) {
         super(entitytameableanimal, false);
-        this.a = entitytameableanimal;
+        this.tameAnimal = entitytameableanimal;
         this.a(EnumSet.of(PathfinderGoal.Type.TARGET));
     }
 
     @Override
     public boolean a() {
-        if (this.a.isTamed() && !this.a.isWillSit()) {
-            EntityLiving entityliving = this.a.getOwner();
+        if (this.tameAnimal.isTamed() && !this.tameAnimal.isWillSit()) {
+            EntityLiving entityliving = this.tameAnimal.getOwner();
 
             if (entityliving == null) {
                 return false;
             } else {
-                this.b = entityliving.getLastDamager();
-                int i = entityliving.da();
+                this.ownerLastHurtBy = entityliving.getLastDamager();
+                int i = entityliving.dH();
 
-                return i != this.c && this.a(this.b, PathfinderTargetCondition.a) && this.a.a(this.b, entityliving);
+                return i != this.timestamp && this.a(this.ownerLastHurtBy, PathfinderTargetCondition.DEFAULT) && this.tameAnimal.a(this.ownerLastHurtBy, entityliving);
             }
         } else {
             return false;
@@ -38,11 +38,11 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
 
     @Override
     public void c() {
-        this.e.setGoalTarget(this.b);
-        EntityLiving entityliving = this.a.getOwner();
+        this.mob.setGoalTarget(this.ownerLastHurtBy);
+        EntityLiving entityliving = this.tameAnimal.getOwner();
 
         if (entityliving != null) {
-            this.c = entityliving.da();
+            this.timestamp = entityliving.dH();
         }
 
         super.c();

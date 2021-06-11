@@ -1,30 +1,32 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInJigsawGenerate implements Packet<PacketListenerPlayIn> {
 
-    private BlockPosition a;
-    private int b;
-    private boolean c;
+    private final BlockPosition pos;
+    private final int levels;
+    private final boolean keepJigsaws;
 
-    public PacketPlayInJigsawGenerate() {}
+    public PacketPlayInJigsawGenerate(BlockPosition blockposition, int i, boolean flag) {
+        this.pos = blockposition;
+        this.levels = i;
+        this.keepJigsaws = flag;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.i();
-        this.c = packetdataserializer.readBoolean();
+    public PacketPlayInJigsawGenerate(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.levels = packetdataserializer.j();
+        this.keepJigsaws = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.d(this.b);
-        packetdataserializer.writeBoolean(this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
+        packetdataserializer.d(this.levels);
+        packetdataserializer.writeBoolean(this.keepJigsaws);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -32,14 +34,14 @@ public class PacketPlayInJigsawGenerate implements Packet<PacketListenerPlayIn> 
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public int c() {
-        return this.b;
+        return this.levels;
     }
 
     public boolean d() {
-        return this.c;
+        return this.keepJigsaws;
     }
 }

@@ -18,14 +18,14 @@ import net.minecraft.world.scores.ScoreboardObjective;
 
 public class ArgumentScoreboardObjective implements ArgumentType<String> {
 
-    private static final Collection<String> b = Arrays.asList("foo", "*", "012");
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("foo", "*", "012");
+    private static final DynamicCommandExceptionType ERROR_OBJECTIVE_NOT_FOUND = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.objective.notFound", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType d = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_OBJECTIVE_READ_ONLY = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.objective.readonly", new Object[]{object});
     });
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    public static final DynamicCommandExceptionType ERROR_OBJECTIVE_NAME_TOO_LONG = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.scoreboard.objectives.add.longName", new Object[]{object});
     });
 
@@ -41,7 +41,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
         ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(s1);
 
         if (scoreboardobjective == null) {
-            throw ArgumentScoreboardObjective.c.create(s1);
+            throw ArgumentScoreboardObjective.ERROR_OBJECTIVE_NOT_FOUND.create(s1);
         } else {
             return scoreboardobjective;
         }
@@ -51,7 +51,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
         ScoreboardObjective scoreboardobjective = a(commandcontext, s);
 
         if (scoreboardobjective.getCriteria().isReadOnly()) {
-            throw ArgumentScoreboardObjective.d.create(scoreboardobjective.getName());
+            throw ArgumentScoreboardObjective.ERROR_OBJECTIVE_READ_ONLY.create(scoreboardobjective.getName());
         } else {
             return scoreboardobjective;
         }
@@ -61,7 +61,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
         String s = stringreader.readUnquotedString();
 
         if (s.length() > 16) {
-            throw ArgumentScoreboardObjective.a.create(16);
+            throw ArgumentScoreboardObjective.ERROR_OBJECTIVE_NAME_TOO_LONG.create(16);
         } else {
             return s;
         }
@@ -80,6 +80,6 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentScoreboardObjective.b;
+        return ArgumentScoreboardObjective.EXAMPLES;
     }
 }

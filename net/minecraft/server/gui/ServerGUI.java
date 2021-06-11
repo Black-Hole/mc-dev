@@ -11,6 +11,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -34,12 +35,14 @@ import org.apache.logging.log4j.Logger;
 
 public class ServerGUI extends JComponent {
 
-    private static final Font a = new Font("Monospaced", 0, 12);
+    private static final Font MONOSPACED = new Font("Monospaced", 0, 12);
     private static final Logger LOGGER = LogManager.getLogger();
-    private final DedicatedServer c;
-    private Thread d;
-    private final Collection<Runnable> e = Lists.newArrayList();
-    private final AtomicBoolean f = new AtomicBoolean();
+    private static final String TITLE = "Minecraft server";
+    private static final String SHUTDOWN_TITLE = "Minecraft server - shutting down!";
+    private final DedicatedServer server;
+    private Thread logAppenderThread;
+    private final Collection<Runnable> finalizers = Lists.newArrayList();
+    final AtomicBoolean isClosing = new AtomicBoolean();
 
     public static ServerGUI a(final DedicatedServer dedicatedserver) {
         try {
@@ -58,7 +61,7 @@ public class ServerGUI extends JComponent {
         jframe.setVisible(true);
         jframe.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowevent) {
-                if (!servergui.f.getAndSet(true)) {
+                if (!servergui.isClosing.getAndSet(true)) {
                     jframe.setTitle("Minecraft server - shutting down!");
                     dedicatedserver.safeShutdown(true);
                     servergui.f();
@@ -66,13 +69,14 @@ public class ServerGUI extends JComponent {
 
             }
         });
+        Objects.requireNonNull(jframe);
         servergui.a(jframe::dispose);
         servergui.a();
         return servergui;
     }
 
     private ServerGUI(DedicatedServer dedicatedserver) {
-        this.c = dedicatedserver;
+        this.server = dedicatedserver;
         this.setPreferredSize(new Dimension(854, 480));
         this.setLayout(new BorderLayout());
 
@@ -86,14 +90,16 @@ public class ServerGUI extends JComponent {
     }
 
     public void a(Runnable runnable) {
-        this.e.add(runnable);
+        this.finalizers.add(runnable);
     }
 
     private JComponent c() {
         JPanel jpanel = new JPanel(new BorderLayout());
-        GuiStatsComponent guistatscomponent = new GuiStatsComponent(this.c);
+        GuiStatsComponent guistatscomponent = new GuiStatsComponent(this.server);
+        Collection collection = this.finalizers;
 
-        this.e.add(guistatscomponent::a);
+        Objects.requireNonNull(guistatscomponent);
+        collection.add(guistatscomponent::a);
         jpanel.add(guistatscomponent, "North");
         jpanel.add(this.d(), "Center");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Stats"));
@@ -101,7 +107,7 @@ public class ServerGUI extends JComponent {
     }
 
     private JComponent d() {
-        JList<?> jlist = new PlayerListBox(this.c);
+        JList<?> jlist = new PlayerListBox(this.server);
         JScrollPane jscrollpane = new JScrollPane(jlist, 22, 30);
 
         jscrollpane.setBorder(new TitledBorder(new EtchedBorder(), "Players"));
@@ -114,14 +120,14 @@ public class ServerGUI extends JComponent {
         JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
 
         jtextarea.setEditable(false);
-        jtextarea.setFont(ServerGUI.a);
+        jtextarea.setFont(ServerGUI.MONOSPACED);
         JTextField jtextfield = new JTextField();
 
         jtextfield.addActionListener((actionevent) -> {
             String s = jtextfield.getText().trim();
 
             if (!s.isEmpty()) {
-                this.c.issueCommand(s, this.c.getServerCommandListener());
+                this.server.issueCommand(s, this.server.getServerCommandListener());
             }
 
             jtextfield.setText("");
@@ -132,7 +138,7 @@ public class ServerGUI extends JComponent {
         jpanel.add(jscrollpane, "Center");
         jpanel.add(jtextfield, "South");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Log and chat"));
-        this.d = new Thread(() -> {
+        this.logAppenderThread = new Thread(() -> {
             String s;
 
             while ((s = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
@@ -140,24 +146,24 @@ public class ServerGUI extends JComponent {
             }
 
         });
-        this.d.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(ServerGUI.LOGGER));
-        this.d.setDaemon(true);
+        this.logAppenderThread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(ServerGUI.LOGGER));
+        this.logAppenderThread.setDaemon(true);
         return jpanel;
     }
 
     public void a() {
-        this.d.start();
+        this.logAppenderThread.start();
     }
 
     public void b() {
-        if (!this.f.getAndSet(true)) {
+        if (!this.isClosing.getAndSet(true)) {
             this.f();
         }
 
     }
 
-    private void f() {
-        this.e.forEach(Runnable::run);
+    void f() {
+        this.finalizers.forEach(Runnable::run);
     }
 
     public void a(JTextArea jtextarea, JScrollPane jscrollpane, String s) {
@@ -171,7 +177,7 @@ public class ServerGUI extends JComponent {
             boolean flag = false;
 
             if (jscrollpane.getViewport().getView() == jtextarea) {
-                flag = (double) jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double) (ServerGUI.a.getSize() * 4) > (double) jscrollbar.getMaximum();
+                flag = (double) jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double) (ServerGUI.MONOSPACED.getSize() * 4) > (double) jscrollbar.getMaximum();
             }
 
             try {

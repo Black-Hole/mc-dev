@@ -12,21 +12,21 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BlockActionContextDirectional extends BlockActionContext {
 
-    private final EnumDirection b;
+    private final EnumDirection direction;
 
     public BlockActionContextDirectional(World world, BlockPosition blockposition, EnumDirection enumdirection, ItemStack itemstack, EnumDirection enumdirection1) {
         super(world, (EntityHuman) null, EnumHand.MAIN_HAND, itemstack, new MovingObjectPositionBlock(Vec3D.c((BaseBlockPosition) blockposition), enumdirection1, blockposition, false));
-        this.b = enumdirection;
+        this.direction = enumdirection;
     }
 
     @Override
     public BlockPosition getClickPosition() {
-        return this.i().getBlockPosition();
+        return this.j().getBlockPosition();
     }
 
     @Override
     public boolean b() {
-        return this.getWorld().getType(this.i().getBlockPosition()).a((BlockActionContext) this);
+        return this.getWorld().getType(this.j().getBlockPosition()).a((BlockActionContext) this);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class BlockActionContextDirectional extends BlockActionContext {
     }
 
     @Override
-    public EnumDirection[] e() {
-        switch (this.b) {
+    public EnumDirection[] f() {
+        switch (this.direction) {
             case DOWN:
             default:
                 return new EnumDirection[]{EnumDirection.DOWN, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.UP};
@@ -59,8 +59,8 @@ public class BlockActionContextDirectional extends BlockActionContext {
     }
 
     @Override
-    public EnumDirection f() {
-        return this.b.n() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.b;
+    public EnumDirection g() {
+        return this.direction.n() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.direction;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class BlockActionContextDirectional extends BlockActionContext {
     }
 
     @Override
-    public float h() {
-        return (float) (this.b.get2DRotationValue() * 90);
+    public float i() {
+        return (float) (this.direction.get2DRotationValue() * 90);
     }
 }

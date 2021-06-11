@@ -3,16 +3,15 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
 
 public class NBTTagEnd implements NBTBase {
 
-    public static final NBTTagType<NBTTagEnd> a = new NBTTagType<NBTTagEnd>() {
+    private static final int SELF_SIZE_IN_BITS = 64;
+    public static final NBTTagType<NBTTagEnd> TYPE = new NBTTagType<NBTTagEnd>() {
         @Override
         public NBTTagEnd b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
             nbtreadlimiter.a(64L);
-            return NBTTagEnd.b;
+            return NBTTagEnd.INSTANCE;
         }
 
         @Override
@@ -30,7 +29,7 @@ public class NBTTagEnd implements NBTBase {
             return true;
         }
     };
-    public static final NBTTagEnd b = new NBTTagEnd();
+    public static final NBTTagEnd INSTANCE = new NBTTagEnd();
 
     private NBTTagEnd() {}
 
@@ -44,12 +43,12 @@ public class NBTTagEnd implements NBTBase {
 
     @Override
     public NBTTagType<NBTTagEnd> b() {
-        return NBTTagEnd.a;
+        return NBTTagEnd.TYPE;
     }
 
     @Override
     public String toString() {
-        return "END";
+        return this.asString();
     }
 
     @Override
@@ -58,7 +57,7 @@ public class NBTTagEnd implements NBTBase {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        return ChatComponentText.d;
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 }

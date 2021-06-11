@@ -1,5 +1,7 @@
 package net.minecraft.world.entity.projectile;
 
+import net.minecraft.core.particles.ParticleParamItem;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
@@ -25,6 +27,18 @@ public class EntityEgg extends EntityProjectileThrowable {
     }
 
     @Override
+    public void a(byte b0) {
+        if (b0 == 3) {
+            double d0 = 0.08D;
+
+            for (int i = 0; i < 8; ++i) {
+                this.level.addParticle(new ParticleParamItem(Particles.ITEM, this.getSuppliedItem()), this.locX(), this.locY(), this.locZ(), ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D);
+            }
+        }
+
+    }
+
+    @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         super.a(movingobjectpositionentity);
         movingobjectpositionentity.getEntity().damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
@@ -33,7 +47,7 @@ public class EntityEgg extends EntityProjectileThrowable {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             if (this.random.nextInt(8) == 0) {
                 byte b0 = 1;
 
@@ -42,15 +56,15 @@ public class EntityEgg extends EntityProjectileThrowable {
                 }
 
                 for (int i = 0; i < b0; ++i) {
-                    EntityChicken entitychicken = (EntityChicken) EntityTypes.CHICKEN.a(this.world);
+                    EntityChicken entitychicken = (EntityChicken) EntityTypes.CHICKEN.a(this.level);
 
                     entitychicken.setAgeRaw(-24000);
-                    entitychicken.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
-                    this.world.addEntity(entitychicken);
+                    entitychicken.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.getYRot(), 0.0F);
+                    this.level.addEntity(entitychicken);
                 }
             }
 
-            this.world.broadcastEntityEffect(this, (byte) 3);
+            this.level.broadcastEntityEffect(this, (byte) 3);
             this.die();
         }
 

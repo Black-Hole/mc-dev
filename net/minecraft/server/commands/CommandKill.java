@@ -13,6 +13,8 @@ import net.minecraft.world.entity.Entity;
 
 public class CommandKill {
 
+    public CommandKill() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("kill").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);

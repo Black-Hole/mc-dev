@@ -22,36 +22,41 @@ import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 import net.minecraft.world.level.block.state.properties.BlockStateDirection;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockTripwireHook extends Block {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
-    public static final BlockStateBoolean ATTACHED = BlockProperties.a;
-    protected static final VoxelShape d = Block.a(5.0D, 0.0D, 10.0D, 11.0D, 10.0D, 16.0D);
-    protected static final VoxelShape e = Block.a(5.0D, 0.0D, 0.0D, 11.0D, 10.0D, 6.0D);
-    protected static final VoxelShape f = Block.a(10.0D, 0.0D, 5.0D, 16.0D, 10.0D, 11.0D);
-    protected static final VoxelShape g = Block.a(0.0D, 0.0D, 5.0D, 6.0D, 10.0D, 11.0D);
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
+    public static final BlockStateBoolean ATTACHED = BlockProperties.ATTACHED;
+    protected static final int WIRE_DIST_MIN = 1;
+    protected static final int WIRE_DIST_MAX = 42;
+    private static final int RECHECK_PERIOD = 10;
+    protected static final int AABB_OFFSET = 3;
+    protected static final VoxelShape NORTH_AABB = Block.a(5.0D, 0.0D, 10.0D, 11.0D, 10.0D, 16.0D);
+    protected static final VoxelShape SOUTH_AABB = Block.a(5.0D, 0.0D, 0.0D, 11.0D, 10.0D, 6.0D);
+    protected static final VoxelShape WEST_AABB = Block.a(10.0D, 0.0D, 5.0D, 16.0D, 10.0D, 11.0D);
+    protected static final VoxelShape EAST_AABB = Block.a(0.0D, 0.0D, 5.0D, 6.0D, 10.0D, 11.0D);
 
     public BlockTripwireHook(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)) {
             case EAST:
             default:
-                return BlockTripwireHook.g;
+                return BlockTripwireHook.EAST_AABB;
             case WEST:
-                return BlockTripwireHook.f;
+                return BlockTripwireHook.WEST_AABB;
             case SOUTH:
-                return BlockTripwireHook.e;
+                return BlockTripwireHook.SOUTH_AABB;
             case NORTH:
-                return BlockTripwireHook.d;
+                return BlockTripwireHook.NORTH_AABB;
         }
     }
 
@@ -75,7 +80,7 @@ public class BlockTripwireHook extends Block {
         IBlockData iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false);
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         EnumDirection[] aenumdirection1 = aenumdirection;
         int i = aenumdirection.length;
 
@@ -186,13 +191,17 @@ public class BlockTripwireHook extends Block {
 
     private void a(World world, BlockPosition blockposition, boolean flag, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_ON, SoundCategory.BLOCKS, 0.4F, 0.6F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.TRIPWIRE_CLICK_ON, SoundCategory.BLOCKS, 0.4F, 0.6F);
+            world.a(GameEvent.BLOCK_PRESS, blockposition);
         } else if (!flag1 && flag3) {
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_OFF, SoundCategory.BLOCKS, 0.4F, 0.5F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.TRIPWIRE_CLICK_OFF, SoundCategory.BLOCKS, 0.4F, 0.5F);
+            world.a(GameEvent.BLOCK_UNPRESS, blockposition);
         } else if (flag && !flag2) {
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_ATTACH, SoundCategory.BLOCKS, 0.4F, 0.7F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.TRIPWIRE_ATTACH, SoundCategory.BLOCKS, 0.4F, 0.7F);
+            world.a(GameEvent.BLOCK_ATTACH, blockposition);
         } else if (!flag && flag2) {
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_DETACH, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.TRIPWIRE_DETACH, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
+            world.a(GameEvent.BLOCK_DETACH, blockposition);
         }
 
     }

@@ -19,36 +19,36 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
     @Override
     protected SoundEffect getSoundAmbient() {
         super.getSoundAmbient();
-        return SoundEffects.ENTITY_DONKEY_AMBIENT;
+        return SoundEffects.DONKEY_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundAngry() {
         super.getSoundAngry();
-        return SoundEffects.ENTITY_DONKEY_ANGRY;
+        return SoundEffects.DONKEY_ANGRY;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
-        return SoundEffects.ENTITY_DONKEY_DEATH;
+        return SoundEffects.DONKEY_DEATH;
     }
 
     @Nullable
     @Override
-    protected SoundEffect fg() {
-        return SoundEffects.ENTITY_DONKEY_EAT;
+    protected SoundEffect fP() {
+        return SoundEffects.DONKEY_EAT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
         super.getSoundHurt(damagesource);
-        return SoundEffects.ENTITY_DONKEY_HURT;
+        return SoundEffects.DONKEY_HURT;
     }
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fo() && ((EntityHorseAbstract) entityanimal).fo());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fX() && ((EntityHorseAbstract) entityanimal).fX());
     }
 
     @Override

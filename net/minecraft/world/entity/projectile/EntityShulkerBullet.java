@@ -1,5 +1,6 @@
 package net.minecraft.world.entity.projectile;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +10,6 @@ import net.minecraft.core.EnumDirection;
 import net.minecraft.core.IPosition;
 import net.minecraft.core.particles.Particles;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.sounds.SoundCategory;
@@ -31,19 +31,21 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityShulkerBullet extends IProjectile {
 
-    private Entity target;
+    private static final double SPEED = 0.15D;
     @Nullable
-    private EnumDirection dir;
-    private int d;
-    private double e;
-    private double f;
-    private double g;
+    private Entity finalTarget;
     @Nullable
-    private UUID ag;
+    private EnumDirection currentMoveDirection;
+    private int flightSteps;
+    private double targetDeltaX;
+    private double targetDeltaY;
+    private double targetDeltaZ;
+    @Nullable
+    private UUID targetId;
 
     public EntityShulkerBullet(EntityTypes<? extends EntityShulkerBullet> entitytypes, World world) {
         super(entitytypes, world);
-        this.noclip = true;
+        this.noPhysics = true;
     }
 
     public EntityShulkerBullet(World world, EntityLiving entityliving, Entity entity, EnumDirection.EnumAxis enumdirection_enumaxis) {
@@ -54,9 +56,9 @@ public class EntityShulkerBullet extends IProjectile {
         double d1 = (double) blockposition.getY() + 0.5D;
         double d2 = (double) blockposition.getZ() + 0.5D;
 
-        this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
-        this.target = entity;
-        this.dir = EnumDirection.UP;
+        this.setPositionRotation(d0, d1, d2, this.getYRot(), this.getXRot());
+        this.finalTarget = entity;
+        this.currentMoveDirection = EnumDirection.UP;
         this.a(enumdirection_enumaxis);
     }
 
@@ -68,33 +70,33 @@ public class EntityShulkerBullet extends IProjectile {
     @Override
     protected void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        if (this.target != null) {
-            nbttagcompound.a("Target", this.target.getUniqueID());
+        if (this.finalTarget != null) {
+            nbttagcompound.a("Target", this.finalTarget.getUniqueID());
         }
 
-        if (this.dir != null) {
-            nbttagcompound.setInt("Dir", this.dir.c());
+        if (this.currentMoveDirection != null) {
+            nbttagcompound.setInt("Dir", this.currentMoveDirection.b());
         }
 
-        nbttagcompound.setInt("Steps", this.d);
-        nbttagcompound.setDouble("TXD", this.e);
-        nbttagcompound.setDouble("TYD", this.f);
-        nbttagcompound.setDouble("TZD", this.g);
+        nbttagcompound.setInt("Steps", this.flightSteps);
+        nbttagcompound.setDouble("TXD", this.targetDeltaX);
+        nbttagcompound.setDouble("TYD", this.targetDeltaY);
+        nbttagcompound.setDouble("TZD", this.targetDeltaZ);
     }
 
     @Override
     protected void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.d = nbttagcompound.getInt("Steps");
-        this.e = nbttagcompound.getDouble("TXD");
-        this.f = nbttagcompound.getDouble("TYD");
-        this.g = nbttagcompound.getDouble("TZD");
+        this.flightSteps = nbttagcompound.getInt("Steps");
+        this.targetDeltaX = nbttagcompound.getDouble("TXD");
+        this.targetDeltaY = nbttagcompound.getDouble("TYD");
+        this.targetDeltaZ = nbttagcompound.getDouble("TZD");
         if (nbttagcompound.hasKeyOfType("Dir", 99)) {
-            this.dir = EnumDirection.fromType1(nbttagcompound.getInt("Dir"));
+            this.currentMoveDirection = EnumDirection.fromType1(nbttagcompound.getInt("Dir"));
         }
 
         if (nbttagcompound.b("Target")) {
-            this.ag = nbttagcompound.a("Target");
+            this.targetId = nbttagcompound.a("Target");
         }
 
     }
@@ -102,19 +104,24 @@ public class EntityShulkerBullet extends IProjectile {
     @Override
     protected void initDatawatcher() {}
 
+    @Nullable
+    private EnumDirection h() {
+        return this.currentMoveDirection;
+    }
+
     private void a(@Nullable EnumDirection enumdirection) {
-        this.dir = enumdirection;
+        this.currentMoveDirection = enumdirection;
     }
 
     private void a(@Nullable EnumDirection.EnumAxis enumdirection_enumaxis) {
         double d0 = 0.5D;
         BlockPosition blockposition;
 
-        if (this.target == null) {
+        if (this.finalTarget == null) {
             blockposition = this.getChunkCoordinates().down();
         } else {
-            d0 = (double) this.target.getHeight() * 0.5D;
-            blockposition = new BlockPosition(this.target.locX(), this.target.locY() + d0, this.target.locZ());
+            d0 = (double) this.finalTarget.getHeight() * 0.5D;
+            blockposition = new BlockPosition(this.finalTarget.locX(), this.finalTarget.locY() + d0, this.finalTarget.locZ());
         }
 
         double d1 = (double) blockposition.getX() + 0.5D;
@@ -127,32 +134,32 @@ public class EntityShulkerBullet extends IProjectile {
             List<EnumDirection> list = Lists.newArrayList();
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.X) {
-                if (blockposition1.getX() < blockposition.getX() && this.world.isEmpty(blockposition1.east())) {
+                if (blockposition1.getX() < blockposition.getX() && this.level.isEmpty(blockposition1.east())) {
                     list.add(EnumDirection.EAST);
-                } else if (blockposition1.getX() > blockposition.getX() && this.world.isEmpty(blockposition1.west())) {
+                } else if (blockposition1.getX() > blockposition.getX() && this.level.isEmpty(blockposition1.west())) {
                     list.add(EnumDirection.WEST);
                 }
             }
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.Y) {
-                if (blockposition1.getY() < blockposition.getY() && this.world.isEmpty(blockposition1.up())) {
+                if (blockposition1.getY() < blockposition.getY() && this.level.isEmpty(blockposition1.up())) {
                     list.add(EnumDirection.UP);
-                } else if (blockposition1.getY() > blockposition.getY() && this.world.isEmpty(blockposition1.down())) {
+                } else if (blockposition1.getY() > blockposition.getY() && this.level.isEmpty(blockposition1.down())) {
                     list.add(EnumDirection.DOWN);
                 }
             }
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.Z) {
-                if (blockposition1.getZ() < blockposition.getZ() && this.world.isEmpty(blockposition1.south())) {
+                if (blockposition1.getZ() < blockposition.getZ() && this.level.isEmpty(blockposition1.south())) {
                     list.add(EnumDirection.SOUTH);
-                } else if (blockposition1.getZ() > blockposition.getZ() && this.world.isEmpty(blockposition1.north())) {
+                } else if (blockposition1.getZ() > blockposition.getZ() && this.level.isEmpty(blockposition1.north())) {
                     list.add(EnumDirection.NORTH);
                 }
             }
 
             enumdirection = EnumDirection.a(this.random);
             if (list.isEmpty()) {
-                for (int i = 5; !this.world.isEmpty(blockposition1.shift(enumdirection)) && i > 0; --i) {
+                for (int i = 5; !this.level.isEmpty(blockposition1.shift(enumdirection)) && i > 0; --i) {
                     enumdirection = EnumDirection.a(this.random);
                 }
             } else {
@@ -168,25 +175,25 @@ public class EntityShulkerBullet extends IProjectile {
         double d4 = d1 - this.locX();
         double d5 = d2 - this.locY();
         double d6 = d3 - this.locZ();
-        double d7 = (double) MathHelper.sqrt(d4 * d4 + d5 * d5 + d6 * d6);
+        double d7 = Math.sqrt(d4 * d4 + d5 * d5 + d6 * d6);
 
         if (d7 == 0.0D) {
-            this.e = 0.0D;
-            this.f = 0.0D;
-            this.g = 0.0D;
+            this.targetDeltaX = 0.0D;
+            this.targetDeltaY = 0.0D;
+            this.targetDeltaZ = 0.0D;
         } else {
-            this.e = d4 / d7 * 0.15D;
-            this.f = d5 / d7 * 0.15D;
-            this.g = d6 / d7 * 0.15D;
+            this.targetDeltaX = d4 / d7 * 0.15D;
+            this.targetDeltaY = d5 / d7 * 0.15D;
+            this.targetDeltaZ = d6 / d7 * 0.15D;
         }
 
-        this.impulse = true;
-        this.d = 10 + this.random.nextInt(5) * 10;
+        this.hasImpulse = true;
+        this.flightSteps = 10 + this.random.nextInt(5) * 10;
     }
 
     @Override
     public void checkDespawn() {
-        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+        if (this.level.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
 
@@ -197,20 +204,20 @@ public class EntityShulkerBullet extends IProjectile {
         super.tick();
         Vec3D vec3d;
 
-        if (!this.world.isClientSide) {
-            if (this.target == null && this.ag != null) {
-                this.target = ((WorldServer) this.world).getEntity(this.ag);
-                if (this.target == null) {
-                    this.ag = null;
+        if (!this.level.isClientSide) {
+            if (this.finalTarget == null && this.targetId != null) {
+                this.finalTarget = ((WorldServer) this.level).getEntity(this.targetId);
+                if (this.finalTarget == null) {
+                    this.targetId = null;
                 }
             }
 
-            if (this.target != null && this.target.isAlive() && (!(this.target instanceof EntityHuman) || !((EntityHuman) this.target).isSpectator())) {
-                this.e = MathHelper.a(this.e * 1.025D, -1.0D, 1.0D);
-                this.f = MathHelper.a(this.f * 1.025D, -1.0D, 1.0D);
-                this.g = MathHelper.a(this.g * 1.025D, -1.0D, 1.0D);
+            if (this.finalTarget != null && this.finalTarget.isAlive() && (!(this.finalTarget instanceof EntityHuman) || !this.finalTarget.isSpectator())) {
+                this.targetDeltaX = MathHelper.a(this.targetDeltaX * 1.025D, -1.0D, 1.0D);
+                this.targetDeltaY = MathHelper.a(this.targetDeltaY * 1.025D, -1.0D, 1.0D);
+                this.targetDeltaZ = MathHelper.a(this.targetDeltaZ * 1.025D, -1.0D, 1.0D);
                 vec3d = this.getMot();
-                this.setMot(vec3d.add((this.e - vec3d.x) * 0.2D, (this.f - vec3d.y) * 0.2D, (this.g - vec3d.z) * 0.2D));
+                this.setMot(vec3d.add((this.targetDeltaX - vec3d.x) * 0.2D, (this.targetDeltaY - vec3d.y) * 0.2D, (this.targetDeltaZ - vec3d.z) * 0.2D));
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
@@ -226,24 +233,24 @@ public class EntityShulkerBullet extends IProjectile {
         vec3d = this.getMot();
         this.setPosition(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z);
         ProjectileHelper.a(this, 0.5F);
-        if (this.world.isClientSide) {
-            this.world.addParticle(Particles.END_ROD, this.locX() - vec3d.x, this.locY() - vec3d.y + 0.15D, this.locZ() - vec3d.z, 0.0D, 0.0D, 0.0D);
-        } else if (this.target != null && !this.target.dead) {
-            if (this.d > 0) {
-                --this.d;
-                if (this.d == 0) {
-                    this.a(this.dir == null ? null : this.dir.n());
+        if (this.level.isClientSide) {
+            this.level.addParticle(Particles.END_ROD, this.locX() - vec3d.x, this.locY() - vec3d.y + 0.15D, this.locZ() - vec3d.z, 0.0D, 0.0D, 0.0D);
+        } else if (this.finalTarget != null && !this.finalTarget.isRemoved()) {
+            if (this.flightSteps > 0) {
+                --this.flightSteps;
+                if (this.flightSteps == 0) {
+                    this.a(this.currentMoveDirection == null ? null : this.currentMoveDirection.n());
                 }
             }
 
-            if (this.dir != null) {
+            if (this.currentMoveDirection != null) {
                 BlockPosition blockposition = this.getChunkCoordinates();
-                EnumDirection.EnumAxis enumdirection_enumaxis = this.dir.n();
+                EnumDirection.EnumAxis enumdirection_enumaxis = this.currentMoveDirection.n();
 
-                if (this.world.a(blockposition.shift(this.dir), (Entity) this)) {
+                if (this.level.a(blockposition.shift(this.currentMoveDirection), (Entity) this)) {
                     this.a(enumdirection_enumaxis);
                 } else {
-                    BlockPosition blockposition1 = this.target.getChunkCoordinates();
+                    BlockPosition blockposition1 = this.finalTarget.getChunkCoordinates();
 
                     if (enumdirection_enumaxis == EnumDirection.EnumAxis.X && blockposition.getX() == blockposition1.getX() || enumdirection_enumaxis == EnumDirection.EnumAxis.Z && blockposition.getZ() == blockposition1.getZ() || enumdirection_enumaxis == EnumDirection.EnumAxis.Y && blockposition.getY() == blockposition1.getY()) {
                         this.a(enumdirection_enumaxis);
@@ -256,7 +263,7 @@ public class EntityShulkerBullet extends IProjectile {
 
     @Override
     protected boolean a(Entity entity) {
-        return super.a(entity) && !entity.noclip;
+        return super.a(entity) && !entity.noPhysics;
     }
 
     @Override
@@ -265,7 +272,12 @@ public class EntityShulkerBullet extends IProjectile {
     }
 
     @Override
-    public float aR() {
+    public boolean a(double d0) {
+        return d0 < 16384.0D;
+    }
+
+    @Override
+    public float aY() {
         return 1.0F;
     }
 
@@ -280,7 +292,7 @@ public class EntityShulkerBullet extends IProjectile {
         if (flag) {
             this.a(entityliving, entity);
             if (entity instanceof EntityLiving) {
-                ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.LEVITATION, 200));
+                ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.LEVITATION, 200), (Entity) MoreObjects.firstNonNull(entity1, this));
             }
         }
 
@@ -289,8 +301,8 @@ public class EntityShulkerBullet extends IProjectile {
     @Override
     protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
         super.a(movingobjectpositionblock);
-        ((WorldServer) this.world).a(Particles.EXPLOSION, this.locX(), this.locY(), this.locZ(), 2, 0.2D, 0.2D, 0.2D, 0.0D);
-        this.playSound(SoundEffects.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
+        ((WorldServer) this.level).a(Particles.EXPLOSION, this.locX(), this.locY(), this.locZ(), 2, 0.2D, 0.2D, 0.2D, 0.0D);
+        this.playSound(SoundEffects.SHULKER_BULLET_HIT, 1.0F, 1.0F);
     }
 
     @Override
@@ -306,9 +318,9 @@ public class EntityShulkerBullet extends IProjectile {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.world.isClientSide) {
-            this.playSound(SoundEffects.ENTITY_SHULKER_BULLET_HURT, 1.0F, 1.0F);
-            ((WorldServer) this.world).a(Particles.CRIT, this.locX(), this.locY(), this.locZ(), 15, 0.2D, 0.2D, 0.2D, 0.0D);
+        if (!this.level.isClientSide) {
+            this.playSound(SoundEffects.SHULKER_BULLET_HURT, 1.0F, 1.0F);
+            ((WorldServer) this.level).a(Particles.CRIT, this.locX(), this.locY(), this.locZ(), 15, 0.2D, 0.2D, 0.2D, 0.0D);
             this.die();
         }
 
@@ -316,7 +328,12 @@ public class EntityShulkerBullet extends IProjectile {
     }
 
     @Override
-    public Packet<?> P() {
-        return new PacketPlayOutSpawnEntity(this);
+    public void a(PacketPlayOutSpawnEntity packetplayoutspawnentity) {
+        super.a(packetplayoutspawnentity);
+        double d0 = packetplayoutspawnentity.g();
+        double d1 = packetplayoutspawnentity.h();
+        double d2 = packetplayoutspawnentity.i();
+
+        this.setMot(d0, d1, d2);
     }
 }

@@ -7,17 +7,17 @@ import net.minecraft.network.PacketDataSerializer;
 
 public class DataPaletteGlobal<T> implements DataPalette<T> {
 
-    private final RegistryBlockID<T> a;
-    private final T b;
+    private final RegistryBlockID<T> registry;
+    private final T defaultValue;
 
     public DataPaletteGlobal(RegistryBlockID<T> registryblockid, T t0) {
-        this.a = registryblockid;
-        this.b = t0;
+        this.registry = registryblockid;
+        this.defaultValue = t0;
     }
 
     @Override
     public int a(T t0) {
-        int i = this.a.getId(t0);
+        int i = this.registry.getId(t0);
 
         return i == -1 ? 0 : i;
     }
@@ -29,10 +29,13 @@ public class DataPaletteGlobal<T> implements DataPalette<T> {
 
     @Override
     public T a(int i) {
-        T t0 = this.a.fromId(i);
+        T t0 = this.registry.fromId(i);
 
-        return t0 == null ? this.b : t0;
+        return t0 == null ? this.defaultValue : t0;
     }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {}
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) {}
@@ -40,6 +43,11 @@ public class DataPaletteGlobal<T> implements DataPalette<T> {
     @Override
     public int a() {
         return PacketDataSerializer.a(0);
+    }
+
+    @Override
+    public int b() {
+        return this.registry.a();
     }
 
     @Override

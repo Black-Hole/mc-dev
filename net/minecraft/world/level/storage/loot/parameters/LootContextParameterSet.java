@@ -3,37 +3,47 @@ package net.minecraft.world.level.storage.loot.parameters;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.world.level.storage.loot.LootCollector;
 import net.minecraft.world.level.storage.loot.LootItemUser;
 
 public class LootContextParameterSet {
 
-    private final Set<LootContextParameter<?>> a;
-    private final Set<LootContextParameter<?>> b;
+    private final Set<LootContextParameter<?>> required;
+    private final Set<LootContextParameter<?>> all;
 
-    private LootContextParameterSet(Set<LootContextParameter<?>> set, Set<LootContextParameter<?>> set1) {
-        this.a = ImmutableSet.copyOf(set);
-        this.b = ImmutableSet.copyOf(Sets.union(set, set1));
+    LootContextParameterSet(Set<LootContextParameter<?>> set, Set<LootContextParameter<?>> set1) {
+        this.required = ImmutableSet.copyOf(set);
+        this.all = ImmutableSet.copyOf(Sets.union(set, set1));
+    }
+
+    public boolean a(LootContextParameter<?> lootcontextparameter) {
+        return this.all.contains(lootcontextparameter);
     }
 
     public Set<LootContextParameter<?>> getRequired() {
-        return this.a;
+        return this.required;
     }
 
     public Set<LootContextParameter<?>> getOptional() {
-        return this.b;
+        return this.all;
     }
 
     public String toString() {
-        return "[" + Joiner.on(", ").join(this.b.stream().map((lootcontextparameter) -> {
-            return (this.a.contains(lootcontextparameter) ? "!" : "") + lootcontextparameter.a();
-        }).iterator()) + "]";
+        Joiner joiner = Joiner.on(", ");
+        Iterator iterator = this.all.stream().map((lootcontextparameter) -> {
+            String s = this.required.contains(lootcontextparameter) ? "!" : "";
+
+            return s + lootcontextparameter.a();
+        }).iterator();
+
+        return "[" + joiner.join(iterator) + "]";
     }
 
     public void a(LootCollector lootcollector, LootItemUser lootitemuser) {
-        Set<LootContextParameter<?>> set = lootitemuser.a();
-        Set<LootContextParameter<?>> set1 = Sets.difference(set, this.b);
+        Set<LootContextParameter<?>> set = lootitemuser.b();
+        Set<LootContextParameter<?>> set1 = Sets.difference(set, this.all);
 
         if (!set1.isEmpty()) {
             lootcollector.a("Parameters " + set1 + " are not provided in this context");
@@ -41,33 +51,37 @@ public class LootContextParameterSet {
 
     }
 
+    public static LootContextParameterSet.Builder c() {
+        return new LootContextParameterSet.Builder();
+    }
+
     public static class Builder {
 
-        private final Set<LootContextParameter<?>> a = Sets.newIdentityHashSet();
-        private final Set<LootContextParameter<?>> b = Sets.newIdentityHashSet();
+        private final Set<LootContextParameter<?>> required = Sets.newIdentityHashSet();
+        private final Set<LootContextParameter<?>> optional = Sets.newIdentityHashSet();
 
         public Builder() {}
 
         public LootContextParameterSet.Builder addRequired(LootContextParameter<?> lootcontextparameter) {
-            if (this.b.contains(lootcontextparameter)) {
+            if (this.optional.contains(lootcontextparameter)) {
                 throw new IllegalArgumentException("Parameter " + lootcontextparameter.a() + " is already optional");
             } else {
-                this.a.add(lootcontextparameter);
+                this.required.add(lootcontextparameter);
                 return this;
             }
         }
 
         public LootContextParameterSet.Builder addOptional(LootContextParameter<?> lootcontextparameter) {
-            if (this.a.contains(lootcontextparameter)) {
+            if (this.required.contains(lootcontextparameter)) {
                 throw new IllegalArgumentException("Parameter " + lootcontextparameter.a() + " is already required");
             } else {
-                this.b.add(lootcontextparameter);
+                this.optional.add(lootcontextparameter);
                 return this;
             }
         }
 
         public LootContextParameterSet build() {
-            return new LootContextParameterSet(this.a, this.b);
+            return new LootContextParameterSet(this.required, this.optional);
         }
     }
 }

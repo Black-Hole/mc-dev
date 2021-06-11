@@ -1,6 +1,7 @@
 package net.minecraft.world.level.block;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.EnumPistonReaction;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -18,17 +20,17 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public abstract class BlockPressurePlateAbstract extends Block {
 
-    protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 0.5D, 15.0D);
-    protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.25D, 0.875D);
+    protected static final VoxelShape PRESSED_AABB = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 0.5D, 15.0D);
+    protected static final VoxelShape AABB = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
+    protected static final AxisAlignedBB TOUCH_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.25D, 0.875D);
 
     protected BlockPressurePlateAbstract(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.getPower(iblockdata) > 0 ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.getPower(iblockdata) > 0 ? BlockPressurePlateAbstract.PRESSED_AABB : BlockPressurePlateAbstract.AABB;
     }
 
     protected int c() {
@@ -36,7 +38,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Override
-    public boolean ai_() {
+    public boolean W_() {
         return true;
     }
 
@@ -49,7 +51,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return c((IBlockAccess) iworldreader, blockposition1) || a(iworldreader, blockposition1, EnumDirection.UP);
+        return c(iworldreader, blockposition1) || a(iworldreader, blockposition1, EnumDirection.UP);
     }
 
     @Override
@@ -57,7 +59,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         int i = this.getPower(iblockdata);
 
         if (i > 0) {
-            this.a(worldserver, blockposition, iblockdata, i);
+            this.a((Entity) null, (World) worldserver, blockposition, iblockdata, i);
         }
 
     }
@@ -68,13 +70,13 @@ public abstract class BlockPressurePlateAbstract extends Block {
             int i = this.getPower(iblockdata);
 
             if (i == 0) {
-                this.a(world, blockposition, iblockdata, i);
+                this.a(entity, world, blockposition, iblockdata, i);
             }
 
         }
     }
 
-    protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
+    protected void a(@Nullable Entity entity, World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
         int j = this.b(world, blockposition);
         boolean flag = i > 0;
         boolean flag1 = j > 0;
@@ -89,8 +91,10 @@ public abstract class BlockPressurePlateAbstract extends Block {
 
         if (!flag1 && flag) {
             this.b((GeneratorAccess) world, blockposition);
+            world.a(entity, GameEvent.BLOCK_UNPRESS, blockposition);
         } else if (flag1 && !flag) {
             this.a((GeneratorAccess) world, blockposition);
+            world.a(entity, GameEvent.BLOCK_PRESS, blockposition);
         }
 
         if (flag1) {

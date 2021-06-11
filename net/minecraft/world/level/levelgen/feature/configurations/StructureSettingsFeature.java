@@ -4,39 +4,40 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.function.Function;
+import net.minecraft.util.ExtraCodecs;
 
 public class StructureSettingsFeature {
 
-    public static final Codec<StructureSettingsFeature> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<StructureSettingsFeature> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structuresettingsfeature) -> {
-            return structuresettingsfeature.b;
+            return structuresettingsfeature.spacing;
         }), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structuresettingsfeature) -> {
-            return structuresettingsfeature.c;
-        }), Codec.intRange(0, Integer.MAX_VALUE).fieldOf("salt").forGetter((structuresettingsfeature) -> {
-            return structuresettingsfeature.d;
+            return structuresettingsfeature.separation;
+        }), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("salt").forGetter((structuresettingsfeature) -> {
+            return structuresettingsfeature.salt;
         })).apply(instance, StructureSettingsFeature::new);
     }).comapFlatMap((structuresettingsfeature) -> {
-        return structuresettingsfeature.b <= structuresettingsfeature.c ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structuresettingsfeature);
+        return structuresettingsfeature.spacing <= structuresettingsfeature.separation ? DataResult.error("Spacing has to be smaller than separation") : DataResult.success(structuresettingsfeature);
     }, Function.identity());
-    private final int b;
-    private final int c;
-    private final int d;
+    private final int spacing;
+    private final int separation;
+    private final int salt;
 
     public StructureSettingsFeature(int i, int j, int k) {
-        this.b = i;
-        this.c = j;
-        this.d = k;
+        this.spacing = i;
+        this.separation = j;
+        this.salt = k;
     }
 
     public int a() {
-        return this.b;
+        return this.spacing;
     }
 
     public int b() {
-        return this.c;
+        return this.separation;
     }
 
     public int c() {
-        return this.d;
+        return this.salt;
     }
 }

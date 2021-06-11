@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -11,39 +10,56 @@ import org.apache.commons.lang3.Validate;
 
 public class PacketPlayOutEntitySound implements Packet<PacketListenerPlayOut> {
 
-    private SoundEffect a;
-    private SoundCategory b;
-    private int c;
-    private float d;
-    private float e;
-
-    public PacketPlayOutEntitySound() {}
+    private final SoundEffect sound;
+    private final SoundCategory source;
+    private final int id;
+    private final float volume;
+    private final float pitch;
 
     public PacketPlayOutEntitySound(SoundEffect soundeffect, SoundCategory soundcategory, Entity entity, float f, float f1) {
         Validate.notNull(soundeffect, "sound", new Object[0]);
-        this.a = soundeffect;
-        this.b = soundcategory;
-        this.c = entity.getId();
-        this.d = f;
-        this.e = f1;
+        this.sound = soundeffect;
+        this.source = soundcategory;
+        this.id = entity.getId();
+        this.volume = f;
+        this.pitch = f1;
+    }
+
+    public PacketPlayOutEntitySound(PacketDataSerializer packetdataserializer) {
+        this.sound = (SoundEffect) IRegistry.SOUND_EVENT.fromId(packetdataserializer.j());
+        this.source = (SoundCategory) packetdataserializer.a(SoundCategory.class);
+        this.id = packetdataserializer.j();
+        this.volume = packetdataserializer.readFloat();
+        this.pitch = packetdataserializer.readFloat();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (SoundEffect) IRegistry.SOUND_EVENT.fromId(packetdataserializer.i());
-        this.b = (SoundCategory) packetdataserializer.a(SoundCategory.class);
-        this.c = packetdataserializer.i();
-        this.d = packetdataserializer.readFloat();
-        this.e = packetdataserializer.readFloat();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(IRegistry.SOUND_EVENT.getId(this.sound));
+        packetdataserializer.a((Enum) this.source);
+        packetdataserializer.d(this.id);
+        packetdataserializer.writeFloat(this.volume);
+        packetdataserializer.writeFloat(this.pitch);
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(IRegistry.SOUND_EVENT.a((Object) this.a));
-        packetdataserializer.a((Enum) this.b);
-        packetdataserializer.d(this.c);
-        packetdataserializer.writeFloat(this.d);
-        packetdataserializer.writeFloat(this.e);
+    public SoundEffect b() {
+        return this.sound;
+    }
+
+    public SoundCategory c() {
+        return this.source;
+    }
+
+    public int d() {
+        return this.id;
+    }
+
+    public float e() {
+        return this.volume;
+    }
+
+    public float f() {
+        return this.pitch;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

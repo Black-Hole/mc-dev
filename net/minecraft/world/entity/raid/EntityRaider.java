@@ -31,7 +31,7 @@ import net.minecraft.world.entity.GroupDataEntity;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalRaid;
 import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.ai.village.poi.VillagePlace;
 import net.minecraft.world.entity.ai.village.poi.VillagePlaceType;
 import net.minecraft.world.entity.animal.EntityWolf;
@@ -47,15 +47,15 @@ import net.minecraft.world.phys.Vec3D;
 
 public abstract class EntityRaider extends EntityMonsterPatrolling {
 
-    protected static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityRaider.class, DataWatcherRegistry.i);
-    private static final Predicate<EntityItem> b = (entityitem) -> {
-        return !entityitem.p() && entityitem.isAlive() && ItemStack.matches(entityitem.getItemStack(), Raid.s());
+    protected static final DataWatcherObject<Boolean> IS_CELEBRATING = DataWatcher.a(EntityRaider.class, DataWatcherRegistry.BOOLEAN);
+    static final Predicate<EntityItem> ALLOWED_ITEMS = (entityitem) -> {
+        return !entityitem.q() && entityitem.isAlive() && ItemStack.matches(entityitem.getItemStack(), Raid.s());
     };
     @Nullable
-    protected Raid d;
-    private int bo;
+    protected Raid raid;
+    private int wave;
     private boolean canJoinRaid;
-    private int bq;
+    private int ticksOutsideRaid;
 
     protected EntityRaider(EntityTypes<? extends EntityRaider> entitytypes, World world) {
         super(entitytypes, world);
@@ -73,7 +73,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityRaider.c, false);
+        this.entityData.register(EntityRaider.IS_CELEBRATING, false);
     }
 
     public abstract void a(int i, boolean flag);
@@ -88,13 +88,13 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     @Override
     public void movementTick() {
-        if (this.world instanceof WorldServer && this.isAlive()) {
-            Raid raid = this.fa();
+        if (this.level instanceof WorldServer && this.isAlive()) {
+            Raid raid = this.fJ();
 
             if (this.isCanJoinRaid()) {
                 if (raid == null) {
-                    if (this.world.getTime() % 20L == 0L) {
-                        Raid raid1 = ((WorldServer) this.world).b_(this.getChunkCoordinates());
+                    if (this.level.getTime() % 20L == 0L) {
+                        Raid raid1 = ((WorldServer) this.level).c(this.getChunkCoordinates());
 
                         if (raid1 != null && PersistentRaid.a(this, raid1)) {
                             raid1.a(raid1.getGroupsSpawned(), this, (BlockPosition) null, true);
@@ -104,7 +104,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                     EntityLiving entityliving = this.getGoalTarget();
 
                     if (entityliving != null && (entityliving.getEntityType() == EntityTypes.PLAYER || entityliving.getEntityType() == EntityTypes.IRON_GOLEM)) {
-                        this.ticksFarFromPlayer = 0;
+                        this.noActionTime = 0;
                     }
                 }
             }
@@ -114,19 +114,19 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     @Override
-    protected void eQ() {
-        this.ticksFarFromPlayer += 2;
+    protected void fz() {
+        this.noActionTime += 2;
     }
 
     @Override
     public void die(DamageSource damagesource) {
-        if (this.world instanceof WorldServer) {
+        if (this.level instanceof WorldServer) {
             Entity entity = damagesource.getEntity();
-            Raid raid = this.fa();
+            Raid raid = this.fJ();
 
             if (raid != null) {
                 if (this.isPatrolLeader()) {
-                    raid.c(this.fc());
+                    raid.c(this.fL());
                 }
 
                 if (entity != null && entity.getEntityType() == EntityTypes.PLAYER) {
@@ -136,7 +136,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                 raid.a(this, false);
             }
 
-            if (this.isPatrolLeader() && raid == null && ((WorldServer) this.world).b_(this.getChunkCoordinates()) == null) {
+            if (this.isPatrolLeader() && raid == null && ((WorldServer) this.level).c(this.getChunkCoordinates()) == null) {
                 ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
                 EntityHuman entityhuman = null;
 
@@ -166,7 +166,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                     i = MathHelper.clamp(i, 0, 4);
                     MobEffect mobeffect1 = new MobEffect(MobEffects.BAD_OMEN, 120000, i, false, false, true);
 
-                    if (!this.world.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
+                    if (!this.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
                         entityhuman.addEffect(mobeffect1);
                     }
                 }
@@ -177,42 +177,46 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     @Override
-    public boolean eT() {
-        return !this.fb();
+    public boolean fC() {
+        return !this.fK();
     }
 
     public void a(@Nullable Raid raid) {
-        this.d = raid;
+        this.raid = raid;
     }
 
     @Nullable
-    public Raid fa() {
-        return this.d;
+    public Raid fJ() {
+        return this.raid;
     }
 
-    public boolean fb() {
-        return this.fa() != null && this.fa().v();
+    public boolean fK() {
+        return this.fJ() != null && this.fJ().v();
     }
 
     public void a(int i) {
-        this.bo = i;
+        this.wave = i;
     }
 
-    public int fc() {
-        return this.bo;
+    public int fL() {
+        return this.wave;
     }
 
-    public void x(boolean flag) {
-        this.datawatcher.set(EntityRaider.c, flag);
+    public boolean fM() {
+        return (Boolean) this.entityData.get(EntityRaider.IS_CELEBRATING);
+    }
+
+    public void z(boolean flag) {
+        this.entityData.set(EntityRaider.IS_CELEBRATING, flag);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("Wave", this.bo);
+        nbttagcompound.setInt("Wave", this.wave);
         nbttagcompound.setBoolean("CanJoinRaid", this.canJoinRaid);
-        if (this.d != null) {
-            nbttagcompound.setInt("RaidId", this.d.getId());
+        if (this.raid != null) {
+            nbttagcompound.setInt("RaidId", this.raid.getId());
         }
 
     }
@@ -220,17 +224,17 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.bo = nbttagcompound.getInt("Wave");
+        this.wave = nbttagcompound.getInt("Wave");
         this.canJoinRaid = nbttagcompound.getBoolean("CanJoinRaid");
         if (nbttagcompound.hasKeyOfType("RaidId", 3)) {
-            if (this.world instanceof WorldServer) {
-                this.d = ((WorldServer) this.world).getPersistentRaid().a(nbttagcompound.getInt("RaidId"));
+            if (this.level instanceof WorldServer) {
+                this.raid = ((WorldServer) this.level).getPersistentRaid().a(nbttagcompound.getInt("RaidId"));
             }
 
-            if (this.d != null) {
-                this.d.a(this.bo, this, false);
+            if (this.raid != null) {
+                this.raid.a(this.wave, this, false);
                 if (this.isPatrolLeader()) {
-                    this.d.a(this.bo, this);
+                    this.raid.a(this.wave, this);
                 }
             }
         }
@@ -240,22 +244,22 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     protected void b(EntityItem entityitem) {
         ItemStack itemstack = entityitem.getItemStack();
-        boolean flag = this.fb() && this.fa().b(this.fc()) != null;
+        boolean flag = this.fK() && this.fJ().b(this.fL()) != null;
 
-        if (this.fb() && !flag && ItemStack.matches(itemstack, Raid.s())) {
+        if (this.fK() && !flag && ItemStack.matches(itemstack, Raid.s())) {
             EnumItemSlot enumitemslot = EnumItemSlot.HEAD;
             ItemStack itemstack1 = this.getEquipment(enumitemslot);
             double d0 = (double) this.e(enumitemslot);
 
             if (!itemstack1.isEmpty() && (double) Math.max(this.random.nextFloat() - 0.1F, 0.0F) < d0) {
-                this.a(itemstack1);
+                this.b(itemstack1);
             }
 
             this.a(entityitem);
             this.setSlot(enumitemslot, itemstack);
             this.receive(entityitem, itemstack.getCount());
             entityitem.die();
-            this.fa().a(this.fc(), this);
+            this.fJ().a(this.fL(), this);
             this.setPatrolLeader(true);
         } else {
             super.b(entityitem);
@@ -265,26 +269,26 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     @Override
     public boolean isTypeNotPersistent(double d0) {
-        return this.fa() == null ? super.isTypeNotPersistent(d0) : false;
+        return this.fJ() == null ? super.isTypeNotPersistent(d0) : false;
     }
 
     @Override
     public boolean isSpecialPersistence() {
-        return super.isSpecialPersistence() || this.fa() != null;
+        return super.isSpecialPersistence() || this.fJ() != null;
     }
 
-    public int fe() {
-        return this.bq;
+    public int fN() {
+        return this.ticksOutsideRaid;
     }
 
     public void b(int i) {
-        this.bq = i;
+        this.ticksOutsideRaid = i;
     }
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.fb()) {
-            this.fa().updateProgress();
+        if (this.fK()) {
+            this.fJ().updateProgress();
         }
 
         return super.damageEntity(damagesource, f);
@@ -297,58 +301,101 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
-    public abstract SoundEffect eL();
+    public abstract SoundEffect t();
 
-    static class d extends PathfinderGoal {
+    public class b<T extends EntityRaider> extends PathfinderGoal {
 
-        private final EntityRaider a;
-        private final double b;
-        private BlockPosition c;
-        private final List<BlockPosition> d = Lists.newArrayList();
-        private final int e;
-        private boolean f;
+        private final T mob;
+
+        public b(EntityRaider entityraider) {
+            this.mob = entityraider;
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean a() {
+            Raid raid = this.mob.fJ();
+
+            if (this.mob.fK() && !this.mob.fJ().a() && this.mob.fw() && !ItemStack.matches(this.mob.getEquipment(EnumItemSlot.HEAD), Raid.s())) {
+                EntityRaider entityraider = raid.b(this.mob.fL());
+
+                if (entityraider == null || !entityraider.isAlive()) {
+                    List<EntityItem> list = this.mob.level.a(EntityItem.class, this.mob.getBoundingBox().grow(16.0D, 8.0D, 16.0D), EntityRaider.ALLOWED_ITEMS);
+
+                    if (!list.isEmpty()) {
+                        return this.mob.getNavigation().a((Entity) list.get(0), 1.149999976158142D);
+                    }
+                }
+
+                return false;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public void e() {
+            if (this.mob.getNavigation().h().a((IPosition) this.mob.getPositionVector(), 1.414D)) {
+                List<EntityItem> list = this.mob.level.a(EntityItem.class, this.mob.getBoundingBox().grow(4.0D, 4.0D, 4.0D), EntityRaider.ALLOWED_ITEMS);
+
+                if (!list.isEmpty()) {
+                    this.mob.b((EntityItem) list.get(0));
+                }
+            }
+
+        }
+    }
+
+    private static class d extends PathfinderGoal {
+
+        private final EntityRaider raider;
+        private final double speedModifier;
+        private BlockPosition poiPos;
+        private final List<BlockPosition> visited = Lists.newArrayList();
+        private final int distanceToPoi;
+        private boolean stuck;
 
         public d(EntityRaider entityraider, double d0, int i) {
-            this.a = entityraider;
-            this.b = d0;
-            this.e = i;
+            this.raider = entityraider;
+            this.speedModifier = d0;
+            this.distanceToPoi = i;
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean a() {
             this.j();
-            return this.g() && this.h() && this.a.getGoalTarget() == null;
+            return this.g() && this.h() && this.raider.getGoalTarget() == null;
         }
 
         private boolean g() {
-            return this.a.fb() && !this.a.fa().a();
+            return this.raider.fK() && !this.raider.fJ().a();
         }
 
         private boolean h() {
-            WorldServer worldserver = (WorldServer) this.a.world;
-            BlockPosition blockposition = this.a.getChunkCoordinates();
-            Optional<BlockPosition> optional = worldserver.y().a((villageplacetype) -> {
-                return villageplacetype == VillagePlaceType.r;
-            }, this::a, VillagePlace.Occupancy.ANY, blockposition, 48, this.a.random);
+            WorldServer worldserver = (WorldServer) this.raider.level;
+            BlockPosition blockposition = this.raider.getChunkCoordinates();
+            Optional<BlockPosition> optional = worldserver.A().a((villageplacetype) -> {
+                return villageplacetype == VillagePlaceType.HOME;
+            }, this::a, VillagePlace.Occupancy.ANY, blockposition, 48, this.raider.random);
 
             if (!optional.isPresent()) {
                 return false;
             } else {
-                this.c = ((BlockPosition) optional.get()).immutableCopy();
+                this.poiPos = ((BlockPosition) optional.get()).immutableCopy();
                 return true;
             }
         }
 
         @Override
         public boolean b() {
-            return this.a.getNavigation().m() ? false : this.a.getGoalTarget() == null && !this.c.a((IPosition) this.a.getPositionVector(), (double) (this.a.getWidth() + (float) this.e)) && !this.f;
+            return this.raider.getNavigation().m() ? false : this.raider.getGoalTarget() == null && !this.poiPos.a((IPosition) this.raider.getPositionVector(), (double) (this.raider.getWidth() + (float) this.distanceToPoi)) && !this.stuck;
         }
 
         @Override
         public void d() {
-            if (this.c.a((IPosition) this.a.getPositionVector(), (double) this.e)) {
-                this.d.add(this.c);
+            if (this.poiPos.a((IPosition) this.raider.getPositionVector(), (double) this.distanceToPoi)) {
+                this.visited.add(this.poiPos);
             }
 
         }
@@ -356,33 +403,33 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         @Override
         public void c() {
             super.c();
-            this.a.n(0);
-            this.a.getNavigation().a((double) this.c.getX(), (double) this.c.getY(), (double) this.c.getZ(), this.b);
-            this.f = false;
+            this.raider.o(0);
+            this.raider.getNavigation().a((double) this.poiPos.getX(), (double) this.poiPos.getY(), (double) this.poiPos.getZ(), this.speedModifier);
+            this.stuck = false;
         }
 
         @Override
         public void e() {
-            if (this.a.getNavigation().m()) {
-                Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.c);
-                Vec3D vec3d1 = RandomPositionGenerator.a(this.a, 16, 7, vec3d, 0.3141592741012573D);
+            if (this.raider.getNavigation().m()) {
+                Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.poiPos);
+                Vec3D vec3d1 = DefaultRandomPos.a(this.raider, 16, 7, vec3d, 0.3141592741012573D);
 
                 if (vec3d1 == null) {
-                    vec3d1 = RandomPositionGenerator.b(this.a, 8, 7, vec3d);
+                    vec3d1 = DefaultRandomPos.a(this.raider, 8, 7, vec3d, 1.5707963705062866D);
                 }
 
                 if (vec3d1 == null) {
-                    this.f = true;
+                    this.stuck = true;
                     return;
                 }
 
-                this.a.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z, this.b);
+                this.raider.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z, this.speedModifier);
             }
 
         }
 
         private boolean a(BlockPosition blockposition) {
-            Iterator iterator = this.d.iterator();
+            Iterator iterator = this.visited.iterator();
 
             BlockPosition blockposition1;
 
@@ -398,43 +445,85 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         }
 
         private void j() {
-            if (this.d.size() > 2) {
-                this.d.remove(0);
+            if (this.visited.size() > 2) {
+                this.visited.remove(0);
             }
 
         }
     }
 
-    public class a extends PathfinderGoal {
+    public class c extends PathfinderGoal {
 
-        private final EntityRaider c;
-        private final float d;
-        public final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(8.0D).d().a().b().c().e();
+        private final EntityRaider mob;
+
+        c(EntityRaider entityraider) {
+            this.mob = entityraider;
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
+        }
+
+        @Override
+        public boolean a() {
+            Raid raid = this.mob.fJ();
+
+            return this.mob.isAlive() && this.mob.getGoalTarget() == null && raid != null && raid.isLoss();
+        }
+
+        @Override
+        public void c() {
+            this.mob.z(true);
+            super.c();
+        }
+
+        @Override
+        public void d() {
+            this.mob.z(false);
+            super.d();
+        }
+
+        @Override
+        public void e() {
+            if (!this.mob.isSilent() && this.mob.random.nextInt(100) == 0) {
+                EntityRaider.this.playSound(EntityRaider.this.t(), EntityRaider.this.getSoundVolume(), EntityRaider.this.ep());
+            }
+
+            if (!this.mob.isPassenger() && this.mob.random.nextInt(50) == 0) {
+                this.mob.getControllerJump().jump();
+            }
+
+            super.e();
+        }
+    }
+
+    protected class a extends PathfinderGoal {
+
+        private final EntityRaider mob;
+        private final float hostileRadiusSqr;
+        public final PathfinderTargetCondition shoutTargeting = PathfinderTargetCondition.b().a(8.0D).d().e();
 
         public a(EntityIllagerAbstract entityillagerabstract, float f) {
-            this.c = entityillagerabstract;
-            this.d = f * f;
+            this.mob = entityillagerabstract;
+            this.hostileRadiusSqr = f * f;
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
 
         @Override
         public boolean a() {
-            EntityLiving entityliving = this.c.getLastDamager();
+            EntityLiving entityliving = this.mob.getLastDamager();
 
-            return this.c.fa() == null && this.c.isPatrolling() && this.c.getGoalTarget() != null && !this.c.isAggressive() && (entityliving == null || entityliving.getEntityType() != EntityTypes.PLAYER);
+            return this.mob.fJ() == null && this.mob.isPatrolling() && this.mob.getGoalTarget() != null && !this.mob.isAggressive() && (entityliving == null || entityliving.getEntityType() != EntityTypes.PLAYER);
         }
 
         @Override
         public void c() {
             super.c();
-            this.c.getNavigation().o();
-            List<EntityRaider> list = this.c.world.a(EntityRaider.class, this.a, this.c, this.c.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
+            this.mob.getNavigation().o();
+            List<EntityRaider> list = this.mob.level.a(EntityRaider.class, this.shoutTargeting, (EntityLiving) this.mob, this.mob.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityRaider entityraider = (EntityRaider) iterator.next();
 
-                entityraider.setGoalTarget(this.c.getGoalTarget());
+                entityraider.setGoalTarget(this.mob.getGoalTarget());
             }
 
         }
@@ -442,10 +531,10 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         @Override
         public void d() {
             super.d();
-            EntityLiving entityliving = this.c.getGoalTarget();
+            EntityLiving entityliving = this.mob.getGoalTarget();
 
             if (entityliving != null) {
-                List<EntityRaider> list = this.c.world.a(EntityRaider.class, this.a, this.c, this.c.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
+                List<EntityRaider> list = this.mob.level.a(EntityRaider.class, this.shoutTargeting, (EntityLiving) this.mob, this.mob.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
@@ -455,112 +544,27 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                     entityraider.setAggressive(true);
                 }
 
-                this.c.setAggressive(true);
+                this.mob.setAggressive(true);
             }
 
         }
 
         @Override
         public void e() {
-            EntityLiving entityliving = this.c.getGoalTarget();
+            EntityLiving entityliving = this.mob.getGoalTarget();
 
             if (entityliving != null) {
-                if (this.c.h((Entity) entityliving) > (double) this.d) {
-                    this.c.getControllerLook().a(entityliving, 30.0F, 30.0F);
-                    if (this.c.random.nextInt(50) == 0) {
-                        this.c.F();
+                if (this.mob.f((Entity) entityliving) > (double) this.hostileRadiusSqr) {
+                    this.mob.getControllerLook().a(entityliving, 30.0F, 30.0F);
+                    if (this.mob.random.nextInt(50) == 0) {
+                        this.mob.K();
                     }
                 } else {
-                    this.c.setAggressive(true);
+                    this.mob.setAggressive(true);
                 }
 
                 super.e();
             }
-        }
-    }
-
-    public class c extends PathfinderGoal {
-
-        private final EntityRaider b;
-
-        c(EntityRaider entityraider) {
-            this.b = entityraider;
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean a() {
-            Raid raid = this.b.fa();
-
-            return this.b.isAlive() && this.b.getGoalTarget() == null && raid != null && raid.isLoss();
-        }
-
-        @Override
-        public void c() {
-            this.b.x(true);
-            super.c();
-        }
-
-        @Override
-        public void d() {
-            this.b.x(false);
-            super.d();
-        }
-
-        @Override
-        public void e() {
-            if (!this.b.isSilent() && this.b.random.nextInt(100) == 0) {
-                EntityRaider.this.playSound(EntityRaider.this.eL(), EntityRaider.this.getSoundVolume(), EntityRaider.this.dH());
-            }
-
-            if (!this.b.isPassenger() && this.b.random.nextInt(50) == 0) {
-                this.b.getControllerJump().jump();
-            }
-
-            super.e();
-        }
-    }
-
-    public class b<T extends EntityRaider> extends PathfinderGoal {
-
-        private final T b;
-
-        public b(EntityRaider entityraider) {
-            this.b = entityraider;
-            this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        }
-
-        @Override
-        public boolean a() {
-            Raid raid = this.b.fa();
-
-            if (this.b.fb() && !this.b.fa().a() && this.b.eN() && !ItemStack.matches(this.b.getEquipment(EnumItemSlot.HEAD), Raid.s())) {
-                EntityRaider entityraider = raid.b(this.b.fc());
-
-                if (entityraider == null || !entityraider.isAlive()) {
-                    List<EntityItem> list = this.b.world.a(EntityItem.class, this.b.getBoundingBox().grow(16.0D, 8.0D, 16.0D), EntityRaider.b);
-
-                    if (!list.isEmpty()) {
-                        return this.b.getNavigation().a((Entity) list.get(0), 1.149999976158142D);
-                    }
-                }
-
-                return false;
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        public void e() {
-            if (this.b.getNavigation().h().a((IPosition) this.b.getPositionVector(), 1.414D)) {
-                List<EntityItem> list = this.b.world.a(EntityItem.class, this.b.getBoundingBox().grow(4.0D, 4.0D, 4.0D), EntityRaider.b);
-
-                if (!list.isEmpty()) {
-                    this.b.b((EntityItem) list.get(0));
-                }
-            }
-
         }
     }
 }

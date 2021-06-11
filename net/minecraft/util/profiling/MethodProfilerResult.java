@@ -8,5 +8,7 @@ public interface MethodProfilerResult {
 
     long b();
 
-    Object2LongMap<String> c();
+    long c();
+
+    Object2LongMap<String> d();
 }

@@ -9,13 +9,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.SystemUtils;
-import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.INamable;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.level.BlockColumn;
 import net.minecraft.world.level.ChunkCoordIntPair;
-import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.block.EnumBlockMirror;
 import net.minecraft.world.level.block.EnumBlockRotation;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRuinedPortalConfiguration;
 import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.WorldGenFeatureRuinedPortalPieces;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
@@ -31,8 +33,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 
 public class WorldGenFeatureRuinedPortal extends StructureGenerator<WorldGenFeatureRuinedPortalConfiguration> {
 
-    private static final String[] u = new String[]{"ruined_portal/portal_1", "ruined_portal/portal_2", "ruined_portal/portal_3", "ruined_portal/portal_4", "ruined_portal/portal_5", "ruined_portal/portal_6", "ruined_portal/portal_7", "ruined_portal/portal_8", "ruined_portal/portal_9", "ruined_portal/portal_10"};
-    private static final String[] v = new String[]{"ruined_portal/giant_portal_1", "ruined_portal/giant_portal_2", "ruined_portal/giant_portal_3"};
+    static final String[] STRUCTURE_LOCATION_PORTALS = new String[]{"ruined_portal/portal_1", "ruined_portal/portal_2", "ruined_portal/portal_3", "ruined_portal/portal_4", "ruined_portal/portal_5", "ruined_portal/portal_6", "ruined_portal/portal_7", "ruined_portal/portal_8", "ruined_portal/portal_9", "ruined_portal/portal_10"};
+    static final String[] STRUCTURE_LOCATION_GIANT_PORTALS = new String[]{"ruined_portal/giant_portal_1", "ruined_portal/giant_portal_2", "ruined_portal/giant_portal_3"};
+    private static final float PROBABILITY_OF_GIANT_PORTAL = 0.05F;
+    private static final float PROBABILITY_OF_AIR_POCKET = 0.5F;
+    private static final float PROBABILITY_OF_UNDERGROUND = 0.5F;
+    private static final float UNDERWATER_MOSSINESS = 0.8F;
+    private static final float JUNGLE_MOSSINESS = 0.8F;
+    private static final float SWAMP_MOSSINESS = 0.5F;
+    private static final int MIN_Y = 15;
 
     public WorldGenFeatureRuinedPortal(Codec<WorldGenFeatureRuinedPortalConfiguration> codec) {
         super(codec);
@@ -43,40 +52,40 @@ public class WorldGenFeatureRuinedPortal extends StructureGenerator<WorldGenFeat
         return WorldGenFeatureRuinedPortal.a::new;
     }
 
-    private static boolean b(BlockPosition blockposition, BiomeBase biomebase) {
+    static boolean a(BlockPosition blockposition, BiomeBase biomebase) {
         return biomebase.getAdjustedTemperature(blockposition) < 0.15F;
     }
 
-    private static int b(Random random, ChunkGenerator chunkgenerator, WorldGenFeatureRuinedPortalPieces.Position worldgenfeatureruinedportalpieces_position, boolean flag, int i, int j, StructureBoundingBox structureboundingbox) {
+    static int a(Random random, ChunkGenerator chunkgenerator, WorldGenFeatureRuinedPortalPieces.Position worldgenfeatureruinedportalpieces_position, boolean flag, int i, int j, StructureBoundingBox structureboundingbox, LevelHeightAccessor levelheightaccessor) {
         int k;
 
         if (worldgenfeatureruinedportalpieces_position == WorldGenFeatureRuinedPortalPieces.Position.IN_NETHER) {
             if (flag) {
-                k = a(random, 32, 100);
+                k = MathHelper.b(random, 32, 100);
             } else if (random.nextFloat() < 0.5F) {
-                k = a(random, 27, 29);
+                k = MathHelper.b(random, 27, 29);
             } else {
-                k = a(random, 29, 100);
+                k = MathHelper.b(random, 29, 100);
             }
         } else {
             int l;
 
             if (worldgenfeatureruinedportalpieces_position == WorldGenFeatureRuinedPortalPieces.Position.IN_MOUNTAIN) {
                 l = i - j;
-                k = b(random, 70, l);
+                k = a(random, 70, l);
             } else if (worldgenfeatureruinedportalpieces_position == WorldGenFeatureRuinedPortalPieces.Position.UNDERGROUND) {
                 l = i - j;
-                k = b(random, 15, l);
+                k = a(random, 15, l);
             } else if (worldgenfeatureruinedportalpieces_position == WorldGenFeatureRuinedPortalPieces.Position.PARTLY_BURIED) {
-                k = i - j + a(random, 2, 8);
+                k = i - j + MathHelper.b(random, 2, 8);
             } else {
                 k = i;
             }
         }
 
-        List<BlockPosition> list = ImmutableList.of(new BlockPosition(structureboundingbox.a, 0, structureboundingbox.c), new BlockPosition(structureboundingbox.d, 0, structureboundingbox.c), new BlockPosition(structureboundingbox.a, 0, structureboundingbox.f), new BlockPosition(structureboundingbox.d, 0, structureboundingbox.f));
-        List<IBlockAccess> list1 = (List) list.stream().map((blockposition) -> {
-            return chunkgenerator.a(blockposition.getX(), blockposition.getZ());
+        List<BlockPosition> list = ImmutableList.of(new BlockPosition(structureboundingbox.g(), 0, structureboundingbox.i()), new BlockPosition(structureboundingbox.j(), 0, structureboundingbox.i()), new BlockPosition(structureboundingbox.g(), 0, structureboundingbox.l()), new BlockPosition(structureboundingbox.j(), 0, structureboundingbox.l()));
+        List<BlockColumn> list1 = (List) list.stream().map((blockposition) -> {
+            return chunkgenerator.getBaseColumn(blockposition.getX(), blockposition.getZ(), levelheightaccessor);
         }).collect(Collectors.toList());
         HeightMap.Type heightmap_type = worldgenfeatureruinedportalpieces_position == WorldGenFeatureRuinedPortalPieces.Position.ON_OCEAN_FLOOR ? HeightMap.Type.OCEAN_FLOOR_WG : HeightMap.Type.WORLD_SURFACE_WG;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
@@ -90,10 +99,10 @@ public class WorldGenFeatureRuinedPortal extends StructureGenerator<WorldGenFeat
             Iterator iterator = list1.iterator();
 
             while (iterator.hasNext()) {
-                IBlockAccess iblockaccess = (IBlockAccess) iterator.next();
-                IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
+                BlockColumn blockcolumn = (BlockColumn) iterator.next();
+                IBlockData iblockdata = blockcolumn.a(blockposition_mutableblockposition);
 
-                if (iblockdata != null && heightmap_type.e().test(iblockdata)) {
+                if (heightmap_type.e().test(iblockdata)) {
                     ++j1;
                     if (j1 == 3) {
                         return i1;
@@ -106,116 +115,111 @@ public class WorldGenFeatureRuinedPortal extends StructureGenerator<WorldGenFeat
     }
 
     private static int a(Random random, int i, int j) {
-        return random.nextInt(j - i + 1) + i;
-    }
-
-    private static int b(Random random, int i, int j) {
-        return i < j ? a(random, i, j) : j;
+        return i < j ? MathHelper.b(random, i, j) : j;
     }
 
     public static enum Type implements INamable {
 
         STANDARD("standard"), DESERT("desert"), JUNGLE("jungle"), SWAMP("swamp"), MOUNTAIN("mountain"), OCEAN("ocean"), NETHER("nether");
 
-        public static final Codec<WorldGenFeatureRuinedPortal.Type> h = INamable.a(WorldGenFeatureRuinedPortal.Type::values, WorldGenFeatureRuinedPortal.Type::a);
-        private static final Map<String, WorldGenFeatureRuinedPortal.Type> i = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureRuinedPortal.Type::b, (worldgenfeatureruinedportal_type) -> {
+        public static final Codec<WorldGenFeatureRuinedPortal.Type> CODEC = INamable.a(WorldGenFeatureRuinedPortal.Type::values, WorldGenFeatureRuinedPortal.Type::a);
+        private static final Map<String, WorldGenFeatureRuinedPortal.Type> BY_NAME = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureRuinedPortal.Type::a, (worldgenfeatureruinedportal_type) -> {
             return worldgenfeatureruinedportal_type;
         }));
-        private final String j;
+        private final String name;
 
         private Type(String s) {
-            this.j = s;
+            this.name = s;
         }
 
-        public String b() {
-            return this.j;
+        public String a() {
+            return this.name;
         }
 
         public static WorldGenFeatureRuinedPortal.Type a(String s) {
-            return (WorldGenFeatureRuinedPortal.Type) WorldGenFeatureRuinedPortal.Type.i.get(s);
+            return (WorldGenFeatureRuinedPortal.Type) WorldGenFeatureRuinedPortal.Type.BY_NAME.get(s);
         }
 
         @Override
         public String getName() {
-            return this.j;
+            return this.name;
         }
     }
 
     public static class a extends StructureStart<WorldGenFeatureRuinedPortalConfiguration> {
 
-        protected a(StructureGenerator<WorldGenFeatureRuinedPortalConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
+        protected a(StructureGenerator<WorldGenFeatureRuinedPortalConfiguration> structuregenerator, ChunkCoordIntPair chunkcoordintpair, int i, long j) {
+            super(structuregenerator, chunkcoordintpair, i, j);
         }
 
-        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureRuinedPortalConfiguration worldgenfeatureruinedportalconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureRuinedPortalConfiguration worldgenfeatureruinedportalconfiguration, LevelHeightAccessor levelheightaccessor) {
             WorldGenFeatureRuinedPortalPieces.a worldgenfeatureruinedportalpieces_a = new WorldGenFeatureRuinedPortalPieces.a();
             WorldGenFeatureRuinedPortalPieces.Position worldgenfeatureruinedportalpieces_position;
 
-            if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.DESERT) {
+            if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.DESERT) {
                 worldgenfeatureruinedportalpieces_position = WorldGenFeatureRuinedPortalPieces.Position.PARTLY_BURIED;
-                worldgenfeatureruinedportalpieces_a.d = false;
-                worldgenfeatureruinedportalpieces_a.c = 0.0F;
-            } else if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.JUNGLE) {
+                worldgenfeatureruinedportalpieces_a.airPocket = false;
+                worldgenfeatureruinedportalpieces_a.mossiness = 0.0F;
+            } else if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.JUNGLE) {
                 worldgenfeatureruinedportalpieces_position = WorldGenFeatureRuinedPortalPieces.Position.ON_LAND_SURFACE;
-                worldgenfeatureruinedportalpieces_a.d = this.d.nextFloat() < 0.5F;
-                worldgenfeatureruinedportalpieces_a.c = 0.8F;
-                worldgenfeatureruinedportalpieces_a.e = true;
-                worldgenfeatureruinedportalpieces_a.f = true;
-            } else if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.SWAMP) {
+                worldgenfeatureruinedportalpieces_a.airPocket = this.random.nextFloat() < 0.5F;
+                worldgenfeatureruinedportalpieces_a.mossiness = 0.8F;
+                worldgenfeatureruinedportalpieces_a.overgrown = true;
+                worldgenfeatureruinedportalpieces_a.vines = true;
+            } else if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.SWAMP) {
                 worldgenfeatureruinedportalpieces_position = WorldGenFeatureRuinedPortalPieces.Position.ON_OCEAN_FLOOR;
-                worldgenfeatureruinedportalpieces_a.d = false;
-                worldgenfeatureruinedportalpieces_a.c = 0.5F;
-                worldgenfeatureruinedportalpieces_a.f = true;
+                worldgenfeatureruinedportalpieces_a.airPocket = false;
+                worldgenfeatureruinedportalpieces_a.mossiness = 0.5F;
+                worldgenfeatureruinedportalpieces_a.vines = true;
             } else {
                 boolean flag;
 
-                if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.MOUNTAIN) {
-                    flag = this.d.nextFloat() < 0.5F;
+                if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.MOUNTAIN) {
+                    flag = this.random.nextFloat() < 0.5F;
                     worldgenfeatureruinedportalpieces_position = flag ? WorldGenFeatureRuinedPortalPieces.Position.IN_MOUNTAIN : WorldGenFeatureRuinedPortalPieces.Position.ON_LAND_SURFACE;
-                    worldgenfeatureruinedportalpieces_a.d = flag || this.d.nextFloat() < 0.5F;
-                } else if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.OCEAN) {
+                    worldgenfeatureruinedportalpieces_a.airPocket = flag || this.random.nextFloat() < 0.5F;
+                } else if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.OCEAN) {
                     worldgenfeatureruinedportalpieces_position = WorldGenFeatureRuinedPortalPieces.Position.ON_OCEAN_FLOOR;
-                    worldgenfeatureruinedportalpieces_a.d = false;
-                    worldgenfeatureruinedportalpieces_a.c = 0.8F;
-                } else if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.NETHER) {
+                    worldgenfeatureruinedportalpieces_a.airPocket = false;
+                    worldgenfeatureruinedportalpieces_a.mossiness = 0.8F;
+                } else if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.NETHER) {
                     worldgenfeatureruinedportalpieces_position = WorldGenFeatureRuinedPortalPieces.Position.IN_NETHER;
-                    worldgenfeatureruinedportalpieces_a.d = this.d.nextFloat() < 0.5F;
-                    worldgenfeatureruinedportalpieces_a.c = 0.0F;
-                    worldgenfeatureruinedportalpieces_a.g = true;
+                    worldgenfeatureruinedportalpieces_a.airPocket = this.random.nextFloat() < 0.5F;
+                    worldgenfeatureruinedportalpieces_a.mossiness = 0.0F;
+                    worldgenfeatureruinedportalpieces_a.replaceWithBlackstone = true;
                 } else {
-                    flag = this.d.nextFloat() < 0.5F;
+                    flag = this.random.nextFloat() < 0.5F;
                     worldgenfeatureruinedportalpieces_position = flag ? WorldGenFeatureRuinedPortalPieces.Position.UNDERGROUND : WorldGenFeatureRuinedPortalPieces.Position.ON_LAND_SURFACE;
-                    worldgenfeatureruinedportalpieces_a.d = flag || this.d.nextFloat() < 0.5F;
+                    worldgenfeatureruinedportalpieces_a.airPocket = flag || this.random.nextFloat() < 0.5F;
                 }
             }
 
             MinecraftKey minecraftkey;
 
-            if (this.d.nextFloat() < 0.05F) {
-                minecraftkey = new MinecraftKey(WorldGenFeatureRuinedPortal.v[this.d.nextInt(WorldGenFeatureRuinedPortal.v.length)]);
+            if (this.random.nextFloat() < 0.05F) {
+                minecraftkey = new MinecraftKey(WorldGenFeatureRuinedPortal.STRUCTURE_LOCATION_GIANT_PORTALS[this.random.nextInt(WorldGenFeatureRuinedPortal.STRUCTURE_LOCATION_GIANT_PORTALS.length)]);
             } else {
-                minecraftkey = new MinecraftKey(WorldGenFeatureRuinedPortal.u[this.d.nextInt(WorldGenFeatureRuinedPortal.u.length)]);
+                minecraftkey = new MinecraftKey(WorldGenFeatureRuinedPortal.STRUCTURE_LOCATION_PORTALS[this.random.nextInt(WorldGenFeatureRuinedPortal.STRUCTURE_LOCATION_PORTALS.length)]);
             }
 
             DefinedStructure definedstructure = definedstructuremanager.a(minecraftkey);
-            EnumBlockRotation enumblockrotation = (EnumBlockRotation) SystemUtils.a((Object[]) EnumBlockRotation.values(), (Random) this.d);
-            EnumBlockMirror enumblockmirror = this.d.nextFloat() < 0.5F ? EnumBlockMirror.NONE : EnumBlockMirror.FRONT_BACK;
+            EnumBlockRotation enumblockrotation = (EnumBlockRotation) SystemUtils.a((Object[]) EnumBlockRotation.values(), (Random) this.random);
+            EnumBlockMirror enumblockmirror = this.random.nextFloat() < 0.5F ? EnumBlockMirror.NONE : EnumBlockMirror.FRONT_BACK;
             BlockPosition blockposition = new BlockPosition(definedstructure.a().getX() / 2, 0, definedstructure.a().getZ() / 2);
-            BlockPosition blockposition1 = (new ChunkCoordIntPair(i, j)).l();
+            BlockPosition blockposition1 = chunkcoordintpair.l();
             StructureBoundingBox structureboundingbox = definedstructure.a(blockposition1, enumblockrotation, blockposition, enumblockmirror);
-            BaseBlockPosition baseblockposition = structureboundingbox.g();
-            int k = baseblockposition.getX();
-            int l = baseblockposition.getZ();
-            int i1 = chunkgenerator.getBaseHeight(k, l, WorldGenFeatureRuinedPortalPieces.a(worldgenfeatureruinedportalpieces_position)) - 1;
-            int j1 = WorldGenFeatureRuinedPortal.b(this.d, chunkgenerator, worldgenfeatureruinedportalpieces_position, worldgenfeatureruinedportalpieces_a.d, i1, structureboundingbox.e(), structureboundingbox);
-            BlockPosition blockposition2 = new BlockPosition(blockposition1.getX(), j1, blockposition1.getZ());
+            BlockPosition blockposition2 = structureboundingbox.f();
+            int i = blockposition2.getX();
+            int j = blockposition2.getZ();
+            int k = chunkgenerator.getBaseHeight(i, j, WorldGenFeatureRuinedPortalPieces.a(worldgenfeatureruinedportalpieces_position), levelheightaccessor) - 1;
+            int l = WorldGenFeatureRuinedPortal.a(this.random, chunkgenerator, worldgenfeatureruinedportalpieces_position, worldgenfeatureruinedportalpieces_a.airPocket, k, structureboundingbox.d(), structureboundingbox, levelheightaccessor);
+            BlockPosition blockposition3 = new BlockPosition(blockposition1.getX(), l, blockposition1.getZ());
 
-            if (worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.MOUNTAIN || worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.OCEAN || worldgenfeatureruinedportalconfiguration.b == WorldGenFeatureRuinedPortal.Type.STANDARD) {
-                worldgenfeatureruinedportalpieces_a.b = WorldGenFeatureRuinedPortal.b(blockposition2, biomebase);
+            if (worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.MOUNTAIN || worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.OCEAN || worldgenfeatureruinedportalconfiguration.portalType == WorldGenFeatureRuinedPortal.Type.STANDARD) {
+                worldgenfeatureruinedportalpieces_a.cold = WorldGenFeatureRuinedPortal.a(blockposition3, biomebase);
             }
 
-            this.b.add(new WorldGenFeatureRuinedPortalPieces(blockposition2, worldgenfeatureruinedportalpieces_position, worldgenfeatureruinedportalpieces_a, minecraftkey, definedstructure, enumblockrotation, enumblockmirror, blockposition));
-            this.b();
+            this.a((StructurePiece) (new WorldGenFeatureRuinedPortalPieces(definedstructuremanager, blockposition3, worldgenfeatureruinedportalpieces_position, worldgenfeatureruinedportalpieces_a, minecraftkey, definedstructure, enumblockrotation, enumblockmirror, blockposition)));
         }
     }
 }

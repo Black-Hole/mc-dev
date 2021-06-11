@@ -2,8 +2,6 @@ package net.minecraft.world.inventory;
 
 import net.minecraft.world.IInventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockShulkerBox;
 
 public class SlotShulkerBox extends Slot {
 
@@ -13,6 +11,6 @@ public class SlotShulkerBox extends Slot {
 
     @Override
     public boolean isAllowed(ItemStack itemstack) {
-        return !(Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox);
+        return itemstack.getItem().P_();
     }
 }

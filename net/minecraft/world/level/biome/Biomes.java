@@ -85,8 +85,12 @@ public abstract class Biomes {
     public static final ResourceKey<BiomeBase> CRIMSON_FOREST = a("crimson_forest");
     public static final ResourceKey<BiomeBase> WARPED_FOREST = a("warped_forest");
     public static final ResourceKey<BiomeBase> BASALT_DELTAS = a("basalt_deltas");
+    public static final ResourceKey<BiomeBase> DRIPSTONE_CAVES = a("dripstone_caves");
+    public static final ResourceKey<BiomeBase> LUSH_CAVES = a("lush_caves");
+
+    public Biomes() {}
 
     private static ResourceKey<BiomeBase> a(String s) {
-        return ResourceKey.a(IRegistry.ay, new MinecraftKey(s));
+        return ResourceKey.a(IRegistry.BIOME_REGISTRY, new MinecraftKey(s));
     }
 }

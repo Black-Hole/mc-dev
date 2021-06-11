@@ -32,9 +32,12 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityBat extends EntityAmbient {
 
-    private static final DataWatcherObject<Byte> b = DataWatcher.a(EntityBat.class, DataWatcherRegistry.a);
-    private static final PathfinderTargetCondition c = (new PathfinderTargetCondition()).a(4.0D).b();
-    private BlockPosition d;
+    public static final float FLAP_DEGREES_PER_TICK = 74.48451F;
+    public static final int TICKS_PER_FLAP = MathHelper.f(2.4166098F);
+    private static final DataWatcherObject<Byte> DATA_ID_FLAGS = DataWatcher.a(EntityBat.class, DataWatcherRegistry.BYTE);
+    private static final int FLAG_RESTING = 1;
+    private static final PathfinderTargetCondition BAT_RESTING_TARGETING = PathfinderTargetCondition.b().a(4.0D);
+    private BlockPosition targetPosition;
 
     public EntityBat(EntityTypes<? extends EntityBat> entitytypes, World world) {
         super(entitytypes, world);
@@ -42,9 +45,14 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
+    public boolean aF() {
+        return !this.isAsleep() && this.tickCount % EntityBat.TICKS_PER_FLAP == 0;
+    }
+
+    @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityBat.b, (byte) 0);
+        this.entityData.register(EntityBat.DATA_ID_FLAGS, (byte) 0);
     }
 
     @Override
@@ -53,24 +61,24 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected float dH() {
-        return super.dH() * 0.95F;
+    public float ep() {
+        return super.ep() * 0.95F;
     }
 
     @Nullable
     @Override
     public SoundEffect getSoundAmbient() {
-        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.ENTITY_BAT_AMBIENT;
+        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.BAT_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_BAT_HURT;
+        return SoundEffects.BAT_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_BAT_DEATH;
+        return SoundEffects.BAT_DEATH;
     }
 
     @Override
@@ -79,26 +87,26 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected void C(Entity entity) {}
+    protected void A(Entity entity) {}
 
     @Override
     protected void collideNearby() {}
 
-    public static AttributeProvider.Builder m() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 6.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 6.0D);
     }
 
     public boolean isAsleep() {
-        return ((Byte) this.datawatcher.get(EntityBat.b) & 1) != 0;
+        return ((Byte) this.entityData.get(EntityBat.DATA_ID_FLAGS) & 1) != 0;
     }
 
     public void setAsleep(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityBat.b);
+        byte b0 = (Byte) this.entityData.get(EntityBat.DATA_ID_FLAGS);
 
         if (flag) {
-            this.datawatcher.set(EntityBat.b, (byte) (b0 | 1));
+            this.entityData.set(EntityBat.DATA_ID_FLAGS, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityBat.b, (byte) (b0 & -2));
+            this.entityData.set(EntityBat.DATA_ID_FLAGS, (byte) (b0 & -2));
         }
 
     }
@@ -107,7 +115,7 @@ public class EntityBat extends EntityAmbient {
     public void tick() {
         super.tick();
         if (this.isAsleep()) {
-            this.setMot(Vec3D.ORIGIN);
+            this.setMot(Vec3D.ZERO);
             this.setPositionRaw(this.locX(), (double) MathHelper.floor(this.locY()) + 1.0D - (double) this.getHeight(), this.locZ());
         } else {
             this.setMot(this.getMot().d(1.0D, 0.6D, 1.0D));
@@ -124,45 +132,45 @@ public class EntityBat extends EntityAmbient {
         if (this.isAsleep()) {
             boolean flag = this.isSilent();
 
-            if (this.world.getType(blockposition1).isOccluding(this.world, blockposition)) {
+            if (this.level.getType(blockposition1).isOccluding(this.level, blockposition)) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aC = (float) this.random.nextInt(360);
+                    this.yHeadRot = (float) this.random.nextInt(360);
                 }
 
-                if (this.world.a(EntityBat.c, (EntityLiving) this) != null) {
+                if (this.level.a(EntityBat.BAT_RESTING_TARGETING, (EntityLiving) this) != null) {
                     this.setAsleep(false);
                     if (!flag) {
-                        this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                        this.level.a((EntityHuman) null, 1025, blockposition, 0);
                     }
                 }
             } else {
                 this.setAsleep(false);
                 if (!flag) {
-                    this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                    this.level.a((EntityHuman) null, 1025, blockposition, 0);
                 }
             }
         } else {
-            if (this.d != null && (!this.world.isEmpty(this.d) || this.d.getY() < 1)) {
-                this.d = null;
+            if (this.targetPosition != null && (!this.level.isEmpty(this.targetPosition) || this.targetPosition.getY() <= this.level.getMinBuildHeight())) {
+                this.targetPosition = null;
             }
 
-            if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.getPositionVector(), 2.0D)) {
-                this.d = new BlockPosition(this.locX() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY() + (double) this.random.nextInt(6) - 2.0D, this.locZ() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
+            if (this.targetPosition == null || this.random.nextInt(30) == 0 || this.targetPosition.a((IPosition) this.getPositionVector(), 2.0D)) {
+                this.targetPosition = new BlockPosition(this.locX() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY() + (double) this.random.nextInt(6) - 2.0D, this.locZ() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
             }
 
-            double d0 = (double) this.d.getX() + 0.5D - this.locX();
-            double d1 = (double) this.d.getY() + 0.1D - this.locY();
-            double d2 = (double) this.d.getZ() + 0.5D - this.locZ();
+            double d0 = (double) this.targetPosition.getX() + 0.5D - this.locX();
+            double d1 = (double) this.targetPosition.getY() + 0.1D - this.locY();
+            double d2 = (double) this.targetPosition.getZ() + 0.5D - this.locZ();
             Vec3D vec3d = this.getMot();
             Vec3D vec3d1 = vec3d.add((Math.signum(d0) * 0.5D - vec3d.x) * 0.10000000149011612D, (Math.signum(d1) * 0.699999988079071D - vec3d.y) * 0.10000000149011612D, (Math.signum(d2) * 0.5D - vec3d.z) * 0.10000000149011612D);
 
             this.setMot(vec3d1);
             float f = (float) (MathHelper.d(vec3d1.z, vec3d1.x) * 57.2957763671875D) - 90.0F;
-            float f1 = MathHelper.g(f - this.yaw);
+            float f1 = MathHelper.g(f - this.getYRot());
 
-            this.aT = 0.5F;
-            this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).isOccluding(this.world, blockposition1)) {
+            this.zza = 0.5F;
+            this.setYRot(this.getYRot() + f1);
+            if (this.random.nextInt(100) == 0 && this.level.getType(blockposition1).isOccluding(this.level, blockposition1)) {
                 this.setAsleep(true);
             }
         }
@@ -170,12 +178,12 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected boolean playStepSound() {
-        return false;
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.EVENTS;
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
@@ -192,7 +200,7 @@ public class EntityBat extends EntityAmbient {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if (!this.world.isClientSide && this.isAsleep()) {
+            if (!this.level.isClientSide && this.isAsleep()) {
                 this.setAsleep(false);
             }
 
@@ -203,13 +211,13 @@ public class EntityBat extends EntityAmbient {
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.datawatcher.set(EntityBat.b, nbttagcompound.getByte("BatFlags"));
+        this.entityData.set(EntityBat.DATA_ID_FLAGS, nbttagcompound.getByte("BatFlags"));
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setByte("BatFlags", (Byte) this.datawatcher.get(EntityBat.b));
+        nbttagcompound.setByte("BatFlags", (Byte) this.entityData.get(EntityBat.DATA_ID_FLAGS));
     }
 
     public static boolean b(EntityTypes<EntityBat> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -219,7 +227,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (eJ()) {
+            if (t()) {
                 b0 = 7;
             } else if (random.nextBoolean()) {
                 return false;
@@ -229,7 +237,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private static boolean eJ() {
+    private static boolean t() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

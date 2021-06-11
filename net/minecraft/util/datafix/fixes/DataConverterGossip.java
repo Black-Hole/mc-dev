@@ -5,6 +5,7 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DataConverterGossip extends DataConverterNamedEntity {
@@ -23,7 +24,7 @@ public class DataConverterGossip extends DataConverterNamedEntity {
                     });
                 });
 
-                dynamic1.getClass();
+                Objects.requireNonNull(dynamic1);
                 return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1);
             });
         });

@@ -8,9 +8,9 @@ import net.minecraft.world.level.ChunkCoordIntPair;
 
 public class TicketType<T> {
 
-    private final String i;
-    private final Comparator<T> j;
-    public long loadPeriod;
+    private final String name;
+    private final Comparator<T> comparator;
+    public long timeout;
     public static final TicketType<Unit> START = a("start", (unit, unit1) -> {
         return 0;
     });
@@ -33,20 +33,20 @@ public class TicketType<T> {
     }
 
     protected TicketType(String s, Comparator<T> comparator, long i) {
-        this.i = s;
-        this.j = comparator;
-        this.loadPeriod = i;
+        this.name = s;
+        this.comparator = comparator;
+        this.timeout = i;
     }
 
     public String toString() {
-        return this.i;
+        return this.name;
     }
 
     public Comparator<T> a() {
-        return this.j;
+        return this.comparator;
     }
 
     public long b() {
-        return this.loadPeriod;
+        return this.timeout;
     }
 }

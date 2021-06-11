@@ -22,6 +22,8 @@ public class LootContextParameters {
     public static final LootContextParameter<ItemStack> TOOL = a("tool");
     public static final LootContextParameter<Float> EXPLOSION_RADIUS = a("explosion_radius");
 
+    public LootContextParameters() {}
+
     private static <T> LootContextParameter<T> a(String s) {
         return new LootContextParameter<>(new MinecraftKey(s));
     }

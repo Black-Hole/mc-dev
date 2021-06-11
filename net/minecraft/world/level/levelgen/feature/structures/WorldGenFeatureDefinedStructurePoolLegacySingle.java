@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorList
 
 public class WorldGenFeatureDefinedStructurePoolLegacySingle extends WorldGenFeatureDefinedStructurePoolSingle {
 
-    public static final Codec<WorldGenFeatureDefinedStructurePoolLegacySingle> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenFeatureDefinedStructurePoolLegacySingle> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(c(), b(), d()).apply(instance, WorldGenFeatureDefinedStructurePoolLegacySingle::new);
     });
 
@@ -27,18 +27,18 @@ public class WorldGenFeatureDefinedStructurePoolLegacySingle extends WorldGenFea
     protected DefinedStructureInfo a(EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, boolean flag) {
         DefinedStructureInfo definedstructureinfo = super.a(enumblockrotation, structureboundingbox, flag);
 
-        definedstructureinfo.b((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
-        definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.d);
+        definedstructureinfo.b((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.STRUCTURE_BLOCK);
+        definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.STRUCTURE_AND_AIR);
         return definedstructureinfo;
     }
 
     @Override
     public WorldGenFeatureDefinedStructurePools<?> a() {
-        return WorldGenFeatureDefinedStructurePools.e;
+        return WorldGenFeatureDefinedStructurePools.LEGACY;
     }
 
     @Override
     public String toString() {
-        return "LegacySingle[" + this.c + "]";
+        return "LegacySingle[" + this.template + "]";
     }
 }

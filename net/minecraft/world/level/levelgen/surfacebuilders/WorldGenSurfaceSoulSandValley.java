@@ -7,10 +7,10 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenSurfaceSoulSandValley extends WorldGenSurfaceNetherAbstract {
 
-    private static final IBlockData a = Blocks.SOUL_SAND.getBlockData();
-    private static final IBlockData b = Blocks.SOUL_SOIL.getBlockData();
-    private static final IBlockData c = Blocks.GRAVEL.getBlockData();
-    private static final ImmutableList<IBlockData> d = ImmutableList.of(WorldGenSurfaceSoulSandValley.a, WorldGenSurfaceSoulSandValley.b);
+    private static final IBlockData SOUL_SAND = Blocks.SOUL_SAND.getBlockData();
+    private static final IBlockData SOUL_SOIL = Blocks.SOUL_SOIL.getBlockData();
+    private static final IBlockData GRAVEL = Blocks.GRAVEL.getBlockData();
+    private static final ImmutableList<IBlockData> BLOCK_STATES = ImmutableList.of(WorldGenSurfaceSoulSandValley.SOUL_SAND, WorldGenSurfaceSoulSandValley.SOUL_SOIL);
 
     public WorldGenSurfaceSoulSandValley(Codec<WorldGenSurfaceConfigurationBase> codec) {
         super(codec);
@@ -18,16 +18,16 @@ public class WorldGenSurfaceSoulSandValley extends WorldGenSurfaceNetherAbstract
 
     @Override
     protected ImmutableList<IBlockData> a() {
-        return WorldGenSurfaceSoulSandValley.d;
+        return WorldGenSurfaceSoulSandValley.BLOCK_STATES;
     }
 
     @Override
     protected ImmutableList<IBlockData> b() {
-        return WorldGenSurfaceSoulSandValley.d;
+        return WorldGenSurfaceSoulSandValley.BLOCK_STATES;
     }
 
     @Override
     protected IBlockData c() {
-        return WorldGenSurfaceSoulSandValley.c;
+        return WorldGenSurfaceSoulSandValley.GRAVEL;
     }
 }

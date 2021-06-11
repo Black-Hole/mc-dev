@@ -6,18 +6,18 @@ public enum BlockPropertyPistonType implements INamable {
 
     DEFAULT("normal"), STICKY("sticky");
 
-    private final String c;
+    private final String name;
 
     private BlockPropertyPistonType(String s) {
-        this.c = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.c;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.c;
+        return this.name;
     }
 }

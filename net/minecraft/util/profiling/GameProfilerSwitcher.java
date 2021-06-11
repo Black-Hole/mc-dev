@@ -5,33 +5,33 @@ import java.util.function.LongSupplier;
 
 public class GameProfilerSwitcher {
 
-    private final LongSupplier a;
-    private final IntSupplier b;
-    private GameProfilerFillerActive c;
+    private final LongSupplier realTime;
+    private final IntSupplier tickCount;
+    private GameProfilerFillerActive profiler;
 
     public GameProfilerSwitcher(LongSupplier longsupplier, IntSupplier intsupplier) {
-        this.c = GameProfilerDisabled.a;
-        this.a = longsupplier;
-        this.b = intsupplier;
+        this.profiler = GameProfilerDisabled.INSTANCE;
+        this.realTime = longsupplier;
+        this.tickCount = intsupplier;
     }
 
     public boolean a() {
-        return this.c != GameProfilerDisabled.a;
+        return this.profiler != GameProfilerDisabled.INSTANCE;
     }
 
     public void b() {
-        this.c = GameProfilerDisabled.a;
+        this.profiler = GameProfilerDisabled.INSTANCE;
     }
 
     public void c() {
-        this.c = new MethodProfiler(this.a, this.b, true);
+        this.profiler = new MethodProfiler(this.realTime, this.tickCount, true);
     }
 
     public GameProfilerFiller d() {
-        return this.c;
+        return this.profiler;
     }
 
     public MethodProfilerResults e() {
-        return this.c.d();
+        return this.profiler.d();
     }
 }

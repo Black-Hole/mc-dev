@@ -2,30 +2,30 @@ package net.minecraft.world.level.levelgen.feature.configurations;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.IntSpread;
+import net.minecraft.util.valueproviders.IntProvider;
 
 public class WorldGenFeatureBasaltColumnsConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureBasaltColumnsConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(IntSpread.a(0, 2, 1).fieldOf("reach").forGetter((worldgenfeaturebasaltcolumnsconfiguration) -> {
-            return worldgenfeaturebasaltcolumnsconfiguration.b;
-        }), IntSpread.a(1, 5, 5).fieldOf("height").forGetter((worldgenfeaturebasaltcolumnsconfiguration) -> {
-            return worldgenfeaturebasaltcolumnsconfiguration.c;
+    public static final Codec<WorldGenFeatureBasaltColumnsConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IntProvider.b(0, 3).fieldOf("reach").forGetter((worldgenfeaturebasaltcolumnsconfiguration) -> {
+            return worldgenfeaturebasaltcolumnsconfiguration.reach;
+        }), IntProvider.b(1, 10).fieldOf("height").forGetter((worldgenfeaturebasaltcolumnsconfiguration) -> {
+            return worldgenfeaturebasaltcolumnsconfiguration.height;
         })).apply(instance, WorldGenFeatureBasaltColumnsConfiguration::new);
     });
-    private final IntSpread b;
-    private final IntSpread c;
+    private final IntProvider reach;
+    private final IntProvider height;
 
-    public WorldGenFeatureBasaltColumnsConfiguration(IntSpread intspread, IntSpread intspread1) {
-        this.b = intspread;
-        this.c = intspread1;
+    public WorldGenFeatureBasaltColumnsConfiguration(IntProvider intprovider, IntProvider intprovider1) {
+        this.reach = intprovider;
+        this.height = intprovider1;
     }
 
-    public IntSpread am_() {
-        return this.b;
+    public IntProvider a() {
+        return this.reach;
     }
 
-    public IntSpread b() {
-        return this.c;
+    public IntProvider b() {
+        return this.height;
     }
 }

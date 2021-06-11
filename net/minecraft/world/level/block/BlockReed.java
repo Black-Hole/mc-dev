@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsBlock;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
@@ -21,17 +22,18 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockReed extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.aj;
-    protected static final VoxelShape b = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    public static final BlockStateInteger AGE = BlockProperties.AGE_15;
+    protected static final float AABB_OFFSET = 6.0F;
+    protected static final VoxelShape SHAPE = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     protected BlockReed(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockReed.AGE, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockReed.AGE, 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockReed.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockReed.SHAPE;
     }
 
     @Override
@@ -78,10 +80,10 @@ public class BlockReed extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
 
-        if (iblockdata1.getBlock() == this) {
+        if (iblockdata1.a((Block) this)) {
             return true;
         } else {
-            if (iblockdata1.a(Blocks.GRASS_BLOCK) || iblockdata1.a(Blocks.DIRT) || iblockdata1.a(Blocks.COARSE_DIRT) || iblockdata1.a(Blocks.PODZOL) || iblockdata1.a(Blocks.SAND) || iblockdata1.a(Blocks.RED_SAND)) {
+            if (iblockdata1.a((Tag) TagsBlock.DIRT) || iblockdata1.a(Blocks.SAND) || iblockdata1.a(Blocks.RED_SAND)) {
                 BlockPosition blockposition1 = blockposition.down();
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 

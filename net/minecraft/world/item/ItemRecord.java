@@ -1,8 +1,14 @@
 package net.minecraft.world.item;
 
 import com.google.common.collect.Maps;
+import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
+import net.minecraft.EnumChatFormat;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.stats.StatisticList;
 import net.minecraft.world.EnumInteractionResult;
@@ -16,15 +22,15 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class ItemRecord extends Item {
 
-    private static final Map<SoundEffect, ItemRecord> a = Maps.newHashMap();
-    private final int b;
-    private final SoundEffect c;
+    private static final Map<SoundEffect, ItemRecord> BY_NAME = Maps.newHashMap();
+    private final int analogOutput;
+    private final SoundEffect sound;
 
     protected ItemRecord(int i, SoundEffect soundeffect, Item.Info item_info) {
         super(item_info);
-        this.b = i;
-        this.c = soundeffect;
-        ItemRecord.a.put(this.c, this);
+        this.analogOutput = i;
+        this.sound = soundeffect;
+        ItemRecord.BY_NAME.put(this.sound, this);
     }
 
     @Override
@@ -53,7 +59,25 @@ public class ItemRecord extends Item {
         }
     }
 
-    public int f() {
-        return this.b;
+    public int i() {
+        return this.analogOutput;
+    }
+
+    @Override
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        list.add(this.j().a(EnumChatFormat.GRAY));
+    }
+
+    public IChatMutableComponent j() {
+        return new ChatMessage(this.getName() + ".desc");
+    }
+
+    @Nullable
+    public static ItemRecord a(SoundEffect soundeffect) {
+        return (ItemRecord) ItemRecord.BY_NAME.get(soundeffect);
+    }
+
+    public SoundEffect x() {
+        return this.sound;
     }
 }

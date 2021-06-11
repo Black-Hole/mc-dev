@@ -12,23 +12,23 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalFleeSun extends PathfinderGoal {
 
-    protected final EntityCreature a;
-    private double b;
-    private double c;
-    private double d;
-    private final double e;
-    private final World f;
+    protected final EntityCreature mob;
+    private double wantedX;
+    private double wantedY;
+    private double wantedZ;
+    private final double speedModifier;
+    private final World level;
 
     public PathfinderGoalFleeSun(EntityCreature entitycreature, double d0) {
-        this.a = entitycreature;
-        this.e = d0;
-        this.f = entitycreature.world;
+        this.mob = entitycreature;
+        this.speedModifier = d0;
+        this.level = entitycreature.level;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean a() {
-        return this.a.getGoalTarget() != null ? false : (!this.f.isDay() ? false : (!this.a.isBurning() ? false : (!this.f.e(this.a.getChunkCoordinates()) ? false : (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
+        return this.mob.getGoalTarget() != null ? false : (!this.level.isDay() ? false : (!this.mob.isBurning() ? false : (!this.level.g(this.mob.getChunkCoordinates()) ? false : (!this.mob.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
     }
 
     protected boolean g() {
@@ -37,32 +37,32 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
         if (vec3d == null) {
             return false;
         } else {
-            this.b = vec3d.x;
-            this.c = vec3d.y;
-            this.d = vec3d.z;
+            this.wantedX = vec3d.x;
+            this.wantedY = vec3d.y;
+            this.wantedZ = vec3d.z;
             return true;
         }
     }
 
     @Override
     public boolean b() {
-        return !this.a.getNavigation().m();
+        return !this.mob.getNavigation().m();
     }
 
     @Override
     public void c() {
-        this.a.getNavigation().a(this.b, this.c, this.d, this.e);
+        this.mob.getNavigation().a(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier);
     }
 
     @Nullable
     protected Vec3D h() {
-        Random random = this.a.getRandom();
-        BlockPosition blockposition = this.a.getChunkCoordinates();
+        Random random = this.mob.getRandom();
+        BlockPosition blockposition = this.mob.getChunkCoordinates();
 
         for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.b(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
+            BlockPosition blockposition1 = blockposition.c(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
-            if (!this.f.e(blockposition1) && this.a.f(blockposition1) < 0.0F) {
+            if (!this.level.g(blockposition1) && this.mob.f(blockposition1) < 0.0F) {
                 return Vec3D.c((BaseBlockPosition) blockposition1);
             }
         }

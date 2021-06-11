@@ -9,10 +9,18 @@ import net.minecraft.util.MathHelper;
 
 public class Vec3D implements IPosition {
 
-    public static final Vec3D ORIGIN = new Vec3D(0.0D, 0.0D, 0.0D);
+    public static final Vec3D ZERO = new Vec3D(0.0D, 0.0D, 0.0D);
     public final double x;
     public final double y;
     public final double z;
+
+    public static Vec3D a(int i) {
+        double d0 = (double) (i >> 16 & 255) / 255.0D;
+        double d1 = (double) (i >> 8 & 255) / 255.0D;
+        double d2 = (double) (i & 255) / 255.0D;
+
+        return new Vec3D(d0, d1, d2);
+    }
 
     public static Vec3D a(BaseBlockPosition baseblockposition) {
         return new Vec3D((double) baseblockposition.getX() + 0.5D, (double) baseblockposition.getY() + 0.5D, (double) baseblockposition.getZ() + 0.5D);
@@ -45,9 +53,9 @@ public class Vec3D implements IPosition {
     }
 
     public Vec3D d() {
-        double d0 = (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        double d0 = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 
-        return d0 < 1.0E-4D ? Vec3D.ORIGIN : new Vec3D(this.x / d0, this.y / d0, this.z / d0);
+        return d0 < 1.0E-4D ? Vec3D.ZERO : new Vec3D(this.x / d0, this.y / d0, this.z / d0);
     }
 
     public double b(Vec3D vec3d) {
@@ -83,7 +91,7 @@ public class Vec3D implements IPosition {
         double d1 = vec3d.y - this.y;
         double d2 = vec3d.z - this.z;
 
-        return (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+        return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
     }
 
     public double distanceSquared(Vec3D vec3d) {
@@ -106,6 +114,10 @@ public class Vec3D implements IPosition {
         return this.d(d0, d0, d0);
     }
 
+    public Vec3D e() {
+        return this.a(-1.0D);
+    }
+
     public Vec3D h(Vec3D vec3d) {
         return this.d(vec3d.x, vec3d.y, vec3d.z);
     }
@@ -115,11 +127,19 @@ public class Vec3D implements IPosition {
     }
 
     public double f() {
-        return (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     public double g() {
         return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+
+    public double h() {
+        return Math.sqrt(this.x * this.x + this.z * this.z);
+    }
+
+    public double i() {
+        return this.x * this.x + this.z * this.z;
     }
 
     public boolean equals(Object object) {
@@ -149,6 +169,10 @@ public class Vec3D implements IPosition {
         return "(" + this.x + ", " + this.y + ", " + this.z + ")";
     }
 
+    public Vec3D a(Vec3D vec3d, double d0) {
+        return new Vec3D(MathHelper.d(d0, this.x, vec3d.x), MathHelper.d(d0, this.y, vec3d.y), MathHelper.d(d0, this.z, vec3d.z));
+    }
+
     public Vec3D a(float f) {
         float f1 = MathHelper.cos(f);
         float f2 = MathHelper.sin(f);
@@ -167,6 +191,29 @@ public class Vec3D implements IPosition {
         double d2 = this.z * (double) f1 - this.x * (double) f2;
 
         return new Vec3D(d0, d1, d2);
+    }
+
+    public Vec3D c(float f) {
+        float f1 = MathHelper.cos(f);
+        float f2 = MathHelper.sin(f);
+        double d0 = this.x * (double) f1 + this.y * (double) f2;
+        double d1 = this.y * (double) f1 - this.x * (double) f2;
+        double d2 = this.z;
+
+        return new Vec3D(d0, d1, d2);
+    }
+
+    public static Vec3D a(Vec2F vec2f) {
+        return a(vec2f.x, vec2f.y);
+    }
+
+    public static Vec3D a(float f, float f1) {
+        float f2 = MathHelper.cos(-f1 * 0.017453292F - 3.1415927F);
+        float f3 = MathHelper.sin(-f1 * 0.017453292F - 3.1415927F);
+        float f4 = -MathHelper.cos(-f * 0.017453292F);
+        float f5 = MathHelper.sin(-f * 0.017453292F);
+
+        return new Vec3D((double) (f3 * f4), (double) f5, (double) (f2 * f4));
     }
 
     public Vec3D a(EnumSet<EnumDirection.EnumAxis> enumset) {

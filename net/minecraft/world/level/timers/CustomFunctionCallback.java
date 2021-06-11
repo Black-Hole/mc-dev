@@ -7,17 +7,17 @@ import net.minecraft.server.MinecraftServer;
 
 public class CustomFunctionCallback implements CustomFunctionCallbackTimer<MinecraftServer> {
 
-    private final MinecraftKey a;
+    final MinecraftKey functionId;
 
     public CustomFunctionCallback(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
+        this.functionId = minecraftkey;
     }
 
     public void a(MinecraftServer minecraftserver, CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue, long i) {
         CustomFunctionData customfunctiondata = minecraftserver.getFunctionData();
 
-        customfunctiondata.a(this.a).ifPresent((customfunction) -> {
-            customfunctiondata.a(customfunction, customfunctiondata.e());
+        customfunctiondata.a(this.functionId).ifPresent((customfunction) -> {
+            customfunctiondata.a(customfunction, customfunctiondata.d());
         });
     }
 
@@ -28,7 +28,7 @@ public class CustomFunctionCallback implements CustomFunctionCallbackTimer<Minec
         }
 
         public void a(NBTTagCompound nbttagcompound, CustomFunctionCallback customfunctioncallback) {
-            nbttagcompound.setString("Name", customfunctioncallback.a.toString());
+            nbttagcompound.setString("Name", customfunctioncallback.functionId.toString());
         }
 
         @Override

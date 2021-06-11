@@ -18,36 +18,36 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
     @Override
     protected SoundEffect getSoundAmbient() {
         super.getSoundAmbient();
-        return SoundEffects.ENTITY_MULE_AMBIENT;
+        return SoundEffects.MULE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundAngry() {
         super.getSoundAngry();
-        return SoundEffects.ENTITY_MULE_ANGRY;
+        return SoundEffects.MULE_ANGRY;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
-        return SoundEffects.ENTITY_MULE_DEATH;
+        return SoundEffects.MULE_DEATH;
     }
 
     @Nullable
     @Override
-    protected SoundEffect fg() {
-        return SoundEffects.ENTITY_MULE_EAT;
+    protected SoundEffect fP() {
+        return SoundEffects.MULE_EAT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
         super.getSoundHurt(damagesource);
-        return SoundEffects.ENTITY_MULE_HURT;
+        return SoundEffects.MULE_HURT;
     }
 
     @Override
-    protected void eO() {
-        this.playSound(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    protected void fx() {
+        this.playSound(SoundEffects.MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
     @Override

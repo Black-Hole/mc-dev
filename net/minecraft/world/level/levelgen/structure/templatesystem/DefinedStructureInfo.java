@@ -8,157 +8,142 @@ import net.minecraft.SystemUtils;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.block.EnumBlockMirror;
 import net.minecraft.world.level.block.EnumBlockRotation;
 import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class DefinedStructureInfo {
 
-    private EnumBlockMirror a;
-    private EnumBlockRotation b;
-    private BlockPosition c;
-    private boolean d;
+    private EnumBlockMirror mirror;
+    private EnumBlockRotation rotation;
+    private BlockPosition rotationPivot;
+    private boolean ignoreEntities;
     @Nullable
-    private ChunkCoordIntPair e;
+    private StructureBoundingBox boundingBox;
+    private boolean keepLiquids;
     @Nullable
-    private StructureBoundingBox f;
-    private boolean g;
+    private Random random;
     @Nullable
-    private Random h;
-    @Nullable
-    private int i;
-    private final List<DefinedStructureProcessor> j;
-    private boolean k;
-    private boolean l;
+    private int palette;
+    private final List<DefinedStructureProcessor> processors;
+    private boolean knownShape;
+    private boolean finalizeEntities;
 
     public DefinedStructureInfo() {
-        this.a = EnumBlockMirror.NONE;
-        this.b = EnumBlockRotation.NONE;
-        this.c = BlockPosition.ZERO;
-        this.g = true;
-        this.j = Lists.newArrayList();
+        this.mirror = EnumBlockMirror.NONE;
+        this.rotation = EnumBlockRotation.NONE;
+        this.rotationPivot = BlockPosition.ZERO;
+        this.keepLiquids = true;
+        this.processors = Lists.newArrayList();
     }
 
     public DefinedStructureInfo a() {
         DefinedStructureInfo definedstructureinfo = new DefinedStructureInfo();
 
-        definedstructureinfo.a = this.a;
-        definedstructureinfo.b = this.b;
-        definedstructureinfo.c = this.c;
-        definedstructureinfo.d = this.d;
-        definedstructureinfo.e = this.e;
-        definedstructureinfo.f = this.f;
-        definedstructureinfo.g = this.g;
-        definedstructureinfo.h = this.h;
-        definedstructureinfo.i = this.i;
-        definedstructureinfo.j.addAll(this.j);
-        definedstructureinfo.k = this.k;
-        definedstructureinfo.l = this.l;
+        definedstructureinfo.mirror = this.mirror;
+        definedstructureinfo.rotation = this.rotation;
+        definedstructureinfo.rotationPivot = this.rotationPivot;
+        definedstructureinfo.ignoreEntities = this.ignoreEntities;
+        definedstructureinfo.boundingBox = this.boundingBox;
+        definedstructureinfo.keepLiquids = this.keepLiquids;
+        definedstructureinfo.random = this.random;
+        definedstructureinfo.palette = this.palette;
+        definedstructureinfo.processors.addAll(this.processors);
+        definedstructureinfo.knownShape = this.knownShape;
+        definedstructureinfo.finalizeEntities = this.finalizeEntities;
         return definedstructureinfo;
     }
 
     public DefinedStructureInfo a(EnumBlockMirror enumblockmirror) {
-        this.a = enumblockmirror;
+        this.mirror = enumblockmirror;
         return this;
     }
 
     public DefinedStructureInfo a(EnumBlockRotation enumblockrotation) {
-        this.b = enumblockrotation;
+        this.rotation = enumblockrotation;
         return this;
     }
 
     public DefinedStructureInfo a(BlockPosition blockposition) {
-        this.c = blockposition;
+        this.rotationPivot = blockposition;
         return this;
     }
 
     public DefinedStructureInfo a(boolean flag) {
-        this.d = flag;
-        return this;
-    }
-
-    public DefinedStructureInfo a(ChunkCoordIntPair chunkcoordintpair) {
-        this.e = chunkcoordintpair;
+        this.ignoreEntities = flag;
         return this;
     }
 
     public DefinedStructureInfo a(StructureBoundingBox structureboundingbox) {
-        this.f = structureboundingbox;
+        this.boundingBox = structureboundingbox;
         return this;
     }
 
     public DefinedStructureInfo a(@Nullable Random random) {
-        this.h = random;
+        this.random = random;
+        return this;
+    }
+
+    public DefinedStructureInfo b(boolean flag) {
+        this.keepLiquids = flag;
         return this;
     }
 
     public DefinedStructureInfo c(boolean flag) {
-        this.k = flag;
+        this.knownShape = flag;
         return this;
     }
 
     public DefinedStructureInfo b() {
-        this.j.clear();
+        this.processors.clear();
         return this;
     }
 
     public DefinedStructureInfo a(DefinedStructureProcessor definedstructureprocessor) {
-        this.j.add(definedstructureprocessor);
+        this.processors.add(definedstructureprocessor);
         return this;
     }
 
     public DefinedStructureInfo b(DefinedStructureProcessor definedstructureprocessor) {
-        this.j.remove(definedstructureprocessor);
+        this.processors.remove(definedstructureprocessor);
         return this;
     }
 
     public EnumBlockMirror c() {
-        return this.a;
+        return this.mirror;
     }
 
     public EnumBlockRotation d() {
-        return this.b;
+        return this.rotation;
     }
 
     public BlockPosition e() {
-        return this.c;
+        return this.rotationPivot;
     }
 
     public Random b(@Nullable BlockPosition blockposition) {
-        return this.h != null ? this.h : (blockposition == null ? new Random(SystemUtils.getMonotonicMillis()) : new Random(MathHelper.a((BaseBlockPosition) blockposition)));
+        return this.random != null ? this.random : (blockposition == null ? new Random(SystemUtils.getMonotonicMillis()) : new Random(MathHelper.a((BaseBlockPosition) blockposition)));
     }
 
-    public boolean g() {
-        return this.d;
+    public boolean f() {
+        return this.ignoreEntities;
     }
 
     @Nullable
-    public StructureBoundingBox h() {
-        if (this.f == null && this.e != null) {
-            this.k();
-        }
-
-        return this.f;
+    public StructureBoundingBox g() {
+        return this.boundingBox;
     }
 
-    public boolean i() {
-        return this.k;
+    public boolean h() {
+        return this.knownShape;
     }
 
-    public List<DefinedStructureProcessor> j() {
-        return this.j;
+    public List<DefinedStructureProcessor> i() {
+        return this.processors;
     }
 
-    void k() {
-        if (this.e != null) {
-            this.f = this.b(this.e);
-        }
-
-    }
-
-    public boolean l() {
-        return this.g;
+    public boolean j() {
+        return this.keepLiquids;
     }
 
     public DefinedStructure.a a(List<DefinedStructure.a> list, @Nullable BlockPosition blockposition) {
@@ -171,24 +156,12 @@ public class DefinedStructureInfo {
         }
     }
 
-    @Nullable
-    private StructureBoundingBox b(@Nullable ChunkCoordIntPair chunkcoordintpair) {
-        if (chunkcoordintpair == null) {
-            return this.f;
-        } else {
-            int i = chunkcoordintpair.x * 16;
-            int j = chunkcoordintpair.z * 16;
-
-            return new StructureBoundingBox(i, 0, j, i + 16 - 1, 255, j + 16 - 1);
-        }
-    }
-
     public DefinedStructureInfo d(boolean flag) {
-        this.l = flag;
+        this.finalizeEntities = flag;
         return this;
     }
 
-    public boolean m() {
-        return this.l;
+    public boolean k() {
+        return this.finalizeEntities;
     }
 }

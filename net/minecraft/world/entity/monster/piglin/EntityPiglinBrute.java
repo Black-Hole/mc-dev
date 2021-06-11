@@ -31,16 +31,19 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class EntityPiglinBrute extends EntityPiglinAbstract {
 
-    protected static final ImmutableList<SensorType<? extends Sensor<? super EntityPiglinBrute>>> d = ImmutableList.of(SensorType.c, SensorType.d, SensorType.b, SensorType.f, SensorType.l);
-    protected static final ImmutableList<MemoryModuleType<?>> bo = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, new MemoryModuleType[]{MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.ANGRY_AT, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.HOME});
+    private static final int MAX_HEALTH = 50;
+    private static final float MOVEMENT_SPEED_WHEN_FIGHTING = 0.35F;
+    private static final int ATTACK_DAMAGE = 7;
+    protected static final ImmutableList<SensorType<? extends Sensor<? super EntityPiglinBrute>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.HURT_BY, SensorType.PIGLIN_BRUTE_SPECIFIC_SENSOR);
+    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, new MemoryModuleType[]{MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.ANGRY_AT, MemoryModuleType.NEAREST_VISIBLE_NEMESIS, MemoryModuleType.HOME});
 
     public EntityPiglinBrute(EntityTypes<? extends EntityPiglinBrute> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 20;
+        this.xpReward = 20;
     }
 
-    public static AttributeProvider.Builder eS() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 50.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D);
+    public static AttributeProvider.Builder fB() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 50.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D);
     }
 
     @Nullable
@@ -57,13 +60,13 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
     }
 
     @Override
-    protected BehaviorController.b<EntityPiglinBrute> cK() {
-        return BehaviorController.a((Collection) EntityPiglinBrute.bo, (Collection) EntityPiglinBrute.d);
+    protected BehaviorController.b<EntityPiglinBrute> dp() {
+        return BehaviorController.a((Collection) EntityPiglinBrute.MEMORY_TYPES, (Collection) EntityPiglinBrute.SENSOR_TYPES);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        return PiglinBruteAI.a(this, this.cK().a(dynamic));
+        return PiglinBruteAI.a(this, this.dp().a(dynamic));
     }
 
     @Override
@@ -72,30 +75,35 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
     }
 
     @Override
-    public boolean m() {
+    public boolean n() {
         return false;
     }
 
     @Override
-    public boolean i(ItemStack itemstack) {
-        return itemstack.getItem() == Items.GOLDEN_AXE ? super.i(itemstack) : false;
+    public boolean l(ItemStack itemstack) {
+        return itemstack.a(Items.GOLDEN_AXE) ? super.l(itemstack) : false;
     }
 
     @Override
     protected void mobTick() {
-        this.world.getMethodProfiler().enter("piglinBruteBrain");
-        this.getBehaviorController().a((WorldServer) this.world, (EntityLiving) this);
-        this.world.getMethodProfiler().exit();
+        this.level.getMethodProfiler().enter("piglinBruteBrain");
+        this.getBehaviorController().a((WorldServer) this.level, (EntityLiving) this);
+        this.level.getMethodProfiler().exit();
         PiglinBruteAI.b(this);
         PiglinBruteAI.c(this);
         super.mobTick();
     }
 
     @Override
+    public EntityPiglinArmPose fw() {
+        return this.isAggressive() && this.fx() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : EntityPiglinArmPose.DEFAULT;
+    }
+
+    @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         boolean flag = super.damageEntity(damagesource, f);
 
-        if (this.world.isClientSide) {
+        if (this.level.isClientSide) {
             return false;
         } else {
             if (flag && damagesource.getEntity() instanceof EntityLiving) {
@@ -108,30 +116,30 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_PIGLIN_BRUTE_AMBIENT;
+        return SoundEffects.PIGLIN_BRUTE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_PIGLIN_BRUTE_HURT;
+        return SoundEffects.PIGLIN_BRUTE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_PIGLIN_BRUTE_DEATH;
+        return SoundEffects.PIGLIN_BRUTE_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.PIGLIN_BRUTE_STEP, 0.15F, 1.0F);
     }
 
-    protected void eT() {
-        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_ANGRY, 1.0F, this.dH());
+    protected void fC() {
+        this.playSound(SoundEffects.PIGLIN_BRUTE_ANGRY, 1.0F, this.ep());
     }
 
     @Override
-    protected void eP() {
-        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED, 1.0F, this.dH());
+    protected void fy() {
+        this.playSound(SoundEffects.PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED, 1.0F, this.ep());
     }
 }

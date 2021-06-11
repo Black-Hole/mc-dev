@@ -18,13 +18,18 @@ public class BlockKelpPlant extends BlockGrowingStem implements IFluidContainer 
     }
 
     @Override
-    protected BlockGrowingTop c() {
+    protected BlockGrowingTop d() {
         return (BlockGrowingTop) Blocks.KELP;
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
+    public Fluid c_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
+    }
+
+    @Override
+    protected boolean h(IBlockData iblockdata) {
+        return this.d().h(iblockdata);
     }
 
     @Override

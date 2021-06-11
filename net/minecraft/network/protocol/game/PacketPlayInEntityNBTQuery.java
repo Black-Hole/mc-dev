@@ -1,26 +1,27 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInEntityNBTQuery implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private int b;
+    private final int transactionId;
+    private final int entityId;
 
-    public PacketPlayInEntityNBTQuery() {}
+    public PacketPlayInEntityNBTQuery(int i, int j) {
+        this.transactionId = i;
+        this.entityId = j;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.i();
+    public PacketPlayInEntityNBTQuery(PacketDataSerializer packetdataserializer) {
+        this.transactionId = packetdataserializer.j();
+        this.entityId = packetdataserializer.j();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.d(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.transactionId);
+        packetdataserializer.d(this.entityId);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -28,10 +29,10 @@ public class PacketPlayInEntityNBTQuery implements Packet<PacketListenerPlayIn> 
     }
 
     public int b() {
-        return this.a;
+        return this.transactionId;
     }
 
     public int c() {
-        return this.b;
+        return this.entityId;
     }
 }

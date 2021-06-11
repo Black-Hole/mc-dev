@@ -1,6 +1,8 @@
 package net.minecraft.world.level.newbiome.layer.traits;
 
-public interface AreaTransformer {
+import net.minecraft.world.level.newbiome.layer.LayerBiomes;
+
+public interface AreaTransformer extends LayerBiomes {
 
     int a(int i);
 

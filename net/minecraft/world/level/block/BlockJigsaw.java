@@ -1,6 +1,5 @@
 package net.minecraft.world.level.block;
 
-import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.BlockPropertyJigsawOrientation;
 import net.minecraft.core.EnumDirection;
@@ -8,7 +7,6 @@ import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.BlockActionContext;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityJigsaw;
@@ -20,28 +18,28 @@ import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 
-public class BlockJigsaw extends Block implements ITileEntity {
+public class BlockJigsaw extends Block implements ITileEntity, GameMasterBlock {
 
-    public static final BlockStateEnum<BlockPropertyJigsawOrientation> a = BlockProperties.P;
+    public static final BlockStateEnum<BlockPropertyJigsawOrientation> ORIENTATION = BlockProperties.ORIENTATION;
 
     protected BlockJigsaw(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJigsaw.a, BlockPropertyJigsawOrientation.NORTH_UP));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockJigsaw.ORIENTATION, BlockPropertyJigsawOrientation.NORTH_UP));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockJigsaw.a);
+        blockstatelist_a.a(BlockJigsaw.ORIENTATION);
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockJigsaw.a, enumblockrotation.a().a((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.a)));
+        return (IBlockData) iblockdata.set(BlockJigsaw.ORIENTATION, enumblockrotation.a().a((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.ORIENTATION)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return (IBlockData) iblockdata.set(BlockJigsaw.a, enumblockmirror.a().a((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.a)));
+        return (IBlockData) iblockdata.set(BlockJigsaw.ORIENTATION, enumblockmirror.a().a((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.ORIENTATION)));
     }
 
     @Override
@@ -50,18 +48,17 @@ public class BlockJigsaw extends Block implements ITileEntity {
         EnumDirection enumdirection1;
 
         if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
-            enumdirection1 = blockactioncontext.f().opposite();
+            enumdirection1 = blockactioncontext.g().opposite();
         } else {
             enumdirection1 = EnumDirection.UP;
         }
 
-        return (IBlockData) this.getBlockData().set(BlockJigsaw.a, BlockPropertyJigsawOrientation.a(enumdirection, enumdirection1));
+        return (IBlockData) this.getBlockData().set(BlockJigsaw.ORIENTATION, BlockPropertyJigsawOrientation.a(enumdirection, enumdirection1));
     }
 
-    @Nullable
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityJigsaw();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityJigsaw(blockposition, iblockdata);
     }
 
     @Override
@@ -77,23 +74,23 @@ public class BlockJigsaw extends Block implements ITileEntity {
     }
 
     public static boolean a(DefinedStructure.BlockInfo definedstructure_blockinfo, DefinedStructure.BlockInfo definedstructure_blockinfo1) {
-        EnumDirection enumdirection = h(definedstructure_blockinfo.b);
-        EnumDirection enumdirection1 = h(definedstructure_blockinfo1.b);
-        EnumDirection enumdirection2 = l(definedstructure_blockinfo.b);
-        EnumDirection enumdirection3 = l(definedstructure_blockinfo1.b);
-        TileEntityJigsaw.JointType tileentityjigsaw_jointtype = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(definedstructure_blockinfo.c.getString("joint")).orElseGet(() -> {
+        EnumDirection enumdirection = h(definedstructure_blockinfo.state);
+        EnumDirection enumdirection1 = h(definedstructure_blockinfo1.state);
+        EnumDirection enumdirection2 = n(definedstructure_blockinfo.state);
+        EnumDirection enumdirection3 = n(definedstructure_blockinfo1.state);
+        TileEntityJigsaw.JointType tileentityjigsaw_jointtype = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(definedstructure_blockinfo.nbt.getString("joint")).orElseGet(() -> {
             return enumdirection.n().d() ? TileEntityJigsaw.JointType.ALIGNED : TileEntityJigsaw.JointType.ROLLABLE;
         });
         boolean flag = tileentityjigsaw_jointtype == TileEntityJigsaw.JointType.ROLLABLE;
 
-        return enumdirection == enumdirection1.opposite() && (flag || enumdirection2 == enumdirection3) && definedstructure_blockinfo.c.getString("target").equals(definedstructure_blockinfo1.c.getString("name"));
+        return enumdirection == enumdirection1.opposite() && (flag || enumdirection2 == enumdirection3) && definedstructure_blockinfo.nbt.getString("target").equals(definedstructure_blockinfo1.nbt.getString("name"));
     }
 
     public static EnumDirection h(IBlockData iblockdata) {
-        return ((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.a)).b();
+        return ((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.ORIENTATION)).a();
     }
 
-    public static EnumDirection l(IBlockData iblockdata) {
-        return ((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.a)).c();
+    public static EnumDirection n(IBlockData iblockdata) {
+        return ((BlockPropertyJigsawOrientation) iblockdata.get(BlockJigsaw.ORIENTATION)).b();
     }
 }

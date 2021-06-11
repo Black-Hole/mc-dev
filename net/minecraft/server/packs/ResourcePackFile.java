@@ -21,19 +21,19 @@ import org.apache.commons.io.IOUtils;
 
 public class ResourcePackFile extends ResourcePackAbstract {
 
-    public static final Splitter b = Splitter.on('/').omitEmptyStrings().limit(3);
-    private ZipFile c;
+    public static final Splitter SPLITTER = Splitter.on('/').omitEmptyStrings().limit(3);
+    private ZipFile zipFile;
 
     public ResourcePackFile(File file) {
         super(file);
     }
 
     private ZipFile b() throws IOException {
-        if (this.c == null) {
-            this.c = new ZipFile(this.a);
+        if (this.zipFile == null) {
+            this.zipFile = new ZipFile(this.file);
         }
 
-        return this.c;
+        return this.zipFile;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
         ZipEntry zipentry = zipfile.getEntry(s);
 
         if (zipentry == null) {
-            throw new ResourceNotFoundException(this.a, s);
+            throw new ResourceNotFoundException(this.file, s);
         } else {
             return zipfile.getInputStream(zipentry);
         }
@@ -75,7 +75,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
             String s = zipentry.getName();
 
             if (s.startsWith(enumresourcepacktype.a() + "/")) {
-                List<String> list = Lists.newArrayList(ResourcePackFile.b.split(s));
+                List<String> list = Lists.newArrayList(ResourcePackFile.SPLITTER.split(s));
 
                 if (list.size() > 1) {
                     String s1 = (String) list.get(1);
@@ -99,9 +99,9 @@ public class ResourcePackFile extends ResourcePackAbstract {
 
     @Override
     public void close() {
-        if (this.c != null) {
-            IOUtils.closeQuietly(this.c);
-            this.c = null;
+        if (this.zipFile != null) {
+            IOUtils.closeQuietly(this.zipFile);
+            this.zipFile = null;
         }
 
     }
@@ -118,21 +118,22 @@ public class ResourcePackFile extends ResourcePackAbstract {
 
         Enumeration<? extends ZipEntry> enumeration = zipfile.entries();
         List<MinecraftKey> list = Lists.newArrayList();
-        String s2 = enumresourcepacktype.a() + "/" + s + "/";
-        String s3 = s2 + s1 + "/";
+        String s2 = enumresourcepacktype.a();
+        String s3 = s2 + "/" + s + "/";
+        String s4 = s3 + s1 + "/";
 
         while (enumeration.hasMoreElements()) {
             ZipEntry zipentry = (ZipEntry) enumeration.nextElement();
 
             if (!zipentry.isDirectory()) {
-                String s4 = zipentry.getName();
+                String s5 = zipentry.getName();
 
-                if (!s4.endsWith(".mcmeta") && s4.startsWith(s3)) {
-                    String s5 = s4.substring(s2.length());
-                    String[] astring = s5.split("/");
+                if (!s5.endsWith(".mcmeta") && s5.startsWith(s4)) {
+                    String s6 = s5.substring(s3.length());
+                    String[] astring = s6.split("/");
 
                     if (astring.length >= i + 1 && predicate.test(astring[astring.length - 1])) {
-                        list.add(new MinecraftKey(s, s5));
+                        list.add(new MinecraftKey(s, s6));
                     }
                 }
             }

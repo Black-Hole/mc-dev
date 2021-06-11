@@ -14,21 +14,21 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class DefinedStructureProcessorRule extends DefinedStructureProcessor {
 
-    public static final Codec<DefinedStructureProcessorRule> a = DefinedStructureProcessorPredicates.a.listOf().fieldOf("rules").xmap(DefinedStructureProcessorRule::new, (definedstructureprocessorrule) -> {
-        return definedstructureprocessorrule.b;
+    public static final Codec<DefinedStructureProcessorRule> CODEC = DefinedStructureProcessorPredicates.CODEC.listOf().fieldOf("rules").xmap(DefinedStructureProcessorRule::new, (definedstructureprocessorrule) -> {
+        return definedstructureprocessorrule.rules;
     }).codec();
-    private final ImmutableList<DefinedStructureProcessorPredicates> b;
+    private final ImmutableList<DefinedStructureProcessorPredicates> rules;
 
     public DefinedStructureProcessorRule(List<? extends DefinedStructureProcessorPredicates> list) {
-        this.b = ImmutableList.copyOf(list);
+        this.rules = ImmutableList.copyOf(list);
     }
 
     @Nullable
     @Override
     public DefinedStructure.BlockInfo a(IWorldReader iworldreader, BlockPosition blockposition, BlockPosition blockposition1, DefinedStructure.BlockInfo definedstructure_blockinfo, DefinedStructure.BlockInfo definedstructure_blockinfo1, DefinedStructureInfo definedstructureinfo) {
-        Random random = new Random(MathHelper.a((BaseBlockPosition) definedstructure_blockinfo1.a));
-        IBlockData iblockdata = iworldreader.getType(definedstructure_blockinfo1.a);
-        UnmodifiableIterator unmodifiableiterator = this.b.iterator();
+        Random random = new Random(MathHelper.a((BaseBlockPosition) definedstructure_blockinfo1.pos));
+        IBlockData iblockdata = iworldreader.getType(definedstructure_blockinfo1.pos);
+        UnmodifiableIterator unmodifiableiterator = this.rules.iterator();
 
         DefinedStructureProcessorPredicates definedstructureprocessorpredicates;
 
@@ -38,13 +38,13 @@ public class DefinedStructureProcessorRule extends DefinedStructureProcessor {
             }
 
             definedstructureprocessorpredicates = (DefinedStructureProcessorPredicates) unmodifiableiterator.next();
-        } while (!definedstructureprocessorpredicates.a(definedstructure_blockinfo1.b, iblockdata, definedstructure_blockinfo.a, definedstructure_blockinfo1.a, blockposition1, random));
+        } while (!definedstructureprocessorpredicates.a(definedstructure_blockinfo1.state, iblockdata, definedstructure_blockinfo.pos, definedstructure_blockinfo1.pos, blockposition1, random));
 
-        return new DefinedStructure.BlockInfo(definedstructure_blockinfo1.a, definedstructureprocessorpredicates.a(), definedstructureprocessorpredicates.b());
+        return new DefinedStructure.BlockInfo(definedstructure_blockinfo1.pos, definedstructureprocessorpredicates.a(), definedstructureprocessorpredicates.b());
     }
 
     @Override
     protected DefinedStructureStructureProcessorType<?> a() {
-        return DefinedStructureStructureProcessorType.e;
+        return DefinedStructureStructureProcessorType.RULE;
     }
 }

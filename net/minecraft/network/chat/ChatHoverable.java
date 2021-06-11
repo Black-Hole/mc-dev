@@ -1,10 +1,12 @@
 package net.minecraft.network.chat;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,22 +26,22 @@ import org.apache.logging.log4j.Logger;
 
 public class ChatHoverable {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private final ChatHoverable.EnumHoverAction<?> b;
-    private final Object c;
+    static final Logger LOGGER = LogManager.getLogger();
+    private final ChatHoverable.EnumHoverAction<?> action;
+    private final Object value;
 
     public <T> ChatHoverable(ChatHoverable.EnumHoverAction<T> chathoverable_enumhoveraction, T t0) {
-        this.b = chathoverable_enumhoveraction;
-        this.c = t0;
+        this.action = chathoverable_enumhoveraction;
+        this.value = t0;
     }
 
     public ChatHoverable.EnumHoverAction<?> a() {
-        return this.b;
+        return this.action;
     }
 
     @Nullable
     public <T> T a(ChatHoverable.EnumHoverAction<T> chathoverable_enumhoveraction) {
-        return this.b == chathoverable_enumhoveraction ? chathoverable_enumhoveraction.b(this.c) : null;
+        return this.action == chathoverable_enumhoveraction ? chathoverable_enumhoveraction.b(this.value) : null;
     }
 
     public boolean equals(Object object) {
@@ -48,20 +50,20 @@ public class ChatHoverable {
         } else if (object != null && this.getClass() == object.getClass()) {
             ChatHoverable chathoverable = (ChatHoverable) object;
 
-            return this.b == chathoverable.b && Objects.equals(this.c, chathoverable.c);
+            return this.action == chathoverable.action && Objects.equals(this.value, chathoverable.value);
         } else {
             return false;
         }
     }
 
     public String toString() {
-        return "HoverEvent{action=" + this.b + ", value='" + this.c + '\'' + '}';
+        return "HoverEvent{action=" + this.action + ", value='" + this.value + "'}";
     }
 
     public int hashCode() {
-        int i = this.b.hashCode();
+        int i = this.action.hashCode();
 
-        i = 31 * i + (this.c != null ? this.c.hashCode() : 0);
+        i = 31 * i + (this.value != null ? this.value.hashCode() : 0);
         return i;
     }
 
@@ -93,90 +95,86 @@ public class ChatHoverable {
     public JsonObject b() {
         JsonObject jsonobject = new JsonObject();
 
-        jsonobject.addProperty("action", this.b.b());
-        jsonobject.add("contents", this.b.a(this.c));
+        jsonobject.addProperty("action", this.action.b());
+        jsonobject.add("contents", this.action.a(this.value));
         return jsonobject;
     }
 
     public static class EnumHoverAction<T> {
 
         public static final ChatHoverable.EnumHoverAction<IChatBaseComponent> SHOW_TEXT = new ChatHoverable.EnumHoverAction<>("show_text", true, IChatBaseComponent.ChatSerializer::a, IChatBaseComponent.ChatSerializer::b, Function.identity());
-        public static final ChatHoverable.EnumHoverAction<ChatHoverable.c> SHOW_ITEM = new ChatHoverable.EnumHoverAction<>("show_item", true, (jsonelement) -> {
-            return ChatHoverable.c.b(jsonelement);
-        }, (object) -> {
-            return ((ChatHoverable.c) object).b();
-        }, (ichatbasecomponent) -> {
-            return ChatHoverable.c.b(ichatbasecomponent);
-        });
+        public static final ChatHoverable.EnumHoverAction<ChatHoverable.c> SHOW_ITEM = new ChatHoverable.EnumHoverAction<>("show_item", true, ChatHoverable.c::a, ChatHoverable.c::b, ChatHoverable.c::a);
         public static final ChatHoverable.EnumHoverAction<ChatHoverable.b> SHOW_ENTITY = new ChatHoverable.EnumHoverAction<>("show_entity", true, ChatHoverable.b::a, ChatHoverable.b::a, ChatHoverable.b::a);
-        private static final Map<String, ChatHoverable.EnumHoverAction> d = (Map) Stream.of(ChatHoverable.EnumHoverAction.SHOW_TEXT, ChatHoverable.EnumHoverAction.SHOW_ITEM, ChatHoverable.EnumHoverAction.SHOW_ENTITY).collect(ImmutableMap.toImmutableMap(ChatHoverable.EnumHoverAction::b, (chathoverable_enumhoveraction) -> {
+        private static final Map<String, ChatHoverable.EnumHoverAction<?>> LOOKUP = (Map) Stream.of(ChatHoverable.EnumHoverAction.SHOW_TEXT, ChatHoverable.EnumHoverAction.SHOW_ITEM, ChatHoverable.EnumHoverAction.SHOW_ENTITY).collect(ImmutableMap.toImmutableMap(ChatHoverable.EnumHoverAction::b, (chathoverable_enumhoveraction) -> {
             return chathoverable_enumhoveraction;
         }));
-        private final String e;
-        private final boolean f;
-        private final Function<JsonElement, T> g;
-        private final Function<T, JsonElement> h;
-        private final Function<IChatBaseComponent, T> i;
+        private final String name;
+        private final boolean allowFromServer;
+        private final Function<JsonElement, T> argDeserializer;
+        private final Function<T, JsonElement> argSerializer;
+        private final Function<IChatBaseComponent, T> legacyArgDeserializer;
 
         public EnumHoverAction(String s, boolean flag, Function<JsonElement, T> function, Function<T, JsonElement> function1, Function<IChatBaseComponent, T> function2) {
-            this.e = s;
-            this.f = flag;
-            this.g = function;
-            this.h = function1;
-            this.i = function2;
+            this.name = s;
+            this.allowFromServer = flag;
+            this.argDeserializer = function;
+            this.argSerializer = function1;
+            this.legacyArgDeserializer = function2;
         }
 
         public boolean a() {
-            return this.f;
+            return this.allowFromServer;
         }
 
         public String b() {
-            return this.e;
+            return this.name;
         }
 
         @Nullable
-        public static ChatHoverable.EnumHoverAction a(String s) {
-            return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.d.get(s);
+        public static ChatHoverable.EnumHoverAction<?> a(String s) {
+            return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.LOOKUP.get(s);
         }
 
-        private T b(Object object) {
+        T b(Object object) {
             return object;
         }
 
         @Nullable
         public ChatHoverable a(JsonElement jsonelement) {
-            T t0 = this.g.apply(jsonelement);
+            T t0 = this.argDeserializer.apply(jsonelement);
 
             return t0 == null ? null : new ChatHoverable(this, t0);
         }
 
         @Nullable
         public ChatHoverable a(IChatBaseComponent ichatbasecomponent) {
-            T t0 = this.i.apply(ichatbasecomponent);
+            T t0 = this.legacyArgDeserializer.apply(ichatbasecomponent);
 
             return t0 == null ? null : new ChatHoverable(this, t0);
         }
 
         public JsonElement a(Object object) {
-            return (JsonElement) this.h.apply(this.b(object));
+            return (JsonElement) this.argSerializer.apply(this.b(object));
         }
 
         public String toString() {
-            return "<action " + this.e + ">";
+            return "<action " + this.name + ">";
         }
     }
 
     public static class c {
 
-        private final Item a;
-        private final int b;
+        private final Item item;
+        private final int count;
         @Nullable
-        private final NBTTagCompound c;
+        private final NBTTagCompound tag;
+        @Nullable
+        private ItemStack itemStack;
 
         c(Item item, int i, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = item;
-            this.b = i;
-            this.c = nbttagcompound;
+            this.item = item;
+            this.count = i;
+            this.tag = nbttagcompound;
         }
 
         public c(ItemStack itemstack) {
@@ -189,21 +187,32 @@ public class ChatHoverable {
             } else if (object != null && this.getClass() == object.getClass()) {
                 ChatHoverable.c chathoverable_c = (ChatHoverable.c) object;
 
-                return this.b == chathoverable_c.b && this.a.equals(chathoverable_c.a) && Objects.equals(this.c, chathoverable_c.c);
+                return this.count == chathoverable_c.count && this.item.equals(chathoverable_c.item) && Objects.equals(this.tag, chathoverable_c.tag);
             } else {
                 return false;
             }
         }
 
         public int hashCode() {
-            int i = this.a.hashCode();
+            int i = this.item.hashCode();
 
-            i = 31 * i + this.b;
-            i = 31 * i + (this.c != null ? this.c.hashCode() : 0);
+            i = 31 * i + this.count;
+            i = 31 * i + (this.tag != null ? this.tag.hashCode() : 0);
             return i;
         }
 
-        private static ChatHoverable.c b(JsonElement jsonelement) {
+        public ItemStack a() {
+            if (this.itemStack == null) {
+                this.itemStack = new ItemStack(this.item, this.count);
+                if (this.tag != null) {
+                    this.itemStack.setTag(this.tag);
+                }
+            }
+
+            return this.itemStack;
+        }
+
+        private static ChatHoverable.c a(JsonElement jsonelement) {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatHoverable.c((Item) IRegistry.ITEM.get(new MinecraftKey(jsonelement.getAsString())), 1, (NBTTagCompound) null);
             } else {
@@ -228,7 +237,7 @@ public class ChatHoverable {
         }
 
         @Nullable
-        private static ChatHoverable.c b(IChatBaseComponent ichatbasecomponent) {
+        private static ChatHoverable.c a(IChatBaseComponent ichatbasecomponent) {
             try {
                 NBTTagCompound nbttagcompound = MojangsonParser.parse(ichatbasecomponent.getString());
 
@@ -242,13 +251,13 @@ public class ChatHoverable {
         private JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("id", IRegistry.ITEM.getKey(this.a).toString());
-            if (this.b != 1) {
-                jsonobject.addProperty("count", this.b);
+            jsonobject.addProperty("id", IRegistry.ITEM.getKey(this.item).toString());
+            if (this.count != 1) {
+                jsonobject.addProperty("count", this.count);
             }
 
-            if (this.c != null) {
-                jsonobject.addProperty("tag", this.c.toString());
+            if (this.tag != null) {
+                jsonobject.addProperty("tag", this.tag.toString());
             }
 
             return jsonobject;
@@ -257,15 +266,17 @@ public class ChatHoverable {
 
     public static class b {
 
-        public final EntityTypes<?> a;
-        public final UUID b;
+        public final EntityTypes<?> type;
+        public final UUID id;
         @Nullable
-        public final IChatBaseComponent c;
+        public final IChatBaseComponent name;
+        @Nullable
+        private List<IChatBaseComponent> linesCache;
 
         public b(EntityTypes<?> entitytypes, UUID uuid, @Nullable IChatBaseComponent ichatbasecomponent) {
-            this.a = entitytypes;
-            this.b = uuid;
-            this.c = ichatbasecomponent;
+            this.type = entitytypes;
+            this.id = uuid;
+            this.name = ichatbasecomponent;
         }
 
         @Nullable
@@ -299,13 +310,27 @@ public class ChatHoverable {
         public JsonElement a() {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("type", IRegistry.ENTITY_TYPE.getKey(this.a).toString());
-            jsonobject.addProperty("id", this.b.toString());
-            if (this.c != null) {
-                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(this.c));
+            jsonobject.addProperty("type", IRegistry.ENTITY_TYPE.getKey(this.type).toString());
+            jsonobject.addProperty("id", this.id.toString());
+            if (this.name != null) {
+                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(this.name));
             }
 
             return jsonobject;
+        }
+
+        public List<IChatBaseComponent> b() {
+            if (this.linesCache == null) {
+                this.linesCache = Lists.newArrayList();
+                if (this.name != null) {
+                    this.linesCache.add(this.name);
+                }
+
+                this.linesCache.add(new ChatMessage("gui.entity_tooltip.type", new Object[]{this.type.h()}));
+                this.linesCache.add(new ChatComponentText(this.id.toString()));
+            }
+
+            return this.linesCache;
         }
 
         public boolean equals(Object object) {
@@ -314,17 +339,17 @@ public class ChatHoverable {
             } else if (object != null && this.getClass() == object.getClass()) {
                 ChatHoverable.b chathoverable_b = (ChatHoverable.b) object;
 
-                return this.a.equals(chathoverable_b.a) && this.b.equals(chathoverable_b.b) && Objects.equals(this.c, chathoverable_b.c);
+                return this.type.equals(chathoverable_b.type) && this.id.equals(chathoverable_b.id) && Objects.equals(this.name, chathoverable_b.name);
             } else {
                 return false;
             }
         }
 
         public int hashCode() {
-            int i = this.a.hashCode();
+            int i = this.type.hashCode();
 
-            i = 31 * i + this.b.hashCode();
-            i = 31 * i + (this.c != null ? this.c.hashCode() : 0);
+            i = 31 * i + this.id.hashCode();
+            i = 31 * i + (this.name != null ? this.name.hashCode() : 0);
             return i;
         }
     }

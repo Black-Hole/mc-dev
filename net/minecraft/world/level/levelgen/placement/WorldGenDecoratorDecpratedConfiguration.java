@@ -6,22 +6,22 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 
 public class WorldGenDecoratorDecpratedConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public static final Codec<WorldGenDecoratorDecpratedConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenDecoratorConfigured.a.fieldOf("outer").forGetter(WorldGenDecoratorDecpratedConfiguration::a), WorldGenDecoratorConfigured.a.fieldOf("inner").forGetter(WorldGenDecoratorDecpratedConfiguration::b)).apply(instance, WorldGenDecoratorDecpratedConfiguration::new);
+    public static final Codec<WorldGenDecoratorDecpratedConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenDecoratorConfigured.CODEC.fieldOf("outer").forGetter(WorldGenDecoratorDecpratedConfiguration::a), WorldGenDecoratorConfigured.CODEC.fieldOf("inner").forGetter(WorldGenDecoratorDecpratedConfiguration::b)).apply(instance, WorldGenDecoratorDecpratedConfiguration::new);
     });
-    private final WorldGenDecoratorConfigured<?> c;
-    private final WorldGenDecoratorConfigured<?> d;
+    private final WorldGenDecoratorConfigured<?> outer;
+    private final WorldGenDecoratorConfigured<?> inner;
 
     public WorldGenDecoratorDecpratedConfiguration(WorldGenDecoratorConfigured<?> worldgendecoratorconfigured, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured1) {
-        this.c = worldgendecoratorconfigured;
-        this.d = worldgendecoratorconfigured1;
+        this.outer = worldgendecoratorconfigured;
+        this.inner = worldgendecoratorconfigured1;
     }
 
     public WorldGenDecoratorConfigured<?> a() {
-        return this.c;
+        return this.outer;
     }
 
     public WorldGenDecoratorConfigured<?> b() {
-        return this.d;
+        return this.inner;
     }
 }

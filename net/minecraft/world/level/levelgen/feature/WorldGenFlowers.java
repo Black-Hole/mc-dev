@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureConfiguration;
 
 public abstract class WorldGenFlowers<U extends WorldGenFeatureConfiguration> extends WorldGenerator<U> {
@@ -16,14 +15,18 @@ public abstract class WorldGenFlowers<U extends WorldGenFeatureConfiguration> ex
     }
 
     @Override
-    public boolean generate(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, U u0) {
+    public boolean generate(FeaturePlaceContext<U> featureplacecontext) {
+        Random random = featureplacecontext.c();
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        U u0 = featureplacecontext.e();
         IBlockData iblockdata = this.b(random, blockposition, u0);
         int i = 0;
 
         for (int j = 0; j < this.a(u0); ++j) {
             BlockPosition blockposition1 = this.a(random, blockposition, u0);
 
-            if (generatoraccessseed.isEmpty(blockposition1) && blockposition1.getY() < 255 && iblockdata.canPlace(generatoraccessseed, blockposition1) && this.a((GeneratorAccess) generatoraccessseed, blockposition1, u0)) {
+            if (generatoraccessseed.isEmpty(blockposition1) && iblockdata.canPlace(generatoraccessseed, blockposition1) && this.a((GeneratorAccess) generatoraccessseed, blockposition1, u0)) {
                 generatoraccessseed.setTypeAndData(blockposition1, iblockdata, 2);
                 ++i;
             }

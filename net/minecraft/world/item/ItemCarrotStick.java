@@ -11,13 +11,13 @@ import net.minecraft.world.level.World;
 
 public class ItemCarrotStick<T extends Entity & ISteerable> extends Item {
 
-    private final EntityTypes<T> a;
-    private final int b;
+    private final EntityTypes<T> canInteractWith;
+    private final int consumeItemDamage;
 
     public ItemCarrotStick(Item.Info item_info, EntityTypes<T> entitytypes, int i) {
         super(item_info);
-        this.a = entitytypes;
-        this.b = i;
+        this.canInteractWith = entitytypes;
+        this.consumeItemDamage = i;
     }
 
     @Override
@@ -29,11 +29,11 @@ public class ItemCarrotStick<T extends Entity & ISteerable> extends Item {
         } else {
             Entity entity = entityhuman.getVehicle();
 
-            if (entityhuman.isPassenger() && entity instanceof ISteerable && entity.getEntityType() == this.a) {
+            if (entityhuman.isPassenger() && entity instanceof ISteerable && entity.getEntityType() == this.canInteractWith) {
                 ISteerable isteerable = (ISteerable) entity;
 
-                if (isteerable.O_()) {
-                    itemstack.damage(this.b, entityhuman, (entityhuman1) -> {
+                if (isteerable.a()) {
+                    itemstack.damage(this.consumeItemDamage, entityhuman, (entityhuman1) -> {
                         entityhuman1.broadcastItemBreak(enumhand);
                     });
                     if (itemstack.isEmpty()) {

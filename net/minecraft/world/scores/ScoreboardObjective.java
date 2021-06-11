@@ -8,28 +8,33 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class ScoreboardObjective {
 
-    private final Scoreboard a;
-    private final String b;
-    private final IScoreboardCriteria c;
+    public static final int MAX_NAME_LENGTH = 16;
+    private final Scoreboard scoreboard;
+    private final String name;
+    private final IScoreboardCriteria criteria;
     public IChatBaseComponent displayName;
-    private IChatBaseComponent e;
-    private IScoreboardCriteria.EnumScoreboardHealthDisplay f;
+    private IChatBaseComponent formattedDisplayName;
+    private IScoreboardCriteria.EnumScoreboardHealthDisplay renderType;
 
     public ScoreboardObjective(Scoreboard scoreboard, String s, IScoreboardCriteria iscoreboardcriteria, IChatBaseComponent ichatbasecomponent, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        this.a = scoreboard;
-        this.b = s;
-        this.c = iscoreboardcriteria;
+        this.scoreboard = scoreboard;
+        this.name = s;
+        this.criteria = iscoreboardcriteria;
         this.displayName = ichatbasecomponent;
-        this.e = this.g();
-        this.f = iscoreboardcriteria_enumscoreboardhealthdisplay;
+        this.formattedDisplayName = this.g();
+        this.renderType = iscoreboardcriteria_enumscoreboardhealthdisplay;
+    }
+
+    public Scoreboard a() {
+        return this.scoreboard;
     }
 
     public String getName() {
-        return this.b;
+        return this.name;
     }
 
     public IScoreboardCriteria getCriteria() {
-        return this.c;
+        return this.criteria;
     }
 
     public IChatBaseComponent getDisplayName() {
@@ -38,26 +43,26 @@ public class ScoreboardObjective {
 
     private IChatBaseComponent g() {
         return ChatComponentUtils.a((IChatBaseComponent) this.displayName.mutableCopy().format((chatmodifier) -> {
-            return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
+            return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.name)));
         }));
     }
 
     public IChatBaseComponent e() {
-        return this.e;
+        return this.formattedDisplayName;
     }
 
     public void setDisplayName(IChatBaseComponent ichatbasecomponent) {
         this.displayName = ichatbasecomponent;
-        this.e = this.g();
-        this.a.handleObjectiveChanged(this);
+        this.formattedDisplayName = this.g();
+        this.scoreboard.handleObjectiveChanged(this);
     }
 
     public IScoreboardCriteria.EnumScoreboardHealthDisplay getRenderType() {
-        return this.f;
+        return this.renderType;
     }
 
     public void setRenderType(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        this.f = iscoreboardcriteria_enumscoreboardhealthdisplay;
-        this.a.handleObjectiveChanged(this);
+        this.renderType = iscoreboardcriteria_enumscoreboardhealthdisplay;
+        this.scoreboard.handleObjectiveChanged(this);
     }
 }

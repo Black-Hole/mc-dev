@@ -10,24 +10,29 @@ import net.minecraft.EnumChatFormat;
 
 public final class ChatHexColor {
 
-    private static final Map<EnumChatFormat, ChatHexColor> a = (Map) Stream.of(EnumChatFormat.values()).filter(EnumChatFormat::d).collect(ImmutableMap.toImmutableMap(Function.identity(), (enumchatformat) -> {
+    private static final String CUSTOM_COLOR_PREFIX = "#";
+    private static final Map<EnumChatFormat, ChatHexColor> LEGACY_FORMAT_TO_COLOR = (Map) Stream.of(EnumChatFormat.values()).filter(EnumChatFormat::d).collect(ImmutableMap.toImmutableMap(Function.identity(), (enumchatformat) -> {
         return new ChatHexColor(enumchatformat.e(), enumchatformat.f());
     }));
-    private static final Map<String, ChatHexColor> b = (Map) ChatHexColor.a.values().stream().collect(ImmutableMap.toImmutableMap((chathexcolor) -> {
+    private static final Map<String, ChatHexColor> NAMED_COLORS = (Map) ChatHexColor.LEGACY_FORMAT_TO_COLOR.values().stream().collect(ImmutableMap.toImmutableMap((chathexcolor) -> {
         return chathexcolor.name;
     }, Function.identity()));
-    private final int rgb;
+    private final int value;
     @Nullable
     public final String name;
 
     private ChatHexColor(int i, String s) {
-        this.rgb = i;
+        this.value = i;
         this.name = s;
     }
 
     private ChatHexColor(int i) {
-        this.rgb = i;
+        this.value = i;
         this.name = null;
+    }
+
+    public int a() {
+        return this.value;
     }
 
     public String b() {
@@ -35,7 +40,7 @@ public final class ChatHexColor {
     }
 
     private String c() {
-        return String.format("#%06X", this.rgb);
+        return String.format("#%06X", this.value);
     }
 
     public boolean equals(Object object) {
@@ -44,14 +49,14 @@ public final class ChatHexColor {
         } else if (object != null && this.getClass() == object.getClass()) {
             ChatHexColor chathexcolor = (ChatHexColor) object;
 
-            return this.rgb == chathexcolor.rgb;
+            return this.value == chathexcolor.value;
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{this.rgb, this.name});
+        return Objects.hash(new Object[]{this.value, this.name});
     }
 
     public String toString() {
@@ -60,7 +65,7 @@ public final class ChatHexColor {
 
     @Nullable
     public static ChatHexColor a(EnumChatFormat enumchatformat) {
-        return (ChatHexColor) ChatHexColor.a.get(enumchatformat);
+        return (ChatHexColor) ChatHexColor.LEGACY_FORMAT_TO_COLOR.get(enumchatformat);
     }
 
     public static ChatHexColor a(int i) {
@@ -78,7 +83,7 @@ public final class ChatHexColor {
                 return null;
             }
         } else {
-            return (ChatHexColor) ChatHexColor.b.get(s);
+            return (ChatHexColor) ChatHexColor.NAMED_COLORS.get(s);
         }
     }
 }

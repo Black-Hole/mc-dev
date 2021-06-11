@@ -51,8 +51,8 @@ public class WorldGenDecoratorCountMultilayer extends WorldGenDecorator<WorldGen
         int i1 = 0;
         IBlockData iblockdata = worldgendecoratorcontext.a(blockposition_mutableblockposition);
 
-        for (int j1 = j; j1 >= 1; --j1) {
-            blockposition_mutableblockposition.p(j1 - 1);
+        for (int j1 = j; j1 >= worldgendecoratorcontext.c() + 1; --j1) {
+            blockposition_mutableblockposition.t(j1 - 1);
             IBlockData iblockdata1 = worldgendecoratorcontext.a(blockposition_mutableblockposition);
 
             if (!a(iblockdata1) && a(iblockdata) && !iblockdata1.a(Blocks.BEDROCK)) {

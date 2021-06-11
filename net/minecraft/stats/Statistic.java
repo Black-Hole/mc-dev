@@ -8,19 +8,21 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class Statistic<T> extends IScoreboardCriteria {
 
-    private final Counter o;
-    private final T p;
-    private final StatisticWrapper<T> q;
+    private final Counter formatter;
+    private final T value;
+    private final StatisticWrapper<T> type;
 
     protected Statistic(StatisticWrapper<T> statisticwrapper, T t0, Counter counter) {
         super(a(statisticwrapper, t0));
-        this.q = statisticwrapper;
-        this.o = counter;
-        this.p = t0;
+        this.type = statisticwrapper;
+        this.formatter = counter;
+        this.value = t0;
     }
 
     public static <T> String a(StatisticWrapper<T> statisticwrapper, T t0) {
-        return a(IRegistry.STATS.getKey(statisticwrapper)) + ":" + a(statisticwrapper.getRegistry().getKey(t0));
+        String s = a(IRegistry.STAT_TYPE.getKey(statisticwrapper));
+
+        return s + ":" + a(statisticwrapper.getRegistry().getKey(t0));
     }
 
     private static <T> String a(@Nullable MinecraftKey minecraftkey) {
@@ -28,11 +30,15 @@ public class Statistic<T> extends IScoreboardCriteria {
     }
 
     public StatisticWrapper<T> getWrapper() {
-        return this.q;
+        return this.type;
     }
 
     public T b() {
-        return this.p;
+        return this.value;
+    }
+
+    public String a(int i) {
+        return this.formatter.format(i);
     }
 
     public boolean equals(Object object) {
@@ -44,6 +50,8 @@ public class Statistic<T> extends IScoreboardCriteria {
     }
 
     public String toString() {
-        return "Stat{name=" + this.getName() + ", formatter=" + this.o + '}';
+        String s = this.getName();
+
+        return "Stat{name=" + s + ", formatter=" + this.formatter + "}";
     }
 }

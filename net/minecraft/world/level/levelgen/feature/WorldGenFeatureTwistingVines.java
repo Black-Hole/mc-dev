@@ -6,12 +6,9 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.GeneratorAccess;
-import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.BlockGrowingTop;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class WorldGenFeatureTwistingVines extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
@@ -20,8 +17,9 @@ public class WorldGenFeatureTwistingVines extends WorldGenerator<WorldGenFeature
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return a(generatoraccessseed, random, blockposition, 8, 4, 8);
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        return a(featureplacecontext.a(), featureplacecontext.c(), featureplacecontext.d(), 8, 4, 8);
     }
 
     public static boolean a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, int i, int j, int k) {
@@ -61,7 +59,7 @@ public class WorldGenFeatureTwistingVines extends WorldGenerator<WorldGenFeature
     private static boolean a(GeneratorAccess generatoraccess, BlockPosition.MutableBlockPosition blockposition_mutableblockposition) {
         do {
             blockposition_mutableblockposition.e(0, -1, 0);
-            if (World.isOutsideWorld(blockposition_mutableblockposition)) {
+            if (generatoraccess.isOutsideWorld(blockposition_mutableblockposition)) {
                 return false;
             }
         } while (generatoraccess.getType(blockposition_mutableblockposition).isAir());
@@ -74,7 +72,7 @@ public class WorldGenFeatureTwistingVines extends WorldGenerator<WorldGenFeature
         for (int l = 1; l <= i; ++l) {
             if (generatoraccess.isEmpty(blockposition_mutableblockposition)) {
                 if (l == i || !generatoraccess.isEmpty(blockposition_mutableblockposition.up())) {
-                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, (IBlockData) Blocks.TWISTING_VINES.getBlockData().set(BlockGrowingTop.d, MathHelper.nextInt(random, j, k)), 2);
+                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, (IBlockData) Blocks.TWISTING_VINES.getBlockData().set(BlockGrowingTop.AGE, MathHelper.nextInt(random, j, k)), 2);
                     break;
                 }
 

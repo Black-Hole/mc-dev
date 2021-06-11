@@ -20,8 +20,10 @@ import net.minecraft.world.entity.Entity;
 
 public class CommandTag {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.tag.add.failed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.tag.remove.failed"));
+    private static final SimpleCommandExceptionType ERROR_ADD_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.tag.add.failed"));
+    private static final SimpleCommandExceptionType ERROR_REMOVE_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.tag.remove.failed"));
+
+    public CommandTag() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("tag").requires((commandlistenerwrapper) -> {
@@ -63,7 +65,7 @@ public class CommandTag {
         }
 
         if (i == 0) {
-            throw CommandTag.a.create();
+            throw CommandTag.ERROR_ADD_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.add.success.single", new Object[]{s, ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
@@ -88,7 +90,7 @@ public class CommandTag {
         }
 
         if (i == 0) {
-            throw CommandTag.b.create();
+            throw CommandTag.ERROR_REMOVE_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.remove.success.single", new Object[]{s, ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);

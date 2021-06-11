@@ -11,7 +11,7 @@ public abstract class ChunkMap extends LightEngineGraph {
 
     @Override
     protected boolean a(long i) {
-        return i == ChunkCoordIntPair.a;
+        return i == ChunkCoordIntPair.INVALID_CHUNK_POS;
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class ChunkMap extends LightEngineGraph {
                 long i2 = ChunkCoordIntPair.pair(i1 + k1, j1 + l1);
 
                 if (i2 == i) {
-                    i2 = ChunkCoordIntPair.a;
+                    i2 = ChunkCoordIntPair.INVALID_CHUNK_POS;
                 }
 
                 if (i2 != j) {
@@ -66,12 +66,12 @@ public abstract class ChunkMap extends LightEngineGraph {
 
     @Override
     protected int b(long i, long j, int k) {
-        return i == ChunkCoordIntPair.a ? this.b(j) : k + 1;
+        return i == ChunkCoordIntPair.INVALID_CHUNK_POS ? this.b(j) : k + 1;
     }
 
     protected abstract int b(long i);
 
     public void update(long i, int j, boolean flag) {
-        this.a(ChunkCoordIntPair.a, i, j, flag);
+        this.a(ChunkCoordIntPair.INVALID_CHUNK_POS, i, j, flag);
     }
 }

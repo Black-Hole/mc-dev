@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import net.minecraft.resources.MinecraftKey;
@@ -19,30 +20,30 @@ import org.apache.logging.log4j.Logger;
 public class LootTableRegistry extends ResourceDataJson {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson b = LootSerialization.c().create();
-    private Map<MinecraftKey, LootTable> keyToLootTable = ImmutableMap.of();
-    private final LootPredicateManager d;
+    private static final Gson GSON = LootSerialization.c().create();
+    private Map<MinecraftKey, LootTable> tables = ImmutableMap.of();
+    private final LootPredicateManager predicateManager;
 
     public LootTableRegistry(LootPredicateManager lootpredicatemanager) {
-        super(LootTableRegistry.b, "loot_tables");
-        this.d = lootpredicatemanager;
+        super(LootTableRegistry.GSON, "loot_tables");
+        this.predicateManager = lootpredicatemanager;
     }
 
     public LootTable getLootTable(MinecraftKey minecraftkey) {
-        return (LootTable) this.keyToLootTable.getOrDefault(minecraftkey, LootTable.EMPTY);
+        return (LootTable) this.tables.getOrDefault(minecraftkey, LootTable.EMPTY);
     }
 
     protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
         Builder<MinecraftKey, LootTable> builder = ImmutableMap.builder();
-        JsonElement jsonelement = (JsonElement) map.remove(LootTables.a);
+        JsonElement jsonelement = (JsonElement) map.remove(LootTables.EMPTY);
 
         if (jsonelement != null) {
-            LootTableRegistry.LOGGER.warn("Datapack tried to redefine {} loot table, ignoring", LootTables.a);
+            LootTableRegistry.LOGGER.warn("Datapack tried to redefine {} loot table, ignoring", LootTables.EMPTY);
         }
 
         map.forEach((minecraftkey, jsonelement1) -> {
             try {
-                LootTable loottable = (LootTable) LootTableRegistry.b.fromJson(jsonelement1, LootTable.class);
+                LootTable loottable = (LootTable) LootTableRegistry.GSON.fromJson(jsonelement1, LootTable.class);
 
                 builder.put(minecraftkey, loottable);
             } catch (Exception exception) {
@@ -50,24 +51,24 @@ public class LootTableRegistry extends ResourceDataJson {
             }
 
         });
-        builder.put(LootTables.a, LootTable.EMPTY);
+        builder.put(LootTables.EMPTY, LootTable.EMPTY);
         ImmutableMap<MinecraftKey, LootTable> immutablemap = builder.build();
-        LootContextParameterSet lootcontextparameterset = LootContextParameterSets.GENERIC;
-        LootPredicateManager lootpredicatemanager = this.d;
+        LootContextParameterSet lootcontextparameterset = LootContextParameterSets.ALL_PARAMS;
+        LootPredicateManager lootpredicatemanager = this.predicateManager;
 
-        this.d.getClass();
+        Objects.requireNonNull(this.predicateManager);
         Function function = lootpredicatemanager::a;
 
-        immutablemap.getClass();
+        Objects.requireNonNull(immutablemap);
         LootCollector lootcollector = new LootCollector(lootcontextparameterset, function, immutablemap::get);
 
         immutablemap.forEach((minecraftkey, loottable) -> {
             a(lootcollector, minecraftkey, loottable);
         });
         lootcollector.a().forEach((s, s1) -> {
-            LootTableRegistry.LOGGER.warn("Found validation problem in " + s + ": " + s1);
+            LootTableRegistry.LOGGER.warn("Found validation problem in {}: {}", s, s1);
         });
-        this.keyToLootTable = immutablemap;
+        this.tables = immutablemap;
     }
 
     public static void a(LootCollector lootcollector, MinecraftKey minecraftkey, LootTable loottable) {
@@ -75,10 +76,10 @@ public class LootTableRegistry extends ResourceDataJson {
     }
 
     public static JsonElement a(LootTable loottable) {
-        return LootTableRegistry.b.toJsonTree(loottable);
+        return LootTableRegistry.GSON.toJsonTree(loottable);
     }
 
     public Set<MinecraftKey> a() {
-        return this.keyToLootTable.keySet();
+        return this.tables.keySet();
     }
 }

@@ -19,22 +19,22 @@ public interface CriterionTrigger<T extends CriterionInstance> {
 
     public static class a<T extends CriterionInstance> {
 
-        private final T a;
-        private final Advancement b;
-        private final String c;
+        private final T trigger;
+        private final Advancement advancement;
+        private final String criterion;
 
         public a(T t0, Advancement advancement, String s) {
-            this.a = t0;
-            this.b = advancement;
-            this.c = s;
+            this.trigger = t0;
+            this.advancement = advancement;
+            this.criterion = s;
         }
 
         public T a() {
-            return this.a;
+            return this.trigger;
         }
 
         public void a(AdvancementDataPlayer advancementdataplayer) {
-            advancementdataplayer.grantCriteria(this.b, this.c);
+            advancementdataplayer.grantCriteria(this.advancement, this.criterion);
         }
 
         public boolean equals(Object object) {
@@ -43,17 +43,17 @@ public interface CriterionTrigger<T extends CriterionInstance> {
             } else if (object != null && this.getClass() == object.getClass()) {
                 CriterionTrigger.a<?> criteriontrigger_a = (CriterionTrigger.a) object;
 
-                return !this.a.equals(criteriontrigger_a.a) ? false : (!this.b.equals(criteriontrigger_a.b) ? false : this.c.equals(criteriontrigger_a.c));
+                return !this.trigger.equals(criteriontrigger_a.trigger) ? false : (!this.advancement.equals(criteriontrigger_a.advancement) ? false : this.criterion.equals(criteriontrigger_a.criterion));
             } else {
                 return false;
             }
         }
 
         public int hashCode() {
-            int i = this.a.hashCode();
+            int i = this.trigger.hashCode();
 
-            i = 31 * i + this.b.hashCode();
-            i = 31 * i + this.c.hashCode();
+            i = 31 * i + this.advancement.hashCode();
+            i = 31 * i + this.criterion.hashCode();
             return i;
         }
     }

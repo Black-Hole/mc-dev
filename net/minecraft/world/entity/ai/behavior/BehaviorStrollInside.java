@@ -15,24 +15,24 @@ import net.minecraft.world.entity.ai.memory.MemoryTarget;
 
 public class BehaviorStrollInside extends Behavior<EntityCreature> {
 
-    private final float b;
+    private final float speedModifier;
 
     public BehaviorStrollInside(float f) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.b = f;
+        this.speedModifier = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        return !worldserver.e(entitycreature.getChunkCoordinates());
+        return !worldserver.g(entitycreature.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
         BlockPosition blockposition = entitycreature.getChunkCoordinates();
-        List<BlockPosition> list = (List) BlockPosition.b(blockposition.b(-1, -1, -1), blockposition.b(1, 1, 1)).map(BlockPosition::immutableCopy).collect(Collectors.toList());
+        List<BlockPosition> list = (List) BlockPosition.b(blockposition.c(-1, -1, -1), blockposition.c(1, 1, 1)).map(BlockPosition::immutableCopy).collect(Collectors.toList());
 
         Collections.shuffle(list);
         Optional<BlockPosition> optional = list.stream().filter((blockposition1) -> {
-            return !worldserver.e(blockposition1);
+            return !worldserver.g(blockposition1);
         }).filter((blockposition1) -> {
             return worldserver.a(blockposition1, (Entity) entitycreature);
         }).filter((blockposition1) -> {
@@ -40,7 +40,7 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
         }).findFirst();
 
         optional.ifPresent((blockposition1) -> {
-            entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.b, 0)));
+            entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.speedModifier, 0)));
         });
     }
 }

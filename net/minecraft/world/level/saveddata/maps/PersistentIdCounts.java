@@ -10,31 +10,31 @@ import net.minecraft.world.level.saveddata.PersistentBase;
 
 public class PersistentIdCounts extends PersistentBase {
 
-    private final Object2IntMap<String> a = new Object2IntOpenHashMap();
+    public static final String FILE_NAME = "idcounts";
+    private final Object2IntMap<String> usedAuxIds = new Object2IntOpenHashMap();
 
     public PersistentIdCounts() {
-        super("idcounts");
-        this.a.defaultReturnValue(-1);
+        this.usedAuxIds.defaultReturnValue(-1);
     }
 
-    @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        this.a.clear();
+    public static PersistentIdCounts b(NBTTagCompound nbttagcompound) {
+        PersistentIdCounts persistentidcounts = new PersistentIdCounts();
         Iterator iterator = nbttagcompound.getKeys().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
             if (nbttagcompound.hasKeyOfType(s, 99)) {
-                this.a.put(s, nbttagcompound.getInt(s));
+                persistentidcounts.usedAuxIds.put(s, nbttagcompound.getInt(s));
             }
         }
 
+        return persistentidcounts;
     }
 
     @Override
-    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+        ObjectIterator objectiterator = this.usedAuxIds.object2IntEntrySet().iterator();
 
         while (objectiterator.hasNext()) {
             Entry<String> entry = (Entry) objectiterator.next();
@@ -46,9 +46,9 @@ public class PersistentIdCounts extends PersistentBase {
     }
 
     public int a() {
-        int i = this.a.getInt("map") + 1;
+        int i = this.usedAuxIds.getInt("map") + 1;
 
-        this.a.put("map", i);
+        this.usedAuxIds.put("map", i);
         this.b();
         return i;
     }

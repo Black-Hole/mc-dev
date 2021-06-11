@@ -1,16 +1,17 @@
 package net.minecraft.world.inventory;
 
 import net.minecraft.core.IRegistry;
+import net.minecraft.world.entity.player.PlayerInventory;
 
 public class Containers<T extends Container> {
 
-    public static final Containers<ContainerChest> GENERIC_9X1 = a("generic_9x1", ContainerChest::a);
-    public static final Containers<ContainerChest> GENERIC_9X2 = a("generic_9x2", ContainerChest::b);
-    public static final Containers<ContainerChest> GENERIC_9X3 = a("generic_9x3", ContainerChest::c);
-    public static final Containers<ContainerChest> GENERIC_9X4 = a("generic_9x4", ContainerChest::d);
-    public static final Containers<ContainerChest> GENERIC_9X5 = a("generic_9x5", ContainerChest::e);
-    public static final Containers<ContainerChest> GENERIC_9X6 = a("generic_9x6", ContainerChest::f);
-    public static final Containers<ContainerDispenser> GENERIC_3X3 = a("generic_3x3", ContainerDispenser::new);
+    public static final Containers<ContainerChest> GENERIC_9x1 = a("generic_9x1", ContainerChest::a);
+    public static final Containers<ContainerChest> GENERIC_9x2 = a("generic_9x2", ContainerChest::b);
+    public static final Containers<ContainerChest> GENERIC_9x3 = a("generic_9x3", ContainerChest::c);
+    public static final Containers<ContainerChest> GENERIC_9x4 = a("generic_9x4", ContainerChest::d);
+    public static final Containers<ContainerChest> GENERIC_9x5 = a("generic_9x5", ContainerChest::e);
+    public static final Containers<ContainerChest> GENERIC_9x6 = a("generic_9x6", ContainerChest::f);
+    public static final Containers<ContainerDispenser> GENERIC_3x3 = a("generic_3x3", ContainerDispenser::new);
     public static final Containers<ContainerAnvil> ANVIL = a("anvil", ContainerAnvil::new);
     public static final Containers<ContainerBeacon> BEACON = a("beacon", ContainerBeacon::new);
     public static final Containers<ContainerBlastFurnace> BLAST_FURNACE = a("blast_furnace", ContainerBlastFurnace::new);
@@ -30,15 +31,22 @@ public class Containers<T extends Container> {
     public static final Containers<ContainerSmoker> SMOKER = a("smoker", ContainerSmoker::new);
     public static final Containers<ContainerCartography> CARTOGRAPHY_TABLE = a("cartography_table", ContainerCartography::new);
     public static final Containers<ContainerStonecutter> STONECUTTER = a("stonecutter", ContainerStonecutter::new);
-    private final Containers.Supplier<T> y;
+    private final Containers.Supplier<T> constructor;
 
     private static <T extends Container> Containers<T> a(String s, Containers.Supplier<T> containers_supplier) {
         return (Containers) IRegistry.a(IRegistry.MENU, s, (Object) (new Containers<>(containers_supplier)));
     }
 
     private Containers(Containers.Supplier<T> containers_supplier) {
-        this.y = containers_supplier;
+        this.constructor = containers_supplier;
     }
 
-    interface Supplier<T extends Container> {}
+    public T a(int i, PlayerInventory playerinventory) {
+        return this.constructor.create(i, playerinventory);
+    }
+
+    private interface Supplier<T extends Container> {
+
+        T create(int i, PlayerInventory playerinventory);
+    }
 }

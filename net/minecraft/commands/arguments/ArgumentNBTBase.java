@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTBase;
 
 public class ArgumentNBTBase implements ArgumentType<NBTBase> {
 
-    private static final Collection<String> a = Arrays.asList("0", "0b", "0l", "0.0", "\"foo\"", "{foo=bar}", "[0]");
+    private static final Collection<String> EXAMPLES = Arrays.asList("0", "0b", "0l", "0.0", "\"foo\"", "{foo=bar}", "[0]");
 
     private ArgumentNBTBase() {}
 
@@ -28,6 +28,6 @@ public class ArgumentNBTBase implements ArgumentType<NBTBase> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentNBTBase.a;
+        return ArgumentNBTBase.EXAMPLES;
     }
 }

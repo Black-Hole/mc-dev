@@ -1,39 +1,42 @@
 package net.minecraft.network.protocol.login;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketLoginInCustomPayload implements Packet<PacketLoginInListener> {
 
-    private int a;
-    private PacketDataSerializer b;
+    private static final int MAX_PAYLOAD_SIZE = 1048576;
+    private final int transactionId;
+    private final PacketDataSerializer data;
 
-    public PacketLoginInCustomPayload() {}
+    public PacketLoginInCustomPayload(int i, @Nullable PacketDataSerializer packetdataserializer) {
+        this.transactionId = i;
+        this.data = packetdataserializer;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
+    public PacketLoginInCustomPayload(PacketDataSerializer packetdataserializer) {
+        this.transactionId = packetdataserializer.j();
         if (packetdataserializer.readBoolean()) {
             int i = packetdataserializer.readableBytes();
 
             if (i < 0 || i > 1048576) {
-                throw new IOException("Payload may not be larger than 1048576 bytes");
+                throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
             }
 
-            this.b = new PacketDataSerializer(packetdataserializer.readBytes(i));
+            this.data = new PacketDataSerializer(packetdataserializer.readBytes(i));
         } else {
-            this.b = null;
+            this.data = null;
         }
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        if (this.b != null) {
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.transactionId);
+        if (this.data != null) {
             packetdataserializer.writeBoolean(true);
-            packetdataserializer.writeBytes(this.b.copy());
+            packetdataserializer.writeBytes(this.data.copy());
         } else {
             packetdataserializer.writeBoolean(false);
         }
@@ -42,5 +45,13 @@ public class PacketLoginInCustomPayload implements Packet<PacketLoginInListener>
 
     public void a(PacketLoginInListener packetlogininlistener) {
         packetlogininlistener.a(this);
+    }
+
+    public int b() {
+        return this.transactionId;
+    }
+
+    public PacketDataSerializer c() {
+        return this.data;
     }
 }

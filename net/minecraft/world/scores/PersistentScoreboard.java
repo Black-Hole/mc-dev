@@ -10,46 +10,31 @@ import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.world.level.saveddata.PersistentBase;
 import net.minecraft.world.scores.criteria.IScoreboardCriteria;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class PersistentScoreboard extends PersistentBase {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private Scoreboard b;
-    private NBTTagCompound c;
+    public static final String FILE_ID = "scoreboard";
+    private final Scoreboard scoreboard;
 
-    public PersistentScoreboard() {
-        super("scoreboard");
+    public PersistentScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
     }
 
-    public void a(Scoreboard scoreboard) {
-        this.b = scoreboard;
-        if (this.c != null) {
-            this.a(this.c);
+    public PersistentScoreboard b(NBTTagCompound nbttagcompound) {
+        this.b(nbttagcompound.getList("Objectives", 10));
+        this.scoreboard.a(nbttagcompound.getList("PlayerScores", 10));
+        if (nbttagcompound.hasKeyOfType("DisplaySlots", 10)) {
+            this.c(nbttagcompound.getCompound("DisplaySlots"));
         }
 
-    }
-
-    @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        if (this.b == null) {
-            this.c = nbttagcompound;
-        } else {
-            this.b(nbttagcompound.getList("Objectives", 10));
-            this.b.a(nbttagcompound.getList("PlayerScores", 10));
-            if (nbttagcompound.hasKeyOfType("DisplaySlots", 10)) {
-                this.c(nbttagcompound.getCompound("DisplaySlots"));
-            }
-
-            if (nbttagcompound.hasKeyOfType("Teams", 9)) {
-                this.a(nbttagcompound.getList("Teams", 10));
-            }
-
+        if (nbttagcompound.hasKeyOfType("Teams", 9)) {
+            this.a(nbttagcompound.getList("Teams", 10));
         }
+
+        return this;
     }
 
-    protected void a(NBTTagList nbttaglist) {
+    private void a(NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
             String s = nbttagcompound.getString("Name");
@@ -58,7 +43,7 @@ public class PersistentScoreboard extends PersistentBase {
                 s = s.substring(0, 16);
             }
 
-            ScoreboardTeam scoreboardteam = this.b.createTeam(s);
+            ScoreboardTeam scoreboardteam = this.scoreboard.createTeam(s);
             IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
 
             if (ichatmutablecomponent != null) {
@@ -122,26 +107,26 @@ public class PersistentScoreboard extends PersistentBase {
 
     }
 
-    protected void a(ScoreboardTeam scoreboardteam, NBTTagList nbttaglist) {
+    private void a(ScoreboardTeam scoreboardteam, NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            this.b.addPlayerToTeam(nbttaglist.getString(i), scoreboardteam);
+            this.scoreboard.addPlayerToTeam(nbttaglist.getString(i), scoreboardteam);
         }
 
     }
 
-    protected void c(NBTTagCompound nbttagcompound) {
+    private void c(NBTTagCompound nbttagcompound) {
         for (int i = 0; i < 19; ++i) {
             if (nbttagcompound.hasKeyOfType("slot_" + i, 8)) {
                 String s = nbttagcompound.getString("slot_" + i);
-                ScoreboardObjective scoreboardobjective = this.b.getObjective(s);
+                ScoreboardObjective scoreboardobjective = this.scoreboard.getObjective(s);
 
-                this.b.setDisplaySlot(i, scoreboardobjective);
+                this.scoreboard.setDisplaySlot(i, scoreboardobjective);
             }
         }
 
     }
 
-    protected void b(NBTTagList nbttaglist) {
+    private void b(NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
 
@@ -155,29 +140,24 @@ public class PersistentScoreboard extends PersistentBase {
                 IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
                 IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(nbttagcompound.getString("RenderType"));
 
-                this.b.registerObjective(s, iscoreboardcriteria, ichatmutablecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
+                this.scoreboard.registerObjective(s, iscoreboardcriteria, ichatmutablecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
             });
         }
 
     }
 
     @Override
-    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        if (this.b == null) {
-            PersistentScoreboard.LOGGER.warn("Tried to save scoreboard without having a scoreboard...");
-            return nbttagcompound;
-        } else {
-            nbttagcompound.set("Objectives", this.e());
-            nbttagcompound.set("PlayerScores", this.b.i());
-            nbttagcompound.set("Teams", this.a());
-            this.d(nbttagcompound);
-            return nbttagcompound;
-        }
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+        nbttagcompound.set("Objectives", this.d());
+        nbttagcompound.set("PlayerScores", this.scoreboard.i());
+        nbttagcompound.set("Teams", this.a());
+        this.d(nbttagcompound);
+        return nbttagcompound;
     }
 
-    protected NBTTagList a() {
+    private NBTTagList a() {
         NBTTagList nbttaglist = new NBTTagList();
-        Collection<ScoreboardTeam> collection = this.b.getTeams();
+        Collection<ScoreboardTeam> collection = this.scoreboard.getTeams();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -194,9 +174,9 @@ public class PersistentScoreboard extends PersistentBase {
             nbttagcompound.setBoolean("SeeFriendlyInvisibles", scoreboardteam.canSeeFriendlyInvisibles());
             nbttagcompound.setString("MemberNamePrefix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getPrefix()));
             nbttagcompound.setString("MemberNameSuffix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getSuffix()));
-            nbttagcompound.setString("NameTagVisibility", scoreboardteam.getNameTagVisibility().e);
-            nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.getDeathMessageVisibility().e);
-            nbttagcompound.setString("CollisionRule", scoreboardteam.getCollisionRule().e);
+            nbttagcompound.setString("NameTagVisibility", scoreboardteam.getNameTagVisibility().name);
+            nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.getDeathMessageVisibility().name);
+            nbttagcompound.setString("CollisionRule", scoreboardteam.getCollisionRule().name);
             NBTTagList nbttaglist1 = new NBTTagList();
             Iterator iterator1 = scoreboardteam.getPlayerNameSet().iterator();
 
@@ -213,12 +193,12 @@ public class PersistentScoreboard extends PersistentBase {
         return nbttaglist;
     }
 
-    protected void d(NBTTagCompound nbttagcompound) {
+    private void d(NBTTagCompound nbttagcompound) {
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         boolean flag = false;
 
         for (int i = 0; i < 19; ++i) {
-            ScoreboardObjective scoreboardobjective = this.b.getObjectiveForSlot(i);
+            ScoreboardObjective scoreboardobjective = this.scoreboard.getObjectiveForSlot(i);
 
             if (scoreboardobjective != null) {
                 nbttagcompound1.setString("slot_" + i, scoreboardobjective.getName());
@@ -232,9 +212,9 @@ public class PersistentScoreboard extends PersistentBase {
 
     }
 
-    protected NBTTagList e() {
+    private NBTTagList d() {
         NBTTagList nbttaglist = new NBTTagList();
-        Collection<ScoreboardObjective> collection = this.b.getObjectives();
+        Collection<ScoreboardObjective> collection = this.scoreboard.getObjectives();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {

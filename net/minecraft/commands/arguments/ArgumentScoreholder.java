@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.ICompletionProvider;
@@ -26,7 +27,7 @@ import net.minecraft.world.entity.Entity;
 
 public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> {
 
-    public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+    public static final SuggestionProvider<CommandListenerWrapper> SUGGEST_SCORE_HOLDERS = (commandcontext, suggestionsbuilder) -> {
         StringReader stringreader = new StringReader(suggestionsbuilder.getInput());
 
         stringreader.setCursor(suggestionsbuilder.getStart());
@@ -42,12 +43,13 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).l(), suggestionsbuilder1);
         });
     };
-    private static final Collection<String> b = Arrays.asList("Player", "0123", "*", "@e");
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.scoreHolder.empty"));
-    private final boolean d;
+    private static final Collection<String> EXAMPLES = Arrays.asList("Player", "0123", "*", "@e");
+    private static final SimpleCommandExceptionType ERROR_NO_RESULTS = new SimpleCommandExceptionType(new ChatMessage("argument.scoreHolder.empty"));
+    private static final byte FLAG_MULTIPLE = 1;
+    final boolean multiple;
 
     public ArgumentScoreholder(boolean flag) {
-        this.d = flag;
+        this.multiple = flag;
     }
 
     public static String a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
@@ -61,7 +63,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
     public static Collection<String> c(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         ScoreboardServer scoreboardserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard();
 
-        scoreboardserver.getClass();
+        Objects.requireNonNull(scoreboardserver);
         return a(commandcontext, s, scoreboardserver::getPlayers);
     }
 
@@ -69,7 +71,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         Collection<String> collection = ((ArgumentScoreholder.a) commandcontext.getArgument(s, ArgumentScoreholder.a.class)).getNames((CommandListenerWrapper) commandcontext.getSource(), supplier);
 
         if (collection.isEmpty()) {
-            throw ArgumentEntity.d.create();
+            throw ArgumentEntity.NO_ENTITIES_FOUND.create();
         } else {
             return collection;
         }
@@ -88,8 +90,8 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
             EntitySelector entityselector = argumentparserselector.parse();
 
-            if (!this.d && entityselector.a() > 1) {
-                throw ArgumentEntity.a.create();
+            if (!this.multiple && entityselector.a() > 1) {
+                throw ArgumentEntity.ERROR_NOT_SINGLE_ENTITY.create();
             } else {
                 return new ArgumentScoreholder.b(entityselector);
             }
@@ -107,7 +109,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
                     Collection<String> collection = (Collection) supplier.get();
 
                     if (collection.isEmpty()) {
-                        throw ArgumentScoreholder.c.create();
+                        throw ArgumentScoreholder.ERROR_NO_RESULTS.create();
                     } else {
                         return collection;
                     }
@@ -123,50 +125,29 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
     }
 
     public Collection<String> getExamples() {
-        return ArgumentScoreholder.b;
+        return ArgumentScoreholder.EXAMPLES;
     }
 
-    public static class c implements ArgumentSerializer<ArgumentScoreholder> {
+    @FunctionalInterface
+    public interface a {
 
-        public c() {}
-
-        public void a(ArgumentScoreholder argumentscoreholder, PacketDataSerializer packetdataserializer) {
-            byte b0 = 0;
-
-            if (argumentscoreholder.d) {
-                b0 = (byte) (b0 | 1);
-            }
-
-            packetdataserializer.writeByte(b0);
-        }
-
-        @Override
-        public ArgumentScoreholder b(PacketDataSerializer packetdataserializer) {
-            byte b0 = packetdataserializer.readByte();
-            boolean flag = (b0 & 1) != 0;
-
-            return new ArgumentScoreholder(flag);
-        }
-
-        public void a(ArgumentScoreholder argumentscoreholder, JsonObject jsonobject) {
-            jsonobject.addProperty("amount", argumentscoreholder.d ? "multiple" : "single");
-        }
+        Collection<String> getNames(CommandListenerWrapper commandlistenerwrapper, Supplier<Collection<String>> supplier) throws CommandSyntaxException;
     }
 
     public static class b implements ArgumentScoreholder.a {
 
-        private final EntitySelector a;
+        private final EntitySelector selector;
 
         public b(EntitySelector entityselector) {
-            this.a = entityselector;
+            this.selector = entityselector;
         }
 
         @Override
         public Collection<String> getNames(CommandListenerWrapper commandlistenerwrapper, Supplier<Collection<String>> supplier) throws CommandSyntaxException {
-            List<? extends Entity> list = this.a.getEntities(commandlistenerwrapper);
+            List<? extends Entity> list = this.selector.getEntities(commandlistenerwrapper);
 
             if (list.isEmpty()) {
-                throw ArgumentEntity.d.create();
+                throw ArgumentEntity.NO_ENTITIES_FOUND.create();
             } else {
                 List<String> list1 = Lists.newArrayList();
                 Iterator iterator = list.iterator();
@@ -182,9 +163,30 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         }
     }
 
-    @FunctionalInterface
-    public interface a {
+    public static class c implements ArgumentSerializer<ArgumentScoreholder> {
 
-        Collection<String> getNames(CommandListenerWrapper commandlistenerwrapper, Supplier<Collection<String>> supplier) throws CommandSyntaxException;
+        public c() {}
+
+        public void a(ArgumentScoreholder argumentscoreholder, PacketDataSerializer packetdataserializer) {
+            byte b0 = 0;
+
+            if (argumentscoreholder.multiple) {
+                b0 = (byte) (b0 | 1);
+            }
+
+            packetdataserializer.writeByte(b0);
+        }
+
+        @Override
+        public ArgumentScoreholder b(PacketDataSerializer packetdataserializer) {
+            byte b0 = packetdataserializer.readByte();
+            boolean flag = (b0 & 1) != 0;
+
+            return new ArgumentScoreholder(flag);
+        }
+
+        public void a(ArgumentScoreholder argumentscoreholder, JsonObject jsonobject) {
+            jsonobject.addProperty("amount", argumentscoreholder.multiple ? "multiple" : "single");
+        }
     }
 }

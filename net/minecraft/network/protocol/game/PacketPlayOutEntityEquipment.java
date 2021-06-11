@@ -2,7 +2,6 @@ package net.minecraft.network.protocol.game;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import java.io.IOException;
 import java.util.List;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -11,42 +10,40 @@ import net.minecraft.world.item.ItemStack;
 
 public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private final List<Pair<EnumItemSlot, ItemStack>> b;
-
-    public PacketPlayOutEntityEquipment() {
-        this.b = Lists.newArrayList();
-    }
+    private static final byte CONTINUE_MASK = -128;
+    private final int entity;
+    private final List<Pair<EnumItemSlot, ItemStack>> slots;
 
     public PacketPlayOutEntityEquipment(int i, List<Pair<EnumItemSlot, ItemStack>> list) {
-        this.a = i;
-        this.b = list;
+        this.entity = i;
+        this.slots = list;
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
+    public PacketPlayOutEntityEquipment(PacketDataSerializer packetdataserializer) {
+        this.entity = packetdataserializer.j();
         EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
+
+        this.slots = Lists.newArrayList();
 
         byte b0;
 
         do {
             b0 = packetdataserializer.readByte();
             EnumItemSlot enumitemslot = aenumitemslot[b0 & 127];
-            ItemStack itemstack = packetdataserializer.n();
+            ItemStack itemstack = packetdataserializer.o();
 
-            this.b.add(Pair.of(enumitemslot, itemstack));
+            this.slots.add(Pair.of(enumitemslot, itemstack));
         } while ((b0 & -128) != 0);
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        int i = this.b.size();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.entity);
+        int i = this.slots.size();
 
         for (int j = 0; j < i; ++j) {
-            Pair<EnumItemSlot, ItemStack> pair = (Pair) this.b.get(j);
+            Pair<EnumItemSlot, ItemStack> pair = (Pair) this.slots.get(j);
             EnumItemSlot enumitemslot = (EnumItemSlot) pair.getFirst();
             boolean flag = j != i - 1;
             int k = enumitemslot.ordinal();
@@ -59,5 +56,13 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.entity;
+    }
+
+    public List<Pair<EnumItemSlot, ItemStack>> c() {
+        return this.slots;
     }
 }

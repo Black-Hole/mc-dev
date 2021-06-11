@@ -17,53 +17,53 @@ import net.minecraft.world.level.ChunkCoordIntPair;
 
 public class ChunkTaskQueue<T> {
 
-    public static final int a = PlayerChunkMap.GOLDEN_TICKET + 2;
-    private final List<Long2ObjectLinkedOpenHashMap<List<Optional<T>>>> b;
-    private volatile int c;
-    private final String d;
-    private final LongSet e;
-    private final int f;
+    public static final int PRIORITY_LEVEL_COUNT = PlayerChunkMap.MAX_CHUNK_DISTANCE + 2;
+    private final List<Long2ObjectLinkedOpenHashMap<List<Optional<T>>>> taskQueue;
+    private volatile int firstQueue;
+    private final String name;
+    private final LongSet acquired;
+    private final int maxTasks;
 
     public ChunkTaskQueue(String s, int i) {
-        this.b = (List) IntStream.range(0, ChunkTaskQueue.a).mapToObj((j) -> {
+        this.taskQueue = (List) IntStream.range(0, ChunkTaskQueue.PRIORITY_LEVEL_COUNT).mapToObj((j) -> {
             return new Long2ObjectLinkedOpenHashMap();
         }).collect(Collectors.toList());
-        this.c = ChunkTaskQueue.a;
-        this.e = new LongOpenHashSet();
-        this.d = s;
-        this.f = i;
+        this.firstQueue = ChunkTaskQueue.PRIORITY_LEVEL_COUNT;
+        this.acquired = new LongOpenHashSet();
+        this.name = s;
+        this.maxTasks = i;
     }
 
     protected void a(int i, ChunkCoordIntPair chunkcoordintpair, int j) {
-        if (i < ChunkTaskQueue.a) {
-            Long2ObjectLinkedOpenHashMap<List<Optional<T>>> long2objectlinkedopenhashmap = (Long2ObjectLinkedOpenHashMap) this.b.get(i);
+        if (i < ChunkTaskQueue.PRIORITY_LEVEL_COUNT) {
+            Long2ObjectLinkedOpenHashMap<List<Optional<T>>> long2objectlinkedopenhashmap = (Long2ObjectLinkedOpenHashMap) this.taskQueue.get(i);
             List<Optional<T>> list = (List) long2objectlinkedopenhashmap.remove(chunkcoordintpair.pair());
 
-            if (i == this.c) {
-                while (this.c < ChunkTaskQueue.a && ((Long2ObjectLinkedOpenHashMap) this.b.get(this.c)).isEmpty()) {
-                    ++this.c;
+            if (i == this.firstQueue) {
+                while (this.firstQueue < ChunkTaskQueue.PRIORITY_LEVEL_COUNT && ((Long2ObjectLinkedOpenHashMap) this.taskQueue.get(this.firstQueue)).isEmpty()) {
+                    ++this.firstQueue;
                 }
             }
 
             if (list != null && !list.isEmpty()) {
-                ((List) ((Long2ObjectLinkedOpenHashMap) this.b.get(j)).computeIfAbsent(chunkcoordintpair.pair(), (k) -> {
+                ((List) ((Long2ObjectLinkedOpenHashMap) this.taskQueue.get(j)).computeIfAbsent(chunkcoordintpair.pair(), (k) -> {
                     return Lists.newArrayList();
                 })).addAll(list);
-                this.c = Math.min(this.c, j);
+                this.firstQueue = Math.min(this.firstQueue, j);
             }
 
         }
     }
 
     protected void a(Optional<T> optional, long i, int j) {
-        ((List) ((Long2ObjectLinkedOpenHashMap) this.b.get(j)).computeIfAbsent(i, (k) -> {
+        ((List) ((Long2ObjectLinkedOpenHashMap) this.taskQueue.get(j)).computeIfAbsent(i, (k) -> {
             return Lists.newArrayList();
         })).add(optional);
-        this.c = Math.min(this.c, j);
+        this.firstQueue = Math.min(this.firstQueue, j);
     }
 
     protected void a(long i, boolean flag) {
-        Iterator iterator = this.b.iterator();
+        Iterator iterator = this.taskQueue.iterator();
 
         while (iterator.hasNext()) {
             Long2ObjectLinkedOpenHashMap<List<Optional<T>>> long2objectlinkedopenhashmap = (Long2ObjectLinkedOpenHashMap) iterator.next();
@@ -84,33 +84,33 @@ public class ChunkTaskQueue<T> {
             }
         }
 
-        while (this.c < ChunkTaskQueue.a && ((Long2ObjectLinkedOpenHashMap) this.b.get(this.c)).isEmpty()) {
-            ++this.c;
+        while (this.firstQueue < ChunkTaskQueue.PRIORITY_LEVEL_COUNT && ((Long2ObjectLinkedOpenHashMap) this.taskQueue.get(this.firstQueue)).isEmpty()) {
+            ++this.firstQueue;
         }
 
-        this.e.remove(i);
+        this.acquired.remove(i);
     }
 
     private Runnable a(long i) {
         return () -> {
-            this.e.add(i);
+            this.acquired.add(i);
         };
     }
 
     @Nullable
     public Stream<Either<T, Runnable>> a() {
-        if (this.e.size() >= this.f) {
+        if (this.acquired.size() >= this.maxTasks) {
             return null;
-        } else if (this.c >= ChunkTaskQueue.a) {
+        } else if (this.firstQueue >= ChunkTaskQueue.PRIORITY_LEVEL_COUNT) {
             return null;
         } else {
-            int i = this.c;
-            Long2ObjectLinkedOpenHashMap<List<Optional<T>>> long2objectlinkedopenhashmap = (Long2ObjectLinkedOpenHashMap) this.b.get(i);
+            int i = this.firstQueue;
+            Long2ObjectLinkedOpenHashMap<List<Optional<T>>> long2objectlinkedopenhashmap = (Long2ObjectLinkedOpenHashMap) this.taskQueue.get(i);
             long j = long2objectlinkedopenhashmap.firstLongKey();
 
             List list;
 
-            for (list = (List) long2objectlinkedopenhashmap.removeFirst(); this.c < ChunkTaskQueue.a && ((Long2ObjectLinkedOpenHashMap) this.b.get(this.c)).isEmpty(); ++this.c) {
+            for (list = (List) long2objectlinkedopenhashmap.removeFirst(); this.firstQueue < ChunkTaskQueue.PRIORITY_LEVEL_COUNT && ((Long2ObjectLinkedOpenHashMap) this.taskQueue.get(this.firstQueue)).isEmpty(); ++this.firstQueue) {
                 ;
             }
 
@@ -123,11 +123,11 @@ public class ChunkTaskQueue<T> {
     }
 
     public String toString() {
-        return this.d + " " + this.c + "...";
+        return this.name + " " + this.firstQueue + "...";
     }
 
     @VisibleForTesting
     LongSet b() {
-        return new LongOpenHashSet(this.e);
+        return new LongOpenHashSet(this.acquired);
     }
 }

@@ -1,16 +1,15 @@
 package net.minecraft.core.particles;
 
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 
 public class ParticleType extends Particle<ParticleType> implements ParticleParam {
 
-    private static final ParticleParam.a<ParticleType> a = new ParticleParam.a<ParticleType>() {
+    private static final ParticleParam.a<ParticleType> DESERIALIZER = new ParticleParam.a<ParticleType>() {
         @Override
-        public ParticleType b(Particle<ParticleType> particle, StringReader stringreader) throws CommandSyntaxException {
+        public ParticleType b(Particle<ParticleType> particle, StringReader stringreader) {
             return (ParticleType) particle;
         }
 
@@ -19,10 +18,10 @@ public class ParticleType extends Particle<ParticleType> implements ParticlePara
             return (ParticleType) particle;
         }
     };
-    private final Codec<ParticleType> b = Codec.unit(this::getParticle);
+    private final Codec<ParticleType> codec = Codec.unit(this::getParticle);
 
     protected ParticleType(boolean flag) {
-        super(flag, ParticleType.a);
+        super(flag, ParticleType.DESERIALIZER);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class ParticleType extends Particle<ParticleType> implements ParticlePara
 
     @Override
     public Codec<ParticleType> e() {
-        return this.b;
+        return this.codec;
     }
 
     @Override

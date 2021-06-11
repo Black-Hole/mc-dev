@@ -21,18 +21,21 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import net.minecraft.CrashReport;
 import net.minecraft.DefaultUncaughtExceptionHandler;
+import net.minecraft.SharedConstants;
 import net.minecraft.SystemUtils;
 import net.minecraft.commands.CommandDispatcher;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.nbt.DynamicOpsNBT;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.obfuscate.DontObfuscate;
 import net.minecraft.resources.RegistryReadOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.dedicated.DedicatedServerSettings;
 import net.minecraft.server.level.progress.WorldLoadListenerLogger;
+import net.minecraft.server.packs.EnumResourcePackType;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.ResourcePackRepository;
 import net.minecraft.server.packs.repository.ResourcePackSource;
@@ -51,6 +54,7 @@ import net.minecraft.world.level.storage.Convertable;
 import net.minecraft.world.level.storage.SaveData;
 import net.minecraft.world.level.storage.SavedFile;
 import net.minecraft.world.level.storage.WorldDataServer;
+import net.minecraft.world.level.storage.WorldInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,7 +64,9 @@ public class Main {
 
     public Main() {}
 
+    @DontObfuscate
     public static void main(String[] astring) {
+        SharedConstants.a();
         OptionParser optionparser = new OptionParser();
         OptionSpec<Void> optionspec = optionparser.accepts("nogui");
         OptionSpec<Void> optionspec1 = optionparser.accepts("initSettings", "Initializes 'server.properties' and 'eula.txt', then quits");
@@ -89,9 +95,9 @@ public class Main {
             DispenserRegistry.init();
             DispenserRegistry.c();
             SystemUtils.l();
-            IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
+            IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.a();
             Path path = Paths.get("server.properties");
-            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(iregistrycustom_dimension, path);
+            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(path);
 
             dedicatedserversettings.save();
             Path path1 = Paths.get("eula.txt");
@@ -111,12 +117,19 @@ public class Main {
             YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Proxy.NO_PROXY);
             MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
             GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
-            UserCache usercache = new UserCache(gameprofilerepository, new File(file, MinecraftServer.b.getName()));
-            String s = (String) Optional.ofNullable(optionset.valueOf(optionspec10)).orElse(dedicatedserversettings.getProperties().levelName);
+            UserCache usercache = new UserCache(gameprofilerepository, new File(file, MinecraftServer.USERID_CACHE_FILE.getName()));
+            String s = (String) Optional.ofNullable((String) optionset.valueOf(optionspec10)).orElse(dedicatedserversettings.getProperties().levelName);
             Convertable convertable = Convertable.a(file.toPath());
             Convertable.ConversionSession convertable_conversionsession = convertable.c(s);
 
             MinecraftServer.convertWorld(convertable_conversionsession);
+            WorldInfo worldinfo = convertable_conversionsession.d();
+
+            if (worldinfo != null && worldinfo.p()) {
+                Main.LOGGER.info("Loading of worlds with extended height is disabled.");
+                return;
+            }
+
             DataPackConfiguration datapackconfiguration = convertable_conversionsession.e();
             boolean flag = optionset.has(optionspec6);
 
@@ -124,9 +137,9 @@ public class Main {
                 Main.LOGGER.warn("Safe mode active, only vanilla datapack will be loaded");
             }
 
-            ResourcePackRepository resourcepackrepository = new ResourcePackRepository(new ResourcePackSource[]{new ResourcePackSourceVanilla(), new ResourcePackSourceFolder(convertable_conversionsession.getWorldFolder(SavedFile.DATAPACKS).toFile(), PackSource.c)});
-            DataPackConfiguration datapackconfiguration1 = MinecraftServer.a(resourcepackrepository, datapackconfiguration == null ? DataPackConfiguration.a : datapackconfiguration, flag);
-            CompletableFuture completablefuture = DataPackResources.a(resourcepackrepository.f(), CommandDispatcher.ServerType.DEDICATED, dedicatedserversettings.getProperties().functionPermissionLevel, SystemUtils.f(), Runnable::run);
+            ResourcePackRepository resourcepackrepository = new ResourcePackRepository(EnumResourcePackType.SERVER_DATA, new ResourcePackSource[]{new ResourcePackSourceVanilla(), new ResourcePackSourceFolder(convertable_conversionsession.getWorldFolder(SavedFile.DATAPACK_DIR).toFile(), PackSource.WORLD)});
+            DataPackConfiguration datapackconfiguration1 = MinecraftServer.a(resourcepackrepository, datapackconfiguration == null ? DataPackConfiguration.DEFAULT : datapackconfiguration, flag);
+            CompletableFuture completablefuture = DataPackResources.a(resourcepackrepository.f(), iregistrycustom_dimension, CommandDispatcher.ServerType.DEDICATED, dedicatedserversettings.getProperties().functionPermissionLevel, SystemUtils.f(), Runnable::run);
 
             DataPackResources datapackresources;
 
@@ -138,8 +151,10 @@ public class Main {
                 return;
             }
 
-            datapackresources.i();
-            RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, datapackresources.h(), iregistrycustom_dimension);
+            datapackresources.j();
+            RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.INSTANCE, datapackresources.i(), (IRegistryCustom) iregistrycustom_dimension);
+
+            dedicatedserversettings.getProperties().a((IRegistryCustom) iregistrycustom_dimension);
             Object object = convertable_conversionsession.a((DynamicOps) registryreadops, datapackconfiguration1);
 
             if (object == null) {
@@ -147,13 +162,13 @@ public class Main {
                 GeneratorSettings generatorsettings;
 
                 if (optionset.has(optionspec2)) {
-                    worldsettings = MinecraftServer.c;
+                    worldsettings = MinecraftServer.DEMO_SETTINGS;
                     generatorsettings = GeneratorSettings.a((IRegistryCustom) iregistrycustom_dimension);
                 } else {
                     DedicatedServerProperties dedicatedserverproperties = dedicatedserversettings.getProperties();
 
                     worldsettings = new WorldSettings(dedicatedserverproperties.levelName, dedicatedserverproperties.gamemode, dedicatedserverproperties.hardcore, dedicatedserverproperties.difficulty, false, new GameRules(), datapackconfiguration1);
-                    generatorsettings = optionset.has(optionspec3) ? dedicatedserverproperties.generatorSettings.j() : dedicatedserverproperties.generatorSettings;
+                    generatorsettings = optionset.has(optionspec3) ? dedicatedserverproperties.a((IRegistryCustom) iregistrycustom_dimension).j() : dedicatedserverproperties.a((IRegistryCustom) iregistrycustom_dimension);
                 }
 
                 object = new WorldDataServer(worldsettings, generatorsettings, Lifecycle.stable());
@@ -176,7 +191,7 @@ public class Main {
                 boolean flag1 = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
                 if (flag1 && !GraphicsEnvironment.isHeadless()) {
-                    dedicatedserver1.bd();
+                    dedicatedserver1.bi();
                 }
 
                 return dedicatedserver1;

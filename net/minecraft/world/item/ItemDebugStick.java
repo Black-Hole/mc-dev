@@ -28,7 +28,7 @@ public class ItemDebugStick extends Item {
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
+    public boolean i(ItemStack itemstack) {
         return true;
     }
 
@@ -49,14 +49,18 @@ public class ItemDebugStick extends Item {
         if (!world.isClientSide && entityhuman != null) {
             BlockPosition blockposition = itemactioncontext.getClickPosition();
 
-            this.a(entityhuman, world.getType(blockposition), world, blockposition, true, itemactioncontext.getItemStack());
+            if (!this.a(entityhuman, world.getType(blockposition), world, blockposition, true, itemactioncontext.getItemStack())) {
+                return EnumInteractionResult.FAIL;
+            }
         }
 
         return EnumInteractionResult.a(world.isClientSide);
     }
 
-    private void a(EntityHuman entityhuman, IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag, ItemStack itemstack) {
-        if (entityhuman.isCreativeAndOp()) {
+    private boolean a(EntityHuman entityhuman, IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag, ItemStack itemstack) {
+        if (!entityhuman.isCreativeAndOp()) {
+            return false;
+        } else {
             Block block = iblockdata.getBlock();
             BlockStateList<Block, IBlockData> blockstatelist = block.getStates();
             Collection<IBlockState<?>> collection = blockstatelist.d();
@@ -64,6 +68,7 @@ public class ItemDebugStick extends Item {
 
             if (collection.isEmpty()) {
                 a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".empty", new Object[]{s})));
+                return false;
             } else {
                 NBTTagCompound nbttagcompound = itemstack.a("DebugProperty");
                 String s1 = nbttagcompound.getString(s);
@@ -74,18 +79,19 @@ public class ItemDebugStick extends Item {
                         iblockstate = (IBlockState) collection.iterator().next();
                     }
 
-                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.eq());
+                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.eY());
 
                     generatoraccess.setTypeAndData(blockposition, iblockdata1, 18);
                     a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".update", new Object[]{iblockstate.getName(), a(iblockdata1, iblockstate)})));
                 } else {
-                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.eq());
+                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.eY());
                     String s2 = iblockstate.getName();
 
                     nbttagcompound.setString(s, s2);
                     a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".select", new Object[]{s2, a(iblockdata, iblockstate)})));
                 }
 
+                return true;
             }
         }
     }
@@ -99,7 +105,7 @@ public class ItemDebugStick extends Item {
     }
 
     private static void a(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ((EntityPlayer) entityhuman).a(ichatbasecomponent, ChatMessageType.GAME_INFO, SystemUtils.b);
+        ((EntityPlayer) entityhuman).a(ichatbasecomponent, ChatMessageType.GAME_INFO, SystemUtils.NIL_UUID);
     }
 
     private static <T extends Comparable<T>> String a(IBlockData iblockdata, IBlockState<T> iblockstate) {

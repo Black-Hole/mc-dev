@@ -8,34 +8,34 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 
 public class WorldGenFeatureHugeFungiConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureHugeFungiConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(IBlockData.b.fieldOf("valid_base_block").forGetter((worldgenfeaturehugefungiconfiguration) -> {
-            return worldgenfeaturehugefungiconfiguration.f;
-        }), IBlockData.b.fieldOf("stem_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
-            return worldgenfeaturehugefungiconfiguration.g;
-        }), IBlockData.b.fieldOf("hat_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
-            return worldgenfeaturehugefungiconfiguration.h;
-        }), IBlockData.b.fieldOf("decor_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
-            return worldgenfeaturehugefungiconfiguration.i;
+    public static final Codec<WorldGenFeatureHugeFungiConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IBlockData.CODEC.fieldOf("valid_base_block").forGetter((worldgenfeaturehugefungiconfiguration) -> {
+            return worldgenfeaturehugefungiconfiguration.validBaseState;
+        }), IBlockData.CODEC.fieldOf("stem_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
+            return worldgenfeaturehugefungiconfiguration.stemState;
+        }), IBlockData.CODEC.fieldOf("hat_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
+            return worldgenfeaturehugefungiconfiguration.hatState;
+        }), IBlockData.CODEC.fieldOf("decor_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
+            return worldgenfeaturehugefungiconfiguration.decorState;
         }), Codec.BOOL.fieldOf("planted").orElse(false).forGetter((worldgenfeaturehugefungiconfiguration) -> {
-            return worldgenfeaturehugefungiconfiguration.j;
+            return worldgenfeaturehugefungiconfiguration.planted;
         })).apply(instance, WorldGenFeatureHugeFungiConfiguration::new);
     });
-    public static final WorldGenFeatureHugeFungiConfiguration CRIMSON_FUNGUS = new WorldGenFeatureHugeFungiConfiguration(Blocks.CRIMSON_NYLIUM.getBlockData(), Blocks.CRIMSON_STEM.getBlockData(), Blocks.NETHER_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
-    public static final WorldGenFeatureHugeFungiConfiguration c = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.f, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.g, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.h, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.i, false);
-    public static final WorldGenFeatureHugeFungiConfiguration WARPED_FUNGUS = new WorldGenFeatureHugeFungiConfiguration(Blocks.WARPED_NYLIUM.getBlockData(), Blocks.WARPED_STEM.getBlockData(), Blocks.WARPED_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
-    public static final WorldGenFeatureHugeFungiConfiguration e = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.f, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.g, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.h, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.i, false);
-    public final IBlockData f;
-    public final IBlockData g;
-    public final IBlockData h;
-    public final IBlockData i;
-    public final boolean j;
+    public static final WorldGenFeatureHugeFungiConfiguration HUGE_CRIMSON_FUNGI_PLANTED_CONFIG = new WorldGenFeatureHugeFungiConfiguration(Blocks.CRIMSON_NYLIUM.getBlockData(), Blocks.CRIMSON_STEM.getBlockData(), Blocks.NETHER_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
+    public static final WorldGenFeatureHugeFungiConfiguration HUGE_CRIMSON_FUNGI_NOT_PLANTED_CONFIG = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.HUGE_CRIMSON_FUNGI_PLANTED_CONFIG.validBaseState, WorldGenFeatureHugeFungiConfiguration.HUGE_CRIMSON_FUNGI_PLANTED_CONFIG.stemState, WorldGenFeatureHugeFungiConfiguration.HUGE_CRIMSON_FUNGI_PLANTED_CONFIG.hatState, WorldGenFeatureHugeFungiConfiguration.HUGE_CRIMSON_FUNGI_PLANTED_CONFIG.decorState, false);
+    public static final WorldGenFeatureHugeFungiConfiguration HUGE_WARPED_FUNGI_PLANTED_CONFIG = new WorldGenFeatureHugeFungiConfiguration(Blocks.WARPED_NYLIUM.getBlockData(), Blocks.WARPED_STEM.getBlockData(), Blocks.WARPED_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
+    public static final WorldGenFeatureHugeFungiConfiguration HUGE_WARPED_FUNGI_NOT_PLANTED_CONFIG = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.HUGE_WARPED_FUNGI_PLANTED_CONFIG.validBaseState, WorldGenFeatureHugeFungiConfiguration.HUGE_WARPED_FUNGI_PLANTED_CONFIG.stemState, WorldGenFeatureHugeFungiConfiguration.HUGE_WARPED_FUNGI_PLANTED_CONFIG.hatState, WorldGenFeatureHugeFungiConfiguration.HUGE_WARPED_FUNGI_PLANTED_CONFIG.decorState, false);
+    public final IBlockData validBaseState;
+    public final IBlockData stemState;
+    public final IBlockData hatState;
+    public final IBlockData decorState;
+    public final boolean planted;
 
     public WorldGenFeatureHugeFungiConfiguration(IBlockData iblockdata, IBlockData iblockdata1, IBlockData iblockdata2, IBlockData iblockdata3, boolean flag) {
-        this.f = iblockdata;
-        this.g = iblockdata1;
-        this.h = iblockdata2;
-        this.i = iblockdata3;
-        this.j = flag;
+        this.validBaseState = iblockdata;
+        this.stemState = iblockdata1;
+        this.hatState = iblockdata2;
+        this.decorState = iblockdata3;
+        this.planted = flag;
     }
 }

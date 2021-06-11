@@ -6,22 +6,22 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 
 public class WorldGenDecoratorNoiseConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public static final Codec<WorldGenDecoratorNoiseConfiguration> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenDecoratorNoiseConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.INT.fieldOf("noise_to_count_ratio").forGetter((worldgendecoratornoiseconfiguration) -> {
-            return worldgendecoratornoiseconfiguration.c;
+            return worldgendecoratornoiseconfiguration.noiseToCountRatio;
         }), Codec.DOUBLE.fieldOf("noise_factor").forGetter((worldgendecoratornoiseconfiguration) -> {
-            return worldgendecoratornoiseconfiguration.d;
+            return worldgendecoratornoiseconfiguration.noiseFactor;
         }), Codec.DOUBLE.fieldOf("noise_offset").orElse(0.0D).forGetter((worldgendecoratornoiseconfiguration) -> {
-            return worldgendecoratornoiseconfiguration.e;
+            return worldgendecoratornoiseconfiguration.noiseOffset;
         })).apply(instance, WorldGenDecoratorNoiseConfiguration::new);
     });
-    public final int c;
-    public final double d;
-    public final double e;
+    public final int noiseToCountRatio;
+    public final double noiseFactor;
+    public final double noiseOffset;
 
     public WorldGenDecoratorNoiseConfiguration(int i, double d0, double d1) {
-        this.c = i;
-        this.d = d0;
-        this.e = d1;
+        this.noiseToCountRatio = i;
+        this.noiseFactor = d0;
+        this.noiseOffset = d1;
     }
 }

@@ -33,16 +33,16 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final List<Enchantment> b;
+    final List<Enchantment> enchantments;
 
-    private LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, Collection<Enchantment> collection) {
+    LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, Collection<Enchantment> collection) {
         super(alootitemcondition);
-        this.b = ImmutableList.copyOf(collection);
+        this.enchantments = ImmutableList.copyOf(collection);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.d;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.ENCHANT_RANDOMLY;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
         Random random = loottableinfo.a();
         Enchantment enchantment;
 
-        if (this.b.isEmpty()) {
-            boolean flag = itemstack.getItem() == Items.BOOK;
+        if (this.enchantments.isEmpty()) {
+            boolean flag = itemstack.a(Items.BOOK);
             List<Enchantment> list = (List) IRegistry.ENCHANTMENT.g().filter(Enchantment::i).filter((enchantment1) -> {
                 return flag || enchantment1.canEnchant(itemstack);
             }).collect(Collectors.toList());
@@ -63,7 +63,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
             enchantment = (Enchantment) list.get(random.nextInt(list.size()));
         } else {
-            enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
+            enchantment = (Enchantment) this.enchantments.get(random.nextInt(this.enchantments.size()));
         }
 
         return a(itemstack, enchantment, random);
@@ -72,7 +72,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
     private static ItemStack a(ItemStack itemstack, Enchantment enchantment, Random random) {
         int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
 
-        if (itemstack.getItem() == Items.BOOK) {
+        if (itemstack.a(Items.BOOK)) {
             itemstack = new ItemStack(Items.ENCHANTED_BOOK);
             ItemEnchantedBook.a(itemstack, new WeightedRandomEnchant(enchantment, i));
         } else {
@@ -82,10 +82,36 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
         return itemstack;
     }
 
+    public static LootItemFunctionEnchant.a c() {
+        return new LootItemFunctionEnchant.a();
+    }
+
     public static LootItemFunctionConditional.a<?> d() {
         return a((alootitemcondition) -> {
             return new LootItemFunctionEnchant(alootitemcondition, ImmutableList.of());
         });
+    }
+
+    public static class a extends LootItemFunctionConditional.a<LootItemFunctionEnchant.a> {
+
+        private final Set<Enchantment> enchantments = Sets.newHashSet();
+
+        public a() {}
+
+        @Override
+        protected LootItemFunctionEnchant.a d() {
+            return this;
+        }
+
+        public LootItemFunctionEnchant.a a(Enchantment enchantment) {
+            this.enchantments.add(enchantment);
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootItemFunctionEnchant(this.g(), this.enchantments);
+        }
     }
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionEnchant> {
@@ -94,9 +120,9 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
         public void a(JsonObject jsonobject, LootItemFunctionEnchant lootitemfunctionenchant, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionenchant, jsonserializationcontext);
-            if (!lootitemfunctionenchant.b.isEmpty()) {
+            if (!lootitemfunctionenchant.enchantments.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
-                Iterator iterator = lootitemfunctionenchant.b.iterator();
+                Iterator iterator = lootitemfunctionenchant.enchantments.iterator();
 
                 while (iterator.hasNext()) {
                     Enchantment enchantment = (Enchantment) iterator.next();
@@ -134,28 +160,6 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
             }
 
             return new LootItemFunctionEnchant(alootitemcondition, list);
-        }
-    }
-
-    public static class a extends LootItemFunctionConditional.a<LootItemFunctionEnchant.a> {
-
-        private final Set<Enchantment> a = Sets.newHashSet();
-
-        public a() {}
-
-        @Override
-        protected LootItemFunctionEnchant.a d() {
-            return this;
-        }
-
-        public LootItemFunctionEnchant.a a(Enchantment enchantment) {
-            this.a.add(enchantment);
-            return this;
-        }
-
-        @Override
-        public LootItemFunction b() {
-            return new LootItemFunctionEnchant(this.g(), this.a);
         }
     }
 }

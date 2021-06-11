@@ -8,16 +8,20 @@ public enum BlockPropertyStructureMode implements INamable {
 
     SAVE("save"), LOAD("load"), CORNER("corner"), DATA("data");
 
-    private final String e;
-    private final IChatBaseComponent f;
+    private final String name;
+    private final IChatBaseComponent displayName;
 
     private BlockPropertyStructureMode(String s) {
-        this.e = s;
-        this.f = new ChatMessage("structure_block.mode_info." + s);
+        this.name = s;
+        this.displayName = new ChatMessage("structure_block.mode_info." + s);
     }
 
     @Override
     public String getName() {
-        return this.e;
+        return this.name;
+    }
+
+    public IChatBaseComponent a() {
+        return this.displayName;
     }
 }

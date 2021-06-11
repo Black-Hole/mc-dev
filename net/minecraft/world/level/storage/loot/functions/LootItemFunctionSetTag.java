@@ -14,21 +14,21 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionSetTag extends LootItemFunctionConditional {
 
-    private final NBTTagCompound a;
+    final NBTTagCompound tag;
 
-    private LootItemFunctionSetTag(LootItemCondition[] alootitemcondition, NBTTagCompound nbttagcompound) {
+    LootItemFunctionSetTag(LootItemCondition[] alootitemcondition, NBTTagCompound nbttagcompound) {
         super(alootitemcondition);
-        this.a = nbttagcompound;
+        this.tag = nbttagcompound;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.e;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_NBT;
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        itemstack.getOrCreateTag().a(this.a);
+        itemstack.getOrCreateTag().a(this.tag);
         return itemstack;
     }
 
@@ -44,7 +44,7 @@ public class LootItemFunctionSetTag extends LootItemFunctionConditional {
 
         public void a(JsonObject jsonobject, LootItemFunctionSetTag lootitemfunctionsettag, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsettag, jsonserializationcontext);
-            jsonobject.addProperty("tag", lootitemfunctionsettag.a.toString());
+            jsonobject.addProperty("tag", lootitemfunctionsettag.tag.toString());
         }
 
         @Override

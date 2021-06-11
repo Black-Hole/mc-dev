@@ -3,6 +3,8 @@ package net.minecraft.world.level.block;
 import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
@@ -14,21 +16,22 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockNetherWart extends BlockPlant {
 
-    public static final BlockStateInteger AGE = BlockProperties.ag;
-    private static final VoxelShape[] b = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)};
+    public static final int MAX_AGE = 3;
+    public static final BlockStateInteger AGE = BlockProperties.AGE_3;
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)};
 
     protected BlockNetherWart(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNetherWart.AGE, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockNetherWart.AGE, 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockNetherWart.b[(Integer) iblockdata.get(BlockNetherWart.AGE)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockNetherWart.SHAPE_BY_AGE[(Integer) iblockdata.get(BlockNetherWart.AGE)];
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.a(Blocks.SOUL_SAND);
     }
 
@@ -46,6 +49,11 @@ public class BlockNetherWart extends BlockPlant {
             worldserver.setTypeAndData(blockposition, iblockdata, 2);
         }
 
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.NETHER_WART);
     }
 
     @Override

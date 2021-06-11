@@ -10,14 +10,14 @@ import net.minecraft.core.IRegistry;
 
 public class AttributeProvider {
 
-    private final Map<AttributeBase, AttributeModifiable> a;
+    private final Map<AttributeBase, AttributeModifiable> instances;
 
     public AttributeProvider(Map<AttributeBase, AttributeModifiable> map) {
-        this.a = ImmutableMap.copyOf(map);
+        this.instances = ImmutableMap.copyOf(map);
     }
 
     private AttributeModifiable d(AttributeBase attributebase) {
-        AttributeModifiable attributemodifiable = (AttributeModifiable) this.a.get(attributebase);
+        AttributeModifiable attributemodifiable = (AttributeModifiable) this.instances.get(attributebase);
 
         if (attributemodifiable == null) {
             throw new IllegalArgumentException("Can't find attribute " + IRegistry.ATTRIBUTE.getKey(attributebase));
@@ -46,7 +46,7 @@ public class AttributeProvider {
 
     @Nullable
     public AttributeModifiable a(Consumer<AttributeModifiable> consumer, AttributeBase attributebase) {
-        AttributeModifiable attributemodifiable = (AttributeModifiable) this.a.get(attributebase);
+        AttributeModifiable attributemodifiable = (AttributeModifiable) this.instances.get(attributebase);
 
         if (attributemodifiable == null) {
             return null;
@@ -63,30 +63,30 @@ public class AttributeProvider {
     }
 
     public boolean c(AttributeBase attributebase) {
-        return this.a.containsKey(attributebase);
+        return this.instances.containsKey(attributebase);
     }
 
     public boolean b(AttributeBase attributebase, UUID uuid) {
-        AttributeModifiable attributemodifiable = (AttributeModifiable) this.a.get(attributebase);
+        AttributeModifiable attributemodifiable = (AttributeModifiable) this.instances.get(attributebase);
 
         return attributemodifiable != null && attributemodifiable.a(uuid) != null;
     }
 
     public static class Builder {
 
-        private final Map<AttributeBase, AttributeModifiable> a = Maps.newHashMap();
-        private boolean b;
+        private final Map<AttributeBase, AttributeModifiable> builder = Maps.newHashMap();
+        private boolean instanceFrozen;
 
         public Builder() {}
 
         private AttributeModifiable b(AttributeBase attributebase) {
             AttributeModifiable attributemodifiable = new AttributeModifiable(attributebase, (attributemodifiable1) -> {
-                if (this.b) {
+                if (this.instanceFrozen) {
                     throw new UnsupportedOperationException("Tried to change value for default attribute instance: " + IRegistry.ATTRIBUTE.getKey(attributebase));
                 }
             });
 
-            this.a.put(attributebase, attributemodifiable);
+            this.builder.put(attributebase, attributemodifiable);
             return attributemodifiable;
         }
 
@@ -103,8 +103,8 @@ public class AttributeProvider {
         }
 
         public AttributeProvider a() {
-            this.b = true;
-            return new AttributeProvider(this.a);
+            this.instanceFrozen = true;
+            return new AttributeProvider(this.builder);
         }
     }
 }

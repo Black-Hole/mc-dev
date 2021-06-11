@@ -10,5 +10,7 @@ public interface WorldLoadListener {
 
     void a(ChunkCoordIntPair chunkcoordintpair, @Nullable ChunkStatus chunkstatus);
 
+    void a();
+
     void b();
 }

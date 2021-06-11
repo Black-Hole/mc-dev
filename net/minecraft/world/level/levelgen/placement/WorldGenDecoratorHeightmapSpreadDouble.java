@@ -4,26 +4,19 @@ import com.mojang.serialization.Codec;
 import java.util.Random;
 import java.util.stream.Stream;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.world.level.levelgen.HeightMap;
-import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.HeightmapConfiguration;
 
-public class WorldGenDecoratorHeightmapSpreadDouble<DC extends WorldGenFeatureDecoratorConfiguration> extends WorldGenDecoratorHeightAbstract<DC> {
+public class WorldGenDecoratorHeightmapSpreadDouble extends WorldGenDecorator<HeightmapConfiguration> {
 
-    public WorldGenDecoratorHeightmapSpreadDouble(Codec<DC> codec) {
+    public WorldGenDecoratorHeightmapSpreadDouble(Codec<HeightmapConfiguration> codec) {
         super(codec);
     }
 
-    @Override
-    protected HeightMap.Type a(DC dc) {
-        return HeightMap.Type.MOTION_BLOCKING;
-    }
-
-    @Override
-    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, DC dc, BlockPosition blockposition) {
+    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, HeightmapConfiguration heightmapconfiguration, BlockPosition blockposition) {
         int i = blockposition.getX();
         int j = blockposition.getZ();
-        int k = worldgendecoratorcontext.a(this.a(dc), i, j);
+        int k = worldgendecoratorcontext.a(heightmapconfiguration.heightmap, i, j);
 
-        return k == 0 ? Stream.of() : Stream.of(new BlockPosition(i, random.nextInt(k * 2), j));
+        return k == worldgendecoratorcontext.c() ? Stream.of() : Stream.of(new BlockPosition(i, worldgendecoratorcontext.c() + random.nextInt((k - worldgendecoratorcontext.c()) * 2), j));
     }
 }

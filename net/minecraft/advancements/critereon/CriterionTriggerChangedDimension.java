@@ -11,19 +11,19 @@ import net.minecraft.world.level.World;
 
 public class CriterionTriggerChangedDimension extends CriterionTriggerAbstract<CriterionTriggerChangedDimension.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("changed_dimension");
+    static final MinecraftKey ID = new MinecraftKey("changed_dimension");
 
     public CriterionTriggerChangedDimension() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerChangedDimension.a;
+        return CriterionTriggerChangedDimension.ID;
     }
 
     @Override
     public CriterionTriggerChangedDimension.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
-        ResourceKey<World> resourcekey = jsonobject.has("from") ? ResourceKey.a(IRegistry.L, new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
-        ResourceKey<World> resourcekey1 = jsonobject.has("to") ? ResourceKey.a(IRegistry.L, new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
+        ResourceKey<World> resourcekey = jsonobject.has("from") ? ResourceKey.a(IRegistry.DIMENSION_REGISTRY, new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
+        ResourceKey<World> resourcekey1 = jsonobject.has("to") ? ResourceKey.a(IRegistry.DIMENSION_REGISTRY, new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
 
         return new CriterionTriggerChangedDimension.a(criterionconditionentity_b, resourcekey, resourcekey1);
     }
@@ -37,34 +37,46 @@ public class CriterionTriggerChangedDimension extends CriterionTriggerAbstract<C
     public static class a extends CriterionInstanceAbstract {
 
         @Nullable
-        private final ResourceKey<World> a;
+        private final ResourceKey<World> from;
         @Nullable
-        private final ResourceKey<World> b;
+        private final ResourceKey<World> to;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable ResourceKey<World> resourcekey, @Nullable ResourceKey<World> resourcekey1) {
-            super(CriterionTriggerChangedDimension.a, criterionconditionentity_b);
-            this.a = resourcekey;
-            this.b = resourcekey1;
+            super(CriterionTriggerChangedDimension.ID, criterionconditionentity_b);
+            this.from = resourcekey;
+            this.to = resourcekey1;
+        }
+
+        public static CriterionTriggerChangedDimension.a c() {
+            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.ANY, (ResourceKey) null, (ResourceKey) null);
+        }
+
+        public static CriterionTriggerChangedDimension.a a(ResourceKey<World> resourcekey, ResourceKey<World> resourcekey1) {
+            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.ANY, resourcekey, resourcekey1);
         }
 
         public static CriterionTriggerChangedDimension.a a(ResourceKey<World> resourcekey) {
-            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.a, (ResourceKey) null, resourcekey);
+            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.ANY, (ResourceKey) null, resourcekey);
+        }
+
+        public static CriterionTriggerChangedDimension.a b(ResourceKey<World> resourcekey) {
+            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.ANY, resourcekey, (ResourceKey) null);
         }
 
         public boolean b(ResourceKey<World> resourcekey, ResourceKey<World> resourcekey1) {
-            return this.a != null && this.a != resourcekey ? false : this.b == null || this.b == resourcekey1;
+            return this.from != null && this.from != resourcekey ? false : this.to == null || this.to == resourcekey1;
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            if (this.a != null) {
-                jsonobject.addProperty("from", this.a.a().toString());
+            if (this.from != null) {
+                jsonobject.addProperty("from", this.from.a().toString());
             }
 
-            if (this.b != null) {
-                jsonobject.addProperty("to", this.b.a().toString());
+            if (this.to != null) {
+                jsonobject.addProperty("to", this.to.a().toString());
             }
 
             return jsonobject;

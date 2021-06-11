@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.advancements.CriterionTriggers;
+import net.minecraft.core.particles.ParticleParam;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.network.syncher.DataWatcherObject;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.DifficultyDamageScaler;
 import net.minecraft.world.InventorySubcontainer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,6 +25,7 @@ import net.minecraft.world.entity.EntitySize;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumMobSpawn;
 import net.minecraft.world.entity.GroupDataEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.IMerchant;
@@ -31,14 +34,17 @@ import net.minecraft.world.item.trading.MerchantRecipeList;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.WorldAccess;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.Vec3D;
 
-public abstract class EntityVillagerAbstract extends EntityAgeable implements NPC, IMerchant {
+public abstract class EntityVillagerAbstract extends EntityAgeable implements InventoryCarrier, NPC, IMerchant {
 
-    private static final DataWatcherObject<Integer> bp = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> DATA_UNHAPPY_COUNTER = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.INT);
+    public static final int VILLAGER_SLOT_OFFSET = 300;
+    private static final int VILLAGER_INVENTORY_SIZE = 8;
     @Nullable
     private EntityHuman tradingPlayer;
     @Nullable
-    protected MerchantRecipeList trades;
+    protected MerchantRecipeList offers;
     private final InventorySubcontainer inventory = new InventorySubcontainer(8);
 
     public EntityVillagerAbstract(EntityTypes<? extends EntityVillagerAbstract> entitytypes, World world) {
@@ -56,12 +62,12 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    public int eK() {
-        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bp);
+    public int p() {
+        return (Integer) this.entityData.get(EntityVillagerAbstract.DATA_UNHAPPY_COUNTER);
     }
 
-    public void s(int i) {
-        this.datawatcher.set(EntityVillagerAbstract.bp, i);
+    public void t(int i) {
+        this.entityData.set(EntityVillagerAbstract.DATA_UNHAPPY_COUNTER, i);
     }
 
     @Override
@@ -77,7 +83,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityVillagerAbstract.bp, 0);
+        this.entityData.register(EntityVillagerAbstract.DATA_UNHAPPY_COUNTER, 0);
     }
 
     @Override
@@ -91,19 +97,22 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean eN() {
+    public boolean fw() {
         return this.tradingPlayer != null;
     }
 
     @Override
     public MerchantRecipeList getOffers() {
-        if (this.trades == null) {
-            this.trades = new MerchantRecipeList();
-            this.eW();
+        if (this.offers == null) {
+            this.offers = new MerchantRecipeList();
+            this.fE();
         }
 
-        return this.trades;
+        return this.offers;
     }
+
+    @Override
+    public void a(@Nullable MerchantRecipeList merchantrecipelist) {}
 
     @Override
     public void setForcedExperience(int i) {}
@@ -111,10 +120,10 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.increaseUses();
-        this.e = -this.D();
+        this.ambientSoundTime = -this.J();
         this.b(merchantrecipe);
         if (this.tradingPlayer instanceof EntityPlayer) {
-            CriterionTriggers.s.a((EntityPlayer) this.tradingPlayer, this, merchantrecipe.getSellingItem());
+            CriterionTriggers.TRADE.a((EntityPlayer) this.tradingPlayer, this, merchantrecipe.getSellingItem());
         }
 
     }
@@ -127,25 +136,25 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     @Override
-    public void k(ItemStack itemstack) {
-        if (!this.world.isClientSide && this.e > -this.D() + 20) {
-            this.e = -this.D();
-            this.playSound(this.t(!itemstack.isEmpty()), this.getSoundVolume(), this.dH());
+    public void m(ItemStack itemstack) {
+        if (!this.level.isClientSide && this.ambientSoundTime > -this.J() + 20) {
+            this.ambientSoundTime = -this.J();
+            this.playSound(this.v(!itemstack.isEmpty()), this.getSoundVolume(), this.ep());
         }
 
     }
 
     @Override
     public SoundEffect getTradeSound() {
-        return SoundEffects.ENTITY_VILLAGER_YES;
+        return SoundEffects.VILLAGER_YES;
     }
 
-    protected SoundEffect t(boolean flag) {
-        return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
+    protected SoundEffect v(boolean flag) {
+        return flag ? SoundEffects.VILLAGER_YES : SoundEffects.VILLAGER_NO;
     }
 
-    public void eR() {
-        this.playSound(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dH());
+    public void fA() {
+        this.playSound(SoundEffects.VILLAGER_CELEBRATE, this.getSoundVolume(), this.ep());
     }
 
     @Override
@@ -164,7 +173,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
-            this.trades = new MerchantRecipeList(nbttagcompound.getCompound("Offers"));
+            this.offers = new MerchantRecipeList(nbttagcompound.getCompound("Offers"));
         }
 
         this.inventory.a(nbttagcompound.getList("Inventory", 10));
@@ -173,18 +182,29 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Nullable
     @Override
     public Entity b(WorldServer worldserver) {
-        this.eT();
+        this.fB();
         return super.b(worldserver);
     }
 
-    protected void eT() {
+    protected void fB() {
         this.setTradingPlayer((EntityHuman) null);
     }
 
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.eT();
+        this.fB();
+    }
+
+    protected void a(ParticleParam particleparam) {
+        for (int i = 0; i < 5; ++i) {
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
+
+            this.level.addParticle(particleparam, this.d(1.0D), this.da() + 1.0D, this.g(1.0D), d0, d1, d2);
+        }
+
     }
 
     @Override
@@ -192,32 +212,24 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return false;
     }
 
+    @Override
     public InventorySubcontainer getInventory() {
         return this.inventory;
     }
 
     @Override
-    public boolean a_(int i, ItemStack itemstack) {
-        if (super.a_(i, itemstack)) {
-            return true;
-        } else {
-            int j = i - 300;
+    public SlotAccess k(int i) {
+        int j = i - 300;
 
-            if (j >= 0 && j < this.inventory.getSize()) {
-                this.inventory.setItem(j, itemstack);
-                return true;
-            } else {
-                return false;
-            }
-        }
+        return j >= 0 && j < this.inventory.getSize() ? SlotAccess.a(this.inventory, j) : super.k(i);
     }
 
     @Override
     public World getWorld() {
-        return this.world;
+        return this.level;
     }
 
-    protected abstract void eW();
+    protected abstract void fE();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();
@@ -244,5 +256,13 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
             }
         }
 
+    }
+
+    @Override
+    public Vec3D n(float f) {
+        float f1 = MathHelper.h(f, this.yBodyRotO, this.yBodyRot) * 0.017453292F;
+        Vec3D vec3d = new Vec3D(0.0D, this.getBoundingBox().c() - 1.0D, 0.2D);
+
+        return this.k(f).e(vec3d.b(-f1));
     }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -8,43 +7,52 @@ import net.minecraft.world.level.block.entity.TileEntityCommand;
 
 public class PacketPlayInSetCommandBlock implements Packet<PacketListenerPlayIn> {
 
-    private BlockPosition a;
-    private String b;
-    private boolean c;
-    private boolean d;
-    private boolean e;
-    private TileEntityCommand.Type f;
+    private static final int FLAG_TRACK_OUTPUT = 1;
+    private static final int FLAG_CONDITIONAL = 2;
+    private static final int FLAG_AUTOMATIC = 4;
+    private final BlockPosition pos;
+    private final String command;
+    private final boolean trackOutput;
+    private final boolean conditional;
+    private final boolean automatic;
+    private final TileEntityCommand.Type mode;
 
-    public PacketPlayInSetCommandBlock() {}
+    public PacketPlayInSetCommandBlock(BlockPosition blockposition, String s, TileEntityCommand.Type tileentitycommand_type, boolean flag, boolean flag1, boolean flag2) {
+        this.pos = blockposition;
+        this.command = s;
+        this.trackOutput = flag;
+        this.conditional = flag1;
+        this.automatic = flag2;
+        this.mode = tileentitycommand_type;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.e(32767);
-        this.f = (TileEntityCommand.Type) packetdataserializer.a(TileEntityCommand.Type.class);
+    public PacketPlayInSetCommandBlock(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.command = packetdataserializer.p();
+        this.mode = (TileEntityCommand.Type) packetdataserializer.a(TileEntityCommand.Type.class);
         byte b0 = packetdataserializer.readByte();
 
-        this.c = (b0 & 1) != 0;
-        this.d = (b0 & 2) != 0;
-        this.e = (b0 & 4) != 0;
+        this.trackOutput = (b0 & 1) != 0;
+        this.conditional = (b0 & 2) != 0;
+        this.automatic = (b0 & 4) != 0;
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.a((Enum) this.f);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
+        packetdataserializer.a(this.command);
+        packetdataserializer.a((Enum) this.mode);
         int i = 0;
 
-        if (this.c) {
+        if (this.trackOutput) {
             i |= 1;
         }
 
-        if (this.d) {
+        if (this.conditional) {
             i |= 2;
         }
 
-        if (this.e) {
+        if (this.automatic) {
             i |= 4;
         }
 
@@ -56,26 +64,26 @@ public class PacketPlayInSetCommandBlock implements Packet<PacketListenerPlayIn>
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public String c() {
-        return this.b;
+        return this.command;
     }
 
     public boolean d() {
-        return this.c;
+        return this.trackOutput;
     }
 
     public boolean e() {
-        return this.d;
+        return this.conditional;
     }
 
     public boolean f() {
-        return this.e;
+        return this.automatic;
     }
 
     public TileEntityCommand.Type g() {
-        return this.f;
+        return this.mode;
     }
 }

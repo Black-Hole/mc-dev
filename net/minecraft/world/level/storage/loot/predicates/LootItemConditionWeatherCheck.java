@@ -12,24 +12,53 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 public class LootItemConditionWeatherCheck implements LootItemCondition {
 
     @Nullable
-    private final Boolean a;
+    final Boolean isRaining;
     @Nullable
-    private final Boolean b;
+    final Boolean isThundering;
 
-    private LootItemConditionWeatherCheck(@Nullable Boolean obool, @Nullable Boolean obool1) {
-        this.a = obool;
-        this.b = obool1;
+    LootItemConditionWeatherCheck(@Nullable Boolean obool, @Nullable Boolean obool1) {
+        this.isRaining = obool;
+        this.isThundering = obool1;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.n;
+    public LootItemConditionType a() {
+        return LootItemConditions.WEATHER_CHECK;
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         WorldServer worldserver = loottableinfo.getWorld();
 
-        return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.W();
+        return this.isRaining != null && this.isRaining != worldserver.isRaining() ? false : this.isThundering == null || this.isThundering == worldserver.Y();
+    }
+
+    public static LootItemConditionWeatherCheck.a c() {
+        return new LootItemConditionWeatherCheck.a();
+    }
+
+    public static class a implements LootItemCondition.a {
+
+        @Nullable
+        private Boolean isRaining;
+        @Nullable
+        private Boolean isThundering;
+
+        public a() {}
+
+        public LootItemConditionWeatherCheck.a a(@Nullable Boolean obool) {
+            this.isRaining = obool;
+            return this;
+        }
+
+        public LootItemConditionWeatherCheck.a b(@Nullable Boolean obool) {
+            this.isThundering = obool;
+            return this;
+        }
+
+        @Override
+        public LootItemConditionWeatherCheck build() {
+            return new LootItemConditionWeatherCheck(this.isRaining, this.isThundering);
+        }
     }
 
     public static class b implements LootSerializer<LootItemConditionWeatherCheck> {
@@ -37,8 +66,8 @@ public class LootItemConditionWeatherCheck implements LootItemCondition {
         public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionWeatherCheck lootitemconditionweathercheck, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("raining", lootitemconditionweathercheck.a);
-            jsonobject.addProperty("thundering", lootitemconditionweathercheck.b);
+            jsonobject.addProperty("raining", lootitemconditionweathercheck.isRaining);
+            jsonobject.addProperty("thundering", lootitemconditionweathercheck.isThundering);
         }
 
         @Override

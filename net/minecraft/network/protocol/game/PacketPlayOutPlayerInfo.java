@@ -4,9 +4,11 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import java.io.IOException;
+import com.mojang.authlib.properties.PropertyMap;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.chat.IChatBaseComponent;
@@ -16,202 +18,233 @@ import net.minecraft.world.level.EnumGamemode;
 
 public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
-    private PacketPlayOutPlayerInfo.EnumPlayerInfoAction a;
-    private final List<PacketPlayOutPlayerInfo.PlayerInfoData> b = Lists.newArrayList();
-
-    public PacketPlayOutPlayerInfo() {}
+    private final PacketPlayOutPlayerInfo.EnumPlayerInfoAction action;
+    private final List<PacketPlayOutPlayerInfo.PlayerInfoData> entries;
 
     public PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction, EntityPlayer... aentityplayer) {
-        this.a = packetplayoutplayerinfo_enumplayerinfoaction;
+        this.action = packetplayoutplayerinfo_enumplayerinfoaction;
+        this.entries = Lists.newArrayListWithCapacity(aentityplayer.length);
         EntityPlayer[] aentityplayer1 = aentityplayer;
         int i = aentityplayer.length;
 
         for (int j = 0; j < i; ++j) {
             EntityPlayer entityplayer = aentityplayer1[j];
 
-            this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(entityplayer.getProfile(), entityplayer.ping, entityplayer.playerInteractManager.getGameMode(), entityplayer.getPlayerListName()));
+            this.entries.add(new PacketPlayOutPlayerInfo.PlayerInfoData(entityplayer.getProfile(), entityplayer.latency, entityplayer.gameMode.getGameMode(), entityplayer.getPlayerListName()));
         }
 
     }
 
-    public PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction, Iterable<EntityPlayer> iterable) {
-        this.a = packetplayoutplayerinfo_enumplayerinfoaction;
-        Iterator iterator = iterable.iterator();
+    public PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction, Collection<EntityPlayer> collection) {
+        this.action = packetplayoutplayerinfo_enumplayerinfoaction;
+        this.entries = Lists.newArrayListWithCapacity(collection.size());
+        Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(entityplayer.getProfile(), entityplayer.ping, entityplayer.playerInteractManager.getGameMode(), entityplayer.getPlayerListName()));
+            this.entries.add(new PacketPlayOutPlayerInfo.PlayerInfoData(entityplayer.getProfile(), entityplayer.latency, entityplayer.gameMode.getGameMode(), entityplayer.getPlayerListName()));
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (PacketPlayOutPlayerInfo.EnumPlayerInfoAction) packetdataserializer.a(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class);
-        int i = packetdataserializer.i();
+    public PacketPlayOutPlayerInfo(PacketDataSerializer packetdataserializer) {
+        this.action = (PacketPlayOutPlayerInfo.EnumPlayerInfoAction) packetdataserializer.a(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class);
+        PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction = this.action;
 
-        for (int j = 0; j < i; ++j) {
-            GameProfile gameprofile = null;
-            int k = 0;
-            EnumGamemode enumgamemode = null;
-            IChatBaseComponent ichatbasecomponent = null;
-
-            switch (this.a) {
-                case ADD_PLAYER:
-                    gameprofile = new GameProfile(packetdataserializer.k(), packetdataserializer.e(16));
-                    int l = packetdataserializer.i();
-
-                    for (int i1 = 0; i1 < l; ++i1) {
-                        String s = packetdataserializer.e(32767);
-                        String s1 = packetdataserializer.e(32767);
-
-                        if (packetdataserializer.readBoolean()) {
-                            gameprofile.getProperties().put(s, new Property(s, s1, packetdataserializer.e(32767)));
-                        } else {
-                            gameprofile.getProperties().put(s, new Property(s, s1));
-                        }
-                    }
-
-                    enumgamemode = EnumGamemode.getById(packetdataserializer.i());
-                    k = packetdataserializer.i();
-                    if (packetdataserializer.readBoolean()) {
-                        ichatbasecomponent = packetdataserializer.h();
-                    }
-                    break;
-                case UPDATE_GAME_MODE:
-                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                    enumgamemode = EnumGamemode.getById(packetdataserializer.i());
-                    break;
-                case UPDATE_LATENCY:
-                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                    k = packetdataserializer.i();
-                    break;
-                case UPDATE_DISPLAY_NAME:
-                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                    if (packetdataserializer.readBoolean()) {
-                        ichatbasecomponent = packetdataserializer.h();
-                    }
-                    break;
-                case REMOVE_PLAYER:
-                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-            }
-
-            this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, enumgamemode, ichatbasecomponent));
-        }
-
+        Objects.requireNonNull(this.action);
+        this.entries = packetdataserializer.a(packetplayoutplayerinfo_enumplayerinfoaction::a);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
-        packetdataserializer.d(this.b.size());
-        Iterator iterator = this.b.iterator();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.action);
+        List list = this.entries;
+        PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction = this.action;
 
-        while (iterator.hasNext()) {
-            PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata = (PacketPlayOutPlayerInfo.PlayerInfoData) iterator.next();
-
-            switch (this.a) {
-                case ADD_PLAYER:
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
-                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
-                    Iterator iterator1 = packetplayoutplayerinfo_playerinfodata.a().getProperties().values().iterator();
-
-                    while (iterator1.hasNext()) {
-                        Property property = (Property) iterator1.next();
-
-                        packetdataserializer.a(property.getName());
-                        packetdataserializer.a(property.getValue());
-                        if (property.hasSignature()) {
-                            packetdataserializer.writeBoolean(true);
-                            packetdataserializer.a(property.getSignature());
-                        } else {
-                            packetdataserializer.writeBoolean(false);
-                        }
-                    }
-
-                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
-                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
-                    if (packetplayoutplayerinfo_playerinfodata.d() == null) {
-                        packetdataserializer.writeBoolean(false);
-                    } else {
-                        packetdataserializer.writeBoolean(true);
-                        packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
-                    }
-                    break;
-                case UPDATE_GAME_MODE:
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
-                    break;
-                case UPDATE_LATENCY:
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
-                    break;
-                case UPDATE_DISPLAY_NAME:
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                    if (packetplayoutplayerinfo_playerinfodata.d() == null) {
-                        packetdataserializer.writeBoolean(false);
-                    } else {
-                        packetdataserializer.writeBoolean(true);
-                        packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
-                    }
-                    break;
-                case REMOVE_PLAYER:
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-            }
-        }
-
+        Objects.requireNonNull(this.action);
+        packetdataserializer.a((Collection) list, packetplayoutplayerinfo_enumplayerinfoaction::a);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    public String toString() {
-        return MoreObjects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
+    public List<PacketPlayOutPlayerInfo.PlayerInfoData> b() {
+        return this.entries;
     }
 
-    public class PlayerInfoData {
+    public PacketPlayOutPlayerInfo.EnumPlayerInfoAction c() {
+        return this.action;
+    }
 
-        private final int b;
-        private final EnumGamemode c;
-        private final GameProfile d;
-        private final IChatBaseComponent e;
+    @Nullable
+    static IChatBaseComponent b(PacketDataSerializer packetdataserializer) {
+        return packetdataserializer.readBoolean() ? packetdataserializer.i() : null;
+    }
 
-        public PlayerInfoData(GameProfile gameprofile, int i, EnumGamemode enumgamemode, @Nullable IChatBaseComponent ichatbasecomponent) {
-            this.d = gameprofile;
-            this.b = i;
-            this.c = enumgamemode;
-            this.e = ichatbasecomponent;
+    static void a(PacketDataSerializer packetdataserializer, @Nullable IChatBaseComponent ichatbasecomponent) {
+        if (ichatbasecomponent == null) {
+            packetdataserializer.writeBoolean(false);
+        } else {
+            packetdataserializer.writeBoolean(true);
+            packetdataserializer.a(ichatbasecomponent);
         }
 
-        public GameProfile a() {
-            return this.d;
-        }
+    }
 
-        public int b() {
-            return this.b;
-        }
-
-        public EnumGamemode c() {
-            return this.c;
-        }
-
-        @Nullable
-        public IChatBaseComponent d() {
-            return this.e;
-        }
-
-        public String toString() {
-            return MoreObjects.toStringHelper(this).add("latency", this.b).add("gameMode", this.c).add("profile", this.d).add("displayName", this.e == null ? null : IChatBaseComponent.ChatSerializer.a(this.e)).toString();
-        }
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("action", this.action).add("entries", this.entries).toString();
     }
 
     public static enum EnumPlayerInfoAction {
 
-        ADD_PLAYER, UPDATE_GAME_MODE, UPDATE_LATENCY, UPDATE_DISPLAY_NAME, REMOVE_PLAYER;
+        ADD_PLAYER {
+            @Override
+            protected PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer) {
+                GameProfile gameprofile = new GameProfile(packetdataserializer.l(), packetdataserializer.e(16));
+                PropertyMap propertymap = gameprofile.getProperties();
 
-        private EnumPlayerInfoAction() {}
+                packetdataserializer.a((packetdataserializer1) -> {
+                    String s = packetdataserializer1.p();
+                    String s1 = packetdataserializer1.p();
+
+                    if (packetdataserializer1.readBoolean()) {
+                        String s2 = packetdataserializer1.p();
+
+                        propertymap.put(s, new Property(s, s1, s2));
+                    } else {
+                        propertymap.put(s, new Property(s, s1));
+                    }
+
+                });
+                EnumGamemode enumgamemode = EnumGamemode.getById(packetdataserializer.j());
+                int i = packetdataserializer.j();
+                IChatBaseComponent ichatbasecomponent = PacketPlayOutPlayerInfo.b(packetdataserializer);
+
+                return new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, i, enumgamemode, ichatbasecomponent);
+            }
+
+            @Override
+            protected void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata) {
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getProperties().values(), (packetdataserializer1, property) -> {
+                    packetdataserializer1.a(property.getName());
+                    packetdataserializer1.a(property.getValue());
+                    if (property.hasSignature()) {
+                        packetdataserializer1.writeBoolean(true);
+                        packetdataserializer1.a(property.getSignature());
+                    } else {
+                        packetdataserializer1.writeBoolean(false);
+                    }
+
+                });
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
+                PacketPlayOutPlayerInfo.a(packetdataserializer, packetplayoutplayerinfo_playerinfodata.d());
+            }
+        },
+        UPDATE_GAME_MODE {
+            @Override
+            protected PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer) {
+                GameProfile gameprofile = new GameProfile(packetdataserializer.l(), (String) null);
+                EnumGamemode enumgamemode = EnumGamemode.getById(packetdataserializer.j());
+
+                return new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, 0, enumgamemode, (IChatBaseComponent) null);
+            }
+
+            @Override
+            protected void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata) {
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
+            }
+        },
+        UPDATE_LATENCY {
+            @Override
+            protected PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer) {
+                GameProfile gameprofile = new GameProfile(packetdataserializer.l(), (String) null);
+                int i = packetdataserializer.j();
+
+                return new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, i, (EnumGamemode) null, (IChatBaseComponent) null);
+            }
+
+            @Override
+            protected void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata) {
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
+            }
+        },
+        UPDATE_DISPLAY_NAME {
+            @Override
+            protected PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer) {
+                GameProfile gameprofile = new GameProfile(packetdataserializer.l(), (String) null);
+                IChatBaseComponent ichatbasecomponent = PacketPlayOutPlayerInfo.b(packetdataserializer);
+
+                return new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, 0, (EnumGamemode) null, ichatbasecomponent);
+            }
+
+            @Override
+            protected void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata) {
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                PacketPlayOutPlayerInfo.a(packetdataserializer, packetplayoutplayerinfo_playerinfodata.d());
+            }
+        },
+        REMOVE_PLAYER {
+            @Override
+            protected PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer) {
+                GameProfile gameprofile = new GameProfile(packetdataserializer.l(), (String) null);
+
+                return new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, 0, (EnumGamemode) null, (IChatBaseComponent) null);
+            }
+
+            @Override
+            protected void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata) {
+                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+            }
+        };
+
+        EnumPlayerInfoAction() {}
+
+        protected abstract PacketPlayOutPlayerInfo.PlayerInfoData a(PacketDataSerializer packetdataserializer);
+
+        protected abstract void a(PacketDataSerializer packetdataserializer, PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata);
+    }
+
+    public static class PlayerInfoData {
+
+        private final int latency;
+        private final EnumGamemode gameMode;
+        private final GameProfile profile;
+        @Nullable
+        private final IChatBaseComponent displayName;
+
+        public PlayerInfoData(GameProfile gameprofile, int i, @Nullable EnumGamemode enumgamemode, @Nullable IChatBaseComponent ichatbasecomponent) {
+            this.profile = gameprofile;
+            this.latency = i;
+            this.gameMode = enumgamemode;
+            this.displayName = ichatbasecomponent;
+        }
+
+        public GameProfile a() {
+            return this.profile;
+        }
+
+        public int b() {
+            return this.latency;
+        }
+
+        public EnumGamemode c() {
+            return this.gameMode;
+        }
+
+        @Nullable
+        public IChatBaseComponent d() {
+            return this.displayName;
+        }
+
+        public String toString() {
+            return MoreObjects.toStringHelper(this).add("latency", this.latency).add("gameMode", this.gameMode).add("profile", this.profile).add("displayName", this.displayName == null ? null : IChatBaseComponent.ChatSerializer.a(this.displayName)).toString();
+        }
     }
 }

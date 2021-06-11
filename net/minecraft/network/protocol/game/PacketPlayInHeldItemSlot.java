@@ -1,23 +1,23 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInHeldItemSlot implements Packet<PacketListenerPlayIn> {
 
-    private int itemInHandIndex;
+    private final int slot;
 
-    public PacketPlayInHeldItemSlot() {}
+    public PacketPlayInHeldItemSlot(int i) {
+        this.slot = i;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.itemInHandIndex = packetdataserializer.readShort();
+    public PacketPlayInHeldItemSlot(PacketDataSerializer packetdataserializer) {
+        this.slot = packetdataserializer.readShort();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeShort(this.itemInHandIndex);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeShort(this.slot);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -25,6 +25,6 @@ public class PacketPlayInHeldItemSlot implements Packet<PacketListenerPlayIn> {
     }
 
     public int b() {
-        return this.itemInHandIndex;
+        return this.slot;
     }
 }

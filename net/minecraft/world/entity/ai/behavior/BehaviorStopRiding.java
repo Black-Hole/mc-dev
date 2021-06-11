@@ -10,13 +10,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorStopRiding<E extends EntityLiving, T extends Entity> extends Behavior<E> {
 
-    private final int b;
-    private final BiPredicate<E, Entity> c;
+    private final int maxWalkDistToRideTarget;
+    private final BiPredicate<E, Entity> dontRideIf;
 
     public BehaviorStopRiding(int i, BiPredicate<E, Entity> bipredicate) {
         super(ImmutableMap.of(MemoryModuleType.RIDE_TARGET, MemoryStatus.REGISTERED));
-        this.b = i;
-        this.c = bipredicate;
+        this.maxWalkDistToRideTarget = i;
+        this.dontRideIf = bipredicate;
     }
 
     @Override
@@ -29,12 +29,12 @@ public class BehaviorStopRiding<E extends EntityLiving, T extends Entity> extend
         } else {
             Entity entity2 = entity == null ? entity1 : entity;
 
-            return !this.a(e0, entity2) || this.c.test(e0, entity2);
+            return !this.a(e0, entity2) || this.dontRideIf.test(e0, entity2);
         }
     }
 
     private boolean a(E e0, Entity entity) {
-        return entity.isAlive() && entity.a((Entity) e0, (double) this.b) && entity.world == e0.world;
+        return entity.isAlive() && entity.a((Entity) e0, (double) this.maxWalkDistToRideTarget) && entity.level == e0.level;
     }
 
     @Override

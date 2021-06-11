@@ -14,58 +14,63 @@ import org.apache.logging.log4j.Logger;
 public class RemoteControlSession extends RemoteConnectionThread {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private boolean e;
-    private final Socket f;
-    private final byte[] g = new byte[1460];
-    private final String h;
-    private final IMinecraftServer i;
+    private static final int SERVERDATA_AUTH = 3;
+    private static final int SERVERDATA_EXECCOMMAND = 2;
+    private static final int SERVERDATA_RESPONSE_VALUE = 0;
+    private static final int SERVERDATA_AUTH_RESPONSE = 2;
+    private static final int SERVERDATA_AUTH_FAILURE = -1;
+    private boolean authed;
+    private final Socket client;
+    private final byte[] buf = new byte[1460];
+    private final String rconPassword;
+    private final IMinecraftServer serverInterface;
 
     RemoteControlSession(IMinecraftServer iminecraftserver, String s, Socket socket) {
         super("RCON Client " + socket.getInetAddress());
-        this.i = iminecraftserver;
-        this.f = socket;
+        this.serverInterface = iminecraftserver;
+        this.client = socket;
 
         try {
-            this.f.setSoTimeout(0);
+            this.client.setSoTimeout(0);
         } catch (Exception exception) {
-            this.a = false;
+            this.running = false;
         }
 
-        this.h = s;
+        this.rconPassword = s;
     }
 
     public void run() {
         while (true) {
             try {
-                if (!this.a) {
+                if (!this.running) {
                     return;
                 }
 
-                BufferedInputStream bufferedinputstream = new BufferedInputStream(this.f.getInputStream());
-                int i = bufferedinputstream.read(this.g, 0, 1460);
+                BufferedInputStream bufferedinputstream = new BufferedInputStream(this.client.getInputStream());
+                int i = bufferedinputstream.read(this.buf, 0, 1460);
 
                 if (10 > i) {
                     return;
                 }
 
                 byte b0 = 0;
-                int j = StatusChallengeUtils.b(this.g, 0, i);
+                int j = StatusChallengeUtils.b(this.buf, 0, i);
 
                 if (j == i - 4) {
                     int k = b0 + 4;
-                    int l = StatusChallengeUtils.b(this.g, k, i);
+                    int l = StatusChallengeUtils.b(this.buf, k, i);
 
                     k += 4;
-                    int i1 = StatusChallengeUtils.a(this.g, k);
+                    int i1 = StatusChallengeUtils.a(this.buf, k);
 
                     k += 4;
                     switch (i1) {
                         case 2:
-                            if (this.e) {
-                                String s = StatusChallengeUtils.a(this.g, k, i);
+                            if (this.authed) {
+                                String s = StatusChallengeUtils.a(this.buf, k, i);
 
                                 try {
-                                    this.a(l, this.i.executeRemoteCommand(s));
+                                    this.a(l, this.serverInterface.executeRemoteCommand(s));
                                 } catch (Exception exception) {
                                     this.a(l, "Error executing: " + s + " (" + exception.getMessage() + ")");
                                 }
@@ -75,16 +80,16 @@ public class RemoteControlSession extends RemoteConnectionThread {
                             this.d();
                             continue;
                         case 3:
-                            String s1 = StatusChallengeUtils.a(this.g, k, i);
+                            String s1 = StatusChallengeUtils.a(this.buf, k, i);
                             int j1 = k + s1.length();
 
-                            if (!s1.isEmpty() && s1.equals(this.h)) {
-                                this.e = true;
+                            if (!s1.isEmpty() && s1.equals(this.rconPassword)) {
+                                this.authed = true;
                                 this.a(l, 2, "");
                                 continue;
                             }
 
-                            this.e = false;
+                            this.authed = false;
                             this.d();
                             continue;
                         default:
@@ -99,8 +104,8 @@ public class RemoteControlSession extends RemoteConnectionThread {
                 return;
             } finally {
                 this.e();
-                RemoteControlSession.LOGGER.info("Thread {} shutting down", this.b);
-                this.a = false;
+                RemoteControlSession.LOGGER.info("Thread {} shutting down", this.name);
+                this.running = false;
             }
 
             return;
@@ -118,7 +123,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
         dataoutputstream.write(abyte);
         dataoutputstream.write(0);
         dataoutputstream.write(0);
-        this.f.getOutputStream().write(bytearrayoutputstream.toByteArray());
+        this.client.getOutputStream().write(bytearrayoutputstream.toByteArray());
     }
 
     private void d() throws IOException {
@@ -140,14 +145,14 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
     @Override
     public void b() {
-        this.a = false;
+        this.running = false;
         this.e();
         super.b();
     }
 
     private void e() {
         try {
-            this.f.close();
+            this.client.close();
         } catch (IOException ioexception) {
             RemoteControlSession.LOGGER.warn("Failed to close socket", ioexception);
         }

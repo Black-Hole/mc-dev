@@ -6,9 +6,13 @@ public enum MobEffectInfo {
 
     BENEFICIAL(EnumChatFormat.BLUE), HARMFUL(EnumChatFormat.RED), NEUTRAL(EnumChatFormat.BLUE);
 
-    private final EnumChatFormat d;
+    private final EnumChatFormat tooltipFormatting;
 
     private MobEffectInfo(EnumChatFormat enumchatformat) {
-        this.d = enumchatformat;
+        this.tooltipFormatting = enumchatformat;
+    }
+
+    public EnumChatFormat a() {
+        return this.tooltipFormatting;
     }
 }

@@ -1,5 +1,6 @@
 package net.minecraft.network.chat;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -26,6 +27,7 @@ import net.minecraft.SystemUtils;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.ChatDeserializer;
 import net.minecraft.util.ChatTypeAdapterFactory;
+import net.minecraft.util.FormattedString;
 
 public interface IChatBaseComponent extends Message, IChatFormatted {
 
@@ -45,7 +47,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
             int j = i - stringbuilder.length();
 
             if (j <= 0) {
-                return IChatBaseComponent.b;
+                return IChatBaseComponent.STOP_ITERATION;
             } else {
                 stringbuilder.append(s.length() <= j ? s : s.substring(0, j));
                 return Optional.empty();
@@ -59,6 +61,34 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
     IChatMutableComponent g();
 
     IChatMutableComponent mutableCopy();
+
+    FormattedString f();
+
+    @Override
+    default <T> Optional<T> a(IChatFormatted.b<T> ichatformatted_b, ChatModifier chatmodifier) {
+        ChatModifier chatmodifier1 = this.getChatModifier().setChatModifier(chatmodifier);
+        Optional<T> optional = this.b(ichatformatted_b, chatmodifier1);
+
+        if (optional.isPresent()) {
+            return optional;
+        } else {
+            Iterator iterator = this.getSiblings().iterator();
+
+            Optional optional1;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return Optional.empty();
+                }
+
+                IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
+
+                optional1 = ichatbasecomponent.a(ichatformatted_b, chatmodifier1);
+            } while (!optional1.isPresent());
+
+            return optional1;
+        }
+    }
 
     @Override
     default <T> Optional<T> a(IChatFormatted.a<T> ichatformatted_a) {
@@ -85,13 +115,34 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
         }
     }
 
+    default <T> Optional<T> b(IChatFormatted.b<T> ichatformatted_b, ChatModifier chatmodifier) {
+        return ichatformatted_b.accept(chatmodifier, this.getText());
+    }
+
     default <T> Optional<T> b(IChatFormatted.a<T> ichatformatted_a) {
         return ichatformatted_a.accept(this.getText());
     }
 
+    default List<IChatBaseComponent> b(ChatModifier chatmodifier) {
+        List<IChatBaseComponent> list = Lists.newArrayList();
+
+        this.a((chatmodifier1, s) -> {
+            if (!s.isEmpty()) {
+                list.add((new ChatComponentText(s)).c(chatmodifier1));
+            }
+
+            return Optional.empty();
+        }, chatmodifier);
+        return list;
+    }
+
+    static IChatBaseComponent a(@Nullable String s) {
+        return (IChatBaseComponent) (s != null ? new ChatComponentText(s) : ChatComponentText.EMPTY);
+    }
+
     public static class ChatSerializer implements JsonDeserializer<IChatMutableComponent>, JsonSerializer<IChatBaseComponent> {
 
-        private static final Gson a = (Gson) SystemUtils.a(() -> {
+        private static final Gson GSON = (Gson) SystemUtils.a(() -> {
             GsonBuilder gsonbuilder = new GsonBuilder();
 
             gsonbuilder.disableHtmlEscaping();
@@ -100,7 +151,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
             gsonbuilder.registerTypeAdapterFactory(new ChatTypeAdapterFactory());
             return gsonbuilder.create();
         });
-        private static final Field b = (Field) SystemUtils.a(() -> {
+        private static final Field JSON_READER_POS = (Field) SystemUtils.a(() -> {
             try {
                 new JsonReader(new StringReader(""));
                 Field field = JsonReader.class.getDeclaredField("pos");
@@ -111,7 +162,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                 throw new IllegalStateException("Couldn't get field 'pos' for JsonReader", nosuchfieldexception);
             }
         });
-        private static final Field c = (Field) SystemUtils.a(() -> {
+        private static final Field JSON_READER_LINESTART = (Field) SystemUtils.a(() -> {
             try {
                 new JsonReader(new StringReader(""));
                 Field field = JsonReader.class.getDeclaredField("lineStart");
@@ -188,7 +239,9 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
                         object = new ChatComponentScore(ChatDeserializer.h(jsonobject1, "name"), ChatDeserializer.h(jsonobject1, "objective"));
                     } else if (jsonobject.has("selector")) {
-                        object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
+                        Optional<IChatBaseComponent> optional = this.a(type, jsondeserializationcontext, jsonobject);
+
+                        object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"), optional);
                     } else if (jsonobject.has("keybind")) {
                         object = new ChatComponentKeybind(ChatDeserializer.h(jsonobject, "keybind"));
                     } else {
@@ -197,18 +250,19 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                         }
 
                         s = ChatDeserializer.h(jsonobject, "nbt");
+                        Optional<IChatBaseComponent> optional1 = this.a(type, jsondeserializationcontext, jsonobject);
                         boolean flag = ChatDeserializer.a(jsonobject, "interpret", false);
 
                         if (jsonobject.has("block")) {
-                            object = new ChatComponentNBT.a(s, flag, ChatDeserializer.h(jsonobject, "block"));
+                            object = new ChatComponentNBT.a(s, flag, ChatDeserializer.h(jsonobject, "block"), optional1);
                         } else if (jsonobject.has("entity")) {
-                            object = new ChatComponentNBT.b(s, flag, ChatDeserializer.h(jsonobject, "entity"));
+                            object = new ChatComponentNBT.b(s, flag, ChatDeserializer.h(jsonobject, "entity"), optional1);
                         } else {
                             if (!jsonobject.has("storage")) {
                                 throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
                             }
 
-                            object = new ChatComponentNBT.c(s, flag, new MinecraftKey(ChatDeserializer.h(jsonobject, "storage")));
+                            object = new ChatComponentNBT.c(s, flag, new MinecraftKey(ChatDeserializer.h(jsonobject, "storage")), optional1);
                         }
                     }
                 }
@@ -228,6 +282,10 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                 ((IChatMutableComponent) object).setChatModifier((ChatModifier) jsondeserializationcontext.deserialize(jsonelement, ChatModifier.class));
                 return (IChatMutableComponent) object;
             }
+        }
+
+        private Optional<IChatBaseComponent> a(Type type, JsonDeserializationContext jsondeserializationcontext, JsonObject jsonobject) {
+            return jsonobject.has("separator") ? Optional.of(this.deserialize(jsonobject.get("separator"), type, jsondeserializationcontext)) : Optional.empty();
         }
 
         private void a(ChatModifier chatmodifier, JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {
@@ -300,6 +358,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                 ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
 
                 jsonobject.addProperty("selector", chatcomponentselector.h());
+                this.a(jsonserializationcontext, jsonobject, chatcomponentselector.j());
             } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
                 ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
 
@@ -313,6 +372,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
                 jsonobject.addProperty("nbt", chatcomponentnbt.h());
                 jsonobject.addProperty("interpret", chatcomponentnbt.i());
+                this.a(jsonserializationcontext, jsonobject, chatcomponentnbt.separator);
                 if (ichatbasecomponent instanceof ChatComponentNBT.a) {
                     ChatComponentNBT.a chatcomponentnbt_a = (ChatComponentNBT.a) ichatbasecomponent;
 
@@ -335,27 +395,33 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
             return jsonobject;
         }
 
+        private void a(JsonSerializationContext jsonserializationcontext, JsonObject jsonobject, Optional<IChatBaseComponent> optional) {
+            optional.ifPresent((ichatbasecomponent) -> {
+                jsonobject.add("separator", this.serialize(ichatbasecomponent, ichatbasecomponent.getClass(), jsonserializationcontext));
+            });
+        }
+
         public static String a(IChatBaseComponent ichatbasecomponent) {
-            return IChatBaseComponent.ChatSerializer.a.toJson(ichatbasecomponent);
+            return IChatBaseComponent.ChatSerializer.GSON.toJson(ichatbasecomponent);
         }
 
         public static JsonElement b(IChatBaseComponent ichatbasecomponent) {
-            return IChatBaseComponent.ChatSerializer.a.toJsonTree(ichatbasecomponent);
+            return IChatBaseComponent.ChatSerializer.GSON.toJsonTree(ichatbasecomponent);
         }
 
         @Nullable
         public static IChatMutableComponent a(String s) {
-            return (IChatMutableComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatMutableComponent.class, false);
+            return (IChatMutableComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.GSON, s, IChatMutableComponent.class, false);
         }
 
         @Nullable
         public static IChatMutableComponent a(JsonElement jsonelement) {
-            return (IChatMutableComponent) IChatBaseComponent.ChatSerializer.a.fromJson(jsonelement, IChatMutableComponent.class);
+            return (IChatMutableComponent) IChatBaseComponent.ChatSerializer.GSON.fromJson(jsonelement, IChatMutableComponent.class);
         }
 
         @Nullable
         public static IChatMutableComponent b(String s) {
-            return (IChatMutableComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatMutableComponent.class, true);
+            return (IChatMutableComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.GSON, s, IChatMutableComponent.class, true);
         }
 
         public static IChatMutableComponent a(com.mojang.brigadier.StringReader com_mojang_brigadier_stringreader) {
@@ -363,7 +429,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                 JsonReader jsonreader = new JsonReader(new StringReader(com_mojang_brigadier_stringreader.getRemaining()));
 
                 jsonreader.setLenient(false);
-                IChatMutableComponent ichatmutablecomponent = (IChatMutableComponent) IChatBaseComponent.ChatSerializer.a.getAdapter(IChatMutableComponent.class).read(jsonreader);
+                IChatMutableComponent ichatmutablecomponent = (IChatMutableComponent) IChatBaseComponent.ChatSerializer.GSON.getAdapter(IChatMutableComponent.class).read(jsonreader);
 
                 com_mojang_brigadier_stringreader.setCursor(com_mojang_brigadier_stringreader.getCursor() + a(jsonreader));
                 return ichatmutablecomponent;
@@ -374,7 +440,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
         private static int a(JsonReader jsonreader) {
             try {
-                return IChatBaseComponent.ChatSerializer.b.getInt(jsonreader) - IChatBaseComponent.ChatSerializer.c.getInt(jsonreader) + 1;
+                return IChatBaseComponent.ChatSerializer.JSON_READER_POS.getInt(jsonreader) - IChatBaseComponent.ChatSerializer.JSON_READER_LINESTART.getInt(jsonreader) + 1;
             } catch (IllegalAccessException illegalaccessexception) {
                 throw new IllegalStateException("Couldn't read position of JsonReader", illegalaccessexception);
             }

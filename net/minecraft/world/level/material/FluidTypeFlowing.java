@@ -34,9 +34,10 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public abstract class FluidTypeFlowing extends FluidType {
 
-    public static final BlockStateBoolean FALLING = BlockProperties.i;
-    public static final BlockStateInteger LEVEL = BlockProperties.at;
-    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> e = ThreadLocal.withInitial(() -> {
+    public static final BlockStateBoolean FALLING = BlockProperties.FALLING;
+    public static final BlockStateInteger LEVEL = BlockProperties.LEVEL_FLOWING;
+    private static final int CACHE_SIZE = 200;
+    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> OCCLUSION_CACHE = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
             protected void rehash(int i) {}
         };
@@ -44,7 +45,7 @@ public abstract class FluidTypeFlowing extends FluidType {
         object2bytelinkedopenhashmap.defaultReturnValue((byte) 127);
         return object2bytelinkedopenhashmap;
     });
-    private final Map<Fluid, VoxelShape> f = Maps.newIdentityHashMap();
+    private final Map<Fluid, VoxelShape> shapes = Maps.newIdentityHashMap();
 
     public FluidTypeFlowing() {}
 
@@ -214,7 +215,7 @@ public abstract class FluidTypeFlowing extends FluidType {
         Object2ByteLinkedOpenHashMap object2bytelinkedopenhashmap;
 
         if (!iblockdata.getBlock().o() && !iblockdata1.getBlock().o()) {
-            object2bytelinkedopenhashmap = (Object2ByteLinkedOpenHashMap) FluidTypeFlowing.e.get();
+            object2bytelinkedopenhashmap = (Object2ByteLinkedOpenHashMap) FluidTypeFlowing.OCCLUSION_CACHE.get();
         } else {
             object2bytelinkedopenhashmap = null;
         }
@@ -412,10 +413,10 @@ public abstract class FluidTypeFlowing extends FluidType {
 
         if (block instanceof IFluidContainer) {
             return ((IFluidContainer) block).canPlace(iblockaccess, blockposition, iblockdata, fluidtype);
-        } else if (!(block instanceof BlockDoor) && !block.a((Tag) TagsBlock.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
+        } else if (!(block instanceof BlockDoor) && !iblockdata.a((Tag) TagsBlock.SIGNS) && !iblockdata.a(Blocks.LADDER) && !iblockdata.a(Blocks.SUGAR_CANE) && !iblockdata.a(Blocks.BUBBLE_COLUMN)) {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PORTAL && material != Material.STRUCTURE_VOID && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT ? !material.isSolid() : false;
+            return material != Material.PORTAL && material != Material.STRUCTURAL_AIR && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT ? !material.isSolid() : false;
         } else {
             return false;
         }
@@ -472,8 +473,11 @@ public abstract class FluidTypeFlowing extends FluidType {
     }
 
     @Override
+    public abstract int d(Fluid fluid);
+
+    @Override
     public VoxelShape b(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return fluid.e() == 9 && c(fluid, iblockaccess, blockposition) ? VoxelShapes.b() : (VoxelShape) this.f.computeIfAbsent(fluid, (fluid1) -> {
+        return fluid.e() == 9 && c(fluid, iblockaccess, blockposition) ? VoxelShapes.b() : (VoxelShape) this.shapes.computeIfAbsent(fluid, (fluid1) -> {
             return VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.getHeight(iblockaccess, blockposition), 1.0D);
         });
     }

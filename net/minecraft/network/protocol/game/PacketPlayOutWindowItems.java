@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import net.minecraft.core.NonNullList;
@@ -10,39 +9,36 @@ import net.minecraft.world.item.ItemStack;
 
 public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private List<ItemStack> b;
-
-    public PacketPlayOutWindowItems() {}
+    private final int containerId;
+    private final List<ItemStack> items;
 
     public PacketPlayOutWindowItems(int i, NonNullList<ItemStack> nonnulllist) {
-        this.a = i;
-        this.b = NonNullList.a(nonnulllist.size(), ItemStack.b);
+        this.containerId = i;
+        this.items = NonNullList.a(nonnulllist.size(), ItemStack.EMPTY);
 
-        for (int j = 0; j < this.b.size(); ++j) {
-            this.b.set(j, ((ItemStack) nonnulllist.get(j)).cloneItemStack());
+        for (int j = 0; j < this.items.size(); ++j) {
+            this.items.set(j, ((ItemStack) nonnulllist.get(j)).cloneItemStack());
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readUnsignedByte();
+    public PacketPlayOutWindowItems(PacketDataSerializer packetdataserializer) {
+        this.containerId = packetdataserializer.readUnsignedByte();
         short short0 = packetdataserializer.readShort();
 
-        this.b = NonNullList.a(short0, ItemStack.b);
+        this.items = NonNullList.a(short0, ItemStack.EMPTY);
 
         for (int i = 0; i < short0; ++i) {
-            this.b.set(i, packetdataserializer.n());
+            this.items.set(i, packetdataserializer.o());
         }
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.writeShort(this.b.size());
-        Iterator iterator = this.b.iterator();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.containerId);
+        packetdataserializer.writeShort(this.items.size());
+        Iterator iterator = this.items.iterator();
 
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();
@@ -54,5 +50,13 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.containerId;
+    }
+
+    public List<ItemStack> c() {
+        return this.items;
     }
 }

@@ -5,28 +5,28 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class StructureSettingsStronghold {
 
-    public static final Codec<StructureSettingsStronghold> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<StructureSettingsStronghold> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.intRange(0, 1023).fieldOf("distance").forGetter(StructureSettingsStronghold::a), Codec.intRange(0, 1023).fieldOf("spread").forGetter(StructureSettingsStronghold::b), Codec.intRange(1, 4095).fieldOf("count").forGetter(StructureSettingsStronghold::c)).apply(instance, StructureSettingsStronghold::new);
     });
-    private final int b;
-    private final int c;
-    private final int d;
+    private final int distance;
+    private final int spread;
+    private final int count;
 
     public StructureSettingsStronghold(int i, int j, int k) {
-        this.b = i;
-        this.c = j;
-        this.d = k;
+        this.distance = i;
+        this.spread = j;
+        this.count = k;
     }
 
     public int a() {
-        return this.b;
+        return this.distance;
     }
 
     public int b() {
-        return this.c;
+        return this.spread;
     }
 
     public int c() {
-        return this.d;
+        return this.count;
     }
 }

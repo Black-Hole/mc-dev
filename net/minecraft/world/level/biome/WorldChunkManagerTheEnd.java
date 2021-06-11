@@ -12,21 +12,24 @@ import net.minecraft.world.level.levelgen.synth.NoiseGenerator3Handler;
 
 public class WorldChunkManagerTheEnd extends WorldChunkManager {
 
-    public static final Codec<WorldChunkManagerTheEnd> e = RecordCodecBuilder.create((instance) -> {
-        return instance.group(RegistryLookupCodec.a(IRegistry.ay).forGetter((worldchunkmanagertheend) -> {
-            return worldchunkmanagertheend.g;
+    public static final Codec<WorldChunkManagerTheEnd> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(RegistryLookupCodec.a(IRegistry.BIOME_REGISTRY).forGetter((worldchunkmanagertheend) -> {
+            return worldchunkmanagertheend.biomes;
         }), Codec.LONG.fieldOf("seed").stable().forGetter((worldchunkmanagertheend) -> {
-            return worldchunkmanagertheend.h;
+            return worldchunkmanagertheend.seed;
         })).apply(instance, instance.stable(WorldChunkManagerTheEnd::new));
     });
-    private final NoiseGenerator3Handler f;
-    private final IRegistry<BiomeBase> g;
-    private final long h;
-    private final BiomeBase i;
-    private final BiomeBase j;
-    private final BiomeBase k;
-    private final BiomeBase l;
-    private final BiomeBase m;
+    private static final float ISLAND_THRESHOLD = -0.9F;
+    public static final int ISLAND_CHUNK_DISTANCE = 64;
+    private static final long ISLAND_CHUNK_DISTANCE_SQR = 4096L;
+    private final NoiseGenerator3Handler islandNoise;
+    private final IRegistry<BiomeBase> biomes;
+    private final long seed;
+    private final BiomeBase end;
+    private final BiomeBase highlands;
+    private final BiomeBase midlands;
+    private final BiomeBase islands;
+    private final BiomeBase barrens;
 
     public WorldChunkManagerTheEnd(IRegistry<BiomeBase> iregistry, long i) {
         this(iregistry, i, (BiomeBase) iregistry.d(Biomes.THE_END), (BiomeBase) iregistry.d(Biomes.END_HIGHLANDS), (BiomeBase) iregistry.d(Biomes.END_MIDLANDS), (BiomeBase) iregistry.d(Biomes.SMALL_END_ISLANDS), (BiomeBase) iregistry.d(Biomes.END_BARRENS));
@@ -34,22 +37,27 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
 
     private WorldChunkManagerTheEnd(IRegistry<BiomeBase> iregistry, long i, BiomeBase biomebase, BiomeBase biomebase1, BiomeBase biomebase2, BiomeBase biomebase3, BiomeBase biomebase4) {
         super((List) ImmutableList.of(biomebase, biomebase1, biomebase2, biomebase3, biomebase4));
-        this.g = iregistry;
-        this.h = i;
-        this.i = biomebase;
-        this.j = biomebase1;
-        this.k = biomebase2;
-        this.l = biomebase3;
-        this.m = biomebase4;
+        this.biomes = iregistry;
+        this.seed = i;
+        this.end = biomebase;
+        this.highlands = biomebase1;
+        this.midlands = biomebase2;
+        this.islands = biomebase3;
+        this.barrens = biomebase4;
         SeededRandom seededrandom = new SeededRandom(i);
 
         seededrandom.a(17292);
-        this.f = new NoiseGenerator3Handler(seededrandom);
+        this.islandNoise = new NoiseGenerator3Handler(seededrandom);
     }
 
     @Override
     protected Codec<? extends WorldChunkManager> a() {
-        return WorldChunkManagerTheEnd.e;
+        return WorldChunkManagerTheEnd.CODEC;
+    }
+
+    @Override
+    public WorldChunkManager a(long i) {
+        return new WorldChunkManagerTheEnd(this.biomes, i, this.end, this.highlands, this.midlands, this.islands, this.barrens);
     }
 
     @Override
@@ -58,16 +66,16 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         int i1 = k >> 2;
 
         if ((long) l * (long) l + (long) i1 * (long) i1 <= 4096L) {
-            return this.i;
+            return this.end;
         } else {
-            float f = a(this.f, l * 2 + 1, i1 * 2 + 1);
+            float f = a(this.islandNoise, l * 2 + 1, i1 * 2 + 1);
 
-            return f > 40.0F ? this.j : (f >= 0.0F ? this.k : (f < -20.0F ? this.l : this.m));
+            return f > 40.0F ? this.highlands : (f >= 0.0F ? this.midlands : (f < -20.0F ? this.islands : this.barrens));
         }
     }
 
     public boolean b(long i) {
-        return this.h == i;
+        return this.seed == i;
     }
 
     public static float a(NoiseGenerator3Handler noisegenerator3handler, int i, int j) {

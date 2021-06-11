@@ -4,7 +4,7 @@ import net.minecraft.world.entity.Entity;
 
 public class MovingObjectPositionEntity extends MovingObjectPosition {
 
-    private final Entity b;
+    private final Entity entity;
 
     public MovingObjectPositionEntity(Entity entity) {
         this(entity, entity.getPositionVector());
@@ -12,11 +12,11 @@ public class MovingObjectPositionEntity extends MovingObjectPosition {
 
     public MovingObjectPositionEntity(Entity entity, Vec3D vec3d) {
         super(vec3d);
-        this.b = entity;
+        this.entity = entity;
     }
 
     public Entity getEntity() {
-        return this.b;
+        return this.entity;
     }
 
     @Override

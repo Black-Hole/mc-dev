@@ -8,21 +8,21 @@ import net.minecraft.world.inventory.ITileEntityContainer;
 
 public final class TileInventory implements ITileInventory {
 
-    private final IChatBaseComponent a;
-    private final ITileEntityContainer b;
+    private final IChatBaseComponent title;
+    private final ITileEntityContainer menuConstructor;
 
     public TileInventory(ITileEntityContainer itileentitycontainer, IChatBaseComponent ichatbasecomponent) {
-        this.b = itileentitycontainer;
-        this.a = ichatbasecomponent;
+        this.menuConstructor = itileentitycontainer;
+        this.title = ichatbasecomponent;
     }
 
     @Override
     public IChatBaseComponent getScoreboardDisplayName() {
-        return this.a;
+        return this.title;
     }
 
     @Override
     public Container createMenu(int i, PlayerInventory playerinventory, EntityHuman entityhuman) {
-        return this.b.createMenu(i, playerinventory, entityhuman);
+        return this.menuConstructor.createMenu(i, playerinventory, entityhuman);
     }
 }

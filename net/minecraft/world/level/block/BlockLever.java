@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block;
 
+import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.particles.ParticleParamRedstone;
@@ -7,6 +8,7 @@ import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
@@ -18,58 +20,62 @@ import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockPropertyAttachPosition;
 import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 import net.minecraft.world.level.block.state.properties.IBlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockLever extends BlockAttachable {
 
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
-    protected static final VoxelShape b = Block.a(5.0D, 4.0D, 10.0D, 11.0D, 12.0D, 16.0D);
-    protected static final VoxelShape c = Block.a(5.0D, 4.0D, 0.0D, 11.0D, 12.0D, 6.0D);
-    protected static final VoxelShape d = Block.a(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 11.0D);
-    protected static final VoxelShape e = Block.a(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 11.0D);
-    protected static final VoxelShape f = Block.a(5.0D, 0.0D, 4.0D, 11.0D, 6.0D, 12.0D);
-    protected static final VoxelShape g = Block.a(4.0D, 0.0D, 5.0D, 12.0D, 6.0D, 11.0D);
-    protected static final VoxelShape h = Block.a(5.0D, 10.0D, 4.0D, 11.0D, 16.0D, 12.0D);
-    protected static final VoxelShape i = Block.a(4.0D, 10.0D, 5.0D, 12.0D, 16.0D, 11.0D);
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
+    protected static final int DEPTH = 6;
+    protected static final int WIDTH = 6;
+    protected static final int HEIGHT = 8;
+    protected static final VoxelShape NORTH_AABB = Block.a(5.0D, 4.0D, 10.0D, 11.0D, 12.0D, 16.0D);
+    protected static final VoxelShape SOUTH_AABB = Block.a(5.0D, 4.0D, 0.0D, 11.0D, 12.0D, 6.0D);
+    protected static final VoxelShape WEST_AABB = Block.a(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 11.0D);
+    protected static final VoxelShape EAST_AABB = Block.a(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 11.0D);
+    protected static final VoxelShape UP_AABB_Z = Block.a(5.0D, 0.0D, 4.0D, 11.0D, 6.0D, 12.0D);
+    protected static final VoxelShape UP_AABB_X = Block.a(4.0D, 0.0D, 5.0D, 12.0D, 6.0D, 11.0D);
+    protected static final VoxelShape DOWN_AABB_Z = Block.a(5.0D, 10.0D, 4.0D, 11.0D, 16.0D, 12.0D);
+    protected static final VoxelShape DOWN_AABB_X = Block.a(4.0D, 10.0D, 5.0D, 12.0D, 16.0D, 11.0D);
 
     protected BlockLever(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, false)).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, false)).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockLever.FACE)) {
             case FLOOR:
                 switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).n()) {
                     case X:
-                        return BlockLever.g;
+                        return BlockLever.UP_AABB_X;
                     case Z:
                     default:
-                        return BlockLever.f;
+                        return BlockLever.UP_AABB_Z;
                 }
             case WALL:
                 switch ((EnumDirection) iblockdata.get(BlockLever.FACING)) {
                     case EAST:
-                        return BlockLever.e;
+                        return BlockLever.EAST_AABB;
                     case WEST:
-                        return BlockLever.d;
+                        return BlockLever.WEST_AABB;
                     case SOUTH:
-                        return BlockLever.c;
+                        return BlockLever.SOUTH_AABB;
                     case NORTH:
                     default:
-                        return BlockLever.b;
+                        return BlockLever.NORTH_AABB;
                 }
             case CEILING:
             default:
                 switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).n()) {
                     case X:
-                        return BlockLever.i;
+                        return BlockLever.DOWN_AABB_X;
                     case Z:
                     default:
-                        return BlockLever.h;
+                        return BlockLever.DOWN_AABB_Z;
                 }
         }
     }
@@ -89,7 +95,8 @@ public class BlockLever extends BlockAttachable {
             iblockdata1 = this.d(iblockdata, world, blockposition);
             float f = (Boolean) iblockdata1.get(BlockLever.POWERED) ? 0.6F : 0.5F;
 
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
+            world.a((Entity) entityhuman, (Boolean) iblockdata1.get(BlockLever.POWERED) ? GameEvent.BLOCK_SWITCH : GameEvent.BLOCK_UNSWITCH, blockposition);
             return EnumInteractionResult.CONSUME;
         }
     }
@@ -108,7 +115,15 @@ public class BlockLever extends BlockAttachable {
         double d1 = (double) blockposition.getY() + 0.5D + 0.1D * (double) enumdirection.getAdjacentY() + 0.2D * (double) enumdirection1.getAdjacentY();
         double d2 = (double) blockposition.getZ() + 0.5D + 0.1D * (double) enumdirection.getAdjacentZ() + 0.2D * (double) enumdirection1.getAdjacentZ();
 
-        generatoraccess.addParticle(new ParticleParamRedstone(1.0F, 0.0F, 0.0F, f), d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        generatoraccess.addParticle(new ParticleParamRedstone(ParticleParamRedstone.REDSTONE_PARTICLE_COLOR, f), d0, d1, d2, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockLever.POWERED) && random.nextFloat() < 0.25F) {
+            a(iblockdata, world, blockposition, 0.5F);
+        }
+
     }
 
     @Override

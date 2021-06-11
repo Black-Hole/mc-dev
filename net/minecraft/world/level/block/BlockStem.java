@@ -1,11 +1,17 @@
 package net.minecraft.world.level.block;
 
 import java.util.Random;
+import java.util.function.Supplier;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsBlock;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.IMaterial;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
@@ -17,23 +23,27 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.ai;
-    protected static final VoxelShape[] b = new VoxelShape[]{Block.a(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 8.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 12.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 14.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D)};
-    private final BlockStemmed blockFruit;
+    public static final int MAX_AGE = 7;
+    public static final BlockStateInteger AGE = BlockProperties.AGE_7;
+    protected static final float AABB_OFFSET = 1.0F;
+    protected static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.a(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 8.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 12.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 14.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D)};
+    private final BlockStemmed fruit;
+    private final Supplier<Item> seedSupplier;
 
-    protected BlockStem(BlockStemmed blockstemmed, BlockBase.Info blockbase_info) {
+    protected BlockStem(BlockStemmed blockstemmed, Supplier<Item> supplier, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.blockFruit = blockstemmed;
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
+        this.fruit = blockstemmed;
+        this.seedSupplier = supplier;
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockStem.AGE, 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockStem.b[(Integer) iblockdata.get(BlockStem.AGE)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockStem.SHAPE_BY_AGE[(Integer) iblockdata.get(BlockStem.AGE)];
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.a(Blocks.FARMLAND);
     }
 
@@ -53,14 +63,19 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                     BlockPosition blockposition1 = blockposition.shift(enumdirection);
                     IBlockData iblockdata1 = worldserver.getType(blockposition1.down());
 
-                    if (worldserver.getType(blockposition1).isAir() && (iblockdata1.a(Blocks.FARMLAND) || iblockdata1.a(Blocks.DIRT) || iblockdata1.a(Blocks.COARSE_DIRT) || iblockdata1.a(Blocks.PODZOL) || iblockdata1.a(Blocks.GRASS_BLOCK))) {
-                        worldserver.setTypeUpdate(blockposition1, this.blockFruit.getBlockData());
-                        worldserver.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
+                    if (worldserver.getType(blockposition1).isAir() && (iblockdata1.a(Blocks.FARMLAND) || iblockdata1.a((Tag) TagsBlock.DIRT))) {
+                        worldserver.setTypeUpdate(blockposition1, this.fruit.getBlockData());
+                        worldserver.setTypeUpdate(blockposition, (IBlockData) this.fruit.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
                     }
                 }
             }
 
         }
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack((IMaterial) this.seedSupplier.get());
     }
 
     @Override
@@ -90,7 +105,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         blockstatelist_a.a(BlockStem.AGE);
     }
 
-    public BlockStemmed d() {
-        return this.blockFruit;
+    public BlockStemmed c() {
+        return this.fruit;
     }
 }

@@ -1,54 +1,55 @@
 package net.minecraft.world.entity.ai.goal.target;
 
 import javax.annotation.Nullable;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
-import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import net.minecraft.world.level.pathfinder.PathPoint;
 import net.minecraft.world.scores.ScoreboardTeamBase;
 
 public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
-    protected final EntityInsentient e;
-    protected final boolean f;
-    private final boolean a;
-    private int b;
-    private int c;
-    private int d;
-    protected EntityLiving g;
-    protected int h;
+    private static final int EMPTY_REACH_CACHE = 0;
+    private static final int CAN_REACH_CACHE = 1;
+    private static final int CANT_REACH_CACHE = 2;
+    protected final EntityInsentient mob;
+    protected final boolean mustSee;
+    private final boolean mustReach;
+    private int reachCache;
+    private int reachCacheTime;
+    private int unseenTicks;
+    protected EntityLiving targetMob;
+    protected int unseenMemoryTicks;
 
     public PathfinderGoalTarget(EntityInsentient entityinsentient, boolean flag) {
         this(entityinsentient, flag, false);
     }
 
     public PathfinderGoalTarget(EntityInsentient entityinsentient, boolean flag, boolean flag1) {
-        this.h = 60;
-        this.e = entityinsentient;
-        this.f = flag;
-        this.a = flag1;
+        this.unseenMemoryTicks = 60;
+        this.mob = entityinsentient;
+        this.mustSee = flag;
+        this.mustReach = flag1;
     }
 
     @Override
     public boolean b() {
-        EntityLiving entityliving = this.e.getGoalTarget();
+        EntityLiving entityliving = this.mob.getGoalTarget();
 
         if (entityliving == null) {
-            entityliving = this.g;
+            entityliving = this.targetMob;
         }
 
         if (entityliving == null) {
             return false;
-        } else if (!entityliving.isAlive()) {
+        } else if (!this.mob.c(entityliving)) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.e.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase = this.mob.getScoreboardTeam();
             ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
@@ -56,63 +57,59 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             } else {
                 double d0 = this.k();
 
-                if (this.e.h((Entity) entityliving) > d0 * d0) {
+                if (this.mob.f((Entity) entityliving) > d0 * d0) {
                     return false;
                 } else {
-                    if (this.f) {
-                        if (this.e.getEntitySenses().a(entityliving)) {
-                            this.d = 0;
-                        } else if (++this.d > this.h) {
+                    if (this.mustSee) {
+                        if (this.mob.getEntitySenses().a(entityliving)) {
+                            this.unseenTicks = 0;
+                        } else if (++this.unseenTicks > this.unseenMemoryTicks) {
                             return false;
                         }
                     }
 
-                    if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
-                        return false;
-                    } else {
-                        this.e.setGoalTarget(entityliving);
-                        return true;
-                    }
+                    this.mob.setGoalTarget(entityliving);
+                    return true;
                 }
             }
         }
     }
 
     protected double k() {
-        return this.e.b(GenericAttributes.FOLLOW_RANGE);
+        return this.mob.b(GenericAttributes.FOLLOW_RANGE);
     }
 
     @Override
     public void c() {
-        this.b = 0;
-        this.c = 0;
-        this.d = 0;
+        this.reachCache = 0;
+        this.reachCacheTime = 0;
+        this.unseenTicks = 0;
     }
 
     @Override
     public void d() {
-        this.e.setGoalTarget((EntityLiving) null);
-        this.g = null;
+        this.mob.setGoalTarget((EntityLiving) null);
+        this.targetMob = null;
     }
 
     protected boolean a(@Nullable EntityLiving entityliving, PathfinderTargetCondition pathfindertargetcondition) {
         if (entityliving == null) {
             return false;
-        } else if (!pathfindertargetcondition.a(this.e, entityliving)) {
+        } else if (!pathfindertargetcondition.a(this.mob, entityliving)) {
             return false;
-        } else if (!this.e.a(entityliving.getChunkCoordinates())) {
+        } else if (!this.mob.a(entityliving.getChunkCoordinates())) {
             return false;
         } else {
-            if (this.a) {
-                if (--this.c <= 0) {
-                    this.b = 0;
+            if (this.mustReach) {
+                if (--this.reachCacheTime <= 0) {
+                    this.reachCache = 0;
                 }
 
-                if (this.b == 0) {
-                    this.b = this.a(entityliving) ? 1 : 2;
+                if (this.reachCache == 0) {
+                    this.reachCache = this.a(entityliving) ? 1 : 2;
                 }
 
-                if (this.b == 2) {
+                if (this.reachCache == 2) {
                     return false;
                 }
             }
@@ -122,8 +119,8 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     }
 
     private boolean a(EntityLiving entityliving) {
-        this.c = 10 + this.e.getRandom().nextInt(5);
-        PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving, 0);
+        this.reachCacheTime = 10 + this.mob.getRandom().nextInt(5);
+        PathEntity pathentity = this.mob.getNavigation().a((Entity) entityliving, 0);
 
         if (pathentity == null) {
             return false;
@@ -133,8 +130,8 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             if (pathpoint == null) {
                 return false;
             } else {
-                int i = pathpoint.a - MathHelper.floor(entityliving.locX());
-                int j = pathpoint.c - MathHelper.floor(entityliving.locZ());
+                int i = pathpoint.x - entityliving.cW();
+                int j = pathpoint.z - entityliving.dc();
 
                 return (double) (i * i + j * j) <= 2.25D;
             }
@@ -142,7 +139,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     }
 
     public PathfinderGoalTarget a(int i) {
-        this.h = i;
+        this.unseenMemoryTicks = i;
         return this;
     }
 }

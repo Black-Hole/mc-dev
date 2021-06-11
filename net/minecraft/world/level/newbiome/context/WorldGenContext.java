@@ -6,5 +6,5 @@ public interface WorldGenContext {
 
     int a(int i);
 
-    NoiseGeneratorPerlin b();
+    NoiseGeneratorPerlin a();
 }

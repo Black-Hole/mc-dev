@@ -23,19 +23,20 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class MobSpawnerCat implements MobSpawner {
 
-    private int a;
+    private static final int TICK_DELAY = 1200;
+    private int nextTick;
 
     public MobSpawnerCat() {}
 
     @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
-        if (flag1 && worldserver.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
-            --this.a;
-            if (this.a > 0) {
+        if (flag1 && worldserver.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+            --this.nextTick;
+            if (this.nextTick > 0) {
                 return 0;
             } else {
-                this.a = 1200;
-                EntityPlayer entityplayer = worldserver.q_();
+                this.nextTick = 1200;
+                EntityPlayer entityplayer = worldserver.i();
 
                 if (entityplayer == null) {
                     return 0;
@@ -43,9 +44,10 @@ public class MobSpawnerCat implements MobSpawner {
                     Random random = worldserver.random;
                     int i = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                     int j = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
-                    BlockPosition blockposition = entityplayer.getChunkCoordinates().b(i, 0, j);
+                    BlockPosition blockposition = entityplayer.getChunkCoordinates().c(i, 0, j);
+                    boolean flag2 = true;
 
-                    if (!worldserver.isAreaLoaded(blockposition.getX() - 10, blockposition.getY() - 10, blockposition.getZ() - 10, blockposition.getX() + 10, blockposition.getY() + 10, blockposition.getZ() + 10)) {
+                    if (!worldserver.b(blockposition.getX() - 10, blockposition.getZ() - 10, blockposition.getX() + 10, blockposition.getZ() + 10)) {
                         return 0;
                     } else {
                         if (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) worldserver, blockposition, EntityTypes.CAT)) {
@@ -70,7 +72,7 @@ public class MobSpawnerCat implements MobSpawner {
     private int a(WorldServer worldserver, BlockPosition blockposition) {
         boolean flag = true;
 
-        if (worldserver.y().a(VillagePlaceType.r.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
+        if (worldserver.A().a(VillagePlaceType.HOME.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
             List<EntityCat> list = worldserver.a(EntityCat.class, (new AxisAlignedBB(blockposition)).grow(48.0D, 8.0D, 48.0D));
 
             if (list.size() < 5) {

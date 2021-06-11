@@ -6,22 +6,22 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 
 public class WorldGenDecoratorFrequencyExtraChanceConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public static final Codec<WorldGenDecoratorFrequencyExtraChanceConfiguration> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenDecoratorFrequencyExtraChanceConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.INT.fieldOf("count").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
-            return worldgendecoratorfrequencyextrachanceconfiguration.c;
+            return worldgendecoratorfrequencyextrachanceconfiguration.count;
         }), Codec.FLOAT.fieldOf("extra_chance").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
-            return worldgendecoratorfrequencyextrachanceconfiguration.d;
+            return worldgendecoratorfrequencyextrachanceconfiguration.extraChance;
         }), Codec.INT.fieldOf("extra_count").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
-            return worldgendecoratorfrequencyextrachanceconfiguration.e;
+            return worldgendecoratorfrequencyextrachanceconfiguration.extraCount;
         })).apply(instance, WorldGenDecoratorFrequencyExtraChanceConfiguration::new);
     });
-    public final int c;
-    public final float d;
-    public final int e;
+    public final int count;
+    public final float extraChance;
+    public final int extraCount;
 
     public WorldGenDecoratorFrequencyExtraChanceConfiguration(int i, float f, int j) {
-        this.c = i;
-        this.d = f;
-        this.e = j;
+        this.count = i;
+        this.extraChance = f;
+        this.extraCount = j;
     }
 }

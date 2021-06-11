@@ -1,10 +1,12 @@
 package net.minecraft.network.chat;
 
-import com.google.common.base.Joiner;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.DataFixUtils;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.advancements.critereon.CriterionConditionNBT;
@@ -27,13 +29,14 @@ import org.apache.logging.log4j.Logger;
 public abstract class ChatComponentNBT extends ChatBaseComponent implements ChatComponentContextual {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    protected final boolean d;
-    protected final String e;
+    protected final boolean interpreting;
+    protected final Optional<IChatBaseComponent> separator;
+    protected final String nbtPathPattern;
     @Nullable
-    protected final ArgumentNBTKey.h f;
+    protected final ArgumentNBTKey.g compiledNbtPath;
 
     @Nullable
-    private static ArgumentNBTKey.h d(String s) {
+    private static ArgumentNBTKey.g d(String s) {
         try {
             return (new ArgumentNBTKey()).parse(new StringReader(s));
         } catch (CommandSyntaxException commandsyntaxexception) {
@@ -41,49 +44,68 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
         }
     }
 
-    public ChatComponentNBT(String s, boolean flag) {
-        this(s, d(s), flag);
+    public ChatComponentNBT(String s, boolean flag, Optional<IChatBaseComponent> optional) {
+        this(s, d(s), flag, optional);
     }
 
-    protected ChatComponentNBT(String s, @Nullable ArgumentNBTKey.h argumentnbtkey_h, boolean flag) {
-        this.e = s;
-        this.f = argumentnbtkey_h;
-        this.d = flag;
+    protected ChatComponentNBT(String s, @Nullable ArgumentNBTKey.g argumentnbtkey_g, boolean flag, Optional<IChatBaseComponent> optional) {
+        this.nbtPathPattern = s;
+        this.compiledNbtPath = argumentnbtkey_g;
+        this.interpreting = flag;
+        this.separator = optional;
     }
 
     protected abstract Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException;
 
     public String h() {
-        return this.e;
+        return this.nbtPathPattern;
     }
 
     public boolean i() {
-        return this.d;
+        return this.interpreting;
     }
 
     @Override
     public IChatMutableComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
-        if (commandlistenerwrapper != null && this.f != null) {
+        if (commandlistenerwrapper != null && this.compiledNbtPath != null) {
             Stream<String> stream = this.a(commandlistenerwrapper).flatMap((nbttagcompound) -> {
                 try {
-                    return this.f.a((NBTBase) nbttagcompound).stream();
+                    return this.compiledNbtPath.a((NBTBase) nbttagcompound).stream();
                 } catch (CommandSyntaxException commandsyntaxexception) {
                     return Stream.empty();
                 }
             }).map(NBTBase::asString);
 
-            return (IChatMutableComponent) (this.d ? (IChatMutableComponent) stream.flatMap((s) -> {
-                try {
-                    IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(s);
+            if (this.interpreting) {
+                IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) DataFixUtils.orElse(ChatComponentUtils.a(commandlistenerwrapper, this.separator, entity, i), ChatComponentUtils.DEFAULT_NO_STYLE_SEPARATOR);
 
-                    return Stream.of(ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatmutablecomponent, entity, i));
-                } catch (Exception exception) {
-                    ChatComponentNBT.LOGGER.warn("Failed to parse component: " + s, exception);
-                    return Stream.of();
-                }
-            }).reduce((ichatmutablecomponent, ichatmutablecomponent1) -> {
-                return ichatmutablecomponent.c(", ").addSibling(ichatmutablecomponent1);
-            }).orElse(new ChatComponentText("")) : new ChatComponentText(Joiner.on(", ").join(stream.iterator())));
+                return (IChatMutableComponent) stream.flatMap((s) -> {
+                    try {
+                        IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(s);
+
+                        return Stream.of(ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatmutablecomponent, entity, i));
+                    } catch (Exception exception) {
+                        ChatComponentNBT.LOGGER.warn("Failed to parse component: {}", s, exception);
+                        return Stream.of();
+                    }
+                }).reduce((ichatmutablecomponent, ichatmutablecomponent1) -> {
+                    return ichatmutablecomponent.addSibling(ichatbasecomponent).addSibling(ichatmutablecomponent1);
+                }).orElseGet(() -> {
+                    return new ChatComponentText("");
+                });
+            } else {
+                return (IChatMutableComponent) ChatComponentUtils.a(commandlistenerwrapper, this.separator, entity, i).map((ichatmutablecomponent) -> {
+                    return (IChatMutableComponent) stream.map((s) -> {
+                        return new ChatComponentText(s);
+                    }).reduce((ichatmutablecomponent1, ichatmutablecomponent2) -> {
+                        return ichatmutablecomponent1.addSibling(ichatmutablecomponent).addSibling(ichatmutablecomponent2);
+                    }).orElseGet(() -> {
+                        return new ChatComponentText("");
+                    });
+                }).orElseGet(() -> {
+                    return new ChatComponentText((String) stream.collect(Collectors.joining(", ")));
+                });
+            }
         } else {
             return new ChatComponentText("");
         }
@@ -91,30 +113,30 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
     public static class c extends ChatComponentNBT {
 
-        private final MinecraftKey g;
+        private final MinecraftKey id;
 
-        public c(String s, boolean flag, MinecraftKey minecraftkey) {
-            super(s, flag);
-            this.g = minecraftkey;
+        public c(String s, boolean flag, MinecraftKey minecraftkey, Optional<IChatBaseComponent> optional) {
+            super(s, flag, optional);
+            this.id = minecraftkey;
         }
 
-        public c(String s, @Nullable ArgumentNBTKey.h argumentnbtkey_h, boolean flag, MinecraftKey minecraftkey) {
-            super(s, argumentnbtkey_h, flag);
-            this.g = minecraftkey;
+        public c(String s, @Nullable ArgumentNBTKey.g argumentnbtkey_g, boolean flag, MinecraftKey minecraftkey, Optional<IChatBaseComponent> optional) {
+            super(s, argumentnbtkey_g, flag, optional);
+            this.id = minecraftkey;
         }
 
         public MinecraftKey j() {
-            return this.g;
+            return this.id;
         }
 
         @Override
         public ChatComponentNBT.c g() {
-            return new ChatComponentNBT.c(this.e, this.f, this.d, this.g);
+            return new ChatComponentNBT.c(this.nbtPathPattern, this.compiledNbtPath, this.interpreting, this.id, this.separator);
         }
 
         @Override
         protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) {
-            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aI().a(this.g);
+            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aH().a(this.id);
 
             return Stream.of(nbttagcompound);
         }
@@ -128,26 +150,26 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             } else {
                 ChatComponentNBT.c chatcomponentnbt_c = (ChatComponentNBT.c) object;
 
-                return Objects.equals(this.g, chatcomponentnbt_c.g) && Objects.equals(this.e, chatcomponentnbt_c.e) && super.equals(object);
+                return Objects.equals(this.id, chatcomponentnbt_c.id) && Objects.equals(this.nbtPathPattern, chatcomponentnbt_c.nbtPathPattern) && super.equals(object);
             }
         }
 
         @Override
         public String toString() {
-            return "StorageNbtComponent{id='" + this.g + '\'' + "path='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+            return "StorageNbtComponent{id='" + this.id + "'path='" + this.nbtPathPattern + "', siblings=" + this.siblings + ", style=" + this.getChatModifier() + "}";
         }
     }
 
     public static class a extends ChatComponentNBT {
 
-        private final String g;
+        private final String posPattern;
         @Nullable
-        private final IVectorPosition h;
+        private final IVectorPosition compiledPos;
 
-        public a(String s, boolean flag, String s1) {
-            super(s, flag);
-            this.g = s1;
-            this.h = this.d(this.g);
+        public a(String s, boolean flag, String s1, Optional<IChatBaseComponent> optional) {
+            super(s, flag, optional);
+            this.posPattern = s1;
+            this.compiledPos = this.d(this.posPattern);
         }
 
         @Nullable
@@ -159,29 +181,29 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             }
         }
 
-        private a(String s, @Nullable ArgumentNBTKey.h argumentnbtkey_h, boolean flag, String s1, @Nullable IVectorPosition ivectorposition) {
-            super(s, argumentnbtkey_h, flag);
-            this.g = s1;
-            this.h = ivectorposition;
+        private a(String s, @Nullable ArgumentNBTKey.g argumentnbtkey_g, boolean flag, String s1, @Nullable IVectorPosition ivectorposition, Optional<IChatBaseComponent> optional) {
+            super(s, argumentnbtkey_g, flag, optional);
+            this.posPattern = s1;
+            this.compiledPos = ivectorposition;
         }
 
         @Nullable
         public String j() {
-            return this.g;
+            return this.posPattern;
         }
 
         @Override
         public ChatComponentNBT.a g() {
-            return new ChatComponentNBT.a(this.e, this.f, this.d, this.g, this.h);
+            return new ChatComponentNBT.a(this.nbtPathPattern, this.compiledNbtPath, this.interpreting, this.posPattern, this.compiledPos, this.separator);
         }
 
         @Override
         protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) {
-            if (this.h != null) {
+            if (this.compiledPos != null) {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
-                BlockPosition blockposition = this.h.c(commandlistenerwrapper);
+                BlockPosition blockposition = this.compiledPos.c(commandlistenerwrapper);
 
-                if (worldserver.p(blockposition)) {
+                if (worldserver.o(blockposition)) {
                     TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
                     if (tileentity != null) {
@@ -202,26 +224,26 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             } else {
                 ChatComponentNBT.a chatcomponentnbt_a = (ChatComponentNBT.a) object;
 
-                return Objects.equals(this.g, chatcomponentnbt_a.g) && Objects.equals(this.e, chatcomponentnbt_a.e) && super.equals(object);
+                return Objects.equals(this.posPattern, chatcomponentnbt_a.posPattern) && Objects.equals(this.nbtPathPattern, chatcomponentnbt_a.nbtPathPattern) && super.equals(object);
             }
         }
 
         @Override
         public String toString() {
-            return "BlockPosArgument{pos='" + this.g + '\'' + "path='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+            return "BlockPosArgument{pos='" + this.posPattern + "'path='" + this.nbtPathPattern + "', siblings=" + this.siblings + ", style=" + this.getChatModifier() + "}";
         }
     }
 
     public static class b extends ChatComponentNBT {
 
-        private final String g;
+        private final String selectorPattern;
         @Nullable
-        private final EntitySelector h;
+        private final EntitySelector compiledSelector;
 
-        public b(String s, boolean flag, String s1) {
-            super(s, flag);
-            this.g = s1;
-            this.h = d(s1);
+        public b(String s, boolean flag, String s1, Optional<IChatBaseComponent> optional) {
+            super(s, flag, optional);
+            this.selectorPattern = s1;
+            this.compiledSelector = d(s1);
         }
 
         @Nullable
@@ -235,25 +257,25 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             }
         }
 
-        private b(String s, @Nullable ArgumentNBTKey.h argumentnbtkey_h, boolean flag, String s1, @Nullable EntitySelector entityselector) {
-            super(s, argumentnbtkey_h, flag);
-            this.g = s1;
-            this.h = entityselector;
+        private b(String s, @Nullable ArgumentNBTKey.g argumentnbtkey_g, boolean flag, String s1, @Nullable EntitySelector entityselector, Optional<IChatBaseComponent> optional) {
+            super(s, argumentnbtkey_g, flag, optional);
+            this.selectorPattern = s1;
+            this.compiledSelector = entityselector;
         }
 
         public String j() {
-            return this.g;
+            return this.selectorPattern;
         }
 
         @Override
         public ChatComponentNBT.b g() {
-            return new ChatComponentNBT.b(this.e, this.f, this.d, this.g, this.h);
+            return new ChatComponentNBT.b(this.nbtPathPattern, this.compiledNbtPath, this.interpreting, this.selectorPattern, this.compiledSelector, this.separator);
         }
 
         @Override
         protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-            if (this.h != null) {
-                List<? extends Entity> list = this.h.getEntities(commandlistenerwrapper);
+            if (this.compiledSelector != null) {
+                List<? extends Entity> list = this.compiledSelector.getEntities(commandlistenerwrapper);
 
                 return list.stream().map(CriterionConditionNBT::b);
             } else {
@@ -270,13 +292,13 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             } else {
                 ChatComponentNBT.b chatcomponentnbt_b = (ChatComponentNBT.b) object;
 
-                return Objects.equals(this.g, chatcomponentnbt_b.g) && Objects.equals(this.e, chatcomponentnbt_b.e) && super.equals(object);
+                return Objects.equals(this.selectorPattern, chatcomponentnbt_b.selectorPattern) && Objects.equals(this.nbtPathPattern, chatcomponentnbt_b.nbtPathPattern) && super.equals(object);
             }
         }
 
         @Override
         public String toString() {
-            return "EntityNbtComponent{selector='" + this.g + '\'' + "path='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+            return "EntityNbtComponent{selector='" + this.selectorPattern + "'path='" + this.nbtPathPattern + "', siblings=" + this.siblings + ", style=" + this.getChatModifier() + "}";
         }
     }
 }

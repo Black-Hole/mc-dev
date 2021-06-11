@@ -217,7 +217,7 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
             return DSL.taggedChoiceLazy("id", a(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV705.b, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)))), DataConverterSchemaV705.ADD_NAMES, HookFunction.IDENTITY);
         });
         schema.registerType(false, DataConverterTypes.HOTBAR, () -> {
             return DSL.compoundList(DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
@@ -246,7 +246,11 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
         schema.registerType(false, DataConverterTypes.STRUCTURE_FEATURE, () -> {
             return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.BLOCK_STATE.in(schema), "CB", DataConverterTypes.BLOCK_STATE.in(schema), "CC", DataConverterTypes.BLOCK_STATE.in(schema), "CD", DataConverterTypes.BLOCK_STATE.in(schema))));
         });
-        schema.registerType(false, DataConverterTypes.OBJECTIVE, DSL::remainder);
+        Map<String, Supplier<TypeTemplate>> map2 = DataConverterSchemaV1451_6.a(schema);
+
+        schema.registerType(false, DataConverterTypes.OBJECTIVE, () -> {
+            return DSL.hook(DSL.optionalFields("CriteriaType", DSL.taggedChoiceLazy("type", DSL.string(), map2)), DataConverterSchemaV1451_6.UNPACK_OBJECTIVE_ID, DataConverterSchemaV1451_6.REPACK_OBJECTIVE_ID);
+        });
         schema.registerType(false, DataConverterTypes.TEAM, DSL::remainder);
         schema.registerType(true, DataConverterTypes.UNTAGGED_SPAWNER, () -> {
             return DSL.optionalFields("SpawnPotentials", DSL.list(DSL.fields("Entity", DataConverterTypes.ENTITY_TREE.in(schema))), "SpawnData", DataConverterTypes.ENTITY_TREE.in(schema));
@@ -262,5 +266,8 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
         });
         schema.registerType(false, DataConverterTypes.POI_CHUNK, DSL::remainder);
         schema.registerType(true, DataConverterTypes.WORLD_GEN_SETTINGS, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.ENTITY_CHUNK, () -> {
+            return DSL.optionalFields("Entities", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)));
+        });
     }
 }

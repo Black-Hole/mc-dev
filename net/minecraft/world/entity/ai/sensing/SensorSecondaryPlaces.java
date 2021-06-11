@@ -15,6 +15,8 @@ import net.minecraft.world.level.World;
 
 public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
 
+    private static final int SCAN_RATE = 40;
+
     public SensorSecondaryPlaces() {
         super(40);
     }
@@ -28,7 +30,7 @@ public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
         for (int i = -4; i <= 4; ++i) {
             for (int j = -2; j <= 2; ++j) {
                 for (int k = -4; k <= 4; ++k) {
-                    BlockPosition blockposition1 = blockposition.b(i, j, k);
+                    BlockPosition blockposition1 = blockposition.c(i, j, k);
 
                     if (entityvillager.getVillagerData().getProfession().d().contains(worldserver.getType(blockposition1).getBlock())) {
                         list.add(GlobalPos.create(resourcekey, blockposition1));

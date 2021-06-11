@@ -14,7 +14,8 @@ import net.minecraft.world.phys.Vec3D;
 
 public class RemoteControlCommandListener implements ICommandListener {
 
-    private static final ChatComponentText b = new ChatComponentText("Rcon");
+    private static final String RCON = "Rcon";
+    private static final IChatBaseComponent RCON_COMPONENT = new ChatComponentText("Rcon");
     private final StringBuffer buffer = new StringBuffer();
     private final MinecraftServer server;
 
@@ -31,9 +32,9 @@ public class RemoteControlCommandListener implements ICommandListener {
     }
 
     public CommandListenerWrapper getWrapper() {
-        WorldServer worldserver = this.server.E();
+        WorldServer worldserver = this.server.F();
 
-        return new CommandListenerWrapper(this, Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Rcon", RemoteControlCommandListener.b, this.server, (Entity) null);
+        return new CommandListenerWrapper(this, Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.ZERO, worldserver, 4, "Rcon", RemoteControlCommandListener.RCON_COMPONENT, this.server, (Entity) null);
     }
 
     @Override
@@ -53,6 +54,6 @@ public class RemoteControlCommandListener implements ICommandListener {
 
     @Override
     public boolean shouldBroadcastCommands() {
-        return this.server.i();
+        return this.server.j();
     }
 }

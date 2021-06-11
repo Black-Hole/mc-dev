@@ -10,13 +10,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerBredAnimals extends CriterionTriggerAbstract<CriterionTriggerBredAnimals.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("bred_animals");
+    static final MinecraftKey ID = new MinecraftKey("bred_animals");
 
     public CriterionTriggerBredAnimals() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerBredAnimals.a;
+        return CriterionTriggerBredAnimals.ID;
     }
 
     @Override
@@ -40,40 +40,40 @@ public class CriterionTriggerBredAnimals extends CriterionTriggerAbstract<Criter
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b a;
-        private final CriterionConditionEntity.b b;
-        private final CriterionConditionEntity.b c;
+        private final CriterionConditionEntity.b parent;
+        private final CriterionConditionEntity.b partner;
+        private final CriterionConditionEntity.b child;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionEntity.b criterionconditionentity_b2, CriterionConditionEntity.b criterionconditionentity_b3) {
-            super(CriterionTriggerBredAnimals.a, criterionconditionentity_b);
-            this.a = criterionconditionentity_b1;
-            this.b = criterionconditionentity_b2;
-            this.c = criterionconditionentity_b3;
+            super(CriterionTriggerBredAnimals.ID, criterionconditionentity_b);
+            this.parent = criterionconditionentity_b1;
+            this.partner = criterionconditionentity_b2;
+            this.child = criterionconditionentity_b3;
         }
 
         public static CriterionTriggerBredAnimals.a c() {
-            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY);
         }
 
         public static CriterionTriggerBredAnimals.a a(CriterionConditionEntity.a criterionconditionentity_a) {
-            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
         }
 
         public static CriterionTriggerBredAnimals.a a(CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1, CriterionConditionEntity criterionconditionentity2) {
-            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity), CriterionConditionEntity.b.a(criterionconditionentity1), CriterionConditionEntity.b.a(criterionconditionentity2));
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.a(criterionconditionentity), CriterionConditionEntity.b.a(criterionconditionentity1), CriterionConditionEntity.b.a(criterionconditionentity2));
         }
 
         public boolean a(LootTableInfo loottableinfo, LootTableInfo loottableinfo1, @Nullable LootTableInfo loottableinfo2) {
-            return this.c != CriterionConditionEntity.b.a && (loottableinfo2 == null || !this.c.a(loottableinfo2)) ? false : this.a.a(loottableinfo) && this.b.a(loottableinfo1) || this.a.a(loottableinfo1) && this.b.a(loottableinfo);
+            return this.child != CriterionConditionEntity.b.ANY && (loottableinfo2 == null || !this.child.a(loottableinfo2)) ? false : this.parent.a(loottableinfo) && this.partner.a(loottableinfo1) || this.parent.a(loottableinfo1) && this.partner.a(loottableinfo);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("parent", this.a.a(lootserializationcontext));
-            jsonobject.add("partner", this.b.a(lootserializationcontext));
-            jsonobject.add("child", this.c.a(lootserializationcontext));
+            jsonobject.add("parent", this.parent.a(lootserializationcontext));
+            jsonobject.add("partner", this.partner.a(lootserializationcontext));
+            jsonobject.add("child", this.child.a(lootserializationcontext));
             return jsonobject;
         }
     }

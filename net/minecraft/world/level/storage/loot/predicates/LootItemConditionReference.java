@@ -14,36 +14,36 @@ import org.apache.logging.log4j.Logger;
 public class LootItemConditionReference implements LootItemCondition {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final MinecraftKey b;
+    final MinecraftKey name;
 
-    private LootItemConditionReference(MinecraftKey minecraftkey) {
-        this.b = minecraftkey;
+    LootItemConditionReference(MinecraftKey minecraftkey) {
+        this.name = minecraftkey;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.o;
+    public LootItemConditionType a() {
+        return LootItemConditions.REFERENCE;
     }
 
     @Override
     public void a(LootCollector lootcollector) {
-        if (lootcollector.b(this.b)) {
-            lootcollector.a("Condition " + this.b + " is recursively called");
+        if (lootcollector.b(this.name)) {
+            lootcollector.a("Condition " + this.name + " is recursively called");
         } else {
             LootItemCondition.super.a(lootcollector);
-            LootItemCondition lootitemcondition = lootcollector.d(this.b);
+            LootItemCondition lootitemcondition = lootcollector.d(this.name);
 
             if (lootitemcondition == null) {
-                lootcollector.a("Unknown condition table called " + this.b);
+                lootcollector.a("Unknown condition table called " + this.name);
             } else {
-                lootitemcondition.a(lootcollector.a(".{" + this.b + "}", this.b));
+                lootitemcondition.a(lootcollector.a(".{" + this.name + "}", this.name));
             }
 
         }
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        LootItemCondition lootitemcondition = loottableinfo.b(this.b);
+        LootItemCondition lootitemcondition = loottableinfo.b(this.name);
 
         if (loottableinfo.a(lootitemcondition)) {
             boolean flag;
@@ -61,12 +61,18 @@ public class LootItemConditionReference implements LootItemCondition {
         }
     }
 
+    public static LootItemCondition.a a(MinecraftKey minecraftkey) {
+        return () -> {
+            return new LootItemConditionReference(minecraftkey);
+        };
+    }
+
     public static class a implements LootSerializer<LootItemConditionReference> {
 
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionReference lootitemconditionreference, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("name", lootitemconditionreference.b.toString());
+            jsonobject.addProperty("name", lootitemconditionreference.name.toString());
         }
 
         @Override

@@ -29,8 +29,8 @@ public class EntityMagmaCube extends EntitySlime {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder n() {
+        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     public static boolean b(EntityTypes<EntityMagmaCube> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -39,7 +39,7 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.j((Entity) this) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.f((Entity) this) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     @Override
@@ -49,18 +49,18 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public float aR() {
+    public float aY() {
         return 1.0F;
     }
 
     @Override
-    protected ParticleParam eI() {
+    protected ParticleParam p() {
         return Particles.FLAME;
     }
 
     @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.eQ() ? LootTables.a : this.getEntityType().i();
+        return this.fz() ? LootTables.EMPTY : this.getEntityType().j();
     }
 
     @Override
@@ -69,21 +69,21 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected int eJ() {
-        return super.eJ() * 4;
+    protected int t() {
+        return super.t() * 4;
     }
 
     @Override
-    protected void eK() {
-        this.b *= 0.9F;
+    protected void ft() {
+        this.targetSquish *= 0.9F;
     }
 
     @Override
     protected void jump() {
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) (this.dJ() + (float) this.getSize() * 0.1F), vec3d.z);
-        this.impulse = true;
+        this.setMot(vec3d.x, (double) (this.er() + (float) this.getSize() * 0.1F), vec3d.z);
+        this.hasImpulse = true;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EntityMagmaCube extends EntitySlime {
             Vec3D vec3d = this.getMot();
 
             this.setMot(vec3d.x, (double) (0.22F + (float) this.getSize() * 0.05F), vec3d.z);
-            this.impulse = true;
+            this.hasImpulse = true;
         } else {
             super.c(tag);
         }
@@ -100,37 +100,37 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
     @Override
-    protected boolean eL() {
+    protected boolean fu() {
         return this.doAITick();
     }
 
     @Override
-    protected float eM() {
-        return super.eM() + 2.0F;
+    protected float fv() {
+        return super.fv() + 2.0F;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.fz() ? SoundEffects.MAGMA_CUBE_HURT_SMALL : SoundEffects.MAGMA_CUBE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+        return this.fz() ? SoundEffects.MAGMA_CUBE_DEATH_SMALL : SoundEffects.MAGMA_CUBE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSquish() {
-        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+        return this.fz() ? SoundEffects.MAGMA_CUBE_SQUISH_SMALL : SoundEffects.MAGMA_CUBE_SQUISH;
     }
 
     @Override
     protected SoundEffect getSoundJump() {
-        return SoundEffects.ENTITY_MAGMA_CUBE_JUMP;
+        return SoundEffects.MAGMA_CUBE_JUMP;
     }
 }

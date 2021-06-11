@@ -7,10 +7,11 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.OptionalDynamic;
 import java.util.List;
+import java.util.Objects;
 
 public class DataConverterDropChances extends DataFix {
 
-    private static final Codec<List<Float>> a = Codec.FLOAT.listOf();
+    private static final Codec<List<Float>> FLOAT_LIST_CODEC = Codec.FLOAT.listOf();
 
     public DataConverterDropChances(Schema schema, boolean flag) {
         super(schema, flag);
@@ -33,9 +34,9 @@ public class DataConverterDropChances extends DataFix {
     }
 
     private static boolean a(OptionalDynamic<?> optionaldynamic, int i) {
-        Codec codec = DataConverterDropChances.a;
+        Codec codec = DataConverterDropChances.FLOAT_LIST_CODEC;
 
-        codec.getClass();
+        Objects.requireNonNull(codec);
         return (Boolean) optionaldynamic.flatMap(codec::parse).map((list) -> {
             return list.size() == i && list.stream().allMatch((ofloat) -> {
                 return ofloat == 0.0F;

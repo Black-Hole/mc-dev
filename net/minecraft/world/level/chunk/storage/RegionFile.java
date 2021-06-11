@@ -28,41 +28,50 @@ import org.apache.logging.log4j.Logger;
 public class RegionFile implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ByteBuffer c = ByteBuffer.allocateDirect(1);
-    private final FileChannel dataFile;
-    private final Path e;
-    private final RegionFileCompression f;
-    private final ByteBuffer g;
-    private final IntBuffer h;
-    private final IntBuffer i;
+    private static final int SECTOR_BYTES = 4096;
     @VisibleForTesting
-    protected final RegionFileBitSet freeSectors;
+    protected static final int SECTOR_INTS = 1024;
+    private static final int CHUNK_HEADER_SIZE = 5;
+    private static final int HEADER_OFFSET = 0;
+    private static final ByteBuffer PADDING_BUFFER = ByteBuffer.allocateDirect(1);
+    private static final String EXTERNAL_FILE_EXTENSION = ".mcc";
+    private static final int EXTERNAL_STREAM_FLAG = 128;
+    private static final int EXTERNAL_CHUNK_THRESHOLD = 256;
+    private static final int CHUNK_NOT_PRESENT = 0;
+    private final FileChannel file;
+    private final Path externalFileDir;
+    final RegionFileCompression version;
+    private final ByteBuffer header;
+    private final IntBuffer offsets;
+    private final IntBuffer timestamps;
+    @VisibleForTesting
+    protected final RegionFileBitSet usedSectors;
 
     public RegionFile(File file, File file1, boolean flag) throws IOException {
-        this(file.toPath(), file1.toPath(), RegionFileCompression.b, flag);
+        this(file.toPath(), file1.toPath(), RegionFileCompression.VERSION_DEFLATE, flag);
     }
 
     public RegionFile(Path path, Path path1, RegionFileCompression regionfilecompression, boolean flag) throws IOException {
-        this.g = ByteBuffer.allocateDirect(8192);
-        this.freeSectors = new RegionFileBitSet();
-        this.f = regionfilecompression;
+        this.header = ByteBuffer.allocateDirect(8192);
+        this.usedSectors = new RegionFileBitSet();
+        this.version = regionfilecompression;
         if (!Files.isDirectory(path1, new LinkOption[0])) {
             throw new IllegalArgumentException("Expected directory, got " + path1.toAbsolutePath());
         } else {
-            this.e = path1;
-            this.h = this.g.asIntBuffer();
-            this.h.limit(1024);
-            this.g.position(4096);
-            this.i = this.g.asIntBuffer();
+            this.externalFileDir = path1;
+            this.offsets = this.header.asIntBuffer();
+            this.offsets.limit(1024);
+            this.header.position(4096);
+            this.timestamps = this.header.asIntBuffer();
             if (flag) {
-                this.dataFile = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
+                this.file = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
             } else {
-                this.dataFile = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+                this.file = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
             }
 
-            this.freeSectors.a(0, 2);
-            this.g.position(0);
-            int i = this.dataFile.read(this.g, 0L);
+            this.usedSectors.a(0, 2);
+            this.header.position(0);
+            int i = this.file.read(this.header, 0L);
 
             if (i != -1) {
                 if (i != 8192) {
@@ -72,7 +81,7 @@ public class RegionFile implements AutoCloseable {
                 long j = Files.size(path);
 
                 for (int k = 0; k < 1024; ++k) {
-                    int l = this.h.get(k);
+                    int l = this.offsets.get(k);
 
                     if (l != 0) {
                         int i1 = b(l);
@@ -80,15 +89,15 @@ public class RegionFile implements AutoCloseable {
 
                         if (i1 < 2) {
                             RegionFile.LOGGER.warn("Region file {} has invalid sector at index: {}; sector {} overlaps with header", path, k, i1);
-                            this.h.put(k, 0);
+                            this.offsets.put(k, 0);
                         } else if (j1 == 0) {
                             RegionFile.LOGGER.warn("Region file {} has an invalid sector at index: {}; size has to be > 0", path, k);
-                            this.h.put(k, 0);
+                            this.offsets.put(k, 0);
                         } else if ((long) i1 * 4096L > j) {
                             RegionFile.LOGGER.warn("Region file {} has an invalid sector at index: {}; sector {} is out of bounds", path, k, i1);
-                            this.h.put(k, 0);
+                            this.offsets.put(k, 0);
                         } else {
-                            this.freeSectors.a(i1, j1);
+                            this.usedSectors.a(i1, j1);
                         }
                     }
                 }
@@ -97,10 +106,10 @@ public class RegionFile implements AutoCloseable {
         }
     }
 
-    private Path e(ChunkCoordIntPair chunkcoordintpair) {
+    private Path f(ChunkCoordIntPair chunkcoordintpair) {
         String s = "c." + chunkcoordintpair.x + "." + chunkcoordintpair.z + ".mcc";
 
-        return this.e.resolve(s);
+        return this.externalFileDir.resolve(s);
     }
 
     @Nullable
@@ -115,7 +124,7 @@ public class RegionFile implements AutoCloseable {
             int l = k * 4096;
             ByteBuffer bytebuffer = ByteBuffer.allocate(l);
 
-            this.dataFile.read(bytebuffer, (long) (j * 4096));
+            this.file.read(bytebuffer, (long) (j * 4096));
             bytebuffer.flip();
             if (bytebuffer.remaining() < 5) {
                 RegionFile.LOGGER.error("Chunk {} header is truncated: expected {} but read {}", chunkcoordintpair, l, bytebuffer.remaining());
@@ -150,6 +159,10 @@ public class RegionFile implements AutoCloseable {
         }
     }
 
+    private static int b() {
+        return (int) (SystemUtils.getTimeMillis() / 1000L);
+    }
+
     private static boolean a(byte b0) {
         return (b0 & 128) != 0;
     }
@@ -172,7 +185,7 @@ public class RegionFile implements AutoCloseable {
 
     @Nullable
     private DataInputStream a(ChunkCoordIntPair chunkcoordintpair, byte b0) throws IOException {
-        Path path = this.e(chunkcoordintpair);
+        Path path = this.f(chunkcoordintpair);
 
         if (!Files.isRegularFile(path, new LinkOption[0])) {
             RegionFile.LOGGER.error("External chunk path {} is not file", path);
@@ -213,7 +226,7 @@ public class RegionFile implements AutoCloseable {
             ByteBuffer bytebuffer = ByteBuffer.allocate(5);
 
             try {
-                this.dataFile.read(bytebuffer, (long) (j * 4096));
+                this.file.read(bytebuffer, (long) (j * 4096));
                 bytebuffer.flip();
                 if (bytebuffer.remaining() != 5) {
                     return false;
@@ -226,7 +239,7 @@ public class RegionFile implements AutoCloseable {
                             return false;
                         }
 
-                        if (!Files.isRegularFile(this.e(chunkcoordintpair), new LinkOption[0])) {
+                        if (!Files.isRegularFile(this.f(chunkcoordintpair), new LinkOption[0])) {
                             return false;
                         }
                     } else {
@@ -254,16 +267,29 @@ public class RegionFile implements AutoCloseable {
     }
 
     public DataOutputStream c(ChunkCoordIntPair chunkcoordintpair) throws IOException {
-        return new DataOutputStream(new BufferedOutputStream(this.f.a((OutputStream) (new RegionFile.ChunkBuffer(chunkcoordintpair)))));
+        return new DataOutputStream(new BufferedOutputStream(this.version.a((OutputStream) (new RegionFile.ChunkBuffer(chunkcoordintpair)))));
     }
 
     public void a() throws IOException {
-        this.dataFile.force(true);
+        this.file.force(true);
+    }
+
+    public void d(ChunkCoordIntPair chunkcoordintpair) throws IOException {
+        int i = h(chunkcoordintpair);
+        int j = this.offsets.get(i);
+
+        if (j != 0) {
+            this.offsets.put(i, 0);
+            this.timestamps.put(i, b());
+            this.d();
+            Files.deleteIfExists(this.f(chunkcoordintpair));
+            this.usedSectors.b(b(j), a(j));
+        }
     }
 
     protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, ByteBuffer bytebuffer) throws IOException {
-        int i = g(chunkcoordintpair);
-        int j = this.h.get(i);
+        int i = h(chunkcoordintpair);
+        int j = this.offsets.get(i);
         int k = b(j);
         int l = a(j);
         int i1 = bytebuffer.remaining();
@@ -272,68 +298,63 @@ public class RegionFile implements AutoCloseable {
         RegionFile.b regionfile_b;
 
         if (j1 >= 256) {
-            Path path = this.e(chunkcoordintpair);
+            Path path = this.f(chunkcoordintpair);
 
             RegionFile.LOGGER.warn("Saving oversized chunk {} ({} bytes} to external file {}", chunkcoordintpair, i1, path);
             j1 = 1;
-            k1 = this.freeSectors.a(j1);
+            k1 = this.usedSectors.a(j1);
             regionfile_b = this.a(path, bytebuffer);
-            ByteBuffer bytebuffer1 = this.b();
+            ByteBuffer bytebuffer1 = this.c();
 
-            this.dataFile.write(bytebuffer1, (long) (k1 * 4096));
+            this.file.write(bytebuffer1, (long) (k1 * 4096));
         } else {
-            k1 = this.freeSectors.a(j1);
+            k1 = this.usedSectors.a(j1);
             regionfile_b = () -> {
-                Files.deleteIfExists(this.e(chunkcoordintpair));
+                Files.deleteIfExists(this.f(chunkcoordintpair));
             };
-            this.dataFile.write(bytebuffer, (long) (k1 * 4096));
+            this.file.write(bytebuffer, (long) (k1 * 4096));
         }
 
-        int l1 = (int) (SystemUtils.getTimeMillis() / 1000L);
-
-        this.h.put(i, this.a(k1, j1));
-        this.i.put(i, l1);
-        this.c();
+        this.offsets.put(i, this.a(k1, j1));
+        this.timestamps.put(i, b());
+        this.d();
         regionfile_b.run();
         if (k != 0) {
-            this.freeSectors.b(k, l);
+            this.usedSectors.b(k, l);
         }
 
     }
 
-    private ByteBuffer b() {
+    private ByteBuffer c() {
         ByteBuffer bytebuffer = ByteBuffer.allocate(5);
 
         bytebuffer.putInt(1);
-        bytebuffer.put((byte) (this.f.a() | 128));
+        bytebuffer.put((byte) (this.version.a() | 128));
         bytebuffer.flip();
         return bytebuffer;
     }
 
     private RegionFile.b a(Path path, ByteBuffer bytebuffer) throws IOException {
-        Path path1 = Files.createTempFile(this.e, "tmp", (String) null);
+        Path path1 = Files.createTempFile(this.externalFileDir, "tmp", (String) null);
         FileChannel filechannel = FileChannel.open(path1, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-        Throwable throwable = null;
 
         try {
             bytebuffer.position(5);
             filechannel.write(bytebuffer);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
+        } catch (Throwable throwable) {
             if (filechannel != null) {
-                if (throwable != null) {
-                    try {
-                        filechannel.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
+                try {
                     filechannel.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
             }
 
+            throw throwable;
+        }
+
+        if (filechannel != null) {
+            filechannel.close();
         }
 
         return () -> {
@@ -341,57 +362,52 @@ public class RegionFile implements AutoCloseable {
         };
     }
 
-    private void c() throws IOException {
-        this.g.position(0);
-        this.dataFile.write(this.g, 0L);
+    private void d() throws IOException {
+        this.header.position(0);
+        this.file.write(this.header, 0L);
     }
 
     private int getOffset(ChunkCoordIntPair chunkcoordintpair) {
-        return this.h.get(g(chunkcoordintpair));
+        return this.offsets.get(h(chunkcoordintpair));
     }
 
     public boolean chunkExists(ChunkCoordIntPair chunkcoordintpair) {
         return this.getOffset(chunkcoordintpair) != 0;
     }
 
-    private static int g(ChunkCoordIntPair chunkcoordintpair) {
+    private static int h(ChunkCoordIntPair chunkcoordintpair) {
         return chunkcoordintpair.j() + chunkcoordintpair.k() * 32;
     }
 
     public void close() throws IOException {
         try {
-            this.d();
+            this.e();
         } finally {
             try {
-                this.dataFile.force(true);
+                this.file.force(true);
             } finally {
-                this.dataFile.close();
+                this.file.close();
             }
         }
 
     }
 
-    private void d() throws IOException {
-        int i = (int) this.dataFile.size();
+    private void e() throws IOException {
+        int i = (int) this.file.size();
         int j = c(i) * 4096;
 
         if (i != j) {
-            ByteBuffer bytebuffer = RegionFile.c.duplicate();
+            ByteBuffer bytebuffer = RegionFile.PADDING_BUFFER.duplicate();
 
             bytebuffer.position(0);
-            this.dataFile.write(bytebuffer, (long) (j - 1));
+            this.file.write(bytebuffer, (long) (j - 1));
         }
 
     }
 
-    interface b {
+    private class ChunkBuffer extends ByteArrayOutputStream {
 
-        void run() throws IOException;
-    }
-
-    class ChunkBuffer extends ByteArrayOutputStream {
-
-        private final ChunkCoordIntPair b;
+        private final ChunkCoordIntPair pos;
 
         public ChunkBuffer(ChunkCoordIntPair chunkcoordintpair) {
             super(8096);
@@ -399,15 +415,20 @@ public class RegionFile implements AutoCloseable {
             super.write(0);
             super.write(0);
             super.write(0);
-            super.write(RegionFile.this.f.a());
-            this.b = chunkcoordintpair;
+            super.write(RegionFile.this.version.a());
+            this.pos = chunkcoordintpair;
         }
 
         public void close() throws IOException {
             ByteBuffer bytebuffer = ByteBuffer.wrap(this.buf, 0, this.count);
 
             bytebuffer.putInt(0, this.count - 5 + 1);
-            RegionFile.this.a(this.b, bytebuffer);
+            RegionFile.this.a(this.pos, bytebuffer);
         }
+    }
+
+    private interface b {
+
+        void run() throws IOException;
     }
 }

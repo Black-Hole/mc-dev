@@ -24,11 +24,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BlockTarget extends Block {
 
-    private static final BlockStateInteger a = BlockProperties.az;
+    private static final BlockStateInteger OUTPUT_POWER = BlockProperties.POWER;
+    private static final int ACTIVATION_TICKS_ARROWS = 20;
+    private static final int ACTIVATION_TICKS_OTHER = 8;
 
     public BlockTarget(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTarget.a, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockTarget.OUTPUT_POWER, 0));
     }
 
     @Override
@@ -40,7 +42,7 @@ public class BlockTarget extends Block {
             EntityPlayer entityplayer = (EntityPlayer) entity;
 
             entityplayer.a(StatisticList.TARGET_HIT);
-            CriterionTriggers.L.a(entityplayer, iprojectile, movingobjectpositionblock.getPos(), i);
+            CriterionTriggers.TARGET_BLOCK_HIT.a(entityplayer, iprojectile, movingobjectpositionblock.getPos(), i);
         }
 
     }
@@ -58,9 +60,9 @@ public class BlockTarget extends Block {
 
     private static int a(MovingObjectPositionBlock movingobjectpositionblock, Vec3D vec3d) {
         EnumDirection enumdirection = movingobjectpositionblock.getDirection();
-        double d0 = Math.abs(MathHelper.h(vec3d.x) - 0.5D);
-        double d1 = Math.abs(MathHelper.h(vec3d.y) - 0.5D);
-        double d2 = Math.abs(MathHelper.h(vec3d.z) - 0.5D);
+        double d0 = Math.abs(MathHelper.g(vec3d.x) - 0.5D);
+        double d1 = Math.abs(MathHelper.g(vec3d.y) - 0.5D);
+        double d2 = Math.abs(MathHelper.g(vec3d.z) - 0.5D);
         EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
         double d3;
 
@@ -72,25 +74,25 @@ public class BlockTarget extends Block {
             d3 = Math.max(d1, d2);
         }
 
-        return Math.max(1, MathHelper.f(15.0D * MathHelper.a((0.5D - d3) / 0.5D, 0.0D, 1.0D)));
+        return Math.max(1, MathHelper.e(15.0D * MathHelper.a((0.5D - d3) / 0.5D, 0.0D, 1.0D)));
     }
 
     private static void a(GeneratorAccess generatoraccess, IBlockData iblockdata, int i, BlockPosition blockposition, int j) {
-        generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.a, i), 3);
+        generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.OUTPUT_POWER, i), 3);
         generatoraccess.getBlockTickList().a(blockposition, iblockdata.getBlock(), j);
     }
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if ((Integer) iblockdata.get(BlockTarget.a) != 0) {
-            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.a, 0), 3);
+        if ((Integer) iblockdata.get(BlockTarget.OUTPUT_POWER) != 0) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.OUTPUT_POWER, 0), 3);
         }
 
     }
 
     @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return (Integer) iblockdata.get(BlockTarget.a);
+        return (Integer) iblockdata.get(BlockTarget.OUTPUT_POWER);
     }
 
     @Override
@@ -100,14 +102,14 @@ public class BlockTarget extends Block {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockTarget.a);
+        blockstatelist_a.a(BlockTarget.OUTPUT_POWER);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!world.s_() && !iblockdata.a(iblockdata1.getBlock())) {
-            if ((Integer) iblockdata.get(BlockTarget.a) > 0 && !world.getBlockTickList().a(blockposition, this)) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.a, 0), 18);
+        if (!world.isClientSide() && !iblockdata.a(iblockdata1.getBlock())) {
+            if ((Integer) iblockdata.get(BlockTarget.OUTPUT_POWER) > 0 && !world.getBlockTickList().a(blockposition, this)) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTarget.OUTPUT_POWER, 0), 18);
             }
 
         }

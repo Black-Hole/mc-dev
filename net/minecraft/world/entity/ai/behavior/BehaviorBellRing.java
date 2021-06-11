@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -16,6 +17,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 
 public class BehaviorBellRing extends Behavior<EntityLiving> {
+
+    private static final float BELL_RING_CHANCE = 0.95F;
+    public static final int RING_BELL_FROM_DISTANCE = 3;
 
     public BehaviorBellRing() {
         super(ImmutableMap.of(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT));
@@ -37,7 +41,7 @@ public class BehaviorBellRing extends Behavior<EntityLiving> {
             if (iblockdata.a(Blocks.BELL)) {
                 BlockBell blockbell = (BlockBell) iblockdata.getBlock();
 
-                blockbell.a((World) worldserver, blockposition, (EnumDirection) null);
+                blockbell.a((Entity) entityliving, (World) worldserver, blockposition, (EnumDirection) null);
             }
         }
 

@@ -18,7 +18,7 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockWorkbench extends Block {
 
-    private static final IChatBaseComponent a = new ChatMessage("container.crafting");
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.crafting");
 
     protected BlockWorkbench(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -39,6 +39,6 @@ public class BlockWorkbench extends Block {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerWorkbench(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockWorkbench.a);
+        }, BlockWorkbench.CONTAINER_TITLE);
     }
 }

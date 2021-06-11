@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.game.PacketDebug;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.animal.EntityDolphin;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.RayTrace;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.pathfinder.Pathfinder;
@@ -17,7 +17,7 @@ import net.minecraft.world.phys.Vec3D;
 
 public class NavigationGuardian extends NavigationAbstract {
 
-    private boolean p;
+    private boolean allowBreaching;
 
     public NavigationGuardian(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
@@ -25,25 +25,25 @@ public class NavigationGuardian extends NavigationAbstract {
 
     @Override
     protected Pathfinder a(int i) {
-        this.p = this.a instanceof EntityDolphin;
-        this.o = new PathfinderWater(this.p);
-        return new Pathfinder(this.o, i);
+        this.allowBreaching = this.mob.getEntityType() == EntityTypes.DOLPHIN;
+        this.nodeEvaluator = new PathfinderWater(this.allowBreaching);
+        return new Pathfinder(this.nodeEvaluator, i);
     }
 
     @Override
     protected boolean a() {
-        return this.p || this.p();
+        return this.allowBreaching || this.p();
     }
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX(), this.a.e(0.5D), this.a.locZ());
+        return new Vec3D(this.mob.locX(), this.mob.e(0.5D), this.mob.locZ());
     }
 
     @Override
     public void c() {
-        ++this.e;
-        if (this.m) {
+        ++this.tick;
+        if (this.hasDelayedRecomputation) {
             this.j();
         }
 
@@ -52,44 +52,44 @@ public class NavigationGuardian extends NavigationAbstract {
 
             if (this.a()) {
                 this.l();
-            } else if (this.c != null && !this.c.c()) {
-                vec3d = this.c.a((Entity) this.a);
-                if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
-                    this.c.a();
+            } else if (this.path != null && !this.path.c()) {
+                vec3d = this.path.a((Entity) this.mob);
+                if (this.mob.cW() == MathHelper.floor(vec3d.x) && this.mob.cY() == MathHelper.floor(vec3d.y) && this.mob.dc() == MathHelper.floor(vec3d.z)) {
+                    this.path.a();
                 }
             }
 
-            PacketDebug.a(this.b, this.a, this.c, this.l);
+            PacketDebug.a(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.m()) {
-                vec3d = this.c.a((Entity) this.a);
-                this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
+                vec3d = this.path.a((Entity) this.mob);
+                this.mob.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.speedModifier);
             }
         }
     }
 
     @Override
     protected void l() {
-        if (this.c != null) {
+        if (this.path != null) {
             Vec3D vec3d = this.b();
-            float f = this.a.getWidth();
+            float f = this.mob.getWidth();
             float f1 = f > 0.75F ? f / 2.0F : 0.75F - f / 2.0F;
-            Vec3D vec3d1 = this.a.getMot();
+            Vec3D vec3d1 = this.mob.getMot();
 
             if (Math.abs(vec3d1.x) > 0.2D || Math.abs(vec3d1.z) > 0.2D) {
                 f1 = (float) ((double) f1 * vec3d1.f() * 6.0D);
             }
 
             boolean flag = true;
-            Vec3D vec3d2 = Vec3D.c((BaseBlockPosition) this.c.g());
+            Vec3D vec3d2 = Vec3D.c((BaseBlockPosition) this.path.g());
 
-            if (Math.abs(this.a.locX() - vec3d2.x) < (double) f1 && Math.abs(this.a.locZ() - vec3d2.z) < (double) f1 && Math.abs(this.a.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
-                this.c.a();
+            if (Math.abs(this.mob.locX() - vec3d2.x) < (double) f1 && Math.abs(this.mob.locZ() - vec3d2.z) < (double) f1 && Math.abs(this.mob.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
+                this.path.a();
             }
 
-            for (int i = Math.min(this.c.f() + 6, this.c.e() - 1); i > this.c.f(); --i) {
-                vec3d2 = this.c.a(this.a, i);
+            for (int i = Math.min(this.path.f() + 6, this.path.e() - 1); i > this.path.f(); --i) {
+                vec3d2 = this.path.a(this.mob, i);
                 if (vec3d2.distanceSquared(vec3d) <= 36.0D && this.a(vec3d, vec3d2, 0, 0, 0)) {
-                    this.c.c(i);
+                    this.path.c(i);
                     break;
                 }
             }
@@ -100,49 +100,49 @@ public class NavigationGuardian extends NavigationAbstract {
 
     @Override
     protected void a(Vec3D vec3d) {
-        if (this.e - this.f > 100) {
-            if (vec3d.distanceSquared(this.g) < 2.25D) {
+        if (this.tick - this.lastStuckCheck > 100) {
+            if (vec3d.distanceSquared(this.lastStuckCheckPos) < 2.25D) {
                 this.o();
             }
 
-            this.f = this.e;
-            this.g = vec3d;
+            this.lastStuckCheck = this.tick;
+            this.lastStuckCheckPos = vec3d;
         }
 
-        if (this.c != null && !this.c.c()) {
-            BlockPosition blockposition = this.c.g();
+        if (this.path != null && !this.path.c()) {
+            BlockPosition blockposition = this.path.g();
 
-            if (blockposition.equals(this.h)) {
-                this.i += SystemUtils.getMonotonicMillis() - this.j;
+            if (blockposition.equals(this.timeoutCachedNode)) {
+                this.timeoutTimer += SystemUtils.getMonotonicMillis() - this.lastTimeoutCheck;
             } else {
-                this.h = blockposition;
-                double d0 = vec3d.f(Vec3D.a(this.h));
+                this.timeoutCachedNode = blockposition;
+                double d0 = vec3d.f(Vec3D.a(this.timeoutCachedNode));
 
-                this.k = this.a.dN() > 0.0F ? d0 / (double) this.a.dN() * 100.0D : 0.0D;
+                this.timeoutLimit = this.mob.ev() > 0.0F ? d0 / (double) this.mob.ev() * 100.0D : 0.0D;
             }
 
-            if (this.k > 0.0D && (double) this.i > this.k * 2.0D) {
-                this.h = BaseBlockPosition.ZERO;
-                this.i = 0L;
-                this.k = 0.0D;
+            if (this.timeoutLimit > 0.0D && (double) this.timeoutTimer > this.timeoutLimit * 2.0D) {
+                this.timeoutCachedNode = BaseBlockPosition.ZERO;
+                this.timeoutTimer = 0L;
+                this.timeoutLimit = 0.0D;
                 this.o();
             }
 
-            this.j = SystemUtils.getMonotonicMillis();
+            this.lastTimeoutCheck = SystemUtils.getMonotonicMillis();
         }
 
     }
 
     @Override
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
-        Vec3D vec3d2 = new Vec3D(vec3d1.x, vec3d1.y + (double) this.a.getHeight() * 0.5D, vec3d1.z);
+        Vec3D vec3d2 = new Vec3D(vec3d1.x, vec3d1.y + (double) this.mob.getHeight() * 0.5D, vec3d1.z);
 
-        return this.b.rayTrace(new RayTrace(vec3d, vec3d2, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this.a)).getType() == MovingObjectPosition.EnumMovingObjectType.MISS;
+        return this.level.rayTrace(new RayTrace(vec3d, vec3d2, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this.mob)).getType() == MovingObjectPosition.EnumMovingObjectType.MISS;
     }
 
     @Override
     public boolean a(BlockPosition blockposition) {
-        return !this.b.getType(blockposition).i(this.b, blockposition);
+        return !this.level.getType(blockposition).i(this.level, blockposition);
     }
 
     @Override

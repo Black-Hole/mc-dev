@@ -15,13 +15,13 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<CriterionTriggerPlacedBlock.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("placed_block");
+    static final MinecraftKey ID = new MinecraftKey("placed_block");
 
     public CriterionTriggerPlacedBlock() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerPlacedBlock.a;
+        return CriterionTriggerPlacedBlock.ID;
     }
 
     @Override
@@ -64,38 +64,38 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final Block a;
-        private final CriterionTriggerProperties b;
-        private final CriterionConditionLocation c;
-        private final CriterionConditionItem d;
+        private final Block block;
+        private final CriterionTriggerProperties state;
+        private final CriterionConditionLocation location;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable Block block, CriterionTriggerProperties criteriontriggerproperties, CriterionConditionLocation criterionconditionlocation, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerPlacedBlock.a, criterionconditionentity_b);
-            this.a = block;
-            this.b = criteriontriggerproperties;
-            this.c = criterionconditionlocation;
-            this.d = criterionconditionitem;
+            super(CriterionTriggerPlacedBlock.ID, criterionconditionentity_b);
+            this.block = block;
+            this.state = criteriontriggerproperties;
+            this.location = criterionconditionlocation;
+            this.item = criterionconditionitem;
         }
 
         public static CriterionTriggerPlacedBlock.a a(Block block) {
-            return new CriterionTriggerPlacedBlock.a(CriterionConditionEntity.b.a, block, CriterionTriggerProperties.a, CriterionConditionLocation.a, CriterionConditionItem.a);
+            return new CriterionTriggerPlacedBlock.a(CriterionConditionEntity.b.ANY, block, CriterionTriggerProperties.ANY, CriterionConditionLocation.ANY, CriterionConditionItem.ANY);
         }
 
         public boolean a(IBlockData iblockdata, BlockPosition blockposition, WorldServer worldserver, ItemStack itemstack) {
-            return this.a != null && !iblockdata.a(this.a) ? false : (!this.b.a(iblockdata) ? false : (!this.c.a(worldserver, (float) blockposition.getX(), (float) blockposition.getY(), (float) blockposition.getZ()) ? false : this.d.a(itemstack)));
+            return this.block != null && !iblockdata.a(this.block) ? false : (!this.state.a(iblockdata) ? false : (!this.location.a(worldserver, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()) ? false : this.item.a(itemstack)));
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            if (this.a != null) {
-                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.a).toString());
+            if (this.block != null) {
+                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.block).toString());
             }
 
-            jsonobject.add("state", this.b.a());
-            jsonobject.add("location", this.c.a());
-            jsonobject.add("item", this.d.a());
+            jsonobject.add("state", this.state.a());
+            jsonobject.add("location", this.location.a());
+            jsonobject.add("item", this.item.a());
             return jsonobject;
         }
     }

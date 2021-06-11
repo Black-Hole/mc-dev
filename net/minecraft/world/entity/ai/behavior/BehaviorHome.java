@@ -16,30 +16,30 @@ import net.minecraft.world.entity.ai.village.poi.VillagePlaceType;
 
 public class BehaviorHome extends Behavior<EntityLiving> {
 
-    private final float b;
-    private final int c;
-    private final int d;
-    private Optional<BlockPosition> e = Optional.empty();
+    private final float speedModifier;
+    private final int radius;
+    private final int closeEnoughDist;
+    private Optional<BlockPosition> currentPos = Optional.empty();
 
     public BehaviorHome(int i, float f, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.HOME, MemoryStatus.REGISTERED, MemoryModuleType.HIDING_PLACE, MemoryStatus.REGISTERED));
-        this.c = i;
-        this.b = f;
-        this.d = j;
+        this.radius = i;
+        this.speedModifier = f;
+        this.closeEnoughDist = j;
     }
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        Optional<BlockPosition> optional = worldserver.y().c((villageplacetype) -> {
-            return villageplacetype == VillagePlaceType.r;
+        Optional<BlockPosition> optional = worldserver.A().c((villageplacetype) -> {
+            return villageplacetype == VillagePlaceType.HOME;
         }, (blockposition) -> {
             return true;
-        }, entityliving.getChunkCoordinates(), this.d + 1, VillagePlace.Occupancy.ANY);
+        }, entityliving.getChunkCoordinates(), this.closeEnoughDist + 1, VillagePlace.Occupancy.ANY);
 
-        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.d)) {
-            this.e = optional;
+        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.closeEnoughDist)) {
+            this.currentPos = optional;
         } else {
-            this.e = Optional.empty();
+            this.currentPos = Optional.empty();
         }
 
         return true;
@@ -48,14 +48,14 @@ public class BehaviorHome extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        Optional<BlockPosition> optional = this.e;
+        Optional<BlockPosition> optional = this.currentPos;
 
         if (!optional.isPresent()) {
-            optional = worldserver.y().a((villageplacetype) -> {
-                return villageplacetype == VillagePlaceType.r;
+            optional = worldserver.A().a((villageplacetype) -> {
+                return villageplacetype == VillagePlaceType.HOME;
             }, (blockposition) -> {
                 return true;
-            }, VillagePlace.Occupancy.ANY, entityliving.getChunkCoordinates(), this.c, entityliving.getRandom());
+            }, VillagePlace.Occupancy.ANY, entityliving.getChunkCoordinates(), this.radius, entityliving.getRandom());
             if (!optional.isPresent()) {
                 Optional<GlobalPos> optional1 = behaviorcontroller.getMemory(MemoryModuleType.HOME);
 
@@ -71,8 +71,8 @@ public class BehaviorHome extends Behavior<EntityLiving> {
             behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
             behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.create(worldserver.getDimensionKey(), (BlockPosition) optional.get()));
-            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.d)) {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.b, this.d)));
+            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.closeEnoughDist)) {
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.speedModifier, this.closeEnoughDist)));
             }
         }
 

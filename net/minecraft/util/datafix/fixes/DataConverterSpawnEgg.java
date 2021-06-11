@@ -16,7 +16,7 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterSpawnEgg extends DataFix {
 
-    public static final String[] ID_MAPPING = (String[]) DataFixUtils.make(new String[256], (astring) -> {
+    public static final String[] ID_TO_ENTITY = (String[]) DataFixUtils.make(new String[256], (astring) -> {
         astring[1] = "Item";
         astring[2] = "XPOrb";
         astring[7] = "ThrownEgg";
@@ -117,7 +117,7 @@ public class DataConverterSpawnEgg extends DataFix {
                     return typed1.getOptional(opticfinder1);
                 });
                 Typed<?> typed1 = typed;
-                String s = DataConverterSpawnEgg.ID_MAPPING[short0 & 255];
+                String s = DataConverterSpawnEgg.ID_TO_ENTITY[short0 & 255];
 
                 if (s != null && (!optional4.isPresent() || !Objects.equals(optional4.get(), s))) {
                     Typed<?> typed2 = typed.getOrCreateTyped(opticfinder2);

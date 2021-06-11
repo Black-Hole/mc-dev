@@ -5,7 +5,7 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public interface ICommandListener {
 
-    ICommandListener DUMMY = new ICommandListener() {
+    ICommandListener NULL = new ICommandListener() {
         @Override
         public void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid) {}
 
@@ -32,4 +32,8 @@ public interface ICommandListener {
     boolean shouldSendFailure();
 
     boolean shouldBroadcastCommands();
+
+    default boolean c_() {
+        return false;
+    }
 }

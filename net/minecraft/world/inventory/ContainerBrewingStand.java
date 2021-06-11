@@ -6,7 +6,6 @@ import net.minecraft.world.IInventory;
 import net.minecraft.world.InventorySubcontainer;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.PlayerInventory;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewer;
@@ -15,9 +14,19 @@ import net.minecraft.world.item.alchemy.PotionUtil;
 
 public class ContainerBrewingStand extends Container {
 
+    private static final int BOTTLE_SLOT_START = 0;
+    private static final int BOTTLE_SLOT_END = 2;
+    private static final int INGREDIENT_SLOT = 3;
+    private static final int FUEL_SLOT = 4;
+    private static final int SLOT_COUNT = 5;
+    private static final int DATA_COUNT = 2;
+    private static final int INV_SLOT_START = 5;
+    private static final int INV_SLOT_END = 32;
+    private static final int USE_ROW_SLOT_START = 32;
+    private static final int USE_ROW_SLOT_END = 41;
     private final IInventory brewingStand;
-    private final IContainerProperties d;
-    private final Slot e;
+    private final IContainerProperties brewingStandData;
+    private final Slot ingredientSlot;
 
     public ContainerBrewingStand(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, new InventorySubcontainer(5), new ContainerProperties(2));
@@ -28,11 +37,11 @@ public class ContainerBrewingStand extends Container {
         a(iinventory, 5);
         a(icontainerproperties, 2);
         this.brewingStand = iinventory;
-        this.d = icontainerproperties;
+        this.brewingStandData = icontainerproperties;
         this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 0, 56, 51)));
         this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 1, 79, 58)));
         this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 2, 102, 51)));
-        this.e = this.a((Slot) (new ContainerBrewingStand.SlotBrewing(iinventory, 3, 79, 17)));
+        this.ingredientSlot = this.a((Slot) (new ContainerBrewingStand.SlotBrewing(iinventory, 3, 79, 17)));
         this.a((Slot) (new ContainerBrewingStand.a(iinventory, 4, 17, 17)));
         this.a(icontainerproperties);
 
@@ -57,7 +66,7 @@ public class ContainerBrewingStand extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -65,45 +74,45 @@ public class ContainerBrewingStand extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if ((i < 0 || i > 2) && i != 3 && i != 4) {
-                if (ContainerBrewingStand.a.a_(itemstack)) {
-                    if (this.a(itemstack1, 4, 5, false) || this.e.isAllowed(itemstack1) && !this.a(itemstack1, 3, 4, false)) {
-                        return ItemStack.b;
+                if (ContainerBrewingStand.a.b(itemstack)) {
+                    if (this.a(itemstack1, 4, 5, false) || this.ingredientSlot.isAllowed(itemstack1) && !this.a(itemstack1, 3, 4, false)) {
+                        return ItemStack.EMPTY;
                     }
-                } else if (this.e.isAllowed(itemstack1)) {
+                } else if (this.ingredientSlot.isAllowed(itemstack1)) {
                     if (!this.a(itemstack1, 3, 4, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
-                } else if (ContainerBrewingStand.SlotPotionBottle.b_(itemstack) && itemstack.getCount() == 1) {
+                } else if (ContainerBrewingStand.SlotPotionBottle.b(itemstack) && itemstack.getCount() == 1) {
                     if (!this.a(itemstack1, 0, 3, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (i >= 5 && i < 32) {
                     if (!this.a(itemstack1, 32, 41, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (i >= 32 && i < 41) {
                     if (!this.a(itemstack1, 5, 32, false)) {
-                        return ItemStack.b;
+                        return ItemStack.EMPTY;
                     }
                 } else if (!this.a(itemstack1, 5, 41, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else {
                 if (!this.a(itemstack1, 5, 41, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.a(itemstack1, itemstack);
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -112,28 +121,47 @@ public class ContainerBrewingStand extends Container {
         return itemstack;
     }
 
-    static class a extends Slot {
+    public int i() {
+        return this.brewingStandData.getProperty(1);
+    }
 
-        public a(IInventory iinventory, int i, int j, int k) {
+    public int j() {
+        return this.brewingStandData.getProperty(0);
+    }
+
+    private static class SlotPotionBottle extends Slot {
+
+        public SlotPotionBottle(IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);
         }
 
         @Override
         public boolean isAllowed(ItemStack itemstack) {
-            return a_(itemstack);
-        }
-
-        public static boolean a_(ItemStack itemstack) {
-            return itemstack.getItem() == Items.BLAZE_POWDER;
+            return b(itemstack);
         }
 
         @Override
         public int getMaxStackSize() {
-            return 64;
+            return 1;
+        }
+
+        @Override
+        public void a(EntityHuman entityhuman, ItemStack itemstack) {
+            PotionRegistry potionregistry = PotionUtil.d(itemstack);
+
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.BREWED_POTION.a((EntityPlayer) entityhuman, potionregistry);
+            }
+
+            super.a(entityhuman, itemstack);
+        }
+
+        public static boolean b(ItemStack itemstack) {
+            return itemstack.a(Items.POTION) || itemstack.a(Items.SPLASH_POTION) || itemstack.a(Items.LINGERING_POTION) || itemstack.a(Items.GLASS_BOTTLE);
         }
     }
 
-    static class SlotBrewing extends Slot {
+    private static class SlotBrewing extends Slot {
 
         public SlotBrewing(IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);
@@ -150,38 +178,24 @@ public class ContainerBrewingStand extends Container {
         }
     }
 
-    static class SlotPotionBottle extends Slot {
+    private static class a extends Slot {
 
-        public SlotPotionBottle(IInventory iinventory, int i, int j, int k) {
+        public a(IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);
         }
 
         @Override
         public boolean isAllowed(ItemStack itemstack) {
-            return b_(itemstack);
+            return b(itemstack);
+        }
+
+        public static boolean b(ItemStack itemstack) {
+            return itemstack.a(Items.BLAZE_POWDER);
         }
 
         @Override
         public int getMaxStackSize() {
-            return 1;
-        }
-
-        @Override
-        public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-            PotionRegistry potionregistry = PotionUtil.d(itemstack);
-
-            if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.k.a((EntityPlayer) entityhuman, potionregistry);
-            }
-
-            super.a(entityhuman, itemstack);
-            return itemstack;
-        }
-
-        public static boolean b_(ItemStack itemstack) {
-            Item item = itemstack.getItem();
-
-            return item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE;
+            return 64;
         }
     }
 }

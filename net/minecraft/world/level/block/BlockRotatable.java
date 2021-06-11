@@ -10,15 +10,19 @@ import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 
 public class BlockRotatable extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.F;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.AXIS;
 
     public BlockRotatable(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
+        this.k((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return b(iblockdata, enumblockrotation);
+    }
+
+    public static IBlockData b(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
             case COUNTERCLOCKWISE_90:
             case CLOCKWISE_90:

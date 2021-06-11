@@ -2,29 +2,39 @@ package net.minecraft.gametest.framework;
 
 import com.google.common.collect.Lists;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class GameTestHarnessCollector {
 
-    private final Collection<GameTestHarnessInfo> a = Lists.newArrayList();
+    private static final char NOT_STARTED_TEST_CHAR = ' ';
+    private static final char ONGOING_TEST_CHAR = '_';
+    private static final char SUCCESSFUL_TEST_CHAR = '+';
+    private static final char FAILED_OPTIONAL_TEST_CHAR = 'x';
+    private static final char FAILED_REQUIRED_TEST_CHAR = 'X';
+    private final Collection<GameTestHarnessInfo> tests = Lists.newArrayList();
     @Nullable
-    private Collection<GameTestHarnessListener> b = Lists.newArrayList();
+    private final Collection<GameTestHarnessListener> listeners = Lists.newArrayList();
 
     public GameTestHarnessCollector() {}
 
     public GameTestHarnessCollector(Collection<GameTestHarnessInfo> collection) {
-        this.a.addAll(collection);
+        this.tests.addAll(collection);
     }
 
     public void a(GameTestHarnessInfo gametestharnessinfo) {
-        this.a.add(gametestharnessinfo);
-        this.b.forEach(gametestharnessinfo::a);
+        this.tests.add(gametestharnessinfo);
+        Collection collection = this.listeners;
+
+        Objects.requireNonNull(gametestharnessinfo);
+        collection.forEach(gametestharnessinfo::a);
     }
 
     public void a(GameTestHarnessListener gametestharnesslistener) {
-        this.b.add(gametestharnesslistener);
-        this.a.forEach((gametestharnessinfo) -> {
+        this.listeners.add(gametestharnesslistener);
+        this.tests.forEach((gametestharnessinfo) -> {
             gametestharnessinfo.a(gametestharnesslistener);
         });
     }
@@ -35,6 +45,9 @@ public class GameTestHarnessCollector {
             public void a(GameTestHarnessInfo gametestharnessinfo) {}
 
             @Override
+            public void b(GameTestHarnessInfo gametestharnessinfo) {}
+
+            @Override
             public void c(GameTestHarnessInfo gametestharnessinfo) {
                 consumer.accept(gametestharnessinfo);
             }
@@ -42,15 +55,15 @@ public class GameTestHarnessCollector {
     }
 
     public int a() {
-        return (int) this.a.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::q).count();
+        return (int) this.tests.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::r).count();
     }
 
     public int b() {
-        return (int) this.a.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::r).count();
+        return (int) this.tests.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::s).count();
     }
 
     public int c() {
-        return (int) this.a.stream().filter(GameTestHarnessInfo::k).count();
+        return (int) this.tests.stream().filter(GameTestHarnessInfo::k).count();
     }
 
     public boolean d() {
@@ -61,8 +74,16 @@ public class GameTestHarnessCollector {
         return this.b() > 0;
     }
 
+    public Collection<GameTestHarnessInfo> f() {
+        return (Collection) this.tests.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::r).collect(Collectors.toList());
+    }
+
+    public Collection<GameTestHarnessInfo> g() {
+        return (Collection) this.tests.stream().filter(GameTestHarnessInfo::i).filter(GameTestHarnessInfo::s).collect(Collectors.toList());
+    }
+
     public int h() {
-        return this.a.size();
+        return this.tests.size();
     }
 
     public boolean i() {
@@ -73,13 +94,13 @@ public class GameTestHarnessCollector {
         StringBuffer stringbuffer = new StringBuffer();
 
         stringbuffer.append('[');
-        this.a.forEach((gametestharnessinfo) -> {
+        this.tests.forEach((gametestharnessinfo) -> {
             if (!gametestharnessinfo.j()) {
                 stringbuffer.append(' ');
             } else if (gametestharnessinfo.h()) {
                 stringbuffer.append('+');
             } else if (gametestharnessinfo.i()) {
-                stringbuffer.append((char) (gametestharnessinfo.q() ? 'X' : 'x'));
+                stringbuffer.append((char) (gametestharnessinfo.r() ? 'X' : 'x'));
             } else {
                 stringbuffer.append('_');
             }

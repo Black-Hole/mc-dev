@@ -22,6 +22,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class CommandGive {
 
+    public static final int MAX_ALLOWED_ITEMSTACKS = 100;
+
+    public CommandGive() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("give").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
@@ -33,45 +37,53 @@ public class CommandGive {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ArgumentPredicateItemStack argumentpredicateitemstack, Collection<EntityPlayer> collection, int i) throws CommandSyntaxException {
-        Iterator iterator = collection.iterator();
+        int j = argumentpredicateitemstack.a().getMaxStackSize();
+        int k = j * 100;
 
-        while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-            int j = i;
+        if (i > k) {
+            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.give.failed.toomanyitems", new Object[]{k, argumentpredicateitemstack.a(i, false).G()}));
+            return 0;
+        } else {
+            Iterator iterator = collection.iterator();
 
-            while (j > 0) {
-                int k = Math.min(argumentpredicateitemstack.a().getMaxStackSize(), j);
+            while (iterator.hasNext()) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                int l = i;
 
-                j -= k;
-                ItemStack itemstack = argumentpredicateitemstack.a(k, false);
-                boolean flag = entityplayer.inventory.pickup(itemstack);
-                EntityItem entityitem;
+                while (l > 0) {
+                    int i1 = Math.min(j, l);
 
-                if (flag && itemstack.isEmpty()) {
-                    itemstack.setCount(1);
-                    entityitem = entityplayer.drop(itemstack, false);
-                    if (entityitem != null) {
-                        entityitem.s();
-                    }
+                    l -= i1;
+                    ItemStack itemstack = argumentpredicateitemstack.a(i1, false);
+                    boolean flag = entityplayer.getInventory().pickup(itemstack);
+                    EntityItem entityitem;
 
-                    entityplayer.world.playSound((EntityHuman) null, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ(), SoundEffects.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    entityplayer.defaultContainer.c();
-                } else {
-                    entityitem = entityplayer.drop(itemstack, false);
-                    if (entityitem != null) {
-                        entityitem.n();
-                        entityitem.setOwner(entityplayer.getUniqueID());
+                    if (flag && itemstack.isEmpty()) {
+                        itemstack.setCount(1);
+                        entityitem = entityplayer.drop(itemstack, false);
+                        if (entityitem != null) {
+                            entityitem.t();
+                        }
+
+                        entityplayer.level.playSound((EntityHuman) null, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ(), SoundEffects.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                        entityplayer.containerMenu.d();
+                    } else {
+                        entityitem = entityplayer.drop(itemstack, false);
+                        if (entityitem != null) {
+                            entityitem.o();
+                            entityitem.setOwner(entityplayer.getUniqueID());
+                        }
                     }
                 }
             }
-        }
 
-        if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).C(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
-        } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).C(), collection.size()}), true);
-        }
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).G(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).G(), collection.size()}), true);
+            }
 
-        return collection.size();
+            return collection.size();
+        }
     }
 }

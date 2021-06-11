@@ -1,23 +1,31 @@
 package net.minecraft.util.thread;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Queues;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+import net.minecraft.util.profiling.metrics.MetricCategory;
+import net.minecraft.util.profiling.metrics.MetricSampler;
+import net.minecraft.util.profiling.metrics.MetricsRegistry;
+import net.minecraft.util.profiling.metrics.ProfilerMeasured;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R>, Executor {
+public abstract class IAsyncTaskHandler<R extends Runnable> implements ProfilerMeasured, Mailbox<R>, Executor {
 
-    private final String b;
+    private final String name;
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Queue<R> d = Queues.newConcurrentLinkedQueue();
-    private int e;
+    private final Queue<R> pendingRunnables = Queues.newConcurrentLinkedQueue();
+    private int blockingCount;
 
     protected IAsyncTaskHandler(String s) {
-        this.b = s;
+        this.name = s;
+        MetricsRegistry.INSTANCE.a((ProfilerMeasured) this);
     }
 
     protected abstract R postToMainThread(Runnable runnable);
@@ -34,13 +42,17 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         return !this.isMainThread();
     }
 
-    public int bi() {
-        return this.d.size();
+    public int bn() {
+        return this.pendingRunnables.size();
     }
 
     @Override
-    public String bj() {
-        return this.b;
+    public String bo() {
+        return this.name;
+    }
+
+    public <V> CompletableFuture<V> a(Supplier<V> supplier) {
+        return this.isNotMainThread() ? CompletableFuture.supplyAsync(supplier, this) : CompletableFuture.completedFuture(supplier.get());
     }
 
     private CompletableFuture<Void> executeFuture(Runnable runnable) {
@@ -69,7 +81,7 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
     }
 
     public void a(R r0) {
-        this.d.add(r0);
+        this.pendingRunnables.add(r0);
         LockSupport.unpark(this.getThread());
     }
 
@@ -82,6 +94,10 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
 
     }
 
+    protected void bp() {
+        this.pendingRunnables.clear();
+    }
+
     protected void executeAll() {
         while (this.executeNext()) {
             ;
@@ -89,35 +105,35 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
 
     }
 
-    protected boolean executeNext() {
-        R r0 = (Runnable) this.d.peek();
+    public boolean executeNext() {
+        R r0 = (Runnable) this.pendingRunnables.peek();
 
         if (r0 == null) {
             return false;
-        } else if (this.e == 0 && !this.canExecute(r0)) {
+        } else if (this.blockingCount == 0 && !this.canExecute(r0)) {
             return false;
         } else {
-            this.executeTask((Runnable) this.d.remove());
+            this.executeTask((Runnable) this.pendingRunnables.remove());
             return true;
         }
     }
 
     public void awaitTasks(BooleanSupplier booleansupplier) {
-        ++this.e;
+        ++this.blockingCount;
 
         try {
             while (!booleansupplier.getAsBoolean()) {
                 if (!this.executeNext()) {
-                    this.bm();
+                    this.br();
                 }
             }
         } finally {
-            --this.e;
+            --this.blockingCount;
         }
 
     }
 
-    protected void bm() {
+    protected void br() {
         Thread.yield();
         LockSupport.parkNanos("waiting for tasks", 100000L);
     }
@@ -126,8 +142,13 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         try {
             r0.run();
         } catch (Exception exception) {
-            IAsyncTaskHandler.LOGGER.fatal("Error executing task on {}", this.bj(), exception);
+            IAsyncTaskHandler.LOGGER.fatal("Error executing task on {}", this.bo(), exception);
         }
 
+    }
+
+    @Override
+    public List<MetricSampler> bl() {
+        return ImmutableList.of(MetricSampler.a(this.name + "-pending-tasks", MetricCategory.EVENT_LOOPS, this::bn));
     }
 }

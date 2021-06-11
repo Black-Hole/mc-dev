@@ -8,6 +8,8 @@ import com.google.gson.JsonSyntaxException;
 import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ITagRegistry;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsInstance;
 import net.minecraft.util.ChatDeserializer;
@@ -15,7 +17,7 @@ import net.minecraft.world.entity.EntityTypes;
 
 public abstract class CriterionConditionEntityType {
 
-    public static final CriterionConditionEntityType a = new CriterionConditionEntityType() {
+    public static final CriterionConditionEntityType ANY = new CriterionConditionEntityType() {
         @Override
         public boolean a(EntityTypes<?> entitytypes) {
             return true;
@@ -26,7 +28,7 @@ public abstract class CriterionConditionEntityType {
             return JsonNull.INSTANCE;
         }
     };
-    private static final Joiner b = Joiner.on(", ");
+    private static final Joiner COMMA_JOINER = Joiner.on(", ");
 
     public CriterionConditionEntityType() {}
 
@@ -41,17 +43,19 @@ public abstract class CriterionConditionEntityType {
 
             if (s.startsWith("#")) {
                 minecraftkey = new MinecraftKey(s.substring(1));
-                return new CriterionConditionEntityType.a(TagsInstance.a().getEntityTags().b(minecraftkey));
+                return new CriterionConditionEntityType.a(TagsInstance.a().a(IRegistry.ENTITY_TYPE_REGISTRY, minecraftkey, (minecraftkey1) -> {
+                    return new JsonSyntaxException("Unknown entity tag '" + minecraftkey1 + "'");
+                }));
             } else {
                 minecraftkey = new MinecraftKey(s);
                 EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
-                    return new JsonSyntaxException("Unknown entity type '" + minecraftkey + "', valid types are: " + CriterionConditionEntityType.b.join(IRegistry.ENTITY_TYPE.keySet()));
+                    return new JsonSyntaxException("Unknown entity type '" + minecraftkey + "', valid types are: " + CriterionConditionEntityType.COMMA_JOINER.join(IRegistry.ENTITY_TYPE.keySet()));
                 });
 
                 return new CriterionConditionEntityType.b(entitytypes);
             }
         } else {
-            return CriterionConditionEntityType.a;
+            return CriterionConditionEntityType.ANY;
         }
     }
 
@@ -63,41 +67,47 @@ public abstract class CriterionConditionEntityType {
         return new CriterionConditionEntityType.a(tag);
     }
 
-    static class a extends CriterionConditionEntityType {
+    private static class a extends CriterionConditionEntityType {
 
-        private final Tag<EntityTypes<?>> b;
+        private final Tag<EntityTypes<?>> tag;
 
         public a(Tag<EntityTypes<?>> tag) {
-            this.b = tag;
+            this.tag = tag;
         }
 
         @Override
         public boolean a(EntityTypes<?> entitytypes) {
-            return this.b.isTagged(entitytypes);
+            return entitytypes.a(this.tag);
         }
 
         @Override
         public JsonElement a() {
-            return new JsonPrimitive("#" + TagsInstance.a().getEntityTags().b(this.b));
+            ITagRegistry itagregistry = TagsInstance.a();
+            ResourceKey resourcekey = IRegistry.ENTITY_TYPE_REGISTRY;
+            Tag tag = this.tag;
+
+            return new JsonPrimitive("#" + itagregistry.a(resourcekey, tag, () -> {
+                return new IllegalStateException("Unknown entity type tag");
+            }));
         }
     }
 
-    static class b extends CriterionConditionEntityType {
+    private static class b extends CriterionConditionEntityType {
 
-        private final EntityTypes<?> b;
+        private final EntityTypes<?> type;
 
         public b(EntityTypes<?> entitytypes) {
-            this.b = entitytypes;
+            this.type = entitytypes;
         }
 
         @Override
         public boolean a(EntityTypes<?> entitytypes) {
-            return this.b == entitytypes;
+            return this.type == entitytypes;
         }
 
         @Override
         public JsonElement a() {
-            return new JsonPrimitive(IRegistry.ENTITY_TYPE.getKey(this.b).toString());
+            return new JsonPrimitive(IRegistry.ENTITY_TYPE.getKey(this.type).toString());
         }
     }
 }

@@ -26,14 +26,16 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CommandSummon {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.summon.failed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.summon.failed.uuid"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.summon.invalidPosition"));
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.summon.failed"));
+    private static final SimpleCommandExceptionType ERROR_DUPLICATE_UUID = new SimpleCommandExceptionType(new ChatMessage("commands.summon.failed.uuid"));
+    private static final SimpleCommandExceptionType INVALID_POSITION = new SimpleCommandExceptionType(new ChatMessage("commands.summon.invalidPosition"));
+
+    public CommandSummon() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("summon").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("entity", (ArgumentType) ArgumentEntitySummon.a()).suggests(CompletionProviders.e).executes((commandcontext) -> {
+        })).then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("entity", (ArgumentType) ArgumentEntitySummon.a()).suggests(CompletionProviders.SUMMONABLE_ENTITIES).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntitySummon.a(commandcontext, "entity"), ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), new NBTTagCompound(), true);
         })).then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntitySummon.a(commandcontext, "entity"), ArgumentVec3.a(commandcontext, "pos"), new NBTTagCompound(), true);
@@ -46,26 +48,26 @@ public class CommandSummon {
         BlockPosition blockposition = new BlockPosition(vec3d);
 
         if (!World.l(blockposition)) {
-            throw CommandSummon.c.create();
+            throw CommandSummon.INVALID_POSITION.create();
         } else {
             NBTTagCompound nbttagcompound1 = nbttagcompound.clone();
 
             nbttagcompound1.setString("id", minecraftkey.toString());
             WorldServer worldserver = commandlistenerwrapper.getWorld();
             Entity entity = EntityTypes.a(nbttagcompound1, worldserver, (entity1) -> {
-                entity1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, entity1.yaw, entity1.pitch);
+                entity1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, entity1.getYRot(), entity1.getXRot());
                 return entity1;
             });
 
             if (entity == null) {
-                throw CommandSummon.a.create();
+                throw CommandSummon.ERROR_FAILED.create();
             } else {
                 if (flag && entity instanceof EntityInsentient) {
                     ((EntityInsentient) entity).prepare(commandlistenerwrapper.getWorld(), commandlistenerwrapper.getWorld().getDamageScaler(entity.getChunkCoordinates()), EnumMobSpawn.COMMAND, (GroupDataEntity) null, (NBTTagCompound) null);
                 }
 
                 if (!worldserver.addAllEntitiesSafely(entity)) {
-                    throw CommandSummon.b.create();
+                    throw CommandSummon.ERROR_DUPLICATE_UUID.create();
                 } else {
                     commandlistenerwrapper.sendMessage(new ChatMessage("commands.summon.success", new Object[]{entity.getScoreboardDisplayName()}), true);
                     return 1;

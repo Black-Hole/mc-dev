@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Function;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.PacketPlayOutBoss;
 import net.minecraft.util.MathHelper;
@@ -14,20 +15,21 @@ import net.minecraft.world.BossBattle;
 
 public class BossBattleServer extends BossBattle {
 
-    private final Set<EntityPlayer> h = Sets.newHashSet();
-    private final Set<EntityPlayer> i;
+    private final Set<EntityPlayer> players = Sets.newHashSet();
+    private final Set<EntityPlayer> unmodifiablePlayers;
     public boolean visible;
 
     public BossBattleServer(IChatBaseComponent ichatbasecomponent, BossBattle.BarColor bossbattle_barcolor, BossBattle.BarStyle bossbattle_barstyle) {
         super(MathHelper.a(), ichatbasecomponent, bossbattle_barcolor, bossbattle_barstyle);
-        this.i = Collections.unmodifiableSet(this.h);
+        this.unmodifiablePlayers = Collections.unmodifiableSet(this.players);
         this.visible = true;
     }
 
+    @Override
     public void setProgress(float f) {
-        if (f != this.b) {
-            super.a(f);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_PCT);
+        if (f != this.progress) {
+            super.setProgress(f);
+            this.sendUpdate(PacketPlayOutBoss::createUpdateProgressPacket);
         }
 
     }
@@ -36,42 +38,45 @@ public class BossBattleServer extends BossBattle {
     public void a(BossBattle.BarColor bossbattle_barcolor) {
         if (bossbattle_barcolor != this.color) {
             super.a(bossbattle_barcolor);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+            this.sendUpdate(PacketPlayOutBoss::createUpdateStylePacket);
         }
 
     }
 
     @Override
     public void a(BossBattle.BarStyle bossbattle_barstyle) {
-        if (bossbattle_barstyle != this.style) {
+        if (bossbattle_barstyle != this.overlay) {
             super.a(bossbattle_barstyle);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+            this.sendUpdate(PacketPlayOutBoss::createUpdateStylePacket);
         }
 
     }
 
+    @Override
     public BossBattle setDarkenSky(boolean flag) {
-        if (flag != this.e) {
-            super.a(flag);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_PROPERTIES);
+        if (flag != this.darkenScreen) {
+            super.setDarkenSky(flag);
+            this.sendUpdate(PacketPlayOutBoss::createUpdatePropertiesPacket);
         }
 
         return this;
     }
 
+    @Override
     public BossBattle setPlayMusic(boolean flag) {
-        if (flag != this.f) {
-            super.b(flag);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_PROPERTIES);
+        if (flag != this.playBossMusic) {
+            super.setPlayMusic(flag);
+            this.sendUpdate(PacketPlayOutBoss::createUpdatePropertiesPacket);
         }
 
         return this;
     }
 
+    @Override
     public BossBattle setCreateFog(boolean flag) {
-        if (flag != this.g) {
-            super.c(flag);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_PROPERTIES);
+        if (flag != this.createWorldFog) {
+            super.setCreateFog(flag);
+            this.sendUpdate(PacketPlayOutBoss::createUpdatePropertiesPacket);
         }
 
         return this;
@@ -79,44 +84,44 @@ public class BossBattleServer extends BossBattle {
 
     @Override
     public void a(IChatBaseComponent ichatbasecomponent) {
-        if (!Objects.equal(ichatbasecomponent, this.title)) {
+        if (!Objects.equal(ichatbasecomponent, this.name)) {
             super.a(ichatbasecomponent);
-            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_NAME);
+            this.sendUpdate(PacketPlayOutBoss::createUpdateNamePacket);
         }
 
     }
 
-    public void sendUpdate(PacketPlayOutBoss.Action packetplayoutboss_action) {
+    public void sendUpdate(Function<BossBattle, PacketPlayOutBoss> function) {
         if (this.visible) {
-            PacketPlayOutBoss packetplayoutboss = new PacketPlayOutBoss(packetplayoutboss_action, this);
-            Iterator iterator = this.h.iterator();
+            PacketPlayOutBoss packetplayoutboss = (PacketPlayOutBoss) function.apply(this);
+            Iterator iterator = this.players.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.playerConnection.sendPacket(packetplayoutboss);
+                entityplayer.connection.sendPacket(packetplayoutboss);
             }
         }
 
     }
 
     public void addPlayer(EntityPlayer entityplayer) {
-        if (this.h.add(entityplayer) && this.visible) {
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(PacketPlayOutBoss.Action.ADD, this));
+        if (this.players.add(entityplayer) && this.visible) {
+            entityplayer.connection.sendPacket(PacketPlayOutBoss.createAddPacket(this));
         }
 
     }
 
     public void removePlayer(EntityPlayer entityplayer) {
-        if (this.h.remove(entityplayer) && this.visible) {
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(PacketPlayOutBoss.Action.REMOVE, this));
+        if (this.players.remove(entityplayer) && this.visible) {
+            entityplayer.connection.sendPacket(PacketPlayOutBoss.createRemovePacket(this.i()));
         }
 
     }
 
     public void b() {
-        if (!this.h.isEmpty()) {
-            Iterator iterator = Lists.newArrayList(this.h).iterator();
+        if (!this.players.isEmpty()) {
+            Iterator iterator = Lists.newArrayList(this.players).iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -134,18 +139,18 @@ public class BossBattleServer extends BossBattle {
     public void setVisible(boolean flag) {
         if (flag != this.visible) {
             this.visible = flag;
-            Iterator iterator = this.h.iterator();
+            Iterator iterator = this.players.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(flag ? PacketPlayOutBoss.Action.ADD : PacketPlayOutBoss.Action.REMOVE, this));
+                entityplayer.connection.sendPacket(flag ? PacketPlayOutBoss.createAddPacket(this) : PacketPlayOutBoss.createRemovePacket(this.i()));
             }
         }
 
     }
 
     public Collection<EntityPlayer> getPlayers() {
-        return this.i;
+        return this.unmodifiablePlayers;
     }
 }

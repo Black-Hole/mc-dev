@@ -1,32 +1,28 @@
 package net.minecraft.server.level;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
+import com.mojang.datafixers.DataFixer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap.Entry;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.longs.LongSets;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
@@ -38,17 +34,19 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.CrashReport;
-import net.minecraft.SystemUtils;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.EnumDirection;
 import net.minecraft.core.IPosition;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.IRegistryCustom;
+import net.minecraft.core.RegistryBlocks;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.core.particles.ParticleParam;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddVibrationSignalPacket;
 import net.minecraft.network.protocol.game.PacketDebug;
 import net.minecraft.network.protocol.game.PacketPlayOutBlockAction;
 import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation;
@@ -60,16 +58,15 @@ import net.minecraft.network.protocol.game.PacketPlayOutNamedSoundEffect;
 import net.minecraft.network.protocol.game.PacketPlayOutSpawnPosition;
 import net.minecraft.network.protocol.game.PacketPlayOutWorldEvent;
 import net.minecraft.network.protocol.game.PacketPlayOutWorldParticles;
-import net.minecraft.resources.MinecraftKey;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ScoreboardServer;
 import net.minecraft.server.level.progress.WorldLoadListener;
+import net.minecraft.server.players.SleepStatus;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.tags.ITagRegistry;
 import net.minecraft.util.CSVWriter;
-import net.minecraft.util.EntitySlice;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Unit;
@@ -104,6 +101,7 @@ import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.ForcedChunk;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.MobSpawner;
 import net.minecraft.world.level.NextTickListEntry;
 import net.minecraft.world.level.SpawnerCreature;
@@ -113,15 +111,24 @@ import net.minecraft.world.level.World;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.Chunk;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkSection;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.chunk.storage.EntityStorage;
 import net.minecraft.world.level.dimension.DimensionManager;
 import net.minecraft.world.level.dimension.end.EnderDragonBattle;
+import net.minecraft.world.level.entity.EntityAccess;
+import net.minecraft.world.level.entity.EntityPersistentStorage;
+import net.minecraft.world.level.entity.EntityTickList;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.entity.LevelCallback;
+import net.minecraft.world.level.entity.LevelEntityGetter;
+import net.minecraft.world.level.entity.PersistentEntitySectionManager;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListenerRegistrar;
+import net.minecraft.world.level.gameevent.vibrations.VibrationPath;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
@@ -147,75 +154,99 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldServer extends World implements GeneratorAccessSeed {
 
-    public static final BlockPosition a = new BlockPosition(100, 50, 0);
+    public static final BlockPosition END_SPAWN_POINT = new BlockPosition(100, 50, 0);
     private static final Logger LOGGER = LogManager.getLogger();
-    public final Int2ObjectMap<Entity> entitiesById = new Int2ObjectLinkedOpenHashMap();
-    private final Map<UUID, Entity> entitiesByUUID = Maps.newHashMap();
-    private final Queue<Entity> entitiesToAdd = Queues.newArrayDeque();
-    private final List<EntityPlayer> players = Lists.newArrayList();
-    private final ChunkProviderServer chunkProvider;
-    boolean tickingEntities;
+    private static final int EMPTY_TIME_NO_TICK = 300;
+    final List<EntityPlayer> players;
+    private final ChunkProviderServer chunkSource;
     private final MinecraftServer server;
-    public final IWorldDataServer worldDataServer;
-    public boolean savingDisabled;
-    private boolean everyoneSleeping;
+    public final IWorldDataServer serverLevelData;
+    final EntityTickList entityTickList;
+    private final PersistentEntitySectionManager<Entity> entityManager;
+    public boolean noSave;
+    private final SleepStatus sleepStatus;
     private int emptyTime;
-    private final PortalTravelAgent portalTravelAgent;
-    private final TickListServer<Block> nextTickListBlock;
-    private final TickListServer<FluidType> nextTickListFluid;
-    private final Set<NavigationAbstract> navigators;
-    protected final PersistentRaid persistentRaid;
-    private final ObjectLinkedOpenHashSet<BlockActionData> L;
-    private boolean ticking;
-    private final List<MobSpawner> mobSpawners;
+    private final PortalTravelAgent portalForcer;
+    private final TickListServer<Block> blockTicks;
+    private final TickListServer<FluidType> liquidTicks;
+    final Set<EntityInsentient> navigatingMobs;
+    protected final PersistentRaid raids;
+    private final ObjectLinkedOpenHashSet<BlockActionData> blockEvents;
+    private boolean handlingTick;
+    private final List<MobSpawner> customSpawners;
     @Nullable
-    private final EnderDragonBattle dragonBattle;
-    private final StructureManager structureManager;
-    private final boolean Q;
+    private final EnderDragonBattle dragonFight;
+    final Int2ObjectMap<EntityComplexPart> dragonParts;
+    private final StructureManager structureFeatureManager;
+    private final boolean tickTime;
 
     public WorldServer(MinecraftServer minecraftserver, Executor executor, Convertable.ConversionSession convertable_conversionsession, IWorldDataServer iworlddataserver, ResourceKey<World> resourcekey, DimensionManager dimensionmanager, WorldLoadListener worldloadlistener, ChunkGenerator chunkgenerator, boolean flag, long i, List<MobSpawner> list, boolean flag1) {
+        Objects.requireNonNull(minecraftserver);
         super(iworlddataserver, resourcekey, dimensionmanager, minecraftserver::getMethodProfiler, false, flag, i);
-        this.nextTickListBlock = new TickListServer<>(this, (block) -> {
+        this.players = Lists.newArrayList();
+        this.entityTickList = new EntityTickList();
+        Predicate predicate = (block) -> {
             return block == null || block.getBlockData().isAir();
-        }, IRegistry.BLOCK::getKey, this::b);
-        this.nextTickListFluid = new TickListServer<>(this, (fluidtype) -> {
+        };
+        RegistryBlocks registryblocks = IRegistry.BLOCK;
+
+        Objects.requireNonNull(registryblocks);
+        this.blockTicks = new TickListServer<>(this, predicate, registryblocks::getKey, this::b);
+        predicate = (fluidtype) -> {
             return fluidtype == null || fluidtype == FluidTypes.EMPTY;
-        }, IRegistry.FLUID::getKey, this::a);
-        this.navigators = Sets.newHashSet();
-        this.L = new ObjectLinkedOpenHashSet();
-        this.Q = flag1;
+        };
+        registryblocks = IRegistry.FLUID;
+        Objects.requireNonNull(registryblocks);
+        this.liquidTicks = new TickListServer<>(this, predicate, registryblocks::getKey, this::a);
+        this.navigatingMobs = new ObjectOpenHashSet();
+        this.blockEvents = new ObjectLinkedOpenHashSet();
+        this.dragonParts = new Int2ObjectOpenHashMap();
+        this.tickTime = flag1;
         this.server = minecraftserver;
-        this.mobSpawners = list;
-        this.worldDataServer = iworlddataserver;
-        this.chunkProvider = new ChunkProviderServer(this, convertable_conversionsession, minecraftserver.getDataFixer(), minecraftserver.getDefinedStructureManager(), executor, chunkgenerator, minecraftserver.getPlayerList().getViewDistance(), minecraftserver.isSyncChunkWrites(), worldloadlistener, () -> {
-            return minecraftserver.E().getWorldPersistentData();
+        this.customSpawners = list;
+        this.serverLevelData = iworlddataserver;
+        boolean flag2 = minecraftserver.isSyncChunkWrites();
+        DataFixer datafixer = minecraftserver.getDataFixer();
+        EntityPersistentStorage<Entity> entitypersistentstorage = new EntityStorage(this, new File(convertable_conversionsession.a(resourcekey), "entities"), datafixer, flag2, minecraftserver);
+
+        this.entityManager = new PersistentEntitySectionManager<>(Entity.class, new WorldServer.a(), entitypersistentstorage);
+        DefinedStructureManager definedstructuremanager = minecraftserver.getDefinedStructureManager();
+        int j = minecraftserver.getPlayerList().getViewDistance();
+        PersistentEntitySectionManager persistententitysectionmanager = this.entityManager;
+
+        Objects.requireNonNull(this.entityManager);
+        this.chunkSource = new ChunkProviderServer(this, convertable_conversionsession, datafixer, definedstructuremanager, executor, chunkgenerator, j, flag2, worldloadlistener, persistententitysectionmanager::a, () -> {
+            return minecraftserver.F().getWorldPersistentData();
         });
-        this.portalTravelAgent = new PortalTravelAgent(this);
-        this.Q();
-        this.R();
-        this.getWorldBorder().a(minecraftserver.au());
-        this.persistentRaid = (PersistentRaid) this.getWorldPersistentData().a(() -> {
+        this.portalForcer = new PortalTravelAgent(this);
+        this.S();
+        this.T();
+        this.getWorldBorder().a(minecraftserver.at());
+        this.raids = (PersistentRaid) this.getWorldPersistentData().a((nbttagcompound) -> {
+            return PersistentRaid.a(this, nbttagcompound);
+        }, () -> {
             return new PersistentRaid(this);
         }, PersistentRaid.a(this.getDimensionManager()));
         if (!minecraftserver.isEmbeddedServer()) {
             iworlddataserver.setGameType(minecraftserver.getGamemode());
         }
 
-        this.structureManager = new StructureManager(this, minecraftserver.getSaveData().getGeneratorSettings());
+        this.structureFeatureManager = new StructureManager(this, minecraftserver.getSaveData().getGeneratorSettings());
         if (this.getDimensionManager().isCreateDragonBattle()) {
-            this.dragonBattle = new EnderDragonBattle(this, minecraftserver.getSaveData().getGeneratorSettings().getSeed(), minecraftserver.getSaveData().C());
+            this.dragonFight = new EnderDragonBattle(this, minecraftserver.getSaveData().getGeneratorSettings().getSeed(), minecraftserver.getSaveData().C());
         } else {
-            this.dragonBattle = null;
+            this.dragonFight = null;
         }
 
+        this.sleepStatus = new SleepStatus();
     }
 
     public void a(int i, int j, boolean flag, boolean flag1) {
-        this.worldDataServer.setClearWeatherTime(i);
-        this.worldDataServer.setWeatherDuration(j);
-        this.worldDataServer.setThunderDuration(j);
-        this.worldDataServer.setStorm(flag);
-        this.worldDataServer.setThundering(flag1);
+        this.serverLevelData.setClearWeatherTime(i);
+        this.serverLevelData.setWeatherDuration(j);
+        this.serverLevelData.setThunderDuration(j);
+        this.serverLevelData.setStorm(flag);
+        this.serverLevelData.setThundering(flag1);
     }
 
     @Override
@@ -224,25 +255,26 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public StructureManager getStructureManager() {
-        return this.structureManager;
+        return this.structureFeatureManager;
     }
 
     public void doTick(BooleanSupplier booleansupplier) {
         GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
 
-        this.ticking = true;
+        this.handlingTick = true;
         gameprofilerfiller.enter("world border");
         this.getWorldBorder().s();
         gameprofilerfiller.exitEnter("weather");
         boolean flag = this.isRaining();
+        int i;
 
         if (this.getDimensionManager().hasSkyLight()) {
-            if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
-                int i = this.worldDataServer.getClearWeatherTime();
-                int j = this.worldDataServer.getThunderDuration();
-                int k = this.worldDataServer.getWeatherDuration();
-                boolean flag1 = this.worldData.isThundering();
-                boolean flag2 = this.worldData.hasStorm();
+            if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE)) {
+                i = this.serverLevelData.getClearWeatherTime();
+                int j = this.serverLevelData.getThunderDuration();
+                int k = this.serverLevelData.getWeatherDuration();
+                boolean flag1 = this.levelData.isThundering();
+                boolean flag2 = this.levelData.hasStorm();
 
                 if (i > 0) {
                     --i;
@@ -274,23 +306,23 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                     }
                 }
 
-                this.worldDataServer.setThunderDuration(j);
-                this.worldDataServer.setWeatherDuration(k);
-                this.worldDataServer.setClearWeatherTime(i);
-                this.worldDataServer.setThundering(flag1);
-                this.worldDataServer.setStorm(flag2);
+                this.serverLevelData.setThunderDuration(j);
+                this.serverLevelData.setWeatherDuration(k);
+                this.serverLevelData.setClearWeatherTime(i);
+                this.serverLevelData.setThundering(flag1);
+                this.serverLevelData.setStorm(flag2);
             }
 
-            this.lastThunderLevel = this.thunderLevel;
-            if (this.worldData.isThundering()) {
+            this.oThunderLevel = this.thunderLevel;
+            if (this.levelData.isThundering()) {
                 this.thunderLevel = (float) ((double) this.thunderLevel + 0.01D);
             } else {
                 this.thunderLevel = (float) ((double) this.thunderLevel - 0.01D);
             }
 
             this.thunderLevel = MathHelper.a(this.thunderLevel, 0.0F, 1.0F);
-            this.lastRainLevel = this.rainLevel;
-            if (this.worldData.hasStorm()) {
+            this.oRainLevel = this.rainLevel;
+            if (this.levelData.hasStorm()) {
                 this.rainLevel = (float) ((double) this.rainLevel + 0.01D);
             } else {
                 this.rainLevel = (float) ((double) this.rainLevel - 0.01D);
@@ -299,57 +331,55 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             this.rainLevel = MathHelper.a(this.rainLevel, 0.0F, 1.0F);
         }
 
-        if (this.lastRainLevel != this.rainLevel) {
-            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.h, this.rainLevel)), this.getDimensionKey());
+        if (this.oRainLevel != this.rainLevel) {
+            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.RAIN_LEVEL_CHANGE, this.rainLevel)), this.getDimensionKey());
         }
 
-        if (this.lastThunderLevel != this.thunderLevel) {
-            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.i, this.thunderLevel)), this.getDimensionKey());
+        if (this.oThunderLevel != this.thunderLevel) {
+            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.THUNDER_LEVEL_CHANGE, this.thunderLevel)), this.getDimensionKey());
         }
 
         if (flag != this.isRaining()) {
             if (flag) {
-                this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.c, 0.0F));
+                this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.STOP_RAINING, 0.0F));
             } else {
-                this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.b, 0.0F));
+                this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.START_RAINING, 0.0F));
             }
 
-            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.h, this.rainLevel));
-            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.i, this.thunderLevel));
+            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.RAIN_LEVEL_CHANGE, this.rainLevel));
+            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.THUNDER_LEVEL_CHANGE, this.thunderLevel));
         }
 
-        if (this.everyoneSleeping && this.players.stream().noneMatch((entityplayer) -> {
-            return !entityplayer.isSpectator() && !entityplayer.isDeeplySleeping();
-        })) {
-            this.everyoneSleeping = false;
-            if (this.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
-                long l = this.worldData.getDayTime() + 24000L;
+        i = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+        if (this.sleepStatus.a(i) && this.sleepStatus.a(i, this.players)) {
+            if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                long l = this.levelData.getDayTime() + 24000L;
 
                 this.setDayTime(l - l % 24000L);
             }
 
             this.wakeupPlayers();
-            if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
+            if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE)) {
                 this.clearWeather();
             }
         }
 
-        this.Q();
+        this.S();
         this.b();
         gameprofilerfiller.exitEnter("chunkSource");
         this.getChunkProvider().tick(booleansupplier);
         gameprofilerfiller.exitEnter("tickPending");
         if (!this.isDebugWorld()) {
-            this.nextTickListBlock.b();
-            this.nextTickListFluid.b();
+            this.blockTicks.b();
+            this.liquidTicks.b();
         }
 
         gameprofilerfiller.exitEnter("raid");
-        this.persistentRaid.a();
+        this.raids.a();
         gameprofilerfiller.exitEnter("blockEvents");
-        this.ak();
-        this.ticking = false;
-        gameprofilerfiller.exitEnter("entities");
+        this.aq();
+        this.handlingTick = false;
+        gameprofilerfiller.exit();
         boolean flag3 = !this.players.isEmpty() || !this.getForceLoadedChunks().isEmpty();
 
         if (flag3) {
@@ -357,89 +387,65 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         }
 
         if (flag3 || this.emptyTime++ < 300) {
-            if (this.dragonBattle != null) {
-                this.dragonBattle.b();
+            gameprofilerfiller.enter("entities");
+            if (this.dragonFight != null) {
+                gameprofilerfiller.enter("dragonFight");
+                this.dragonFight.b();
+                gameprofilerfiller.exit();
             }
 
-            this.tickingEntities = true;
-            ObjectIterator objectiterator = this.entitiesById.int2ObjectEntrySet().iterator();
+            this.entityTickList.a((entity) -> {
+                if (!entity.isRemoved()) {
+                    if (this.i(entity)) {
+                        entity.die();
+                    } else {
+                        gameprofilerfiller.enter("checkDespawn");
+                        entity.checkDespawn();
+                        gameprofilerfiller.exit();
+                        Entity entity1 = entity.getVehicle();
 
-            while (objectiterator.hasNext()) {
-                Entry<Entity> entry = (Entry) objectiterator.next();
-                Entity entity = (Entity) entry.getValue();
-                Entity entity1 = entity.getVehicle();
+                        if (entity1 != null) {
+                            if (!entity1.isRemoved() && entity1.u(entity)) {
+                                return;
+                            }
 
-                if (!this.server.getSpawnAnimals() && (entity instanceof EntityAnimal || entity instanceof EntityWaterAnimal)) {
-                    entity.die();
-                }
+                            entity.stopRiding();
+                        }
 
-                if (!this.server.getSpawnNPCs() && entity instanceof NPC) {
-                    entity.die();
-                }
-
-                gameprofilerfiller.enter("checkDespawn");
-                if (!entity.dead) {
-                    entity.checkDespawn();
-                }
-
-                gameprofilerfiller.exit();
-                if (entity1 != null) {
-                    if (!entity1.dead && entity1.w(entity)) {
-                        continue;
+                        gameprofilerfiller.enter("tick");
+                        this.a(this::entityJoinedWorld, entity);
+                        gameprofilerfiller.exit();
                     }
-
-                    entity.stopRiding();
                 }
-
-                gameprofilerfiller.enter("tick");
-                if (!entity.dead && !(entity instanceof EntityComplexPart)) {
-                    this.a(this::entityJoinedWorld, entity);
-                }
-
-                gameprofilerfiller.exit();
-                gameprofilerfiller.enter("remove");
-                if (entity.dead) {
-                    this.removeEntityFromChunk(entity);
-                    objectiterator.remove();
-                    this.unregisterEntity(entity);
-                }
-
-                gameprofilerfiller.exit();
-            }
-
-            this.tickingEntities = false;
-
-            Entity entity2;
-
-            while ((entity2 = (Entity) this.entitiesToAdd.poll()) != null) {
-                this.registerEntity(entity2);
-            }
-
+            });
+            gameprofilerfiller.exit();
             this.tickBlockEntities();
         }
 
+        gameprofilerfiller.enter("entityManagement");
+        this.entityManager.a();
         gameprofilerfiller.exit();
     }
 
     protected void b() {
-        if (this.Q) {
-            long i = this.worldData.getTime() + 1L;
+        if (this.tickTime) {
+            long i = this.levelData.getTime() + 1L;
 
-            this.worldDataServer.setTime(i);
-            this.worldDataServer.u().a(this.server, i);
-            if (this.worldData.q().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
-                this.setDayTime(this.worldData.getDayTime() + 1L);
+            this.serverLevelData.setTime(i);
+            this.serverLevelData.u().a(this.server, i);
+            if (this.levelData.q().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                this.setDayTime(this.levelData.getDayTime() + 1L);
             }
 
         }
     }
 
     public void setDayTime(long i) {
-        this.worldDataServer.setDayTime(i);
+        this.serverLevelData.setDayTime(i);
     }
 
     public void doMobSpawning(boolean flag, boolean flag1) {
-        Iterator iterator = this.mobSpawners.iterator();
+        Iterator iterator = this.customSpawners.iterator();
 
         while (iterator.hasNext()) {
             MobSpawner mobspawner = (MobSpawner) iterator.next();
@@ -449,7 +455,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     }
 
+    private boolean i(Entity entity) {
+        return !this.server.getSpawnAnimals() && (entity instanceof EntityAnimal || entity instanceof EntityWaterAnimal) ? true : !this.server.getSpawnNPCs() && entity instanceof NPC;
+    }
+
     private void wakeupPlayers() {
+        this.sleepStatus.a();
         ((List) this.players.stream().filter(EntityLiving::isSleeping).collect(Collectors.toList())).forEach((entityplayer) -> {
             entityplayer.wakeup(false, false);
         });
@@ -465,16 +476,16 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.enter("thunder");
         BlockPosition blockposition;
 
-        if (flag && this.W() && this.random.nextInt(100000) == 0) {
+        if (flag && this.Y() && this.random.nextInt(100000) == 0) {
             blockposition = this.a(this.a(j, 0, k, 15));
             if (this.isRainingAt(blockposition)) {
                 DifficultyDamageScaler difficultydamagescaler = this.getDamageScaler(blockposition);
-                boolean flag1 = this.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.01D;
+                boolean flag1 = this.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.01D && !this.getType(blockposition.down()).a(Blocks.LIGHTNING_ROD);
 
                 if (flag1) {
                     EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a((World) this);
 
-                    entityhorseskeleton.t(true);
+                    entityhorseskeleton.v(true);
                     entityhorseskeleton.setAgeRaw(0);
                     entityhorseskeleton.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
                     this.addEntity(entityhorseskeleton);
@@ -494,16 +505,23 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             BlockPosition blockposition1 = blockposition.down();
             BiomeBase biomebase = this.getBiome(blockposition);
 
-            if (biomebase.a(this, blockposition1)) {
+            if (biomebase.a((IWorldReader) this, blockposition1)) {
                 this.setTypeUpdate(blockposition1, Blocks.ICE.getBlockData());
             }
 
-            if (flag && biomebase.b(this, blockposition)) {
-                this.setTypeUpdate(blockposition, Blocks.SNOW.getBlockData());
-            }
+            if (flag) {
+                if (biomebase.b(this, blockposition)) {
+                    this.setTypeUpdate(blockposition, Blocks.SNOW.getBlockData());
+                }
 
-            if (flag && this.getBiome(blockposition1).c() == BiomeBase.Precipitation.RAIN) {
-                this.getType(blockposition1).getBlock().c((World) this, blockposition1);
+                IBlockData iblockdata = this.getType(blockposition1);
+                BiomeBase.Precipitation biomebase_precipitation = this.getBiome(blockposition).c();
+
+                if (biomebase_precipitation == BiomeBase.Precipitation.RAIN && biomebase.b(blockposition1)) {
+                    biomebase_precipitation = BiomeBase.Precipitation.SNOW;
+                }
+
+                iblockdata.getBlock().a(iblockdata, (World) this, blockposition1, biomebase_precipitation);
             }
         }
 
@@ -515,20 +533,20 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             for (int i1 = 0; i1 < l; ++i1) {
                 ChunkSection chunksection = achunksection[i1];
 
-                if (chunksection != Chunk.a && chunksection.d()) {
+                if (chunksection != Chunk.EMPTY_SECTION && chunksection.d()) {
                     int j1 = chunksection.getYPosition();
 
                     for (int k1 = 0; k1 < i; ++k1) {
                         BlockPosition blockposition2 = this.a(j, j1, k, 15);
 
                         gameprofilerfiller.enter("randomTick");
-                        IBlockData iblockdata = chunksection.getType(blockposition2.getX() - j, blockposition2.getY() - j1, blockposition2.getZ() - k);
+                        IBlockData iblockdata1 = chunksection.getType(blockposition2.getX() - j, blockposition2.getY() - j1, blockposition2.getZ() - k);
 
-                        if (iblockdata.isTicking()) {
-                            iblockdata.b(this, blockposition2, this.random);
+                        if (iblockdata1.isTicking()) {
+                            iblockdata1.b(this, blockposition2, this.random);
                         }
 
-                        Fluid fluid = iblockdata.getFluid();
+                        Fluid fluid = iblockdata1.getFluid();
 
                         if (fluid.f()) {
                             fluid.b(this, blockposition2, this.random);
@@ -543,46 +561,77 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.exit();
     }
 
+    private Optional<BlockPosition> E(BlockPosition blockposition) {
+        Optional<BlockPosition> optional = this.A().d((villageplacetype) -> {
+            return villageplacetype == VillagePlaceType.LIGHTNING_ROD;
+        }, (blockposition1) -> {
+            return blockposition1.getY() == this.getLevel().a(HeightMap.Type.WORLD_SURFACE, blockposition1.getX(), blockposition1.getZ()) - 1;
+        }, blockposition, 128, VillagePlace.Occupancy.ANY);
+
+        return optional.map((blockposition1) -> {
+            return blockposition1.up(1);
+        });
+    }
+
     protected BlockPosition a(BlockPosition blockposition) {
         BlockPosition blockposition1 = this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition);
-        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getBuildHeight(), blockposition1.getZ()))).g(3.0D);
-        List<EntityLiving> list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
-            return entityliving != null && entityliving.isAlive() && this.e(entityliving.getChunkCoordinates());
-        });
+        Optional<BlockPosition> optional = this.E(blockposition1);
 
-        if (!list.isEmpty()) {
-            return ((EntityLiving) list.get(this.random.nextInt(list.size()))).getChunkCoordinates();
+        if (optional.isPresent()) {
+            return (BlockPosition) optional.get();
         } else {
-            if (blockposition1.getY() == -1) {
-                blockposition1 = blockposition1.up(2);
-            }
+            AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getMaxBuildHeight(), blockposition1.getZ()))).g(3.0D);
+            List<EntityLiving> list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
+                return entityliving != null && entityliving.isAlive() && this.g(entityliving.getChunkCoordinates());
+            });
 
-            return blockposition1;
+            if (!list.isEmpty()) {
+                return ((EntityLiving) list.get(this.random.nextInt(list.size()))).getChunkCoordinates();
+            } else {
+                if (blockposition1.getY() == this.getMinBuildHeight() - 1) {
+                    blockposition1 = blockposition1.up(2);
+                }
+
+                return blockposition1;
+            }
         }
     }
 
-    public boolean m_() {
-        return this.ticking;
+    public boolean c() {
+        return this.handlingTick;
+    }
+
+    public boolean d() {
+        return this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE) <= 100;
+    }
+
+    private void an() {
+        if (this.d()) {
+            if (!this.getMinecraftServer().isEmbeddedServer() || this.getMinecraftServer().o()) {
+                int i = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+                ChatMessage chatmessage;
+
+                if (this.sleepStatus.a(i)) {
+                    chatmessage = new ChatMessage("sleep.skipping_night");
+                } else {
+                    chatmessage = new ChatMessage("sleep.players_sleeping", new Object[]{this.sleepStatus.b(), this.sleepStatus.b(i)});
+                }
+
+                Iterator iterator = this.players.iterator();
+
+                while (iterator.hasNext()) {
+                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                    entityplayer.a((IChatBaseComponent) chatmessage, true);
+                }
+
+            }
+        }
     }
 
     public void everyoneSleeping() {
-        this.everyoneSleeping = false;
-        if (!this.players.isEmpty()) {
-            int i = 0;
-            int j = 0;
-            Iterator iterator = this.players.iterator();
-
-            while (iterator.hasNext()) {
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
-                if (entityplayer.isSpectator()) {
-                    ++i;
-                } else if (entityplayer.isSleeping()) {
-                    ++j;
-                }
-            }
-
-            this.everyoneSleeping = j > 0 && j >= this.players.size() - i;
+        if (!this.players.isEmpty() && this.sleepStatus.a(this.players)) {
+            this.an();
         }
 
     }
@@ -593,10 +642,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     private void clearWeather() {
-        this.worldDataServer.setWeatherDuration(0);
-        this.worldDataServer.setStorm(false);
-        this.worldDataServer.setThunderDuration(0);
-        this.worldDataServer.setThundering(false);
+        this.serverLevelData.setWeatherDuration(0);
+        this.serverLevelData.setStorm(false);
+        this.serverLevelData.setThunderDuration(0);
+        this.serverLevelData.setThundering(false);
     }
 
     public void resetEmptyTime() {
@@ -604,115 +653,68 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     private void a(NextTickListEntry<FluidType> nextticklistentry) {
-        Fluid fluid = this.getFluid(nextticklistentry.a);
+        Fluid fluid = this.getFluid(nextticklistentry.pos);
 
         if (fluid.getType() == nextticklistentry.b()) {
-            fluid.a((World) this, nextticklistentry.a);
+            fluid.a((World) this, nextticklistentry.pos);
         }
 
     }
 
     private void b(NextTickListEntry<Block> nextticklistentry) {
-        IBlockData iblockdata = this.getType(nextticklistentry.a);
+        IBlockData iblockdata = this.getType(nextticklistentry.pos);
 
         if (iblockdata.a((Block) nextticklistentry.b())) {
-            iblockdata.a(this, nextticklistentry.a, this.random);
+            iblockdata.a(this, nextticklistentry.pos, this.random);
         }
 
     }
 
     public void entityJoinedWorld(Entity entity) {
-        if (!(entity instanceof EntityHuman) && !this.getChunkProvider().a(entity)) {
-            this.chunkCheck(entity);
-        } else {
-            entity.g(entity.locX(), entity.locY(), entity.locZ());
-            entity.lastYaw = entity.yaw;
-            entity.lastPitch = entity.pitch;
-            if (entity.inChunk) {
-                ++entity.ticksLived;
+        entity.aZ();
+        GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
+
+        ++entity.tickCount;
+        this.getMethodProfiler().a(() -> {
+            return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType()).toString();
+        });
+        gameprofilerfiller.c("tickNonPassenger");
+        entity.tick();
+        this.getMethodProfiler().exit();
+        Iterator iterator = entity.getPassengers().iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity1 = (Entity) iterator.next();
+
+            this.a(entity, entity1);
+        }
+
+    }
+
+    private void a(Entity entity, Entity entity1) {
+        if (!entity1.isRemoved() && entity1.getVehicle() == entity) {
+            if (entity1 instanceof EntityHuman || this.entityTickList.c(entity1)) {
+                entity1.aZ();
+                ++entity1.tickCount;
                 GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
 
                 gameprofilerfiller.a(() -> {
-                    return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType()).toString();
+                    return IRegistry.ENTITY_TYPE.getKey(entity1.getEntityType()).toString();
                 });
-                gameprofilerfiller.c("tickNonPassenger");
-                entity.tick();
+                gameprofilerfiller.c("tickPassenger");
+                entity1.passengerTick();
                 gameprofilerfiller.exit();
-            }
-
-            this.chunkCheck(entity);
-            if (entity.inChunk) {
-                Iterator iterator = entity.getPassengers().iterator();
+                Iterator iterator = entity1.getPassengers().iterator();
 
                 while (iterator.hasNext()) {
-                    Entity entity1 = (Entity) iterator.next();
+                    Entity entity2 = (Entity) iterator.next();
 
-                    this.a(entity, entity1);
-                }
-            }
-
-        }
-    }
-
-    public void a(Entity entity, Entity entity1) {
-        if (!entity1.dead && entity1.getVehicle() == entity) {
-            if (entity1 instanceof EntityHuman || this.getChunkProvider().a(entity1)) {
-                entity1.g(entity1.locX(), entity1.locY(), entity1.locZ());
-                entity1.lastYaw = entity1.yaw;
-                entity1.lastPitch = entity1.pitch;
-                if (entity1.inChunk) {
-                    ++entity1.ticksLived;
-                    GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
-
-                    gameprofilerfiller.a(() -> {
-                        return IRegistry.ENTITY_TYPE.getKey(entity1.getEntityType()).toString();
-                    });
-                    gameprofilerfiller.c("tickPassenger");
-                    entity1.passengerTick();
-                    gameprofilerfiller.exit();
-                }
-
-                this.chunkCheck(entity1);
-                if (entity1.inChunk) {
-                    Iterator iterator = entity1.getPassengers().iterator();
-
-                    while (iterator.hasNext()) {
-                        Entity entity2 = (Entity) iterator.next();
-
-                        this.a(entity1, entity2);
-                    }
+                    this.a(entity1, entity2);
                 }
 
             }
         } else {
             entity1.stopRiding();
-        }
-    }
-
-    public void chunkCheck(Entity entity) {
-        if (entity.cl()) {
-            this.getMethodProfiler().enter("chunkCheck");
-            int i = MathHelper.floor(entity.locX() / 16.0D);
-            int j = MathHelper.floor(entity.locY() / 16.0D);
-            int k = MathHelper.floor(entity.locZ() / 16.0D);
-
-            if (!entity.inChunk || entity.chunkX != i || entity.chunkY != j || entity.chunkZ != k) {
-                if (entity.inChunk && this.isChunkLoaded(entity.chunkX, entity.chunkZ)) {
-                    this.getChunkAt(entity.chunkX, entity.chunkZ).a(entity, entity.chunkY);
-                }
-
-                if (!entity.ck() && !this.isChunkLoaded(i, k)) {
-                    if (entity.inChunk) {
-                        WorldServer.LOGGER.warn("Entity {} left loaded chunk area", entity);
-                    }
-
-                    entity.inChunk = false;
-                } else {
-                    this.getChunkAt(i, k).a(entity);
-                }
-            }
-
-            this.getMethodProfiler().exit();
         }
     }
 
@@ -729,52 +731,43 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                 iprogressupdate.a(new ChatMessage("menu.savingLevel"));
             }
 
-            this.aj();
+            this.ap();
             if (iprogressupdate != null) {
                 iprogressupdate.c(new ChatMessage("menu.savingChunks"));
             }
 
             chunkproviderserver.save(flag);
+            if (flag) {
+                this.entityManager.c();
+            } else {
+                this.entityManager.b();
+            }
+
         }
     }
 
-    private void aj() {
-        if (this.dragonBattle != null) {
-            this.server.getSaveData().a(this.dragonBattle.a());
+    private void ap() {
+        if (this.dragonFight != null) {
+            this.server.getSaveData().a(this.dragonFight.a());
         }
 
         this.getChunkProvider().getWorldPersistentData().a();
     }
 
-    public List<Entity> a(@Nullable EntityTypes<?> entitytypes, Predicate<? super Entity> predicate) {
-        List<Entity> list = Lists.newArrayList();
-        ChunkProviderServer chunkproviderserver = this.getChunkProvider();
-        ObjectIterator objectiterator = this.entitiesById.values().iterator();
+    public <T extends Entity> List<? extends T> a(EntityTypeTest<Entity, T> entitytypetest, Predicate<? super T> predicate) {
+        List<T> list = Lists.newArrayList();
 
-        while (objectiterator.hasNext()) {
-            Entity entity = (Entity) objectiterator.next();
-
-            if ((entitytypes == null || entity.getEntityType() == entitytypes) && chunkproviderserver.isLoaded(MathHelper.floor(entity.locX()) >> 4, MathHelper.floor(entity.locZ()) >> 4) && predicate.test(entity)) {
+        this.getEntities().a(entitytypetest, (entity) -> {
+            if (predicate.test(entity)) {
                 list.add(entity);
             }
-        }
 
+        });
         return list;
     }
 
-    public List<EntityEnderDragon> g() {
-        List<EntityEnderDragon> list = Lists.newArrayList();
-        ObjectIterator objectiterator = this.entitiesById.values().iterator();
-
-        while (objectiterator.hasNext()) {
-            Entity entity = (Entity) objectiterator.next();
-
-            if (entity instanceof EntityEnderDragon && entity.isAlive()) {
-                list.add((EntityEnderDragon) entity);
-            }
-        }
-
-        return list;
+    public List<? extends EntityEnderDragon> h() {
+        return this.a((EntityTypeTest) EntityTypes.ENDER_DRAGON, EntityLiving::isAlive);
     }
 
     public List<EntityPlayer> a(Predicate<? super EntityPlayer> predicate) {
@@ -793,7 +786,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Nullable
-    public EntityPlayer q_() {
+    public EntityPlayer i() {
         List<EntityPlayer> list = this.a(EntityLiving::isAlive);
 
         return list.isEmpty() ? null : (EntityPlayer) list.get(this.random.nextInt(list.size()));
@@ -809,22 +802,15 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public void addEntityTeleport(Entity entity) {
-        boolean flag = entity.attachedToPlayer;
-
-        entity.attachedToPlayer = true;
-        this.addEntitySerialized(entity);
-        entity.attachedToPlayer = flag;
-        this.chunkCheck(entity);
+        this.addEntity0(entity);
     }
 
     public void addPlayerCommand(EntityPlayer entityplayer) {
         this.addPlayer0(entityplayer);
-        this.chunkCheck(entityplayer);
     }
 
     public void addPlayerPortal(EntityPlayer entityplayer) {
         this.addPlayer0(entityplayer);
-        this.chunkCheck(entityplayer);
     }
 
     public void addPlayerJoin(EntityPlayer entityplayer) {
@@ -836,90 +822,32 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     private void addPlayer0(EntityPlayer entityplayer) {
-        Entity entity = (Entity) this.entitiesByUUID.get(entityplayer.getUniqueID());
+        Entity entity = (Entity) this.getEntities().a(entityplayer.getUniqueID());
 
         if (entity != null) {
             WorldServer.LOGGER.warn("Force-added player with duplicate UUID {}", entityplayer.getUniqueID().toString());
             entity.decouple();
-            this.removePlayer((EntityPlayer) entity);
+            this.a((EntityPlayer) entity, Entity.RemovalReason.DISCARDED);
         }
 
-        this.players.add(entityplayer);
-        this.everyoneSleeping();
-        IChunkAccess ichunkaccess = this.getChunkAt(MathHelper.floor(entityplayer.locX() / 16.0D), MathHelper.floor(entityplayer.locZ() / 16.0D), ChunkStatus.FULL, true);
-
-        if (ichunkaccess instanceof Chunk) {
-            ichunkaccess.a((Entity) entityplayer);
-        }
-
-        this.registerEntity(entityplayer);
+        this.entityManager.a((EntityAccess) entityplayer);
     }
 
     private boolean addEntity0(Entity entity) {
-        if (entity.dead) {
+        if (entity.isRemoved()) {
             WorldServer.LOGGER.warn("Tried to add entity {} but it was marked as removed already", EntityTypes.getName(entity.getEntityType()));
             return false;
-        } else if (this.isUUIDTaken(entity)) {
-            return false;
         } else {
-            IChunkAccess ichunkaccess = this.getChunkAt(MathHelper.floor(entity.locX() / 16.0D), MathHelper.floor(entity.locZ() / 16.0D), ChunkStatus.FULL, entity.attachedToPlayer);
-
-            if (!(ichunkaccess instanceof Chunk)) {
-                return false;
-            } else {
-                ichunkaccess.a(entity);
-                this.registerEntity(entity);
-                return true;
-            }
-        }
-    }
-
-    public boolean addEntityChunk(Entity entity) {
-        if (this.isUUIDTaken(entity)) {
-            return false;
-        } else {
-            this.registerEntity(entity);
-            return true;
-        }
-    }
-
-    private boolean isUUIDTaken(Entity entity) {
-        UUID uuid = entity.getUniqueID();
-        Entity entity1 = this.c(uuid);
-
-        if (entity1 == null) {
-            return false;
-        } else {
-            WorldServer.LOGGER.warn("Trying to add entity with duplicated UUID {}. Existing {}#{}, new: {}#{}", uuid, EntityTypes.getName(entity1.getEntityType()), entity1.getId(), EntityTypes.getName(entity.getEntityType()), entity.getId());
-            return true;
-        }
-    }
-
-    @Nullable
-    private Entity c(UUID uuid) {
-        Entity entity = (Entity) this.entitiesByUUID.get(uuid);
-
-        if (entity != null) {
-            return entity;
-        } else {
-            if (this.tickingEntities) {
-                Iterator iterator = this.entitiesToAdd.iterator();
-
-                while (iterator.hasNext()) {
-                    Entity entity1 = (Entity) iterator.next();
-
-                    if (entity1.getUniqueID().equals(uuid)) {
-                        return entity1;
-                    }
-                }
-            }
-
-            return null;
+            return this.entityManager.a((EntityAccess) entity);
         }
     }
 
     public boolean addAllEntitiesSafely(Entity entity) {
-        if (entity.recursiveStream().anyMatch(this::isUUIDTaken)) {
+        Stream stream = entity.recursiveStream().map(Entity::getUniqueID);
+        PersistentEntitySectionManager persistententitysectionmanager = this.entityManager;
+
+        Objects.requireNonNull(this.entityManager);
+        if (stream.anyMatch(persistententitysectionmanager::a)) {
             return false;
         } else {
             this.addAllEntities(entity);
@@ -928,105 +856,11 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public void unloadChunk(Chunk chunk) {
-        this.tileEntityListUnload.addAll(chunk.getTileEntities().values());
-        EntitySlice[] aentityslice = chunk.getEntitySlices();
-        int i = aentityslice.length;
-
-        for (int j = 0; j < i; ++j) {
-            EntitySlice<Entity> entityslice = aentityslice[j];
-            Iterator iterator = entityslice.iterator();
-
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
-                if (!(entity instanceof EntityPlayer)) {
-                    if (this.tickingEntities) {
-                        throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Removing entity while ticking!")));
-                    }
-
-                    this.entitiesById.remove(entity.getId());
-                    this.unregisterEntity(entity);
-                }
-            }
-        }
-
+        chunk.C();
     }
 
-    public void unregisterEntity(Entity entity) {
-        if (entity instanceof EntityEnderDragon) {
-            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eJ();
-            int i = aentitycomplexpart.length;
-
-            for (int j = 0; j < i; ++j) {
-                EntityComplexPart entitycomplexpart = aentitycomplexpart[j];
-
-                entitycomplexpart.die();
-            }
-        }
-
-        this.entitiesByUUID.remove(entity.getUniqueID());
-        this.getChunkProvider().removeEntity(entity);
-        if (entity instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) entity;
-
-            this.players.remove(entityplayer);
-        }
-
-        this.getScoreboard().a(entity);
-        if (entity instanceof EntityInsentient) {
-            this.navigators.remove(((EntityInsentient) entity).getNavigation());
-        }
-
-    }
-
-    private void registerEntity(Entity entity) {
-        if (this.tickingEntities) {
-            this.entitiesToAdd.add(entity);
-        } else {
-            this.entitiesById.put(entity.getId(), entity);
-            if (entity instanceof EntityEnderDragon) {
-                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eJ();
-                int i = aentitycomplexpart.length;
-
-                for (int j = 0; j < i; ++j) {
-                    EntityComplexPart entitycomplexpart = aentitycomplexpart[j];
-
-                    this.entitiesById.put(entitycomplexpart.getId(), entitycomplexpart);
-                }
-            }
-
-            this.entitiesByUUID.put(entity.getUniqueID(), entity);
-            this.getChunkProvider().addEntity(entity);
-            if (entity instanceof EntityInsentient) {
-                this.navigators.add(((EntityInsentient) entity).getNavigation());
-            }
-        }
-
-    }
-
-    public void removeEntity(Entity entity) {
-        if (this.tickingEntities) {
-            throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Removing entity while ticking!")));
-        } else {
-            this.removeEntityFromChunk(entity);
-            this.entitiesById.remove(entity.getId());
-            this.unregisterEntity(entity);
-        }
-    }
-
-    private void removeEntityFromChunk(Entity entity) {
-        IChunkAccess ichunkaccess = this.getChunkAt(entity.chunkX, entity.chunkZ, ChunkStatus.FULL, false);
-
-        if (ichunkaccess instanceof Chunk) {
-            ((Chunk) ichunkaccess).b(entity);
-        }
-
-    }
-
-    public void removePlayer(EntityPlayer entityplayer) {
-        entityplayer.die();
-        this.removeEntity(entityplayer);
-        this.everyoneSleeping();
+    public void a(EntityPlayer entityplayer, Entity.RemovalReason entity_removalreason) {
+        entityplayer.a(entity_removalreason);
     }
 
     @Override
@@ -1036,13 +870,13 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (entityplayer != null && entityplayer.world == this && entityplayer.getId() != i) {
+            if (entityplayer != null && entityplayer.level == this && entityplayer.getId() != i) {
                 double d0 = (double) blockposition.getX() - entityplayer.locX();
                 double d1 = (double) blockposition.getY() - entityplayer.locY();
                 double d2 = (double) blockposition.getZ() - entityplayer.locZ();
 
                 if (d0 * d0 + d1 * d1 + d2 * d2 < 1024.0D) {
-                    entityplayer.playerConnection.sendPacket(new PacketPlayOutBlockBreakAnimation(i, blockposition, j));
+                    entityplayer.connection.sendPacket(new PacketPlayOutBlockBreakAnimation(i, blockposition, j));
                 }
             }
         }
@@ -1070,16 +904,27 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Override
+    public int getLogicalHeight() {
+        return this.getDimensionManager().getLogicalHeight();
+    }
+
+    @Override
+    public void a(@Nullable Entity entity, GameEvent gameevent, BlockPosition blockposition) {
+        this.a(entity, gameevent, blockposition, gameevent.b());
+    }
+
+    @Override
     public void notify(BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
         this.getChunkProvider().flagDirty(blockposition);
         VoxelShape voxelshape = iblockdata.getCollisionShape(this, blockposition);
         VoxelShape voxelshape1 = iblockdata1.getCollisionShape(this, blockposition);
 
         if (VoxelShapes.c(voxelshape, voxelshape1, OperatorBoolean.NOT_SAME)) {
-            Iterator iterator = this.navigators.iterator();
+            Iterator iterator = this.navigatingMobs.iterator();
 
             while (iterator.hasNext()) {
-                NavigationAbstract navigationabstract = (NavigationAbstract) iterator.next();
+                EntityInsentient entityinsentient = (EntityInsentient) iterator.next();
+                NavigationAbstract navigationabstract = entityinsentient.getNavigation();
 
                 if (!navigationabstract.i()) {
                     navigationabstract.b(blockposition);
@@ -1096,7 +941,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Override
     public ChunkProviderServer getChunkProvider() {
-        return this.chunkProvider;
+        return this.chunkSource;
     }
 
     @Override
@@ -1115,7 +960,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
             if (entityplayer.h(d0, d1, d2) < 4096.0D) {
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutExplosion(d0, d1, d2, f, explosion.getBlocks(), (Vec3D) explosion.c().get(entityplayer)));
+                entityplayer.connection.sendPacket(new PacketPlayOutExplosion(d0, d1, d2, f, explosion.getBlocks(), (Vec3D) explosion.c().get(entityplayer)));
             }
         }
 
@@ -1124,12 +969,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Override
     public void playBlockAction(BlockPosition blockposition, Block block, int i, int j) {
-        this.L.add(new BlockActionData(blockposition, block, i, j));
+        this.blockEvents.add(new BlockActionData(blockposition, block, i, j));
     }
 
-    private void ak() {
-        while (!this.L.isEmpty()) {
-            BlockActionData blockactiondata = (BlockActionData) this.L.removeFirst();
+    private void aq() {
+        while (!this.blockEvents.isEmpty()) {
+            BlockActionData blockactiondata = (BlockActionData) this.blockEvents.removeFirst();
 
             if (this.a(blockactiondata)) {
                 this.server.getPlayerList().sendPacketNearby((EntityHuman) null, (double) blockactiondata.a().getX(), (double) blockactiondata.a().getY(), (double) blockactiondata.a().getZ(), 64.0D, this.getDimensionKey(), new PacketPlayOutBlockAction(blockactiondata.a(), blockactiondata.b(), blockactiondata.c(), blockactiondata.d()));
@@ -1146,12 +991,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Override
     public TickListServer<Block> getBlockTickList() {
-        return this.nextTickListBlock;
+        return this.blockTicks;
     }
 
     @Override
     public TickListServer<FluidType> getFluidTickList() {
-        return this.nextTickListFluid;
+        return this.liquidTicks;
     }
 
     @Nonnull
@@ -1161,11 +1006,20 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public PortalTravelAgent getTravelAgent() {
-        return this.portalTravelAgent;
+        return this.portalForcer;
     }
 
-    public DefinedStructureManager n() {
+    public DefinedStructureManager p() {
         return this.server.getDefinedStructureManager();
+    }
+
+    public void a(VibrationPath vibrationpath) {
+        BlockPosition blockposition = vibrationpath.b();
+        ClientboundAddVibrationSignalPacket clientboundaddvibrationsignalpacket = new ClientboundAddVibrationSignalPacket(vibrationpath);
+
+        this.players.forEach((entityplayer) -> {
+            this.a(entityplayer, false, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), clientboundaddvibrationsignalpacket);
+        });
     }
 
     public <T extends ParticleParam> int a(T t0, double d0, double d1, double d2, int i, double d3, double d4, double d5, double d6) {
@@ -1196,7 +1050,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             BlockPosition blockposition = entityplayer.getChunkCoordinates();
 
             if (blockposition.a((IPosition) (new Vec3D(d0, d1, d2)), flag ? 512.0D : 32.0D)) {
-                entityplayer.playerConnection.sendPacket(packet);
+                entityplayer.connection.sendPacket(packet);
                 return true;
             } else {
                 return false;
@@ -1207,12 +1061,20 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Nullable
     @Override
     public Entity getEntity(int i) {
-        return (Entity) this.entitiesById.get(i);
+        return (Entity) this.getEntities().a(i);
+    }
+
+    @Deprecated
+    @Nullable
+    public Entity b(int i) {
+        Entity entity = (Entity) this.getEntities().a(i);
+
+        return entity != null ? entity : (Entity) this.dragonParts.get(i);
     }
 
     @Nullable
     public Entity getEntity(UUID uuid) {
-        return (Entity) this.entitiesByUUID.get(uuid);
+        return (Entity) this.getEntities().a(uuid);
     }
 
     @Nullable
@@ -1233,17 +1095,17 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Override
-    public ITagRegistry p() {
+    public ITagRegistry r() {
         return this.server.getTagRegistry();
     }
 
     @Override
     public boolean isSavingDisabled() {
-        return this.savingDisabled;
+        return this.noSave;
     }
 
     @Override
-    public IRegistryCustom r() {
+    public IRegistryCustom t() {
         return this.server.getCustomRegistry();
     }
 
@@ -1254,32 +1116,30 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Nullable
     @Override
     public WorldMap a(String s) {
-        return (WorldMap) this.getMinecraftServer().E().getWorldPersistentData().b(() -> {
-            return new WorldMap(s);
-        }, s);
+        return (WorldMap) this.getMinecraftServer().F().getWorldPersistentData().a(WorldMap::b, s);
     }
 
     @Override
-    public void a(WorldMap worldmap) {
-        this.getMinecraftServer().E().getWorldPersistentData().a((PersistentBase) worldmap);
+    public void a(String s, WorldMap worldmap) {
+        this.getMinecraftServer().F().getWorldPersistentData().a(s, (PersistentBase) worldmap);
     }
 
     @Override
     public int getWorldMapCount() {
-        return ((PersistentIdCounts) this.getMinecraftServer().E().getWorldPersistentData().a(PersistentIdCounts::new, "idcounts")).a();
+        return ((PersistentIdCounts) this.getMinecraftServer().F().getWorldPersistentData().a(PersistentIdCounts::b, PersistentIdCounts::new, "idcounts")).a();
     }
 
     public void a(BlockPosition blockposition, float f) {
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(this.worldData.a(), 0, this.worldData.c()));
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(this.levelData.a(), 0, this.levelData.c()));
 
-        this.worldData.setSpawn(blockposition, f);
+        this.levelData.setSpawn(blockposition, f);
         this.getChunkProvider().removeTicket(TicketType.START, chunkcoordintpair, 11, Unit.INSTANCE);
         this.getChunkProvider().addTicket(TicketType.START, new ChunkCoordIntPair(blockposition), 11, Unit.INSTANCE);
         this.getMinecraftServer().getPlayerList().sendAll(new PacketPlayOutSpawnPosition(blockposition, f));
     }
 
     public BlockPosition getSpawn() {
-        BlockPosition blockposition = new BlockPosition(this.worldData.a(), this.worldData.b(), this.worldData.c());
+        BlockPosition blockposition = new BlockPosition(this.levelData.a(), this.levelData.b(), this.levelData.c());
 
         if (!this.getWorldBorder().a(blockposition)) {
             blockposition = this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, new BlockPosition(this.getWorldBorder().getCenterX(), 0.0D, this.getWorldBorder().getCenterZ()));
@@ -1288,18 +1148,18 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         return blockposition;
     }
 
-    public float v() {
-        return this.worldData.d();
+    public float x() {
+        return this.levelData.d();
     }
 
     public LongSet getForceLoadedChunks() {
-        ForcedChunk forcedchunk = (ForcedChunk) this.getWorldPersistentData().b(ForcedChunk::new, "chunks");
+        ForcedChunk forcedchunk = (ForcedChunk) this.getWorldPersistentData().a(ForcedChunk::b, "chunks");
 
         return (LongSet) (forcedchunk != null ? LongSets.unmodifiable(forcedchunk.a()) : LongSets.EMPTY_SET);
     }
 
     public boolean setForceLoaded(int i, int j, boolean flag) {
-        ForcedChunk forcedchunk = (ForcedChunk) this.getWorldPersistentData().a(ForcedChunk::new, "chunks");
+        ForcedChunk forcedchunk = (ForcedChunk) this.getWorldPersistentData().a(ForcedChunk::b, ForcedChunk::new, "chunks");
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
         long k = chunkcoordintpair.pair();
         boolean flag1;
@@ -1336,29 +1196,29 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
             optional.ifPresent((villageplacetype) -> {
                 this.getMinecraftServer().execute(() -> {
-                    this.y().a(blockposition1);
+                    this.A().a(blockposition1);
                     PacketDebug.b(this, blockposition1);
                 });
             });
             optional1.ifPresent((villageplacetype) -> {
                 this.getMinecraftServer().execute(() -> {
-                    this.y().a(blockposition1, villageplacetype);
+                    this.A().a(blockposition1, villageplacetype);
                     PacketDebug.a(this, blockposition1);
                 });
             });
         }
     }
 
-    public VillagePlace y() {
+    public VillagePlace A() {
         return this.getChunkProvider().j();
     }
 
-    public boolean a_(BlockPosition blockposition) {
+    public boolean b(BlockPosition blockposition) {
         return this.a(blockposition, 1);
     }
 
     public boolean a(SectionPosition sectionposition) {
-        return this.a_(sectionposition.q());
+        return this.b(sectionposition.q());
     }
 
     public boolean a(BlockPosition blockposition, int i) {
@@ -1366,20 +1226,20 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public int b(SectionPosition sectionposition) {
-        return this.y().a(sectionposition);
+        return this.A().a(sectionposition);
     }
 
     public PersistentRaid getPersistentRaid() {
-        return this.persistentRaid;
+        return this.raids;
     }
 
     @Nullable
-    public Raid b_(BlockPosition blockposition) {
-        return this.persistentRaid.getNearbyRaid(blockposition, 9216);
+    public Raid c(BlockPosition blockposition) {
+        return this.raids.getNearbyRaid(blockposition, 9216);
     }
 
-    public boolean c_(BlockPosition blockposition) {
-        return this.b_(blockposition) != null;
+    public boolean d(BlockPosition blockposition) {
+        return this.c(blockposition) != null;
     }
 
     public void a(ReputationEvent reputationevent, Entity entity, ReputationHandler reputationhandler) {
@@ -1387,9 +1247,8 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public void a(Path path) throws IOException {
-        PlayerChunkMap playerchunkmap = this.getChunkProvider().playerChunkMap;
+        PlayerChunkMap playerchunkmap = this.getChunkProvider().chunkMap;
         BufferedWriter bufferedwriter = Files.newBufferedWriter(path.resolve("stats.txt"));
-        Throwable throwable = null;
 
         try {
             bufferedwriter.write(String.format("spawning_chunks: %d\n", playerchunkmap.e().b()));
@@ -1399,132 +1258,139 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                 ObjectIterator objectiterator = spawnercreature_d.b().object2IntEntrySet().iterator();
 
                 while (objectiterator.hasNext()) {
-                    it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<EnumCreatureType> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
+                    Entry<EnumCreatureType> entry = (Entry) objectiterator.next();
 
-                    bufferedwriter.write(String.format("spawn_count.%s: %d\n", ((EnumCreatureType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).b(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue()));
+                    bufferedwriter.write(String.format("spawn_count.%s: %d\n", ((EnumCreatureType) entry.getKey()).a(), entry.getIntValue()));
                 }
             }
 
-            bufferedwriter.write(String.format("entities: %d\n", this.entitiesById.size()));
-            bufferedwriter.write(String.format("block_entities: %d\n", this.tileEntityList.size()));
+            bufferedwriter.write(String.format("entities: %s\n", this.entityManager.e()));
+            bufferedwriter.write(String.format("block_entity_tickers: %d\n", this.blockEntityTickers.size()));
             bufferedwriter.write(String.format("block_ticks: %d\n", this.getBlockTickList().a()));
             bufferedwriter.write(String.format("fluid_ticks: %d\n", this.getFluidTickList().a()));
             bufferedwriter.write("distance_manager: " + playerchunkmap.e().c() + "\n");
             bufferedwriter.write(String.format("pending_tasks: %d\n", this.getChunkProvider().f()));
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
+        } catch (Throwable throwable) {
             if (bufferedwriter != null) {
-                if (throwable != null) {
-                    try {
-                        bufferedwriter.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
+                try {
                     bufferedwriter.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
             }
 
+            throw throwable;
+        }
+
+        if (bufferedwriter != null) {
+            bufferedwriter.close();
         }
 
         CrashReport crashreport = new CrashReport("Level dump", new Exception("dummy"));
 
         this.a(crashreport);
         BufferedWriter bufferedwriter1 = Files.newBufferedWriter(path.resolve("example_crash.txt"));
-        Throwable throwable3 = null;
 
         try {
             bufferedwriter1.write(crashreport.e());
-        } catch (Throwable throwable4) {
-            throwable3 = throwable4;
-            throw throwable4;
-        } finally {
+        } catch (Throwable throwable2) {
             if (bufferedwriter1 != null) {
-                if (throwable3 != null) {
-                    try {
-                        bufferedwriter1.close();
-                    } catch (Throwable throwable5) {
-                        throwable3.addSuppressed(throwable5);
-                    }
-                } else {
+                try {
                     bufferedwriter1.close();
+                } catch (Throwable throwable3) {
+                    throwable2.addSuppressed(throwable3);
                 }
             }
 
+            throw throwable2;
+        }
+
+        if (bufferedwriter1 != null) {
+            bufferedwriter1.close();
         }
 
         Path path1 = path.resolve("chunks.csv");
         BufferedWriter bufferedwriter2 = Files.newBufferedWriter(path1);
-        Throwable throwable6 = null;
 
         try {
             playerchunkmap.a((Writer) bufferedwriter2);
-        } catch (Throwable throwable7) {
-            throwable6 = throwable7;
-            throw throwable7;
-        } finally {
+        } catch (Throwable throwable4) {
             if (bufferedwriter2 != null) {
-                if (throwable6 != null) {
-                    try {
-                        bufferedwriter2.close();
-                    } catch (Throwable throwable8) {
-                        throwable6.addSuppressed(throwable8);
-                    }
-                } else {
+                try {
                     bufferedwriter2.close();
+                } catch (Throwable throwable5) {
+                    throwable4.addSuppressed(throwable5);
                 }
             }
 
+            throw throwable4;
         }
 
-        Path path2 = path.resolve("entities.csv");
+        if (bufferedwriter2 != null) {
+            bufferedwriter2.close();
+        }
+
+        Path path2 = path.resolve("entity_chunks.csv");
         BufferedWriter bufferedwriter3 = Files.newBufferedWriter(path2);
-        Throwable throwable9 = null;
 
         try {
-            a((Writer) bufferedwriter3, (Iterable) this.entitiesById.values());
-        } catch (Throwable throwable10) {
-            throwable9 = throwable10;
-            throw throwable10;
-        } finally {
+            this.entityManager.a((Writer) bufferedwriter3);
+        } catch (Throwable throwable6) {
             if (bufferedwriter3 != null) {
-                if (throwable9 != null) {
-                    try {
-                        bufferedwriter3.close();
-                    } catch (Throwable throwable11) {
-                        throwable9.addSuppressed(throwable11);
-                    }
-                } else {
+                try {
                     bufferedwriter3.close();
+                } catch (Throwable throwable7) {
+                    throwable6.addSuppressed(throwable7);
                 }
             }
 
+            throw throwable6;
         }
 
-        Path path3 = path.resolve("block_entities.csv");
+        if (bufferedwriter3 != null) {
+            bufferedwriter3.close();
+        }
+
+        Path path3 = path.resolve("entities.csv");
         BufferedWriter bufferedwriter4 = Files.newBufferedWriter(path3);
-        Throwable throwable12 = null;
 
         try {
-            this.a((Writer) bufferedwriter4);
-        } catch (Throwable throwable13) {
-            throwable12 = throwable13;
-            throw throwable13;
-        } finally {
+            a((Writer) bufferedwriter4, this.getEntities().a());
+        } catch (Throwable throwable8) {
             if (bufferedwriter4 != null) {
-                if (throwable12 != null) {
-                    try {
-                        bufferedwriter4.close();
-                    } catch (Throwable throwable14) {
-                        throwable12.addSuppressed(throwable14);
-                    }
-                } else {
+                try {
                     bufferedwriter4.close();
+                } catch (Throwable throwable9) {
+                    throwable8.addSuppressed(throwable9);
                 }
             }
 
+            throw throwable8;
+        }
+
+        if (bufferedwriter4 != null) {
+            bufferedwriter4.close();
+        }
+
+        Path path4 = path.resolve("block_entities.csv");
+        BufferedWriter bufferedwriter5 = Files.newBufferedWriter(path4);
+
+        try {
+            this.a((Writer) bufferedwriter5);
+        } catch (Throwable throwable10) {
+            if (bufferedwriter5 != null) {
+                try {
+                    bufferedwriter5.close();
+                } catch (Throwable throwable11) {
+                    throwable10.addSuppressed(throwable11);
+                }
+            }
+
+            throw throwable10;
+        }
+
+        if (bufferedwriter5 != null) {
+            bufferedwriter5.close();
         }
 
     }
@@ -1545,20 +1411,20 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     private void a(Writer writer) throws IOException {
         CSVWriter csvwriter = CSVWriter.a().a("x").a("y").a("z").a("type").a(writer);
-        Iterator iterator = this.tileEntityList.iterator();
+        Iterator iterator = this.blockEntityTickers.iterator();
 
         while (iterator.hasNext()) {
-            TileEntity tileentity = (TileEntity) iterator.next();
-            BlockPosition blockposition = tileentity.getPosition();
+            TickingBlockEntity tickingblockentity = (TickingBlockEntity) iterator.next();
+            BlockPosition blockposition = tickingblockentity.c();
 
-            csvwriter.a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.getTileType()));
+            csvwriter.a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), tickingblockentity.d());
         }
 
     }
 
     @VisibleForTesting
     public void a(StructureBoundingBox structureboundingbox) {
-        this.L.removeIf((blockactiondata) -> {
+        this.blockEvents.removeIf((blockactiondata) -> {
             return structureboundingbox.b((BaseBlockPosition) blockactiondata.a());
         });
     }
@@ -1571,12 +1437,17 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     }
 
-    public Iterable<Entity> A() {
-        return Iterables.unmodifiableIterable(this.entitiesById.values());
+    @Override
+    public float a(EnumDirection enumdirection, boolean flag) {
+        return 1.0F;
+    }
+
+    public Iterable<Entity> C() {
+        return this.getEntities().a();
     }
 
     public String toString() {
-        return "ServerLevel[" + this.worldDataServer.getName() + "]";
+        return "ServerLevel[" + this.serverLevelData.getName() + "]";
     }
 
     public boolean isFlatWorld() {
@@ -1590,7 +1461,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Nullable
     public EnderDragonBattle getDragonBattle() {
-        return this.dragonBattle;
+        return this.dragonFight;
     }
 
     @Override
@@ -1599,33 +1470,33 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Override
-    public WorldServer getMinecraftWorld() {
+    public WorldServer getLevel() {
         return this;
     }
 
     @VisibleForTesting
-    public String F() {
-        return String.format("players: %s, entities: %d [%s], block_entities: %d [%s], block_ticks: %d, fluid_ticks: %d, chunk_source: %s", this.players.size(), this.entitiesById.size(), a((Collection) this.entitiesById.values(), (entity) -> {
-            return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType());
-        }), this.tileEntityListTick.size(), a((Collection) this.tileEntityListTick, (tileentity) -> {
-            return IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.getTileType());
-        }), this.getBlockTickList().a(), this.getFluidTickList().a(), this.P());
+    public String H() {
+        return String.format("players: %s, entities: %s [%s], block_entities: %d [%s], block_ticks: %d, fluid_ticks: %d, chunk_source: %s", this.players.size(), this.entityManager.e(), a(this.entityManager.d().a(), (entity) -> {
+            return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType()).toString();
+        }), this.blockEntityTickers.size(), a((Iterable) this.blockEntityTickers, TickingBlockEntity::d), this.getBlockTickList().a(), this.getFluidTickList().a(), this.J());
     }
 
-    private static <T> String a(Collection<T> collection, Function<T, MinecraftKey> function) {
+    private static <T> String a(Iterable<T> iterable, Function<T, String> function) {
         try {
-            Object2IntOpenHashMap<MinecraftKey> object2intopenhashmap = new Object2IntOpenHashMap();
-            Iterator iterator = collection.iterator();
+            Object2IntOpenHashMap<String> object2intopenhashmap = new Object2IntOpenHashMap();
+            Iterator iterator = iterable.iterator();
 
             while (iterator.hasNext()) {
                 T t0 = iterator.next();
-                MinecraftKey minecraftkey = (MinecraftKey) function.apply(t0);
+                String s = (String) function.apply(t0);
 
-                object2intopenhashmap.addTo(minecraftkey, 1);
+                object2intopenhashmap.addTo(s, 1);
             }
 
-            return (String) object2intopenhashmap.object2IntEntrySet().stream().sorted(Comparator.comparing(it.unimi.dsi.fastutil.objects.Object2IntMap.Entry::getIntValue).reversed()).limit(5L).map((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
-                return it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey() + ":" + it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue();
+            return (String) object2intopenhashmap.object2IntEntrySet().stream().sorted(Comparator.comparing(Entry::getIntValue).reversed()).limit(5L).map((entry) -> {
+                String s1 = (String) entry.getKey();
+
+                return s1 + ":" + entry.getIntValue();
             }).collect(Collectors.joining(","));
         } catch (Exception exception) {
             return "";
@@ -1633,7 +1504,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public static void a(WorldServer worldserver) {
-        BlockPosition blockposition = WorldServer.a;
+        BlockPosition blockposition = WorldServer.END_SPAWN_POINT;
         int i = blockposition.getX();
         int j = blockposition.getY() - 2;
         int k = blockposition.getZ();
@@ -1644,5 +1515,124 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         BlockPosition.b(i - 2, j, k - 2, i + 2, j, k + 2).forEach((blockposition1) -> {
             worldserver.setTypeUpdate(blockposition1, Blocks.OBSIDIAN.getBlockData());
         });
+    }
+
+    @Override
+    public LevelEntityGetter<Entity> getEntities() {
+        return this.entityManager.d();
+    }
+
+    public void a(Stream<Entity> stream) {
+        this.entityManager.a(stream);
+    }
+
+    public void b(Stream<Entity> stream) {
+        this.entityManager.b(stream);
+    }
+
+    @Override
+    public void close() throws IOException {
+        super.close();
+        this.entityManager.close();
+    }
+
+    @Override
+    public String J() {
+        String s = this.chunkSource.getName();
+
+        return "Chunks[S] W: " + s + " E: " + this.entityManager.e();
+    }
+
+    public boolean b(long i) {
+        return this.entityManager.a(i);
+    }
+
+    public boolean e(BlockPosition blockposition) {
+        long i = ChunkCoordIntPair.a(blockposition);
+
+        return this.chunkSource.a(i) && this.b(i);
+    }
+
+    public boolean f(BlockPosition blockposition) {
+        return this.entityManager.a(blockposition);
+    }
+
+    public boolean a(ChunkCoordIntPair chunkcoordintpair) {
+        return this.entityManager.a(chunkcoordintpair);
+    }
+
+    private final class a implements LevelCallback<Entity> {
+
+        a() {}
+
+        public void f(Entity entity) {}
+
+        public void e(Entity entity) {
+            WorldServer.this.getScoreboard().a(entity);
+        }
+
+        public void d(Entity entity) {
+            WorldServer.this.entityTickList.a(entity);
+        }
+
+        public void c(Entity entity) {
+            WorldServer.this.entityTickList.b(entity);
+        }
+
+        public void b(Entity entity) {
+            WorldServer.this.getChunkProvider().addEntity(entity);
+            if (entity instanceof EntityPlayer) {
+                WorldServer.this.players.add((EntityPlayer) entity);
+                WorldServer.this.everyoneSleeping();
+            }
+
+            if (entity instanceof EntityInsentient) {
+                WorldServer.this.navigatingMobs.add((EntityInsentient) entity);
+            }
+
+            if (entity instanceof EntityEnderDragon) {
+                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).t();
+                int i = aentitycomplexpart.length;
+
+                for (int j = 0; j < i; ++j) {
+                    EntityComplexPart entitycomplexpart = aentitycomplexpart[j];
+
+                    WorldServer.this.dragonParts.put(entitycomplexpart.getId(), entitycomplexpart);
+                }
+            }
+
+        }
+
+        public void a(Entity entity) {
+            WorldServer.this.getChunkProvider().removeEntity(entity);
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer entityplayer = (EntityPlayer) entity;
+
+                WorldServer.this.players.remove(entityplayer);
+                WorldServer.this.everyoneSleeping();
+            }
+
+            if (entity instanceof EntityInsentient) {
+                WorldServer.this.navigatingMobs.remove(entity);
+            }
+
+            if (entity instanceof EntityEnderDragon) {
+                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).t();
+                int i = aentitycomplexpart.length;
+
+                for (int j = 0; j < i; ++j) {
+                    EntityComplexPart entitycomplexpart = aentitycomplexpart[j];
+
+                    WorldServer.this.dragonParts.remove(entitycomplexpart.getId());
+                }
+            }
+
+            GameEventListenerRegistrar gameeventlistenerregistrar = entity.bQ();
+
+            if (gameeventlistenerregistrar != null) {
+                gameeventlistenerregistrar.a(entity.level);
+            }
+
+        }
     }
 }

@@ -11,27 +11,27 @@ import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class WorldGenSurfaceComposite<SC extends WorldGenSurfaceConfiguration> {
 
-    public static final Codec<WorldGenSurfaceComposite<?>> a = IRegistry.SURFACE_BUILDER.dispatch((worldgensurfacecomposite) -> {
-        return worldgensurfacecomposite.c;
+    public static final Codec<WorldGenSurfaceComposite<?>> DIRECT_CODEC = IRegistry.SURFACE_BUILDER.dispatch((worldgensurfacecomposite) -> {
+        return worldgensurfacecomposite.surfaceBuilder;
     }, WorldGenSurface::d);
-    public static final Codec<Supplier<WorldGenSurfaceComposite<?>>> b = RegistryFileCodec.a(IRegistry.as, WorldGenSurfaceComposite.a);
-    public final WorldGenSurface<SC> c;
-    public final SC d;
+    public static final Codec<Supplier<WorldGenSurfaceComposite<?>>> CODEC = RegistryFileCodec.a(IRegistry.CONFIGURED_SURFACE_BUILDER_REGISTRY, WorldGenSurfaceComposite.DIRECT_CODEC);
+    public final WorldGenSurface<SC> surfaceBuilder;
+    public final SC config;
 
     public WorldGenSurfaceComposite(WorldGenSurface<SC> worldgensurface, SC sc) {
-        this.c = worldgensurface;
-        this.d = sc;
+        this.surfaceBuilder = worldgensurface;
+        this.config = sc;
     }
 
-    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1) {
-        this.c.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, this.d);
+    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, int i1, long j1) {
+        this.surfaceBuilder.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, j1, this.config);
     }
 
     public void a(long i) {
-        this.c.a(i);
+        this.surfaceBuilder.a(i);
     }
 
     public SC a() {
-        return this.d;
+        return this.config;
     }
 }

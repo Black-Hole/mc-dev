@@ -9,55 +9,56 @@ import org.apache.logging.log4j.Logger;
 public abstract class RemoteConnectionThread implements Runnable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final AtomicInteger e = new AtomicInteger(0);
-    protected volatile boolean a;
-    protected final String b;
+    private static final AtomicInteger UNIQUE_THREAD_ID = new AtomicInteger(0);
+    private static final int MAX_STOP_WAIT = 5;
+    protected volatile boolean running;
+    protected final String name;
     @Nullable
-    protected Thread c;
+    protected Thread thread;
 
     protected RemoteConnectionThread(String s) {
-        this.b = s;
+        this.name = s;
     }
 
     public synchronized boolean a() {
-        if (this.a) {
+        if (this.running) {
             return true;
         } else {
-            this.a = true;
-            this.c = new Thread(this, this.b + " #" + RemoteConnectionThread.e.incrementAndGet());
-            this.c.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.LOGGER));
-            this.c.start();
-            RemoteConnectionThread.LOGGER.info("Thread {} started", this.b);
+            this.running = true;
+            this.thread = new Thread(this, this.name + " #" + RemoteConnectionThread.UNIQUE_THREAD_ID.incrementAndGet());
+            this.thread.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.LOGGER));
+            this.thread.start();
+            RemoteConnectionThread.LOGGER.info("Thread {} started", this.name);
             return true;
         }
     }
 
     public synchronized void b() {
-        this.a = false;
-        if (null != this.c) {
+        this.running = false;
+        if (null != this.thread) {
             int i = 0;
 
-            while (this.c.isAlive()) {
+            while (this.thread.isAlive()) {
                 try {
-                    this.c.join(1000L);
+                    this.thread.join(1000L);
                     ++i;
                     if (i >= 5) {
                         RemoteConnectionThread.LOGGER.warn("Waited {} seconds attempting force stop!", i);
-                    } else if (this.c.isAlive()) {
-                        RemoteConnectionThread.LOGGER.warn("Thread {} ({}) failed to exit after {} second(s)", this, this.c.getState(), i, new Exception("Stack:"));
-                        this.c.interrupt();
+                    } else if (this.thread.isAlive()) {
+                        RemoteConnectionThread.LOGGER.warn("Thread {} ({}) failed to exit after {} second(s)", this, this.thread.getState(), i, new Exception("Stack:"));
+                        this.thread.interrupt();
                     }
                 } catch (InterruptedException interruptedexception) {
                     ;
                 }
             }
 
-            RemoteConnectionThread.LOGGER.info("Thread {} stopped", this.b);
-            this.c = null;
+            RemoteConnectionThread.LOGGER.info("Thread {} stopped", this.name);
+            this.thread = null;
         }
     }
 
     public boolean c() {
-        return this.a;
+        return this.running;
     }
 }

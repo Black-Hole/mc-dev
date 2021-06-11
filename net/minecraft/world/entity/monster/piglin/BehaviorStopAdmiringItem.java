@@ -11,11 +11,11 @@ import net.minecraft.world.entity.item.EntityItem;
 
 public class BehaviorStopAdmiringItem<E extends EntityPiglin> extends Behavior<E> {
 
-    private final int b;
+    private final int maxDistanceToItem;
 
     public BehaviorStopAdmiringItem(int i) {
         super(ImmutableMap.of(MemoryModuleType.ADMIRING_ITEM, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryStatus.REGISTERED));
-        this.b = i;
+        this.maxDistanceToItem = i;
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
@@ -24,7 +24,7 @@ public class BehaviorStopAdmiringItem<E extends EntityPiglin> extends Behavior<E
         } else {
             Optional<EntityItem> optional = e0.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM);
 
-            return !optional.isPresent() ? true : !((EntityItem) optional.get()).a((Entity) e0, (double) this.b);
+            return !optional.isPresent() ? true : !((EntityItem) optional.get()).a((Entity) e0, (double) this.maxDistanceToItem);
         }
     }
 

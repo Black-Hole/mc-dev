@@ -11,9 +11,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.World;
 
-public abstract class EntityProjectileThrowable extends EntityProjectile {
+public abstract class EntityProjectileThrowable extends EntityProjectile implements ItemSupplier {
 
-    private static final DataWatcherObject<ItemStack> b = DataWatcher.a(EntityProjectileThrowable.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<ItemStack> DATA_ITEM_STACK = DataWatcher.a(EntityProjectileThrowable.class, DataWatcherRegistry.ITEM_STACK);
 
     public EntityProjectileThrowable(EntityTypes<? extends EntityProjectileThrowable> entitytypes, World world) {
         super(entitytypes, world);
@@ -28,8 +28,8 @@ public abstract class EntityProjectileThrowable extends EntityProjectile {
     }
 
     public void setItem(ItemStack itemstack) {
-        if (itemstack.getItem() != this.getDefaultItem() || itemstack.hasTag()) {
-            this.getDataWatcher().set(EntityProjectileThrowable.b, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
+        if (!itemstack.a(this.getDefaultItem()) || itemstack.hasTag()) {
+            this.getDataWatcher().set(EntityProjectileThrowable.DATA_ITEM_STACK, (ItemStack) SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
                 itemstack1.setCount(1);
             }));
         }
@@ -39,10 +39,11 @@ public abstract class EntityProjectileThrowable extends EntityProjectile {
     protected abstract Item getDefaultItem();
 
     public ItemStack getItem() {
-        return (ItemStack) this.getDataWatcher().get(EntityProjectileThrowable.b);
+        return (ItemStack) this.getDataWatcher().get(EntityProjectileThrowable.DATA_ITEM_STACK);
     }
 
-    public ItemStack g() {
+    @Override
+    public ItemStack getSuppliedItem() {
         ItemStack itemstack = this.getItem();
 
         return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
@@ -50,7 +51,7 @@ public abstract class EntityProjectileThrowable extends EntityProjectile {
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityProjectileThrowable.b, ItemStack.b);
+        this.getDataWatcher().register(EntityProjectileThrowable.DATA_ITEM_STACK, ItemStack.EMPTY);
     }
 
     @Override

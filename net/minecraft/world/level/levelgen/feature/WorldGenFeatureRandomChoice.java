@@ -14,18 +14,24 @@ public class WorldGenFeatureRandomChoice extends WorldGenerator<WorldGenFeatureR
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration) {
-        Iterator iterator = worldgenfeaturerandomchoiceconfiguration.b.iterator();
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureRandomChoiceConfiguration> featureplacecontext) {
+        WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration = (WorldGenFeatureRandomChoiceConfiguration) featureplacecontext.e();
+        Random random = featureplacecontext.c();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        ChunkGenerator chunkgenerator = featureplacecontext.b();
+        BlockPosition blockposition = featureplacecontext.d();
+        Iterator iterator = worldgenfeaturerandomchoiceconfiguration.features.iterator();
 
         WorldGenFeatureRandomChoiceConfigurationWeight worldgenfeaturerandomchoiceconfigurationweight;
 
         do {
             if (!iterator.hasNext()) {
-                return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfiguration.c.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
+                return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfiguration.defaultFeature.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
             }
 
             worldgenfeaturerandomchoiceconfigurationweight = (WorldGenFeatureRandomChoiceConfigurationWeight) iterator.next();
-        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.c);
+        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.chance);
 
         return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccessseed, chunkgenerator, random, blockposition);
     }

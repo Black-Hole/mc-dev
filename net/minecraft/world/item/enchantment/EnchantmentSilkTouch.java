@@ -25,6 +25,6 @@ public class EnchantmentSilkTouch extends Enchantment {
 
     @Override
     public boolean a(Enchantment enchantment) {
-        return super.a(enchantment) && enchantment != Enchantments.LOOT_BONUS_BLOCKS;
+        return super.a(enchantment) && enchantment != Enchantments.BLOCK_FORTUNE;
     }
 }

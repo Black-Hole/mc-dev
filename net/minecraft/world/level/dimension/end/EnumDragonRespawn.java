@@ -126,7 +126,7 @@ public enum EnumDragonRespawn {
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {}
     };
 
-    private EnumDragonRespawn() {}
+    EnumDragonRespawn() {}
 
     public abstract void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition);
 }

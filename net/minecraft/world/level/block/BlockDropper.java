@@ -8,17 +8,17 @@ import net.minecraft.core.dispenser.IDispenseBehavior;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityDispenser;
 import net.minecraft.world.level.block.entity.TileEntityDropper;
 import net.minecraft.world.level.block.entity.TileEntityHopper;
 import net.minecraft.world.level.block.state.BlockBase;
+import net.minecraft.world.level.block.state.IBlockData;
 
 public class BlockDropper extends BlockDispenser {
 
-    private static final IDispenseBehavior c = new DispenseBehaviorItem();
+    private static final IDispenseBehavior DISPENSE_BEHAVIOUR = new DispenseBehaviorItem();
 
     public BlockDropper(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -26,12 +26,12 @@ public class BlockDropper extends BlockDispenser {
 
     @Override
     protected IDispenseBehavior a(ItemStack itemstack) {
-        return BlockDropper.c;
+        return BlockDropper.DISPENSE_BEHAVIOUR;
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityDropper();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityDropper(blockposition, iblockdata);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class BlockDropper extends BlockDispenser {
 
             if (!itemstack.isEmpty()) {
                 EnumDirection enumdirection = (EnumDirection) worldserver.getType(blockposition).get(BlockDropper.FACING);
-                IInventory iinventory = TileEntityHopper.b((World) worldserver, blockposition.shift(enumdirection));
+                IInventory iinventory = TileEntityHopper.a((World) worldserver, blockposition.shift(enumdirection));
                 ItemStack itemstack1;
 
                 if (iinventory == null) {
-                    itemstack1 = BlockDropper.c.dispense(sourceblock, itemstack);
+                    itemstack1 = BlockDropper.DISPENSE_BEHAVIOUR.dispense(sourceblock, itemstack);
                 } else {
                     itemstack1 = TileEntityHopper.addItem(tileentitydispenser, iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
                     if (itemstack1.isEmpty()) {

@@ -11,6 +11,12 @@ import net.minecraft.server.packs.metadata.ResourcePackMetaParser;
 
 public interface IResourcePack extends AutoCloseable {
 
+    String METADATA_EXTENSION = ".mcmeta";
+    String PACK_META = "pack.mcmeta";
+
+    @Nullable
+    InputStream b(String s) throws IOException;
+
     InputStream a(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) throws IOException;
 
     Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate);

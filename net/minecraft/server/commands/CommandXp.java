@@ -22,7 +22,9 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class CommandXp {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.experience.set.points.invalid"));
+    private static final SimpleCommandExceptionType ERROR_SET_POINTS_INVALID = new SimpleCommandExceptionType(new ChatMessage("commands.experience.set.points.invalid"));
+
+    public CommandXp() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("experience").requires((commandlistenerwrapper) -> {
@@ -51,9 +53,9 @@ public class CommandXp {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, EntityPlayer entityplayer, CommandXp.Unit commandxp_unit) {
-        int i = commandxp_unit.f.applyAsInt(entityplayer);
+        int i = commandxp_unit.query.applyAsInt(entityplayer);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.e, new Object[]{entityplayer.getScoreboardDisplayName(), i}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.name, new Object[]{entityplayer.getScoreboardDisplayName(), i}), false);
         return i;
     }
 
@@ -63,13 +65,13 @@ public class CommandXp {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            commandxp_unit.c.accept(entityplayer, i);
+            commandxp_unit.add.accept(entityplayer, i);
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.name + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.multiple", new Object[]{i, collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.name + ".success.multiple", new Object[]{i, collection.size()}), true);
         }
 
         return collection.size();
@@ -82,25 +84,25 @@ public class CommandXp {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (commandxp_unit.d.test(entityplayer, i)) {
+            if (commandxp_unit.set.test(entityplayer, i)) {
                 ++j;
             }
         }
 
         if (j == 0) {
-            throw CommandXp.a.create();
+            throw CommandXp.ERROR_SET_POINTS_INVALID.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.name + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.multiple", new Object[]{i, collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.name + ".success.multiple", new Object[]{i, collection.size()}), true);
             }
 
             return collection.size();
         }
     }
 
-    static enum Unit {
+    private static enum Unit {
 
         POINTS("points", EntityHuman::giveExp, (entityplayer, integer) -> {
             if (integer >= entityplayer.getExpToLevel()) {
@@ -110,24 +112,24 @@ public class CommandXp {
                 return true;
             }
         }, (entityplayer) -> {
-            return MathHelper.d(entityplayer.exp * (float) entityplayer.getExpToLevel());
+            return MathHelper.d(entityplayer.experienceProgress * (float) entityplayer.getExpToLevel());
         }), LEVELS("levels", EntityPlayer::levelDown, (entityplayer, integer) -> {
             entityplayer.b(integer);
             return true;
         }, (entityplayer) -> {
-            return entityplayer.expLevel;
+            return entityplayer.experienceLevel;
         });
 
-        public final BiConsumer<EntityPlayer, Integer> c;
-        public final BiPredicate<EntityPlayer, Integer> d;
-        public final String e;
-        private final ToIntFunction<EntityPlayer> f;
+        public final BiConsumer<EntityPlayer, Integer> add;
+        public final BiPredicate<EntityPlayer, Integer> set;
+        public final String name;
+        final ToIntFunction<EntityPlayer> query;
 
         private Unit(String s, BiConsumer biconsumer, BiPredicate bipredicate, ToIntFunction tointfunction) {
-            this.c = biconsumer;
-            this.e = s;
-            this.d = bipredicate;
-            this.f = tointfunction;
+            this.add = biconsumer;
+            this.name = s;
+            this.set = bipredicate;
+            this.query = tointfunction;
         }
     }
 }

@@ -16,11 +16,11 @@ public class WorldNBTStorage {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final File playerDir;
-    protected final DataFixer a;
+    protected final DataFixer fixerUpper;
 
     public WorldNBTStorage(Convertable.ConversionSession convertable_conversionsession, DataFixer datafixer) {
-        this.a = datafixer;
-        this.playerDir = convertable_conversionsession.getWorldFolder(SavedFile.PLAYERDATA).toFile();
+        this.fixerUpper = datafixer;
+        this.playerDir = convertable_conversionsession.getWorldFolder(SavedFile.PLAYER_DATA_DIR).toFile();
         this.playerDir.mkdirs();
     }
 
@@ -57,7 +57,7 @@ public class WorldNBTStorage {
         if (nbttagcompound != null) {
             int i = nbttagcompound.hasKeyOfType("DataVersion", 3) ? nbttagcompound.getInt("DataVersion") : -1;
 
-            entityhuman.load(GameProfileSerializer.a(this.a, DataFixTypes.PLAYER, nbttagcompound, i));
+            entityhuman.load(GameProfileSerializer.a(this.fixerUpper, DataFixTypes.PLAYER, nbttagcompound, i));
         }
 
         return nbttagcompound;

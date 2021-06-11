@@ -2,66 +2,70 @@ package net.minecraft.core;
 
 public class CursorPosition {
 
-    private int a;
-    private int b;
-    private int c;
-    private int d;
-    private int e;
-    private int f;
-    private int g;
-    private int h;
-    private int i;
-    private int j;
-    private int k;
+    public static final int TYPE_INSIDE = 0;
+    public static final int TYPE_FACE = 1;
+    public static final int TYPE_EDGE = 2;
+    public static final int TYPE_CORNER = 3;
+    private final int originX;
+    private final int originY;
+    private final int originZ;
+    private final int width;
+    private final int height;
+    private final int depth;
+    private final int end;
+    private int index;
+    private int x;
+    private int y;
+    private int z;
 
     public CursorPosition(int i, int j, int k, int l, int i1, int j1) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
-        this.d = l - i + 1;
-        this.e = i1 - j + 1;
-        this.f = j1 - k + 1;
-        this.g = this.d * this.e * this.f;
+        this.originX = i;
+        this.originY = j;
+        this.originZ = k;
+        this.width = l - i + 1;
+        this.height = i1 - j + 1;
+        this.depth = j1 - k + 1;
+        this.end = this.width * this.height * this.depth;
     }
 
     public boolean a() {
-        if (this.h == this.g) {
+        if (this.index == this.end) {
             return false;
         } else {
-            this.i = this.h % this.d;
-            int i = this.h / this.d;
+            this.x = this.index % this.width;
+            int i = this.index / this.width;
 
-            this.j = i % this.e;
-            this.k = i / this.e;
-            ++this.h;
+            this.y = i % this.height;
+            this.z = i / this.height;
+            ++this.index;
             return true;
         }
     }
 
     public int b() {
-        return this.a + this.i;
+        return this.originX + this.x;
     }
 
     public int c() {
-        return this.b + this.j;
+        return this.originY + this.y;
     }
 
     public int d() {
-        return this.c + this.k;
+        return this.originZ + this.z;
     }
 
     public int e() {
         int i = 0;
 
-        if (this.i == 0 || this.i == this.d - 1) {
+        if (this.x == 0 || this.x == this.width - 1) {
             ++i;
         }
 
-        if (this.j == 0 || this.j == this.e - 1) {
+        if (this.y == 0 || this.y == this.height - 1) {
             ++i;
         }
 
-        if (this.k == 0 || this.k == this.f - 1) {
+        if (this.z == 0 || this.z == this.depth - 1) {
             ++i;
         }
 

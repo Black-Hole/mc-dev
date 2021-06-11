@@ -8,54 +8,54 @@ import net.minecraft.util.INamable;
 
 public enum EnumCreatureType implements INamable {
 
-    MONSTER("monster", 70, false, false, 128), CREATURE("creature", 10, true, true, 128), AMBIENT("ambient", 15, true, false, 128), WATER_CREATURE("water_creature", 5, true, false, 128), WATER_AMBIENT("water_ambient", 20, true, false, 64), MISC("misc", -1, true, true, 128);
+    MONSTER("monster", 70, false, false, 128), CREATURE("creature", 10, true, true, 128), AMBIENT("ambient", 15, true, false, 128), UNDERGROUND_WATER_CREATURE("underground_water_creature", 5, true, false, 128), WATER_CREATURE("water_creature", 5, true, false, 128), WATER_AMBIENT("water_ambient", 20, true, false, 64), MISC("misc", -1, true, true, 128);
 
-    public static final Codec<EnumCreatureType> g = INamable.a(EnumCreatureType::values, EnumCreatureType::a);
-    private static final Map<String, EnumCreatureType> h = (Map) Arrays.stream(values()).collect(Collectors.toMap(EnumCreatureType::b, (enumcreaturetype) -> {
+    public static final Codec<EnumCreatureType> CODEC = INamable.a(EnumCreatureType::values, EnumCreatureType::a);
+    private static final Map<String, EnumCreatureType> BY_NAME = (Map) Arrays.stream(values()).collect(Collectors.toMap(EnumCreatureType::a, (enumcreaturetype) -> {
         return enumcreaturetype;
     }));
-    private final int i;
-    private final boolean j;
-    private final boolean k;
-    private final String l;
-    private final int m = 32;
-    private final int n;
+    private final int max;
+    private final boolean isFriendly;
+    private final boolean isPersistent;
+    private final String name;
+    private final int noDespawnDistance = 32;
+    private final int despawnDistance;
 
     private EnumCreatureType(String s, int i, boolean flag, boolean flag1, int j) {
-        this.l = s;
-        this.i = i;
-        this.j = flag;
-        this.k = flag1;
-        this.n = j;
+        this.name = s;
+        this.max = i;
+        this.isFriendly = flag;
+        this.isPersistent = flag1;
+        this.despawnDistance = j;
     }
 
-    public String b() {
-        return this.l;
+    public String a() {
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.l;
+        return this.name;
     }
 
     public static EnumCreatureType a(String s) {
-        return (EnumCreatureType) EnumCreatureType.h.get(s);
+        return (EnumCreatureType) EnumCreatureType.BY_NAME.get(s);
     }
 
-    public int c() {
-        return this.i;
+    public int b() {
+        return this.max;
     }
 
     public boolean d() {
-        return this.j;
+        return this.isFriendly;
     }
 
     public boolean e() {
-        return this.k;
+        return this.isPersistent;
     }
 
     public int f() {
-        return this.n;
+        return this.despawnDistance;
     }
 
     public int g() {

@@ -22,15 +22,15 @@ public class BlockSoulFire extends BlockFireAbstract {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return c(iworldreader.getType(blockposition.down()).getBlock());
+        return h(iworldreader.getType(blockposition.down()));
     }
 
-    public static boolean c(Block block) {
-        return block.a((Tag) TagsBlock.SOUL_FIRE_BASE_BLOCKS);
+    public static boolean h(IBlockData iblockdata) {
+        return iblockdata.a((Tag) TagsBlock.SOUL_FIRE_BASE_BLOCKS);
     }
 
     @Override
-    protected boolean e(IBlockData iblockdata) {
+    protected boolean f(IBlockData iblockdata) {
         return true;
     }
 }

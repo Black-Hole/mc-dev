@@ -11,7 +11,6 @@ import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRadiusConfiguration;
 
 public class WorldGenFeatureNetherrackReplaceBlobs extends WorldGenerator<WorldGenFeatureRadiusConfiguration> {
@@ -20,28 +19,35 @@ public class WorldGenFeatureNetherrackReplaceBlobs extends WorldGenerator<WorldG
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRadiusConfiguration worldgenfeatureradiusconfiguration) {
-        Block block = worldgenfeatureradiusconfiguration.b.getBlock();
-        BlockPosition blockposition1 = a((GeneratorAccess) generatoraccessseed, blockposition.i().a(EnumDirection.EnumAxis.Y, 1, generatoraccessseed.getBuildHeight() - 1), block);
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureRadiusConfiguration> featureplacecontext) {
+        WorldGenFeatureRadiusConfiguration worldgenfeatureradiusconfiguration = (WorldGenFeatureRadiusConfiguration) featureplacecontext.e();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
+        Block block = worldgenfeatureradiusconfiguration.targetState.getBlock();
+        BlockPosition blockposition = a((GeneratorAccess) generatoraccessseed, featureplacecontext.d().i().a(EnumDirection.EnumAxis.Y, generatoraccessseed.getMinBuildHeight() + 1, generatoraccessseed.getMaxBuildHeight() - 1), block);
 
-        if (blockposition1 == null) {
+        if (blockposition == null) {
             return false;
         } else {
             int i = worldgenfeatureradiusconfiguration.b().a(random);
+            int j = worldgenfeatureradiusconfiguration.b().a(random);
+            int k = worldgenfeatureradiusconfiguration.b().a(random);
+            int l = Math.max(i, Math.max(j, k));
             boolean flag = false;
-            Iterator iterator = BlockPosition.a(blockposition1, i, i, i).iterator();
+            Iterator iterator = BlockPosition.a(blockposition, i, j, k).iterator();
 
             while (iterator.hasNext()) {
-                BlockPosition blockposition2 = (BlockPosition) iterator.next();
+                BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                if (blockposition2.k(blockposition1) > i) {
+                if (blockposition1.k(blockposition) > l) {
                     break;
                 }
 
-                IBlockData iblockdata = generatoraccessseed.getType(blockposition2);
+                IBlockData iblockdata = generatoraccessseed.getType(blockposition1);
 
                 if (iblockdata.a(block)) {
-                    this.a((IWorldWriter) generatoraccessseed, blockposition2, worldgenfeatureradiusconfiguration.c);
+                    this.a((IWorldWriter) generatoraccessseed, blockposition1, worldgenfeatureradiusconfiguration.replaceState);
                     flag = true;
                 }
             }
@@ -52,7 +58,7 @@ public class WorldGenFeatureNetherrackReplaceBlobs extends WorldGenerator<WorldG
 
     @Nullable
     private static BlockPosition a(GeneratorAccess generatoraccess, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, Block block) {
-        while (blockposition_mutableblockposition.getY() > 1) {
+        while (blockposition_mutableblockposition.getY() > generatoraccess.getMinBuildHeight() + 1) {
             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition);
 
             if (iblockdata.a(block)) {

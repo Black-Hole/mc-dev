@@ -4,13 +4,11 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 
 public class NBTTagString implements NBTBase {
 
-    public static final NBTTagType<NBTTagString> a = new NBTTagType<NBTTagString>() {
+    private static final int SELF_SIZE_IN_BITS = 288;
+    public static final NBTTagType<NBTTagString> TYPE = new NBTTagType<NBTTagString>() {
         @Override
         public NBTTagString b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(288L);
@@ -35,7 +33,11 @@ public class NBTTagString implements NBTBase {
             return true;
         }
     };
-    private static final NBTTagString b = new NBTTagString("");
+    private static final NBTTagString EMPTY = new NBTTagString("");
+    private static final char DOUBLE_QUOTE = '"';
+    private static final char SINGLE_QUOTE = '\'';
+    private static final char ESCAPE = '\\';
+    private static final char NOT_SET = '\u0000';
     private final String data;
 
     private NBTTagString(String s) {
@@ -44,7 +46,7 @@ public class NBTTagString implements NBTBase {
     }
 
     public static NBTTagString a(String s) {
-        return s.isEmpty() ? NBTTagString.b : new NBTTagString(s);
+        return s.isEmpty() ? NBTTagString.EMPTY : new NBTTagString(s);
     }
 
     @Override
@@ -59,12 +61,12 @@ public class NBTTagString implements NBTBase {
 
     @Override
     public NBTTagType<NBTTagString> b() {
-        return NBTTagString.a;
+        return NBTTagString.TYPE;
     }
 
     @Override
     public String toString() {
-        return b(this.data);
+        return NBTBase.super.asString();
     }
 
     @Override
@@ -86,12 +88,8 @@ public class NBTTagString implements NBTBase {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        String s1 = b(this.data);
-        String s2 = s1.substring(0, 1);
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1.substring(1, s1.length() - 1))).a(NBTTagString.e);
-
-        return (new ChatComponentText(s2)).addSibling(ichatmutablecomponent).c(s2);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     public static String b(String s) {

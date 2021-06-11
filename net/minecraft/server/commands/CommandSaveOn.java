@@ -10,7 +10,9 @@ import net.minecraft.server.level.WorldServer;
 
 public class CommandSaveOn {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOn"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_ON = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOn"));
+
+    public CommandSaveOn() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("save-on").requires((commandlistenerwrapper) -> {
@@ -23,14 +25,14 @@ public class CommandSaveOn {
             while (iterator.hasNext()) {
                 WorldServer worldserver = (WorldServer) iterator.next();
 
-                if (worldserver != null && worldserver.savingDisabled) {
-                    worldserver.savingDisabled = false;
+                if (worldserver != null && worldserver.noSave) {
+                    worldserver.noSave = false;
                     flag = true;
                 }
             }
 
             if (!flag) {
-                throw CommandSaveOn.a.create();
+                throw CommandSaveOn.ERROR_ALREADY_ON.create();
             } else {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.enabled"), true);
                 return 1;

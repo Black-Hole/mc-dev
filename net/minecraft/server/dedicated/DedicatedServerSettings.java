@@ -2,16 +2,15 @@ package net.minecraft.server.dedicated;
 
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
-import net.minecraft.core.IRegistryCustom;
 
 public class DedicatedServerSettings {
 
-    private final Path path;
+    private final Path source;
     private DedicatedServerProperties properties;
 
-    public DedicatedServerSettings(IRegistryCustom iregistrycustom, Path path) {
-        this.path = path;
-        this.properties = DedicatedServerProperties.load(iregistrycustom, path);
+    public DedicatedServerSettings(Path path) {
+        this.source = path;
+        this.properties = DedicatedServerProperties.load(path);
     }
 
     public DedicatedServerProperties getProperties() {
@@ -19,11 +18,11 @@ public class DedicatedServerSettings {
     }
 
     public void save() {
-        this.properties.savePropertiesFile(this.path);
+        this.properties.savePropertiesFile(this.source);
     }
 
     public DedicatedServerSettings setProperty(UnaryOperator<DedicatedServerProperties> unaryoperator) {
-        (this.properties = (DedicatedServerProperties) unaryoperator.apply(this.properties)).savePropertiesFile(this.path);
+        (this.properties = (DedicatedServerProperties) unaryoperator.apply(this.properties)).savePropertiesFile(this.source);
         return this;
     }
 }

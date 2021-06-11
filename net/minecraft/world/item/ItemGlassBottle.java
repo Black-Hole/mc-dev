@@ -9,6 +9,7 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.InteractionResultWrapper;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAreaEffectCloud;
 import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
 import net.minecraft.world.entity.player.EntityHuman;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.alchemy.PotionUtil;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.RayTrace;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.MovingObjectPosition;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 
@@ -36,8 +38,9 @@ public class ItemGlassBottle extends Item {
             EntityAreaEffectCloud entityareaeffectcloud = (EntityAreaEffectCloud) list.get(0);
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
-            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            return InteractionResultWrapper.a(this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)), world.s_());
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            world.a((Entity) entityhuman, GameEvent.FLUID_PICKUP, entityhuman.getChunkCoordinates());
+            return InteractionResultWrapper.a(this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)), world.isClientSide());
         } else {
             MovingObjectPositionBlock movingobjectpositionblock = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
@@ -52,8 +55,9 @@ public class ItemGlassBottle extends Item {
                     }
 
                     if (world.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
-                        world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        return InteractionResultWrapper.a(this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)), world.s_());
+                        world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        world.a((Entity) entityhuman, GameEvent.FLUID_PICKUP, blockposition);
+                        return InteractionResultWrapper.a(this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)), world.isClientSide());
                     }
                 }
 

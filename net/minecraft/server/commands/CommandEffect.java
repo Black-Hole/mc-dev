@@ -23,9 +23,11 @@ import net.minecraft.world.entity.EntityLiving;
 
 public class CommandEffect {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.effect.give.failed"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.everything.failed"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.specific.failed"));
+    private static final SimpleCommandExceptionType ERROR_GIVE_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.effect.give.failed"));
+    private static final SimpleCommandExceptionType ERROR_CLEAR_EVERYTHING_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.everything.failed"));
+    private static final SimpleCommandExceptionType ERROR_CLEAR_SPECIFIC_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.specific.failed"));
+
+    public CommandEffect() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("effect").requires((commandlistenerwrapper) -> {
@@ -71,14 +73,14 @@ public class CommandEffect {
             if (entity instanceof EntityLiving) {
                 MobEffect mobeffect = new MobEffect(mobeffectlist, k, i, false, flag);
 
-                if (((EntityLiving) entity).addEffect(mobeffect)) {
+                if (((EntityLiving) entity).addEffect(mobeffect, commandlistenerwrapper.getEntity())) {
                     ++j;
                 }
             }
         }
 
         if (j == 0) {
-            throw CommandEffect.a.create();
+            throw CommandEffect.ERROR_GIVE_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[]{mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), k / 20}), true);
@@ -103,7 +105,7 @@ public class CommandEffect {
         }
 
         if (i == 0) {
-            throw CommandEffect.b.create();
+            throw CommandEffect.ERROR_CLEAR_EVERYTHING_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.single", new Object[]{((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
@@ -128,7 +130,7 @@ public class CommandEffect {
         }
 
         if (i == 0) {
-            throw CommandEffect.c.create();
+            throw CommandEffect.ERROR_CLEAR_SPECIFIC_FAILED.create();
         } else {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.single", new Object[]{mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);

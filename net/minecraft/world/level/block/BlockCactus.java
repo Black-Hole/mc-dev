@@ -25,13 +25,15 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCactus extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.aj;
-    protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
-    protected static final VoxelShape c = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+    public static final BlockStateInteger AGE = BlockProperties.AGE_15;
+    public static final int MAX_AGE = 15;
+    protected static final int AABB_OFFSET = 1;
+    protected static final VoxelShape COLLISION_SHAPE = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
+    protected static final VoxelShape OUTLINE_SHAPE = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
     protected BlockCactus(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockCactus.AGE, 0));
     }
 
     @Override
@@ -72,12 +74,12 @@ public class BlockCactus extends Block {
 
     @Override
     public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCactus.b;
+        return BlockCactus.COLLISION_SHAPE;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCactus.c;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCactus.OUTLINE_SHAPE;
     }
 
     @Override

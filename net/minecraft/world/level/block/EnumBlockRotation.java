@@ -12,10 +12,10 @@ public enum EnumBlockRotation {
 
     NONE(PointGroupO.IDENTITY), CLOCKWISE_90(PointGroupO.ROT_90_Y_NEG), CLOCKWISE_180(PointGroupO.ROT_180_FACE_XZ), COUNTERCLOCKWISE_90(PointGroupO.ROT_90_Y_POS);
 
-    private final PointGroupO e;
+    private final PointGroupO rotation;
 
     private EnumBlockRotation(PointGroupO pointgroupo) {
-        this.e = pointgroupo;
+        this.rotation = pointgroupo;
     }
 
     public EnumBlockRotation a(EnumBlockRotation enumblockrotation) {
@@ -59,7 +59,7 @@ public enum EnumBlockRotation {
     }
 
     public PointGroupO a() {
-        return this.e;
+        return this.rotation;
     }
 
     public EnumDirection a(EnumDirection enumdirection) {

@@ -1,35 +1,22 @@
 package net.minecraft.world.level;
 
-import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.material.Fluid;
 
-public final class BlockColumn implements IBlockAccess {
+public final class BlockColumn {
 
-    private final IBlockData[] a;
+    private final int minY;
+    private final IBlockData[] column;
 
-    public BlockColumn(IBlockData[] aiblockdata) {
-        this.a = aiblockdata;
+    public BlockColumn(int i, IBlockData[] aiblockdata) {
+        this.minY = i;
+        this.column = aiblockdata;
     }
 
-    @Nullable
-    @Override
-    public TileEntity getTileEntity(BlockPosition blockposition) {
-        return null;
-    }
+    public IBlockData a(BlockPosition blockposition) {
+        int i = blockposition.getY() - this.minY;
 
-    @Override
-    public IBlockData getType(BlockPosition blockposition) {
-        int i = blockposition.getY();
-
-        return i >= 0 && i < this.a.length ? this.a[i] : Blocks.AIR.getBlockData();
-    }
-
-    @Override
-    public Fluid getFluid(BlockPosition blockposition) {
-        return this.getType(blockposition).getFluid();
+        return i >= 0 && i < this.column.length ? this.column[i] : Blocks.AIR.getBlockData();
     }
 }

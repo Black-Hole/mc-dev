@@ -23,7 +23,7 @@ import net.minecraft.world.phys.MovingObjectPositionEntity;
 
 public class EntityWitherSkull extends EntityFireball {
 
-    private static final DataWatcherObject<Boolean> e = DataWatcher.a(EntityWitherSkull.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> DATA_DANGEROUS = DataWatcher.a(EntityWitherSkull.class, DataWatcherRegistry.BOOLEAN);
 
     public EntityWitherSkull(EntityTypes<? extends EntityWitherSkull> entitytypes, World world) {
         super(entitytypes, world);
@@ -34,8 +34,8 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     @Override
-    protected float i() {
-        return this.isCharged() ? 0.73F : super.i();
+    protected float j() {
+        return this.isCharged() ? 0.73F : super.j();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EntityWitherSkull extends EntityFireball {
     @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         super.a(movingobjectpositionentity);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             Entity entity = movingobjectpositionentity.getEntity();
             Entity entity1 = this.getShooter();
             boolean flag;
@@ -74,14 +74,14 @@ public class EntityWitherSkull extends EntityFireball {
             if (flag && entity instanceof EntityLiving) {
                 byte b0 = 0;
 
-                if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+                if (this.level.getDifficulty() == EnumDifficulty.NORMAL) {
                     b0 = 10;
-                } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+                } else if (this.level.getDifficulty() == EnumDifficulty.HARD) {
                     b0 = 40;
                 }
 
                 if (b0 > 0) {
-                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.WITHER, 20 * b0, 1));
+                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.WITHER, 20 * b0, 1), this.x());
                 }
             }
 
@@ -91,10 +91,10 @@ public class EntityWitherSkull extends EntityFireball {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (!this.world.isClientSide) {
-            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
+        if (!this.level.isClientSide) {
+            Explosion.Effect explosion_effect = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
 
-            this.world.createExplosion(this, this.locX(), this.locY(), this.locZ(), 1.0F, false, explosion_effect);
+            this.level.createExplosion(this, this.locX(), this.locY(), this.locZ(), 1.0F, false, explosion_effect);
             this.die();
         }
 
@@ -112,19 +112,19 @@ public class EntityWitherSkull extends EntityFireball {
 
     @Override
     protected void initDatawatcher() {
-        this.datawatcher.register(EntityWitherSkull.e, false);
+        this.entityData.register(EntityWitherSkull.DATA_DANGEROUS, false);
     }
 
     public boolean isCharged() {
-        return (Boolean) this.datawatcher.get(EntityWitherSkull.e);
+        return (Boolean) this.entityData.get(EntityWitherSkull.DATA_DANGEROUS);
     }
 
     public void setCharged(boolean flag) {
-        this.datawatcher.set(EntityWitherSkull.e, flag);
+        this.entityData.set(EntityWitherSkull.DATA_DANGEROUS, flag);
     }
 
     @Override
-    protected boolean W_() {
+    protected boolean J_() {
         return false;
     }
 }

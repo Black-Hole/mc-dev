@@ -1,5 +1,6 @@
 package net.minecraft.world.inventory;
 
+import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
@@ -7,12 +8,12 @@ import net.minecraft.world.level.block.entity.TileEntityFurnace;
 
 public class SlotFurnaceResult extends Slot {
 
-    private final EntityHuman a;
-    private int b;
+    private final EntityHuman player;
+    private int removeCount;
 
     public SlotFurnaceResult(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
-        this.a = entityhuman;
+        this.player = entityhuman;
     }
 
     @Override
@@ -23,32 +24,31 @@ public class SlotFurnaceResult extends Slot {
     @Override
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.b += Math.min(i, this.getItem().getCount());
+            this.removeCount += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
     }
 
     @Override
-    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-        this.c(itemstack);
+    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+        this.b_(itemstack);
         super.a(entityhuman, itemstack);
-        return itemstack;
     }
 
     @Override
     protected void a(ItemStack itemstack, int i) {
-        this.b += i;
-        this.c(itemstack);
+        this.removeCount += i;
+        this.b_(itemstack);
     }
 
     @Override
-    protected void c(ItemStack itemstack) {
-        itemstack.a(this.a.world, this.a, this.b);
-        if (!this.a.world.isClientSide && this.inventory instanceof TileEntityFurnace) {
-            ((TileEntityFurnace) this.inventory).d(this.a);
+    protected void b_(ItemStack itemstack) {
+        itemstack.a(this.player.level, this.player, this.removeCount);
+        if (this.player instanceof EntityPlayer && this.container instanceof TileEntityFurnace) {
+            ((TileEntityFurnace) this.container).a((EntityPlayer) this.player);
         }
 
-        this.b = 0;
+        this.removeCount = 0;
     }
 }

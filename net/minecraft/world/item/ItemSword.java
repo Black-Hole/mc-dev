@@ -19,21 +19,21 @@ import net.minecraft.world.level.material.Material;
 
 public class ItemSword extends ItemToolMaterial implements ItemVanishable {
 
-    private final float a;
-    private final Multimap<AttributeBase, AttributeModifier> b;
+    private final float attackDamage;
+    private final Multimap<AttributeBase, AttributeModifier> defaultModifiers;
 
     public ItemSword(ToolMaterial toolmaterial, int i, float f, Item.Info item_info) {
         super(toolmaterial, item_info);
-        this.a = (float) i + toolmaterial.c();
+        this.attackDamage = (float) i + toolmaterial.c();
         Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
 
-        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemSword.f, "Weapon modifier", (double) this.a, AttributeModifier.Operation.ADDITION));
-        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemSword.g, "Weapon modifier", (double) f, AttributeModifier.Operation.ADDITION));
-        this.b = builder.build();
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemSword.BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemSword.BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double) f, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
     }
 
-    public float f() {
-        return this.a;
+    public float i() {
+        return this.attackDamage;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ItemSword extends ItemToolMaterial implements ItemVanishable {
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a((Tag) TagsBlock.LEAVES) && material != Material.PUMPKIN ? 1.0F : 1.5F;
+            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !iblockdata.a((Tag) TagsBlock.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
         }
     }
 
@@ -78,6 +78,6 @@ public class ItemSword extends ItemToolMaterial implements ItemVanishable {
 
     @Override
     public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        return enumitemslot == EnumItemSlot.MAINHAND ? this.b : super.a(enumitemslot);
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.defaultModifiers : super.a(enumitemslot);
     }
 }

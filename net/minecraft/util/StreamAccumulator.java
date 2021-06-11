@@ -2,6 +2,7 @@ package net.minecraft.util;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
@@ -10,24 +11,24 @@ import java.util.stream.StreamSupport;
 
 public class StreamAccumulator<T> {
 
-    private final List<T> a = Lists.newArrayList();
-    private final Spliterator<T> b;
+    final List<T> cache = Lists.newArrayList();
+    final Spliterator<T> source;
 
     public StreamAccumulator(Stream<T> stream) {
-        this.b = stream.spliterator();
+        this.source = stream.spliterator();
     }
 
     public Stream<T> a() {
         return StreamSupport.stream(new AbstractSpliterator<T>(Long.MAX_VALUE, 0) {
-            private int b;
+            private int index;
 
             public boolean tryAdvance(Consumer<? super T> consumer) {
                 while (true) {
-                    if (this.b >= StreamAccumulator.this.a.size()) {
-                        Spliterator spliterator = StreamAccumulator.this.b;
-                        List list = StreamAccumulator.this.a;
+                    if (this.index >= StreamAccumulator.this.cache.size()) {
+                        Spliterator spliterator = StreamAccumulator.this.source;
+                        List list = StreamAccumulator.this.cache;
 
-                        list.getClass();
+                        Objects.requireNonNull(StreamAccumulator.this.cache);
                         if (spliterator.tryAdvance(list::add)) {
                             continue;
                         }
@@ -35,7 +36,7 @@ public class StreamAccumulator<T> {
                         return false;
                     }
 
-                    consumer.accept(StreamAccumulator.this.a.get(this.b++));
+                    consumer.accept(StreamAccumulator.this.cache.get(this.index++));
                     return true;
                 }
             }

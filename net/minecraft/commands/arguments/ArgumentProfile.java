@@ -24,8 +24,8 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
 
-    private static final Collection<String> b = Arrays.asList("Player", "0123", "dd12be42-52a9-4a91-a8a1-11c01849e498", "@e");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.player.unknown"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("Player", "0123", "dd12be42-52a9-4a91-a8a1-11c01849e498", "@e");
+    public static final SimpleCommandExceptionType ERROR_UNKNOWN_PLAYER = new SimpleCommandExceptionType(new ChatMessage("argument.player.unknown"));
 
     public ArgumentProfile() {}
 
@@ -43,7 +43,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
             EntitySelector entityselector = argumentparserselector.parse();
 
             if (entityselector.b()) {
-                throw ArgumentEntity.c.create();
+                throw ArgumentEntity.ERROR_ONLY_PLAYERS_ALLOWED.create();
             } else {
                 return new ArgumentProfile.b(entityselector);
             }
@@ -60,7 +60,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
                 GameProfile gameprofile = commandlistenerwrapper.getServer().getUserCache().getProfile(s);
 
                 if (gameprofile == null) {
-                    throw ArgumentProfile.a.create();
+                    throw ArgumentProfile.ERROR_UNKNOWN_PLAYER.create();
                 } else {
                     return Collections.singleton(gameprofile);
                 }
@@ -90,23 +90,29 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentProfile.b;
+        return ArgumentProfile.EXAMPLES;
+    }
+
+    @FunctionalInterface
+    public interface a {
+
+        Collection<GameProfile> getNames(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException;
     }
 
     public static class b implements ArgumentProfile.a {
 
-        private final EntitySelector a;
+        private final EntitySelector selector;
 
         public b(EntitySelector entityselector) {
-            this.a = entityselector;
+            this.selector = entityselector;
         }
 
         @Override
         public Collection<GameProfile> getNames(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-            List<EntityPlayer> list = this.a.d(commandlistenerwrapper);
+            List<EntityPlayer> list = this.selector.d(commandlistenerwrapper);
 
             if (list.isEmpty()) {
-                throw ArgumentEntity.e.create();
+                throw ArgumentEntity.NO_PLAYERS_FOUND.create();
             } else {
                 List<GameProfile> list1 = Lists.newArrayList();
                 Iterator iterator = list.iterator();
@@ -120,11 +126,5 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
                 return list1;
             }
         }
-    }
-
-    @FunctionalInterface
-    public interface a {
-
-        Collection<GameProfile> getNames(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException;
     }
 }

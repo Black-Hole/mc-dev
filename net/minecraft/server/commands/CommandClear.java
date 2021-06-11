@@ -21,12 +21,14 @@ import net.minecraft.world.item.ItemStack;
 
 public class CommandClear {
 
-    private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_SINGLE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("clear.failed.single", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_MULTIPLE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("clear.failed.multiple", new Object[]{object});
     });
+
+    public CommandClear() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("clear").requires((commandlistenerwrapper) -> {
@@ -53,17 +55,16 @@ public class CommandClear {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            j += entityplayer.inventory.a(predicate, i, entityplayer.defaultContainer.j());
-            entityplayer.activeContainer.c();
-            entityplayer.defaultContainer.a((IInventory) entityplayer.inventory);
-            entityplayer.broadcastCarriedItem();
+            j += entityplayer.getInventory().a(predicate, i, entityplayer.inventoryMenu.n());
+            entityplayer.containerMenu.d();
+            entityplayer.inventoryMenu.a((IInventory) entityplayer.getInventory());
         }
 
         if (j == 0) {
             if (collection.size() == 1) {
-                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName());
+                throw CommandClear.ERROR_SINGLE.create(((EntityPlayer) collection.iterator().next()).getDisplayName());
             } else {
-                throw CommandClear.b.create(collection.size());
+                throw CommandClear.ERROR_MULTIPLE.create(collection.size());
             }
         } else {
             if (i == 0) {

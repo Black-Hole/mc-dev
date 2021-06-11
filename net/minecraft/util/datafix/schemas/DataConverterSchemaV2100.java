@@ -31,7 +31,7 @@ public class DataConverterSchemaV2100 extends DataConverterSchemaNamed {
         Map<String, Supplier<TypeTemplate>> map = super.registerBlockEntities(schema);
 
         schema.register(map, "minecraft:beehive", () -> {
-            return DSL.optionalFields("Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "Bees", DSL.list(DSL.optionalFields("EntityData", DataConverterTypes.ENTITY_TREE.in(schema))));
+            return DSL.optionalFields("Bees", DSL.list(DSL.optionalFields("EntityData", DataConverterTypes.ENTITY_TREE.in(schema))));
         });
         return map;
     }

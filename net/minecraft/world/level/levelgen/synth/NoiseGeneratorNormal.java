@@ -1,22 +1,29 @@
 package net.minecraft.world.level.levelgen.synth;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import it.unimi.dsi.fastutil.doubles.DoubleListIterator;
-import net.minecraft.world.level.levelgen.SeededRandom;
+import net.minecraft.world.level.levelgen.RandomSource;
 
 public class NoiseGeneratorNormal {
 
-    private final double a;
-    private final NoiseGeneratorOctaves b;
-    private final NoiseGeneratorOctaves c;
+    private static final double INPUT_FACTOR = 1.0181268882175227D;
+    private static final double TARGET_DEVIATION = 0.3333333333333333D;
+    private final double valueFactor;
+    private final NoiseGeneratorOctaves first;
+    private final NoiseGeneratorOctaves second;
 
-    public static NoiseGeneratorNormal a(SeededRandom seededrandom, int i, DoubleList doublelist) {
-        return new NoiseGeneratorNormal(seededrandom, i, doublelist);
+    public static NoiseGeneratorNormal a(RandomSource randomsource, int i, double... adouble) {
+        return new NoiseGeneratorNormal(randomsource, i, new DoubleArrayList(adouble));
     }
 
-    private NoiseGeneratorNormal(SeededRandom seededrandom, int i, DoubleList doublelist) {
-        this.b = NoiseGeneratorOctaves.a(seededrandom, i, doublelist);
-        this.c = NoiseGeneratorOctaves.a(seededrandom, i, doublelist);
+    public static NoiseGeneratorNormal a(RandomSource randomsource, int i, DoubleList doublelist) {
+        return new NoiseGeneratorNormal(randomsource, i, doublelist);
+    }
+
+    private NoiseGeneratorNormal(RandomSource randomsource, int i, DoubleList doublelist) {
+        this.first = NoiseGeneratorOctaves.a(randomsource, i, doublelist);
+        this.second = NoiseGeneratorOctaves.a(randomsource, i, doublelist);
         int j = Integer.MAX_VALUE;
         int k = Integer.MIN_VALUE;
         DoubleListIterator doublelistiterator = doublelist.iterator();
@@ -31,7 +38,7 @@ public class NoiseGeneratorNormal {
             }
         }
 
-        this.a = 0.16666666666666666D / a(k - j);
+        this.valueFactor = 0.16666666666666666D / a(k - j);
     }
 
     private static double a(int i) {
@@ -43,6 +50,6 @@ public class NoiseGeneratorNormal {
         double d4 = d1 * 1.0181268882175227D;
         double d5 = d2 * 1.0181268882175227D;
 
-        return (this.b.a(d0, d1, d2) + this.c.a(d3, d4, d5)) * this.a;
+        return (this.first.a(d0, d1, d2) + this.second.a(d3, d4, d5)) * this.valueFactor;
     }
 }

@@ -13,7 +13,6 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityLiving;
-import net.minecraft.world.entity.IEntitySelector;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.boss.wither.EntityWither;
@@ -34,7 +33,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.MOBS, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, new MemoryModuleType[]{MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_REPELLENT});
+        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_NEMESIS, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, new MemoryModuleType[]{MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_REPELLENT});
     }
 
     @Override
@@ -52,7 +51,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
         int i = 0;
         List<EntityPiglinAbstract> list = Lists.newArrayList();
         List<EntityPiglinAbstract> list1 = Lists.newArrayList();
-        List<EntityLiving> list2 = (List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).orElse(ImmutableList.of());
+        List<EntityLiving> list2 = (List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of());
         Iterator iterator = list2.iterator();
 
         while (iterator.hasNext()) {
@@ -63,9 +62,9 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
                 if (entityhoglin.isBaby() && !optional2.isPresent()) {
                     optional2 = Optional.of(entityhoglin);
-                } else if (entityhoglin.eL()) {
+                } else if (entityhoglin.t()) {
                     ++i;
-                    if (!optional1.isPresent() && entityhoglin.eO()) {
+                    if (!optional1.isPresent() && entityhoglin.fx()) {
                         optional1 = Optional.of(entityhoglin);
                     }
                 }
@@ -76,13 +75,13 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
                 if (entitypiglin.isBaby() && !optional3.isPresent()) {
                     optional3 = Optional.of(entitypiglin);
-                } else if (entitypiglin.eM()) {
+                } else if (entitypiglin.fv()) {
                     list.add(entitypiglin);
                 }
             } else if (entityliving1 instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entityliving1;
 
-                if (!optional5.isPresent() && IEntitySelector.f.test(entityliving1) && !PiglinAI.a((EntityLiving) entityhuman)) {
+                if (!optional5.isPresent() && entityliving.c(entityliving1) && !PiglinAI.a((EntityLiving) entityhuman)) {
                     optional5 = Optional.of(entityhuman);
                 }
 
@@ -96,18 +95,18 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
             }
         }
 
-        List<EntityLiving> list3 = (List) behaviorcontroller.getMemory(MemoryModuleType.MOBS).orElse(ImmutableList.of());
+        List<EntityLiving> list3 = (List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of());
         Iterator iterator1 = list3.iterator();
 
         while (iterator1.hasNext()) {
             EntityLiving entityliving2 = (EntityLiving) iterator1.next();
 
-            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).eM()) {
+            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fv()) {
                 list1.add((EntityPiglinAbstract) entityliving2);
             }
         }
 
-        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_NEMSIS, optional);
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_NEMESIS, optional);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, optional1);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, optional2);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, optional4);

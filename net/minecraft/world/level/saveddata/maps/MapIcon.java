@@ -8,17 +8,22 @@ import net.minecraft.util.MathHelper;
 public class MapIcon {
 
     private final MapIcon.Type type;
-    private byte x;
-    private byte y;
-    private byte rotation;
+    private final byte x;
+    private final byte y;
+    private final byte rot;
+    @Nullable
     private final IChatBaseComponent name;
 
     public MapIcon(MapIcon.Type mapicon_type, byte b0, byte b1, byte b2, @Nullable IChatBaseComponent ichatbasecomponent) {
         this.type = mapicon_type;
         this.x = b0;
         this.y = b1;
-        this.rotation = b2;
+        this.rot = b2;
         this.name = ichatbasecomponent;
+    }
+
+    public byte getIconType() {
+        return this.type.a();
     }
 
     public MapIcon.Type getType() {
@@ -34,7 +39,11 @@ public class MapIcon {
     }
 
     public byte getRotation() {
-        return this.rotation;
+        return this.rot;
+    }
+
+    public boolean f() {
+        return this.type.b();
     }
 
     @Nullable
@@ -50,7 +59,7 @@ public class MapIcon {
         } else {
             MapIcon mapicon = (MapIcon) object;
 
-            return this.type != mapicon.type ? false : (this.rotation != mapicon.rotation ? false : (this.x != mapicon.x ? false : (this.y != mapicon.y ? false : Objects.equals(this.name, mapicon.name))));
+            return this.type == mapicon.type && this.rot == mapicon.rot && this.x == mapicon.x && this.y == mapicon.y && Objects.equals(this.name, mapicon.name);
         }
     }
 
@@ -59,43 +68,53 @@ public class MapIcon {
         int i = 31 * b0 + this.x;
 
         i = 31 * i + this.y;
-        i = 31 * i + this.rotation;
+        i = 31 * i + this.rot;
         i = 31 * i + Objects.hashCode(this.name);
         return i;
     }
 
     public static enum Type {
 
-        PLAYER(false), FRAME(true), RED_MARKER(false), BLUE_MARKER(false), TARGET_X(true), TARGET_POINT(true), PLAYER_OFF_MAP(false), PLAYER_OFF_LIMITS(false), MANSION(true, 5393476), MONUMENT(true, 3830373), BANNER_WHITE(true), BANNER_ORANGE(true), BANNER_MAGENTA(true), BANNER_LIGHT_BLUE(true), BANNER_YELLOW(true), BANNER_LIME(true), BANNER_PINK(true), BANNER_GRAY(true), BANNER_LIGHT_GRAY(true), BANNER_CYAN(true), BANNER_PURPLE(true), BANNER_BLUE(true), BANNER_BROWN(true), BANNER_GREEN(true), BANNER_RED(true), BANNER_BLACK(true), RED_X(true);
+        PLAYER(false, true), FRAME(true, true), RED_MARKER(false, true), BLUE_MARKER(false, true), TARGET_X(true, false), TARGET_POINT(true, false), PLAYER_OFF_MAP(false, true), PLAYER_OFF_LIMITS(false, true), MANSION(true, 5393476, false), MONUMENT(true, 3830373, false), BANNER_WHITE(true, true), BANNER_ORANGE(true, true), BANNER_MAGENTA(true, true), BANNER_LIGHT_BLUE(true, true), BANNER_YELLOW(true, true), BANNER_LIME(true, true), BANNER_PINK(true, true), BANNER_GRAY(true, true), BANNER_LIGHT_GRAY(true, true), BANNER_CYAN(true, true), BANNER_PURPLE(true, true), BANNER_BLUE(true, true), BANNER_BROWN(true, true), BANNER_GREEN(true, true), BANNER_RED(true, true), BANNER_BLACK(true, true), RED_X(true, false);
 
-        private final byte B;
-        private final boolean C;
-        private final int D;
+        private final byte icon;
+        private final boolean renderedOnFrame;
+        private final int mapColor;
+        private final boolean trackCount;
 
-        private Type(boolean flag) {
-            this(flag, -1);
+        private Type(boolean flag, boolean flag1) {
+            this(flag, -1, flag1);
         }
 
-        private Type(boolean flag, int i) {
-            this.B = (byte) this.ordinal();
-            this.C = flag;
-            this.D = i;
+        private Type(boolean flag, int i, boolean flag1) {
+            this.trackCount = flag1;
+            this.icon = (byte) this.ordinal();
+            this.renderedOnFrame = flag;
+            this.mapColor = i;
         }
 
         public byte a() {
-            return this.B;
+            return this.icon;
+        }
+
+        public boolean b() {
+            return this.renderedOnFrame;
         }
 
         public boolean c() {
-            return this.D >= 0;
+            return this.mapColor >= 0;
         }
 
         public int d() {
-            return this.D;
+            return this.mapColor;
         }
 
         public static MapIcon.Type a(byte b0) {
             return values()[MathHelper.clamp(b0, 0, values().length - 1)];
+        }
+
+        public boolean e() {
+            return this.trackCount;
         }
     }
 }

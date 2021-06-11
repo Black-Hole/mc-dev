@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.core.IRegistry;
 import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -32,8 +33,8 @@ import net.minecraft.world.level.block.state.properties.IBlockState;
 
 public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredicate.b> {
 
-    private static final Collection<String> a = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "#stone", "#stone[foo=bar]{baz=nbt}");
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "#stone", "#stone[foo=bar]{baz=nbt}");
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_TAG = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.block.tag.unknown", new Object[]{object});
     });
 
@@ -56,13 +57,11 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             MinecraftKey minecraftkey = argumentblock.d();
 
             return (itagregistry) -> {
-                Tag<Block> tag = itagregistry.getBlockTags().a(minecraftkey);
+                Tag<Block> tag = itagregistry.a(IRegistry.BLOCK_REGISTRY, minecraftkey, (minecraftkey1) -> {
+                    return ArgumentBlockPredicate.ERROR_UNKNOWN_TAG.create(minecraftkey1.toString());
+                });
 
-                if (tag == null) {
-                    throw ArgumentBlockPredicate.b.create(minecraftkey.toString());
-                } else {
-                    return new ArgumentBlockPredicate.c(tag, argumentblock.j(), argumentblock.c());
-                }
+                return new ArgumentBlockPredicate.c(tag, argumentblock.j(), argumentblock.c());
             };
         }
     }
@@ -87,29 +86,74 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
     }
 
     public Collection<String> getExamples() {
-        return ArgumentBlockPredicate.a;
+        return ArgumentBlockPredicate.EXAMPLES;
     }
 
-    static class c implements Predicate<ShapeDetectorBlock> {
+    private static class a implements Predicate<ShapeDetectorBlock> {
 
-        private final Tag<Block> a;
+        private final IBlockData state;
+        private final Set<IBlockState<?>> properties;
         @Nullable
-        private final NBTTagCompound b;
-        private final Map<String, String> c;
+        private final NBTTagCompound nbt;
 
-        private c(Tag<Block> tag, Map<String, String> map, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = tag;
-            this.c = map;
-            this.b = nbttagcompound;
+        public a(IBlockData iblockdata, Set<IBlockState<?>> set, @Nullable NBTTagCompound nbttagcompound) {
+            this.state = iblockdata;
+            this.properties = set;
+            this.nbt = nbttagcompound;
         }
 
         public boolean test(ShapeDetectorBlock shapedetectorblock) {
             IBlockData iblockdata = shapedetectorblock.a();
 
-            if (!iblockdata.a(this.a)) {
+            if (!iblockdata.a(this.state.getBlock())) {
                 return false;
             } else {
-                Iterator iterator = this.c.entrySet().iterator();
+                Iterator iterator = this.properties.iterator();
+
+                while (iterator.hasNext()) {
+                    IBlockState<?> iblockstate = (IBlockState) iterator.next();
+
+                    if (iblockdata.get(iblockstate) != this.state.get(iblockstate)) {
+                        return false;
+                    }
+                }
+
+                if (this.nbt == null) {
+                    return true;
+                } else {
+                    TileEntity tileentity = shapedetectorblock.b();
+
+                    return tileentity != null && GameProfileSerializer.a(this.nbt, tileentity.save(new NBTTagCompound()), true);
+                }
+            }
+        }
+    }
+
+    public interface b {
+
+        Predicate<ShapeDetectorBlock> create(ITagRegistry itagregistry) throws CommandSyntaxException;
+    }
+
+    private static class c implements Predicate<ShapeDetectorBlock> {
+
+        private final Tag<Block> tag;
+        @Nullable
+        private final NBTTagCompound nbt;
+        private final Map<String, String> vagueProperties;
+
+        c(Tag<Block> tag, Map<String, String> map, @Nullable NBTTagCompound nbttagcompound) {
+            this.tag = tag;
+            this.vagueProperties = map;
+            this.nbt = nbttagcompound;
+        }
+
+        public boolean test(ShapeDetectorBlock shapedetectorblock) {
+            IBlockData iblockdata = shapedetectorblock.a();
+
+            if (!iblockdata.a(this.tag)) {
+                return false;
+            } else {
+                Iterator iterator = this.vagueProperties.entrySet().iterator();
 
                 while (iterator.hasNext()) {
                     Entry<String, String> entry = (Entry) iterator.next();
@@ -130,59 +174,14 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
                     }
                 }
 
-                if (this.b == null) {
+                if (this.nbt == null) {
                     return true;
                 } else {
                     TileEntity tileentity = shapedetectorblock.b();
 
-                    return tileentity != null && GameProfileSerializer.a(this.b, tileentity.save(new NBTTagCompound()), true);
+                    return tileentity != null && GameProfileSerializer.a(this.nbt, tileentity.save(new NBTTagCompound()), true);
                 }
             }
         }
-    }
-
-    static class a implements Predicate<ShapeDetectorBlock> {
-
-        private final IBlockData a;
-        private final Set<IBlockState<?>> b;
-        @Nullable
-        private final NBTTagCompound c;
-
-        public a(IBlockData iblockdata, Set<IBlockState<?>> set, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = iblockdata;
-            this.b = set;
-            this.c = nbttagcompound;
-        }
-
-        public boolean test(ShapeDetectorBlock shapedetectorblock) {
-            IBlockData iblockdata = shapedetectorblock.a();
-
-            if (!iblockdata.a(this.a.getBlock())) {
-                return false;
-            } else {
-                Iterator iterator = this.b.iterator();
-
-                while (iterator.hasNext()) {
-                    IBlockState<?> iblockstate = (IBlockState) iterator.next();
-
-                    if (iblockdata.get(iblockstate) != this.a.get(iblockstate)) {
-                        return false;
-                    }
-                }
-
-                if (this.c == null) {
-                    return true;
-                } else {
-                    TileEntity tileentity = shapedetectorblock.b();
-
-                    return tileentity != null && GameProfileSerializer.a(this.c, tileentity.save(new NBTTagCompound()), true);
-                }
-            }
-        }
-    }
-
-    public interface b {
-
-        Predicate<ShapeDetectorBlock> create(ITagRegistry itagregistry) throws CommandSyntaxException;
     }
 }

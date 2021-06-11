@@ -5,12 +5,16 @@ import net.minecraft.resources.MinecraftKey;
 
 public class SoundEffect {
 
-    public static final Codec<SoundEffect> a = MinecraftKey.a.xmap(SoundEffect::new, (soundeffect) -> {
-        return soundeffect.b;
+    public static final Codec<SoundEffect> CODEC = MinecraftKey.CODEC.xmap(SoundEffect::new, (soundeffect) -> {
+        return soundeffect.location;
     });
-    private final MinecraftKey b;
+    private final MinecraftKey location;
 
     public SoundEffect(MinecraftKey minecraftkey) {
-        this.b = minecraftkey;
+        this.location = minecraftkey;
+    }
+
+    public MinecraftKey a() {
+        return this.location;
     }
 }

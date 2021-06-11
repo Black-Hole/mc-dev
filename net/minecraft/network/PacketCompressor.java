@@ -7,20 +7,20 @@ import java.util.zip.Deflater;
 
 public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
-    private final byte[] a = new byte[8192];
-    private final Deflater b;
-    private int c;
+    private final byte[] encodeBuf = new byte[8192];
+    private final Deflater deflater;
+    private int threshold;
 
     public PacketCompressor(int i) {
-        this.c = i;
-        this.b = new Deflater();
+        this.threshold = i;
+        this.deflater = new Deflater();
     }
 
-    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) {
         int i = bytebuf.readableBytes();
         PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 
-        if (i < this.c) {
+        if (i < this.threshold) {
             packetdataserializer.d(0);
             packetdataserializer.writeBytes(bytebuf);
         } else {
@@ -28,21 +28,25 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
             bytebuf.readBytes(abyte);
             packetdataserializer.d(abyte.length);
-            this.b.setInput(abyte, 0, i);
-            this.b.finish();
+            this.deflater.setInput(abyte, 0, i);
+            this.deflater.finish();
 
-            while (!this.b.finished()) {
-                int j = this.b.deflate(this.a);
+            while (!this.deflater.finished()) {
+                int j = this.deflater.deflate(this.encodeBuf);
 
-                packetdataserializer.writeBytes(this.a, 0, j);
+                packetdataserializer.writeBytes(this.encodeBuf, 0, j);
             }
 
-            this.b.reset();
+            this.deflater.reset();
         }
 
     }
 
+    public int a() {
+        return this.threshold;
+    }
+
     public void a(int i) {
-        this.c = i;
+        this.threshold = i;
     }
 }

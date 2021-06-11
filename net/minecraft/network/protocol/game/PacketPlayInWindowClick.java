@@ -1,6 +1,9 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.Map;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.inventory.InventoryClickType;
@@ -8,62 +11,68 @@ import net.minecraft.world.item.ItemStack;
 
 public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private int slot;
-    private int button;
-    private short d;
-    private ItemStack item;
-    private InventoryClickType shift;
+    private final int containerId;
+    private final int slotNum;
+    private final int buttonNum;
+    private final InventoryClickType clickType;
+    private final ItemStack carriedItem;
+    private final Int2ObjectMap<ItemStack> changedSlots;
 
-    public PacketPlayInWindowClick() {
-        this.item = ItemStack.b;
+    public PacketPlayInWindowClick(int i, int j, int k, InventoryClickType inventoryclicktype, ItemStack itemstack, Int2ObjectMap<ItemStack> int2objectmap) {
+        this.containerId = i;
+        this.slotNum = j;
+        this.buttonNum = k;
+        this.clickType = inventoryclicktype;
+        this.carriedItem = itemstack;
+        this.changedSlots = Int2ObjectMaps.unmodifiable(int2objectmap);
+    }
+
+    public PacketPlayInWindowClick(PacketDataSerializer packetdataserializer) {
+        this.containerId = packetdataserializer.readByte();
+        this.slotNum = packetdataserializer.readShort();
+        this.buttonNum = packetdataserializer.readByte();
+        this.clickType = (InventoryClickType) packetdataserializer.a(InventoryClickType.class);
+        this.changedSlots = Int2ObjectMaps.unmodifiable((Int2ObjectMap) packetdataserializer.a(Int2ObjectOpenHashMap::new, (packetdataserializer1) -> {
+            return Integer.valueOf(packetdataserializer1.readShort());
+        }, PacketDataSerializer::o));
+        this.carriedItem = packetdataserializer.o();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.containerId);
+        packetdataserializer.writeShort(this.slotNum);
+        packetdataserializer.writeByte(this.buttonNum);
+        packetdataserializer.a((Enum) this.clickType);
+        packetdataserializer.a((Map) this.changedSlots, PacketDataSerializer::writeShort, PacketDataSerializer::a);
+        packetdataserializer.a(this.carriedItem);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readByte();
-        this.slot = packetdataserializer.readShort();
-        this.button = packetdataserializer.readByte();
-        this.d = packetdataserializer.readShort();
-        this.shift = (InventoryClickType) packetdataserializer.a(InventoryClickType.class);
-        this.item = packetdataserializer.n();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.writeShort(this.slot);
-        packetdataserializer.writeByte(this.button);
-        packetdataserializer.writeShort(this.d);
-        packetdataserializer.a((Enum) this.shift);
-        packetdataserializer.a(this.item);
-    }
-
     public int b() {
-        return this.a;
+        return this.containerId;
     }
 
     public int c() {
-        return this.slot;
+        return this.slotNum;
     }
 
     public int d() {
-        return this.button;
+        return this.buttonNum;
     }
 
-    public short e() {
-        return this.d;
+    public ItemStack e() {
+        return this.carriedItem;
     }
 
-    public ItemStack f() {
-        return this.item;
+    public Int2ObjectMap<ItemStack> f() {
+        return this.changedSlots;
     }
 
     public InventoryClickType g() {
-        return this.shift;
+        return this.clickType;
     }
 }

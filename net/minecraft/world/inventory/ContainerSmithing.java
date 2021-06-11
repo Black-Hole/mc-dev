@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.IRecipe;
 import net.minecraft.world.item.crafting.RecipeSmithing;
 import net.minecraft.world.item.crafting.Recipes;
 import net.minecraft.world.level.World;
@@ -14,19 +13,19 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class ContainerSmithing extends ContainerAnvilAbstract {
 
-    private final World g;
+    private final World level;
     @Nullable
-    private RecipeSmithing h;
-    private final List<RecipeSmithing> i;
+    private RecipeSmithing selectedRecipe;
+    private final List<RecipeSmithing> recipes;
 
     public ContainerSmithing(int i, PlayerInventory playerinventory) {
-        this(i, playerinventory, ContainerAccess.a);
+        this(i, playerinventory, ContainerAccess.NULL);
     }
 
     public ContainerSmithing(int i, PlayerInventory playerinventory, ContainerAccess containeraccess) {
         super(Containers.SMITHING, i, playerinventory, containeraccess);
-        this.g = playerinventory.player.world;
-        this.i = this.g.getCraftingManager().a(Recipes.SMITHING);
+        this.level = playerinventory.player.level;
+        this.recipes = this.level.getCraftingManager().a(Recipes.SMITHING);
     }
 
     @Override
@@ -35,54 +34,53 @@ public class ContainerSmithing extends ContainerAnvilAbstract {
     }
 
     @Override
-    protected boolean b(EntityHuman entityhuman, boolean flag) {
-        return this.h != null && this.h.a(this.repairInventory, this.g);
+    protected boolean a(EntityHuman entityhuman, boolean flag) {
+        return this.selectedRecipe != null && this.selectedRecipe.a(this.inputSlots, this.level);
     }
 
     @Override
-    protected ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-        itemstack.a(entityhuman.world, entityhuman, itemstack.getCount());
-        this.resultInventory.b(entityhuman);
+    protected void a(EntityHuman entityhuman, ItemStack itemstack) {
+        itemstack.a(entityhuman.level, entityhuman, itemstack.getCount());
+        this.resultSlots.awardUsedRecipes(entityhuman);
         this.d(0);
         this.d(1);
-        this.containerAccess.a((world, blockposition) -> {
+        this.access.a((world, blockposition) -> {
             world.triggerEffect(1044, blockposition, 0);
         });
-        return itemstack;
     }
 
     private void d(int i) {
-        ItemStack itemstack = this.repairInventory.getItem(i);
+        ItemStack itemstack = this.inputSlots.getItem(i);
 
         itemstack.subtract(1);
-        this.repairInventory.setItem(i, itemstack);
+        this.inputSlots.setItem(i, itemstack);
     }
 
     @Override
-    public void e() {
-        List<RecipeSmithing> list = this.g.getCraftingManager().b(Recipes.SMITHING, this.repairInventory, this.g);
+    public void i() {
+        List<RecipeSmithing> list = this.level.getCraftingManager().b(Recipes.SMITHING, this.inputSlots, this.level);
 
         if (list.isEmpty()) {
-            this.resultInventory.setItem(0, ItemStack.b);
+            this.resultSlots.setItem(0, ItemStack.EMPTY);
         } else {
-            this.h = (RecipeSmithing) list.get(0);
-            ItemStack itemstack = this.h.a(this.repairInventory);
+            this.selectedRecipe = (RecipeSmithing) list.get(0);
+            ItemStack itemstack = this.selectedRecipe.a(this.inputSlots);
 
-            this.resultInventory.a((IRecipe) this.h);
-            this.resultInventory.setItem(0, itemstack);
+            this.resultSlots.setRecipeUsed(this.selectedRecipe);
+            this.resultSlots.setItem(0, itemstack);
         }
 
     }
 
     @Override
-    protected boolean a(ItemStack itemstack) {
-        return this.i.stream().anyMatch((recipesmithing) -> {
+    protected boolean c(ItemStack itemstack) {
+        return this.recipes.stream().anyMatch((recipesmithing) -> {
             return recipesmithing.a(itemstack);
         });
     }
 
     @Override
     public boolean a(ItemStack itemstack, Slot slot) {
-        return slot.inventory != this.resultInventory && super.a(itemstack, slot);
+        return slot.container != this.resultSlots && super.a(itemstack, slot);
     }
 }

@@ -1,8 +1,10 @@
 package net.minecraft.world.level.block;
 
+import javax.annotation.Nullable;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.InventoryUtils;
@@ -12,8 +14,10 @@ import net.minecraft.world.inventory.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityFurnace;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -26,11 +30,11 @@ import net.minecraft.world.phys.Vec3D;
 public abstract class BlockFurnace extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean LIT = BlockProperties.r;
+    public static final BlockStateBoolean LIT = BlockProperties.LIT;
 
     protected BlockFurnace(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
     }
 
     @Override
@@ -47,7 +51,7 @@ public abstract class BlockFurnace extends BlockTileEntity {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockFurnace.FACING, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockFurnace.FACING, blockactioncontext.g().opposite());
     }
 
     @Override
@@ -68,8 +72,11 @@ public abstract class BlockFurnace extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
-                InventoryUtils.dropInventory(world, blockposition, (TileEntityFurnace) tileentity);
-                ((TileEntityFurnace) tileentity).a(world, Vec3D.a((BaseBlockPosition) blockposition));
+                if (world instanceof WorldServer) {
+                    InventoryUtils.dropInventory(world, blockposition, (TileEntityFurnace) tileentity);
+                    ((TileEntityFurnace) tileentity).a((WorldServer) world, Vec3D.a((BaseBlockPosition) blockposition));
+                }
+
                 world.updateAdjacentComparators(blockposition, this);
             }
 
@@ -88,7 +95,7 @@ public abstract class BlockFurnace extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -105,5 +112,10 @@ public abstract class BlockFurnace extends BlockTileEntity {
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockFurnace.FACING, BlockFurnace.LIT);
+    }
+
+    @Nullable
+    protected static <T extends TileEntity> BlockEntityTicker<T> a(World world, TileEntityTypes<T> tileentitytypes, TileEntityTypes<? extends TileEntityFurnace> tileentitytypes1) {
+        return world.isClientSide ? null : a(tileentitytypes, tileentitytypes1, TileEntityFurnace::a);
     }
 }

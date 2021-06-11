@@ -8,13 +8,13 @@ import net.minecraft.world.level.IMaterial;
 
 public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<CriterionTriggerShotCrossbow.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("shot_crossbow");
+    static final MinecraftKey ID = new MinecraftKey("shot_crossbow");
 
     public CriterionTriggerShotCrossbow() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerShotCrossbow.a;
+        return CriterionTriggerShotCrossbow.ID;
     }
 
     @Override
@@ -32,26 +32,30 @@ public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<Crite
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerShotCrossbow.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
+            super(CriterionTriggerShotCrossbow.ID, criterionconditionentity_b);
+            this.item = criterionconditionitem;
+        }
+
+        public static CriterionTriggerShotCrossbow.a a(CriterionConditionItem criterionconditionitem) {
+            return new CriterionTriggerShotCrossbow.a(CriterionConditionEntity.b.ANY, criterionconditionitem);
         }
 
         public static CriterionTriggerShotCrossbow.a a(IMaterial imaterial) {
-            return new CriterionTriggerShotCrossbow.a(CriterionConditionEntity.b.a, CriterionConditionItem.a.a().a(imaterial).b());
+            return new CriterionTriggerShotCrossbow.a(CriterionConditionEntity.b.ANY, CriterionConditionItem.a.a().a(imaterial).b());
         }
 
         public boolean a(ItemStack itemstack) {
-            return this.a.a(itemstack);
+            return this.item.a(itemstack);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.a.a());
+            jsonobject.add("item", this.item.a());
             return jsonobject;
         }
     }

@@ -2,21 +2,21 @@ package net.minecraft.world.entity.ai.control;
 
 import net.minecraft.world.entity.EntityInsentient;
 
-public class ControllerJump {
+public class ControllerJump implements Control {
 
-    private final EntityInsentient b;
-    protected boolean a;
+    private final EntityInsentient mob;
+    protected boolean jump;
 
     public ControllerJump(EntityInsentient entityinsentient) {
-        this.b = entityinsentient;
+        this.mob = entityinsentient;
     }
 
     public void jump() {
-        this.a = true;
+        this.jump = true;
     }
 
     public void b() {
-        this.b.setJumping(this.a);
-        this.a = false;
+        this.mob.setJumping(this.jump);
+        this.jump = false;
     }
 }

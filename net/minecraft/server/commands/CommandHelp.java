@@ -17,11 +17,13 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class CommandHelp {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.help.failed"));
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.help.failed"));
+
+    public CommandHelp() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("help").executes((commandcontext) -> {
-            Map<CommandNode<CommandListenerWrapper>, String> map = commanddispatcher.getSmartUsage(commanddispatcher.getRoot(), commandcontext.getSource());
+            Map<CommandNode<CommandListenerWrapper>, String> map = commanddispatcher.getSmartUsage(commanddispatcher.getRoot(), (CommandListenerWrapper) commandcontext.getSource());
             Iterator iterator = map.values().iterator();
 
             while (iterator.hasNext()) {
@@ -32,18 +34,20 @@ public class CommandHelp {
 
             return map.size();
         })).then(net.minecraft.commands.CommandDispatcher.a("command", (ArgumentType) StringArgumentType.greedyString()).executes((commandcontext) -> {
-            ParseResults<CommandListenerWrapper> parseresults = commanddispatcher.parse(StringArgumentType.getString(commandcontext, "command"), commandcontext.getSource());
+            ParseResults<CommandListenerWrapper> parseresults = commanddispatcher.parse(StringArgumentType.getString(commandcontext, "command"), (CommandListenerWrapper) commandcontext.getSource());
 
             if (parseresults.getContext().getNodes().isEmpty()) {
-                throw CommandHelp.a.create();
+                throw CommandHelp.ERROR_FAILED.create();
             } else {
-                Map<CommandNode<CommandListenerWrapper>, String> map = commanddispatcher.getSmartUsage(((ParsedCommandNode) Iterables.getLast(parseresults.getContext().getNodes())).getNode(), commandcontext.getSource());
+                Map<CommandNode<CommandListenerWrapper>, String> map = commanddispatcher.getSmartUsage(((ParsedCommandNode) Iterables.getLast(parseresults.getContext().getNodes())).getNode(), (CommandListenerWrapper) commandcontext.getSource());
                 Iterator iterator = map.values().iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
+                    CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
+                    String s1 = parseresults.getReader().getString();
 
-                    ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatComponentText("/" + parseresults.getReader().getString() + " " + s), false);
+                    commandlistenerwrapper.sendMessage(new ChatComponentText("/" + s1 + " " + s), false);
                 }
 
                 return map.size();

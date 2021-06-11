@@ -5,10 +5,10 @@ import net.minecraft.core.EnumDirection;
 
 public class MovingObjectPositionBlock extends MovingObjectPosition {
 
-    private final EnumDirection b;
-    private final BlockPosition c;
-    private final boolean d;
-    private final boolean e;
+    private final EnumDirection direction;
+    private final BlockPosition blockPos;
+    private final boolean miss;
+    private final boolean inside;
 
     public static MovingObjectPositionBlock a(Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition) {
         return new MovingObjectPositionBlock(true, vec3d, enumdirection, blockposition, false);
@@ -20,34 +20,34 @@ public class MovingObjectPositionBlock extends MovingObjectPosition {
 
     private MovingObjectPositionBlock(boolean flag, Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition, boolean flag1) {
         super(vec3d);
-        this.d = flag;
-        this.b = enumdirection;
-        this.c = blockposition;
-        this.e = flag1;
+        this.miss = flag;
+        this.direction = enumdirection;
+        this.blockPos = blockposition;
+        this.inside = flag1;
     }
 
     public MovingObjectPositionBlock a(EnumDirection enumdirection) {
-        return new MovingObjectPositionBlock(this.d, this.pos, enumdirection, this.c, this.e);
+        return new MovingObjectPositionBlock(this.miss, this.location, enumdirection, this.blockPos, this.inside);
     }
 
     public MovingObjectPositionBlock a(BlockPosition blockposition) {
-        return new MovingObjectPositionBlock(this.d, this.pos, this.b, blockposition, this.e);
+        return new MovingObjectPositionBlock(this.miss, this.location, this.direction, blockposition, this.inside);
     }
 
     public BlockPosition getBlockPosition() {
-        return this.c;
+        return this.blockPos;
     }
 
     public EnumDirection getDirection() {
-        return this.b;
+        return this.direction;
     }
 
     @Override
     public MovingObjectPosition.EnumMovingObjectType getType() {
-        return this.d ? MovingObjectPosition.EnumMovingObjectType.MISS : MovingObjectPosition.EnumMovingObjectType.BLOCK;
+        return this.miss ? MovingObjectPosition.EnumMovingObjectType.MISS : MovingObjectPosition.EnumMovingObjectType.BLOCK;
     }
 
     public boolean d() {
-        return this.e;
+        return this.inside;
     }
 }

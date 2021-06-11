@@ -16,11 +16,18 @@ public class WorldGenFeatureComposite extends WorldGenerator<WorldGenFeatureComp
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCompositeConfiguration worldgenfeaturecompositeconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureCompositeConfiguration> featureplacecontext) {
         MutableBoolean mutableboolean = new MutableBoolean();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        WorldGenFeatureCompositeConfiguration worldgenfeaturecompositeconfiguration = (WorldGenFeatureCompositeConfiguration) featureplacecontext.e();
+        ChunkGenerator chunkgenerator = featureplacecontext.b();
+        Random random = featureplacecontext.c();
+        BlockPosition blockposition = featureplacecontext.d();
+        WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturecompositeconfiguration.feature.get();
 
-        worldgenfeaturecompositeconfiguration.c.a(new WorldGenDecoratorContext(generatoraccessseed, chunkgenerator), random, blockposition).forEach((blockposition1) -> {
-            if (((WorldGenFeatureConfigured) worldgenfeaturecompositeconfiguration.b.get()).a(generatoraccessseed, chunkgenerator, random, blockposition1)) {
+        worldgenfeaturecompositeconfiguration.decorator.a(new WorldGenDecoratorContext(generatoraccessseed, chunkgenerator), random, blockposition).forEach((blockposition1) -> {
+            if (worldgenfeatureconfigured.a(generatoraccessseed, chunkgenerator, random, blockposition1)) {
                 mutableboolean.setTrue();
             }
 

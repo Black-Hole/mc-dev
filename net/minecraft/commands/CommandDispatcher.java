@@ -68,7 +68,6 @@ import net.minecraft.server.commands.CommandPlaySound;
 import net.minecraft.server.commands.CommandPublish;
 import net.minecraft.server.commands.CommandRecipe;
 import net.minecraft.server.commands.CommandReload;
-import net.minecraft.server.commands.CommandReplaceItem;
 import net.minecraft.server.commands.CommandSaveAll;
 import net.minecraft.server.commands.CommandSaveOff;
 import net.minecraft.server.commands.CommandSaveOn;
@@ -97,6 +96,8 @@ import net.minecraft.server.commands.CommandWeather;
 import net.minecraft.server.commands.CommandWhitelist;
 import net.minecraft.server.commands.CommandWorldBorder;
 import net.minecraft.server.commands.CommandXp;
+import net.minecraft.server.commands.ItemCommands;
+import net.minecraft.server.commands.PerfCommand;
 import net.minecraft.server.commands.data.CommandData;
 import net.minecraft.server.level.EntityPlayer;
 import org.apache.logging.log4j.LogManager;
@@ -105,92 +106,98 @@ import org.apache.logging.log4j.Logger;
 public class CommandDispatcher {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> b = new com.mojang.brigadier.CommandDispatcher();
+    public static final int LEVEL_ALL = 0;
+    public static final int LEVEL_MODERATORS = 1;
+    public static final int LEVEL_GAMEMASTERS = 2;
+    public static final int LEVEL_ADMINS = 3;
+    public static final int LEVEL_OWNERS = 4;
+    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher = new com.mojang.brigadier.CommandDispatcher();
 
     public CommandDispatcher(CommandDispatcher.ServerType commanddispatcher_servertype) {
-        CommandAdvancement.a(this.b);
-        CommandAttribute.a(this.b);
-        CommandExecute.a(this.b);
-        CommandBossBar.a(this.b);
-        CommandClear.a(this.b);
-        CommandClone.a(this.b);
-        CommandData.a(this.b);
-        CommandDatapack.a(this.b);
-        CommandDebug.a(this.b);
-        CommandGamemodeDefault.a(this.b);
-        CommandDifficulty.a(this.b);
-        CommandEffect.a(this.b);
-        CommandMe.a(this.b);
-        CommandEnchant.a(this.b);
-        CommandXp.a(this.b);
-        CommandFill.a(this.b);
-        CommandForceload.a(this.b);
-        CommandFunction.a(this.b);
-        CommandGamemode.a(this.b);
-        CommandGamerule.a(this.b);
-        CommandGive.a(this.b);
-        CommandHelp.a(this.b);
-        CommandKick.a(this.b);
-        CommandKill.a(this.b);
-        CommandList.a(this.b);
-        CommandLocate.a(this.b);
-        CommandLocateBiome.a(this.b);
-        CommandLoot.a(this.b);
-        CommandTell.a(this.b);
-        CommandParticle.a(this.b);
-        CommandPlaySound.a(this.b);
-        CommandReload.a(this.b);
-        CommandRecipe.a(this.b);
-        CommandReplaceItem.a(this.b);
-        CommandSay.a(this.b);
-        CommandSchedule.a(this.b);
-        CommandScoreboard.a(this.b);
-        CommandSeed.a(this.b, commanddispatcher_servertype != CommandDispatcher.ServerType.INTEGRATED);
-        CommandSetBlock.a(this.b);
-        CommandSpawnpoint.a(this.b);
-        CommandSetWorldSpawn.a(this.b);
-        CommandSpectate.a(this.b);
-        CommandSpreadPlayers.a(this.b);
-        CommandStopSound.a(this.b);
-        CommandSummon.a(this.b);
-        CommandTag.a(this.b);
-        CommandTeam.a(this.b);
-        CommandTeamMsg.a(this.b);
-        CommandTeleport.a(this.b);
-        CommandTellRaw.a(this.b);
-        CommandTime.a(this.b);
-        CommandTitle.a(this.b);
-        CommandTrigger.a(this.b);
-        CommandWeather.a(this.b);
-        CommandWorldBorder.a(this.b);
-        if (SharedConstants.d) {
-            GameTestHarnessTestCommand.a(this.b);
+        CommandAdvancement.a(this.dispatcher);
+        CommandAttribute.a(this.dispatcher);
+        CommandExecute.a(this.dispatcher);
+        CommandBossBar.a(this.dispatcher);
+        CommandClear.a(this.dispatcher);
+        CommandClone.a(this.dispatcher);
+        CommandData.a(this.dispatcher);
+        CommandDatapack.a(this.dispatcher);
+        CommandDebug.a(this.dispatcher);
+        CommandGamemodeDefault.a(this.dispatcher);
+        CommandDifficulty.a(this.dispatcher);
+        CommandEffect.a(this.dispatcher);
+        CommandMe.a(this.dispatcher);
+        CommandEnchant.a(this.dispatcher);
+        CommandXp.a(this.dispatcher);
+        CommandFill.a(this.dispatcher);
+        CommandForceload.a(this.dispatcher);
+        CommandFunction.a(this.dispatcher);
+        CommandGamemode.a(this.dispatcher);
+        CommandGamerule.a(this.dispatcher);
+        CommandGive.a(this.dispatcher);
+        CommandHelp.a(this.dispatcher);
+        ItemCommands.a(this.dispatcher);
+        CommandKick.a(this.dispatcher);
+        CommandKill.a(this.dispatcher);
+        CommandList.a(this.dispatcher);
+        CommandLocate.a(this.dispatcher);
+        CommandLocateBiome.a(this.dispatcher);
+        CommandLoot.a(this.dispatcher);
+        CommandTell.a(this.dispatcher);
+        CommandParticle.a(this.dispatcher);
+        CommandPlaySound.a(this.dispatcher);
+        CommandReload.a(this.dispatcher);
+        CommandRecipe.a(this.dispatcher);
+        CommandSay.a(this.dispatcher);
+        CommandSchedule.a(this.dispatcher);
+        CommandScoreboard.a(this.dispatcher);
+        CommandSeed.a(this.dispatcher, commanddispatcher_servertype != CommandDispatcher.ServerType.INTEGRATED);
+        CommandSetBlock.a(this.dispatcher);
+        CommandSpawnpoint.a(this.dispatcher);
+        CommandSetWorldSpawn.a(this.dispatcher);
+        CommandSpectate.a(this.dispatcher);
+        CommandSpreadPlayers.a(this.dispatcher);
+        CommandStopSound.a(this.dispatcher);
+        CommandSummon.a(this.dispatcher);
+        CommandTag.a(this.dispatcher);
+        CommandTeam.a(this.dispatcher);
+        CommandTeamMsg.a(this.dispatcher);
+        CommandTeleport.a(this.dispatcher);
+        CommandTellRaw.a(this.dispatcher);
+        CommandTime.a(this.dispatcher);
+        CommandTitle.a(this.dispatcher);
+        CommandTrigger.a(this.dispatcher);
+        CommandWeather.a(this.dispatcher);
+        CommandWorldBorder.a(this.dispatcher);
+        if (SharedConstants.IS_RUNNING_IN_IDE) {
+            GameTestHarnessTestCommand.a(this.dispatcher);
         }
 
-        if (commanddispatcher_servertype.e) {
-            CommandBanIp.a(this.b);
-            CommandBanList.a(this.b);
-            CommandBan.a(this.b);
-            CommandDeop.a(this.b);
-            CommandOp.a(this.b);
-            CommandPardon.a(this.b);
-            CommandPardonIP.a(this.b);
-            CommandSaveAll.a(this.b);
-            CommandSaveOff.a(this.b);
-            CommandSaveOn.a(this.b);
-            CommandIdleTimeout.a(this.b);
-            CommandStop.a(this.b);
-            CommandWhitelist.a(this.b);
+        if (commanddispatcher_servertype.includeDedicated) {
+            CommandBanIp.a(this.dispatcher);
+            CommandBanList.a(this.dispatcher);
+            CommandBan.a(this.dispatcher);
+            CommandDeop.a(this.dispatcher);
+            CommandOp.a(this.dispatcher);
+            CommandPardon.a(this.dispatcher);
+            CommandPardonIP.a(this.dispatcher);
+            PerfCommand.a(this.dispatcher);
+            CommandSaveAll.a(this.dispatcher);
+            CommandSaveOff.a(this.dispatcher);
+            CommandSaveOn.a(this.dispatcher);
+            CommandIdleTimeout.a(this.dispatcher);
+            CommandStop.a(this.dispatcher);
+            CommandWhitelist.a(this.dispatcher);
         }
 
-        if (commanddispatcher_servertype.d) {
-            CommandPublish.a(this.b);
+        if (commanddispatcher_servertype.includeIntegrated) {
+            CommandPublish.a(this.dispatcher);
         }
 
-        this.b.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
-            CommandDispatcher.LOGGER.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
+        this.dispatcher.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
+            CommandDispatcher.LOGGER.warn("Ambiguity between arguments {} and {} with inputs: {}", this.dispatcher.getPath(commandnode1), this.dispatcher.getPath(commandnode2), collection);
         });
-        this.b.setConsumer((commandcontext, flag, i) -> {
+        this.dispatcher.setConsumer((commandcontext, flag, i) -> {
             ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag, i);
         });
     }
@@ -210,7 +217,7 @@ public class CommandDispatcher {
             byte b1;
 
             try {
-                int i = this.b.execute(stringreader, commandlistenerwrapper);
+                int i = this.dispatcher.execute(stringreader, commandlistenerwrapper);
 
                 return i;
             } catch (CommandException commandexception) {
@@ -257,9 +264,9 @@ public class CommandDispatcher {
                 commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed")).format((chatmodifier) -> {
                     return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext));
                 }));
-                if (SharedConstants.d) {
+                if (SharedConstants.IS_RUNNING_IN_IDE) {
                     commandlistenerwrapper.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
-                    CommandDispatcher.LOGGER.error("'" + s + "' threw an exception", exception);
+                    CommandDispatcher.LOGGER.error("'{}' threw an exception", s, exception);
                 }
 
                 b0 = 0;
@@ -275,9 +282,9 @@ public class CommandDispatcher {
         Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> map = Maps.newHashMap();
         RootCommandNode<ICompletionProvider> rootcommandnode = new RootCommandNode();
 
-        map.put(this.b.getRoot(), rootcommandnode);
-        this.a(this.b.getRoot(), rootcommandnode, entityplayer.getCommandListener(), (Map) map);
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutCommands(rootcommandnode));
+        map.put(this.dispatcher.getRoot(), rootcommandnode);
+        this.a(this.dispatcher.getRoot(), rootcommandnode, entityplayer.getCommandListener(), (Map) map);
+        entityplayer.connection.sendPacket(new PacketPlayOutCommands(rootcommandnode));
     }
 
     private void a(CommandNode<CommandListenerWrapper> commandnode, CommandNode<ICompletionProvider> commandnode1, CommandListenerWrapper commandlistenerwrapper, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> map) {
@@ -342,7 +349,7 @@ public class CommandDispatcher {
     }
 
     public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> a() {
-        return this.b;
+        return this.dispatcher;
     }
 
     @Nullable
@@ -369,12 +376,12 @@ public class CommandDispatcher {
 
         ALL(true, true), DEDICATED(false, true), INTEGRATED(true, false);
 
-        private final boolean d;
-        private final boolean e;
+        final boolean includeIntegrated;
+        final boolean includeDedicated;
 
         private ServerType(boolean flag, boolean flag1) {
-            this.d = flag;
-            this.e = flag1;
+            this.includeIntegrated = flag;
+            this.includeDedicated = flag1;
         }
     }
 

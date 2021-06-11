@@ -6,10 +6,10 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public interface PackSource {
 
-    PackSource a = a();
-    PackSource b = a("pack.source.builtin");
-    PackSource c = a("pack.source.world");
-    PackSource d = a("pack.source.server");
+    PackSource DEFAULT = a();
+    PackSource BUILT_IN = a("pack.source.builtin");
+    PackSource WORLD = a("pack.source.world");
+    PackSource SERVER = a("pack.source.server");
 
     IChatBaseComponent decorate(IChatBaseComponent ichatbasecomponent);
 

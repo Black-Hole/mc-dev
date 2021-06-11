@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public abstract class WorldGenBlockPlacer {
 
-    public static final Codec<WorldGenBlockPlacer> a = IRegistry.BLOCK_PLACER_TYPE.dispatch(WorldGenBlockPlacer::a, WorldGenBlockPlacers::a);
+    public static final Codec<WorldGenBlockPlacer> CODEC = IRegistry.BLOCK_PLACER_TYPES.dispatch(WorldGenBlockPlacer::a, WorldGenBlockPlacers::a);
 
     public WorldGenBlockPlacer() {}
 

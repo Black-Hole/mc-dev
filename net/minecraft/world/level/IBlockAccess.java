@@ -1,5 +1,6 @@
 package net.minecraft.world.level;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,6 +10,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AxisAlignedBB;
@@ -16,33 +18,48 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 import net.minecraft.world.phys.Vec3D;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public interface IBlockAccess {
+public interface IBlockAccess extends LevelHeightAccessor {
 
     @Nullable
     TileEntity getTileEntity(BlockPosition blockposition);
+
+    default <T extends TileEntity> Optional<T> a(BlockPosition blockposition, TileEntityTypes<T> tileentitytypes) {
+        TileEntity tileentity = this.getTileEntity(blockposition);
+
+        return tileentity != null && tileentity.getTileType() == tileentitytypes ? Optional.of(tileentity) : Optional.empty();
+    }
 
     IBlockData getType(BlockPosition blockposition);
 
     Fluid getFluid(BlockPosition blockposition);
 
-    default int g(BlockPosition blockposition) {
+    default int h(BlockPosition blockposition) {
         return this.getType(blockposition).f();
     }
 
-    default int K() {
+    default int O() {
         return 15;
-    }
-
-    default int getBuildHeight() {
-        return 256;
     }
 
     default Stream<IBlockData> a(AxisAlignedBB axisalignedbb) {
         return BlockPosition.a(axisalignedbb).map(this::getType);
     }
 
+    default MovingObjectPositionBlock a(ClipBlockStateContext clipblockstatecontext) {
+        return (MovingObjectPositionBlock) a(clipblockstatecontext.b(), clipblockstatecontext.a(), clipblockstatecontext, (clipblockstatecontext1, blockposition) -> {
+            IBlockData iblockdata = this.getType(blockposition);
+            Vec3D vec3d = clipblockstatecontext1.b().d(clipblockstatecontext1.a());
+
+            return clipblockstatecontext1.c().test(iblockdata) ? new MovingObjectPositionBlock(clipblockstatecontext1.a(), EnumDirection.a(vec3d.x, vec3d.y, vec3d.z), new BlockPosition(clipblockstatecontext1.a()), false) : null;
+        }, (clipblockstatecontext1) -> {
+            Vec3D vec3d = clipblockstatecontext1.b().d(clipblockstatecontext1.a());
+
+            return MovingObjectPositionBlock.a(clipblockstatecontext1.a(), EnumDirection.a(vec3d.x, vec3d.y, vec3d.z), new BlockPosition(clipblockstatecontext1.a()));
+        });
+    }
+
     default MovingObjectPositionBlock rayTrace(RayTrace raytrace) {
-        return (MovingObjectPositionBlock) a(raytrace, (raytrace1, blockposition) -> {
+        return (MovingObjectPositionBlock) a(raytrace.b(), raytrace.a(), raytrace, (raytrace1, blockposition) -> {
             IBlockData iblockdata = this.getType(blockposition);
             Fluid fluid = this.getFluid(blockposition);
             Vec3D vec3d = raytrace1.b();
@@ -87,7 +104,7 @@ public interface IBlockAccess {
         }
     }
 
-    default double h(BlockPosition blockposition) {
+    default double i(BlockPosition blockposition) {
         return this.a(this.getType(blockposition).getCollisionShape(this, blockposition), () -> {
             BlockPosition blockposition1 = blockposition.down();
 
@@ -95,12 +112,9 @@ public interface IBlockAccess {
         });
     }
 
-    static <T> T a(RayTrace raytrace, BiFunction<RayTrace, BlockPosition, T> bifunction, Function<RayTrace, T> function) {
-        Vec3D vec3d = raytrace.b();
-        Vec3D vec3d1 = raytrace.a();
-
+    static <T, C> T a(Vec3D vec3d, Vec3D vec3d1, C c0, BiFunction<C, BlockPosition, T> bifunction, Function<C, T> function) {
         if (vec3d.equals(vec3d1)) {
-            return function.apply(raytrace);
+            return function.apply(c0);
         } else {
             double d0 = MathHelper.d(-1.0E-7D, vec3d1.x, vec3d.x);
             double d1 = MathHelper.d(-1.0E-7D, vec3d1.y, vec3d.y);
@@ -112,7 +126,7 @@ public interface IBlockAccess {
             int j = MathHelper.floor(d4);
             int k = MathHelper.floor(d5);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, j, k);
-            T t0 = bifunction.apply(raytrace, blockposition_mutableblockposition);
+            T t0 = bifunction.apply(c0, blockposition_mutableblockposition);
 
             if (t0 != null) {
                 return t0;
@@ -126,15 +140,15 @@ public interface IBlockAccess {
                 double d9 = l == 0 ? Double.MAX_VALUE : (double) l / d6;
                 double d10 = i1 == 0 ? Double.MAX_VALUE : (double) i1 / d7;
                 double d11 = j1 == 0 ? Double.MAX_VALUE : (double) j1 / d8;
-                double d12 = d9 * (l > 0 ? 1.0D - MathHelper.h(d3) : MathHelper.h(d3));
-                double d13 = d10 * (i1 > 0 ? 1.0D - MathHelper.h(d4) : MathHelper.h(d4));
-                double d14 = d11 * (j1 > 0 ? 1.0D - MathHelper.h(d5) : MathHelper.h(d5));
+                double d12 = d9 * (l > 0 ? 1.0D - MathHelper.g(d3) : MathHelper.g(d3));
+                double d13 = d10 * (i1 > 0 ? 1.0D - MathHelper.g(d4) : MathHelper.g(d4));
+                double d14 = d11 * (j1 > 0 ? 1.0D - MathHelper.g(d5) : MathHelper.g(d5));
 
                 Object object;
 
                 do {
                     if (d12 > 1.0D && d13 > 1.0D && d14 > 1.0D) {
-                        return function.apply(raytrace);
+                        return function.apply(c0);
                     }
 
                     if (d12 < d13) {
@@ -153,7 +167,7 @@ public interface IBlockAccess {
                         d14 += d11;
                     }
 
-                    object = bifunction.apply(raytrace, blockposition_mutableblockposition.d(i, j, k));
+                    object = bifunction.apply(c0, blockposition_mutableblockposition.d(i, j, k));
                 } while (object == null);
 
                 return object;

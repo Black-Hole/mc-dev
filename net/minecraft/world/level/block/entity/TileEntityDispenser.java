@@ -1,6 +1,7 @@
 package net.minecraft.world.level.block.entity;
 
 import java.util.Random;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -15,16 +16,17 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class TileEntityDispenser extends TileEntityLootable {
 
-    private static final Random a = new Random();
+    private static final Random RANDOM = new Random();
+    public static final int CONTAINER_SIZE = 9;
     private NonNullList<ItemStack> items;
 
-    protected TileEntityDispenser(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
-        this.items = NonNullList.a(9, ItemStack.b);
+    protected TileEntityDispenser(TileEntityTypes<?> tileentitytypes, BlockPosition blockposition, IBlockData iblockdata) {
+        super(tileentitytypes, blockposition, iblockdata);
+        this.items = NonNullList.a(9, ItemStack.EMPTY);
     }
 
-    public TileEntityDispenser() {
-        this(TileEntityTypes.DISPENSER);
+    public TileEntityDispenser(BlockPosition blockposition, IBlockData iblockdata) {
+        this(TileEntityTypes.DISPENSER, blockposition, iblockdata);
     }
 
     @Override
@@ -33,12 +35,12 @@ public class TileEntityDispenser extends TileEntityLootable {
     }
 
     public int h() {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         int i = -1;
         int j = 1;
 
         for (int k = 0; k < this.items.size(); ++k) {
-            if (!((ItemStack) this.items.get(k)).isEmpty() && TileEntityDispenser.a.nextInt(j++) == 0) {
+            if (!((ItemStack) this.items.get(k)).isEmpty() && TileEntityDispenser.RANDOM.nextInt(j++) == 0) {
                 i = k;
             }
         }
@@ -63,10 +65,10 @@ public class TileEntityDispenser extends TileEntityLootable {
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.b);
-        if (!this.b(nbttagcompound)) {
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.EMPTY);
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
@@ -75,7 +77,7 @@ public class TileEntityDispenser extends TileEntityLootable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 

@@ -9,13 +9,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CriterionTriggerTargetHit extends CriterionTriggerAbstract<CriterionTriggerTargetHit.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("target_hit");
+    static final MinecraftKey ID = new MinecraftKey("target_hit");
 
     public CriterionTriggerTargetHit() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerTargetHit.a;
+        return CriterionTriggerTargetHit.ID;
     }
 
     @Override
@@ -36,30 +36,30 @@ public class CriterionTriggerTargetHit extends CriterionTriggerAbstract<Criterio
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue.IntegerRange a;
-        private final CriterionConditionEntity.b b;
+        private final CriterionConditionValue.IntegerRange signalStrength;
+        private final CriterionConditionEntity.b projectile;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionEntity.b criterionconditionentity_b1) {
-            super(CriterionTriggerTargetHit.a, criterionconditionentity_b);
-            this.a = criterionconditionvalue_integerrange;
-            this.b = criterionconditionentity_b1;
+            super(CriterionTriggerTargetHit.ID, criterionconditionentity_b);
+            this.signalStrength = criterionconditionvalue_integerrange;
+            this.projectile = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerTargetHit.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionEntity.b criterionconditionentity_b) {
-            return new CriterionTriggerTargetHit.a(CriterionConditionEntity.b.a, criterionconditionvalue_integerrange, criterionconditionentity_b);
+            return new CriterionTriggerTargetHit.a(CriterionConditionEntity.b.ANY, criterionconditionvalue_integerrange, criterionconditionentity_b);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("signal_strength", this.a.d());
-            jsonobject.add("projectile", this.b.a(lootserializationcontext));
+            jsonobject.add("signal_strength", this.signalStrength.d());
+            jsonobject.add("projectile", this.projectile.a(lootserializationcontext));
             return jsonobject;
         }
 
         public boolean a(LootTableInfo loottableinfo, Vec3D vec3d, int i) {
-            return !this.a.d(i) ? false : this.b.a(loottableinfo);
+            return !this.signalStrength.d(i) ? false : this.projectile.a(loottableinfo);
         }
     }
 }

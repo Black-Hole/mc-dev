@@ -21,18 +21,21 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MinecraftKey implements Comparable<MinecraftKey> {
 
-    public static final Codec<MinecraftKey> a = Codec.STRING.comapFlatMap(MinecraftKey::c, MinecraftKey::toString).stable();
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.id.invalid"));
+    public static final Codec<MinecraftKey> CODEC = Codec.STRING.comapFlatMap(MinecraftKey::c, MinecraftKey::toString).stable();
+    private static final SimpleCommandExceptionType ERROR_INVALID = new SimpleCommandExceptionType(new ChatMessage("argument.id.invalid"));
+    public static final char NAMESPACE_SEPARATOR = ':';
+    public static final String DEFAULT_NAMESPACE = "minecraft";
+    public static final String REALMS_NAMESPACE = "realms";
     protected final String namespace;
-    protected final String key;
+    protected final String path;
 
     protected MinecraftKey(String[] astring) {
         this.namespace = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0];
-        this.key = astring[1];
+        this.path = astring[1];
         if (!e(this.namespace)) {
-            throw new ResourceKeyInvalidException("Non [a-z0-9_.-] character in namespace of location: " + this.namespace + ':' + this.key);
-        } else if (!d(this.key)) {
-            throw new ResourceKeyInvalidException("Non [a-z0-9/._-] character in path of location: " + this.namespace + ':' + this.key);
+            throw new ResourceKeyInvalidException("Non [a-z0-9_.-] character in namespace of location: " + this.namespace + ":" + this.path);
+        } else if (!d(this.path)) {
+            throw new ResourceKeyInvalidException("Non [a-z0-9/._-] character in path of location: " + this.namespace + ":" + this.path);
         }
     }
 
@@ -80,7 +83,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public String getKey() {
-        return this.key;
+        return this.path;
     }
 
     public String getNamespace() {
@@ -88,7 +91,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public String toString() {
-        return this.namespace + ':' + this.key;
+        return this.namespace + ":" + this.path;
     }
 
     public boolean equals(Object object) {
@@ -99,22 +102,26 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
         } else {
             MinecraftKey minecraftkey = (MinecraftKey) object;
 
-            return this.namespace.equals(minecraftkey.namespace) && this.key.equals(minecraftkey.key);
+            return this.namespace.equals(minecraftkey.namespace) && this.path.equals(minecraftkey.path);
         }
     }
 
     public int hashCode() {
-        return 31 * this.namespace.hashCode() + this.key.hashCode();
+        return 31 * this.namespace.hashCode() + this.path.hashCode();
     }
 
     public int compareTo(MinecraftKey minecraftkey) {
-        int i = this.key.compareTo(minecraftkey.key);
+        int i = this.path.compareTo(minecraftkey.path);
 
         if (i == 0) {
             i = this.namespace.compareTo(minecraftkey.namespace);
         }
 
         return i;
+    }
+
+    public String c() {
+        return this.toString().replace('/', '_').replace(':', '_');
     }
 
     public static MinecraftKey a(StringReader stringreader) throws CommandSyntaxException {
@@ -130,7 +137,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
             return new MinecraftKey(s);
         } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
             stringreader.setCursor(i);
-            throw MinecraftKey.d.createWithContext(stringreader);
+            throw MinecraftKey.ERROR_INVALID.createWithContext(stringreader);
         }
     }
 
@@ -164,6 +171,12 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
 
     private static boolean c(char c0) {
         return c0 == '_' || c0 == '-' || c0 >= 'a' && c0 <= 'z' || c0 >= '0' && c0 <= '9' || c0 == '.';
+    }
+
+    public static boolean b(String s) {
+        String[] astring = b(s, ':');
+
+        return e(StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0]) && d(astring[1]);
     }
 
     public static class a implements JsonDeserializer<MinecraftKey>, JsonSerializer<MinecraftKey> {

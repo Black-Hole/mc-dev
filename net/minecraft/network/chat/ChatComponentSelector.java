@@ -2,6 +2,7 @@ package net.minecraft.network.chat;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.selector.ArgumentParserSelector;
@@ -13,12 +14,14 @@ import org.apache.logging.log4j.Logger;
 public class ChatComponentSelector extends ChatBaseComponent implements ChatComponentContextual {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final String e;
+    private final String pattern;
     @Nullable
-    private final EntitySelector f;
+    private final EntitySelector selector;
+    protected final Optional<IChatBaseComponent> separator;
 
-    public ChatComponentSelector(String s) {
-        this.e = s;
+    public ChatComponentSelector(String s, Optional<IChatBaseComponent> optional) {
+        this.pattern = s;
+        this.separator = optional;
         EntitySelector entityselector = null;
 
         try {
@@ -26,29 +29,44 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
 
             entityselector = argumentparserselector.parse();
         } catch (CommandSyntaxException commandsyntaxexception) {
-            ChatComponentSelector.LOGGER.warn("Invalid selector component: {}", s, commandsyntaxexception.getMessage());
+            ChatComponentSelector.LOGGER.warn("Invalid selector component: {}: {}", s, commandsyntaxexception.getMessage());
         }
 
-        this.f = entityselector;
+        this.selector = entityselector;
     }
 
     public String h() {
-        return this.e;
+        return this.pattern;
+    }
+
+    @Nullable
+    public EntitySelector i() {
+        return this.selector;
+    }
+
+    public Optional<IChatBaseComponent> j() {
+        return this.separator;
     }
 
     @Override
     public IChatMutableComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
-        return (IChatMutableComponent) (commandlistenerwrapper != null && this.f != null ? EntitySelector.a(this.f.getEntities(commandlistenerwrapper)) : new ChatComponentText(""));
+        if (commandlistenerwrapper != null && this.selector != null) {
+            Optional<? extends IChatBaseComponent> optional = ChatComponentUtils.a(commandlistenerwrapper, this.separator, entity, i);
+
+            return ChatComponentUtils.a(this.selector.getEntities(commandlistenerwrapper), optional, Entity::getScoreboardDisplayName);
+        } else {
+            return new ChatComponentText("");
+        }
     }
 
     @Override
     public String getText() {
-        return this.e;
+        return this.pattern;
     }
 
     @Override
     public ChatComponentSelector g() {
-        return new ChatComponentSelector(this.e);
+        return new ChatComponentSelector(this.pattern, this.separator);
     }
 
     @Override
@@ -60,12 +78,12 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
         } else {
             ChatComponentSelector chatcomponentselector = (ChatComponentSelector) object;
 
-            return this.e.equals(chatcomponentselector.e) && super.equals(object);
+            return this.pattern.equals(chatcomponentselector.pattern) && super.equals(object);
         }
     }
 
     @Override
     public String toString() {
-        return "SelectorComponent{pattern='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        return "SelectorComponent{pattern='" + this.pattern + "', siblings=" + this.siblings + ", style=" + this.getChatModifier() + "}";
     }
 }

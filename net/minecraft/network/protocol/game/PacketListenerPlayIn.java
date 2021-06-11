@@ -12,8 +12,6 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInSettings packetplayinsettings);
 
-    void a(PacketPlayInTransaction packetplayintransaction);
-
     void a(PacketPlayInEnchantItem packetplayinenchantitem);
 
     void a(PacketPlayInWindowClick packetplayinwindowclick);
@@ -29,6 +27,8 @@ public interface PacketListenerPlayIn extends PacketListener {
     void a(PacketPlayInKeepAlive packetplayinkeepalive);
 
     void a(PacketPlayInFlying packetplayinflying);
+
+    void a(ServerboundPongPacket serverboundpongpacket);
 
     void a(PacketPlayInAbilities packetplayinabilities);
 

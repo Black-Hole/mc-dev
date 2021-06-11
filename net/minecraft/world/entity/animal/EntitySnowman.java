@@ -37,10 +37,14 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3D;
 
 public class EntitySnowman extends EntityGolem implements IShearable, IRangedEntity {
 
-    private static final DataWatcherObject<Byte> b = DataWatcher.a(EntitySnowman.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> DATA_PUMPKIN_ID = DataWatcher.a(EntitySnowman.class, DataWatcherRegistry.BYTE);
+    private static final byte PUMPKIN_FLAG = 16;
+    private static final float EYE_HEIGHT = 1.7F;
 
     public EntitySnowman(EntityTypes<? extends EntitySnowman> entitytypes, World world) {
         super(entitytypes, world);
@@ -57,14 +61,14 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
         }));
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder n() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySnowman.b, (byte) 16);
+        this.entityData.register(EntitySnowman.DATA_PUMPKIN_ID, (byte) 16);
     }
 
     @Override
@@ -83,23 +87,23 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
     }
 
     @Override
-    public boolean dO() {
+    public boolean ew() {
         return true;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             int i = MathHelper.floor(this.locX());
             int j = MathHelper.floor(this.locY());
             int k = MathHelper.floor(this.locZ());
 
-            if (this.world.getBiome(new BlockPosition(i, 0, k)).getAdjustedTemperature(new BlockPosition(i, j, k)) > 1.0F) {
-                this.damageEntity(DamageSource.BURN, 1.0F);
+            if (this.level.getBiome(new BlockPosition(i, 0, k)).getAdjustedTemperature(new BlockPosition(i, j, k)) > 1.0F) {
+                this.damageEntity(DamageSource.ON_FIRE, 1.0F);
             }
 
-            if (!this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+            if (!this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                 return;
             }
 
@@ -111,8 +115,8 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
                 k = MathHelper.floor(this.locZ() + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
                 BlockPosition blockposition = new BlockPosition(i, j, k);
 
-                if (this.world.getType(blockposition).isAir() && this.world.getBiome(blockposition).getAdjustedTemperature(blockposition) < 0.8F && iblockdata.canPlace(this.world, blockposition)) {
-                    this.world.setTypeUpdate(blockposition, iblockdata);
+                if (this.level.getType(blockposition).isAir() && this.level.getBiome(blockposition).getAdjustedTemperature(blockposition) < 0.8F && iblockdata.canPlace(this.level, blockposition)) {
+                    this.level.setTypeUpdate(blockposition, iblockdata);
                 }
             }
         }
@@ -121,16 +125,16 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
 
     @Override
     public void a(EntityLiving entityliving, float f) {
-        EntitySnowball entitysnowball = new EntitySnowball(this.world, this);
+        EntitySnowball entitysnowball = new EntitySnowball(this.level, this);
         double d0 = entityliving.getHeadY() - 1.100000023841858D;
         double d1 = entityliving.locX() - this.locX();
         double d2 = d0 - entitysnowball.locY();
         double d3 = entityliving.locZ() - this.locZ();
-        float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+        double d4 = Math.sqrt(d1 * d1 + d3 * d3) * 0.20000000298023224D;
 
-        entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.playSound(SoundEffects.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.world.addEntity(entitysnowball);
+        entitysnowball.shoot(d1, d2 + d4, d3, 1.6F, 12.0F);
+        this.playSound(SoundEffects.SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addEntity(entitysnowball);
     }
 
     @Override
@@ -142,15 +146,16 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
     protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.SHEARS && this.canShear()) {
+        if (itemstack.a(Items.SHEARS) && this.canShear()) {
             this.shear(SoundCategory.PLAYERS);
-            if (!this.world.isClientSide) {
+            this.a(GameEvent.SHEAR, (Entity) entityhuman);
+            if (!this.level.isClientSide) {
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }
@@ -158,10 +163,10 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
 
     @Override
     public void shear(SoundCategory soundcategory) {
-        this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_SNOW_GOLEM_SHEAR, soundcategory, 1.0F, 1.0F);
-        if (!this.world.s_()) {
+        this.level.playSound((EntityHuman) null, (Entity) this, SoundEffects.SNOW_GOLEM_SHEAR, soundcategory, 1.0F, 1.0F);
+        if (!this.level.isClientSide()) {
             this.setHasPumpkin(false);
-            this.a(new ItemStack(Items.dj), 1.7F);
+            this.a(new ItemStack(Items.CARVED_PUMPKIN), 1.7F);
         }
 
     }
@@ -172,16 +177,16 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
     }
 
     public boolean hasPumpkin() {
-        return ((Byte) this.datawatcher.get(EntitySnowman.b) & 16) != 0;
+        return ((Byte) this.entityData.get(EntitySnowman.DATA_PUMPKIN_ID) & 16) != 0;
     }
 
     public void setHasPumpkin(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySnowman.b);
+        byte b0 = (Byte) this.entityData.get(EntitySnowman.DATA_PUMPKIN_ID);
 
         if (flag) {
-            this.datawatcher.set(EntitySnowman.b, (byte) (b0 | 16));
+            this.entityData.set(EntitySnowman.DATA_PUMPKIN_ID, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySnowman.b, (byte) (b0 & -17));
+            this.entityData.set(EntitySnowman.DATA_PUMPKIN_ID, (byte) (b0 & -17));
         }
 
     }
@@ -189,18 +194,23 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
     @Nullable
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_SNOW_GOLEM_AMBIENT;
+        return SoundEffects.SNOW_GOLEM_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_SNOW_GOLEM_HURT;
+        return SoundEffects.SNOW_GOLEM_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_SNOW_GOLEM_DEATH;
+        return SoundEffects.SNOW_GOLEM_DEATH;
+    }
+
+    @Override
+    public Vec3D cu() {
+        return new Vec3D(0.0D, (double) (0.75F * this.getHeadHeight()), (double) (this.getWidth() * 0.4F));
     }
 }

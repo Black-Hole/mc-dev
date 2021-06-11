@@ -17,21 +17,26 @@ import net.minecraft.world.item.ItemStack;
 
 public abstract class Enchantment {
 
-    private final EnumItemSlot[] a;
-    private final Enchantment.Rarity d;
-    public final EnchantmentSlotType itemTarget;
+    private final EnumItemSlot[] slots;
+    private final Enchantment.Rarity rarity;
+    public final EnchantmentSlotType category;
     @Nullable
-    protected String c;
+    protected String descriptionId;
+
+    @Nullable
+    public static Enchantment c(int i) {
+        return (Enchantment) IRegistry.ENCHANTMENT.fromId(i);
+    }
 
     protected Enchantment(Enchantment.Rarity enchantment_rarity, EnchantmentSlotType enchantmentslottype, EnumItemSlot[] aenumitemslot) {
-        this.d = enchantment_rarity;
-        this.itemTarget = enchantmentslottype;
-        this.a = aenumitemslot;
+        this.rarity = enchantment_rarity;
+        this.category = enchantmentslottype;
+        this.slots = aenumitemslot;
     }
 
     public Map<EnumItemSlot, ItemStack> a(EntityLiving entityliving) {
         Map<EnumItemSlot, ItemStack> map = Maps.newEnumMap(EnumItemSlot.class);
-        EnumItemSlot[] aenumitemslot = this.a;
+        EnumItemSlot[] aenumitemslot = this.slots;
         int i = aenumitemslot.length;
 
         for (int j = 0; j < i; ++j) {
@@ -47,7 +52,7 @@ public abstract class Enchantment {
     }
 
     public Enchantment.Rarity d() {
-        return this.d;
+        return this.rarity;
     }
 
     public int getStartLevel() {
@@ -83,11 +88,11 @@ public abstract class Enchantment {
     }
 
     protected String f() {
-        if (this.c == null) {
-            this.c = SystemUtils.a("enchantment", IRegistry.ENCHANTMENT.getKey(this));
+        if (this.descriptionId == null) {
+            this.descriptionId = SystemUtils.a("enchantment", IRegistry.ENCHANTMENT.getKey(this));
         }
 
-        return this.c;
+        return this.descriptionId;
     }
 
     public String g() {
@@ -111,7 +116,7 @@ public abstract class Enchantment {
     }
 
     public boolean canEnchant(ItemStack itemstack) {
-        return this.itemTarget.canEnchant(itemstack.getItem());
+        return this.category.canEnchant(itemstack.getItem());
     }
 
     public void a(EntityLiving entityliving, Entity entity, int i) {}
@@ -138,14 +143,14 @@ public abstract class Enchantment {
 
         COMMON(10), UNCOMMON(5), RARE(2), VERY_RARE(1);
 
-        private final int e;
+        private final int weight;
 
         private Rarity(int i) {
-            this.e = i;
+            this.weight = i;
         }
 
         public int a() {
-            return this.e;
+            return this.weight;
         }
     }
 }

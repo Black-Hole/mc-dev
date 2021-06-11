@@ -19,15 +19,26 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class Scoreboard {
 
+    public static final int DISPLAY_SLOT_LIST = 0;
+    public static final int DISPLAY_SLOT_SIDEBAR = 1;
+    public static final int DISPLAY_SLOT_BELOW_NAME = 2;
+    public static final int DISPLAY_SLOT_TEAMS_SIDEBAR_START = 3;
+    public static final int DISPLAY_SLOT_TEAMS_SIDEBAR_END = 18;
+    public static final int DISPLAY_SLOTS = 19;
+    public static final int MAX_NAME_LENGTH = 40;
     private final Map<String, ScoreboardObjective> objectivesByName = Maps.newHashMap();
     private final Map<IScoreboardCriteria, List<ScoreboardObjective>> objectivesByCriteria = Maps.newHashMap();
     private final Map<String, Map<ScoreboardObjective, ScoreboardScore>> playerScores = Maps.newHashMap();
-    private final ScoreboardObjective[] displaySlots = new ScoreboardObjective[19];
+    private final ScoreboardObjective[] displayObjectives = new ScoreboardObjective[19];
     private final Map<String, ScoreboardTeam> teamsByName = Maps.newHashMap();
     private final Map<String, ScoreboardTeam> teamsByPlayer = Maps.newHashMap();
-    private static String[] g;
+    private static String[] displaySlotNames;
 
     public Scoreboard() {}
+
+    public boolean b(String s) {
+        return this.objectivesByName.containsKey(s);
+    }
 
     public ScoreboardObjective c(String s) {
         return (ScoreboardObjective) this.objectivesByName.get(s);
@@ -103,7 +114,7 @@ public class Scoreboard {
             }
         }
 
-        list.sort(ScoreboardScore.a);
+        list.sort(ScoreboardScore.SCORE_COMPARATOR);
         return list;
     }
 
@@ -183,12 +194,12 @@ public class Scoreboard {
     }
 
     public void setDisplaySlot(int i, @Nullable ScoreboardObjective scoreboardobjective) {
-        this.displaySlots[i] = scoreboardobjective;
+        this.displayObjectives[i] = scoreboardobjective;
     }
 
     @Nullable
     public ScoreboardObjective getObjectiveForSlot(int i) {
-        return this.displaySlots[i];
+        return this.displayObjectives[i];
     }
 
     public ScoreboardTeam getTeam(String s) {
@@ -332,15 +343,15 @@ public class Scoreboard {
     }
 
     public static String[] h() {
-        if (Scoreboard.g == null) {
-            Scoreboard.g = new String[19];
+        if (Scoreboard.displaySlotNames == null) {
+            Scoreboard.displaySlotNames = new String[19];
 
             for (int i = 0; i < 19; ++i) {
-                Scoreboard.g[i] = getSlotName(i);
+                Scoreboard.displaySlotNames[i] = getSlotName(i);
             }
         }
 
-        return Scoreboard.g;
+        return Scoreboard.displaySlotNames;
     }
 
     public void a(Entity entity) {

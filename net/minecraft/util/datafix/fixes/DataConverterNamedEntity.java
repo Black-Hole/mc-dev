@@ -10,22 +10,22 @@ import com.mojang.datafixers.schemas.Schema;
 
 public abstract class DataConverterNamedEntity extends DataFix {
 
-    private final String a;
-    private final String b;
-    private final TypeReference c;
+    private final String name;
+    private final String entityName;
+    private final TypeReference type;
 
     public DataConverterNamedEntity(Schema schema, boolean flag, String s, TypeReference typereference, String s1) {
         super(schema, flag);
-        this.a = s;
-        this.c = typereference;
-        this.b = s1;
+        this.name = s;
+        this.type = typereference;
+        this.entityName = s1;
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder<?> opticfinder = DSL.namedChoice(this.b, this.getInputSchema().getChoiceType(this.c, this.b));
+        OpticFinder<?> opticfinder = DSL.namedChoice(this.entityName, this.getInputSchema().getChoiceType(this.type, this.entityName));
 
-        return this.fixTypeEverywhereTyped(this.a, this.getInputSchema().getType(this.c), this.getOutputSchema().getType(this.c), (typed) -> {
-            return typed.updateTyped(opticfinder, this.getOutputSchema().getChoiceType(this.c, this.b), this::a);
+        return this.fixTypeEverywhereTyped(this.name, this.getInputSchema().getType(this.type), this.getOutputSchema().getType(this.type), (typed) -> {
+            return typed.updateTyped(opticfinder, this.getOutputSchema().getChoiceType(this.type, this.entityName), this::a);
         });
     }
 

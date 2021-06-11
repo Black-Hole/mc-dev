@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class DataConverterJigsawRotation extends DataFix {
 
-    private static final Map<String, String> a = ImmutableMap.builder().put("down", "down_south").put("up", "up_north").put("north", "north_up").put("south", "south_up").put("west", "west_up").put("east", "east_up").build();
+    private static final Map<String, String> RENAMES = ImmutableMap.builder().put("down", "down_south").put("up", "up_north").put("north", "north_up").put("south", "south_up").put("west", "west_up").put("east", "east_up").build();
 
     public DataConverterJigsawRotation(Schema schema, boolean flag) {
         super(schema, flag);
@@ -23,7 +23,7 @@ public class DataConverterJigsawRotation extends DataFix {
         return optional.equals(Optional.of("minecraft:jigsaw")) ? dynamic.update("Properties", (dynamic1) -> {
             String s = dynamic1.get("facing").asString("north");
 
-            return dynamic1.remove("facing").set("orientation", dynamic1.createString((String) DataConverterJigsawRotation.a.getOrDefault(s, s)));
+            return dynamic1.remove("facing").set("orientation", dynamic1.createString((String) DataConverterJigsawRotation.RENAMES.getOrDefault(s, s)));
         }) : dynamic;
     }
 

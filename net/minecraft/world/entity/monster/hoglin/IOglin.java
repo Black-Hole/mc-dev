@@ -8,12 +8,16 @@ import net.minecraft.world.phys.Vec3D;
 
 public interface IOglin {
 
+    int ATTACK_ANIMATION_DURATION = 10;
+
+    int fv();
+
     static boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
         float f = (float) entityliving.b(GenericAttributes.ATTACK_DAMAGE);
         float f1;
 
         if (!entityliving.isBaby() && (int) f > 0) {
-            f1 = f / 2.0F + (float) entityliving.world.random.nextInt((int) f);
+            f1 = f / 2.0F + (float) entityliving.level.random.nextInt((int) f);
         } else {
             f1 = f;
         }
@@ -38,13 +42,13 @@ public interface IOglin {
         if (d2 > 0.0D) {
             double d3 = entityliving1.locX() - entityliving.locX();
             double d4 = entityliving1.locZ() - entityliving.locZ();
-            float f = (float) (entityliving.world.random.nextInt(21) - 10);
-            double d5 = d2 * (double) (entityliving.world.random.nextFloat() * 0.5F + 0.2F);
+            float f = (float) (entityliving.level.random.nextInt(21) - 10);
+            double d5 = d2 * (double) (entityliving.level.random.nextFloat() * 0.5F + 0.2F);
             Vec3D vec3d = (new Vec3D(d3, 0.0D, d4)).d().a(d5).b(f);
-            double d6 = d2 * (double) entityliving.world.random.nextFloat() * 0.5D;
+            double d6 = d2 * (double) entityliving.level.random.nextFloat() * 0.5D;
 
             entityliving1.i(vec3d.x, d6, vec3d.z);
-            entityliving1.velocityChanged = true;
+            entityliving1.hurtMarked = true;
         }
     }
 }

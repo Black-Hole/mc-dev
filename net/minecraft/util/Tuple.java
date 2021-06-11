@@ -14,7 +14,15 @@ public class Tuple<A, B> {
         return this.a;
     }
 
+    public void a(A a0) {
+        this.a = a0;
+    }
+
     public B b() {
         return this.b;
+    }
+
+    public void b(B b0) {
+        this.b = b0;
     }
 }

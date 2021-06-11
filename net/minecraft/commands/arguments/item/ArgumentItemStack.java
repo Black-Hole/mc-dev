@@ -13,7 +13,7 @@ import net.minecraft.tags.TagsItem;
 
 public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStack> {
 
-    private static final Collection<String> a = Arrays.asList("stick", "minecraft:stick", "stick{foo=bar}");
+    private static final Collection<String> EXAMPLES = Arrays.asList("stick", "minecraft:stick", "stick{foo=bar}");
 
     public ArgumentItemStack() {}
 
@@ -22,9 +22,9 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
     }
 
     public ArgumentPredicateItemStack parse(StringReader stringreader) throws CommandSyntaxException {
-        ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).h();
+        ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).g();
 
-        return new ArgumentPredicateItemStack(argumentparseritemstack.b(), argumentparseritemstack.c());
+        return new ArgumentPredicateItemStack(argumentparseritemstack.a(), argumentparseritemstack.b());
     }
 
     public static <S> ArgumentPredicateItemStack a(CommandContext<S> commandcontext, String s) {
@@ -38,7 +38,7 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
         ArgumentParserItemStack argumentparseritemstack = new ArgumentParserItemStack(stringreader, false);
 
         try {
-            argumentparseritemstack.h();
+            argumentparseritemstack.g();
         } catch (CommandSyntaxException commandsyntaxexception) {
             ;
         }
@@ -47,6 +47,6 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
     }
 
     public Collection<String> getExamples() {
-        return ArgumentItemStack.a;
+        return ArgumentItemStack.EXAMPLES;
     }
 }

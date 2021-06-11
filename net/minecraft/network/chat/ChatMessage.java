@@ -15,19 +15,19 @@ import net.minecraft.world.entity.Entity;
 
 public class ChatMessage extends ChatBaseComponent implements ChatComponentContextual {
 
-    private static final Object[] d = new Object[0];
-    private static final IChatFormatted e = IChatFormatted.b("%");
-    private static final IChatFormatted f = IChatFormatted.b("null");
+    private static final Object[] NO_ARGS = new Object[0];
+    private static final IChatFormatted TEXT_PERCENT = IChatFormatted.b("%");
+    private static final IChatFormatted TEXT_NULL = IChatFormatted.b("null");
     private final String key;
     private final Object[] args;
     @Nullable
-    private LocaleLanguage i;
-    private final List<IChatFormatted> j = Lists.newArrayList();
-    private static final Pattern k = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
+    private LocaleLanguage decomposedWith;
+    private final List<IChatFormatted> decomposedParts = Lists.newArrayList();
+    private static final Pattern FORMAT_PATTERN = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     public ChatMessage(String s) {
         this.key = s;
-        this.args = ChatMessage.d;
+        this.args = ChatMessage.NO_ARGS;
     }
 
     public ChatMessage(String s, Object... aobject) {
@@ -38,23 +38,23 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     private void k() {
         LocaleLanguage localelanguage = LocaleLanguage.a();
 
-        if (localelanguage != this.i) {
-            this.i = localelanguage;
-            this.j.clear();
+        if (localelanguage != this.decomposedWith) {
+            this.decomposedWith = localelanguage;
+            this.decomposedParts.clear();
             String s = localelanguage.a(this.key);
 
             try {
                 this.d(s);
             } catch (ChatMessageException chatmessageexception) {
-                this.j.clear();
-                this.j.add(IChatFormatted.b(s));
+                this.decomposedParts.clear();
+                this.decomposedParts.add(IChatFormatted.b(s));
             }
 
         }
     }
 
     private void d(String s) {
-        Matcher matcher = ChatMessage.k.matcher(s);
+        Matcher matcher = ChatMessage.FORMAT_PATTERN.matcher(s);
 
         try {
             int i = 0;
@@ -74,14 +74,14 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
                         throw new IllegalArgumentException();
                     }
 
-                    this.j.add(IChatFormatted.b(s1));
+                    this.decomposedParts.add(IChatFormatted.b(s1));
                 }
 
                 s1 = matcher.group(2);
                 String s2 = s.substring(l, j);
 
                 if ("%".equals(s1) && "%%".equals(s2)) {
-                    this.j.add(ChatMessage.e);
+                    this.decomposedParts.add(ChatMessage.TEXT_PERCENT);
                 } else {
                     if (!"s".equals(s1)) {
                         throw new ChatMessageException(this, "Unsupported format: '" + s2 + "'");
@@ -91,7 +91,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
                     if (i1 < this.args.length) {
-                        this.j.add(this.b(i1));
+                        this.decomposedParts.add(this.b(i1));
                     }
                 }
             }
@@ -103,7 +103,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
                     throw new IllegalArgumentException();
                 }
 
-                this.j.add(IChatFormatted.b(s4));
+                this.decomposedParts.add(IChatFormatted.b(s4));
             }
 
         } catch (IllegalArgumentException illegalargumentexception) {
@@ -117,7 +117,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         } else {
             Object object = this.args[i];
 
-            return (IChatFormatted) (object instanceof IChatBaseComponent ? (IChatBaseComponent) object : (object == null ? ChatMessage.f : IChatFormatted.b(object.toString())));
+            return (IChatFormatted) (object instanceof IChatBaseComponent ? (IChatBaseComponent) object : (object == null ? ChatMessage.TEXT_NULL : IChatFormatted.b(object.toString())));
         }
     }
 
@@ -127,9 +127,29 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     }
 
     @Override
+    public <T> Optional<T> b(IChatFormatted.b<T> ichatformatted_b, ChatModifier chatmodifier) {
+        this.k();
+        Iterator iterator = this.decomposedParts.iterator();
+
+        Optional optional;
+
+        do {
+            if (!iterator.hasNext()) {
+                return Optional.empty();
+            }
+
+            IChatFormatted ichatformatted = (IChatFormatted) iterator.next();
+
+            optional = ichatformatted.a(ichatformatted_b, chatmodifier);
+        } while (!optional.isPresent());
+
+        return optional;
+    }
+
+    @Override
     public <T> Optional<T> b(IChatFormatted.a<T> ichatformatted_a) {
         this.k();
-        Iterator iterator = this.j.iterator();
+        Iterator iterator = this.decomposedParts.iterator();
 
         Optional optional;
 
@@ -187,7 +207,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
 
     @Override
     public String toString() {
-        return "TranslatableComponent{key='" + this.key + '\'' + ", args=" + Arrays.toString(this.args) + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        return "TranslatableComponent{key='" + this.key + "', args=" + Arrays.toString(this.args) + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + "}";
     }
 
     public String getKey() {

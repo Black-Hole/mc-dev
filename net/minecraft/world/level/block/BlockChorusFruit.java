@@ -19,7 +19,7 @@ public class BlockChorusFruit extends BlockSprawling {
 
     protected BlockChorusFruit(BlockBase.Info blockbase_info) {
         super(0.3125F, blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockChorusFruit.NORTH, false)).set(BlockChorusFruit.EAST, false)).set(BlockChorusFruit.SOUTH, false)).set(BlockChorusFruit.WEST, false)).set(BlockChorusFruit.UP, false)).set(BlockChorusFruit.DOWN, false));
     }
 
     @Override
@@ -28,14 +28,14 @@ public class BlockChorusFruit extends BlockSprawling {
     }
 
     public IBlockData a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Block block = iblockaccess.getType(blockposition.down()).getBlock();
-        Block block1 = iblockaccess.getType(blockposition.up()).getBlock();
-        Block block2 = iblockaccess.getType(blockposition.north()).getBlock();
-        Block block3 = iblockaccess.getType(blockposition.east()).getBlock();
-        Block block4 = iblockaccess.getType(blockposition.south()).getBlock();
-        Block block5 = iblockaccess.getType(blockposition.west()).getBlock();
+        IBlockData iblockdata = iblockaccess.getType(blockposition.down());
+        IBlockData iblockdata1 = iblockaccess.getType(blockposition.up());
+        IBlockData iblockdata2 = iblockaccess.getType(blockposition.north());
+        IBlockData iblockdata3 = iblockaccess.getType(blockposition.east());
+        IBlockData iblockdata4 = iblockaccess.getType(blockposition.south());
+        IBlockData iblockdata5 = iblockaccess.getType(blockposition.west());
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.f, block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE)).set(BlockChorusFruit.e, block1 == this || block1 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.a, block2 == this || block2 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.b, block3 == this || block3 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.c, block4 == this || block4 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.d, block5 == this || block5 == Blocks.CHORUS_FLOWER);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.DOWN, iblockdata.a((Block) this) || iblockdata.a(Blocks.CHORUS_FLOWER) || iblockdata.a(Blocks.END_STONE))).set(BlockChorusFruit.UP, iblockdata1.a((Block) this) || iblockdata1.a(Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.NORTH, iblockdata2.a((Block) this) || iblockdata2.a(Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.EAST, iblockdata3.a((Block) this) || iblockdata3.a(Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.SOUTH, iblockdata4.a((Block) this) || iblockdata4.a(Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.WEST, iblockdata5.a((Block) this) || iblockdata5.a(Blocks.CHORUS_FLOWER));
     }
 
     @Override
@@ -44,9 +44,9 @@ public class BlockChorusFruit extends BlockSprawling {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            boolean flag = iblockdata1.getBlock() == this || iblockdata1.a(Blocks.CHORUS_FLOWER) || enumdirection == EnumDirection.DOWN && iblockdata1.a(Blocks.END_STONE);
+            boolean flag = iblockdata1.a((Block) this) || iblockdata1.a(Blocks.CHORUS_FLOWER) || enumdirection == EnumDirection.DOWN && iblockdata1.a(Blocks.END_STONE);
 
-            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.g.get(enumdirection), flag);
+            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.PROPERTY_BY_DIRECTION.get(enumdirection), flag);
         }
     }
 
@@ -64,38 +64,36 @@ public class BlockChorusFruit extends BlockSprawling {
         boolean flag = !iworldreader.getType(blockposition.up()).isAir() && !iblockdata1.isAir();
         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-        Block block;
+        IBlockData iblockdata2;
 
         do {
             BlockPosition blockposition1;
-            Block block1;
+            IBlockData iblockdata3;
 
             do {
                 if (!iterator.hasNext()) {
-                    Block block2 = iblockdata1.getBlock();
-
-                    return block2 == this || block2 == Blocks.END_STONE;
+                    return iblockdata1.a((Block) this) || iblockdata1.a(Blocks.END_STONE);
                 }
 
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                 blockposition1 = blockposition.shift(enumdirection);
-                block1 = iworldreader.getType(blockposition1).getBlock();
-            } while (block1 != this);
+                iblockdata3 = iworldreader.getType(blockposition1);
+            } while (!iblockdata3.a((Block) this));
 
             if (flag) {
                 return false;
             }
 
-            block = iworldreader.getType(blockposition1.down()).getBlock();
-        } while (block != this && block != Blocks.END_STONE);
+            iblockdata2 = iworldreader.getType(blockposition1.down());
+        } while (!iblockdata2.a((Block) this) && !iblockdata2.a(Blocks.END_STONE));
 
         return true;
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockChorusFruit.a, BlockChorusFruit.b, BlockChorusFruit.c, BlockChorusFruit.d, BlockChorusFruit.e, BlockChorusFruit.f);
+        blockstatelist_a.a(BlockChorusFruit.NORTH, BlockChorusFruit.EAST, BlockChorusFruit.SOUTH, BlockChorusFruit.WEST, BlockChorusFruit.UP, BlockChorusFruit.DOWN);
     }
 
     @Override

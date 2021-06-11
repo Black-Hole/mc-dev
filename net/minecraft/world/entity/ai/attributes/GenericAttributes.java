@@ -15,8 +15,10 @@ public class GenericAttributes {
     public static final AttributeBase ARMOR = a("generic.armor", (new AttributeRanged("attribute.name.generic.armor", 0.0D, 0.0D, 30.0D)).a(true));
     public static final AttributeBase ARMOR_TOUGHNESS = a("generic.armor_toughness", (new AttributeRanged("attribute.name.generic.armor_toughness", 0.0D, 0.0D, 20.0D)).a(true));
     public static final AttributeBase LUCK = a("generic.luck", (new AttributeRanged("attribute.name.generic.luck", 0.0D, -1024.0D, 1024.0D)).a(true));
-    public static final AttributeBase SPAWN_REINFORCEMENTS = a("zombie.spawn_reinforcements", new AttributeRanged("attribute.name.zombie.spawn_reinforcements", 0.0D, 0.0D, 1.0D));
+    public static final AttributeBase SPAWN_REINFORCEMENTS_CHANCE = a("zombie.spawn_reinforcements", new AttributeRanged("attribute.name.zombie.spawn_reinforcements", 0.0D, 0.0D, 1.0D));
     public static final AttributeBase JUMP_STRENGTH = a("horse.jump_strength", (new AttributeRanged("attribute.name.horse.jump_strength", 0.7D, 0.0D, 2.0D)).a(true));
+
+    public GenericAttributes() {}
 
     private static AttributeBase a(String s, AttributeBase attributebase) {
         return (AttributeBase) IRegistry.a(IRegistry.ATTRIBUTE, s, (Object) attributebase);

@@ -5,7 +5,8 @@ import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
 
 public class DragonControllerLandedAttack extends AbstractDragonControllerLanded {
 
-    private int b;
+    private static final int ROAR_DURATION = 40;
+    private int attackingTicks;
 
     public DragonControllerLandedAttack(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -13,20 +14,20 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
 
     @Override
     public void b() {
-        this.a.world.a(this.a.locX(), this.a.locY(), this.a.locZ(), SoundEffects.ENTITY_ENDER_DRAGON_GROWL, this.a.getSoundCategory(), 2.5F, 0.8F + this.a.getRandom().nextFloat() * 0.3F, false);
+        this.dragon.level.a(this.dragon.locX(), this.dragon.locY(), this.dragon.locZ(), SoundEffects.ENDER_DRAGON_GROWL, this.dragon.getSoundCategory(), 2.5F, 0.8F + this.dragon.getRandom().nextFloat() * 0.3F, false);
     }
 
     @Override
     public void c() {
-        if (this.b++ >= 40) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_FLAMING);
+        if (this.attackingTicks++ >= 40) {
+            this.dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_FLAMING);
         }
 
     }
 
     @Override
     public void d() {
-        this.b = 0;
+        this.attackingTicks = 0;
     }
 
     @Override

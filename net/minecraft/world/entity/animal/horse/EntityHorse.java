@@ -34,41 +34,41 @@ import net.minecraft.world.level.block.SoundEffectType;
 
 public class EntityHorse extends EntityHorseAbstract {
 
-    private static final UUID bw = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityHorse.class, DataWatcherRegistry.b);
+    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
+    private static final DataWatcherObject<Integer> DATA_ID_TYPE_VARIANT = DataWatcher.a(EntityHorse.class, DataWatcherRegistry.INT);
 
     public EntityHorse(EntityTypes<? extends EntityHorse> entitytypes, World world) {
         super(entitytypes, world);
     }
 
     @Override
-    protected void eK() {
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fp());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.fr());
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fq());
+    protected void p() {
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fY());
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.ga());
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorse.bx, 0);
+        this.entityData.register(EntityHorse.DATA_ID_TYPE_VARIANT, 0);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setInt("Variant", this.getVariantRaw());
-        if (!this.inventoryChest.getItem(1).isEmpty()) {
-            nbttagcompound.set("ArmorItem", this.inventoryChest.getItem(1).save(new NBTTagCompound()));
+        if (!this.inventory.getItem(1).isEmpty()) {
+            nbttagcompound.set("ArmorItem", this.inventory.getItem(1).save(new NBTTagCompound()));
         }
 
     }
 
-    public ItemStack eL() {
+    public ItemStack t() {
         return this.getEquipment(EnumItemSlot.CHEST);
     }
 
-    private void m(ItemStack itemstack) {
+    private void o(ItemStack itemstack) {
         this.setSlot(EnumItemSlot.CHEST, itemstack);
         this.a(EnumItemSlot.CHEST, 0.0F);
     }
@@ -80,20 +80,20 @@ public class EntityHorse extends EntityHorseAbstract {
         if (nbttagcompound.hasKeyOfType("ArmorItem", 10)) {
             ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("ArmorItem"));
 
-            if (!itemstack.isEmpty() && this.l(itemstack)) {
-                this.inventoryChest.setItem(1, itemstack);
+            if (!itemstack.isEmpty() && this.m(itemstack)) {
+                this.inventory.setItem(1, itemstack);
             }
         }
 
-        this.fe();
+        this.fN();
     }
 
     private void setVariantRaw(int i) {
-        this.datawatcher.set(EntityHorse.bx, i);
+        this.entityData.set(EntityHorse.DATA_ID_TYPE_VARIANT, i);
     }
 
     private int getVariantRaw() {
-        return (Integer) this.datawatcher.get(EntityHorse.bx);
+        return (Integer) this.entityData.get(EntityHorse.DATA_ID_TYPE_VARIANT);
     }
 
     public void setVariant(HorseColor horsecolor, HorseStyle horsestyle) {
@@ -109,23 +109,23 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fe() {
-        if (!this.world.isClientSide) {
-            super.fe();
-            this.n(this.inventoryChest.getItem(1));
+    protected void fN() {
+        if (!this.level.isClientSide) {
+            super.fN();
+            this.p(this.inventory.getItem(1));
             this.a(EnumItemSlot.CHEST, 0.0F);
         }
     }
 
-    private void n(ItemStack itemstack) {
-        this.m(itemstack);
-        if (!this.world.isClientSide) {
-            this.getAttributeInstance(GenericAttributes.ARMOR).b(EntityHorse.bw);
-            if (this.l(itemstack)) {
-                int i = ((ItemHorseArmor) itemstack.getItem()).g();
+    private void p(ItemStack itemstack) {
+        this.o(itemstack);
+        if (!this.level.isClientSide) {
+            this.getAttributeInstance(GenericAttributes.ARMOR).b(EntityHorse.ARMOR_MODIFIER_UUID);
+            if (this.m(itemstack)) {
+                int i = ((ItemHorseArmor) itemstack.getItem()).j();
 
                 if (i != 0) {
-                    this.getAttributeInstance(GenericAttributes.ARMOR).b(new AttributeModifier(EntityHorse.bw, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION));
+                    this.getAttributeInstance(GenericAttributes.ARMOR).b(new AttributeModifier(EntityHorse.ARMOR_MODIFIER_UUID, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION));
                 }
             }
         }
@@ -134,13 +134,13 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public void a(IInventory iinventory) {
-        ItemStack itemstack = this.eL();
+        ItemStack itemstack = this.t();
 
         super.a(iinventory);
-        ItemStack itemstack1 = this.eL();
+        ItemStack itemstack1 = this.t();
 
-        if (this.ticksLived > 20 && this.l(itemstack1) && itemstack != itemstack1) {
-            this.playSound(SoundEffects.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+        if (this.tickCount > 20 && this.m(itemstack1) && itemstack != itemstack1) {
+            this.playSound(SoundEffects.HORSE_ARMOR, 0.5F, 1.0F);
         }
 
     }
@@ -149,7 +149,7 @@ public class EntityHorse extends EntityHorseAbstract {
     protected void a(SoundEffectType soundeffecttype) {
         super.a(soundeffecttype);
         if (this.random.nextInt(10) == 0) {
-            this.playSound(SoundEffects.ENTITY_HORSE_BREATHE, soundeffecttype.getVolume() * 0.6F, soundeffecttype.getPitch());
+            this.playSound(SoundEffects.HORSE_BREATHE, soundeffecttype.getVolume() * 0.6F, soundeffecttype.getPitch());
         }
 
     }
@@ -157,31 +157,31 @@ public class EntityHorse extends EntityHorseAbstract {
     @Override
     protected SoundEffect getSoundAmbient() {
         super.getSoundAmbient();
-        return SoundEffects.ENTITY_HORSE_AMBIENT;
+        return SoundEffects.HORSE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
-        return SoundEffects.ENTITY_HORSE_DEATH;
+        return SoundEffects.HORSE_DEATH;
     }
 
     @Nullable
     @Override
-    protected SoundEffect fg() {
-        return SoundEffects.ENTITY_HORSE_EAT;
+    protected SoundEffect fP() {
+        return SoundEffects.HORSE_EAT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
         super.getSoundHurt(damagesource);
-        return SoundEffects.ENTITY_HORSE_HURT;
+        return SoundEffects.HORSE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundAngry() {
         super.getSoundAngry();
-        return SoundEffects.ENTITY_HORSE_ANGRY;
+        return SoundEffects.HORSE_ANGRY;
     }
 
     @Override
@@ -189,9 +189,9 @@ public class EntityHorse extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.eq()) {
+            if (this.isTamed() && entityhuman.eY()) {
                 this.f(entityhuman);
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
             if (this.isVehicle()) {
@@ -200,8 +200,8 @@ public class EntityHorse extends EntityHorseAbstract {
         }
 
         if (!itemstack.isEmpty()) {
-            if (this.k(itemstack)) {
-                return this.b(entityhuman, itemstack);
+            if (this.n(itemstack)) {
+                return this.a(entityhuman, itemstack);
             }
 
             EnumInteractionResult enuminteractionresult = itemstack.a(entityhuman, (EntityLiving) this, enumhand);
@@ -211,15 +211,15 @@ public class EntityHorse extends EntityHorseAbstract {
             }
 
             if (!this.isTamed()) {
-                this.fm();
-                return EnumInteractionResult.a(this.world.isClientSide);
+                this.fV();
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
-            boolean flag = !this.isBaby() && !this.hasSaddle() && itemstack.getItem() == Items.SADDLE;
+            boolean flag = !this.isBaby() && !this.hasSaddle() && itemstack.a(Items.SADDLE);
 
-            if (this.l(itemstack) || flag) {
+            if (this.m(itemstack) || flag) {
                 this.f(entityhuman);
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
         }
 
@@ -227,13 +227,13 @@ public class EntityHorse extends EntityHorseAbstract {
             return super.b(entityhuman, enumhand);
         } else {
             this.h(entityhuman);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         }
     }
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fo() && ((EntityHorseAbstract) entityanimal).fo());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fX() && ((EntityHorseAbstract) entityanimal).fX());
     }
 
     @Override
@@ -276,12 +276,12 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean fs() {
+    public boolean gb() {
         return true;
     }
 
     @Override
-    public boolean l(ItemStack itemstack) {
+    public boolean m(ItemStack itemstack) {
         return itemstack.getItem() instanceof ItemHorseArmor;
     }
 
@@ -291,7 +291,7 @@ public class EntityHorse extends EntityHorseAbstract {
         HorseColor horsecolor;
 
         if (groupdataentity instanceof EntityHorse.a) {
-            horsecolor = ((EntityHorse.a) groupdataentity).a;
+            horsecolor = ((EntityHorse.a) groupdataentity).variant;
         } else {
             horsecolor = (HorseColor) SystemUtils.a((Object[]) HorseColor.values(), this.random);
             groupdataentity = new EntityHorse.a(horsecolor);
@@ -303,11 +303,11 @@ public class EntityHorse extends EntityHorseAbstract {
 
     public static class a extends EntityAgeable.a {
 
-        public final HorseColor a;
+        public final HorseColor variant;
 
         public a(HorseColor horsecolor) {
             super(true);
-            this.a = horsecolor;
+            this.variant = horsecolor;
         }
     }
 }

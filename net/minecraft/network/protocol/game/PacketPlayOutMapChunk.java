@@ -3,11 +3,11 @@ package net.minecraft.network.protocol.game;
 import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import java.io.IOException;
+import java.util.BitSet;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagLongArray;
@@ -22,158 +22,150 @@ import net.minecraft.world.level.levelgen.HeightMap;
 
 public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private int b;
-    private int c;
-    private NBTTagCompound d;
-    @Nullable
-    private int[] e;
-    private byte[] f;
-    private List<NBTTagCompound> g;
-    private boolean h;
+    public static final int TWO_MEGABYTES = 2097152;
+    private final int x;
+    private final int z;
+    private final BitSet availableSections;
+    private final NBTTagCompound heightmaps;
+    private final int[] biomes;
+    private final byte[] buffer;
+    private final List<NBTTagCompound> blockEntitiesTags;
 
-    public PacketPlayOutMapChunk() {}
-
-    public PacketPlayOutMapChunk(Chunk chunk, int i) {
+    public PacketPlayOutMapChunk(Chunk chunk) {
         ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
 
-        this.a = chunkcoordintpair.x;
-        this.b = chunkcoordintpair.z;
-        this.h = i == 65535;
-        this.d = new NBTTagCompound();
-        Iterator iterator = chunk.f().iterator();
+        this.x = chunkcoordintpair.x;
+        this.z = chunkcoordintpair.z;
+        this.heightmaps = new NBTTagCompound();
+        Iterator iterator = chunk.e().iterator();
 
         Entry entry;
 
         while (iterator.hasNext()) {
             entry = (Entry) iterator.next();
-            if (((HeightMap.Type) entry.getKey()).c()) {
-                this.d.set(((HeightMap.Type) entry.getKey()).b(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
+            if (((HeightMap.Type) entry.getKey()).b()) {
+                this.heightmaps.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
             }
         }
 
-        if (this.h) {
-            this.e = chunk.getBiomeIndex().a();
-        }
-
-        this.f = new byte[this.a(chunk, i)];
-        this.c = this.a(new PacketDataSerializer(this.j()), chunk, i);
-        this.g = Lists.newArrayList();
+        this.biomes = chunk.getBiomeIndex().a();
+        this.buffer = new byte[this.a(chunk)];
+        this.availableSections = this.a(new PacketDataSerializer(this.i()), chunk);
+        this.blockEntitiesTags = Lists.newArrayList();
         iterator = chunk.getTileEntities().entrySet().iterator();
 
         while (iterator.hasNext()) {
             entry = (Entry) iterator.next();
-            BlockPosition blockposition = (BlockPosition) entry.getKey();
             TileEntity tileentity = (TileEntity) entry.getValue();
-            int j = blockposition.getY() >> 4;
+            NBTTagCompound nbttagcompound = tileentity.Z_();
 
-            if (this.f() || (i & 1 << j) != 0) {
-                NBTTagCompound nbttagcompound = tileentity.b();
-
-                this.g.add(nbttagcompound);
-            }
+            this.blockEntitiesTags.add(nbttagcompound);
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.readInt();
-        this.h = packetdataserializer.readBoolean();
-        this.c = packetdataserializer.i();
-        this.d = packetdataserializer.l();
-        if (this.h) {
-            this.e = packetdataserializer.c(BiomeStorage.a);
-        }
-
-        int i = packetdataserializer.i();
-
-        if (i > 2097152) {
-            throw new RuntimeException("Chunk Packet trying to allocate too much memory on read.");
+    public PacketPlayOutMapChunk(PacketDataSerializer packetdataserializer) {
+        this.x = packetdataserializer.readInt();
+        this.z = packetdataserializer.readInt();
+        this.availableSections = packetdataserializer.t();
+        this.heightmaps = packetdataserializer.m();
+        if (this.heightmaps == null) {
+            throw new RuntimeException("Can't read heightmap in packet for [" + this.x + ", " + this.z + "]");
         } else {
-            this.f = new byte[i];
-            packetdataserializer.readBytes(this.f);
-            int j = packetdataserializer.i();
+            this.biomes = packetdataserializer.c(BiomeStorage.MAX_SIZE);
+            int i = packetdataserializer.j();
 
-            this.g = Lists.newArrayList();
-
-            for (int k = 0; k < j; ++k) {
-                this.g.add(packetdataserializer.l());
+            if (i > 2097152) {
+                throw new RuntimeException("Chunk Packet trying to allocate too much memory on read.");
+            } else {
+                this.buffer = new byte[i];
+                packetdataserializer.readBytes(this.buffer);
+                this.blockEntitiesTags = packetdataserializer.a(PacketDataSerializer::m);
             }
-
         }
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeBoolean(this.h);
-        packetdataserializer.d(this.c);
-        packetdataserializer.a(this.d);
-        if (this.e != null) {
-            packetdataserializer.a(this.e);
-        }
-
-        packetdataserializer.d(this.f.length);
-        packetdataserializer.writeBytes(this.f);
-        packetdataserializer.d(this.g.size());
-        Iterator iterator = this.g.iterator();
-
-        while (iterator.hasNext()) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) iterator.next();
-
-            packetdataserializer.a(nbttagcompound);
-        }
-
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeInt(this.x);
+        packetdataserializer.writeInt(this.z);
+        packetdataserializer.a(this.availableSections);
+        packetdataserializer.a(this.heightmaps);
+        packetdataserializer.a(this.biomes);
+        packetdataserializer.d(this.buffer.length);
+        packetdataserializer.writeBytes(this.buffer);
+        packetdataserializer.a((Collection) this.blockEntitiesTags, PacketDataSerializer::a);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    private ByteBuf j() {
-        ByteBuf bytebuf = Unpooled.wrappedBuffer(this.f);
+    public PacketDataSerializer b() {
+        return new PacketDataSerializer(Unpooled.wrappedBuffer(this.buffer));
+    }
+
+    private ByteBuf i() {
+        ByteBuf bytebuf = Unpooled.wrappedBuffer(this.buffer);
 
         bytebuf.writerIndex(0);
         return bytebuf;
     }
 
-    public int a(PacketDataSerializer packetdataserializer, Chunk chunk, int i) {
-        int j = 0;
+    public BitSet a(PacketDataSerializer packetdataserializer, Chunk chunk) {
+        BitSet bitset = new BitSet();
         ChunkSection[] achunksection = chunk.getSections();
-        int k = 0;
+        int i = 0;
 
-        for (int l = achunksection.length; k < l; ++k) {
-            ChunkSection chunksection = achunksection[k];
+        for (int j = achunksection.length; i < j; ++i) {
+            ChunkSection chunksection = achunksection[i];
 
-            if (chunksection != Chunk.a && (!this.f() || !chunksection.c()) && (i & 1 << k) != 0) {
-                j |= 1 << k;
+            if (chunksection != Chunk.EMPTY_SECTION && !chunksection.c()) {
+                bitset.set(i);
                 chunksection.b(packetdataserializer);
             }
         }
 
-        return j;
+        return bitset;
     }
 
-    protected int a(Chunk chunk, int i) {
-        int j = 0;
+    protected int a(Chunk chunk) {
+        int i = 0;
         ChunkSection[] achunksection = chunk.getSections();
-        int k = 0;
+        int j = 0;
 
-        for (int l = achunksection.length; k < l; ++k) {
-            ChunkSection chunksection = achunksection[k];
+        for (int k = achunksection.length; j < k; ++j) {
+            ChunkSection chunksection = achunksection[j];
 
-            if (chunksection != Chunk.a && (!this.f() || !chunksection.c()) && (i & 1 << k) != 0) {
-                j += chunksection.j();
+            if (chunksection != Chunk.EMPTY_SECTION && !chunksection.c()) {
+                i += chunksection.j();
             }
         }
 
-        return j;
+        return i;
     }
 
-    public boolean f() {
-        return this.h;
+    public int c() {
+        return this.x;
+    }
+
+    public int d() {
+        return this.z;
+    }
+
+    public BitSet e() {
+        return this.availableSections;
+    }
+
+    public NBTTagCompound f() {
+        return this.heightmaps;
+    }
+
+    public List<NBTTagCompound> g() {
+        return this.blockEntitiesTags;
+    }
+
+    public int[] h() {
+        return this.biomes;
     }
 }

@@ -27,18 +27,18 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockStonecutter extends Block {
 
-    private static final IChatBaseComponent c = new ChatMessage("container.stonecutter");
-    public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
-    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.stonecutter");
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 
     public BlockStonecutter(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStonecutter.a, EnumDirection.NORTH));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockStonecutter.FACING, EnumDirection.NORTH));
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockStonecutter.a, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockStonecutter.FACING, blockactioncontext.g().opposite());
     }
 
     @Override
@@ -57,37 +57,37 @@ public class BlockStonecutter extends Block {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerStonecutter(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockStonecutter.c);
+        }, BlockStonecutter.CONTAINER_TITLE);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockStonecutter.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockStonecutter.SHAPE;
     }
 
     @Override
-    public boolean c_(IBlockData iblockdata) {
+    public boolean g_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockStonecutter.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockStonecutter.a)));
+        return (IBlockData) iblockdata.set(BlockStonecutter.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockStonecutter.FACING)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockStonecutter.a)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockStonecutter.FACING)));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockStonecutter.a);
+        blockstatelist_a.a(BlockStonecutter.FACING);
     }
 
     @Override

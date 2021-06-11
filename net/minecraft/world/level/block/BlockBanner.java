@@ -20,14 +20,14 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockBanner extends BlockBannerAbstract {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.aD;
-    private static final Map<EnumColor, Block> b = Maps.newHashMap();
-    private static final VoxelShape c = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    public static final BlockStateInteger ROTATION = BlockProperties.ROTATION_16;
+    private static final Map<EnumColor, Block> BY_COLOR = Maps.newHashMap();
+    private static final VoxelShape SHAPE = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public BlockBanner(EnumColor enumcolor, BlockBase.Info blockbase_info) {
         super(enumcolor, blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBanner.ROTATION, 0));
-        BlockBanner.b.put(enumcolor, this);
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockBanner.ROTATION, 0));
+        BlockBanner.BY_COLOR.put(enumcolor, this);
     }
 
     @Override
@@ -36,13 +36,13 @@ public class BlockBanner extends BlockBannerAbstract {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockBanner.c;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockBanner.SHAPE;
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockBanner.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15);
+        return (IBlockData) this.getBlockData().set(BlockBanner.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.i()) * 16.0F / 360.0F) + 0.5D) & 15);
     }
 
     @Override
@@ -63,5 +63,9 @@ public class BlockBanner extends BlockBannerAbstract {
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockBanner.ROTATION);
+    }
+
+    public static Block a(EnumColor enumcolor) {
+        return (Block) BlockBanner.BY_COLOR.getOrDefault(enumcolor, Blocks.WHITE_BANNER);
     }
 }

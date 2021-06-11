@@ -23,7 +23,9 @@ import net.minecraft.server.players.GameProfileBanList;
 
 public class CommandBan {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.ban.failed"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_BANNED = new SimpleCommandExceptionType(new ChatMessage("commands.ban.failed"));
+
+    public CommandBan() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("ban").requires((commandlistenerwrapper) -> {
@@ -52,13 +54,13 @@ public class CommandBan {
                 EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(gameprofile.getId());
 
                 if (entityplayer != null) {
-                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.banned"));
+                    entityplayer.connection.disconnect(new ChatMessage("multiplayer.disconnect.banned"));
                 }
             }
         }
 
         if (i == 0) {
-            throw CommandBan.a.create();
+            throw CommandBan.ERROR_ALREADY_BANNED.create();
         } else {
             return i;
         }

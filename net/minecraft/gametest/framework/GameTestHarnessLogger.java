@@ -12,11 +12,14 @@ public class GameTestHarnessLogger implements GameTestHarnessITestReporter {
 
     @Override
     public void a(GameTestHarnessInfo gametestharnessinfo) {
-        if (gametestharnessinfo.q()) {
-            GameTestHarnessLogger.LOGGER.error(gametestharnessinfo.c() + " failed! " + SystemUtils.d(gametestharnessinfo.n()));
+        if (gametestharnessinfo.r()) {
+            GameTestHarnessLogger.LOGGER.error("{} failed! {}", gametestharnessinfo.c(), SystemUtils.d(gametestharnessinfo.n()));
         } else {
-            GameTestHarnessLogger.LOGGER.warn("(optional) " + gametestharnessinfo.c() + " failed. " + SystemUtils.d(gametestharnessinfo.n()));
+            GameTestHarnessLogger.LOGGER.warn("(optional) {} failed. {}", gametestharnessinfo.c(), SystemUtils.d(gametestharnessinfo.n()));
         }
 
     }
+
+    @Override
+    public void b(GameTestHarnessInfo gametestharnessinfo) {}
 }

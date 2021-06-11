@@ -1,18 +1,20 @@
 package net.minecraft.world.entity.ai.goal;
 
+import com.mojang.datafixers.DataFixUtils;
 import java.util.List;
 import java.util.function.Predicate;
 import net.minecraft.world.entity.animal.EntityFishSchool;
 
 public class PathfinderGoalFishSchool extends PathfinderGoal {
 
-    private final EntityFishSchool a;
-    private int b;
-    private int c;
+    private static final int INTERVAL_TICKS = 200;
+    private final EntityFishSchool mob;
+    private int timeToRecalcPath;
+    private int nextStartTick;
 
     public PathfinderGoalFishSchool(EntityFishSchool entityfishschool) {
-        this.a = entityfishschool;
-        this.c = this.a(entityfishschool);
+        this.mob = entityfishschool;
+        this.nextStartTick = this.a(entityfishschool);
     }
 
     protected int a(EntityFishSchool entityfishschool) {
@@ -21,48 +23,48 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (this.a.eR()) {
+        if (this.mob.fB()) {
             return false;
-        } else if (this.a.eO()) {
+        } else if (this.mob.fy()) {
             return true;
-        } else if (this.c > 0) {
-            --this.c;
+        } else if (this.nextStartTick > 0) {
+            --this.nextStartTick;
             return false;
         } else {
-            this.c = this.a(this.a);
+            this.nextStartTick = this.a(this.mob);
             Predicate<EntityFishSchool> predicate = (entityfishschool) -> {
-                return entityfishschool.eQ() || !entityfishschool.eO();
+                return entityfishschool.fA() || !entityfishschool.fy();
             };
-            List<EntityFishSchool> list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
-            EntityFishSchool entityfishschool = (EntityFishSchool) list.stream().filter(EntityFishSchool::eQ).findAny().orElse(this.a);
+            List<? extends EntityFishSchool> list = this.mob.level.a(this.mob.getClass(), this.mob.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
+            EntityFishSchool entityfishschool = (EntityFishSchool) DataFixUtils.orElse(list.stream().filter(EntityFishSchool::fA).findAny(), this.mob);
 
             entityfishschool.a(list.stream().filter((entityfishschool1) -> {
-                return !entityfishschool1.eO();
+                return !entityfishschool1.fy();
             }));
-            return this.a.eO();
+            return this.mob.fy();
         }
     }
 
     @Override
     public boolean b() {
-        return this.a.eO() && this.a.eS();
+        return this.mob.fy() && this.mob.fC();
     }
 
     @Override
     public void c() {
-        this.b = 0;
+        this.timeToRecalcPath = 0;
     }
 
     @Override
     public void d() {
-        this.a.eP();
+        this.mob.fz();
     }
 
     @Override
     public void e() {
-        if (--this.b <= 0) {
-            this.b = 10;
-            this.a.eT();
+        if (--this.timeToRecalcPath <= 0) {
+            this.timeToRecalcPath = 10;
+            this.mob.fD();
         }
     }
 }

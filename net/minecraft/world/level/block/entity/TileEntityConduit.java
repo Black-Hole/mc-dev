@@ -18,45 +18,48 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.monster.IMonster;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.Vec3D;
 
-public class TileEntityConduit extends TileEntity implements ITickable {
+public class TileEntityConduit extends TileEntity {
 
-    private static final Block[] b = new Block[]{Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
-    public int a;
-    private float c;
-    private boolean g;
-    private boolean h;
-    private final List<BlockPosition> i;
+    private static final int BLOCK_REFRESH_RATE = 2;
+    private static final int EFFECT_DURATION = 13;
+    private static final float ROTATION_SPEED = -0.0375F;
+    private static final int MIN_ACTIVE_SIZE = 16;
+    private static final int MIN_KILL_SIZE = 42;
+    private static final int KILL_RANGE = 8;
+    private static final Block[] VALID_BLOCKS = new Block[]{Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
+    public int tickCount;
+    private float activeRotation;
+    private boolean isActive;
+    private boolean isHunting;
+    private final List<BlockPosition> effectBlocks = Lists.newArrayList();
     @Nullable
-    private EntityLiving target;
+    private EntityLiving destroyTarget;
     @Nullable
-    private UUID k;
-    private long l;
+    private UUID destroyTargetUUID;
+    private long nextAmbientSoundActivation;
 
-    public TileEntityConduit() {
-        this(TileEntityTypes.CONDUIT);
-    }
-
-    public TileEntityConduit(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
-        this.i = Lists.newArrayList();
+    public TileEntityConduit(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.CONDUIT, blockposition, iblockdata);
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.b("Target")) {
-            this.k = nbttagcompound.a("Target");
+            this.destroyTargetUUID = nbttagcompound.a("Target");
         } else {
-            this.k = null;
+            this.destroyTargetUUID = null;
         }
 
     }
@@ -64,8 +67,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (this.target != null) {
-            nbttagcompound.a("Target", this.target.getUniqueID());
+        if (this.destroyTarget != null) {
+            nbttagcompound.a("Target", this.destroyTarget.getUniqueID());
         }
 
         return nbttagcompound;
@@ -74,48 +77,73 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 5, this.b());
+        return new PacketPlayOutTileEntityData(this.worldPosition, 5, this.Z_());
     }
 
     @Override
-    public NBTTagCompound b() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
-    @Override
-    public void tick() {
-        ++this.a;
-        long i = this.world.getTime();
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityConduit tileentityconduit) {
+        ++tileentityconduit.tickCount;
+        long i = world.getTime();
+        List<BlockPosition> list = tileentityconduit.effectBlocks;
 
         if (i % 40L == 0L) {
-            this.a(this.h());
-            if (!this.world.isClientSide && this.d()) {
-                this.j();
-                this.k();
+            tileentityconduit.isActive = a(world, blockposition, list);
+            a(tileentityconduit, list);
+        }
+
+        a(world, blockposition, tileentityconduit);
+        a(world, blockposition, list, tileentityconduit.destroyTarget, tileentityconduit.tickCount);
+        if (tileentityconduit.d()) {
+            ++tileentityconduit.activeRotation;
+        }
+
+    }
+
+    public static void b(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityConduit tileentityconduit) {
+        ++tileentityconduit.tickCount;
+        long i = world.getTime();
+        List<BlockPosition> list = tileentityconduit.effectBlocks;
+
+        if (i % 40L == 0L) {
+            boolean flag = a(world, blockposition, list);
+
+            if (flag != tileentityconduit.isActive) {
+                SoundEffect soundeffect = flag ? SoundEffects.CONDUIT_ACTIVATE : SoundEffects.CONDUIT_DEACTIVATE;
+
+                world.playSound((EntityHuman) null, blockposition, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            }
+
+            tileentityconduit.isActive = flag;
+            a(tileentityconduit, list);
+            if (flag) {
+                b(world, blockposition, list);
+                a(world, blockposition, iblockdata, list, tileentityconduit);
             }
         }
 
-        if (i % 80L == 0L && this.d()) {
-            this.a(SoundEffects.BLOCK_CONDUIT_AMBIENT);
-        }
+        if (tileentityconduit.d()) {
+            if (i % 80L == 0L) {
+                world.playSound((EntityHuman) null, blockposition, SoundEffects.CONDUIT_AMBIENT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            }
 
-        if (i > this.l && this.d()) {
-            this.l = i + 60L + (long) this.world.getRandom().nextInt(40);
-            this.a(SoundEffects.BLOCK_CONDUIT_AMBIENT_SHORT);
-        }
-
-        if (this.world.isClientSide) {
-            this.l();
-            this.y();
-            if (this.d()) {
-                ++this.c;
+            if (i > tileentityconduit.nextAmbientSoundActivation) {
+                tileentityconduit.nextAmbientSoundActivation = i + 60L + (long) world.getRandom().nextInt(40);
+                world.playSound((EntityHuman) null, blockposition, SoundEffects.CONDUIT_AMBIENT_SHORT, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 
     }
 
-    private boolean h() {
-        this.i.clear();
+    private static void a(TileEntityConduit tileentityconduit, List<BlockPosition> list) {
+        tileentityconduit.a(list.size() >= 42);
+    }
+
+    private static boolean a(World world, BlockPosition blockposition, List<BlockPosition> list) {
+        list.clear();
 
         int i;
         int j;
@@ -124,9 +152,9 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         for (i = -1; i <= 1; ++i) {
             for (j = -1; j <= 1; ++j) {
                 for (k = -1; k <= 1; ++k) {
-                    BlockPosition blockposition = this.position.b(i, j, k);
+                    BlockPosition blockposition1 = blockposition.c(i, j, k);
 
-                    if (!this.world.A(blockposition)) {
+                    if (!world.B(blockposition1)) {
                         return false;
                     }
                 }
@@ -141,16 +169,16 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                     int j1 = Math.abs(k);
 
                     if ((l > 1 || i1 > 1 || j1 > 1) && (i == 0 && (i1 == 2 || j1 == 2) || j == 0 && (l == 2 || j1 == 2) || k == 0 && (l == 2 || i1 == 2))) {
-                        BlockPosition blockposition1 = this.position.b(i, j, k);
-                        IBlockData iblockdata = this.world.getType(blockposition1);
-                        Block[] ablock = TileEntityConduit.b;
+                        BlockPosition blockposition2 = blockposition.c(i, j, k);
+                        IBlockData iblockdata = world.getType(blockposition2);
+                        Block[] ablock = TileEntityConduit.VALID_BLOCKS;
                         int k1 = ablock.length;
 
                         for (int l1 = 0; l1 < k1; ++l1) {
                             Block block = ablock[l1];
 
                             if (iblockdata.a(block)) {
-                                this.i.add(blockposition1);
+                                list.add(blockposition2);
                             }
                         }
                     }
@@ -158,26 +186,25 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             }
         }
 
-        this.b(this.i.size() >= 42);
-        return this.i.size() >= 16;
+        return list.size() >= 16;
     }
 
-    private void j() {
-        int i = this.i.size();
+    private static void b(World world, BlockPosition blockposition, List<BlockPosition> list) {
+        int i = list.size();
         int j = i / 7 * 16;
-        int k = this.position.getX();
-        int l = this.position.getY();
-        int i1 = this.position.getZ();
-        AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) k, (double) l, (double) i1, (double) (k + 1), (double) (l + 1), (double) (i1 + 1))).g((double) j).b(0.0D, (double) this.world.getBuildHeight(), 0.0D);
-        List<EntityHuman> list = this.world.a(EntityHuman.class, axisalignedbb);
+        int k = blockposition.getX();
+        int l = blockposition.getY();
+        int i1 = blockposition.getZ();
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) k, (double) l, (double) i1, (double) (k + 1), (double) (l + 1), (double) (i1 + 1))).g((double) j).b(0.0D, (double) world.getHeight(), 0.0D);
+        List<EntityHuman> list1 = world.a(EntityHuman.class, axisalignedbb);
 
-        if (!list.isEmpty()) {
-            Iterator iterator = list.iterator();
+        if (!list1.isEmpty()) {
+            Iterator iterator = list1.iterator();
 
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (this.position.a((BaseBlockPosition) entityhuman.getChunkCoordinates(), (double) j) && entityhuman.isInWaterOrRain()) {
+                if (blockposition.a((BaseBlockPosition) entityhuman.getChunkCoordinates(), (double) j) && entityhuman.isInWaterOrRain()) {
                     entityhuman.addEffect(new MobEffect(MobEffects.CONDUIT_POWER, 260, 0, true, true));
                 }
             }
@@ -185,124 +212,117 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
     }
 
-    private void k() {
-        EntityLiving entityliving = this.target;
-        int i = this.i.size();
+    private static void a(World world, BlockPosition blockposition, IBlockData iblockdata, List<BlockPosition> list, TileEntityConduit tileentityconduit) {
+        EntityLiving entityliving = tileentityconduit.destroyTarget;
+        int i = list.size();
 
         if (i < 42) {
-            this.target = null;
-        } else if (this.target == null && this.k != null) {
-            this.target = this.x();
-            this.k = null;
-        } else if (this.target == null) {
-            List<EntityLiving> list = this.world.a(EntityLiving.class, this.m(), (entityliving1) -> {
+            tileentityconduit.destroyTarget = null;
+        } else if (tileentityconduit.destroyTarget == null && tileentityconduit.destroyTargetUUID != null) {
+            tileentityconduit.destroyTarget = a(world, blockposition, tileentityconduit.destroyTargetUUID);
+            tileentityconduit.destroyTargetUUID = null;
+        } else if (tileentityconduit.destroyTarget == null) {
+            List<EntityLiving> list1 = world.a(EntityLiving.class, a(blockposition), (entityliving1) -> {
                 return entityliving1 instanceof IMonster && entityliving1.isInWaterOrRain();
             });
 
-            if (!list.isEmpty()) {
-                this.target = (EntityLiving) list.get(this.world.random.nextInt(list.size()));
+            if (!list1.isEmpty()) {
+                tileentityconduit.destroyTarget = (EntityLiving) list1.get(world.random.nextInt(list1.size()));
             }
-        } else if (!this.target.isAlive() || !this.position.a((BaseBlockPosition) this.target.getChunkCoordinates(), 8.0D)) {
-            this.target = null;
+        } else if (!tileentityconduit.destroyTarget.isAlive() || !blockposition.a((BaseBlockPosition) tileentityconduit.destroyTarget.getChunkCoordinates(), 8.0D)) {
+            tileentityconduit.destroyTarget = null;
         }
 
-        if (this.target != null) {
-            this.world.playSound((EntityHuman) null, this.target.locX(), this.target.locY(), this.target.locZ(), SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            this.target.damageEntity(DamageSource.MAGIC, 4.0F);
+        if (tileentityconduit.destroyTarget != null) {
+            world.playSound((EntityHuman) null, tileentityconduit.destroyTarget.locX(), tileentityconduit.destroyTarget.locY(), tileentityconduit.destroyTarget.locZ(), SoundEffects.CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            tileentityconduit.destroyTarget.damageEntity(DamageSource.MAGIC, 4.0F);
         }
 
-        if (entityliving != this.target) {
-            IBlockData iblockdata = this.getBlock();
-
-            this.world.notify(this.position, iblockdata, iblockdata, 2);
+        if (entityliving != tileentityconduit.destroyTarget) {
+            world.notify(blockposition, iblockdata, iblockdata, 2);
         }
 
     }
 
-    private void l() {
-        if (this.k == null) {
-            this.target = null;
-        } else if (this.target == null || !this.target.getUniqueID().equals(this.k)) {
-            this.target = this.x();
-            if (this.target == null) {
-                this.k = null;
+    private static void a(World world, BlockPosition blockposition, TileEntityConduit tileentityconduit) {
+        if (tileentityconduit.destroyTargetUUID == null) {
+            tileentityconduit.destroyTarget = null;
+        } else if (tileentityconduit.destroyTarget == null || !tileentityconduit.destroyTarget.getUniqueID().equals(tileentityconduit.destroyTargetUUID)) {
+            tileentityconduit.destroyTarget = a(world, blockposition, tileentityconduit.destroyTargetUUID);
+            if (tileentityconduit.destroyTarget == null) {
+                tileentityconduit.destroyTargetUUID = null;
             }
         }
 
     }
 
-    private AxisAlignedBB m() {
-        int i = this.position.getX();
-        int j = this.position.getY();
-        int k = this.position.getZ();
+    private static AxisAlignedBB a(BlockPosition blockposition) {
+        int i = blockposition.getX();
+        int j = blockposition.getY();
+        int k = blockposition.getZ();
 
         return (new AxisAlignedBB((double) i, (double) j, (double) k, (double) (i + 1), (double) (j + 1), (double) (k + 1))).g(8.0D);
     }
 
     @Nullable
-    private EntityLiving x() {
-        List<EntityLiving> list = this.world.a(EntityLiving.class, this.m(), (entityliving) -> {
-            return entityliving.getUniqueID().equals(this.k);
+    private static EntityLiving a(World world, BlockPosition blockposition, UUID uuid) {
+        List<EntityLiving> list = world.a(EntityLiving.class, a(blockposition), (entityliving) -> {
+            return entityliving.getUniqueID().equals(uuid);
         });
 
         return list.size() == 1 ? (EntityLiving) list.get(0) : null;
     }
 
-    private void y() {
-        Random random = this.world.random;
-        double d0 = (double) (MathHelper.sin((float) (this.a + 35) * 0.1F) / 2.0F + 0.5F);
+    private static void a(World world, BlockPosition blockposition, List<BlockPosition> list, @Nullable Entity entity, int i) {
+        Random random = world.random;
+        double d0 = (double) (MathHelper.sin((float) (i + 35) * 0.1F) / 2.0F + 0.5F);
 
         d0 = (d0 * d0 + d0) * 0.30000001192092896D;
-        Vec3D vec3d = new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 1.5D + d0, (double) this.position.getZ() + 0.5D);
-        Iterator iterator = this.i.iterator();
+        Vec3D vec3d = new Vec3D((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.5D + d0, (double) blockposition.getZ() + 0.5D);
+        Iterator iterator = list.iterator();
 
         float f;
-        float f1;
 
         while (iterator.hasNext()) {
-            BlockPosition blockposition = (BlockPosition) iterator.next();
+            BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
             if (random.nextInt(50) == 0) {
-                f = -0.5F + random.nextFloat();
-                f1 = -2.0F + random.nextFloat();
-                float f2 = -0.5F + random.nextFloat();
-                BlockPosition blockposition1 = blockposition.b(this.position);
-                Vec3D vec3d1 = (new Vec3D((double) f, (double) f1, (double) f2)).add((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
+                BlockPosition blockposition2 = blockposition1.e(blockposition);
 
-                this.world.addParticle(Particles.NAUTILUS, vec3d.x, vec3d.y, vec3d.z, vec3d1.x, vec3d1.y, vec3d1.z);
+                f = -0.5F + random.nextFloat() + (float) blockposition2.getX();
+                float f1 = -2.0F + random.nextFloat() + (float) blockposition2.getY();
+                float f2 = -0.5F + random.nextFloat() + (float) blockposition2.getZ();
+
+                world.addParticle(Particles.NAUTILUS, vec3d.x, vec3d.y, vec3d.z, (double) f, (double) f1, (double) f2);
             }
         }
 
-        if (this.target != null) {
-            Vec3D vec3d2 = new Vec3D(this.target.locX(), this.target.getHeadY(), this.target.locZ());
-            float f3 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
+        if (entity != null) {
+            Vec3D vec3d1 = new Vec3D(entity.locX(), entity.getHeadY(), entity.locZ());
+            float f3 = (-0.5F + random.nextFloat()) * (3.0F + entity.getWidth());
+            float f4 = -1.0F + random.nextFloat() * entity.getHeight();
 
-            f = -1.0F + random.nextFloat() * this.target.getHeight();
-            f1 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
-            Vec3D vec3d3 = new Vec3D((double) f3, (double) f, (double) f1);
+            f = (-0.5F + random.nextFloat()) * (3.0F + entity.getWidth());
+            Vec3D vec3d2 = new Vec3D((double) f3, (double) f4, (double) f);
 
-            this.world.addParticle(Particles.NAUTILUS, vec3d2.x, vec3d2.y, vec3d2.z, vec3d3.x, vec3d3.y, vec3d3.z);
+            world.addParticle(Particles.NAUTILUS, vec3d1.x, vec3d1.y, vec3d1.z, vec3d2.x, vec3d2.y, vec3d2.z);
         }
 
     }
 
     public boolean d() {
-        return this.g;
+        return this.isActive;
+    }
+
+    public boolean f() {
+        return this.isHunting;
     }
 
     private void a(boolean flag) {
-        if (flag != this.g) {
-            this.a(flag ? SoundEffects.BLOCK_CONDUIT_ACTIVATE : SoundEffects.BLOCK_CONDUIT_DEACTIVATE);
-        }
-
-        this.g = flag;
+        this.isHunting = flag;
     }
 
-    private void b(boolean flag) {
-        this.h = flag;
-    }
-
-    public void a(SoundEffect soundeffect) {
-        this.world.playSound((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    public float a(float f) {
+        return (this.activeRotation + f) * -0.0375F;
     }
 }

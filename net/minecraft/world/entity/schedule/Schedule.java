@@ -10,11 +10,13 @@ import net.minecraft.core.IRegistry;
 
 public class Schedule {
 
+    public static final int WORK_START_TIME = 2000;
+    public static final int TOTAL_WORK_TIME = 7000;
     public static final Schedule EMPTY = a("empty").a(0, Activity.IDLE).a();
     public static final Schedule SIMPLE = a("simple").a(5000, Activity.WORK).a(11000, Activity.REST).a();
     public static final Schedule VILLAGER_BABY = a("villager_baby").a(10, Activity.IDLE).a(3000, Activity.PLAY).a(6000, Activity.IDLE).a(10000, Activity.PLAY).a(12000, Activity.REST).a();
     public static final Schedule VILLAGER_DEFAULT = a("villager_default").a(10, Activity.IDLE).a(2000, Activity.WORK).a(9000, Activity.MEET).a(11000, Activity.IDLE).a(12000, Activity.REST).a();
-    private final Map<Activity, ScheduleActivity> e = Maps.newHashMap();
+    private final Map<Activity, ScheduleActivity> timelines = Maps.newHashMap();
 
     public Schedule() {}
 
@@ -25,24 +27,24 @@ public class Schedule {
     }
 
     protected void a(Activity activity) {
-        if (!this.e.containsKey(activity)) {
-            this.e.put(activity, new ScheduleActivity());
+        if (!this.timelines.containsKey(activity)) {
+            this.timelines.put(activity, new ScheduleActivity());
         }
 
     }
 
     protected ScheduleActivity b(Activity activity) {
-        return (ScheduleActivity) this.e.get(activity);
+        return (ScheduleActivity) this.timelines.get(activity);
     }
 
     protected List<ScheduleActivity> c(Activity activity) {
-        return (List) this.e.entrySet().stream().filter((entry) -> {
+        return (List) this.timelines.entrySet().stream().filter((entry) -> {
             return entry.getKey() != activity;
         }).map(Entry::getValue).collect(Collectors.toList());
     }
 
     public Activity a(int i) {
-        return (Activity) this.e.entrySet().stream().max(Comparator.comparingDouble((entry) -> {
+        return (Activity) this.timelines.entrySet().stream().max(Comparator.comparingDouble((entry) -> {
             return (double) ((ScheduleActivity) entry.getValue()).a(i);
         })).map(Entry::getKey).orElse(Activity.IDLE);
     }

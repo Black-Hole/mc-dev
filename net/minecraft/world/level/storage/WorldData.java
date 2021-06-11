@@ -3,6 +3,7 @@ package net.minecraft.world.level.storage;
 import net.minecraft.CrashReportSystemDetails;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.LevelHeightAccessor;
 
 public interface WorldData {
 
@@ -32,9 +33,9 @@ public interface WorldData {
 
     boolean isDifficultyLocked();
 
-    default void a(CrashReportSystemDetails crashreportsystemdetails) {
+    default void a(CrashReportSystemDetails crashreportsystemdetails, LevelHeightAccessor levelheightaccessor) {
         crashreportsystemdetails.a("Level spawn location", () -> {
-            return CrashReportSystemDetails.a(this.a(), this.b(), this.c());
+            return CrashReportSystemDetails.a(levelheightaccessor, this.a(), this.b(), this.c());
         });
         crashreportsystemdetails.a("Level time", () -> {
             return String.format("%d game time, %d day time", this.getTime(), this.getDayTime());

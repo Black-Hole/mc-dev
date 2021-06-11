@@ -8,13 +8,13 @@ import net.minecraft.world.item.crafting.IRecipe;
 
 public class CriterionTriggerRecipeUnlocked extends CriterionTriggerAbstract<CriterionTriggerRecipeUnlocked.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("recipe_unlocked");
+    static final MinecraftKey ID = new MinecraftKey("recipe_unlocked");
 
     public CriterionTriggerRecipeUnlocked() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerRecipeUnlocked.a;
+        return CriterionTriggerRecipeUnlocked.ID;
     }
 
     @Override
@@ -31,28 +31,28 @@ public class CriterionTriggerRecipeUnlocked extends CriterionTriggerAbstract<Cri
     }
 
     public static CriterionTriggerRecipeUnlocked.a a(MinecraftKey minecraftkey) {
-        return new CriterionTriggerRecipeUnlocked.a(CriterionConditionEntity.b.a, minecraftkey);
+        return new CriterionTriggerRecipeUnlocked.a(CriterionConditionEntity.b.ANY, minecraftkey);
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final MinecraftKey a;
+        private final MinecraftKey recipe;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, MinecraftKey minecraftkey) {
-            super(CriterionTriggerRecipeUnlocked.a, criterionconditionentity_b);
-            this.a = minecraftkey;
+            super(CriterionTriggerRecipeUnlocked.ID, criterionconditionentity_b);
+            this.recipe = minecraftkey;
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.addProperty("recipe", this.a.toString());
+            jsonobject.addProperty("recipe", this.recipe.toString());
             return jsonobject;
         }
 
         public boolean a(IRecipe<?> irecipe) {
-            return this.a.equals(irecipe.getKey());
+            return this.recipe.equals(irecipe.getKey());
         }
     }
 }

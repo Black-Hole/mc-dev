@@ -23,32 +23,32 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     public static boolean a(EntityTypes<EntityZombieHusk> entitytypes, WorldAccess worldaccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return b(entitytypes, worldaccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || worldaccess.e(blockposition));
+        return b(entitytypes, worldaccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || worldaccess.g(blockposition));
     }
 
     @Override
-    protected boolean T_() {
+    protected boolean I_() {
         return false;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_HUSK_AMBIENT;
+        return SoundEffects.HUSK_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_HUSK_HURT;
+        return SoundEffects.HUSK_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_HUSK_DEATH;
+        return SoundEffects.HUSK_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundStep() {
-        return SoundEffects.ENTITY_HUSK_STEP;
+        return SoundEffects.HUSK_STEP;
     }
 
     @Override
@@ -56,30 +56,30 @@ public class EntityZombieHusk extends EntityZombie {
         boolean flag = super.attackEntity(entity);
 
         if (flag && this.getItemInMainHand().isEmpty() && entity instanceof EntityLiving) {
-            float f = this.world.getDamageScaler(this.getChunkCoordinates()).b();
+            float f = this.level.getDamageScaler(this.getChunkCoordinates()).b();
 
-            ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.HUNGER, 140 * (int) f));
+            ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.HUNGER, 140 * (int) f), this);
         }
 
         return flag;
     }
 
     @Override
-    protected boolean eN() {
+    protected boolean fw() {
         return true;
     }
 
     @Override
-    protected void eP() {
+    protected void fy() {
         this.b(EntityTypes.ZOMBIE);
         if (!this.isSilent()) {
-            this.world.a((EntityHuman) null, 1041, this.getChunkCoordinates(), 0);
+            this.level.a((EntityHuman) null, 1041, this.getChunkCoordinates(), 0);
         }
 
     }
 
     @Override
-    protected ItemStack eM() {
-        return ItemStack.b;
+    protected ItemStack fv() {
+        return ItemStack.EMPTY;
     }
 }

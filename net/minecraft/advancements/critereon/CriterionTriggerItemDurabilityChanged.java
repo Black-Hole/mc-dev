@@ -7,13 +7,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstract<CriterionTriggerItemDurabilityChanged.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("item_durability_changed");
+    static final MinecraftKey ID = new MinecraftKey("item_durability_changed");
 
     public CriterionTriggerItemDurabilityChanged() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerItemDurabilityChanged.a;
+        return CriterionTriggerItemDurabilityChanged.ID;
     }
 
     @Override
@@ -33,32 +33,36 @@ public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstr
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
-        private final CriterionConditionValue.IntegerRange b;
-        private final CriterionConditionValue.IntegerRange c;
+        private final CriterionConditionItem item;
+        private final CriterionConditionValue.IntegerRange durability;
+        private final CriterionConditionValue.IntegerRange delta;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1) {
-            super(CriterionTriggerItemDurabilityChanged.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
-            this.b = criterionconditionvalue_integerrange;
-            this.c = criterionconditionvalue_integerrange1;
+            super(CriterionTriggerItemDurabilityChanged.ID, criterionconditionentity_b);
+            this.item = criterionconditionitem;
+            this.durability = criterionconditionvalue_integerrange;
+            this.delta = criterionconditionvalue_integerrange1;
+        }
+
+        public static CriterionTriggerItemDurabilityChanged.a a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            return a(CriterionConditionEntity.b.ANY, criterionconditionitem, criterionconditionvalue_integerrange);
         }
 
         public static CriterionTriggerItemDurabilityChanged.a a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            return new CriterionTriggerItemDurabilityChanged.a(criterionconditionentity_b, criterionconditionitem, criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerItemDurabilityChanged.a(criterionconditionentity_b, criterionconditionitem, criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange.ANY);
         }
 
         public boolean a(ItemStack itemstack, int i) {
-            return !this.a.a(itemstack) ? false : (!this.b.d(itemstack.h() - i) ? false : this.c.d(itemstack.getDamage() - i));
+            return !this.item.a(itemstack) ? false : (!this.durability.d(itemstack.i() - i) ? false : this.delta.d(itemstack.getDamage() - i));
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.a.a());
-            jsonobject.add("durability", this.b.d());
-            jsonobject.add("delta", this.c.d());
+            jsonobject.add("item", this.item.a());
+            jsonobject.add("durability", this.durability.d());
+            jsonobject.add("delta", this.delta.d());
             return jsonobject;
         }
     }

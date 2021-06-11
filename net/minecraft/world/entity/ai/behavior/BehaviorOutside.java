@@ -16,11 +16,11 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorOutside extends Behavior<EntityLiving> {
 
-    private final float b;
+    private final float speedModifier;
 
     public BehaviorOutside(float f) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.b = f;
+        this.speedModifier = f;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
 
         if (optional.isPresent()) {
             entityliving.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-                return new MemoryTarget(vec3d, this.b, 0);
+                return new MemoryTarget(vec3d, this.speedModifier, 0);
             }));
         }
 
@@ -37,7 +37,7 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        return !worldserver.e(entityliving.getChunkCoordinates());
+        return !worldserver.g(entityliving.getChunkCoordinates());
     }
 
     @Nullable
@@ -46,7 +46,7 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
         BlockPosition blockposition = entityliving.getChunkCoordinates();
 
         for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.b(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
+            BlockPosition blockposition1 = blockposition.c(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
             if (a(worldserver, entityliving, blockposition1)) {
                 return Vec3D.c((BaseBlockPosition) blockposition1);
@@ -57,6 +57,6 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
     }
 
     public static boolean a(WorldServer worldserver, EntityLiving entityliving, BlockPosition blockposition) {
-        return worldserver.e(blockposition) && (double) worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() <= entityliving.locY();
+        return worldserver.g(blockposition) && (double) worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() <= entityliving.locY();
     }
 }

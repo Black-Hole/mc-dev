@@ -7,53 +7,60 @@ import net.minecraft.commands.arguments.item.ArgumentParserItemStack;
 import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
+import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.ItemStack;
 
 public class ParticleParamItem implements ParticleParam {
 
-    public static final ParticleParam.a<ParticleParamItem> a = new ParticleParam.a<ParticleParamItem>() {
+    public static final ParticleParam.a<ParticleParamItem> DESERIALIZER = new ParticleParam.a<ParticleParamItem>() {
         @Override
         public ParticleParamItem b(Particle<ParticleParamItem> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
-            ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).h();
-            ItemStack itemstack = (new ArgumentPredicateItemStack(argumentparseritemstack.b(), argumentparseritemstack.c())).a(1, false);
+            ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).g();
+            ItemStack itemstack = (new ArgumentPredicateItemStack(argumentparseritemstack.a(), argumentparseritemstack.b())).a(1, false);
 
             return new ParticleParamItem(particle, itemstack);
         }
 
         @Override
         public ParticleParamItem b(Particle<ParticleParamItem> particle, PacketDataSerializer packetdataserializer) {
-            return new ParticleParamItem(particle, packetdataserializer.n());
+            return new ParticleParamItem(particle, packetdataserializer.o());
         }
     };
-    private final Particle<ParticleParamItem> b;
-    private final ItemStack c;
+    private final Particle<ParticleParamItem> type;
+    private final ItemStack itemStack;
 
     public static Codec<ParticleParamItem> a(Particle<ParticleParamItem> particle) {
-        return ItemStack.a.xmap((itemstack) -> {
+        return ItemStack.CODEC.xmap((itemstack) -> {
             return new ParticleParamItem(particle, itemstack);
         }, (particleparamitem) -> {
-            return particleparamitem.c;
+            return particleparamitem.itemStack;
         });
     }
 
     public ParticleParamItem(Particle<ParticleParamItem> particle, ItemStack itemstack) {
-        this.b = particle;
-        this.c = itemstack;
+        this.type = particle;
+        this.itemStack = itemstack;
     }
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(this.c);
+        packetdataserializer.a(this.itemStack);
     }
 
     @Override
     public String a() {
-        return IRegistry.PARTICLE_TYPE.getKey(this.getParticle()) + " " + (new ArgumentPredicateItemStack(this.c.getItem(), this.c.getTag())).c();
+        MinecraftKey minecraftkey = IRegistry.PARTICLE_TYPE.getKey(this.getParticle());
+
+        return minecraftkey + " " + (new ArgumentPredicateItemStack(this.itemStack.getItem(), this.itemStack.getTag())).b();
     }
 
     @Override
     public Particle<ParticleParamItem> getParticle() {
-        return this.b;
+        return this.type;
+    }
+
+    public ItemStack c() {
+        return this.itemStack;
     }
 }

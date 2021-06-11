@@ -10,7 +10,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.IEntitySelector;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.behavior.BehaviorAttack;
 import net.minecraft.world.entity.ai.behavior.BehaviorAttackTargetForget;
@@ -30,9 +29,23 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtil;
 import net.minecraft.world.entity.ai.behavior.BehaviorWalkAwayOutOfRange;
 import net.minecraft.world.entity.ai.behavior.BehavorMove;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.schedule.Activity;
 
 public class PiglinBruteAI {
+
+    private static final int ANGER_DURATION = 600;
+    private static final int MELEE_ATTACK_COOLDOWN = 20;
+    private static final double ACTIVITY_SOUND_LIKELIHOOD_PER_TICK = 0.0125D;
+    private static final int MAX_LOOK_DIST = 8;
+    private static final int INTERACTION_RANGE = 8;
+    private static final double TARGETING_RANGE = 12.0D;
+    private static final float SPEED_MULTIPLIER_WHEN_IDLING = 0.6F;
+    private static final int HOME_CLOSE_ENOUGH_DISTANCE = 2;
+    private static final int HOME_TOO_FAR_DISTANCE = 100;
+    private static final int HOME_STROLL_AROUND_DISTANCE = 5;
+
+    public PiglinBruteAI() {}
 
     protected static BehaviorController<?> a(EntityPiglinBrute entitypiglinbrute, BehaviorController<EntityPiglinBrute> behaviorcontroller) {
         b(entitypiglinbrute, behaviorcontroller);
@@ -45,7 +58,7 @@ public class PiglinBruteAI {
     }
 
     protected static void a(EntityPiglinBrute entitypiglinbrute) {
-        GlobalPos globalpos = GlobalPos.create(entitypiglinbrute.world.getDimensionKey(), entitypiglinbrute.getChunkCoordinates());
+        GlobalPos globalpos = GlobalPos.create(entitypiglinbrute.level.getDimensionKey(), entitypiglinbrute.getChunkCoordinates());
 
         entitypiglinbrute.getBehaviorController().setMemory(MemoryModuleType.HOME, (Object) globalpos);
     }
@@ -59,7 +72,7 @@ public class PiglinBruteAI {
     }
 
     private static void d(EntityPiglinBrute entitypiglinbrute, BehaviorController<EntityPiglinBrute> behaviorcontroller) {
-        behaviorcontroller.a(Activity.FLIGHT, 10, ImmutableList.of(new BehaviorAttackTargetForget<>((entityliving) -> {
+        behaviorcontroller.a(Activity.FIGHT, 10, ImmutableList.of(new BehaviorAttackTargetForget<>((entityliving) -> {
             return !a((EntityPiglinAbstract) entitypiglinbrute, entityliving);
         }), new BehaviorWalkAwayOutOfRange(1.0F), new BehaviorAttack(20)), MemoryModuleType.ATTACK_TARGET);
     }
@@ -76,7 +89,7 @@ public class PiglinBruteAI {
         BehaviorController<EntityPiglinBrute> behaviorcontroller = entitypiglinbrute.getBehaviorController();
         Activity activity = (Activity) behaviorcontroller.f().orElse((Object) null);
 
-        behaviorcontroller.a((List) ImmutableList.of(Activity.FLIGHT, Activity.IDLE));
+        behaviorcontroller.a((List) ImmutableList.of(Activity.FIGHT, Activity.IDLE));
         Activity activity1 = (Activity) behaviorcontroller.f().orElse((Object) null);
 
         if (activity != activity1) {
@@ -95,17 +108,13 @@ public class PiglinBruteAI {
     private static Optional<? extends EntityLiving> a(EntityPiglinAbstract entitypiglinabstract) {
         Optional<EntityLiving> optional = BehaviorUtil.a((EntityLiving) entitypiglinabstract, MemoryModuleType.ANGRY_AT);
 
-        if (optional.isPresent() && a((EntityLiving) optional.get())) {
+        if (optional.isPresent() && Sensor.c(entitypiglinabstract, (EntityLiving) optional.get())) {
             return optional;
         } else {
-            Optional<? extends EntityLiving> optional1 = a(entitypiglinabstract, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER);
+            Optional<? extends EntityLiving> optional1 = a(entitypiglinabstract, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER);
 
-            return optional1.isPresent() ? optional1 : entitypiglinabstract.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_NEMSIS);
+            return optional1.isPresent() ? optional1 : entitypiglinabstract.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_NEMESIS);
         }
-    }
-
-    private static boolean a(EntityLiving entityliving) {
-        return IEntitySelector.f.test(entityliving);
     }
 
     private static Optional<? extends EntityLiving> a(EntityPiglinAbstract entitypiglinabstract, MemoryModuleType<? extends EntityLiving> memorymoduletype) {
@@ -120,8 +129,13 @@ public class PiglinBruteAI {
         }
     }
 
+    protected static void b(EntityPiglinBrute entitypiglinbrute, EntityLiving entityliving) {
+        entitypiglinbrute.getBehaviorController().removeMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        entitypiglinbrute.getBehaviorController().a(MemoryModuleType.ANGRY_AT, entityliving.getUniqueID(), 600L);
+    }
+
     protected static void c(EntityPiglinBrute entitypiglinbrute) {
-        if ((double) entitypiglinbrute.world.random.nextFloat() < 0.0125D) {
+        if ((double) entitypiglinbrute.level.random.nextFloat() < 0.0125D) {
             d(entitypiglinbrute);
         }
 
@@ -129,8 +143,8 @@ public class PiglinBruteAI {
 
     private static void d(EntityPiglinBrute entitypiglinbrute) {
         entitypiglinbrute.getBehaviorController().f().ifPresent((activity) -> {
-            if (activity == Activity.FLIGHT) {
-                entitypiglinbrute.eT();
+            if (activity == Activity.FIGHT) {
+                entitypiglinbrute.fC();
             }
 
         });

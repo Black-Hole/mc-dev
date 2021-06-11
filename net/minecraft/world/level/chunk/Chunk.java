@@ -1,20 +1,24 @@
 package net.minecraft.world.level.chunk;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.UnmodifiableIterator;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.shorts.ShortList;
 import it.unimi.dsi.fastutil.shorts.ShortListIterator;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -24,15 +28,14 @@ import net.minecraft.CrashReportSystemDetails;
 import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
+import net.minecraft.core.RegistryBlocks;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.server.level.PlayerChunk;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.util.EntitySlice;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.profiling.GameProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.boss.EntityComplexPart;
-import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.TickList;
@@ -42,66 +45,87 @@ import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ITileEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.EuclideanGameEventDispatcher;
+import net.minecraft.world.level.gameevent.GameEventDispatcher;
+import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.levelgen.ChunkProviderDebug;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidType;
 import net.minecraft.world.level.material.FluidTypes;
-import net.minecraft.world.phys.AxisAlignedBB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Chunk implements IChunkAccess {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    static final Logger LOGGER = LogManager.getLogger();
+    private static final TickingBlockEntity NULL_TICKER = new TickingBlockEntity() {
+        @Override
+        public void a() {}
+
+        @Override
+        public boolean b() {
+            return true;
+        }
+
+        @Override
+        public BlockPosition c() {
+            return BlockPosition.ZERO;
+        }
+
+        @Override
+        public String d() {
+            return "<null>";
+        }
+    };
     @Nullable
-    public static final ChunkSection a = null;
+    public static final ChunkSection EMPTY_SECTION = null;
     private final ChunkSection[] sections;
-    private BiomeStorage d;
-    private final Map<BlockPosition, NBTTagCompound> e;
+    private BiomeStorage biomes;
+    private final Map<BlockPosition, NBTTagCompound> pendingBlockEntities;
+    private final Map<BlockPosition, Chunk.c> tickersInLevel;
     public boolean loaded;
-    public final World world;
-    public final Map<HeightMap.Type, HeightMap> heightMap;
-    private final ChunkConverter i;
-    public final Map<BlockPosition, TileEntity> tileEntities;
-    public final EntitySlice<Entity>[] entitySlices;
-    private final Map<StructureGenerator<?>, StructureStart<?>> l;
-    private final Map<StructureGenerator<?>, LongSet> m;
-    private final ShortList[] n;
-    private TickList<Block> o;
-    private TickList<FluidType> p;
-    private boolean q;
-    private long lastSaved;
-    private volatile boolean s;
+    public final World level;
+    public final Map<HeightMap.Type, HeightMap> heightmaps;
+    private final ChunkConverter upgradeData;
+    public final Map<BlockPosition, TileEntity> blockEntities;
+    private final Map<StructureGenerator<?>, StructureStart<?>> structureStarts;
+    private final Map<StructureGenerator<?>, LongSet> structuresRefences;
+    private final ShortList[] postProcessing;
+    private TickList<Block> blockTicks;
+    private TickList<FluidType> liquidTicks;
+    private volatile boolean unsaved;
     private long inhabitedTime;
     @Nullable
-    private Supplier<PlayerChunk.State> u;
+    private Supplier<PlayerChunk.State> fullStatus;
     @Nullable
-    private Consumer<Chunk> v;
-    private final ChunkCoordIntPair loc;
-    private volatile boolean x;
+    private Consumer<Chunk> postLoad;
+    private final ChunkCoordIntPair chunkPos;
+    private volatile boolean isLightCorrect;
+    private final Int2ObjectMap<GameEventDispatcher> gameEventDispatcherSections;
 
     public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeStorage biomestorage) {
-        this(world, chunkcoordintpair, biomestorage, ChunkConverter.a, TickListEmpty.b(), TickListEmpty.b(), 0L, (ChunkSection[]) null, (Consumer) null);
+        this(world, chunkcoordintpair, biomestorage, ChunkConverter.EMPTY, TickListEmpty.b(), TickListEmpty.b(), 0L, (ChunkSection[]) null, (Consumer) null);
     }
 
     public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeStorage biomestorage, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long i, @Nullable ChunkSection[] achunksection, @Nullable Consumer<Chunk> consumer) {
-        this.sections = new ChunkSection[16];
-        this.e = Maps.newHashMap();
-        this.heightMap = Maps.newEnumMap(HeightMap.Type.class);
-        this.tileEntities = Maps.newHashMap();
-        this.l = Maps.newHashMap();
-        this.m = Maps.newHashMap();
-        this.n = new ShortList[16];
-        this.entitySlices = (EntitySlice[]) (new EntitySlice[16]);
-        this.world = world;
-        this.loc = chunkcoordintpair;
-        this.i = chunkconverter;
+        this.pendingBlockEntities = Maps.newHashMap();
+        this.tickersInLevel = Maps.newHashMap();
+        this.heightmaps = Maps.newEnumMap(HeightMap.Type.class);
+        this.blockEntities = Maps.newHashMap();
+        this.structureStarts = Maps.newHashMap();
+        this.structuresRefences = Maps.newHashMap();
+        this.level = world;
+        this.chunkPos = chunkcoordintpair;
+        this.upgradeData = chunkconverter;
+        this.gameEventDispatcherSections = new Int2ObjectOpenHashMap();
         HeightMap.Type[] aheightmap_type = HeightMap.Type.values();
         int j = aheightmap_type.length;
 
@@ -109,19 +133,16 @@ public class Chunk implements IChunkAccess {
             HeightMap.Type heightmap_type = aheightmap_type[k];
 
             if (ChunkStatus.FULL.h().contains(heightmap_type)) {
-                this.heightMap.put(heightmap_type, new HeightMap(this, heightmap_type));
+                this.heightmaps.put(heightmap_type, new HeightMap(this, heightmap_type));
             }
         }
 
-        for (int l = 0; l < this.entitySlices.length; ++l) {
-            this.entitySlices[l] = new EntitySlice<>(Entity.class);
-        }
-
-        this.d = biomestorage;
-        this.o = ticklist;
-        this.p = ticklist1;
+        this.biomes = biomestorage;
+        this.blockTicks = ticklist;
+        this.liquidTicks = ticklist1;
         this.inhabitedTime = i;
-        this.v = consumer;
+        this.postLoad = consumer;
+        this.sections = new ChunkSection[world.getSectionsCount()];
         if (achunksection != null) {
             if (this.sections.length == achunksection.length) {
                 System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
@@ -130,63 +151,60 @@ public class Chunk implements IChunkAccess {
             }
         }
 
+        this.postProcessing = new ShortList[world.getSectionsCount()];
     }
 
-    public Chunk(World world, ProtoChunk protochunk) {
-        this(world, protochunk.getPos(), protochunk.getBiomeIndex(), protochunk.p(), protochunk.n(), protochunk.o(), protochunk.getInhabitedTime(), protochunk.getSections(), (Consumer) null);
-        Iterator iterator = protochunk.y().iterator();
-
-        while (iterator.hasNext()) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) iterator.next();
-
-            EntityTypes.a(nbttagcompound, world, (entity) -> {
-                this.a(entity);
-                return entity;
-            });
-        }
-
-        iterator = protochunk.x().values().iterator();
+    public Chunk(WorldServer worldserver, ProtoChunk protochunk, @Nullable Consumer<Chunk> consumer) {
+        this(worldserver, protochunk.getPos(), protochunk.getBiomeIndex(), protochunk.q(), protochunk.o(), protochunk.p(), protochunk.getInhabitedTime(), protochunk.getSections(), consumer);
+        Iterator iterator = protochunk.y().values().iterator();
 
         while (iterator.hasNext()) {
             TileEntity tileentity = (TileEntity) iterator.next();
 
-            this.a(tileentity);
+            this.setTileEntity(tileentity);
         }
 
-        this.e.putAll(protochunk.z());
+        this.pendingBlockEntities.putAll(protochunk.A());
 
-        for (int i = 0; i < protochunk.l().length; ++i) {
-            this.n[i] = protochunk.l()[i];
+        for (int i = 0; i < protochunk.k().length; ++i) {
+            this.postProcessing[i] = protochunk.k()[i];
         }
 
-        this.a(protochunk.h());
-        this.b(protochunk.v());
-        iterator = protochunk.f().iterator();
+        this.a(protochunk.g());
+        this.b(protochunk.w());
+        iterator = protochunk.e().iterator();
 
         while (iterator.hasNext()) {
             Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator.next();
 
             if (ChunkStatus.FULL.h().contains(entry.getKey())) {
-                this.a((HeightMap.Type) entry.getKey()).a(((HeightMap) entry.getValue()).a());
+                this.a((HeightMap.Type) entry.getKey(), ((HeightMap) entry.getValue()).a());
             }
         }
 
-        this.b(protochunk.r());
-        this.s = true;
+        this.b(protochunk.s());
+        this.unsaved = true;
+    }
+
+    @Override
+    public GameEventDispatcher a(int i) {
+        return (GameEventDispatcher) this.gameEventDispatcherSections.computeIfAbsent(i, (j) -> {
+            return new EuclideanGameEventDispatcher(this.level);
+        });
     }
 
     @Override
     public HeightMap a(HeightMap.Type heightmap_type) {
-        return (HeightMap) this.heightMap.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
+        return (HeightMap) this.heightmaps.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
             return new HeightMap(this, heightmap_type1);
         });
     }
 
     @Override
     public Set<BlockPosition> c() {
-        Set<BlockPosition> set = Sets.newHashSet(this.e.keySet());
+        Set<BlockPosition> set = Sets.newHashSet(this.pendingBlockEntities.keySet());
 
-        set.addAll(this.tileEntities.keySet());
+        set.addAll(this.blockEntities.keySet());
         return set;
     }
 
@@ -201,7 +219,7 @@ public class Chunk implements IChunkAccess {
         int j = blockposition.getY();
         int k = blockposition.getZ();
 
-        if (this.world.isDebugWorld()) {
+        if (this.level.isDebugWorld()) {
             IBlockData iblockdata = null;
 
             if (j == 60) {
@@ -209,14 +227,16 @@ public class Chunk implements IChunkAccess {
             }
 
             if (j == 70) {
-                iblockdata = ChunkProviderDebug.b(i, k);
+                iblockdata = ChunkProviderDebug.a(i, k);
             }
 
             return iblockdata == null ? Blocks.AIR.getBlockData() : iblockdata;
         } else {
             try {
-                if (j >= 0 && j >> 4 < this.sections.length) {
-                    ChunkSection chunksection = this.sections[j >> 4];
+                int l = this.getSectionIndex(j);
+
+                if (l >= 0 && l < this.sections.length) {
+                    ChunkSection chunksection = this.sections[l];
 
                     if (!ChunkSection.a(chunksection)) {
                         return chunksection.getType(i & 15, j & 15, k & 15);
@@ -229,7 +249,7 @@ public class Chunk implements IChunkAccess {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being got");
 
                 crashreportsystemdetails.a("Location", () -> {
-                    return CrashReportSystemDetails.a(i, j, k);
+                    return CrashReportSystemDetails.a(this, i, j, k);
                 });
                 throw new ReportedException(crashreport);
             }
@@ -243,8 +263,10 @@ public class Chunk implements IChunkAccess {
 
     public Fluid a(int i, int j, int k) {
         try {
-            if (j >= 0 && j >> 4 < this.sections.length) {
-                ChunkSection chunksection = this.sections[j >> 4];
+            int l = this.getSectionIndex(j);
+
+            if (l >= 0 && l < this.sections.length) {
+                ChunkSection chunksection = this.sections[l];
 
                 if (!ChunkSection.a(chunksection)) {
                     return chunksection.b(i & 15, j & 15, k & 15);
@@ -257,7 +279,7 @@ public class Chunk implements IChunkAccess {
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being got");
 
             crashreportsystemdetails.a("Location", () -> {
-                return CrashReportSystemDetails.a(i, j, k);
+                return CrashReportSystemDetails.a(this, i, j, k);
             });
             throw new ReportedException(crashreport);
         }
@@ -266,142 +288,109 @@ public class Chunk implements IChunkAccess {
     @Nullable
     @Override
     public IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        int i = blockposition.getX() & 15;
-        int j = blockposition.getY();
-        int k = blockposition.getZ() & 15;
-        ChunkSection chunksection = this.sections[j >> 4];
+        int i = blockposition.getY();
+        int j = this.getSectionIndex(i);
+        ChunkSection chunksection = this.sections[j];
 
-        if (chunksection == Chunk.a) {
+        if (chunksection == Chunk.EMPTY_SECTION) {
             if (iblockdata.isAir()) {
                 return null;
             }
 
-            chunksection = new ChunkSection(j >> 4 << 4);
-            this.sections[j >> 4] = chunksection;
+            chunksection = new ChunkSection(SectionPosition.a(i));
+            this.sections[j] = chunksection;
         }
 
         boolean flag1 = chunksection.c();
-        IBlockData iblockdata1 = chunksection.setType(i, j & 15, k, iblockdata);
+        int k = blockposition.getX() & 15;
+        int l = i & 15;
+        int i1 = blockposition.getZ() & 15;
+        IBlockData iblockdata1 = chunksection.setType(k, l, i1, iblockdata);
 
         if (iblockdata1 == iblockdata) {
             return null;
         } else {
             Block block = iblockdata.getBlock();
-            Block block1 = iblockdata1.getBlock();
 
-            ((HeightMap) this.heightMap.get(HeightMap.Type.MOTION_BLOCKING)).a(i, j, k, iblockdata);
-            ((HeightMap) this.heightMap.get(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES)).a(i, j, k, iblockdata);
-            ((HeightMap) this.heightMap.get(HeightMap.Type.OCEAN_FLOOR)).a(i, j, k, iblockdata);
-            ((HeightMap) this.heightMap.get(HeightMap.Type.WORLD_SURFACE)).a(i, j, k, iblockdata);
+            ((HeightMap) this.heightmaps.get(HeightMap.Type.MOTION_BLOCKING)).a(k, i, i1, iblockdata);
+            ((HeightMap) this.heightmaps.get(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES)).a(k, i, i1, iblockdata);
+            ((HeightMap) this.heightmaps.get(HeightMap.Type.OCEAN_FLOOR)).a(k, i, i1, iblockdata);
+            ((HeightMap) this.heightmaps.get(HeightMap.Type.WORLD_SURFACE)).a(k, i, i1, iblockdata);
             boolean flag2 = chunksection.c();
 
             if (flag1 != flag2) {
-                this.world.getChunkProvider().getLightEngine().a(blockposition, flag2);
+                this.level.getChunkProvider().getLightEngine().a(blockposition, flag2);
             }
 
-            if (!this.world.isClientSide) {
-                iblockdata1.remove(this.world, blockposition, iblockdata, flag);
-            } else if (block1 != block && block1 instanceof ITileEntity) {
-                this.world.removeTileEntity(blockposition);
+            boolean flag3 = iblockdata1.isTileEntity();
+
+            if (!this.level.isClientSide) {
+                iblockdata1.remove(this.level, blockposition, iblockdata, flag);
+            } else if (!iblockdata1.a(block) && flag3) {
+                this.removeTileEntity(blockposition);
             }
 
-            if (!chunksection.getType(i, j & 15, k).a(block)) {
+            if (!chunksection.getType(k, l, i1).a(block)) {
                 return null;
             } else {
-                TileEntity tileentity;
-
-                if (block1 instanceof ITileEntity) {
-                    tileentity = this.a(blockposition, Chunk.EnumTileEntityState.CHECK);
-                    if (tileentity != null) {
-                        tileentity.invalidateBlockCache();
-                    }
+                if (!this.level.isClientSide) {
+                    iblockdata.onPlace(this.level, blockposition, iblockdata1, flag);
                 }
 
-                if (!this.world.isClientSide) {
-                    iblockdata.onPlace(this.world, blockposition, iblockdata1, flag);
-                }
+                if (iblockdata.isTileEntity()) {
+                    TileEntity tileentity = this.a(blockposition, Chunk.EnumTileEntityState.CHECK);
 
-                if (block instanceof ITileEntity) {
-                    tileentity = this.a(blockposition, Chunk.EnumTileEntityState.CHECK);
                     if (tileentity == null) {
-                        tileentity = ((ITileEntity) block).createTile(this.world);
-                        this.world.setTileEntity(blockposition, tileentity);
+                        tileentity = ((ITileEntity) block).createTile(blockposition, iblockdata);
+                        if (tileentity != null) {
+                            this.b(tileentity);
+                        }
                     } else {
-                        tileentity.invalidateBlockCache();
+                        tileentity.b(iblockdata);
+                        this.f(tileentity);
                     }
                 }
 
-                this.s = true;
+                this.unsaved = true;
                 return iblockdata1;
             }
         }
     }
 
-    @Nullable
-    public LightEngine e() {
-        return this.world.getChunkProvider().getLightEngine();
-    }
-
+    @Deprecated
     @Override
-    public void a(Entity entity) {
-        this.q = true;
-        int i = MathHelper.floor(entity.locX() / 16.0D);
-        int j = MathHelper.floor(entity.locZ() / 16.0D);
-
-        if (i != this.loc.x || j != this.loc.z) {
-            Chunk.LOGGER.warn("Wrong location! ({}, {}) should be ({}, {}), {}", i, j, this.loc.x, this.loc.z, entity);
-            entity.dead = true;
-        }
-
-        int k = MathHelper.floor(entity.locY() / 16.0D);
-
-        if (k < 0) {
-            k = 0;
-        }
-
-        if (k >= this.entitySlices.length) {
-            k = this.entitySlices.length - 1;
-        }
-
-        entity.inChunk = true;
-        entity.chunkX = this.loc.x;
-        entity.chunkY = k;
-        entity.chunkZ = this.loc.z;
-        this.entitySlices[k].add(entity);
-    }
-
-    @Override
-    public void a(HeightMap.Type heightmap_type, long[] along) {
-        ((HeightMap) this.heightMap.get(heightmap_type)).a(along);
-    }
-
-    public void b(Entity entity) {
-        this.a(entity, entity.chunkY);
-    }
-
-    public void a(Entity entity, int i) {
-        if (i < 0) {
-            i = 0;
-        }
-
-        if (i >= this.entitySlices.length) {
-            i = this.entitySlices.length - 1;
-        }
-
-        this.entitySlices[i].remove(entity);
-    }
+    public void a(Entity entity) {}
 
     @Override
     public int getHighestBlock(HeightMap.Type heightmap_type, int i, int j) {
-        return ((HeightMap) this.heightMap.get(heightmap_type)).a(i & 15, j & 15) - 1;
+        return ((HeightMap) this.heightmaps.get(heightmap_type)).a(i & 15, j & 15) - 1;
+    }
+
+    @Override
+    public BlockPosition b(HeightMap.Type heightmap_type) {
+        ChunkCoordIntPair chunkcoordintpair = this.getPos();
+        int i = this.getMinBuildHeight();
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+        for (int j = chunkcoordintpair.d(); j <= chunkcoordintpair.f(); ++j) {
+            for (int k = chunkcoordintpair.e(); k <= chunkcoordintpair.g(); ++k) {
+                int l = this.getHighestBlock(heightmap_type, j & 15, k & 15);
+
+                if (l > i) {
+                    i = l;
+                    blockposition_mutableblockposition.d(j, l, k);
+                }
+            }
+        }
+
+        return blockposition_mutableblockposition.immutableCopy();
     }
 
     @Nullable
-    private TileEntity k(BlockPosition blockposition) {
+    private TileEntity j(BlockPosition blockposition) {
         IBlockData iblockdata = this.getType(blockposition);
-        Block block = iblockdata.getBlock();
 
-        return !block.isTileEntity() ? null : ((ITileEntity) block).createTile(this.world);
+        return !iblockdata.isTileEntity() ? null : ((ITileEntity) iblockdata.getBlock()).createTile(blockposition, iblockdata);
     }
 
     @Nullable
@@ -412,10 +401,10 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     public TileEntity a(BlockPosition blockposition, Chunk.EnumTileEntityState chunk_enumtileentitystate) {
-        TileEntity tileentity = (TileEntity) this.tileEntities.get(blockposition);
+        TileEntity tileentity = (TileEntity) this.blockEntities.get(blockposition);
 
         if (tileentity == null) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) this.e.remove(blockposition);
+            NBTTagCompound nbttagcompound = (NBTTagCompound) this.pendingBlockEntities.remove(blockposition);
 
             if (nbttagcompound != null) {
                 TileEntity tileentity1 = this.a(blockposition, nbttagcompound);
@@ -428,34 +417,47 @@ public class Chunk implements IChunkAccess {
 
         if (tileentity == null) {
             if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.IMMEDIATE) {
-                tileentity = this.k(blockposition);
-                this.world.setTileEntity(blockposition, tileentity);
+                tileentity = this.j(blockposition);
+                if (tileentity != null) {
+                    this.b(tileentity);
+                }
             }
         } else if (tileentity.isRemoved()) {
-            this.tileEntities.remove(blockposition);
+            this.blockEntities.remove(blockposition);
             return null;
         }
 
         return tileentity;
     }
 
-    public void a(TileEntity tileentity) {
-        this.setTileEntity(tileentity.getPosition(), tileentity);
-        if (this.loaded || this.world.s_()) {
-            this.world.setTileEntity(tileentity.getPosition(), tileentity);
+    public void b(TileEntity tileentity) {
+        this.setTileEntity(tileentity);
+        if (this.E()) {
+            this.e(tileentity);
+            this.f(tileentity);
         }
 
     }
 
+    private boolean E() {
+        return this.loaded || this.level.isClientSide();
+    }
+
+    boolean k(BlockPosition blockposition) {
+        return !this.level.getWorldBorder().a(blockposition) ? false : (!(this.level instanceof WorldServer) ? true : this.getState().isAtLeast(PlayerChunk.State.TICKING) && ((WorldServer) this.level).b(ChunkCoordIntPair.a(blockposition)));
+    }
+
     @Override
-    public void setTileEntity(BlockPosition blockposition, TileEntity tileentity) {
-        if (this.getType(blockposition).getBlock() instanceof ITileEntity) {
-            tileentity.setLocation(this.world, blockposition);
-            tileentity.r();
-            TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
+    public void setTileEntity(TileEntity tileentity) {
+        BlockPosition blockposition = tileentity.getPosition();
+
+        if (this.getType(blockposition).isTileEntity()) {
+            tileentity.setWorld(this.level);
+            tileentity.p();
+            TileEntity tileentity1 = (TileEntity) this.blockEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.al_();
+                tileentity1.aa_();
             }
 
         }
@@ -463,12 +465,12 @@ public class Chunk implements IChunkAccess {
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.e.put(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), nbttagcompound);
+        this.pendingBlockEntities.put(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), nbttagcompound);
     }
 
     @Nullable
     @Override
-    public NBTTagCompound j(BlockPosition blockposition) {
+    public NBTTagCompound g(BlockPosition blockposition) {
         TileEntity tileentity = this.getTileEntity(blockposition);
         NBTTagCompound nbttagcompound;
 
@@ -477,7 +479,7 @@ public class Chunk implements IChunkAccess {
             nbttagcompound.setBoolean("keepPacked", false);
             return nbttagcompound;
         } else {
-            nbttagcompound = (NBTTagCompound) this.e.get(blockposition);
+            nbttagcompound = (NBTTagCompound) this.pendingBlockEntities.get(blockposition);
             if (nbttagcompound != null) {
                 nbttagcompound = nbttagcompound.clone();
                 nbttagcompound.setBoolean("keepPacked", true);
@@ -489,106 +491,58 @@ public class Chunk implements IChunkAccess {
 
     @Override
     public void removeTileEntity(BlockPosition blockposition) {
-        if (this.loaded || this.world.s_()) {
-            TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
+        if (this.E()) {
+            TileEntity tileentity = (TileEntity) this.blockEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.al_();
+                this.c(tileentity);
+                tileentity.aa_();
             }
+        }
+
+        this.l(blockposition);
+    }
+
+    private <T extends TileEntity> void c(T t0) {
+        if (!this.level.isClientSide) {
+            Block block = t0.getBlock().getBlock();
+
+            if (block instanceof ITileEntity) {
+                GameEventListener gameeventlistener = ((ITileEntity) block).a(this.level, t0);
+
+                if (gameeventlistener != null) {
+                    int i = SectionPosition.a(t0.getPosition().getY());
+                    GameEventDispatcher gameeventdispatcher = this.a(i);
+
+                    gameeventdispatcher.b(gameeventlistener);
+                    if (gameeventdispatcher.a()) {
+                        this.gameEventDispatcherSections.remove(i);
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void l(BlockPosition blockposition) {
+        Chunk.c chunk_c = (Chunk.c) this.tickersInLevel.remove(blockposition);
+
+        if (chunk_c != null) {
+            chunk_c.a(Chunk.NULL_TICKER);
         }
 
     }
 
     public void addEntities() {
-        if (this.v != null) {
-            this.v.accept(this);
-            this.v = null;
+        if (this.postLoad != null) {
+            this.postLoad.accept(this);
+            this.postLoad = null;
         }
 
     }
 
     public void markDirty() {
-        this.s = true;
-    }
-
-    public void a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, List<Entity> list, @Nullable Predicate<? super Entity> predicate) {
-        int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
-
-        i = MathHelper.clamp(i, 0, this.entitySlices.length - 1);
-        j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
-
-        for (int k = i; k <= j; ++k) {
-            EntitySlice<Entity> entityslice = this.entitySlices[k];
-            List<Entity> list1 = entityslice.a();
-            int l = list1.size();
-
-            for (int i1 = 0; i1 < l; ++i1) {
-                Entity entity1 = (Entity) list1.get(i1);
-
-                if (entity1.getBoundingBox().c(axisalignedbb) && entity1 != entity) {
-                    if (predicate == null || predicate.test(entity1)) {
-                        list.add(entity1);
-                    }
-
-                    if (entity1 instanceof EntityEnderDragon) {
-                        EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eJ();
-                        int j1 = aentitycomplexpart.length;
-
-                        for (int k1 = 0; k1 < j1; ++k1) {
-                            EntityComplexPart entitycomplexpart = aentitycomplexpart[k1];
-
-                            if (entitycomplexpart != entity && entitycomplexpart.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(entitycomplexpart))) {
-                                list.add(entitycomplexpart);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
-    public <T extends Entity> void a(@Nullable EntityTypes<?> entitytypes, AxisAlignedBB axisalignedbb, List<? super T> list, Predicate<? super T> predicate) {
-        int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
-
-        i = MathHelper.clamp(i, 0, this.entitySlices.length - 1);
-        j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
-
-        for (int k = i; k <= j; ++k) {
-            Iterator iterator = this.entitySlices[k].a(Entity.class).iterator();
-
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
-                if ((entitytypes == null || entity.getEntityType() == entitytypes) && entity.getBoundingBox().c(axisalignedbb) && predicate.test(entity)) {
-                    list.add(entity);
-                }
-            }
-        }
-
-    }
-
-    public <T extends Entity> void a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, List<T> list, @Nullable Predicate<? super T> predicate) {
-        int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
-
-        i = MathHelper.clamp(i, 0, this.entitySlices.length - 1);
-        j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
-
-        for (int k = i; k <= j; ++k) {
-            Iterator iterator = this.entitySlices[k].a(oclass).iterator();
-
-            while (iterator.hasNext()) {
-                T t0 = (Entity) iterator.next();
-
-                if (t0.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(t0))) {
-                    list.add(t0);
-                }
-            }
-        }
-
+        this.unsaved = true;
     }
 
     public boolean isEmpty() {
@@ -597,12 +551,71 @@ public class Chunk implements IChunkAccess {
 
     @Override
     public ChunkCoordIntPair getPos() {
-        return this.loc;
+        return this.chunkPos;
+    }
+
+    public void a(@Nullable BiomeStorage biomestorage, PacketDataSerializer packetdataserializer, NBTTagCompound nbttagcompound, BitSet bitset) {
+        boolean flag = biomestorage != null;
+
+        if (flag) {
+            this.blockEntities.values().forEach(this::d);
+            this.blockEntities.clear();
+        } else {
+            this.blockEntities.values().removeIf((tileentity) -> {
+                int i = this.getSectionIndex(tileentity.getPosition().getY());
+
+                if (bitset.get(i)) {
+                    tileentity.aa_();
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+
+        for (int i = 0; i < this.sections.length; ++i) {
+            ChunkSection chunksection = this.sections[i];
+
+            if (!bitset.get(i)) {
+                if (flag && chunksection != Chunk.EMPTY_SECTION) {
+                    this.sections[i] = Chunk.EMPTY_SECTION;
+                }
+            } else {
+                if (chunksection == Chunk.EMPTY_SECTION) {
+                    chunksection = new ChunkSection(this.getSectionYFromSectionIndex(i));
+                    this.sections[i] = chunksection;
+                }
+
+                chunksection.a(packetdataserializer);
+            }
+        }
+
+        if (biomestorage != null) {
+            this.biomes = biomestorage;
+        }
+
+        HeightMap.Type[] aheightmap_type = HeightMap.Type.values();
+        int j = aheightmap_type.length;
+
+        for (int k = 0; k < j; ++k) {
+            HeightMap.Type heightmap_type = aheightmap_type[k];
+            String s = heightmap_type.a();
+
+            if (nbttagcompound.hasKeyOfType(s, 12)) {
+                this.a(heightmap_type, nbttagcompound.getLongArray(s));
+            }
+        }
+
+    }
+
+    private void d(TileEntity tileentity) {
+        tileentity.aa_();
+        this.tickersInLevel.remove(tileentity.getPosition());
     }
 
     @Override
     public BiomeStorage getBiomeIndex() {
-        return this.d;
+        return this.biomes;
     }
 
     public void setLoaded(boolean flag) {
@@ -610,108 +623,95 @@ public class Chunk implements IChunkAccess {
     }
 
     public World getWorld() {
-        return this.world;
+        return this.level;
     }
 
     @Override
-    public Collection<Entry<HeightMap.Type, HeightMap>> f() {
-        return Collections.unmodifiableSet(this.heightMap.entrySet());
+    public Collection<Entry<HeightMap.Type, HeightMap>> e() {
+        return Collections.unmodifiableSet(this.heightmaps.entrySet());
     }
 
     public Map<BlockPosition, TileEntity> getTileEntities() {
-        return this.tileEntities;
-    }
-
-    public EntitySlice<Entity>[] getEntitySlices() {
-        return this.entitySlices;
+        return this.blockEntities;
     }
 
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
-        return (NBTTagCompound) this.e.get(blockposition);
+    public NBTTagCompound f(BlockPosition blockposition) {
+        return (NBTTagCompound) this.pendingBlockEntities.get(blockposition);
     }
 
     @Override
-    public Stream<BlockPosition> m() {
-        return StreamSupport.stream(BlockPosition.b(this.loc.d(), 0, this.loc.e(), this.loc.f(), 255, this.loc.g()).spliterator(), false).filter((blockposition) -> {
+    public Stream<BlockPosition> n() {
+        return StreamSupport.stream(BlockPosition.b(this.chunkPos.d(), this.getMinBuildHeight(), this.chunkPos.e(), this.chunkPos.f(), this.getMaxBuildHeight() - 1, this.chunkPos.g()).spliterator(), false).filter((blockposition) -> {
             return this.getType(blockposition).f() != 0;
         });
     }
 
     @Override
-    public TickList<Block> n() {
-        return this.o;
+    public TickList<Block> o() {
+        return this.blockTicks;
     }
 
     @Override
-    public TickList<FluidType> o() {
-        return this.p;
+    public TickList<FluidType> p() {
+        return this.liquidTicks;
     }
 
     @Override
     public void setNeedsSaving(boolean flag) {
-        this.s = flag;
+        this.unsaved = flag;
     }
 
     @Override
     public boolean isNeedsSaving() {
-        return this.s || this.q && this.world.getTime() != this.lastSaved;
-    }
-
-    public void d(boolean flag) {
-        this.q = flag;
-    }
-
-    @Override
-    public void setLastSaved(long i) {
-        this.lastSaved = i;
+        return this.unsaved;
     }
 
     @Nullable
     @Override
     public StructureStart<?> a(StructureGenerator<?> structuregenerator) {
-        return (StructureStart) this.l.get(structuregenerator);
+        return (StructureStart) this.structureStarts.get(structuregenerator);
     }
 
     @Override
     public void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart) {
-        this.l.put(structuregenerator, structurestart);
+        this.structureStarts.put(structuregenerator, structurestart);
     }
 
     @Override
-    public Map<StructureGenerator<?>, StructureStart<?>> h() {
-        return this.l;
+    public Map<StructureGenerator<?>, StructureStart<?>> g() {
+        return this.structureStarts;
     }
 
     @Override
     public void a(Map<StructureGenerator<?>, StructureStart<?>> map) {
-        this.l.clear();
-        this.l.putAll(map);
+        this.structureStarts.clear();
+        this.structureStarts.putAll(map);
     }
 
     @Override
     public LongSet b(StructureGenerator<?> structuregenerator) {
-        return (LongSet) this.m.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
+        return (LongSet) this.structuresRefences.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         });
     }
 
     @Override
     public void a(StructureGenerator<?> structuregenerator, long i) {
-        ((LongSet) this.m.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
+        ((LongSet) this.structuresRefences.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         })).add(i);
     }
 
     @Override
-    public Map<StructureGenerator<?>, LongSet> v() {
-        return this.m;
+    public Map<StructureGenerator<?>, LongSet> w() {
+        return this.structuresRefences;
     }
 
     @Override
     public void b(Map<StructureGenerator<?>, LongSet> map) {
-        this.m.clear();
-        this.m.putAll(map);
+        this.structuresRefences.clear();
+        this.structuresRefences.putAll(map);
     }
 
     @Override
@@ -727,34 +727,34 @@ public class Chunk implements IChunkAccess {
     public void A() {
         ChunkCoordIntPair chunkcoordintpair = this.getPos();
 
-        for (int i = 0; i < this.n.length; ++i) {
-            if (this.n[i] != null) {
-                ShortListIterator shortlistiterator = this.n[i].iterator();
+        for (int i = 0; i < this.postProcessing.length; ++i) {
+            if (this.postProcessing[i] != null) {
+                ShortListIterator shortlistiterator = this.postProcessing[i].iterator();
 
                 while (shortlistiterator.hasNext()) {
                     Short oshort = (Short) shortlistiterator.next();
-                    BlockPosition blockposition = ProtoChunk.a(oshort, i, chunkcoordintpair);
+                    BlockPosition blockposition = ProtoChunk.a(oshort, this.getSectionYFromSectionIndex(i), chunkcoordintpair);
                     IBlockData iblockdata = this.getType(blockposition);
-                    IBlockData iblockdata1 = Block.b(iblockdata, (GeneratorAccess) this.world, blockposition);
+                    IBlockData iblockdata1 = Block.b(iblockdata, (GeneratorAccess) this.level, blockposition);
 
-                    this.world.setTypeAndData(blockposition, iblockdata1, 20);
+                    this.level.setTypeAndData(blockposition, iblockdata1, 20);
                 }
 
-                this.n[i].clear();
+                this.postProcessing[i].clear();
             }
         }
 
         this.B();
-        Iterator iterator = Sets.newHashSet(this.e.keySet()).iterator();
+        UnmodifiableIterator unmodifiableiterator = ImmutableList.copyOf(this.pendingBlockEntities.keySet()).iterator();
 
-        while (iterator.hasNext()) {
-            BlockPosition blockposition1 = (BlockPosition) iterator.next();
+        while (unmodifiableiterator.hasNext()) {
+            BlockPosition blockposition1 = (BlockPosition) unmodifiableiterator.next();
 
             this.getTileEntity(blockposition1);
         }
 
-        this.e.clear();
-        this.i.a(this);
+        this.pendingBlockEntities.clear();
+        this.upgradeData.a(this);
     }
 
     @Nullable
@@ -763,21 +763,19 @@ public class Chunk implements IChunkAccess {
         TileEntity tileentity;
 
         if ("DUMMY".equals(nbttagcompound.getString("id"))) {
-            Block block = iblockdata.getBlock();
-
-            if (block instanceof ITileEntity) {
-                tileentity = ((ITileEntity) block).createTile(this.world);
+            if (iblockdata.isTileEntity()) {
+                tileentity = ((ITileEntity) iblockdata.getBlock()).createTile(blockposition, iblockdata);
             } else {
                 tileentity = null;
                 Chunk.LOGGER.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, iblockdata);
             }
         } else {
-            tileentity = TileEntity.create(iblockdata, nbttagcompound);
+            tileentity = TileEntity.create(blockposition, iblockdata, nbttagcompound);
         }
 
         if (tileentity != null) {
-            tileentity.setLocation(this.world, blockposition);
-            this.a(tileentity);
+            tileentity.setWorld(this.level);
+            this.b(tileentity);
         } else {
             Chunk.LOGGER.warn("Tried to load a block entity for block {} but failed at location {}", iblockdata, blockposition);
         }
@@ -786,49 +784,65 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public ChunkConverter p() {
-        return this.i;
+    public ChunkConverter q() {
+        return this.upgradeData;
     }
 
     @Override
-    public ShortList[] l() {
-        return this.n;
+    public ShortList[] k() {
+        return this.postProcessing;
     }
 
     public void B() {
-        if (this.o instanceof ProtoChunkTickList) {
-            ((ProtoChunkTickList) this.o).a(this.world.getBlockTickList(), (blockposition) -> {
+        if (this.blockTicks instanceof ProtoChunkTickList) {
+            ((ProtoChunkTickList) this.blockTicks).a(this.level.getBlockTickList(), (blockposition) -> {
                 return this.getType(blockposition).getBlock();
             });
-            this.o = TickListEmpty.b();
-        } else if (this.o instanceof TickListChunk) {
-            ((TickListChunk) this.o).a(this.world.getBlockTickList());
-            this.o = TickListEmpty.b();
+            this.blockTicks = TickListEmpty.b();
+        } else if (this.blockTicks instanceof TickListChunk) {
+            ((TickListChunk) this.blockTicks).a(this.level.getBlockTickList());
+            this.blockTicks = TickListEmpty.b();
         }
 
-        if (this.p instanceof ProtoChunkTickList) {
-            ((ProtoChunkTickList) this.p).a(this.world.getFluidTickList(), (blockposition) -> {
+        if (this.liquidTicks instanceof ProtoChunkTickList) {
+            ((ProtoChunkTickList) this.liquidTicks).a(this.level.getFluidTickList(), (blockposition) -> {
                 return this.getFluid(blockposition).getType();
             });
-            this.p = TickListEmpty.b();
-        } else if (this.p instanceof TickListChunk) {
-            ((TickListChunk) this.p).a(this.world.getFluidTickList());
-            this.p = TickListEmpty.b();
+            this.liquidTicks = TickListEmpty.b();
+        } else if (this.liquidTicks instanceof TickListChunk) {
+            ((TickListChunk) this.liquidTicks).a(this.level.getFluidTickList());
+            this.liquidTicks = TickListEmpty.b();
         }
 
     }
 
     public void a(WorldServer worldserver) {
-        if (this.o == TickListEmpty.b()) {
-            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(this.loc, true, false), worldserver.getTime());
+        RegistryBlocks registryblocks;
+
+        if (this.blockTicks == TickListEmpty.b()) {
+            registryblocks = IRegistry.BLOCK;
+            Objects.requireNonNull(registryblocks);
+            this.blockTicks = new TickListChunk<>(registryblocks::getKey, worldserver.getBlockTickList().a(this.chunkPos, true, false), worldserver.getTime());
             this.setNeedsSaving(true);
         }
 
-        if (this.p == TickListEmpty.b()) {
-            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(this.loc, true, false), worldserver.getTime());
+        if (this.liquidTicks == TickListEmpty.b()) {
+            registryblocks = IRegistry.FLUID;
+            Objects.requireNonNull(registryblocks);
+            this.liquidTicks = new TickListChunk<>(registryblocks::getKey, worldserver.getFluidTickList().a(this.chunkPos, true, false), worldserver.getTime());
             this.setNeedsSaving(true);
         }
 
+    }
+
+    @Override
+    public int getMinBuildHeight() {
+        return this.level.getMinBuildHeight();
+    }
+
+    @Override
+    public int getHeight() {
+        return this.level.getHeight();
     }
 
     @Override
@@ -837,22 +851,80 @@ public class Chunk implements IChunkAccess {
     }
 
     public PlayerChunk.State getState() {
-        return this.u == null ? PlayerChunk.State.BORDER : (PlayerChunk.State) this.u.get();
+        return this.fullStatus == null ? PlayerChunk.State.BORDER : (PlayerChunk.State) this.fullStatus.get();
     }
 
     public void a(Supplier<PlayerChunk.State> supplier) {
-        this.u = supplier;
+        this.fullStatus = supplier;
     }
 
     @Override
-    public boolean r() {
-        return this.x;
+    public boolean s() {
+        return this.isLightCorrect;
     }
 
     @Override
     public void b(boolean flag) {
-        this.x = flag;
+        this.isLightCorrect = flag;
         this.setNeedsSaving(true);
+    }
+
+    public void C() {
+        this.blockEntities.values().forEach(this::d);
+    }
+
+    public void D() {
+        this.blockEntities.values().forEach((tileentity) -> {
+            this.e(tileentity);
+            this.f(tileentity);
+        });
+    }
+
+    private <T extends TileEntity> void e(T t0) {
+        if (!this.level.isClientSide) {
+            Block block = t0.getBlock().getBlock();
+
+            if (block instanceof ITileEntity) {
+                GameEventListener gameeventlistener = ((ITileEntity) block).a(this.level, t0);
+
+                if (gameeventlistener != null) {
+                    GameEventDispatcher gameeventdispatcher = this.a(SectionPosition.a(t0.getPosition().getY()));
+
+                    gameeventdispatcher.a(gameeventlistener);
+                }
+            }
+
+        }
+    }
+
+    private <T extends TileEntity> void f(T t0) {
+        IBlockData iblockdata = t0.getBlock();
+        BlockEntityTicker<T> blockentityticker = iblockdata.a(this.level, t0.getTileType());
+
+        if (blockentityticker == null) {
+            this.l(t0.getPosition());
+        } else {
+            this.tickersInLevel.compute(t0.getPosition(), (blockposition, chunk_c) -> {
+                TickingBlockEntity tickingblockentity = this.a(t0, blockentityticker);
+
+                if (chunk_c != null) {
+                    chunk_c.a(tickingblockentity);
+                    return chunk_c;
+                } else if (this.E()) {
+                    Chunk.c chunk_c1 = new Chunk.c(tickingblockentity);
+
+                    this.level.a((TickingBlockEntity) chunk_c1);
+                    return chunk_c1;
+                } else {
+                    return null;
+                }
+            });
+        }
+
+    }
+
+    private <T extends TileEntity> TickingBlockEntity a(T t0, BlockEntityTicker<T> blockentityticker) {
+        return new Chunk.a<>(t0, blockentityticker);
     }
 
     public static enum EnumTileEntityState {
@@ -860,5 +932,110 @@ public class Chunk implements IChunkAccess {
         IMMEDIATE, QUEUED, CHECK;
 
         private EnumTileEntityState() {}
+    }
+
+    private class c implements TickingBlockEntity {
+
+        private TickingBlockEntity ticker;
+
+        c(TickingBlockEntity tickingblockentity) {
+            this.ticker = tickingblockentity;
+        }
+
+        void a(TickingBlockEntity tickingblockentity) {
+            this.ticker = tickingblockentity;
+        }
+
+        @Override
+        public void a() {
+            this.ticker.a();
+        }
+
+        @Override
+        public boolean b() {
+            return this.ticker.b();
+        }
+
+        @Override
+        public BlockPosition c() {
+            return this.ticker.c();
+        }
+
+        @Override
+        public String d() {
+            return this.ticker.d();
+        }
+
+        public String toString() {
+            return this.ticker.toString() + " <wrapped>";
+        }
+    }
+
+    private class a<T extends TileEntity> implements TickingBlockEntity {
+
+        private final T blockEntity;
+        private final BlockEntityTicker<T> ticker;
+        private boolean loggedInvalidBlockState;
+
+        a(TileEntity tileentity, BlockEntityTicker blockentityticker) {
+            this.blockEntity = tileentity;
+            this.ticker = blockentityticker;
+        }
+
+        @Override
+        public void a() {
+            if (!this.blockEntity.isRemoved() && this.blockEntity.hasWorld()) {
+                BlockPosition blockposition = this.blockEntity.getPosition();
+
+                if (Chunk.this.k(blockposition)) {
+                    try {
+                        GameProfilerFiller gameprofilerfiller = Chunk.this.level.getMethodProfiler();
+
+                        gameprofilerfiller.a(this::d);
+                        IBlockData iblockdata = Chunk.this.getType(blockposition);
+
+                        if (this.blockEntity.getTileType().isValidBlock(iblockdata)) {
+                            this.ticker.tick(Chunk.this.level, this.blockEntity.getPosition(), iblockdata, this.blockEntity);
+                            this.loggedInvalidBlockState = false;
+                        } else if (!this.loggedInvalidBlockState) {
+                            this.loggedInvalidBlockState = true;
+                            Chunk.LOGGER.warn("Block entity {} @ {} state {} invalid for ticking:", new org.apache.logging.log4j.util.Supplier[]{this::d, this::c, () -> {
+                                        return iblockdata;
+                                    }});
+                        }
+
+                        gameprofilerfiller.exit();
+                    } catch (Throwable throwable) {
+                        CrashReport crashreport = CrashReport.a(throwable, "Ticking block entity");
+                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block entity being ticked");
+
+                        this.blockEntity.a(crashreportsystemdetails);
+                        throw new ReportedException(crashreport);
+                    }
+                }
+            }
+
+        }
+
+        @Override
+        public boolean b() {
+            return this.blockEntity.isRemoved();
+        }
+
+        @Override
+        public BlockPosition c() {
+            return this.blockEntity.getPosition();
+        }
+
+        @Override
+        public String d() {
+            return TileEntityTypes.a(this.blockEntity.getTileType()).toString();
+        }
+
+        public String toString() {
+            String s = this.d();
+
+            return "Level ticker for " + s + "@" + this.c();
+        }
     }
 }

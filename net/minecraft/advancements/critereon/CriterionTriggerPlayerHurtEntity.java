@@ -9,13 +9,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerPlayerHurtEntity extends CriterionTriggerAbstract<CriterionTriggerPlayerHurtEntity.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("player_hurt_entity");
+    static final MinecraftKey ID = new MinecraftKey("player_hurt_entity");
 
     public CriterionTriggerPlayerHurtEntity() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerPlayerHurtEntity.a;
+        return CriterionTriggerPlayerHurtEntity.ID;
     }
 
     @Override
@@ -36,29 +36,49 @@ public class CriterionTriggerPlayerHurtEntity extends CriterionTriggerAbstract<C
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionDamage a;
-        private final CriterionConditionEntity.b b;
+        private final CriterionConditionDamage damage;
+        private final CriterionConditionEntity.b entity;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionDamage criterionconditiondamage, CriterionConditionEntity.b criterionconditionentity_b1) {
-            super(CriterionTriggerPlayerHurtEntity.a, criterionconditionentity_b);
-            this.a = criterionconditiondamage;
-            this.b = criterionconditionentity_b1;
+            super(CriterionTriggerPlayerHurtEntity.ID, criterionconditionentity_b);
+            this.damage = criterionconditiondamage;
+            this.entity = criterionconditionentity_b1;
+        }
+
+        public static CriterionTriggerPlayerHurtEntity.a c() {
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, CriterionConditionDamage.ANY, CriterionConditionEntity.b.ANY);
+        }
+
+        public static CriterionTriggerPlayerHurtEntity.a a(CriterionConditionDamage criterionconditiondamage) {
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, criterionconditiondamage, CriterionConditionEntity.b.ANY);
         }
 
         public static CriterionTriggerPlayerHurtEntity.a a(CriterionConditionDamage.a criterionconditiondamage_a) {
-            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.a, criterionconditiondamage_a.b(), CriterionConditionEntity.b.a);
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, criterionconditiondamage_a.b(), CriterionConditionEntity.b.ANY);
+        }
+
+        public static CriterionTriggerPlayerHurtEntity.a a(CriterionConditionEntity criterionconditionentity) {
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, CriterionConditionDamage.ANY, CriterionConditionEntity.b.a(criterionconditionentity));
+        }
+
+        public static CriterionTriggerPlayerHurtEntity.a a(CriterionConditionDamage criterionconditiondamage, CriterionConditionEntity criterionconditionentity) {
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, criterionconditiondamage, CriterionConditionEntity.b.a(criterionconditionentity));
+        }
+
+        public static CriterionTriggerPlayerHurtEntity.a a(CriterionConditionDamage.a criterionconditiondamage_a, CriterionConditionEntity criterionconditionentity) {
+            return new CriterionTriggerPlayerHurtEntity.a(CriterionConditionEntity.b.ANY, criterionconditiondamage_a.b(), CriterionConditionEntity.b.a(criterionconditionentity));
         }
 
         public boolean a(EntityPlayer entityplayer, LootTableInfo loottableinfo, DamageSource damagesource, float f, float f1, boolean flag) {
-            return !this.a.a(entityplayer, damagesource, f, f1, flag) ? false : this.b.a(loottableinfo);
+            return !this.damage.a(entityplayer, damagesource, f, f1, flag) ? false : this.entity.a(loottableinfo);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("damage", this.a.a());
-            jsonobject.add("entity", this.b.a(lootserializationcontext));
+            jsonobject.add("damage", this.damage.a());
+            jsonobject.add("entity", this.entity.a(lootserializationcontext));
             return jsonobject;
         }
     }

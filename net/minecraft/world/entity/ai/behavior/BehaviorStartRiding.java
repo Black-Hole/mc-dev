@@ -9,11 +9,12 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorStartRiding<E extends EntityLiving> extends Behavior<E> {
 
-    private final float b;
+    private static final int CLOSE_ENOUGH_TO_START_RIDING_DIST = 1;
+    private final float speedModifier;
 
     public BehaviorStartRiding(float f) {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.RIDE_TARGET, MemoryStatus.VALUE_PRESENT));
-        this.b = f;
+        this.speedModifier = f;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class BehaviorStartRiding<E extends EntityLiving> extends Behavior<E> {
         if (this.a(e0)) {
             e0.startRiding(this.b(e0));
         } else {
-            BehaviorUtil.a(e0, this.b(e0), this.b, 1);
+            BehaviorUtil.a(e0, this.b(e0), this.speedModifier, 1);
         }
 
     }

@@ -1,11 +1,15 @@
 package net.minecraft.world.item;
 
 import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.world.item.alchemy.PotionRegistry;
 import net.minecraft.world.item.alchemy.PotionUtil;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.World;
 
 public class ItemTippedArrow extends ItemArrow {
 
@@ -35,7 +39,12 @@ public class ItemTippedArrow extends ItemArrow {
     }
 
     @Override
-    public String f(ItemStack itemstack) {
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        PotionUtil.a(itemstack, list, 0.125F);
+    }
+
+    @Override
+    public String j(ItemStack itemstack) {
         return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
     }
 }

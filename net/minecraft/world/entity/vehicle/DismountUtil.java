@@ -22,6 +22,8 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class DismountUtil {
 
+    public DismountUtil() {}
+
     public static int[][] a(EnumDirection enumdirection) {
         EnumDirection enumdirection1 = enumdirection.g();
         EnumDirection enumdirection2 = enumdirection1.opposite();
@@ -38,17 +40,8 @@ public class DismountUtil {
         return icollisionaccess.b(entityliving, axisalignedbb).allMatch(VoxelShape::isEmpty);
     }
 
-    @Nullable
-    public static Vec3D a(ICollisionAccess icollisionaccess, double d0, double d1, double d2, EntityLiving entityliving, EntityPose entitypose) {
-        if (a(d1)) {
-            Vec3D vec3d = new Vec3D(d0, d1, d2);
-
-            if (a(icollisionaccess, entityliving, entityliving.f(entitypose).c(vec3d))) {
-                return vec3d;
-            }
-        }
-
-        return null;
+    public static boolean a(ICollisionAccess icollisionaccess, Vec3D vec3d, EntityLiving entityliving, EntityPose entitypose) {
+        return a(icollisionaccess, entityliving, entityliving.f(entitypose).c(vec3d));
     }
 
     public static VoxelShape a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -91,7 +84,7 @@ public class DismountUtil {
             } else {
                 Vec3D vec3d = Vec3D.a((BaseBlockPosition) blockposition, d0);
 
-                return icollisionaccess.b((Entity) null, entitytypes.l().a(vec3d)).allMatch(VoxelShape::isEmpty) ? vec3d : null;
+                return icollisionaccess.b((Entity) null, entitytypes.m().a(vec3d)).allMatch(VoxelShape::isEmpty) ? vec3d : null;
             }
         }
     }

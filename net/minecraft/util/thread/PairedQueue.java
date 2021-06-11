@@ -18,12 +18,14 @@ public interface PairedQueue<T, F> {
 
     boolean b();
 
+    int c();
+
     public static final class a implements PairedQueue<PairedQueue.b, Runnable> {
 
-        private final List<Queue<Runnable>> a;
+        private final List<Queue<Runnable>> queueList;
 
         public a(int i) {
-            this.a = (List) IntStream.range(0, i).mapToObj((j) -> {
+            this.queueList = (List) IntStream.range(0, i).mapToObj((j) -> {
                 return Queues.newConcurrentLinkedQueue();
             }).collect(Collectors.toList());
         }
@@ -31,7 +33,7 @@ public interface PairedQueue<T, F> {
         @Nullable
         @Override
         public Runnable a() {
-            Iterator iterator = this.a.iterator();
+            Iterator iterator = this.queueList.iterator();
 
             Runnable runnable;
 
@@ -51,57 +53,75 @@ public interface PairedQueue<T, F> {
         public boolean a(PairedQueue.b pairedqueue_b) {
             int i = pairedqueue_b.a();
 
-            ((Queue) this.a.get(i)).add(pairedqueue_b);
+            ((Queue) this.queueList.get(i)).add(pairedqueue_b);
             return true;
         }
 
         @Override
         public boolean b() {
-            return this.a.stream().allMatch(Collection::isEmpty);
+            return this.queueList.stream().allMatch(Collection::isEmpty);
+        }
+
+        @Override
+        public int c() {
+            int i = 0;
+
+            Queue queue;
+
+            for (Iterator iterator = this.queueList.iterator(); iterator.hasNext(); i += queue.size()) {
+                queue = (Queue) iterator.next();
+            }
+
+            return i;
         }
     }
 
     public static final class b implements Runnable {
 
-        private final int a;
-        private final Runnable b;
+        private final int priority;
+        private final Runnable task;
 
         public b(int i, Runnable runnable) {
-            this.a = i;
-            this.b = runnable;
+            this.priority = i;
+            this.task = runnable;
         }
 
         public void run() {
-            this.b.run();
+            this.task.run();
         }
 
         public int a() {
-            return this.a;
+            return this.priority;
         }
     }
 
     public static final class c<T> implements PairedQueue<T, T> {
 
-        private final Queue<T> a;
+        private final Queue<T> queue;
 
         public c(Queue<T> queue) {
-            this.a = queue;
+            this.queue = queue;
         }
 
         @Nullable
         @Override
         public T a() {
-            return this.a.poll();
+            return this.queue.poll();
         }
 
         @Override
         public boolean a(T t0) {
-            return this.a.add(t0);
+            return this.queue.add(t0);
         }
 
         @Override
         public boolean b() {
-            return this.a.isEmpty();
+            return this.queue.isEmpty();
+        }
+
+        @Override
+        public int c() {
+            return this.queue.size();
         }
     }
 }

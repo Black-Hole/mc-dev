@@ -2,6 +2,7 @@ package net.minecraft.server.level;
 
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.level.ChunkCoordIntPair;
@@ -12,20 +13,22 @@ import net.minecraft.world.level.levelgen.HeightMap;
 
 public class WorldProviderNormal {
 
+    public WorldProviderNormal() {}
+
     @Nullable
     protected static BlockPosition a(WorldServer worldserver, int i, int j, boolean flag) {
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, 0, j);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, worldserver.getMinBuildHeight(), j);
         BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
         boolean flag1 = worldserver.getDimensionManager().hasCeiling();
         IBlockData iblockdata = biomebase.e().e().a();
 
-        if (flag && !iblockdata.getBlock().a((Tag) TagsBlock.VALID_SPAWN)) {
+        if (flag && !iblockdata.a((Tag) TagsBlock.VALID_SPAWN)) {
             return null;
         } else {
-            Chunk chunk = worldserver.getChunkAt(i >> 4, j >> 4);
-            int k = flag1 ? worldserver.getChunkProvider().getChunkGenerator().getSpawnHeight() : chunk.getHighestBlock(HeightMap.Type.MOTION_BLOCKING, i & 15, j & 15);
+            Chunk chunk = worldserver.getChunkAt(SectionPosition.a(i), SectionPosition.a(j));
+            int k = flag1 ? worldserver.getChunkProvider().getChunkGenerator().getSpawnHeight(worldserver) : chunk.getHighestBlock(HeightMap.Type.MOTION_BLOCKING, i & 15, j & 15);
 
-            if (k < 0) {
+            if (k < worldserver.getMinBuildHeight()) {
                 return null;
             } else {
                 int l = chunk.getHighestBlock(HeightMap.Type.WORLD_SURFACE, i & 15, j & 15);
@@ -33,7 +36,7 @@ public class WorldProviderNormal {
                 if (l <= k && l > chunk.getHighestBlock(HeightMap.Type.OCEAN_FLOOR, i & 15, j & 15)) {
                     return null;
                 } else {
-                    for (int i1 = k + 1; i1 >= 0; --i1) {
+                    for (int i1 = k + 1; i1 >= worldserver.getMinBuildHeight(); --i1) {
                         blockposition_mutableblockposition.d(i, i1, j);
                         IBlockData iblockdata1 = worldserver.getType(blockposition_mutableblockposition);
 

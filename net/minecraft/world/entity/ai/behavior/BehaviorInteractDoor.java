@@ -24,9 +24,12 @@ import net.minecraft.world.level.pathfinder.PathPoint;
 
 public class BehaviorInteractDoor extends Behavior<EntityLiving> {
 
+    private static final int COOLDOWN_BEFORE_RERUNNING_IN_SAME_NODE = 20;
+    private static final double SKIP_CLOSING_DOOR_IF_FURTHER_AWAY_THAN = 2.0D;
+    private static final double MAX_DISTANCE_TO_HOLD_DOOR_OPEN_FOR_OTHER_MOBS = 2.0D;
     @Nullable
-    private PathPoint b;
-    private int c;
+    private PathPoint lastCheckedNode;
+    private int remainingCooldown;
 
     public BehaviorInteractDoor() {
         super(ImmutableMap.of(MemoryModuleType.PATH, MemoryStatus.VALUE_PRESENT, MemoryModuleType.DOORS_TO_CLOSE, MemoryStatus.REGISTERED));
@@ -37,15 +40,15 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
         PathEntity pathentity = (PathEntity) entityliving.getBehaviorController().getMemory(MemoryModuleType.PATH).get();
 
         if (!pathentity.b() && !pathentity.c()) {
-            if (!Objects.equals(this.b, pathentity.h())) {
-                this.c = 20;
+            if (!Objects.equals(this.lastCheckedNode, pathentity.h())) {
+                this.remainingCooldown = 20;
                 return true;
             } else {
-                if (this.c > 0) {
-                    --this.c;
+                if (this.remainingCooldown > 0) {
+                    --this.remainingCooldown;
                 }
 
-                return this.c == 0;
+                return this.remainingCooldown == 0;
             }
         } else {
             return false;
@@ -56,7 +59,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         PathEntity pathentity = (PathEntity) entityliving.getBehaviorController().getMemory(MemoryModuleType.PATH).get();
 
-        this.b = pathentity.h();
+        this.lastCheckedNode = pathentity.h();
         PathPoint pathpoint = pathentity.i();
         PathPoint pathpoint1 = pathentity.h();
         BlockPosition blockposition = pathpoint.a();
@@ -66,7 +69,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
             BlockDoor blockdoor = (BlockDoor) iblockdata.getBlock();
 
             if (!blockdoor.h(iblockdata)) {
-                blockdoor.setDoor(worldserver, iblockdata, blockposition, true);
+                blockdoor.setDoor(entityliving, worldserver, iblockdata, blockposition, true);
             }
 
             this.c(worldserver, entityliving, blockposition);
@@ -79,7 +82,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
             BlockDoor blockdoor1 = (BlockDoor) iblockdata1.getBlock();
 
             if (!blockdoor1.h(iblockdata1)) {
-                blockdoor1.setDoor(worldserver, iblockdata1, blockposition1, true);
+                blockdoor1.setDoor(entityliving, worldserver, iblockdata1, blockposition1, true);
                 this.c(worldserver, entityliving, blockposition1);
             }
         }
@@ -113,7 +116,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
                             } else if (a(worldserver, entityliving, blockposition)) {
                                 iterator.remove();
                             } else {
-                                blockdoor.setDoor(worldserver, iblockdata, blockposition, false);
+                                blockdoor.setDoor(entityliving, worldserver, iblockdata, blockposition, false);
                                 iterator.remove();
                             }
                         }
@@ -127,7 +130,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
     private static boolean a(WorldServer worldserver, EntityLiving entityliving, BlockPosition blockposition) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        return !behaviorcontroller.hasMemory(MemoryModuleType.MOBS) ? false : ((List) behaviorcontroller.getMemory(MemoryModuleType.MOBS).get()).stream().filter((entityliving1) -> {
+        return !behaviorcontroller.hasMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES) ? false : ((List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).get()).stream().filter((entityliving1) -> {
             return entityliving1.getEntityType() == entityliving.getEntityType();
         }).filter((entityliving1) -> {
             return blockposition.a((IPosition) entityliving1.getPositionVector(), 2.0D);

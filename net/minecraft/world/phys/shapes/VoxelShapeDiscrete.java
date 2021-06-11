@@ -5,23 +5,27 @@ import net.minecraft.core.EnumDirection;
 
 public abstract class VoxelShapeDiscrete {
 
-    private static final EnumDirection.EnumAxis[] d = EnumDirection.EnumAxis.values();
-    protected final int a;
-    protected final int b;
-    protected final int c;
+    private static final EnumDirection.EnumAxis[] AXIS_VALUES = EnumDirection.EnumAxis.values();
+    protected final int xSize;
+    protected final int ySize;
+    protected final int zSize;
 
     protected VoxelShapeDiscrete(int i, int j, int k) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
+        if (i >= 0 && j >= 0 && k >= 0) {
+            this.xSize = i;
+            this.ySize = j;
+            this.zSize = k;
+        } else {
+            throw new IllegalArgumentException("Need all positive sizes: x: " + i + ", y: " + j + ", z: " + k);
+        }
     }
 
     public boolean a(EnumAxisCycle enumaxiscycle, int i, int j, int k) {
-        return this.c(enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.X), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Y), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Z));
+        return this.d(enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.X), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Y), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Z));
     }
 
-    public boolean c(int i, int j, int k) {
-        return i >= 0 && j >= 0 && k >= 0 ? (i < this.a && j < this.b && k < this.c ? this.b(i, j, k) : false) : false;
+    public boolean d(int i, int j, int k) {
+        return i >= 0 && j >= 0 && k >= 0 ? (i < this.xSize && j < this.ySize && k < this.zSize ? this.b(i, j, k) : false) : false;
     }
 
     public boolean b(EnumAxisCycle enumaxiscycle, int i, int j, int k) {
@@ -30,10 +34,10 @@ public abstract class VoxelShapeDiscrete {
 
     public abstract boolean b(int i, int j, int k);
 
-    public abstract void a(int i, int j, int k, boolean flag, boolean flag1);
+    public abstract void c(int i, int j, int k);
 
     public boolean a() {
-        EnumDirection.EnumAxis[] aenumdirection_enumaxis = VoxelShapeDiscrete.d;
+        EnumDirection.EnumAxis[] aenumdirection_enumaxis = VoxelShapeDiscrete.AXIS_VALUES;
         int i = aenumdirection_enumaxis.length;
 
         for (int j = 0; j < i; ++j) {
@@ -51,8 +55,57 @@ public abstract class VoxelShapeDiscrete {
 
     public abstract int b(EnumDirection.EnumAxis enumdirection_enumaxis);
 
+    public int a(EnumDirection.EnumAxis enumdirection_enumaxis, int i, int j) {
+        int k = this.c(enumdirection_enumaxis);
+
+        if (i >= 0 && j >= 0) {
+            EnumDirection.EnumAxis enumdirection_enumaxis1 = EnumAxisCycle.FORWARD.a(enumdirection_enumaxis);
+            EnumDirection.EnumAxis enumdirection_enumaxis2 = EnumAxisCycle.BACKWARD.a(enumdirection_enumaxis);
+
+            if (i < this.c(enumdirection_enumaxis1) && j < this.c(enumdirection_enumaxis2)) {
+                EnumAxisCycle enumaxiscycle = EnumAxisCycle.a(EnumDirection.EnumAxis.X, enumdirection_enumaxis);
+
+                for (int l = 0; l < k; ++l) {
+                    if (this.b(enumaxiscycle, l, i, j)) {
+                        return l;
+                    }
+                }
+
+                return k;
+            } else {
+                return k;
+            }
+        } else {
+            return k;
+        }
+    }
+
+    public int b(EnumDirection.EnumAxis enumdirection_enumaxis, int i, int j) {
+        if (i >= 0 && j >= 0) {
+            EnumDirection.EnumAxis enumdirection_enumaxis1 = EnumAxisCycle.FORWARD.a(enumdirection_enumaxis);
+            EnumDirection.EnumAxis enumdirection_enumaxis2 = EnumAxisCycle.BACKWARD.a(enumdirection_enumaxis);
+
+            if (i < this.c(enumdirection_enumaxis1) && j < this.c(enumdirection_enumaxis2)) {
+                int k = this.c(enumdirection_enumaxis);
+                EnumAxisCycle enumaxiscycle = EnumAxisCycle.a(EnumDirection.EnumAxis.X, enumdirection_enumaxis);
+
+                for (int l = k - 1; l >= 0; --l) {
+                    if (this.b(enumaxiscycle, l, i, j)) {
+                        return l + 1;
+                    }
+                }
+
+                return 0;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
     public int c(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.a, this.b, this.c);
+        return enumdirection_enumaxis.a(this.xSize, this.ySize, this.zSize);
     }
 
     public int b() {
@@ -67,92 +120,55 @@ public abstract class VoxelShapeDiscrete {
         return this.c(EnumDirection.EnumAxis.Z);
     }
 
-    protected boolean a(int i, int j, int k, int l) {
-        for (int i1 = i; i1 < j; ++i1) {
-            if (!this.c(k, l, i1)) {
-                return false;
-            }
-        }
-
-        return true;
+    public void a(VoxelShapeDiscrete.b voxelshapediscrete_b, boolean flag) {
+        this.a(voxelshapediscrete_b, EnumAxisCycle.NONE, flag);
+        this.a(voxelshapediscrete_b, EnumAxisCycle.FORWARD, flag);
+        this.a(voxelshapediscrete_b, EnumAxisCycle.BACKWARD, flag);
     }
 
-    protected void a(int i, int j, int k, int l, boolean flag) {
-        for (int i1 = i; i1 < j; ++i1) {
-            this.a(k, l, i1, false, flag);
-        }
+    private void a(VoxelShapeDiscrete.b voxelshapediscrete_b, EnumAxisCycle enumaxiscycle, boolean flag) {
+        EnumAxisCycle enumaxiscycle1 = enumaxiscycle.a();
+        int i = this.c(enumaxiscycle1.a(EnumDirection.EnumAxis.X));
+        int j = this.c(enumaxiscycle1.a(EnumDirection.EnumAxis.Y));
+        int k = this.c(enumaxiscycle1.a(EnumDirection.EnumAxis.Z));
 
-    }
+        for (int l = 0; l <= i; ++l) {
+            for (int i1 = 0; i1 <= j; ++i1) {
+                int j1 = -1;
 
-    protected boolean a(int i, int j, int k, int l, int i1) {
-        for (int j1 = i; j1 < j; ++j1) {
-            if (!this.a(k, l, j1, i1)) {
-                return false;
-            }
-        }
+                for (int k1 = 0; k1 <= k; ++k1) {
+                    int l1 = 0;
+                    int i2 = 0;
 
-        return true;
-    }
-
-    public void b(VoxelShapeDiscrete.b voxelshapediscrete_b, boolean flag) {
-        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(this);
-
-        for (int i = 0; i <= this.a; ++i) {
-            for (int j = 0; j <= this.b; ++j) {
-                int k = -1;
-
-                for (int l = 0; l <= this.c; ++l) {
-                    if (voxelshapebitset.c(i, j, l)) {
-                        if (flag) {
-                            if (k == -1) {
-                                k = l;
+                    for (int j2 = 0; j2 <= 1; ++j2) {
+                        for (int k2 = 0; k2 <= 1; ++k2) {
+                            if (this.a(enumaxiscycle1, l + j2 - 1, i1 + k2 - 1, k1)) {
+                                ++l1;
+                                i2 ^= j2 ^ k2;
                             }
-                        } else {
-                            voxelshapediscrete_b.consume(i, j, l, i + 1, j + 1, l + 1);
                         }
-                    } else if (k != -1) {
-                        int i1 = i;
-                        int j1 = i;
-                        int k1 = j;
-                        int l1 = j;
+                    }
 
-                        voxelshapebitset.a(k, l, i, j, false);
-
-                        while (voxelshapebitset.a(k, l, i1 - 1, k1)) {
-                            voxelshapebitset.a(k, l, i1 - 1, k1, false);
-                            --i1;
+                    if (l1 != 1 && l1 != 3 && (l1 != 2 || (i2 & 1) != 0)) {
+                        if (j1 != -1) {
+                            voxelshapediscrete_b.consume(enumaxiscycle1.a(l, i1, j1, EnumDirection.EnumAxis.X), enumaxiscycle1.a(l, i1, j1, EnumDirection.EnumAxis.Y), enumaxiscycle1.a(l, i1, j1, EnumDirection.EnumAxis.Z), enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.X), enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.Y), enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.Z));
+                            j1 = -1;
                         }
-
-                        while (voxelshapebitset.a(k, l, j1 + 1, k1)) {
-                            voxelshapebitset.a(k, l, j1 + 1, k1, false);
-                            ++j1;
+                    } else if (flag) {
+                        if (j1 == -1) {
+                            j1 = k1;
                         }
-
-                        int i2;
-
-                        while (voxelshapebitset.a(i1, j1 + 1, k, l, k1 - 1)) {
-                            for (i2 = i1; i2 <= j1; ++i2) {
-                                voxelshapebitset.a(k, l, i2, k1 - 1, false);
-                            }
-
-                            --k1;
-                        }
-
-                        while (voxelshapebitset.a(i1, j1 + 1, k, l, l1 + 1)) {
-                            for (i2 = i1; i2 <= j1; ++i2) {
-                                voxelshapebitset.a(k, l, i2, l1 + 1, false);
-                            }
-
-                            ++l1;
-                        }
-
-                        voxelshapediscrete_b.consume(i1, k1, k, j1 + 1, l1 + 1, l);
-                        k = -1;
+                    } else {
+                        voxelshapediscrete_b.consume(enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.X), enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.Y), enumaxiscycle1.a(l, i1, k1, EnumDirection.EnumAxis.Z), enumaxiscycle1.a(l, i1, k1 + 1, EnumDirection.EnumAxis.X), enumaxiscycle1.a(l, i1, k1 + 1, EnumDirection.EnumAxis.Y), enumaxiscycle1.a(l, i1, k1 + 1, EnumDirection.EnumAxis.Z));
                     }
                 }
             }
         }
 
+    }
+
+    public void b(VoxelShapeDiscrete.b voxelshapediscrete_b, boolean flag) {
+        VoxelShapeBitSet.a(this, voxelshapediscrete_b, flag);
     }
 
     public void a(VoxelShapeDiscrete.a voxelshapediscrete_a) {
@@ -192,13 +208,13 @@ public abstract class VoxelShapeDiscrete {
 
     }
 
-    public interface a {
-
-        void consume(EnumDirection enumdirection, int i, int j, int k);
-    }
-
     public interface b {
 
         void consume(int i, int j, int k, int l, int i1, int j1);
+    }
+
+    public interface a {
+
+        void consume(EnumDirection enumdirection, int i, int j, int k);
     }
 }

@@ -22,8 +22,8 @@ import net.minecraft.world.level.material.Fluid;
 
 public class CriterionTriggerProperties {
 
-    public static final CriterionTriggerProperties a = new CriterionTriggerProperties(ImmutableList.of());
-    private final List<CriterionTriggerProperties.c> b;
+    public static final CriterionTriggerProperties ANY = new CriterionTriggerProperties(ImmutableList.of());
+    private final List<CriterionTriggerProperties.c> properties;
 
     private static CriterionTriggerProperties.c a(String s, JsonElement jsonelement) {
         if (jsonelement.isJsonPrimitive()) {
@@ -44,12 +44,12 @@ public class CriterionTriggerProperties {
         return jsonelement.isJsonNull() ? null : jsonelement.getAsString();
     }
 
-    private CriterionTriggerProperties(List<CriterionTriggerProperties.c> list) {
-        this.b = ImmutableList.copyOf(list);
+    CriterionTriggerProperties(List<CriterionTriggerProperties.c> list) {
+        this.properties = ImmutableList.copyOf(list);
     }
 
     public <S extends IBlockDataHolder<?, S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
-        Iterator iterator = this.b.iterator();
+        Iterator iterator = this.properties.iterator();
 
         CriterionTriggerProperties.c criteriontriggerproperties_c;
 
@@ -73,7 +73,7 @@ public class CriterionTriggerProperties {
     }
 
     public void a(BlockStateList<?, ?> blockstatelist, Consumer<String> consumer) {
-        this.b.forEach((criteriontriggerproperties_c) -> {
+        this.properties.forEach((criteriontriggerproperties_c) -> {
             criteriontriggerproperties_c.a(blockstatelist, consumer);
         });
     }
@@ -92,18 +92,18 @@ public class CriterionTriggerProperties {
 
             return new CriterionTriggerProperties(list);
         } else {
-            return CriterionTriggerProperties.a;
+            return CriterionTriggerProperties.ANY;
         }
     }
 
     public JsonElement a() {
-        if (this == CriterionTriggerProperties.a) {
+        if (this == CriterionTriggerProperties.ANY) {
             return JsonNull.INSTANCE;
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (!this.b.isEmpty()) {
-                this.b.forEach((criteriontriggerproperties_c) -> {
+            if (!this.properties.isEmpty()) {
+                this.properties.forEach((criteriontriggerproperties_c) -> {
                     jsonobject.add(criteriontriggerproperties_c.b(), criteriontriggerproperties_c.a());
                 });
             }
@@ -112,9 +112,115 @@ public class CriterionTriggerProperties {
         }
     }
 
+    private static class b extends CriterionTriggerProperties.c {
+
+        private final String value;
+
+        public b(String s, String s1) {
+            super(s);
+            this.value = s1;
+        }
+
+        @Override
+        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
+            T t0 = iblockdataholder.get(iblockstate);
+            Optional<T> optional = iblockstate.b(this.value);
+
+            return optional.isPresent() && t0.compareTo((Comparable) optional.get()) == 0;
+        }
+
+        @Override
+        public JsonElement a() {
+            return new JsonPrimitive(this.value);
+        }
+    }
+
+    private static class d extends CriterionTriggerProperties.c {
+
+        @Nullable
+        private final String minValue;
+        @Nullable
+        private final String maxValue;
+
+        public d(String s, @Nullable String s1, @Nullable String s2) {
+            super(s);
+            this.minValue = s1;
+            this.maxValue = s2;
+        }
+
+        @Override
+        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
+            T t0 = iblockdataholder.get(iblockstate);
+            Optional optional;
+
+            if (this.minValue != null) {
+                optional = iblockstate.b(this.minValue);
+                if (!optional.isPresent() || t0.compareTo((Comparable) optional.get()) < 0) {
+                    return false;
+                }
+            }
+
+            if (this.maxValue != null) {
+                optional = iblockstate.b(this.maxValue);
+                if (!optional.isPresent() || t0.compareTo((Comparable) optional.get()) > 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public JsonElement a() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.minValue != null) {
+                jsonobject.addProperty("min", this.minValue);
+            }
+
+            if (this.maxValue != null) {
+                jsonobject.addProperty("max", this.maxValue);
+            }
+
+            return jsonobject;
+        }
+    }
+
+    private abstract static class c {
+
+        private final String name;
+
+        public c(String s) {
+            this.name = s;
+        }
+
+        public <S extends IBlockDataHolder<?, S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
+            IBlockState<?> iblockstate = blockstatelist.a(this.name);
+
+            return iblockstate == null ? false : this.a(s0, iblockstate);
+        }
+
+        protected abstract <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate);
+
+        public abstract JsonElement a();
+
+        public String b() {
+            return this.name;
+        }
+
+        public void a(BlockStateList<?, ?> blockstatelist, Consumer<String> consumer) {
+            IBlockState<?> iblockstate = blockstatelist.a(this.name);
+
+            if (iblockstate == null) {
+                consumer.accept(this.name);
+            }
+
+        }
+    }
+
     public static class a {
 
-        private final List<CriterionTriggerProperties.c> a = Lists.newArrayList();
+        private final List<CriterionTriggerProperties.c> matchers = Lists.newArrayList();
 
         private a() {}
 
@@ -123,7 +229,7 @@ public class CriterionTriggerProperties {
         }
 
         public CriterionTriggerProperties.a a(IBlockState<?> iblockstate, String s) {
-            this.a.add(new CriterionTriggerProperties.b(iblockstate.getName(), s));
+            this.matchers.add(new CriterionTriggerProperties.b(iblockstate.getName(), s));
             return this;
         }
 
@@ -140,113 +246,7 @@ public class CriterionTriggerProperties {
         }
 
         public CriterionTriggerProperties b() {
-            return new CriterionTriggerProperties(this.a);
-        }
-    }
-
-    static class d extends CriterionTriggerProperties.c {
-
-        @Nullable
-        private final String a;
-        @Nullable
-        private final String b;
-
-        public d(String s, @Nullable String s1, @Nullable String s2) {
-            super(s);
-            this.a = s1;
-            this.b = s2;
-        }
-
-        @Override
-        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
-            T t0 = iblockdataholder.get(iblockstate);
-            Optional optional;
-
-            if (this.a != null) {
-                optional = iblockstate.b(this.a);
-                if (!optional.isPresent() || t0.compareTo(optional.get()) < 0) {
-                    return false;
-                }
-            }
-
-            if (this.b != null) {
-                optional = iblockstate.b(this.b);
-                if (!optional.isPresent() || t0.compareTo(optional.get()) > 0) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public JsonElement a() {
-            JsonObject jsonobject = new JsonObject();
-
-            if (this.a != null) {
-                jsonobject.addProperty("min", this.a);
-            }
-
-            if (this.b != null) {
-                jsonobject.addProperty("max", this.b);
-            }
-
-            return jsonobject;
-        }
-    }
-
-    static class b extends CriterionTriggerProperties.c {
-
-        private final String a;
-
-        public b(String s, String s1) {
-            super(s);
-            this.a = s1;
-        }
-
-        @Override
-        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
-            T t0 = iblockdataholder.get(iblockstate);
-            Optional<T> optional = iblockstate.b(this.a);
-
-            return optional.isPresent() && t0.compareTo(optional.get()) == 0;
-        }
-
-        @Override
-        public JsonElement a() {
-            return new JsonPrimitive(this.a);
-        }
-    }
-
-    abstract static class c {
-
-        private final String a;
-
-        public c(String s) {
-            this.a = s;
-        }
-
-        public <S extends IBlockDataHolder<?, S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
-            IBlockState<?> iblockstate = blockstatelist.a(this.a);
-
-            return iblockstate == null ? false : this.a(s0, iblockstate);
-        }
-
-        protected abstract <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate);
-
-        public abstract JsonElement a();
-
-        public String b() {
-            return this.a;
-        }
-
-        public void a(BlockStateList<?, ?> blockstatelist, Consumer<String> consumer) {
-            IBlockState<?> iblockstate = blockstatelist.a(this.a);
-
-            if (iblockstate == null) {
-                consumer.accept(this.a);
-            }
-
+            return new CriterionTriggerProperties(this.matchers);
         }
     }
 }

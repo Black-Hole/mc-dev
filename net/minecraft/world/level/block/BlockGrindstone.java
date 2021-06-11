@@ -27,123 +27,123 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockGrindstone extends BlockAttachable {
 
-    public static final VoxelShape a = Block.a(2.0D, 0.0D, 6.0D, 4.0D, 7.0D, 10.0D);
-    public static final VoxelShape b = Block.a(12.0D, 0.0D, 6.0D, 14.0D, 7.0D, 10.0D);
-    public static final VoxelShape c = Block.a(2.0D, 7.0D, 5.0D, 4.0D, 13.0D, 11.0D);
-    public static final VoxelShape d = Block.a(12.0D, 7.0D, 5.0D, 14.0D, 13.0D, 11.0D);
-    public static final VoxelShape e = VoxelShapes.a(BlockGrindstone.a, BlockGrindstone.c);
-    public static final VoxelShape f = VoxelShapes.a(BlockGrindstone.b, BlockGrindstone.d);
-    public static final VoxelShape g = VoxelShapes.a(BlockGrindstone.e, BlockGrindstone.f);
-    public static final VoxelShape h = VoxelShapes.a(BlockGrindstone.g, Block.a(4.0D, 4.0D, 2.0D, 12.0D, 16.0D, 14.0D));
-    public static final VoxelShape i = Block.a(6.0D, 0.0D, 2.0D, 10.0D, 7.0D, 4.0D);
-    public static final VoxelShape j = Block.a(6.0D, 0.0D, 12.0D, 10.0D, 7.0D, 14.0D);
-    public static final VoxelShape k = Block.a(5.0D, 7.0D, 2.0D, 11.0D, 13.0D, 4.0D);
-    public static final VoxelShape o = Block.a(5.0D, 7.0D, 12.0D, 11.0D, 13.0D, 14.0D);
-    public static final VoxelShape p = VoxelShapes.a(BlockGrindstone.i, BlockGrindstone.k);
-    public static final VoxelShape q = VoxelShapes.a(BlockGrindstone.j, BlockGrindstone.o);
-    public static final VoxelShape r = VoxelShapes.a(BlockGrindstone.p, BlockGrindstone.q);
-    public static final VoxelShape s = VoxelShapes.a(BlockGrindstone.r, Block.a(2.0D, 4.0D, 4.0D, 14.0D, 16.0D, 12.0D));
-    public static final VoxelShape t = Block.a(2.0D, 6.0D, 0.0D, 4.0D, 10.0D, 7.0D);
-    public static final VoxelShape v = Block.a(12.0D, 6.0D, 0.0D, 14.0D, 10.0D, 7.0D);
-    public static final VoxelShape w = Block.a(2.0D, 5.0D, 7.0D, 4.0D, 11.0D, 13.0D);
-    public static final VoxelShape x = Block.a(12.0D, 5.0D, 7.0D, 14.0D, 11.0D, 13.0D);
-    public static final VoxelShape y = VoxelShapes.a(BlockGrindstone.t, BlockGrindstone.w);
-    public static final VoxelShape z = VoxelShapes.a(BlockGrindstone.v, BlockGrindstone.x);
-    public static final VoxelShape A = VoxelShapes.a(BlockGrindstone.y, BlockGrindstone.z);
-    public static final VoxelShape B = VoxelShapes.a(BlockGrindstone.A, Block.a(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 16.0D));
-    public static final VoxelShape C = Block.a(2.0D, 6.0D, 7.0D, 4.0D, 10.0D, 16.0D);
-    public static final VoxelShape D = Block.a(12.0D, 6.0D, 7.0D, 14.0D, 10.0D, 16.0D);
-    public static final VoxelShape E = Block.a(2.0D, 5.0D, 3.0D, 4.0D, 11.0D, 9.0D);
-    public static final VoxelShape F = Block.a(12.0D, 5.0D, 3.0D, 14.0D, 11.0D, 9.0D);
-    public static final VoxelShape G = VoxelShapes.a(BlockGrindstone.C, BlockGrindstone.E);
-    public static final VoxelShape H = VoxelShapes.a(BlockGrindstone.D, BlockGrindstone.F);
-    public static final VoxelShape I = VoxelShapes.a(BlockGrindstone.G, BlockGrindstone.H);
-    public static final VoxelShape J = VoxelShapes.a(BlockGrindstone.I, Block.a(4.0D, 2.0D, 0.0D, 12.0D, 14.0D, 12.0D));
-    public static final VoxelShape K = Block.a(7.0D, 6.0D, 2.0D, 16.0D, 10.0D, 4.0D);
-    public static final VoxelShape L = Block.a(7.0D, 6.0D, 12.0D, 16.0D, 10.0D, 14.0D);
-    public static final VoxelShape M = Block.a(3.0D, 5.0D, 2.0D, 9.0D, 11.0D, 4.0D);
-    public static final VoxelShape N = Block.a(3.0D, 5.0D, 12.0D, 9.0D, 11.0D, 14.0D);
-    public static final VoxelShape O = VoxelShapes.a(BlockGrindstone.K, BlockGrindstone.M);
-    public static final VoxelShape P = VoxelShapes.a(BlockGrindstone.L, BlockGrindstone.N);
-    public static final VoxelShape Q = VoxelShapes.a(BlockGrindstone.O, BlockGrindstone.P);
-    public static final VoxelShape R = VoxelShapes.a(BlockGrindstone.Q, Block.a(0.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12.0D));
-    public static final VoxelShape S = Block.a(0.0D, 6.0D, 2.0D, 9.0D, 10.0D, 4.0D);
-    public static final VoxelShape T = Block.a(0.0D, 6.0D, 12.0D, 9.0D, 10.0D, 14.0D);
-    public static final VoxelShape U = Block.a(7.0D, 5.0D, 2.0D, 13.0D, 11.0D, 4.0D);
-    public static final VoxelShape V = Block.a(7.0D, 5.0D, 12.0D, 13.0D, 11.0D, 14.0D);
-    public static final VoxelShape W = VoxelShapes.a(BlockGrindstone.S, BlockGrindstone.U);
-    public static final VoxelShape X = VoxelShapes.a(BlockGrindstone.T, BlockGrindstone.V);
-    public static final VoxelShape Y = VoxelShapes.a(BlockGrindstone.W, BlockGrindstone.X);
-    public static final VoxelShape Z = VoxelShapes.a(BlockGrindstone.Y, Block.a(4.0D, 2.0D, 4.0D, 16.0D, 14.0D, 12.0D));
-    public static final VoxelShape aa = Block.a(2.0D, 9.0D, 6.0D, 4.0D, 16.0D, 10.0D);
-    public static final VoxelShape ab = Block.a(12.0D, 9.0D, 6.0D, 14.0D, 16.0D, 10.0D);
-    public static final VoxelShape ac = Block.a(2.0D, 3.0D, 5.0D, 4.0D, 9.0D, 11.0D);
-    public static final VoxelShape ad = Block.a(12.0D, 3.0D, 5.0D, 14.0D, 9.0D, 11.0D);
-    public static final VoxelShape ae = VoxelShapes.a(BlockGrindstone.aa, BlockGrindstone.ac);
-    public static final VoxelShape af = VoxelShapes.a(BlockGrindstone.ab, BlockGrindstone.ad);
-    public static final VoxelShape ag = VoxelShapes.a(BlockGrindstone.ae, BlockGrindstone.af);
-    public static final VoxelShape ah = VoxelShapes.a(BlockGrindstone.ag, Block.a(4.0D, 0.0D, 2.0D, 12.0D, 12.0D, 14.0D));
-    public static final VoxelShape ai = Block.a(6.0D, 9.0D, 2.0D, 10.0D, 16.0D, 4.0D);
-    public static final VoxelShape aj = Block.a(6.0D, 9.0D, 12.0D, 10.0D, 16.0D, 14.0D);
-    public static final VoxelShape ak = Block.a(5.0D, 3.0D, 2.0D, 11.0D, 9.0D, 4.0D);
-    public static final VoxelShape al = Block.a(5.0D, 3.0D, 12.0D, 11.0D, 9.0D, 14.0D);
-    public static final VoxelShape am = VoxelShapes.a(BlockGrindstone.ai, BlockGrindstone.ak);
-    public static final VoxelShape an = VoxelShapes.a(BlockGrindstone.aj, BlockGrindstone.al);
-    public static final VoxelShape ao = VoxelShapes.a(BlockGrindstone.am, BlockGrindstone.an);
-    public static final VoxelShape ap = VoxelShapes.a(BlockGrindstone.ao, Block.a(2.0D, 0.0D, 4.0D, 14.0D, 12.0D, 12.0D));
-    private static final IChatBaseComponent aD = new ChatMessage("container.grindstone_title");
+    public static final VoxelShape FLOOR_NORTH_SOUTH_LEFT_POST = Block.a(2.0D, 0.0D, 6.0D, 4.0D, 7.0D, 10.0D);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_RIGHT_POST = Block.a(12.0D, 0.0D, 6.0D, 14.0D, 7.0D, 10.0D);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_LEFT_PIVOT = Block.a(2.0D, 7.0D, 5.0D, 4.0D, 13.0D, 11.0D);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_RIGHT_PIVOT = Block.a(12.0D, 7.0D, 5.0D, 14.0D, 13.0D, 11.0D);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_LEFT_LEG = VoxelShapes.a(BlockGrindstone.FLOOR_NORTH_SOUTH_LEFT_POST, BlockGrindstone.FLOOR_NORTH_SOUTH_LEFT_PIVOT);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.FLOOR_NORTH_SOUTH_RIGHT_POST, BlockGrindstone.FLOOR_NORTH_SOUTH_RIGHT_PIVOT);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_ALL_LEGS = VoxelShapes.a(BlockGrindstone.FLOOR_NORTH_SOUTH_LEFT_LEG, BlockGrindstone.FLOOR_NORTH_SOUTH_RIGHT_LEG);
+    public static final VoxelShape FLOOR_NORTH_SOUTH_GRINDSTONE = VoxelShapes.a(BlockGrindstone.FLOOR_NORTH_SOUTH_ALL_LEGS, Block.a(4.0D, 4.0D, 2.0D, 12.0D, 16.0D, 14.0D));
+    public static final VoxelShape FLOOR_EAST_WEST_LEFT_POST = Block.a(6.0D, 0.0D, 2.0D, 10.0D, 7.0D, 4.0D);
+    public static final VoxelShape FLOOR_EAST_WEST_RIGHT_POST = Block.a(6.0D, 0.0D, 12.0D, 10.0D, 7.0D, 14.0D);
+    public static final VoxelShape FLOOR_EAST_WEST_LEFT_PIVOT = Block.a(5.0D, 7.0D, 2.0D, 11.0D, 13.0D, 4.0D);
+    public static final VoxelShape FLOOR_EAST_WEST_RIGHT_PIVOT = Block.a(5.0D, 7.0D, 12.0D, 11.0D, 13.0D, 14.0D);
+    public static final VoxelShape FLOOR_EAST_WEST_LEFT_LEG = VoxelShapes.a(BlockGrindstone.FLOOR_EAST_WEST_LEFT_POST, BlockGrindstone.FLOOR_EAST_WEST_LEFT_PIVOT);
+    public static final VoxelShape FLOOR_EAST_WEST_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.FLOOR_EAST_WEST_RIGHT_POST, BlockGrindstone.FLOOR_EAST_WEST_RIGHT_PIVOT);
+    public static final VoxelShape FLOOR_EAST_WEST_ALL_LEGS = VoxelShapes.a(BlockGrindstone.FLOOR_EAST_WEST_LEFT_LEG, BlockGrindstone.FLOOR_EAST_WEST_RIGHT_LEG);
+    public static final VoxelShape FLOOR_EAST_WEST_GRINDSTONE = VoxelShapes.a(BlockGrindstone.FLOOR_EAST_WEST_ALL_LEGS, Block.a(2.0D, 4.0D, 4.0D, 14.0D, 16.0D, 12.0D));
+    public static final VoxelShape WALL_SOUTH_LEFT_POST = Block.a(2.0D, 6.0D, 0.0D, 4.0D, 10.0D, 7.0D);
+    public static final VoxelShape WALL_SOUTH_RIGHT_POST = Block.a(12.0D, 6.0D, 0.0D, 14.0D, 10.0D, 7.0D);
+    public static final VoxelShape WALL_SOUTH_LEFT_PIVOT = Block.a(2.0D, 5.0D, 7.0D, 4.0D, 11.0D, 13.0D);
+    public static final VoxelShape WALL_SOUTH_RIGHT_PIVOT = Block.a(12.0D, 5.0D, 7.0D, 14.0D, 11.0D, 13.0D);
+    public static final VoxelShape WALL_SOUTH_LEFT_LEG = VoxelShapes.a(BlockGrindstone.WALL_SOUTH_LEFT_POST, BlockGrindstone.WALL_SOUTH_LEFT_PIVOT);
+    public static final VoxelShape WALL_SOUTH_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.WALL_SOUTH_RIGHT_POST, BlockGrindstone.WALL_SOUTH_RIGHT_PIVOT);
+    public static final VoxelShape WALL_SOUTH_ALL_LEGS = VoxelShapes.a(BlockGrindstone.WALL_SOUTH_LEFT_LEG, BlockGrindstone.WALL_SOUTH_RIGHT_LEG);
+    public static final VoxelShape WALL_SOUTH_GRINDSTONE = VoxelShapes.a(BlockGrindstone.WALL_SOUTH_ALL_LEGS, Block.a(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 16.0D));
+    public static final VoxelShape WALL_NORTH_LEFT_POST = Block.a(2.0D, 6.0D, 7.0D, 4.0D, 10.0D, 16.0D);
+    public static final VoxelShape WALL_NORTH_RIGHT_POST = Block.a(12.0D, 6.0D, 7.0D, 14.0D, 10.0D, 16.0D);
+    public static final VoxelShape WALL_NORTH_LEFT_PIVOT = Block.a(2.0D, 5.0D, 3.0D, 4.0D, 11.0D, 9.0D);
+    public static final VoxelShape WALL_NORTH_RIGHT_PIVOT = Block.a(12.0D, 5.0D, 3.0D, 14.0D, 11.0D, 9.0D);
+    public static final VoxelShape WALL_NORTH_LEFT_LEG = VoxelShapes.a(BlockGrindstone.WALL_NORTH_LEFT_POST, BlockGrindstone.WALL_NORTH_LEFT_PIVOT);
+    public static final VoxelShape WALL_NORTH_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.WALL_NORTH_RIGHT_POST, BlockGrindstone.WALL_NORTH_RIGHT_PIVOT);
+    public static final VoxelShape WALL_NORTH_ALL_LEGS = VoxelShapes.a(BlockGrindstone.WALL_NORTH_LEFT_LEG, BlockGrindstone.WALL_NORTH_RIGHT_LEG);
+    public static final VoxelShape WALL_NORTH_GRINDSTONE = VoxelShapes.a(BlockGrindstone.WALL_NORTH_ALL_LEGS, Block.a(4.0D, 2.0D, 0.0D, 12.0D, 14.0D, 12.0D));
+    public static final VoxelShape WALL_WEST_LEFT_POST = Block.a(7.0D, 6.0D, 2.0D, 16.0D, 10.0D, 4.0D);
+    public static final VoxelShape WALL_WEST_RIGHT_POST = Block.a(7.0D, 6.0D, 12.0D, 16.0D, 10.0D, 14.0D);
+    public static final VoxelShape WALL_WEST_LEFT_PIVOT = Block.a(3.0D, 5.0D, 2.0D, 9.0D, 11.0D, 4.0D);
+    public static final VoxelShape WALL_WEST_RIGHT_PIVOT = Block.a(3.0D, 5.0D, 12.0D, 9.0D, 11.0D, 14.0D);
+    public static final VoxelShape WALL_WEST_LEFT_LEG = VoxelShapes.a(BlockGrindstone.WALL_WEST_LEFT_POST, BlockGrindstone.WALL_WEST_LEFT_PIVOT);
+    public static final VoxelShape WALL_WEST_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.WALL_WEST_RIGHT_POST, BlockGrindstone.WALL_WEST_RIGHT_PIVOT);
+    public static final VoxelShape WALL_WEST_ALL_LEGS = VoxelShapes.a(BlockGrindstone.WALL_WEST_LEFT_LEG, BlockGrindstone.WALL_WEST_RIGHT_LEG);
+    public static final VoxelShape WALL_WEST_GRINDSTONE = VoxelShapes.a(BlockGrindstone.WALL_WEST_ALL_LEGS, Block.a(0.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12.0D));
+    public static final VoxelShape WALL_EAST_LEFT_POST = Block.a(0.0D, 6.0D, 2.0D, 9.0D, 10.0D, 4.0D);
+    public static final VoxelShape WALL_EAST_RIGHT_POST = Block.a(0.0D, 6.0D, 12.0D, 9.0D, 10.0D, 14.0D);
+    public static final VoxelShape WALL_EAST_LEFT_PIVOT = Block.a(7.0D, 5.0D, 2.0D, 13.0D, 11.0D, 4.0D);
+    public static final VoxelShape WALL_EAST_RIGHT_PIVOT = Block.a(7.0D, 5.0D, 12.0D, 13.0D, 11.0D, 14.0D);
+    public static final VoxelShape WALL_EAST_LEFT_LEG = VoxelShapes.a(BlockGrindstone.WALL_EAST_LEFT_POST, BlockGrindstone.WALL_EAST_LEFT_PIVOT);
+    public static final VoxelShape WALL_EAST_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.WALL_EAST_RIGHT_POST, BlockGrindstone.WALL_EAST_RIGHT_PIVOT);
+    public static final VoxelShape WALL_EAST_ALL_LEGS = VoxelShapes.a(BlockGrindstone.WALL_EAST_LEFT_LEG, BlockGrindstone.WALL_EAST_RIGHT_LEG);
+    public static final VoxelShape WALL_EAST_GRINDSTONE = VoxelShapes.a(BlockGrindstone.WALL_EAST_ALL_LEGS, Block.a(4.0D, 2.0D, 4.0D, 16.0D, 14.0D, 12.0D));
+    public static final VoxelShape CEILING_NORTH_SOUTH_LEFT_POST = Block.a(2.0D, 9.0D, 6.0D, 4.0D, 16.0D, 10.0D);
+    public static final VoxelShape CEILING_NORTH_SOUTH_RIGHT_POST = Block.a(12.0D, 9.0D, 6.0D, 14.0D, 16.0D, 10.0D);
+    public static final VoxelShape CEILING_NORTH_SOUTH_LEFT_PIVOT = Block.a(2.0D, 3.0D, 5.0D, 4.0D, 9.0D, 11.0D);
+    public static final VoxelShape CEILING_NORTH_SOUTH_RIGHT_PIVOT = Block.a(12.0D, 3.0D, 5.0D, 14.0D, 9.0D, 11.0D);
+    public static final VoxelShape CEILING_NORTH_SOUTH_LEFT_LEG = VoxelShapes.a(BlockGrindstone.CEILING_NORTH_SOUTH_LEFT_POST, BlockGrindstone.CEILING_NORTH_SOUTH_LEFT_PIVOT);
+    public static final VoxelShape CEILING_NORTH_SOUTH_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.CEILING_NORTH_SOUTH_RIGHT_POST, BlockGrindstone.CEILING_NORTH_SOUTH_RIGHT_PIVOT);
+    public static final VoxelShape CEILING_NORTH_SOUTH_ALL_LEGS = VoxelShapes.a(BlockGrindstone.CEILING_NORTH_SOUTH_LEFT_LEG, BlockGrindstone.CEILING_NORTH_SOUTH_RIGHT_LEG);
+    public static final VoxelShape CEILING_NORTH_SOUTH_GRINDSTONE = VoxelShapes.a(BlockGrindstone.CEILING_NORTH_SOUTH_ALL_LEGS, Block.a(4.0D, 0.0D, 2.0D, 12.0D, 12.0D, 14.0D));
+    public static final VoxelShape CEILING_EAST_WEST_LEFT_POST = Block.a(6.0D, 9.0D, 2.0D, 10.0D, 16.0D, 4.0D);
+    public static final VoxelShape CEILING_EAST_WEST_RIGHT_POST = Block.a(6.0D, 9.0D, 12.0D, 10.0D, 16.0D, 14.0D);
+    public static final VoxelShape CEILING_EAST_WEST_LEFT_PIVOT = Block.a(5.0D, 3.0D, 2.0D, 11.0D, 9.0D, 4.0D);
+    public static final VoxelShape CEILING_EAST_WEST_RIGHT_PIVOT = Block.a(5.0D, 3.0D, 12.0D, 11.0D, 9.0D, 14.0D);
+    public static final VoxelShape CEILING_EAST_WEST_LEFT_LEG = VoxelShapes.a(BlockGrindstone.CEILING_EAST_WEST_LEFT_POST, BlockGrindstone.CEILING_EAST_WEST_LEFT_PIVOT);
+    public static final VoxelShape CEILING_EAST_WEST_RIGHT_LEG = VoxelShapes.a(BlockGrindstone.CEILING_EAST_WEST_RIGHT_POST, BlockGrindstone.CEILING_EAST_WEST_RIGHT_PIVOT);
+    public static final VoxelShape CEILING_EAST_WEST_ALL_LEGS = VoxelShapes.a(BlockGrindstone.CEILING_EAST_WEST_LEFT_LEG, BlockGrindstone.CEILING_EAST_WEST_RIGHT_LEG);
+    public static final VoxelShape CEILING_EAST_WEST_GRINDSTONE = VoxelShapes.a(BlockGrindstone.CEILING_EAST_WEST_ALL_LEGS, Block.a(2.0D, 0.0D, 4.0D, 14.0D, 12.0D, 12.0D));
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.grindstone_title");
 
     protected BlockGrindstone(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockGrindstone.FACING, EnumDirection.NORTH)).set(BlockGrindstone.FACE, BlockPropertyAttachPosition.WALL));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockGrindstone.FACING, EnumDirection.NORTH)).set(BlockGrindstone.FACE, BlockPropertyAttachPosition.WALL));
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
-    private VoxelShape l(IBlockData iblockdata) {
+    private VoxelShape n(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockGrindstone.FACING);
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockGrindstone.FACE)) {
             case FLOOR:
                 if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
-                    return BlockGrindstone.s;
+                    return BlockGrindstone.FLOOR_EAST_WEST_GRINDSTONE;
                 }
 
-                return BlockGrindstone.h;
+                return BlockGrindstone.FLOOR_NORTH_SOUTH_GRINDSTONE;
             case WALL:
                 if (enumdirection == EnumDirection.NORTH) {
-                    return BlockGrindstone.J;
+                    return BlockGrindstone.WALL_NORTH_GRINDSTONE;
                 } else if (enumdirection == EnumDirection.SOUTH) {
-                    return BlockGrindstone.B;
+                    return BlockGrindstone.WALL_SOUTH_GRINDSTONE;
                 } else {
                     if (enumdirection == EnumDirection.EAST) {
-                        return BlockGrindstone.Z;
+                        return BlockGrindstone.WALL_EAST_GRINDSTONE;
                     }
 
-                    return BlockGrindstone.R;
+                    return BlockGrindstone.WALL_WEST_GRINDSTONE;
                 }
             case CEILING:
                 if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
-                    return BlockGrindstone.ap;
+                    return BlockGrindstone.CEILING_EAST_WEST_GRINDSTONE;
                 }
 
-                return BlockGrindstone.ah;
+                return BlockGrindstone.CEILING_NORTH_SOUTH_GRINDSTONE;
             default:
-                return BlockGrindstone.s;
+                return BlockGrindstone.FLOOR_EAST_WEST_GRINDSTONE;
         }
     }
 
     @Override
     public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.l(iblockdata);
+        return this.n(iblockdata);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.l(iblockdata);
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.n(iblockdata);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class BlockGrindstone extends BlockAttachable {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerGrindstone(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockGrindstone.aD);
+        }, BlockGrindstone.CONTAINER_TITLE);
     }
 
     @Override

@@ -2,19 +2,19 @@ package net.minecraft.world.entity.schedule;
 
 public class ActivityFrame {
 
-    private final int a;
-    private final float b;
+    private final int timeStamp;
+    private final float value;
 
     public ActivityFrame(int i, float f) {
-        this.a = i;
-        this.b = f;
+        this.timeStamp = i;
+        this.value = f;
     }
 
     public int a() {
-        return this.a;
+        return this.timeStamp;
     }
 
     public float b() {
-        return this.b;
+        return this.value;
     }
 }

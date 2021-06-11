@@ -16,29 +16,29 @@ import net.minecraft.world.phys.Vec3D;
 
 public class LootItemConditionEntityProperty implements LootItemCondition {
 
-    private final CriterionConditionEntity a;
-    private final LootTableInfo.EntityTarget b;
+    final CriterionConditionEntity predicate;
+    final LootTableInfo.EntityTarget entityTarget;
 
-    private LootItemConditionEntityProperty(CriterionConditionEntity criterionconditionentity, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        this.a = criterionconditionentity;
-        this.b = loottableinfo_entitytarget;
+    LootItemConditionEntityProperty(CriterionConditionEntity criterionconditionentity, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        this.predicate = criterionconditionentity;
+        this.entityTarget = loottableinfo_entitytarget;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.e;
+    public LootItemConditionType a() {
+        return LootItemConditions.ENTITY_PROPERTIES;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(LootContextParameters.ORIGIN, this.b.a());
+    public Set<LootContextParameter<?>> b() {
+        return ImmutableSet.of(LootContextParameters.ORIGIN, this.entityTarget.a());
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
+        Entity entity = (Entity) loottableinfo.getContextParameter(this.entityTarget.a());
         Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-        return this.a.a(loottableinfo.getWorld(), vec3d, entity);
+        return this.predicate.a(loottableinfo.getWorld(), vec3d, entity);
     }
 
     public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
@@ -62,8 +62,8 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionEntityProperty lootitemconditionentityproperty, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("predicate", lootitemconditionentityproperty.a.a());
-            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityproperty.b));
+            jsonobject.add("predicate", lootitemconditionentityproperty.predicate.a());
+            jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityproperty.entityTarget));
         }
 
         @Override

@@ -2,9 +2,11 @@ package net.minecraft.world.level.block;
 
 import java.util.Optional;
 import java.util.Random;
+import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
@@ -21,34 +23,39 @@ public abstract class BlockGrowingStem extends BlockGrowingAbstract implements I
         super(blockbase_info, enumdirection, voxelshape, flag);
     }
 
+    protected IBlockData a(IBlockData iblockdata, IBlockData iblockdata1) {
+        return iblockdata1;
+    }
+
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (enumdirection == this.a.opposite() && !iblockdata.canPlace(generatoraccess, blockposition)) {
+        if (enumdirection == this.growthDirection.opposite() && !iblockdata.canPlace(generatoraccess, blockposition)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
-        BlockGrowingTop blockgrowingtop = this.c();
+        BlockGrowingTop blockgrowingtop = this.d();
 
-        if (enumdirection == this.a) {
-            Block block = iblockdata1.getBlock();
-
-            if (block != this && block != blockgrowingtop) {
-                return blockgrowingtop.a(generatoraccess);
+        if (enumdirection == this.growthDirection && !iblockdata1.a((Block) this) && !iblockdata1.a((Block) blockgrowingtop)) {
+            return this.a(iblockdata, blockgrowingtop.a(generatoraccess));
+        } else {
+            if (this.scheduleFluidTicks) {
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
-        }
 
-        if (this.b) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
+            return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         }
+    }
 
-        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(this.d());
     }
 
     @Override
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        Optional<BlockPosition> optional = this.b(iblockaccess, blockposition, iblockdata);
+        Optional<BlockPosition> optional = this.a(iblockaccess, blockposition, iblockdata.getBlock());
 
-        return optional.isPresent() && this.c().h(iblockaccess.getType(((BlockPosition) optional.get()).shift(this.a)));
+        return optional.isPresent() && this.d().g(iblockaccess.getType(((BlockPosition) optional.get()).shift(this.growthDirection)));
     }
 
     @Override
@@ -58,7 +65,7 @@ public abstract class BlockGrowingStem extends BlockGrowingAbstract implements I
 
     @Override
     public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        Optional<BlockPosition> optional = this.b((IBlockAccess) worldserver, blockposition, iblockdata);
+        Optional<BlockPosition> optional = this.a((IBlockAccess) worldserver, blockposition, iblockdata.getBlock());
 
         if (optional.isPresent()) {
             IBlockData iblockdata1 = worldserver.getType((BlockPosition) optional.get());
@@ -68,28 +75,19 @@ public abstract class BlockGrowingStem extends BlockGrowingAbstract implements I
 
     }
 
-    private Optional<BlockPosition> b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        BlockPosition blockposition1 = blockposition;
-
-        Block block;
-
-        do {
-            blockposition1 = blockposition1.shift(this.a);
-            block = iblockaccess.getType(blockposition1).getBlock();
-        } while (block == iblockdata.getBlock());
-
-        return block == this.c() ? Optional.of(blockposition1) : Optional.empty();
+    private Optional<BlockPosition> a(IBlockAccess iblockaccess, BlockPosition blockposition, Block block) {
+        return BlockUtil.a(iblockaccess, blockposition, block, this.growthDirection, this.d());
     }
 
     @Override
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         boolean flag = super.a(iblockdata, blockactioncontext);
 
-        return flag && blockactioncontext.getItemStack().getItem() == this.c().getItem() ? false : flag;
+        return flag && blockactioncontext.getItemStack().a(this.d().getItem()) ? false : flag;
     }
 
     @Override
-    protected Block d() {
+    protected Block c() {
         return this;
     }
 }

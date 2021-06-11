@@ -3,6 +3,7 @@ package net.minecraft.world.level.block;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +21,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 
 public class BlockTallPlant extends BlockPlant {
 
-    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.aa;
+    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
     public BlockTallPlant(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER));
     }
 
     @Override
@@ -38,8 +39,9 @@ public class BlockTallPlant extends BlockPlant {
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         BlockPosition blockposition = blockactioncontext.getClickPosition();
+        World world = blockactioncontext.getWorld();
 
-        return blockposition.getY() < 255 && blockactioncontext.getWorld().getType(blockposition.up()).a(blockactioncontext) ? super.getPlacedState(blockactioncontext) : null;
+        return blockposition.getY() < world.getMaxBuildHeight() - 1 && world.getType(blockposition.up()).a(blockactioncontext) ? super.getPlacedState(blockactioncontext) : null;
     }
 
     @Override
@@ -58,9 +60,9 @@ public class BlockTallPlant extends BlockPlant {
         }
     }
 
-    public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
-        generatoraccess.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER), i);
-        generatoraccess.setTypeAndData(blockposition.up(), (IBlockData) this.getBlockData().set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER), i);
+    public void a(GeneratorAccess generatoraccess, IBlockData iblockdata, BlockPosition blockposition, int i) {
+        generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER), i);
+        generatoraccess.setTypeAndData(blockposition.up(), (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER), i);
     }
 
     @Override
@@ -88,8 +90,10 @@ public class BlockTallPlant extends BlockPlant {
             BlockPosition blockposition1 = blockposition.down();
             IBlockData iblockdata1 = world.getType(blockposition1);
 
-            if (iblockdata1.getBlock() == iblockdata.getBlock() && iblockdata1.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.LOWER) {
-                world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 35);
+            if (iblockdata1.a(iblockdata.getBlock()) && iblockdata1.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.LOWER) {
+                IBlockData iblockdata2 = iblockdata1.b(BlockProperties.WATERLOGGED) && (Boolean) iblockdata1.get(BlockProperties.WATERLOGGED) ? Blocks.WATER.getBlockData() : Blocks.AIR.getBlockData();
+
+                world.setTypeAndData(blockposition1, iblockdata2, 35);
                 world.a(entityhuman, 2001, blockposition1, Block.getCombinedId(iblockdata1));
             }
         }
@@ -102,7 +106,12 @@ public class BlockTallPlant extends BlockPlant {
     }
 
     @Override
-    public BlockBase.EnumRandomOffset ah_() {
+    public BlockBase.EnumRandomOffset S_() {
         return BlockBase.EnumRandomOffset.XZ;
+    }
+
+    @Override
+    public long a(IBlockData iblockdata, BlockPosition blockposition) {
+        return MathHelper.c(blockposition.getX(), blockposition.down(iblockdata.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? 0 : 1).getY(), blockposition.getZ());
     }
 }

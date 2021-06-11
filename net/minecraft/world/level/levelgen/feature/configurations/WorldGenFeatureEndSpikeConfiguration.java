@@ -10,40 +10,40 @@ import net.minecraft.world.level.levelgen.feature.WorldGenEnder;
 
 public class WorldGenFeatureEndSpikeConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureEndSpikeConfiguration> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenFeatureEndSpikeConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.BOOL.fieldOf("crystal_invulnerable").orElse(false).forGetter((worldgenfeatureendspikeconfiguration) -> {
-            return worldgenfeatureendspikeconfiguration.b;
-        }), WorldGenEnder.Spike.a.listOf().fieldOf("spikes").forGetter((worldgenfeatureendspikeconfiguration) -> {
-            return worldgenfeatureendspikeconfiguration.c;
-        }), BlockPosition.a.optionalFieldOf("crystal_beam_target").forGetter((worldgenfeatureendspikeconfiguration) -> {
-            return Optional.ofNullable(worldgenfeatureendspikeconfiguration.d);
+            return worldgenfeatureendspikeconfiguration.crystalInvulnerable;
+        }), WorldGenEnder.Spike.CODEC.listOf().fieldOf("spikes").forGetter((worldgenfeatureendspikeconfiguration) -> {
+            return worldgenfeatureendspikeconfiguration.spikes;
+        }), BlockPosition.CODEC.optionalFieldOf("crystal_beam_target").forGetter((worldgenfeatureendspikeconfiguration) -> {
+            return Optional.ofNullable(worldgenfeatureendspikeconfiguration.crystalBeamTarget);
         })).apply(instance, WorldGenFeatureEndSpikeConfiguration::new);
     });
-    private final boolean b;
-    private final List<WorldGenEnder.Spike> c;
+    private final boolean crystalInvulnerable;
+    private final List<WorldGenEnder.Spike> spikes;
     @Nullable
-    private final BlockPosition d;
+    private final BlockPosition crystalBeamTarget;
 
     public WorldGenFeatureEndSpikeConfiguration(boolean flag, List<WorldGenEnder.Spike> list, @Nullable BlockPosition blockposition) {
         this(flag, list, Optional.ofNullable(blockposition));
     }
 
     private WorldGenFeatureEndSpikeConfiguration(boolean flag, List<WorldGenEnder.Spike> list, Optional<BlockPosition> optional) {
-        this.b = flag;
-        this.c = list;
-        this.d = (BlockPosition) optional.orElse((Object) null);
+        this.crystalInvulnerable = flag;
+        this.spikes = list;
+        this.crystalBeamTarget = (BlockPosition) optional.orElse((Object) null);
     }
 
     public boolean b() {
-        return this.b;
+        return this.crystalInvulnerable;
     }
 
     public List<WorldGenEnder.Spike> c() {
-        return this.c;
+        return this.spikes;
     }
 
     @Nullable
     public BlockPosition d() {
-        return this.d;
+        return this.crystalBeamTarget;
     }
 }

@@ -1,34 +1,36 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
 
-    private BlockPosition a;
-    private String[] b;
+    private static final int MAX_STRING_LENGTH = 384;
+    private final BlockPosition pos;
+    private final String[] lines;
 
-    public PacketPlayInUpdateSign() {}
+    public PacketPlayInUpdateSign(BlockPosition blockposition, String s, String s1, String s2, String s3) {
+        this.pos = blockposition;
+        this.lines = new String[]{s, s1, s2, s3};
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = new String[4];
+    public PacketPlayInUpdateSign(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.lines = new String[4];
 
         for (int i = 0; i < 4; ++i) {
-            this.b[i] = packetdataserializer.e(384);
+            this.lines[i] = packetdataserializer.e(384);
         }
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
 
         for (int i = 0; i < 4; ++i) {
-            packetdataserializer.a(this.b[i]);
+            packetdataserializer.a(this.lines[i]);
         }
 
     }
@@ -38,10 +40,10 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public String[] c() {
-        return this.b;
+        return this.lines;
     }
 }

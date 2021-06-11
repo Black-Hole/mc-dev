@@ -1,35 +1,42 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.World;
 
 public class PacketPlayOutEntityStatus implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private byte b;
-
-    public PacketPlayOutEntityStatus() {}
+    private final int entityId;
+    private final byte eventId;
 
     public PacketPlayOutEntityStatus(Entity entity, byte b0) {
-        this.a = entity.getId();
-        this.b = b0;
+        this.entityId = entity.getId();
+        this.eventId = b0;
+    }
+
+    public PacketPlayOutEntityStatus(PacketDataSerializer packetdataserializer) {
+        this.entityId = packetdataserializer.readInt();
+        this.eventId = packetdataserializer.readByte();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.readByte();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a);
-        packetdataserializer.writeByte(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeInt(this.entityId);
+        packetdataserializer.writeByte(this.eventId);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    @Nullable
+    public Entity a(World world) {
+        return world.getEntity(this.entityId);
+    }
+
+    public byte b() {
+        return this.eventId;
     }
 }

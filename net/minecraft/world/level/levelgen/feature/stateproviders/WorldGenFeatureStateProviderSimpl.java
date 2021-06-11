@@ -7,22 +7,22 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenFeatureStateProviderSimpl extends WorldGenFeatureStateProvider {
 
-    public static final Codec<WorldGenFeatureStateProviderSimpl> b = IBlockData.b.fieldOf("state").xmap(WorldGenFeatureStateProviderSimpl::new, (worldgenfeaturestateprovidersimpl) -> {
-        return worldgenfeaturestateprovidersimpl.c;
+    public static final Codec<WorldGenFeatureStateProviderSimpl> CODEC = IBlockData.CODEC.fieldOf("state").xmap(WorldGenFeatureStateProviderSimpl::new, (worldgenfeaturestateprovidersimpl) -> {
+        return worldgenfeaturestateprovidersimpl.state;
     }).codec();
-    private final IBlockData c;
+    private final IBlockData state;
 
     public WorldGenFeatureStateProviderSimpl(IBlockData iblockdata) {
-        this.c = iblockdata;
+        this.state = iblockdata;
     }
 
     @Override
     protected WorldGenFeatureStateProviders<?> a() {
-        return WorldGenFeatureStateProviders.a;
+        return WorldGenFeatureStateProviders.SIMPLE_STATE_PROVIDER;
     }
 
     @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
-        return this.c;
+        return this.state;
     }
 }

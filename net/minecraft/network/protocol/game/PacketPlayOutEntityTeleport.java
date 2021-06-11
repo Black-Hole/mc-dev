@@ -1,55 +1,79 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
 
 public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private double b;
-    private double c;
-    private double d;
-    private byte e;
-    private byte f;
-    private boolean g;
-
-    public PacketPlayOutEntityTeleport() {}
+    private final int id;
+    private final double x;
+    private final double y;
+    private final double z;
+    private final byte yRot;
+    private final byte xRot;
+    private final boolean onGround;
 
     public PacketPlayOutEntityTeleport(Entity entity) {
-        this.a = entity.getId();
-        this.b = entity.locX();
-        this.c = entity.locY();
-        this.d = entity.locZ();
-        this.e = (byte) ((int) (entity.yaw * 256.0F / 360.0F));
-        this.f = (byte) ((int) (entity.pitch * 256.0F / 360.0F));
-        this.g = entity.isOnGround();
+        this.id = entity.getId();
+        this.x = entity.locX();
+        this.y = entity.locY();
+        this.z = entity.locZ();
+        this.yRot = (byte) ((int) (entity.getYRot() * 256.0F / 360.0F));
+        this.xRot = (byte) ((int) (entity.getXRot() * 256.0F / 360.0F));
+        this.onGround = entity.isOnGround();
+    }
+
+    public PacketPlayOutEntityTeleport(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.x = packetdataserializer.readDouble();
+        this.y = packetdataserializer.readDouble();
+        this.z = packetdataserializer.readDouble();
+        this.yRot = packetdataserializer.readByte();
+        this.xRot = packetdataserializer.readByte();
+        this.onGround = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.readDouble();
-        this.c = packetdataserializer.readDouble();
-        this.d = packetdataserializer.readDouble();
-        this.e = packetdataserializer.readByte();
-        this.f = packetdataserializer.readByte();
-        this.g = packetdataserializer.readBoolean();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.writeDouble(this.b);
-        packetdataserializer.writeDouble(this.c);
-        packetdataserializer.writeDouble(this.d);
-        packetdataserializer.writeByte(this.e);
-        packetdataserializer.writeByte(this.f);
-        packetdataserializer.writeBoolean(this.g);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.writeDouble(this.x);
+        packetdataserializer.writeDouble(this.y);
+        packetdataserializer.writeDouble(this.z);
+        packetdataserializer.writeByte(this.yRot);
+        packetdataserializer.writeByte(this.xRot);
+        packetdataserializer.writeBoolean(this.onGround);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.id;
+    }
+
+    public double c() {
+        return this.x;
+    }
+
+    public double d() {
+        return this.y;
+    }
+
+    public double e() {
+        return this.z;
+    }
+
+    public byte f() {
+        return this.yRot;
+    }
+
+    public byte g() {
+        return this.xRot;
+    }
+
+    public boolean h() {
+        return this.onGround;
     }
 }

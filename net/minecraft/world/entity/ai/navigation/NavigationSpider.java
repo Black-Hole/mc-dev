@@ -9,7 +9,7 @@ import net.minecraft.world.level.pathfinder.PathEntity;
 
 public class NavigationSpider extends Navigation {
 
-    private BlockPosition p;
+    private BlockPosition pathToPosition;
 
     public NavigationSpider(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
@@ -17,13 +17,13 @@ public class NavigationSpider extends Navigation {
 
     @Override
     public PathEntity a(BlockPosition blockposition, int i) {
-        this.p = blockposition;
+        this.pathToPosition = blockposition;
         return super.a(blockposition, i);
     }
 
     @Override
     public PathEntity a(Entity entity, int i) {
-        this.p = entity.getChunkCoordinates();
+        this.pathToPosition = entity.getChunkCoordinates();
         return super.a(entity, i);
     }
 
@@ -34,8 +34,8 @@ public class NavigationSpider extends Navigation {
         if (pathentity != null) {
             return this.a(pathentity, d0);
         } else {
-            this.p = entity.getChunkCoordinates();
-            this.d = d0;
+            this.pathToPosition = entity.getChunkCoordinates();
+            this.speedModifier = d0;
             return true;
         }
     }
@@ -45,11 +45,11 @@ public class NavigationSpider extends Navigation {
         if (!this.m()) {
             super.c();
         } else {
-            if (this.p != null) {
-                if (!this.p.a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()) && (this.a.locY() <= (double) this.p.getY() || !(new BlockPosition((double) this.p.getX(), this.a.locY(), (double) this.p.getZ())).a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()))) {
-                    this.a.getControllerMove().a((double) this.p.getX(), (double) this.p.getY(), (double) this.p.getZ(), this.d);
+            if (this.pathToPosition != null) {
+                if (!this.pathToPosition.a((IPosition) this.mob.getPositionVector(), (double) this.mob.getWidth()) && (this.mob.locY() <= (double) this.pathToPosition.getY() || !(new BlockPosition((double) this.pathToPosition.getX(), this.mob.locY(), (double) this.pathToPosition.getZ())).a((IPosition) this.mob.getPositionVector(), (double) this.mob.getWidth()))) {
+                    this.mob.getControllerMove().a((double) this.pathToPosition.getX(), (double) this.pathToPosition.getY(), (double) this.pathToPosition.getZ(), this.speedModifier);
                 } else {
-                    this.p = null;
+                    this.pathToPosition = null;
                 }
             }
 

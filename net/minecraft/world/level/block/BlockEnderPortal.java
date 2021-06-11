@@ -1,9 +1,12 @@
 package net.minecraft.world.level.block;
 
+import java.util.Random;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
@@ -18,26 +21,26 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockEnderPortal extends BlockTileEntity {
 
-    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 6.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
     protected BlockEnderPortal(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityEnderPortal();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityEnderPortal(blockposition, iblockdata);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockEnderPortal.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockEnderPortal.SHAPE;
     }
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (world instanceof WorldServer && !entity.isPassenger() && !entity.isVehicle() && entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
-            ResourceKey<World> resourcekey = world.getDimensionKey() == World.THE_END ? World.OVERWORLD : World.THE_END;
+            ResourceKey<World> resourcekey = world.getDimensionKey() == World.END ? World.OVERWORLD : World.END;
             WorldServer worldserver = ((WorldServer) world).getMinecraftServer().getWorldServer(resourcekey);
 
             if (worldserver == null) {
@@ -47,6 +50,20 @@ public class BlockEnderPortal extends BlockTileEntity {
             entity.b(worldserver);
         }
 
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        double d0 = (double) blockposition.getX() + random.nextDouble();
+        double d1 = (double) blockposition.getY() + 0.8D;
+        double d2 = (double) blockposition.getZ() + random.nextDouble();
+
+        world.addParticle(Particles.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return ItemStack.EMPTY;
     }
 
     @Override

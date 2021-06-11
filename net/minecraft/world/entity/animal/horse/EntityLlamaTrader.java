@@ -21,28 +21,33 @@ import net.minecraft.world.level.WorldAccess;
 
 public class EntityLlamaTrader extends EntityLlama {
 
-    private int bw = 47999;
+    private int despawnDelay = 47999;
 
     public EntityLlamaTrader(EntityTypes<? extends EntityLlamaTrader> entitytypes, World world) {
         super(entitytypes, world);
     }
 
     @Override
-    protected EntityLlama fz() {
-        return (EntityLlama) EntityTypes.TRADER_LLAMA.a(this.world);
+    public boolean gd() {
+        return true;
+    }
+
+    @Override
+    protected EntityLlama gi() {
+        return (EntityLlama) EntityTypes.TRADER_LLAMA.a(this.level);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.bw);
+        nbttagcompound.setInt("DespawnDelay", this.despawnDelay);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.bw = nbttagcompound.getInt("DespawnDelay");
+            this.despawnDelay = nbttagcompound.getInt("DespawnDelay");
         }
 
     }
@@ -52,6 +57,10 @@ public class EntityLlamaTrader extends EntityLlama {
         super.initPathfinder();
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
         this.targetSelector.a(1, new EntityLlamaTrader.a(this));
+    }
+
+    public void y(int i) {
+        this.despawnDelay = i;
     }
 
     @Override
@@ -66,16 +75,16 @@ public class EntityLlamaTrader extends EntityLlama {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.world.isClientSide) {
-            this.fE();
+        if (!this.level.isClientSide) {
+            this.gn();
         }
 
     }
 
-    private void fE() {
-        if (this.fF()) {
-            this.bw = this.fG() ? ((EntityVillagerTrader) this.getLeashHolder()).getDespawnDelay() - 1 : this.bw - 1;
-            if (this.bw <= 0) {
+    private void gn() {
+        if (this.go()) {
+            this.despawnDelay = this.gp() ? ((EntityVillagerTrader) this.getLeashHolder()).getDespawnDelay() - 1 : this.despawnDelay - 1;
+            if (this.despawnDelay <= 0) {
                 this.unleash(true, false);
                 this.die();
             }
@@ -83,16 +92,16 @@ public class EntityLlamaTrader extends EntityLlama {
         }
     }
 
-    private boolean fF() {
-        return !this.isTamed() && !this.fH() && !this.hasSinglePlayerPassenger();
+    private boolean go() {
+        return !this.isTamed() && !this.gq() && !this.hasSinglePlayerPassenger();
     }
 
-    private boolean fG() {
+    private boolean gp() {
         return this.getLeashHolder() instanceof EntityVillagerTrader;
     }
 
-    private boolean fH() {
-        return this.isLeashed() && !this.fG();
+    private boolean gq() {
+        return this.isLeashed() && !this.gp();
     }
 
     @Nullable
@@ -109,45 +118,45 @@ public class EntityLlamaTrader extends EntityLlama {
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    public class a extends PathfinderGoalTarget {
+    protected static class a extends PathfinderGoalTarget {
 
-        private final EntityLlama b;
-        private EntityLiving c;
-        private int d;
+        private final EntityLlama llama;
+        private EntityLiving ownerLastHurtBy;
+        private int timestamp;
 
         public a(EntityLlama entityllama) {
             super(entityllama, false);
-            this.b = entityllama;
+            this.llama = entityllama;
             this.a(EnumSet.of(PathfinderGoal.Type.TARGET));
         }
 
         @Override
         public boolean a() {
-            if (!this.b.isLeashed()) {
+            if (!this.llama.isLeashed()) {
                 return false;
             } else {
-                Entity entity = this.b.getLeashHolder();
+                Entity entity = this.llama.getLeashHolder();
 
                 if (!(entity instanceof EntityVillagerTrader)) {
                     return false;
                 } else {
                     EntityVillagerTrader entityvillagertrader = (EntityVillagerTrader) entity;
 
-                    this.c = entityvillagertrader.getLastDamager();
-                    int i = entityvillagertrader.da();
+                    this.ownerLastHurtBy = entityvillagertrader.getLastDamager();
+                    int i = entityvillagertrader.dH();
 
-                    return i != this.d && this.a(this.c, PathfinderTargetCondition.a);
+                    return i != this.timestamp && this.a(this.ownerLastHurtBy, PathfinderTargetCondition.DEFAULT);
                 }
             }
         }
 
         @Override
         public void c() {
-            this.e.setGoalTarget(this.c);
-            Entity entity = this.b.getLeashHolder();
+            this.mob.setGoalTarget(this.ownerLastHurtBy);
+            Entity entity = this.llama.getLeashHolder();
 
             if (entity instanceof EntityVillagerTrader) {
-                this.d = ((EntityVillagerTrader) entity).da();
+                this.timestamp = ((EntityVillagerTrader) entity).dH();
             }
 
             super.c();

@@ -28,22 +28,22 @@ import net.minecraft.world.level.material.Material;
 
 public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWearable {
 
-    public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     @Nullable
-    private ShapeDetector b;
+    private ShapeDetector snowGolemBase;
     @Nullable
-    private ShapeDetector c;
+    private ShapeDetector snowGolemFull;
     @Nullable
-    private ShapeDetector d;
+    private ShapeDetector ironGolemBase;
     @Nullable
-    private ShapeDetector e;
-    private static final Predicate<IBlockData> f = (iblockdata) -> {
+    private ShapeDetector ironGolemFull;
+    private static final Predicate<IBlockData> PUMPKINS_PREDICATE = (iblockdata) -> {
         return iblockdata != null && (iblockdata.a(Blocks.CARVED_PUMPKIN) || iblockdata.a(Blocks.JACK_O_LANTERN));
     };
 
     protected BlockPumpkinCarved(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPumpkinCarved.a, EnumDirection.NORTH));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockPumpkinCarved.FACING, EnumDirection.NORTH));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWea
     }
 
     public boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.c().a(iworldreader, blockposition) != null || this.e().a(iworldreader, blockposition) != null;
+        return this.c().a(iworldreader, blockposition) != null || this.u().a(iworldreader, blockposition) != null;
     }
 
     private void a(World world, BlockPosition blockposition) {
@@ -81,7 +81,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWea
 
             while (iterator.hasNext()) {
                 entityplayer = (EntityPlayer) iterator.next();
-                CriterionTriggers.n.a(entityplayer, (Entity) entitysnowman);
+                CriterionTriggers.SUMMONED_ENTITY.a(entityplayer, (Entity) entitysnowman);
             }
 
             for (j = 0; j < this.getSnowmanShape().b(); ++j) {
@@ -111,7 +111,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWea
 
                 while (iterator.hasNext()) {
                     entityplayer = (EntityPlayer) iterator.next();
-                    CriterionTriggers.n.a(entityplayer, (Entity) entityirongolem);
+                    CriterionTriggers.SUMMONED_ENTITY.a(entityplayer, (Entity) entityirongolem);
                 }
 
                 for (j = 0; j < this.getIronGolemShape().c(); ++j) {
@@ -128,43 +128,43 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWea
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockPumpkinCarved.a, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockPumpkinCarved.FACING, blockactioncontext.g().opposite());
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockPumpkinCarved.a);
+        blockstatelist_a.a(BlockPumpkinCarved.FACING);
     }
 
     private ShapeDetector c() {
-        if (this.b == null) {
-            this.b = ShapeDetectorBuilder.a().a(" ", "#", "#").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
+        if (this.snowGolemBase == null) {
+            this.snowGolemBase = ShapeDetectorBuilder.a().a(" ", "#", "#").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
 
-        return this.b;
+        return this.snowGolemBase;
     }
 
     private ShapeDetector getSnowmanShape() {
-        if (this.c == null) {
-            this.c = ShapeDetectorBuilder.a().a("^", "#", "#").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.f)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
+        if (this.snowGolemFull == null) {
+            this.snowGolemFull = ShapeDetectorBuilder.a().a("^", "#", "#").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.PUMPKINS_PREDICATE)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
 
-        return this.c;
+        return this.snowGolemFull;
     }
 
-    private ShapeDetector e() {
-        if (this.d == null) {
-            this.d = ShapeDetectorBuilder.a().a("~ ~", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+    private ShapeDetector u() {
+        if (this.ironGolemBase == null) {
+            this.ironGolemBase = ShapeDetectorBuilder.a().a("~ ~", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
-        return this.d;
+        return this.ironGolemBase;
     }
 
     private ShapeDetector getIronGolemShape() {
-        if (this.e == null) {
-            this.e = ShapeDetectorBuilder.a().a("~^~", "###", "~#~").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.f)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+        if (this.ironGolemFull == null) {
+            this.ironGolemFull = ShapeDetectorBuilder.a().a("~^~", "###", "~#~").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.PUMPKINS_PREDICATE)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
-        return this.e;
+        return this.ironGolemFull;
     }
 }

@@ -9,11 +9,11 @@ import org.apache.logging.log4j.Logger;
 public class RedirectStream extends PrintStream {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    protected final String b;
+    protected final String name;
 
     public RedirectStream(String s, OutputStream outputstream) {
         super(outputstream);
-        this.b = s;
+        this.name = s;
     }
 
     public void println(@Nullable String s) {
@@ -25,6 +25,6 @@ public class RedirectStream extends PrintStream {
     }
 
     protected void a(@Nullable String s) {
-        RedirectStream.LOGGER.info("[{}]: {}", this.b, s);
+        RedirectStream.LOGGER.info("[{}]: {}", this.name, s);
     }
 }

@@ -12,8 +12,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class ArgumentRotation implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> b = Arrays.asList("0 0", "~ ~", "~-5 ~5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.rotation.incomplete"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("0 0", "~ ~", "~-5 ~5");
+    public static final SimpleCommandExceptionType ERROR_NOT_COMPLETE = new SimpleCommandExceptionType(new ChatMessage("argument.rotation.incomplete"));
 
     public ArgumentRotation() {}
 
@@ -29,7 +29,7 @@ public class ArgumentRotation implements ArgumentType<IVectorPosition> {
         int i = stringreader.getCursor();
 
         if (!stringreader.canRead()) {
-            throw ArgumentRotation.a.createWithContext(stringreader);
+            throw ArgumentRotation.ERROR_NOT_COMPLETE.createWithContext(stringreader);
         } else {
             ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader, false);
 
@@ -40,12 +40,12 @@ public class ArgumentRotation implements ArgumentType<IVectorPosition> {
                 return new VectorPosition(argumentparserposition1, argumentparserposition, new ArgumentParserPosition(true, 0.0D));
             } else {
                 stringreader.setCursor(i);
-                throw ArgumentRotation.a.createWithContext(stringreader);
+                throw ArgumentRotation.ERROR_NOT_COMPLETE.createWithContext(stringreader);
             }
         }
     }
 
     public Collection<String> getExamples() {
-        return ArgumentRotation.b;
+        return ArgumentRotation.EXAMPLES;
     }
 }

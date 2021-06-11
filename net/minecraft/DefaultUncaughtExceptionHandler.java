@@ -5,13 +5,13 @@ import org.apache.logging.log4j.Logger;
 
 public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
-    private final Logger a;
+    private final Logger logger;
 
     public DefaultUncaughtExceptionHandler(Logger logger) {
-        this.a = logger;
+        this.logger = logger;
     }
 
     public void uncaughtException(Thread thread, Throwable throwable) {
-        this.a.error("Caught previously unhandled exception :", throwable);
+        this.logger.error("Caught previously unhandled exception :", throwable);
     }
 }

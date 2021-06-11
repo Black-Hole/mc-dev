@@ -1,5 +1,7 @@
 package net.minecraft.world.level.storage.loot.entries;
 
+import com.google.common.collect.Lists;
+import java.util.List;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootEntryGroup extends LootEntryChildrenAbstract {
@@ -10,14 +12,14 @@ public class LootEntryGroup extends LootEntryChildrenAbstract {
 
     @Override
     public LootEntryType a() {
-        return LootEntries.h;
+        return LootEntries.GROUP;
     }
 
     @Override
     protected LootEntryChildren a(LootEntryChildren[] alootentrychildren) {
         switch (alootentrychildren.length) {
             case 0:
-                return LootEntryGroup.b;
+                return LootEntryGroup.ALWAYS_TRUE;
             case 1:
                 return alootentrychildren[0];
             case 2:
@@ -42,6 +44,43 @@ public class LootEntryGroup extends LootEntryChildrenAbstract {
 
                     return true;
                 };
+        }
+    }
+
+    public static LootEntryGroup.a a(LootEntryAbstract.a<?>... alootentryabstract_a) {
+        return new LootEntryGroup.a(alootentryabstract_a);
+    }
+
+    public static class a extends LootEntryAbstract.a<LootEntryGroup.a> {
+
+        private final List<LootEntryAbstract> entries = Lists.newArrayList();
+
+        public a(LootEntryAbstract.a<?>... alootentryabstract_a) {
+            LootEntryAbstract.a[] alootentryabstract_a1 = alootentryabstract_a;
+            int i = alootentryabstract_a.length;
+
+            for (int j = 0; j < i; ++j) {
+                LootEntryAbstract.a<?> lootentryabstract_a = alootentryabstract_a1[j];
+
+                this.entries.add(lootentryabstract_a.b());
+            }
+
+        }
+
+        @Override
+        protected LootEntryGroup.a d() {
+            return this;
+        }
+
+        @Override
+        public LootEntryGroup.a b(LootEntryAbstract.a<?> lootentryabstract_a) {
+            this.entries.add(lootentryabstract_a.b());
+            return this;
+        }
+
+        @Override
+        public LootEntryAbstract b() {
+            return new LootEntryGroup((LootEntryAbstract[]) this.entries.toArray(new LootEntryAbstract[0]), this.f());
         }
     }
 }

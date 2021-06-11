@@ -5,25 +5,24 @@ import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 public final class VoxelShapeCubeMerger implements VoxelShapeMerger {
 
-    private final VoxelShapeCubePoint a;
-    private final int b;
-    private final int c;
-    private final int d;
+    private final VoxelShapeCubePoint result;
+    private final int firstDiv;
+    private final int secondDiv;
 
     VoxelShapeCubeMerger(int i, int j) {
-        this.a = new VoxelShapeCubePoint((int) VoxelShapes.a(i, j));
-        this.b = i;
-        this.c = j;
-        this.d = IntMath.gcd(i, j);
+        this.result = new VoxelShapeCubePoint((int) VoxelShapes.a(i, j));
+        int k = IntMath.gcd(i, j);
+
+        this.firstDiv = i / k;
+        this.secondDiv = j / k;
     }
 
     @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
-        int i = this.b / this.d;
-        int j = this.c / this.d;
+        int i = this.result.size() - 1;
 
-        for (int k = 0; k <= this.a.size(); ++k) {
-            if (!voxelshapemerger_a.merge(k / j, k / i, k)) {
+        for (int j = 0; j < i; ++j) {
+            if (!voxelshapemerger_a.merge(j / this.secondDiv, j / this.firstDiv, j)) {
                 return false;
             }
         }
@@ -32,7 +31,12 @@ public final class VoxelShapeCubeMerger implements VoxelShapeMerger {
     }
 
     @Override
+    public int size() {
+        return this.result.size();
+    }
+
+    @Override
     public DoubleList a() {
-        return this.a;
+        return this.result;
     }
 }

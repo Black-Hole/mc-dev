@@ -2,28 +2,28 @@ package net.minecraft.core;
 
 public class Position implements IPosition {
 
-    protected final double a;
-    protected final double b;
-    protected final double c;
+    protected final double x;
+    protected final double y;
+    protected final double z;
 
     public Position(double d0, double d1, double d2) {
-        this.a = d0;
-        this.b = d1;
-        this.c = d2;
+        this.x = d0;
+        this.y = d1;
+        this.z = d2;
     }
 
     @Override
     public double getX() {
-        return this.a;
+        return this.x;
     }
 
     @Override
     public double getY() {
-        return this.b;
+        return this.y;
     }
 
     @Override
     public double getZ() {
-        return this.c;
+        return this.z;
     }
 }

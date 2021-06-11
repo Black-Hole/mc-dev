@@ -4,7 +4,10 @@ import java.nio.charset.StandardCharsets;
 
 public class StatusChallengeUtils {
 
-    public static final char[] a = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    public static final int MAX_PACKET_SIZE = 1460;
+    public static final char[] HEX_CHAR = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+    public StatusChallengeUtils() {}
 
     public static String a(byte[] abyte, int i, int j) {
         int k = j - 1;
@@ -31,6 +34,8 @@ public class StatusChallengeUtils {
     }
 
     public static String a(byte b0) {
-        return "" + StatusChallengeUtils.a[(b0 & 240) >>> 4] + StatusChallengeUtils.a[b0 & 15];
+        char c0 = StatusChallengeUtils.HEX_CHAR[(b0 & 240) >>> 4];
+
+        return c0 + StatusChallengeUtils.HEX_CHAR[b0 & 15];
     }
 }

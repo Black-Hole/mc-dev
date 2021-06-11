@@ -9,13 +9,14 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import java.util.List;
 import java.util.Objects;
 
 public class DataConverterMinecart extends DataFix {
 
-    private static final List<String> a = Lists.newArrayList(new String[]{"MinecartRideable", "MinecartChest", "MinecartFurnace"});
+    private static final List<String> MINECART_BY_ID = Lists.newArrayList(new String[]{"MinecartRideable", "MinecartChest", "MinecartFurnace"});
 
     public DataConverterMinecart(Schema schema, boolean flag) {
         super(schema, flag);
@@ -35,13 +36,13 @@ public class DataConverterMinecart extends DataFix {
                     int i = dynamic.get("Type").asInt(0);
                     String s;
 
-                    if (i > 0 && i < DataConverterMinecart.a.size()) {
-                        s = (String) DataConverterMinecart.a.get(i);
+                    if (i > 0 && i < DataConverterMinecart.MINECART_BY_ID.size()) {
+                        s = (String) DataConverterMinecart.MINECART_BY_ID.get(i);
                     } else {
                         s = "MinecartRideable";
                     }
 
-                    return Pair.of(s, typed.write().map((dynamic1) -> {
+                    return Pair.of(s, (DataResult) typed.write().map((dynamic1) -> {
                         return ((Type) taggedchoicetype1.types().get(s)).read(dynamic1);
                     }).result().orElseThrow(() -> {
                         return new IllegalStateException("Could not read the new minecart.");

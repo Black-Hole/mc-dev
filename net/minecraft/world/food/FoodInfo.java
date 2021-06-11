@@ -7,89 +7,89 @@ import net.minecraft.world.effect.MobEffect;
 
 public class FoodInfo {
 
-    private final int a;
-    private final float b;
-    private final boolean c;
-    private final boolean d;
-    private final boolean e;
-    private final List<Pair<MobEffect, Float>> f;
+    private final int nutrition;
+    private final float saturationModifier;
+    private final boolean isMeat;
+    private final boolean canAlwaysEat;
+    private final boolean fastFood;
+    private final List<Pair<MobEffect, Float>> effects;
 
-    private FoodInfo(int i, float f, boolean flag, boolean flag1, boolean flag2, List<Pair<MobEffect, Float>> list) {
-        this.a = i;
-        this.b = f;
-        this.c = flag;
-        this.d = flag1;
-        this.e = flag2;
-        this.f = list;
+    FoodInfo(int i, float f, boolean flag, boolean flag1, boolean flag2, List<Pair<MobEffect, Float>> list) {
+        this.nutrition = i;
+        this.saturationModifier = f;
+        this.isMeat = flag;
+        this.canAlwaysEat = flag1;
+        this.fastFood = flag2;
+        this.effects = list;
     }
 
     public int getNutrition() {
-        return this.a;
+        return this.nutrition;
     }
 
     public float getSaturationModifier() {
-        return this.b;
+        return this.saturationModifier;
     }
 
     public boolean c() {
-        return this.c;
+        return this.isMeat;
     }
 
     public boolean d() {
-        return this.d;
+        return this.canAlwaysEat;
     }
 
     public boolean e() {
-        return this.e;
+        return this.fastFood;
     }
 
     public List<Pair<MobEffect, Float>> f() {
-        return this.f;
+        return this.effects;
     }
 
     public static class a {
 
-        private int a;
-        private float b;
-        private boolean c;
-        private boolean d;
-        private boolean e;
-        private final List<Pair<MobEffect, Float>> f = Lists.newArrayList();
+        private int nutrition;
+        private float saturationModifier;
+        private boolean isMeat;
+        private boolean canAlwaysEat;
+        private boolean fastFood;
+        private final List<Pair<MobEffect, Float>> effects = Lists.newArrayList();
 
         public a() {}
 
         public FoodInfo.a a(int i) {
-            this.a = i;
+            this.nutrition = i;
             return this;
         }
 
         public FoodInfo.a a(float f) {
-            this.b = f;
+            this.saturationModifier = f;
             return this;
         }
 
         public FoodInfo.a a() {
-            this.c = true;
+            this.isMeat = true;
             return this;
         }
 
         public FoodInfo.a b() {
-            this.d = true;
+            this.canAlwaysEat = true;
             return this;
         }
 
         public FoodInfo.a c() {
-            this.e = true;
+            this.fastFood = true;
             return this;
         }
 
         public FoodInfo.a a(MobEffect mobeffect, float f) {
-            this.f.add(Pair.of(mobeffect, f));
+            this.effects.add(Pair.of(mobeffect, f));
             return this;
         }
 
         public FoodInfo d() {
-            return new FoodInfo(this.a, this.b, this.c, this.d, this.e, this.f);
+            return new FoodInfo(this.nutrition, this.saturationModifier, this.isMeat, this.canAlwaysEat, this.fastFood, this.effects);
         }
     }
 }

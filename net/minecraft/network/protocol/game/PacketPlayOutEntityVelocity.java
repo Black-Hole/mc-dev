@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.MathHelper;
@@ -9,46 +8,59 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PacketPlayOutEntityVelocity implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private int b;
-    private int c;
-    private int d;
-
-    public PacketPlayOutEntityVelocity() {}
+    private final int id;
+    private final int xa;
+    private final int ya;
+    private final int za;
 
     public PacketPlayOutEntityVelocity(Entity entity) {
         this(entity.getId(), entity.getMot());
     }
 
     public PacketPlayOutEntityVelocity(int i, Vec3D vec3d) {
-        this.a = i;
+        this.id = i;
         double d0 = 3.9D;
         double d1 = MathHelper.a(vec3d.x, -3.9D, 3.9D);
         double d2 = MathHelper.a(vec3d.y, -3.9D, 3.9D);
         double d3 = MathHelper.a(vec3d.z, -3.9D, 3.9D);
 
-        this.b = (int) (d1 * 8000.0D);
-        this.c = (int) (d2 * 8000.0D);
-        this.d = (int) (d3 * 8000.0D);
+        this.xa = (int) (d1 * 8000.0D);
+        this.ya = (int) (d2 * 8000.0D);
+        this.za = (int) (d3 * 8000.0D);
+    }
+
+    public PacketPlayOutEntityVelocity(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.xa = packetdataserializer.readShort();
+        this.ya = packetdataserializer.readShort();
+        this.za = packetdataserializer.readShort();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.readShort();
-        this.c = packetdataserializer.readShort();
-        this.d = packetdataserializer.readShort();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.writeShort(this.b);
-        packetdataserializer.writeShort(this.c);
-        packetdataserializer.writeShort(this.d);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.writeShort(this.xa);
+        packetdataserializer.writeShort(this.ya);
+        packetdataserializer.writeShort(this.za);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.id;
+    }
+
+    public int c() {
+        return this.xa;
+    }
+
+    public int d() {
+        return this.ya;
+    }
+
+    public int e() {
+        return this.za;
     }
 }

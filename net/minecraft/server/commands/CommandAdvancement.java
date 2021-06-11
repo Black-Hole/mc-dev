@@ -22,40 +22,42 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class CommandAdvancement {
 
-    private static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+    private static final SuggestionProvider<CommandListenerWrapper> SUGGEST_ADVANCEMENTS = (commandcontext, suggestionsbuilder) -> {
         Collection<Advancement> collection = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().getAdvancements();
 
         return ICompletionProvider.a(collection.stream().map(Advancement::getName), suggestionsbuilder);
     };
 
+    public CommandAdvancement() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("advancement").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(net.minecraft.commands.CommandDispatcher.a("grant").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("only").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("grant").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("only").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
         })).then(net.minecraft.commands.CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.greedyString()).suggests((commandcontext, suggestionsbuilder) -> {
             return ICompletionProvider.b((Iterable) ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("from").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("from").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.FROM));
-        })))).then(net.minecraft.commands.CommandDispatcher.a("until").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("until").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.UNTIL));
-        })))).then(net.minecraft.commands.CommandDispatcher.a("through").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("through").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.THROUGH));
         })))).then(net.minecraft.commands.CommandDispatcher.a("everything").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().getAdvancements());
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("revoke").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("only").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("revoke").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("only").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
         })).then(net.minecraft.commands.CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.greedyString()).suggests((commandcontext, suggestionsbuilder) -> {
             return ICompletionProvider.b((Iterable) ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("from").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("from").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.FROM));
-        })))).then(net.minecraft.commands.CommandDispatcher.a("until").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("until").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.UNTIL));
-        })))).then(net.minecraft.commands.CommandDispatcher.a("through").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("through").then(net.minecraft.commands.CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.SUGGEST_ADVANCEMENTS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.THROUGH));
         })))).then(net.minecraft.commands.CommandDispatcher.a("everything").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().getAdvancements());
@@ -137,14 +139,14 @@ public class CommandAdvancement {
     private static List<Advancement> a(Advancement advancement, CommandAdvancement.Filter commandadvancement_filter) {
         List<Advancement> list = Lists.newArrayList();
 
-        if (commandadvancement_filter.f) {
+        if (commandadvancement_filter.parents) {
             for (Advancement advancement1 = advancement.b(); advancement1 != null; advancement1 = advancement1.b()) {
                 list.add(advancement1);
             }
         }
 
         list.add(advancement);
-        if (commandadvancement_filter.g) {
+        if (commandadvancement_filter.children) {
             a(advancement, (List) list);
         }
 
@@ -163,20 +165,7 @@ public class CommandAdvancement {
 
     }
 
-    static enum Filter {
-
-        ONLY(false, false), THROUGH(true, true), FROM(false, true), UNTIL(true, false), EVERYTHING(true, true);
-
-        private final boolean f;
-        private final boolean g;
-
-        private Filter(boolean flag, boolean flag1) {
-            this.f = flag;
-            this.g = flag1;
-        }
-    }
-
-    static enum Action {
+    private static enum Action {
 
         GRANT("grant") {
             @Override
@@ -229,10 +218,10 @@ public class CommandAdvancement {
             }
         };
 
-        private final String c;
+        private final String key;
 
-        private Action(String s) {
-            this.c = "commands.advancement." + s;
+        Action(String s) {
+            this.key = "commands.advancement." + s;
         }
 
         public int a(EntityPlayer entityplayer, Iterable<Advancement> iterable) {
@@ -255,7 +244,20 @@ public class CommandAdvancement {
         protected abstract boolean a(EntityPlayer entityplayer, Advancement advancement, String s);
 
         protected String a() {
-            return this.c;
+            return this.key;
+        }
+    }
+
+    private static enum Filter {
+
+        ONLY(false, false), THROUGH(true, true), FROM(false, true), UNTIL(true, false), EVERYTHING(true, true);
+
+        final boolean parents;
+        final boolean children;
+
+        private Filter(boolean flag, boolean flag1) {
+            this.parents = flag;
+            this.children = flag1;
         }
     }
 }

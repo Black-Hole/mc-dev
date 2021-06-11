@@ -41,30 +41,31 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        Entity entity = this.getShooter();
 
         for (int i = 0; i < 32; ++i) {
-            this.world.addParticle(Particles.PORTAL, this.locX(), this.locY() + this.random.nextDouble() * 2.0D, this.locZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
+            this.level.addParticle(Particles.PORTAL, this.locX(), this.locY() + this.random.nextDouble() * 2.0D, this.locZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
         }
 
-        if (!this.world.isClientSide && !this.dead) {
+        if (!this.level.isClientSide && !this.isRemoved()) {
+            Entity entity = this.getShooter();
+
             if (entity instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) entity;
 
-                if (entityplayer.playerConnection.a().isConnected() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
-                    if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
-                        EntityEndermite entityendermite = (EntityEndermite) EntityTypes.ENDERMITE.a(this.world);
+                if (entityplayer.connection.a().isConnected() && entityplayer.level == this.level && !entityplayer.isSleeping()) {
+                    if (this.random.nextFloat() < 0.05F && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+                        EntityEndermite entityendermite = (EntityEndermite) EntityTypes.ENDERMITE.a(this.level);
 
-                        entityendermite.setPlayerSpawned(true);
-                        entityendermite.setPositionRotation(entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
-                        this.world.addEntity(entityendermite);
+                        entityendermite.setPositionRotation(entity.locX(), entity.locY(), entity.locZ(), entity.getYRot(), entity.getXRot());
+                        this.level.addEntity(entityendermite);
                     }
 
                     if (entity.isPassenger()) {
-                        entity.stopRiding();
+                        entityplayer.a(this.locX(), this.locY(), this.locZ());
+                    } else {
+                        entity.enderTeleportTo(this.locX(), this.locY(), this.locZ());
                     }
 
-                    entity.enderTeleportTo(this.locX(), this.locY(), this.locZ());
                     entity.fallDistance = 0.0F;
                     entity.damageEntity(DamageSource.FALL, 5.0F);
                 }
@@ -95,7 +96,7 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
     public Entity b(WorldServer worldserver) {
         Entity entity = this.getShooter();
 
-        if (entity != null && entity.world.getDimensionKey() != worldserver.getDimensionKey()) {
+        if (entity != null && entity.level.getDimensionKey() != worldserver.getDimensionKey()) {
             this.setShooter((Entity) null);
         }
 

@@ -26,13 +26,13 @@ import org.apache.logging.log4j.Logger;
 public class AdvancementDataWorld extends ResourceDataJson {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final Gson DESERIALIZER = (new GsonBuilder()).create();
-    public Advancements REGISTRY = new Advancements();
-    private final LootPredicateManager d;
+    public static final Gson GSON = (new GsonBuilder()).create();
+    public Advancements advancements = new Advancements();
+    private final LootPredicateManager predicateManager;
 
     public AdvancementDataWorld(LootPredicateManager lootpredicatemanager) {
-        super(AdvancementDataWorld.DESERIALIZER, "advancements");
-        this.d = lootpredicatemanager;
+        super(AdvancementDataWorld.GSON, "advancements");
+        this.predicateManager = lootpredicatemanager;
     }
 
     protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
@@ -41,7 +41,7 @@ public class AdvancementDataWorld extends ResourceDataJson {
         map.forEach((minecraftkey, jsonelement) -> {
             try {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "advancement");
-                Advancement.SerializedAdvancement advancement_serializedadvancement = Advancement.SerializedAdvancement.a(jsonobject, new LootDeserializationContext(minecraftkey, this.d));
+                Advancement.SerializedAdvancement advancement_serializedadvancement = Advancement.SerializedAdvancement.a(jsonobject, new LootDeserializationContext(minecraftkey, this.predicateManager));
 
                 map1.put(minecraftkey, advancement_serializedadvancement);
             } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
@@ -62,15 +62,15 @@ public class AdvancementDataWorld extends ResourceDataJson {
             }
         }
 
-        this.REGISTRY = advancements;
+        this.advancements = advancements;
     }
 
     @Nullable
     public Advancement a(MinecraftKey minecraftkey) {
-        return this.REGISTRY.a(minecraftkey);
+        return this.advancements.a(minecraftkey);
     }
 
     public Collection<Advancement> getAdvancements() {
-        return this.REGISTRY.c();
+        return this.advancements.c();
     }
 }

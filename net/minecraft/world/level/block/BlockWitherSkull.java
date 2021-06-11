@@ -30,9 +30,9 @@ import net.minecraft.world.level.material.Material;
 public class BlockWitherSkull extends BlockSkull {
 
     @Nullable
-    private static ShapeDetector c;
+    private static ShapeDetector witherPatternFull;
     @Nullable
-    private static ShapeDetector d;
+    private static ShapeDetector witherPatternBase;
 
     protected BlockWitherSkull(BlockBase.Info blockbase_info) {
         super(BlockSkull.Type.WITHER_SKELETON, blockbase_info);
@@ -54,7 +54,7 @@ public class BlockWitherSkull extends BlockSkull {
             IBlockData iblockdata = tileentityskull.getBlock();
             boolean flag = iblockdata.a(Blocks.WITHER_SKELETON_SKULL) || iblockdata.a(Blocks.WITHER_SKELETON_WALL_SKULL);
 
-            if (flag && blockposition.getY() >= 0 && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+            if (flag && blockposition.getY() >= world.getMinBuildHeight() && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
                 ShapeDetector shapedetector = c();
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = shapedetector.a(world, blockposition);
 
@@ -72,14 +72,14 @@ public class BlockWitherSkull extends BlockSkull {
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
                     entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                    entitywither.aA = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
+                    entitywither.yBodyRot = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
                     entitywither.beginSpawnSequence();
                     Iterator iterator = world.a(EntityPlayer.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 
                     while (iterator.hasNext()) {
                         EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                        CriterionTriggers.n.a(entityplayer, (Entity) entitywither);
+                        CriterionTriggers.SUMMONED_ENTITY.a(entityplayer, (Entity) entitywither);
                     }
 
                     world.addEntity(entitywither);
@@ -96,26 +96,26 @@ public class BlockWitherSkull extends BlockSkull {
     }
 
     public static boolean b(World world, BlockPosition blockposition, ItemStack itemstack) {
-        return itemstack.getItem() == Items.WITHER_SKELETON_SKULL && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isClientSide ? d().a(world, blockposition) != null : false;
+        return itemstack.a(Items.WITHER_SKELETON_SKULL) && blockposition.getY() >= world.getMinBuildHeight() + 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isClientSide ? q().a(world, blockposition) != null : false;
     }
 
     private static ShapeDetector c() {
-        if (BlockWitherSkull.c == null) {
-            BlockWitherSkull.c = ShapeDetectorBuilder.a().a("^^^", "###", "~#~").a('#', (shapedetectorblock) -> {
+        if (BlockWitherSkull.witherPatternFull == null) {
+            BlockWitherSkull.witherPatternFull = ShapeDetectorBuilder.a().a("^^^", "###", "~#~").a('#', (shapedetectorblock) -> {
                 return shapedetectorblock.a().a((Tag) TagsBlock.WITHER_SUMMON_BASE_BLOCKS);
             }).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.WITHER_SKELETON_SKULL).or(BlockStatePredicate.a(Blocks.WITHER_SKELETON_WALL_SKULL)))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
-        return BlockWitherSkull.c;
+        return BlockWitherSkull.witherPatternFull;
     }
 
-    private static ShapeDetector d() {
-        if (BlockWitherSkull.d == null) {
-            BlockWitherSkull.d = ShapeDetectorBuilder.a().a("   ", "###", "~#~").a('#', (shapedetectorblock) -> {
+    private static ShapeDetector q() {
+        if (BlockWitherSkull.witherPatternBase == null) {
+            BlockWitherSkull.witherPatternBase = ShapeDetectorBuilder.a().a("   ", "###", "~#~").a('#', (shapedetectorblock) -> {
                 return shapedetectorblock.a().a((Tag) TagsBlock.WITHER_SUMMON_BASE_BLOCKS);
             }).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
-        return BlockWitherSkull.d;
+        return BlockWitherSkull.witherPatternBase;
     }
 }

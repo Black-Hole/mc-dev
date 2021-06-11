@@ -13,6 +13,8 @@ import net.minecraft.server.players.PlayerList;
 
 public class CommandBanList {
 
+    public CommandBanList() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("banlist").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(3);

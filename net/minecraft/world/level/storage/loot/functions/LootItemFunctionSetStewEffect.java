@@ -1,6 +1,7 @@
 package net.minecraft.world.level.storage.loot.functions;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
@@ -14,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.ChatDeserializer;
@@ -22,31 +24,39 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemSuspiciousStew;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
-import net.minecraft.world.level.storage.loot.LootValueBounds;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
 
-    private final Map<MobEffectList, LootValueBounds> a;
+    final Map<MobEffectList, NumberProvider> effectDurationMap;
 
-    private LootItemFunctionSetStewEffect(LootItemCondition[] alootitemcondition, Map<MobEffectList, LootValueBounds> map) {
+    LootItemFunctionSetStewEffect(LootItemCondition[] alootitemcondition, Map<MobEffectList, NumberProvider> map) {
         super(alootitemcondition);
-        this.a = ImmutableMap.copyOf(map);
+        this.effectDurationMap = ImmutableMap.copyOf(map);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.l;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.SET_STEW_EFFECT;
+    }
+
+    @Override
+    public Set<LootContextParameter<?>> b() {
+        return (Set) this.effectDurationMap.values().stream().flatMap((numberprovider) -> {
+            return numberprovider.b().stream();
+        }).collect(ImmutableSet.toImmutableSet());
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        if (itemstack.getItem() == Items.SUSPICIOUS_STEW && !this.a.isEmpty()) {
+        if (itemstack.a(Items.SUSPICIOUS_STEW) && !this.effectDurationMap.isEmpty()) {
             Random random = loottableinfo.a();
-            int i = random.nextInt(this.a.size());
-            Entry<MobEffectList, LootValueBounds> entry = (Entry) Iterables.get(this.a.entrySet(), i);
+            int i = random.nextInt(this.effectDurationMap.size());
+            Entry<MobEffectList, NumberProvider> entry = (Entry) Iterables.get(this.effectDurationMap.entrySet(), i);
             MobEffectList mobeffectlist = (MobEffectList) entry.getKey();
-            int j = ((LootValueBounds) entry.getValue()).a(random);
+            int j = ((NumberProvider) entry.getValue()).a(loottableinfo);
 
             if (!mobeffectlist.isInstant()) {
                 j *= 20;
@@ -63,15 +73,37 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
         return new LootItemFunctionSetStewEffect.a();
     }
 
+    public static class a extends LootItemFunctionConditional.a<LootItemFunctionSetStewEffect.a> {
+
+        private final Map<MobEffectList, NumberProvider> effectDurationMap = Maps.newHashMap();
+
+        public a() {}
+
+        @Override
+        protected LootItemFunctionSetStewEffect.a d() {
+            return this;
+        }
+
+        public LootItemFunctionSetStewEffect.a a(MobEffectList mobeffectlist, NumberProvider numberprovider) {
+            this.effectDurationMap.put(mobeffectlist, numberprovider);
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootItemFunctionSetStewEffect(this.g(), this.effectDurationMap);
+        }
+    }
+
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetStewEffect> {
 
         public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetStewEffect lootitemfunctionsetsteweffect, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetsteweffect, jsonserializationcontext);
-            if (!lootitemfunctionsetsteweffect.a.isEmpty()) {
+            if (!lootitemfunctionsetsteweffect.effectDurationMap.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
-                Iterator iterator = lootitemfunctionsetsteweffect.a.keySet().iterator();
+                Iterator iterator = lootitemfunctionsetsteweffect.effectDurationMap.keySet().iterator();
 
                 while (iterator.hasNext()) {
                     MobEffectList mobeffectlist = (MobEffectList) iterator.next();
@@ -83,7 +115,7 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
                     }
 
                     jsonobject1.add("type", new JsonPrimitive(minecraftkey.toString()));
-                    jsonobject1.add("duration", jsonserializationcontext.serialize(lootitemfunctionsetsteweffect.a.get(mobeffectlist)));
+                    jsonobject1.add("duration", jsonserializationcontext.serialize(lootitemfunctionsetsteweffect.effectDurationMap.get(mobeffectlist)));
                     jsonarray.add(jsonobject1);
                 }
 
@@ -94,7 +126,7 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
 
         @Override
         public LootItemFunctionSetStewEffect b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            Map<MobEffectList, LootValueBounds> map = Maps.newHashMap();
+            Map<MobEffectList, NumberProvider> map = Maps.newHashMap();
 
             if (jsonobject.has("effects")) {
                 JsonArray jsonarray = ChatDeserializer.u(jsonobject, "effects");
@@ -106,35 +138,13 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
                     MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.getOptional(new MinecraftKey(s)).orElseThrow(() -> {
                         return new JsonSyntaxException("Unknown mob effect '" + s + "'");
                     });
-                    LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonelement.getAsJsonObject(), "duration", jsondeserializationcontext, LootValueBounds.class);
+                    NumberProvider numberprovider = (NumberProvider) ChatDeserializer.a(jsonelement.getAsJsonObject(), "duration", jsondeserializationcontext, NumberProvider.class);
 
-                    map.put(mobeffectlist, lootvaluebounds);
+                    map.put(mobeffectlist, numberprovider);
                 }
             }
 
             return new LootItemFunctionSetStewEffect(alootitemcondition, map);
-        }
-    }
-
-    public static class a extends LootItemFunctionConditional.a<LootItemFunctionSetStewEffect.a> {
-
-        private final Map<MobEffectList, LootValueBounds> a = Maps.newHashMap();
-
-        public a() {}
-
-        @Override
-        protected LootItemFunctionSetStewEffect.a d() {
-            return this;
-        }
-
-        public LootItemFunctionSetStewEffect.a a(MobEffectList mobeffectlist, LootValueBounds lootvaluebounds) {
-            this.a.put(mobeffectlist, lootvaluebounds);
-            return this;
-        }
-
-        @Override
-        public LootItemFunction b() {
-            return new LootItemFunctionSetStewEffect(this.g(), this.a);
         }
     }
 }

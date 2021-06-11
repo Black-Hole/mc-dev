@@ -7,20 +7,20 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<CriterionTriggerUsedEnderEye.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("used_ender_eye");
+    static final MinecraftKey ID = new MinecraftKey("used_ender_eye");
 
     public CriterionTriggerUsedEnderEye() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerUsedEnderEye.a;
+        return CriterionTriggerUsedEnderEye.ID;
     }
 
     @Override
     public CriterionTriggerUsedEnderEye.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
-        CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("distance"));
+        CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange = CriterionConditionValue.DoubleRange.a(jsonobject.get("distance"));
 
-        return new CriterionTriggerUsedEnderEye.a(criterionconditionentity_b, criterionconditionvalue_floatrange);
+        return new CriterionTriggerUsedEnderEye.a(criterionconditionentity_b, criterionconditionvalue_doublerange);
     }
 
     public void a(EntityPlayer entityplayer, BlockPosition blockposition) {
@@ -35,15 +35,15 @@ public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<Crite
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue.FloatRange a;
+        private final CriterionConditionValue.DoubleRange level;
 
-        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
-            super(CriterionTriggerUsedEnderEye.a, criterionconditionentity_b);
-            this.a = criterionconditionvalue_floatrange;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange) {
+            super(CriterionTriggerUsedEnderEye.ID, criterionconditionentity_b);
+            this.level = criterionconditionvalue_doublerange;
         }
 
         public boolean a(double d0) {
-            return this.a.a(d0);
+            return this.level.e(d0);
         }
     }
 }

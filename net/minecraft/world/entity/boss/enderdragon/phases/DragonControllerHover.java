@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3D;
 
 public class DragonControllerHover extends AbstractDragonController {
 
-    private Vec3D b;
+    private Vec3D targetLocation;
 
     public DragonControllerHover(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -14,8 +14,8 @@ public class DragonControllerHover extends AbstractDragonController {
 
     @Override
     public void c() {
-        if (this.b == null) {
-            this.b = this.a.getPositionVector();
+        if (this.targetLocation == null) {
+            this.targetLocation = this.dragon.getPositionVector();
         }
 
     }
@@ -27,7 +27,7 @@ public class DragonControllerHover extends AbstractDragonController {
 
     @Override
     public void d() {
-        this.b = null;
+        this.targetLocation = null;
     }
 
     @Override
@@ -38,11 +38,11 @@ public class DragonControllerHover extends AbstractDragonController {
     @Nullable
     @Override
     public Vec3D g() {
-        return this.b;
+        return this.targetLocation;
     }
 
     @Override
     public DragonControllerPhase<DragonControllerHover> getControllerPhase() {
-        return DragonControllerPhase.HOVER;
+        return DragonControllerPhase.HOVERING;
     }
 }

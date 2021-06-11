@@ -11,24 +11,24 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockNetherSprouts extends BlockPlant {
 
-    protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D);
+    protected static final VoxelShape SHAPE = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D);
 
     public BlockNetherSprouts(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockNetherSprouts.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockNetherSprouts.SHAPE;
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.a((Tag) TagsBlock.NYLIUM) || iblockdata.a(Blocks.SOUL_SOIL) || super.c(iblockdata, iblockaccess, blockposition);
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a((Tag) TagsBlock.NYLIUM) || iblockdata.a(Blocks.SOUL_SOIL) || super.d(iblockdata, iblockaccess, blockposition);
     }
 
     @Override
-    public BlockBase.EnumRandomOffset ah_() {
+    public BlockBase.EnumRandomOffset S_() {
         return BlockBase.EnumRandomOffset.XZ;
     }
 }

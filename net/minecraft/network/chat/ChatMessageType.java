@@ -4,16 +4,16 @@ public enum ChatMessageType {
 
     CHAT((byte) 0, false), SYSTEM((byte) 1, true), GAME_INFO((byte) 2, true);
 
-    private final byte d;
-    private final boolean e;
+    private final byte index;
+    private final boolean interrupt;
 
     private ChatMessageType(byte b0, boolean flag) {
-        this.d = b0;
-        this.e = flag;
+        this.index = b0;
+        this.interrupt = flag;
     }
 
     public byte a() {
-        return this.d;
+        return this.index;
     }
 
     public static ChatMessageType a(byte b0) {
@@ -23,11 +23,15 @@ public enum ChatMessageType {
         for (int j = 0; j < i; ++j) {
             ChatMessageType chatmessagetype = achatmessagetype[j];
 
-            if (b0 == chatmessagetype.d) {
+            if (b0 == chatmessagetype.index) {
                 return chatmessagetype;
             }
         }
 
         return ChatMessageType.CHAT;
+    }
+
+    public boolean b() {
+        return this.interrupt;
     }
 }

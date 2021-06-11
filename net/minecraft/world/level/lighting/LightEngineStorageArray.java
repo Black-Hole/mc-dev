@@ -6,51 +6,52 @@ import net.minecraft.world.level.chunk.NibbleArray;
 
 public abstract class LightEngineStorageArray<M extends LightEngineStorageArray<M>> {
 
-    private final long[] b = new long[2];
-    private final NibbleArray[] c = new NibbleArray[2];
-    private boolean d;
-    protected final Long2ObjectOpenHashMap<NibbleArray> a;
+    private static final int CACHE_SIZE = 2;
+    private final long[] lastSectionKeys = new long[2];
+    private final NibbleArray[] lastSections = new NibbleArray[2];
+    private boolean cacheEnabled;
+    protected final Long2ObjectOpenHashMap<NibbleArray> map;
 
     protected LightEngineStorageArray(Long2ObjectOpenHashMap<NibbleArray> long2objectopenhashmap) {
-        this.a = long2objectopenhashmap;
+        this.map = long2objectopenhashmap;
         this.c();
-        this.d = true;
+        this.cacheEnabled = true;
     }
 
     public abstract M b();
 
     public void a(long i) {
-        this.a.put(i, ((NibbleArray) this.a.get(i)).b());
+        this.map.put(i, ((NibbleArray) this.map.get(i)).b());
         this.c();
     }
 
     public boolean b(long i) {
-        return this.a.containsKey(i);
+        return this.map.containsKey(i);
     }
 
     @Nullable
     public NibbleArray c(long i) {
-        if (this.d) {
+        if (this.cacheEnabled) {
             for (int j = 0; j < 2; ++j) {
-                if (i == this.b[j]) {
-                    return this.c[j];
+                if (i == this.lastSectionKeys[j]) {
+                    return this.lastSections[j];
                 }
             }
         }
 
-        NibbleArray nibblearray = (NibbleArray) this.a.get(i);
+        NibbleArray nibblearray = (NibbleArray) this.map.get(i);
 
         if (nibblearray == null) {
             return null;
         } else {
-            if (this.d) {
+            if (this.cacheEnabled) {
                 for (int k = 1; k > 0; --k) {
-                    this.b[k] = this.b[k - 1];
-                    this.c[k] = this.c[k - 1];
+                    this.lastSectionKeys[k] = this.lastSectionKeys[k - 1];
+                    this.lastSections[k] = this.lastSections[k - 1];
                 }
 
-                this.b[0] = i;
-                this.c[0] = nibblearray;
+                this.lastSectionKeys[0] = i;
+                this.lastSections[0] = nibblearray;
             }
 
             return nibblearray;
@@ -59,22 +60,22 @@ public abstract class LightEngineStorageArray<M extends LightEngineStorageArray<
 
     @Nullable
     public NibbleArray d(long i) {
-        return (NibbleArray) this.a.remove(i);
+        return (NibbleArray) this.map.remove(i);
     }
 
     public void a(long i, NibbleArray nibblearray) {
-        this.a.put(i, nibblearray);
+        this.map.put(i, nibblearray);
     }
 
     public void c() {
         for (int i = 0; i < 2; ++i) {
-            this.b[i] = Long.MAX_VALUE;
-            this.c[i] = null;
+            this.lastSectionKeys[i] = Long.MAX_VALUE;
+            this.lastSections[i] = null;
         }
 
     }
 
     public void d() {
-        this.d = false;
+        this.cacheEnabled = false;
     }
 }

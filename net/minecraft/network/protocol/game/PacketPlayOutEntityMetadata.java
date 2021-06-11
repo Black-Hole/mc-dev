@@ -1,42 +1,49 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.DataWatcher;
 
 public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private List<DataWatcher.Item<?>> b;
-
-    public PacketPlayOutEntityMetadata() {}
+    private final int id;
+    @Nullable
+    private final List<DataWatcher.Item<?>> packedItems;
 
     public PacketPlayOutEntityMetadata(int i, DataWatcher datawatcher, boolean flag) {
-        this.a = i;
+        this.id = i;
         if (flag) {
-            this.b = datawatcher.c();
+            this.packedItems = datawatcher.getAll();
             datawatcher.e();
         } else {
-            this.b = datawatcher.b();
+            this.packedItems = datawatcher.b();
         }
 
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = DataWatcher.a(packetdataserializer);
+    public PacketPlayOutEntityMetadata(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.packedItems = DataWatcher.a(packetdataserializer);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        DataWatcher.a(this.b, packetdataserializer);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        DataWatcher.a(this.packedItems, packetdataserializer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    @Nullable
+    public List<DataWatcher.Item<?>> b() {
+        return this.packedItems;
+    }
+
+    public int c() {
+        return this.id;
     }
 }

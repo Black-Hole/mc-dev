@@ -1,13 +1,13 @@
 package net.minecraft.world.level.levelgen.structure;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.StructureManager;
@@ -30,60 +30,53 @@ import net.minecraft.world.level.storage.loot.LootTables;
 
 public class WorldGenIglooPiece {
 
-    private static final MinecraftKey a = new MinecraftKey("igloo/top");
-    private static final MinecraftKey b = new MinecraftKey("igloo/middle");
-    private static final MinecraftKey c = new MinecraftKey("igloo/bottom");
-    private static final Map<MinecraftKey, BlockPosition> d = ImmutableMap.of(WorldGenIglooPiece.a, new BlockPosition(3, 5, 5), WorldGenIglooPiece.b, new BlockPosition(1, 3, 1), WorldGenIglooPiece.c, new BlockPosition(3, 6, 7));
-    private static final Map<MinecraftKey, BlockPosition> e = ImmutableMap.of(WorldGenIglooPiece.a, BlockPosition.ZERO, WorldGenIglooPiece.b, new BlockPosition(2, -3, 4), WorldGenIglooPiece.c, new BlockPosition(0, -3, -2));
+    public static final int GENERATION_HEIGHT = 90;
+    static final MinecraftKey STRUCTURE_LOCATION_IGLOO = new MinecraftKey("igloo/top");
+    private static final MinecraftKey STRUCTURE_LOCATION_LADDER = new MinecraftKey("igloo/middle");
+    private static final MinecraftKey STRUCTURE_LOCATION_LABORATORY = new MinecraftKey("igloo/bottom");
+    static final Map<MinecraftKey, BlockPosition> PIVOTS = ImmutableMap.of(WorldGenIglooPiece.STRUCTURE_LOCATION_IGLOO, new BlockPosition(3, 5, 5), WorldGenIglooPiece.STRUCTURE_LOCATION_LADDER, new BlockPosition(1, 3, 1), WorldGenIglooPiece.STRUCTURE_LOCATION_LABORATORY, new BlockPosition(3, 6, 7));
+    static final Map<MinecraftKey, BlockPosition> OFFSETS = ImmutableMap.of(WorldGenIglooPiece.STRUCTURE_LOCATION_IGLOO, BlockPosition.ZERO, WorldGenIglooPiece.STRUCTURE_LOCATION_LADDER, new BlockPosition(2, -3, 4), WorldGenIglooPiece.STRUCTURE_LOCATION_LABORATORY, new BlockPosition(0, -3, -2));
 
-    public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<StructurePiece> list, Random random) {
+    public WorldGenIglooPiece() {}
+
+    public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructurePieceAccessor structurepieceaccessor, Random random) {
         if (random.nextDouble() < 0.5D) {
             int i = random.nextInt(8) + 4;
 
-            list.add(new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.c, blockposition, enumblockrotation, i * 3));
+            structurepieceaccessor.a((StructurePiece) (new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.STRUCTURE_LOCATION_LABORATORY, blockposition, enumblockrotation, i * 3)));
 
             for (int j = 0; j < i - 1; ++j) {
-                list.add(new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.b, blockposition, enumblockrotation, j * 3));
+                structurepieceaccessor.a((StructurePiece) (new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.STRUCTURE_LOCATION_LADDER, blockposition, enumblockrotation, j * 3)));
             }
         }
 
-        list.add(new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.a, blockposition, enumblockrotation, 0));
+        structurepieceaccessor.a((StructurePiece) (new WorldGenIglooPiece.a(definedstructuremanager, WorldGenIglooPiece.STRUCTURE_LOCATION_IGLOO, blockposition, enumblockrotation, 0)));
     }
 
     public static class a extends DefinedStructurePiece {
 
-        private final MinecraftKey d;
-        private final EnumBlockRotation e;
-
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation, int i) {
-            super(WorldGenFeatureStructurePieceType.I, 0);
-            this.d = minecraftkey;
-            BlockPosition blockposition1 = (BlockPosition) WorldGenIglooPiece.e.get(minecraftkey);
-
-            this.c = blockposition.b(blockposition1.getX(), blockposition1.getY() - i, blockposition1.getZ());
-            this.e = enumblockrotation;
-            this.a(definedstructuremanager);
+            super(WorldGenFeatureStructurePieceType.IGLOO, 0, definedstructuremanager, minecraftkey, minecraftkey.toString(), a(enumblockrotation, minecraftkey), a(minecraftkey, blockposition, i));
         }
 
-        public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.I, nbttagcompound);
-            this.d = new MinecraftKey(nbttagcompound.getString("Template"));
-            this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
-            this.a(definedstructuremanager);
+        public a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.IGLOO, nbttagcompound, worldserver, (minecraftkey) -> {
+                return a(EnumBlockRotation.valueOf(nbttagcompound.getString("Rot")), minecraftkey);
+            });
         }
 
-        private void a(DefinedStructureManager definedstructuremanager) {
-            DefinedStructure definedstructure = definedstructuremanager.a(this.d);
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
+        private static DefinedStructureInfo a(EnumBlockRotation enumblockrotation, MinecraftKey minecraftkey) {
+            return (new DefinedStructureInfo()).a(enumblockrotation).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.PIVOTS.get(minecraftkey)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.STRUCTURE_BLOCK);
+        }
 
-            this.a(definedstructure, this.c, definedstructureinfo);
+        private static BlockPosition a(MinecraftKey minecraftkey, BlockPosition blockposition, int i) {
+            return blockposition.f((BaseBlockPosition) WorldGenIglooPiece.OFFSETS.get(minecraftkey)).down(i);
         }
 
         @Override
-        protected void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
-            nbttagcompound.setString("Template", this.d.toString());
-            nbttagcompound.setString("Rot", this.e.name());
+        protected void a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+            super.a(worldserver, nbttagcompound);
+            nbttagcompound.setString("Rot", this.placeSettings.d().name());
         }
 
         @Override
@@ -93,7 +86,7 @@ public class WorldGenIglooPiece {
                 TileEntity tileentity = worldaccess.getTileEntity(blockposition.down());
 
                 if (tileentity instanceof TileEntityChest) {
-                    ((TileEntityChest) tileentity).setLootTable(LootTables.C, random.nextLong());
+                    ((TileEntityChest) tileentity).setLootTable(LootTables.IGLOO_CHEST, random.nextLong());
                 }
 
             }
@@ -101,17 +94,18 @@ public class WorldGenIglooPiece {
 
         @Override
         public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
-            BlockPosition blockposition1 = (BlockPosition) WorldGenIglooPiece.e.get(this.d);
-            BlockPosition blockposition2 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3 - blockposition1.getX(), 0, 0 - blockposition1.getZ())));
+            MinecraftKey minecraftkey = new MinecraftKey(this.templateName);
+            DefinedStructureInfo definedstructureinfo = a(this.placeSettings.d(), minecraftkey);
+            BlockPosition blockposition1 = (BlockPosition) WorldGenIglooPiece.OFFSETS.get(minecraftkey);
+            BlockPosition blockposition2 = this.templatePosition.f(DefinedStructure.a(definedstructureinfo, new BlockPosition(3 - blockposition1.getX(), 0, -blockposition1.getZ())));
             int i = generatoraccessseed.a(HeightMap.Type.WORLD_SURFACE_WG, blockposition2.getX(), blockposition2.getZ());
-            BlockPosition blockposition3 = this.c;
+            BlockPosition blockposition3 = this.templatePosition;
 
-            this.c = this.c.b(0, i - 90 - 1, 0);
+            this.templatePosition = this.templatePosition.c(0, i - 90 - 1, 0);
             boolean flag = super.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, chunkcoordintpair, blockposition);
 
-            if (this.d.equals(WorldGenIglooPiece.a)) {
-                BlockPosition blockposition4 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5)));
+            if (minecraftkey.equals(WorldGenIglooPiece.STRUCTURE_LOCATION_IGLOO)) {
+                BlockPosition blockposition4 = this.templatePosition.f(DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5)));
                 IBlockData iblockdata = generatoraccessseed.getType(blockposition4.down());
 
                 if (!iblockdata.isAir() && !iblockdata.a(Blocks.LADDER)) {
@@ -119,7 +113,7 @@ public class WorldGenIglooPiece {
                 }
             }
 
-            this.c = blockposition3;
+            this.templatePosition = blockposition3;
             return flag;
         }
     }

@@ -7,10 +7,29 @@ import java.util.stream.StreamSupport;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class SectionPosition extends BaseBlockPosition {
 
-    private SectionPosition(int i, int j, int k) {
+    public static final int SECTION_BITS = 4;
+    public static final int SECTION_SIZE = 16;
+    private static final int SECTION_MASK = 15;
+    public static final int SECTION_HALF_SIZE = 8;
+    public static final int SECTION_MAX_INDEX = 15;
+    private static final int PACKED_X_LENGTH = 22;
+    private static final int PACKED_Y_LENGTH = 20;
+    private static final int PACKED_Z_LENGTH = 22;
+    private static final long PACKED_X_MASK = 4194303L;
+    private static final long PACKED_Y_MASK = 1048575L;
+    private static final long PACKED_Z_MASK = 4194303L;
+    private static final int Y_OFFSET = 0;
+    private static final int Z_OFFSET = 20;
+    private static final int X_OFFSET = 42;
+    private static final int RELATIVE_X_SHIFT = 8;
+    private static final int RELATIVE_Y_SHIFT = 0;
+    private static final int RELATIVE_Z_SHIFT = 4;
+
+    SectionPosition(int i, int j, int k) {
         super(i, j, k);
     }
 
@@ -27,11 +46,15 @@ public class SectionPosition extends BaseBlockPosition {
     }
 
     public static SectionPosition a(Entity entity) {
-        return new SectionPosition(a(MathHelper.floor(entity.locX())), a(MathHelper.floor(entity.locY())), a(MathHelper.floor(entity.locZ())));
+        return new SectionPosition(a(entity.cW()), a(entity.cY()), a(entity.dc()));
     }
 
     public static SectionPosition a(long i) {
         return new SectionPosition(b(i), c(i), d(i));
+    }
+
+    public static SectionPosition a(IChunkAccess ichunkaccess) {
+        return a(ichunkaccess.getPos(), ichunkaccess.getMinSection());
     }
 
     public static long a(long i, EnumDirection enumdirection) {
@@ -40,6 +63,10 @@ public class SectionPosition extends BaseBlockPosition {
 
     public static long a(long i, int j, int k, int l) {
         return b(b(i) + j, c(i) + k, d(i) + l);
+    }
+
+    public static int a(double d0) {
+        return a(MathHelper.floor(d0));
     }
 
     public static int a(int i) {
@@ -90,6 +117,10 @@ public class SectionPosition extends BaseBlockPosition {
         return i << 4;
     }
 
+    public static int a(int i, int j) {
+        return c(i) + j;
+    }
+
     public static int b(long i) {
         return (int) (i << 0 >> 42);
     }
@@ -115,31 +146,31 @@ public class SectionPosition extends BaseBlockPosition {
     }
 
     public int d() {
-        return this.a() << 4;
+        return c(this.a());
     }
 
     public int e() {
-        return this.b() << 4;
+        return c(this.b());
     }
 
     public int f() {
-        return this.c() << 4;
+        return c(this.c());
     }
 
     public int g() {
-        return (this.a() << 4) + 15;
+        return a(this.a(), 15);
     }
 
     public int h() {
-        return (this.b() << 4) + 15;
+        return a(this.b(), 15);
     }
 
     public int i() {
-        return (this.c() << 4) + 15;
+        return a(this.c(), 15);
     }
 
     public static long e(long i) {
-        return b(a(BlockPosition.b(i)), a(BlockPosition.c(i)), a(BlockPosition.d(i)));
+        return b(a(BlockPosition.a(i)), a(BlockPosition.b(i)), a(BlockPosition.c(i)));
     }
 
     public static long f(long i) {
@@ -153,11 +184,15 @@ public class SectionPosition extends BaseBlockPosition {
     public BlockPosition q() {
         boolean flag = true;
 
-        return this.p().b(8, 8, 8);
+        return this.p().c(8, 8, 8);
     }
 
     public ChunkCoordIntPair r() {
         return new ChunkCoordIntPair(this.a(), this.c());
+    }
+
+    public static long c(BlockPosition blockposition) {
+        return b(a(blockposition.getX()), a(blockposition.getY()), a(blockposition.getZ()));
     }
 
     public static long b(int i, int j, int k) {
@@ -173,6 +208,11 @@ public class SectionPosition extends BaseBlockPosition {
         return b(this.a(), this.b(), this.c());
     }
 
+    @Override
+    public SectionPosition c(int i, int j, int k) {
+        return i == 0 && j == 0 && k == 0 ? this : new SectionPosition(this.a() + i, this.b() + j, this.c() + k);
+    }
+
     public Stream<BlockPosition> t() {
         return BlockPosition.a(this.d(), this.e(), this.f(), this.g(), this.h(), this.i());
     }
@@ -185,20 +225,20 @@ public class SectionPosition extends BaseBlockPosition {
         return a(j - i, k - i, l - i, j + i, k + i, l + i);
     }
 
-    public static Stream<SectionPosition> b(ChunkCoordIntPair chunkcoordintpair, int i) {
-        int j = chunkcoordintpair.x;
-        int k = chunkcoordintpair.z;
+    public static Stream<SectionPosition> a(ChunkCoordIntPair chunkcoordintpair, int i, int j, int k) {
+        int l = chunkcoordintpair.x;
+        int i1 = chunkcoordintpair.z;
 
-        return a(j - i, 0, k - i, j + i, 15, k + i);
+        return a(l - i, j, i1 - i, l + i, k - 1, i1 + i);
     }
 
     public static Stream<SectionPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {
         return StreamSupport.stream(new AbstractSpliterator<SectionPosition>((long) ((l - i + 1) * (i1 - j + 1) * (j1 - k + 1)), 64) {
-            final CursorPosition a = new CursorPosition(i, j, k, l, i1, j1);
+            final CursorPosition cursor = new CursorPosition(i, j, k, l, i1, j1);
 
             public boolean tryAdvance(Consumer<? super SectionPosition> consumer) {
-                if (this.a.a()) {
-                    consumer.accept(new SectionPosition(this.a.b(), this.a.c(), this.a.d()));
+                if (this.cursor.a()) {
+                    consumer.accept(new SectionPosition(this.cursor.b(), this.cursor.c(), this.cursor.d()));
                     return true;
                 } else {
                     return false;

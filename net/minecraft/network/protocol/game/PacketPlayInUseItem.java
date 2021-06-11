@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.EnumHand;
@@ -8,21 +7,23 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
 
-    private MovingObjectPositionBlock a;
-    private EnumHand b;
+    private final MovingObjectPositionBlock blockHit;
+    private final EnumHand hand;
 
-    public PacketPlayInUseItem() {}
+    public PacketPlayInUseItem(EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        this.hand = enumhand;
+        this.blockHit = movingobjectpositionblock;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.b = (EnumHand) packetdataserializer.a(EnumHand.class);
-        this.a = packetdataserializer.r();
+    public PacketPlayInUseItem(PacketDataSerializer packetdataserializer) {
+        this.hand = (EnumHand) packetdataserializer.a(EnumHand.class);
+        this.blockHit = packetdataserializer.s();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.b);
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.hand);
+        packetdataserializer.a(this.blockHit);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -30,10 +31,10 @@ public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
     }
 
     public EnumHand b() {
-        return this.b;
+        return this.hand;
     }
 
     public MovingObjectPositionBlock c() {
-        return this.a;
+        return this.blockHit;
     }
 }

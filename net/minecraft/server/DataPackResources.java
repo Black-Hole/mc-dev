@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import net.minecraft.commands.CommandDispatcher;
+import net.minecraft.core.IRegistryCustom;
 import net.minecraft.server.packs.EnumResourcePackType;
 import net.minecraft.server.packs.IResourcePack;
 import net.minecraft.server.packs.resources.IReloadListener;
@@ -14,73 +15,81 @@ import net.minecraft.tags.ITagRegistry;
 import net.minecraft.tags.TagRegistry;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.crafting.CraftingManager;
+import net.minecraft.world.level.storage.loot.ItemModifierManager;
 import net.minecraft.world.level.storage.loot.LootPredicateManager;
 import net.minecraft.world.level.storage.loot.LootTableRegistry;
 
 public class DataPackResources implements AutoCloseable {
 
-    private static final CompletableFuture<Unit> a = CompletableFuture.completedFuture(Unit.INSTANCE);
-    private final IReloadableResourceManager b;
-    public CommandDispatcher commandDispatcher;
-    private final CraftingManager d;
-    private final TagRegistry e;
-    private final LootPredicateManager f;
-    private final LootTableRegistry g;
-    private final AdvancementDataWorld h;
-    private final CustomFunctionManager i;
+    private static final CompletableFuture<Unit> DATA_RELOAD_INITIAL_TASK = CompletableFuture.completedFuture(Unit.INSTANCE);
+    private final IReloadableResourceManager resources;
+    public CommandDispatcher commands;
+    private final CraftingManager recipes;
+    private final TagRegistry tagManager;
+    private final LootPredicateManager predicateManager;
+    private final LootTableRegistry lootTables;
+    private final ItemModifierManager itemModifierManager;
+    private final AdvancementDataWorld advancements;
+    private final CustomFunctionManager functionLibrary;
 
-    public DataPackResources(CommandDispatcher.ServerType commanddispatcher_servertype, int i) {
-        this.b = new ResourceManager(EnumResourcePackType.SERVER_DATA);
-        this.d = new CraftingManager();
-        this.e = new TagRegistry();
-        this.f = new LootPredicateManager();
-        this.g = new LootTableRegistry(this.f);
-        this.h = new AdvancementDataWorld(this.f);
-        this.commandDispatcher = new CommandDispatcher(commanddispatcher_servertype);
-        this.i = new CustomFunctionManager(i, this.commandDispatcher.a());
-        this.b.a((IReloadListener) this.e);
-        this.b.a((IReloadListener) this.f);
-        this.b.a((IReloadListener) this.d);
-        this.b.a((IReloadListener) this.g);
-        this.b.a((IReloadListener) this.i);
-        this.b.a((IReloadListener) this.h);
+    public DataPackResources(IRegistryCustom iregistrycustom, CommandDispatcher.ServerType commanddispatcher_servertype, int i) {
+        this.resources = new ResourceManager(EnumResourcePackType.SERVER_DATA);
+        this.recipes = new CraftingManager();
+        this.predicateManager = new LootPredicateManager();
+        this.lootTables = new LootTableRegistry(this.predicateManager);
+        this.itemModifierManager = new ItemModifierManager(this.predicateManager, this.lootTables);
+        this.advancements = new AdvancementDataWorld(this.predicateManager);
+        this.tagManager = new TagRegistry(iregistrycustom);
+        this.commands = new CommandDispatcher(commanddispatcher_servertype);
+        this.functionLibrary = new CustomFunctionManager(i, this.commands.a());
+        this.resources.a((IReloadListener) this.tagManager);
+        this.resources.a((IReloadListener) this.predicateManager);
+        this.resources.a((IReloadListener) this.recipes);
+        this.resources.a((IReloadListener) this.lootTables);
+        this.resources.a((IReloadListener) this.itemModifierManager);
+        this.resources.a((IReloadListener) this.functionLibrary);
+        this.resources.a((IReloadListener) this.advancements);
     }
 
     public CustomFunctionManager a() {
-        return this.i;
+        return this.functionLibrary;
     }
 
     public LootPredicateManager b() {
-        return this.f;
+        return this.predicateManager;
     }
 
     public LootTableRegistry c() {
-        return this.g;
+        return this.lootTables;
     }
 
-    public ITagRegistry d() {
-        return this.e.a();
+    public ItemModifierManager d() {
+        return this.itemModifierManager;
     }
 
-    public CraftingManager e() {
-        return this.d;
+    public ITagRegistry e() {
+        return this.tagManager.a();
     }
 
-    public CommandDispatcher f() {
-        return this.commandDispatcher;
+    public CraftingManager f() {
+        return this.recipes;
     }
 
-    public AdvancementDataWorld g() {
-        return this.h;
+    public CommandDispatcher g() {
+        return this.commands;
     }
 
-    public IResourceManager h() {
-        return this.b;
+    public AdvancementDataWorld h() {
+        return this.advancements;
     }
 
-    public static CompletableFuture<DataPackResources> a(List<IResourcePack> list, CommandDispatcher.ServerType commanddispatcher_servertype, int i, Executor executor, Executor executor1) {
-        DataPackResources datapackresources = new DataPackResources(commanddispatcher_servertype, i);
-        CompletableFuture<Unit> completablefuture = datapackresources.b.a(executor, executor1, list, DataPackResources.a);
+    public IResourceManager i() {
+        return this.resources;
+    }
+
+    public static CompletableFuture<DataPackResources> a(List<IResourcePack> list, IRegistryCustom iregistrycustom, CommandDispatcher.ServerType commanddispatcher_servertype, int i, Executor executor, Executor executor1) {
+        DataPackResources datapackresources = new DataPackResources(iregistrycustom, commanddispatcher_servertype, i);
+        CompletableFuture<Unit> completablefuture = datapackresources.resources.a(executor, executor1, list, DataPackResources.DATA_RELOAD_INITIAL_TASK);
 
         return completablefuture.whenComplete((unit, throwable) -> {
             if (throwable != null) {
@@ -92,11 +101,11 @@ public class DataPackResources implements AutoCloseable {
         });
     }
 
-    public void i() {
-        this.e.a().bind();
+    public void j() {
+        this.tagManager.a().bind();
     }
 
     public void close() {
-        this.b.close();
+        this.resources.close();
     }
 }

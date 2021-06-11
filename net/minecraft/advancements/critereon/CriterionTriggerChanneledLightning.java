@@ -13,13 +13,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerChanneledLightning extends CriterionTriggerAbstract<CriterionTriggerChanneledLightning.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("channeled_lightning");
+    static final MinecraftKey ID = new MinecraftKey("channeled_lightning");
 
     public CriterionTriggerChanneledLightning() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerChanneledLightning.a;
+        return CriterionTriggerChanneledLightning.ID;
     }
 
     @Override
@@ -41,21 +41,21 @@ public class CriterionTriggerChanneledLightning extends CriterionTriggerAbstract
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b[] a;
+        private final CriterionConditionEntity.b[] victims;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b[] acriterionconditionentity_b) {
-            super(CriterionTriggerChanneledLightning.a, criterionconditionentity_b);
-            this.a = acriterionconditionentity_b;
+            super(CriterionTriggerChanneledLightning.ID, criterionconditionentity_b);
+            this.victims = acriterionconditionentity_b;
         }
 
         public static CriterionTriggerChanneledLightning.a a(CriterionConditionEntity... acriterionconditionentity) {
-            return new CriterionTriggerChanneledLightning.a(CriterionConditionEntity.b.a, (CriterionConditionEntity.b[]) Stream.of(acriterionconditionentity).map(CriterionConditionEntity.b::a).toArray((i) -> {
+            return new CriterionTriggerChanneledLightning.a(CriterionConditionEntity.b.ANY, (CriterionConditionEntity.b[]) Stream.of(acriterionconditionentity).map(CriterionConditionEntity.b::a).toArray((i) -> {
                 return new CriterionConditionEntity.b[i];
             }));
         }
 
         public boolean a(Collection<? extends LootTableInfo> collection) {
-            CriterionConditionEntity.b[] acriterionconditionentity_b = this.a;
+            CriterionConditionEntity.b[] acriterionconditionentity_b = this.victims;
             int i = acriterionconditionentity_b.length;
             int j = 0;
 
@@ -91,7 +91,7 @@ public class CriterionTriggerChanneledLightning extends CriterionTriggerAbstract
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("victims", CriterionConditionEntity.b.a(this.a, lootserializationcontext));
+            jsonobject.add("victims", CriterionConditionEntity.b.a(this.victims, lootserializationcontext));
             return jsonobject;
         }
     }

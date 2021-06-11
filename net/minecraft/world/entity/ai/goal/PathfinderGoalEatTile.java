@@ -10,74 +10,78 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 public class PathfinderGoalEatTile extends PathfinderGoal {
 
-    private static final Predicate<IBlockData> a = BlockStatePredicate.a(Blocks.GRASS);
-    private final EntityInsentient b;
-    private final World c;
-    private int d;
+    private static final int EAT_ANIMATION_TICKS = 40;
+    private static final Predicate<IBlockData> IS_TALL_GRASS = BlockStatePredicate.a(Blocks.GRASS);
+    private final EntityInsentient mob;
+    private final World level;
+    private int eatAnimationTick;
 
     public PathfinderGoalEatTile(EntityInsentient entityinsentient) {
-        this.b = entityinsentient;
-        this.c = entityinsentient.world;
+        this.mob = entityinsentient;
+        this.level = entityinsentient.level;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK, PathfinderGoal.Type.JUMP));
     }
 
     @Override
     public boolean a() {
-        if (this.b.getRandom().nextInt(this.b.isBaby() ? 50 : 1000) != 0) {
+        if (this.mob.getRandom().nextInt(this.mob.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
-            BlockPosition blockposition = this.b.getChunkCoordinates();
+            BlockPosition blockposition = this.mob.getChunkCoordinates();
 
-            return PathfinderGoalEatTile.a.test(this.c.getType(blockposition)) ? true : this.c.getType(blockposition.down()).a(Blocks.GRASS_BLOCK);
+            return PathfinderGoalEatTile.IS_TALL_GRASS.test(this.level.getType(blockposition)) ? true : this.level.getType(blockposition.down()).a(Blocks.GRASS_BLOCK);
         }
     }
 
     @Override
     public void c() {
-        this.d = 40;
-        this.c.broadcastEntityEffect(this.b, (byte) 10);
-        this.b.getNavigation().o();
+        this.eatAnimationTick = 40;
+        this.level.broadcastEntityEffect(this.mob, (byte) 10);
+        this.mob.getNavigation().o();
     }
 
     @Override
     public void d() {
-        this.d = 0;
+        this.eatAnimationTick = 0;
     }
 
     @Override
     public boolean b() {
-        return this.d > 0;
+        return this.eatAnimationTick > 0;
     }
 
     public int g() {
-        return this.d;
+        return this.eatAnimationTick;
     }
 
     @Override
     public void e() {
-        this.d = Math.max(0, this.d - 1);
-        if (this.d == 4) {
-            BlockPosition blockposition = this.b.getChunkCoordinates();
+        this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
+        if (this.eatAnimationTick == 4) {
+            BlockPosition blockposition = this.mob.getChunkCoordinates();
 
-            if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
-                if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-                    this.c.b(blockposition, false);
+            if (PathfinderGoalEatTile.IS_TALL_GRASS.test(this.level.getType(blockposition))) {
+                if (this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                    this.level.b(blockposition, false);
                 }
 
-                this.b.blockEaten();
+                this.mob.blockEaten();
+                this.mob.a(GameEvent.EAT, this.mob.cT());
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (this.c.getType(blockposition1).a(Blocks.GRASS_BLOCK)) {
-                    if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-                        this.c.triggerEffect(2001, blockposition1, Block.getCombinedId(Blocks.GRASS_BLOCK.getBlockData()));
-                        this.c.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
+                if (this.level.getType(blockposition1).a(Blocks.GRASS_BLOCK)) {
+                    if (this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                        this.level.triggerEffect(2001, blockposition1, Block.getCombinedId(Blocks.GRASS_BLOCK.getBlockData()));
+                        this.level.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
                     }
 
-                    this.b.blockEaten();
+                    this.mob.blockEaten();
+                    this.mob.a(GameEvent.EAT, this.mob.cT());
                 }
             }
 

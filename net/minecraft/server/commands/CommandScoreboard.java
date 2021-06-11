@@ -38,14 +38,16 @@ import net.minecraft.world.scores.criteria.IScoreboardCriteria;
 
 public class CommandScoreboard {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.add.duplicate"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadyEmpty"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadySet"));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.failed"));
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.invalid"));
-    private static final Dynamic2CommandExceptionType f = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final SimpleCommandExceptionType ERROR_OBJECTIVE_ALREADY_EXISTS = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.add.duplicate"));
+    private static final SimpleCommandExceptionType ERROR_DISPLAY_SLOT_ALREADY_EMPTY = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadyEmpty"));
+    private static final SimpleCommandExceptionType ERROR_DISPLAY_SLOT_ALREADY_SET = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadySet"));
+    private static final SimpleCommandExceptionType ERROR_TRIGGER_ALREADY_ENABLED = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.failed"));
+    private static final SimpleCommandExceptionType ERROR_NOT_TRIGGER = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.invalid"));
+    private static final Dynamic2CommandExceptionType ERROR_NO_VALUE = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.scoreboard.players.get.null", new Object[]{object, object1});
     });
+
+    public CommandScoreboard() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("scoreboard").requires((commandlistenerwrapper) -> {
@@ -66,25 +68,25 @@ public class CommandScoreboard {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardSlot.a(commandcontext, "slot"), ArgumentScoreboardObjective.a(commandcontext, "objective"));
         })))))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("players").then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("list").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource());
-        })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.a(commandcontext, "target"));
-        })))).then(net.minecraft.commands.CommandDispatcher.a("set").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+        })))).then(net.minecraft.commands.CommandDispatcher.a("set").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.b(commandcontext, "objective"), IntegerArgumentType.getInteger(commandcontext, "score"));
-        })))))).then(net.minecraft.commands.CommandDispatcher.a("get").then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).executes((commandcontext) -> {
+        })))))).then(net.minecraft.commands.CommandDispatcher.a("get").then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.a(commandcontext, "target"), ArgumentScoreboardObjective.a(commandcontext, "objective"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("add").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("add").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.b(commandcontext, "objective"), IntegerArgumentType.getInteger(commandcontext, "score"));
-        })))))).then(net.minecraft.commands.CommandDispatcher.a("remove").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+        })))))).then(net.minecraft.commands.CommandDispatcher.a("remove").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("score", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
             return c((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.b(commandcontext, "objective"), IntegerArgumentType.getInteger(commandcontext, "score"));
-        })))))).then(net.minecraft.commands.CommandDispatcher.a("reset").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).executes((commandcontext) -> {
+        })))))).then(net.minecraft.commands.CommandDispatcher.a("reset").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"));
         })).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.a(commandcontext, "objective"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("enable").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).suggests((commandcontext, suggestionsbuilder) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("enable").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).suggests((commandcontext, suggestionsbuilder) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.a(commandcontext, "objective"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("operation").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("operation", (ArgumentType) ArgumentMathOperation.a()).then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("operation").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("operation", (ArgumentType) ArgumentMathOperation.a()).then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.b(commandcontext, "targetObjective"), ArgumentMathOperation.a(commandcontext, "operation"), ArgumentScoreholder.c(commandcontext, "source"), ArgumentScoreboardObjective.a(commandcontext, "sourceObjective"));
         })))))))));
     }
@@ -143,7 +145,7 @@ public class CommandScoreboard {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (!scoreboardserver.b(s, scoreboardobjective)) {
-            throw CommandScoreboard.f.create(scoreboardobjective.getName(), s);
+            throw CommandScoreboard.ERROR_NO_VALUE.create(scoreboardobjective.getName(), s);
         } else {
             ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
 
@@ -183,7 +185,7 @@ public class CommandScoreboard {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<String> collection, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {
         if (scoreboardobjective.getCriteria() != IScoreboardCriteria.TRIGGER) {
-            throw CommandScoreboard.e.create();
+            throw CommandScoreboard.ERROR_NOT_TRIGGER.create();
         } else {
             ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
             int i = 0;
@@ -200,7 +202,7 @@ public class CommandScoreboard {
             }
 
             if (i == 0) {
-                throw CommandScoreboard.d.create();
+                throw CommandScoreboard.ERROR_TRIGGER_ALREADY_ENABLED.create();
             } else {
                 if (collection.size() == 1) {
                     commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.enable.success.single", new Object[]{scoreboardobjective.e(), collection.iterator().next()}), true);
@@ -350,7 +352,7 @@ public class CommandScoreboard {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (scoreboardserver.getObjectiveForSlot(i) == null) {
-            throw CommandScoreboard.b.create();
+            throw CommandScoreboard.ERROR_DISPLAY_SLOT_ALREADY_EMPTY.create();
         } else {
             scoreboardserver.setDisplaySlot(i, (ScoreboardObjective) null);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.display.cleared", new Object[]{Scoreboard.h()[i]}), true);
@@ -362,7 +364,7 @@ public class CommandScoreboard {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (scoreboardserver.getObjectiveForSlot(i) == scoreboardobjective) {
-            throw CommandScoreboard.c.create();
+            throw CommandScoreboard.ERROR_DISPLAY_SLOT_ALREADY_SET.create();
         } else {
             scoreboardserver.setDisplaySlot(i, scoreboardobjective);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.display.set", new Object[]{Scoreboard.h()[i], scoreboardobjective.getDisplayName()}), true);
@@ -400,11 +402,11 @@ public class CommandScoreboard {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (scoreboardserver.getObjective(s) != null) {
-            throw CommandScoreboard.a.create();
+            throw CommandScoreboard.ERROR_OBJECTIVE_ALREADY_EXISTS.create();
         } else if (s.length() > 16) {
-            throw ArgumentScoreboardObjective.a.create(16);
+            throw ArgumentScoreboardObjective.ERROR_OBJECTIVE_NAME_TOO_LONG.create(16);
         } else {
-            scoreboardserver.registerObjective(s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria.e());
+            scoreboardserver.registerObjective(s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria.f());
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(s);
 
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.add.success", new Object[]{scoreboardobjective.e()}), true);

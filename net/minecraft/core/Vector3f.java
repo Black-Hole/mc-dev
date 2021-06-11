@@ -2,6 +2,7 @@ package net.minecraft.core;
 
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.MathHelper;
 
 public class Vector3f {
 
@@ -48,5 +49,17 @@ public class Vector3f {
 
     public float getZ() {
         return this.z;
+    }
+
+    public float e() {
+        return MathHelper.g(this.x);
+    }
+
+    public float f() {
+        return MathHelper.g(this.y);
+    }
+
+    public float g() {
+        return MathHelper.g(this.z);
     }
 }

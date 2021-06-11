@@ -2,95 +2,96 @@ package net.minecraft.world.level.block.entity;
 
 import java.util.Random;
 import javax.annotation.Nullable;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.INamableTileEntity;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;
 
-public class TileEntityEnchantTable extends TileEntity implements INamableTileEntity, ITickable {
+public class TileEntityEnchantTable extends TileEntity implements INamableTileEntity {
 
-    public int a;
-    public float b;
-    public float c;
-    public float g;
-    public float h;
-    public float i;
-    public float j;
-    public float k;
-    public float l;
-    public float m;
-    private static final Random n = new Random();
-    private IChatBaseComponent o;
+    public int time;
+    public float flip;
+    public float oFlip;
+    public float flipT;
+    public float flipA;
+    public float open;
+    public float oOpen;
+    public float rot;
+    public float oRot;
+    public float tRot;
+    private static final Random RANDOM = new Random();
+    private IChatBaseComponent name;
 
-    public TileEntityEnchantTable() {
-        super(TileEntityTypes.ENCHANTING_TABLE);
+    public TileEntityEnchantTable(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.ENCHANTING_TABLE, blockposition, iblockdata);
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.hasCustomName()) {
-            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.o));
+            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.name));
         }
 
         return nbttagcompound;
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.o = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
+            this.name = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
     }
 
-    @Override
-    public void tick() {
-        this.j = this.i;
-        this.l = this.k;
-        EntityHuman entityhuman = this.world.a((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D, 3.0D, false);
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntityEnchantTable tileentityenchanttable) {
+        tileentityenchanttable.oOpen = tileentityenchanttable.open;
+        tileentityenchanttable.oRot = tileentityenchanttable.rot;
+        EntityHuman entityhuman = world.a((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 3.0D, false);
 
         if (entityhuman != null) {
-            double d0 = entityhuman.locX() - ((double) this.position.getX() + 0.5D);
-            double d1 = entityhuman.locZ() - ((double) this.position.getZ() + 0.5D);
+            double d0 = entityhuman.locX() - ((double) blockposition.getX() + 0.5D);
+            double d1 = entityhuman.locZ() - ((double) blockposition.getZ() + 0.5D);
 
-            this.m = (float) MathHelper.d(d1, d0);
-            this.i += 0.1F;
-            if (this.i < 0.5F || TileEntityEnchantTable.n.nextInt(40) == 0) {
-                float f = this.g;
+            tileentityenchanttable.tRot = (float) MathHelper.d(d1, d0);
+            tileentityenchanttable.open += 0.1F;
+            if (tileentityenchanttable.open < 0.5F || TileEntityEnchantTable.RANDOM.nextInt(40) == 0) {
+                float f = tileentityenchanttable.flipT;
 
                 do {
-                    this.g += (float) (TileEntityEnchantTable.n.nextInt(4) - TileEntityEnchantTable.n.nextInt(4));
-                } while (f == this.g);
+                    tileentityenchanttable.flipT += (float) (TileEntityEnchantTable.RANDOM.nextInt(4) - TileEntityEnchantTable.RANDOM.nextInt(4));
+                } while (f == tileentityenchanttable.flipT);
             }
         } else {
-            this.m += 0.02F;
-            this.i -= 0.1F;
+            tileentityenchanttable.tRot += 0.02F;
+            tileentityenchanttable.open -= 0.1F;
         }
 
-        while (this.k >= 3.1415927F) {
-            this.k -= 6.2831855F;
+        while (tileentityenchanttable.rot >= 3.1415927F) {
+            tileentityenchanttable.rot -= 6.2831855F;
         }
 
-        while (this.k < -3.1415927F) {
-            this.k += 6.2831855F;
+        while (tileentityenchanttable.rot < -3.1415927F) {
+            tileentityenchanttable.rot += 6.2831855F;
         }
 
-        while (this.m >= 3.1415927F) {
-            this.m -= 6.2831855F;
+        while (tileentityenchanttable.tRot >= 3.1415927F) {
+            tileentityenchanttable.tRot -= 6.2831855F;
         }
 
-        while (this.m < -3.1415927F) {
-            this.m += 6.2831855F;
+        while (tileentityenchanttable.tRot < -3.1415927F) {
+            tileentityenchanttable.tRot += 6.2831855F;
         }
 
         float f1;
 
-        for (f1 = this.m - this.k; f1 >= 3.1415927F; f1 -= 6.2831855F) {
+        for (f1 = tileentityenchanttable.tRot - tileentityenchanttable.rot; f1 >= 3.1415927F; f1 -= 6.2831855F) {
             ;
         }
 
@@ -98,30 +99,30 @@ public class TileEntityEnchantTable extends TileEntity implements INamableTileEn
             f1 += 6.2831855F;
         }
 
-        this.k += f1 * 0.4F;
-        this.i = MathHelper.a(this.i, 0.0F, 1.0F);
-        ++this.a;
-        this.c = this.b;
-        float f2 = (this.g - this.b) * 0.4F;
+        tileentityenchanttable.rot += f1 * 0.4F;
+        tileentityenchanttable.open = MathHelper.a(tileentityenchanttable.open, 0.0F, 1.0F);
+        ++tileentityenchanttable.time;
+        tileentityenchanttable.oFlip = tileentityenchanttable.flip;
+        float f2 = (tileentityenchanttable.flipT - tileentityenchanttable.flip) * 0.4F;
         float f3 = 0.2F;
 
         f2 = MathHelper.a(f2, -0.2F, 0.2F);
-        this.h += (f2 - this.h) * 0.9F;
-        this.b += this.h;
+        tileentityenchanttable.flipA += (f2 - tileentityenchanttable.flipA) * 0.9F;
+        tileentityenchanttable.flip += tileentityenchanttable.flipA;
     }
 
     @Override
     public IChatBaseComponent getDisplayName() {
-        return (IChatBaseComponent) (this.o != null ? this.o : new ChatMessage("container.enchant"));
+        return (IChatBaseComponent) (this.name != null ? this.name : new ChatMessage("container.enchant"));
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.o = ichatbasecomponent;
+        this.name = ichatbasecomponent;
     }
 
     @Nullable
     @Override
     public IChatBaseComponent getCustomName() {
-        return this.o;
+        return this.name;
     }
 }

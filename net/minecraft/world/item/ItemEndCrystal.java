@@ -11,6 +11,7 @@ import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.dimension.end.EnderDragonBattle;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class ItemEndCrystal extends Item {
@@ -46,6 +47,7 @@ public class ItemEndCrystal extends Item {
 
                         entityendercrystal.setShowingBottom(false);
                         world.addEntity(entityendercrystal);
+                        world.a((Entity) itemactioncontext.getEntity(), GameEvent.ENTITY_PLACE, blockposition1);
                         EnderDragonBattle enderdragonbattle = ((WorldServer) world).getDragonBattle();
 
                         if (enderdragonbattle != null) {
@@ -61,7 +63,7 @@ public class ItemEndCrystal extends Item {
     }
 
     @Override
-    public boolean e(ItemStack itemstack) {
+    public boolean i(ItemStack itemstack) {
         return true;
     }
 }

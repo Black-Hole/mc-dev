@@ -1,5 +1,6 @@
 package net.minecraft.world.level.storage;
 
+import com.mojang.serialization.Lifecycle;
 import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.CrashReportSystemDetails;
@@ -9,9 +10,13 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.level.DataPackConfiguration;
 import net.minecraft.world.level.EnumGamemode;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.WorldSettings;
 import net.minecraft.world.level.levelgen.GeneratorSettings;
 
 public interface SaveData {
+
+    int ANVIL_VERSION_ID = 19133;
+    int MCREGION_VERSION_ID = 19132;
 
     DataPackConfiguration D();
 
@@ -55,6 +60,8 @@ public interface SaveData {
 
     IWorldDataServer H();
 
+    WorldSettings I();
+
     NBTTagCompound a(IRegistryCustom iregistrycustom, @Nullable NBTTagCompound nbttagcompound);
 
     boolean isHardcore();
@@ -86,4 +93,6 @@ public interface SaveData {
     void a(NBTTagCompound nbttagcompound);
 
     GeneratorSettings getGeneratorSettings();
+
+    Lifecycle B();
 }

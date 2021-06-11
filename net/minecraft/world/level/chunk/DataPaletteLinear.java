@@ -10,45 +10,45 @@ import net.minecraft.network.PacketDataSerializer;
 
 public class DataPaletteLinear<T> implements DataPalette<T> {
 
-    private final RegistryBlockID<T> a;
-    private final T[] b;
-    private final DataPaletteExpandable<T> c;
-    private final Function<NBTTagCompound, T> d;
-    private final int e;
-    private int f;
+    private final RegistryBlockID<T> registry;
+    private final T[] values;
+    private final DataPaletteExpandable<T> resizeHandler;
+    private final Function<NBTTagCompound, T> reader;
+    private final int bits;
+    private int size;
 
     public DataPaletteLinear(RegistryBlockID<T> registryblockid, int i, DataPaletteExpandable<T> datapaletteexpandable, Function<NBTTagCompound, T> function) {
-        this.a = registryblockid;
-        this.b = (Object[]) (new Object[1 << i]);
-        this.e = i;
-        this.c = datapaletteexpandable;
-        this.d = function;
+        this.registry = registryblockid;
+        this.values = new Object[1 << i];
+        this.bits = i;
+        this.resizeHandler = datapaletteexpandable;
+        this.reader = function;
     }
 
     @Override
     public int a(T t0) {
         int i;
 
-        for (i = 0; i < this.f; ++i) {
-            if (this.b[i] == t0) {
+        for (i = 0; i < this.size; ++i) {
+            if (this.values[i] == t0) {
                 return i;
             }
         }
 
-        i = this.f;
-        if (i < this.b.length) {
-            this.b[i] = t0;
-            ++this.f;
+        i = this.size;
+        if (i < this.values.length) {
+            this.values[i] = t0;
+            ++this.size;
             return i;
         } else {
-            return this.c.onResize(this.e + 1, t0);
+            return this.resizeHandler.onResize(this.bits + 1, t0);
         }
     }
 
     @Override
     public boolean a(Predicate<T> predicate) {
-        for (int i = 0; i < this.f; ++i) {
-            if (predicate.test(this.b[i])) {
+        for (int i = 0; i < this.size; ++i) {
+            if (predicate.test(this.values[i])) {
                 return true;
             }
         }
@@ -59,15 +59,25 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
     @Nullable
     @Override
     public T a(int i) {
-        return i >= 0 && i < this.f ? this.b[i] : null;
+        return i >= 0 && i < this.size ? this.values[i] : null;
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        this.size = packetdataserializer.j();
+
+        for (int i = 0; i < this.size; ++i) {
+            this.values[i] = this.registry.fromId(packetdataserializer.j());
+        }
+
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.d(this.f);
+        packetdataserializer.d(this.size);
 
-        for (int i = 0; i < this.f; ++i) {
-            packetdataserializer.d(this.a.getId(this.b[i]));
+        for (int i = 0; i < this.size; ++i) {
+            packetdataserializer.d(this.registry.getId(this.values[i]));
         }
 
     }
@@ -77,22 +87,23 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
         int i = PacketDataSerializer.a(this.b());
 
         for (int j = 0; j < this.b(); ++j) {
-            i += PacketDataSerializer.a(this.a.getId(this.b[j]));
+            i += PacketDataSerializer.a(this.registry.getId(this.values[j]));
         }
 
         return i;
     }
 
+    @Override
     public int b() {
-        return this.f;
+        return this.size;
     }
 
     @Override
     public void a(NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            this.b[i] = this.d.apply(nbttaglist.getCompound(i));
+            this.values[i] = this.reader.apply(nbttaglist.getCompound(i));
         }
 
-        this.f = nbttaglist.size();
+        this.size = nbttaglist.size();
     }
 }

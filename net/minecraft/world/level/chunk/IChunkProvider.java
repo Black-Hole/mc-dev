@@ -1,9 +1,8 @@
 package net.minecraft.world.level.chunk;
 
 import java.io.IOException;
+import java.util.function.BooleanSupplier;
 import javax.annotation.Nullable;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.lighting.LightEngine;
@@ -28,14 +27,18 @@ public abstract class IChunkProvider implements ILightAccess, AutoCloseable {
         return this.getChunkAt(i, j, ChunkStatus.EMPTY, false);
     }
 
-    public boolean b(int i, int j) {
+    public boolean isLoaded(int i, int j) {
         return this.getChunkAt(i, j, ChunkStatus.FULL, false) != null;
     }
 
     @Nullable
     public abstract IChunkAccess getChunkAt(int i, int j, ChunkStatus chunkstatus, boolean flag);
 
+    public abstract void tick(BooleanSupplier booleansupplier);
+
     public abstract String getName();
+
+    public abstract int h();
 
     public void close() throws IOException {}
 
@@ -44,16 +47,4 @@ public abstract class IChunkProvider implements ILightAccess, AutoCloseable {
     public void a(boolean flag, boolean flag1) {}
 
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {}
-
-    public boolean a(Entity entity) {
-        return true;
-    }
-
-    public boolean a(ChunkCoordIntPair chunkcoordintpair) {
-        return true;
-    }
-
-    public boolean a(BlockPosition blockposition) {
-        return true;
-    }
 }

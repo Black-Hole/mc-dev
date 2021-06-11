@@ -2,19 +2,19 @@ package net.minecraft.server;
 
 public class TickTask implements Runnable {
 
-    private final int a;
-    private final Runnable b;
+    private final int tick;
+    private final Runnable runnable;
 
     public TickTask(int i, Runnable runnable) {
-        this.a = i;
-        this.b = runnable;
+        this.tick = i;
+        this.runnable = runnable;
     }
 
     public int a() {
-        return this.a;
+        return this.tick;
     }
 
     public void run() {
-        this.b.run();
+        this.runnable.run();
     }
 }

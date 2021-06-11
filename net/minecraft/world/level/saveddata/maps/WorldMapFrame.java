@@ -6,14 +6,14 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class WorldMapFrame {
 
-    private final BlockPosition a;
-    private final int b;
-    private final int c;
+    private final BlockPosition pos;
+    private final int rotation;
+    private final int entityId;
 
     public WorldMapFrame(BlockPosition blockposition, int i, int j) {
-        this.a = blockposition;
-        this.b = i;
-        this.c = j;
+        this.pos = blockposition;
+        this.rotation = i;
+        this.entityId = j;
     }
 
     public static WorldMapFrame a(NBTTagCompound nbttagcompound) {
@@ -27,29 +27,31 @@ public class WorldMapFrame {
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.set("Pos", GameProfileSerializer.a(this.a));
-        nbttagcompound.setInt("Rotation", this.b);
-        nbttagcompound.setInt("EntityId", this.c);
+        nbttagcompound.set("Pos", GameProfileSerializer.a(this.pos));
+        nbttagcompound.setInt("Rotation", this.rotation);
+        nbttagcompound.setInt("EntityId", this.entityId);
         return nbttagcompound;
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public int c() {
-        return this.b;
+        return this.rotation;
     }
 
     public int d() {
-        return this.c;
+        return this.entityId;
     }
 
     public String e() {
-        return a(this.a);
+        return a(this.pos);
     }
 
     public static String a(BlockPosition blockposition) {
-        return "frame-" + blockposition.getX() + "," + blockposition.getY() + "," + blockposition.getZ();
+        int i = blockposition.getX();
+
+        return "frame-" + i + "," + blockposition.getY() + "," + blockposition.getZ();
     }
 }

@@ -31,7 +31,7 @@ public class EntitySmallFireball extends EntityFireballFireball {
     @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         super.a(movingobjectpositionentity);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             Entity entity = movingobjectpositionentity.getEntity();
 
             if (!entity.isFireProof()) {
@@ -54,14 +54,14 @@ public class EntitySmallFireball extends EntityFireballFireball {
     @Override
     protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
         super.a(movingobjectpositionblock);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             Entity entity = this.getShooter();
 
-            if (entity == null || !(entity instanceof EntityInsentient) || this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+            if (!(entity instanceof EntityInsentient) || this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                 BlockPosition blockposition = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
 
-                if (this.world.isEmpty(blockposition)) {
-                    this.world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.world, blockposition));
+                if (this.level.isEmpty(blockposition)) {
+                    this.level.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.level, blockposition));
                 }
             }
 
@@ -71,7 +71,7 @@ public class EntitySmallFireball extends EntityFireballFireball {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             this.die();
         }
 

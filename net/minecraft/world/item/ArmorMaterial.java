@@ -16,6 +16,8 @@ public interface ArmorMaterial {
 
     RecipeItemStack c();
 
+    String d();
+
     float e();
 
     float f();

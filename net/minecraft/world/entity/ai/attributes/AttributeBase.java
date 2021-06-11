@@ -2,25 +2,26 @@ package net.minecraft.world.entity.ai.attributes;
 
 public class AttributeBase {
 
-    private final double a;
-    private boolean b;
-    private final String c;
+    public static final int MAX_NAME_LENGTH = 64;
+    private final double defaultValue;
+    private boolean syncable;
+    private final String descriptionId;
 
     protected AttributeBase(String s, double d0) {
-        this.a = d0;
-        this.c = s;
+        this.defaultValue = d0;
+        this.descriptionId = s;
     }
 
     public double getDefault() {
-        return this.a;
+        return this.defaultValue;
     }
 
     public boolean b() {
-        return this.b;
+        return this.syncable;
     }
 
     public AttributeBase a(boolean flag) {
-        this.b = flag;
+        this.syncable = flag;
         return this;
     }
 
@@ -29,6 +30,6 @@ public class AttributeBase {
     }
 
     public String getName() {
-        return this.c;
+        return this.descriptionId;
     }
 }

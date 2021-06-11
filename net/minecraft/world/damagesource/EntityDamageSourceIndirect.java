@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class EntityDamageSourceIndirect extends EntityDamageSource {
 
+    @Nullable
     private final Entity owner;
 
     public EntityDamageSourceIndirect(String s, Entity entity, @Nullable Entity entity1) {
@@ -18,8 +19,8 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
 
     @Nullable
     @Override
-    public Entity j() {
-        return this.w;
+    public Entity k() {
+        return this.entity;
     }
 
     @Nullable
@@ -30,11 +31,11 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
 
     @Override
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.w.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
-        ItemStack itemstack = this.owner instanceof EntityLiving ? ((EntityLiving) this.owner).getItemInMainHand() : ItemStack.b;
-        String s = "death.attack." + this.translationIndex;
+        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.entity.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
+        ItemStack itemstack = this.owner instanceof EntityLiving ? ((EntityLiving) this.owner).getItemInMainHand() : ItemStack.EMPTY;
+        String s = "death.attack." + this.msgId;
         String s1 = s + ".item";
 
-        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.C()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent});
+        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.G()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent});
     }
 }

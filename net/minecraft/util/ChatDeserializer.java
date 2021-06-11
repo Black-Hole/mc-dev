@@ -9,10 +9,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
@@ -21,18 +24,40 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ChatDeserializer {
 
-    private static final Gson a = (new GsonBuilder()).create();
+    private static final Gson GSON = (new GsonBuilder()).create();
+
+    public ChatDeserializer() {}
 
     public static boolean a(JsonObject jsonobject, String s) {
         return !f(jsonobject, s) ? false : jsonobject.getAsJsonPrimitive(s).isString();
+    }
+
+    public static boolean a(JsonElement jsonelement) {
+        return !jsonelement.isJsonPrimitive() ? false : jsonelement.getAsJsonPrimitive().isString();
+    }
+
+    public static boolean b(JsonObject jsonobject, String s) {
+        return !f(jsonobject, s) ? false : jsonobject.getAsJsonPrimitive(s).isNumber();
     }
 
     public static boolean b(JsonElement jsonelement) {
         return !jsonelement.isJsonPrimitive() ? false : jsonelement.getAsJsonPrimitive().isNumber();
     }
 
+    public static boolean c(JsonObject jsonobject, String s) {
+        return !f(jsonobject, s) ? false : jsonobject.getAsJsonPrimitive(s).isBoolean();
+    }
+
+    public static boolean c(JsonElement jsonelement) {
+        return !jsonelement.isJsonPrimitive() ? false : jsonelement.getAsJsonPrimitive().isBoolean();
+    }
+
     public static boolean d(JsonObject jsonobject, String s) {
         return !g(jsonobject, s) ? false : jsonobject.get(s).isJsonArray();
+    }
+
+    public static boolean e(JsonObject jsonobject, String s) {
+        return !g(jsonobject, s) ? false : jsonobject.get(s).isJsonObject();
     }
 
     public static boolean f(JsonObject jsonobject, String s) {
@@ -83,6 +108,10 @@ public class ChatDeserializer {
         }
     }
 
+    public static Item a(JsonObject jsonobject, String s, Item item) {
+        return jsonobject.has(s) ? b(jsonobject.get(s), s) : item;
+    }
+
     public static boolean c(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             return jsonelement.getAsBoolean();
@@ -101,6 +130,26 @@ public class ChatDeserializer {
 
     public static boolean a(JsonObject jsonobject, String s, boolean flag) {
         return jsonobject.has(s) ? c(jsonobject.get(s), s) : flag;
+    }
+
+    public static double d(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsDouble();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Double, was " + d(jsonelement));
+        }
+    }
+
+    public static double k(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return d(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Double");
+        }
+    }
+
+    public static double a(JsonObject jsonobject, String s, double d0) {
+        return jsonobject.has(s) ? d(jsonobject.get(s), s) : d0;
     }
 
     public static float e(JsonElement jsonelement, String s) {
@@ -171,8 +220,96 @@ public class ChatDeserializer {
         }
     }
 
+    public static byte o(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return h(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Byte");
+        }
+    }
+
     public static byte a(JsonObject jsonobject, String s, byte b0) {
         return jsonobject.has(s) ? h(jsonobject.get(s), s) : b0;
+    }
+
+    public static char i(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsCharacter();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Character, was " + d(jsonelement));
+        }
+    }
+
+    public static char p(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return i(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Character");
+        }
+    }
+
+    public static char a(JsonObject jsonobject, String s, char c0) {
+        return jsonobject.has(s) ? i(jsonobject.get(s), s) : c0;
+    }
+
+    public static BigDecimal j(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsBigDecimal();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a BigDecimal, was " + d(jsonelement));
+        }
+    }
+
+    public static BigDecimal q(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return j(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a BigDecimal");
+        }
+    }
+
+    public static BigDecimal a(JsonObject jsonobject, String s, BigDecimal bigdecimal) {
+        return jsonobject.has(s) ? j(jsonobject.get(s), s) : bigdecimal;
+    }
+
+    public static BigInteger k(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsBigInteger();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a BigInteger, was " + d(jsonelement));
+        }
+    }
+
+    public static BigInteger r(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return k(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a BigInteger");
+        }
+    }
+
+    public static BigInteger a(JsonObject jsonobject, String s, BigInteger biginteger) {
+        return jsonobject.has(s) ? k(jsonobject.get(s), s) : biginteger;
+    }
+
+    public static short l(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsShort();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Short, was " + d(jsonelement));
+        }
+    }
+
+    public static short s(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return l(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Short");
+        }
+    }
+
+    public static short a(JsonObject jsonobject, String s, short short0) {
+        return jsonobject.has(s) ? l(jsonobject.get(s), s) : short0;
     }
 
     public static JsonObject m(JsonElement jsonelement, String s) {
@@ -277,8 +414,35 @@ public class ChatDeserializer {
     }
 
     @Nullable
+    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken, boolean flag) {
+        try {
+            JsonReader jsonreader = new JsonReader(reader);
+
+            jsonreader.setLenient(flag);
+            return gson.getAdapter(typetoken).read(jsonreader);
+        } catch (IOException ioexception) {
+            throw new JsonParseException(ioexception);
+        }
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, String s, TypeToken<T> typetoken, boolean flag) {
+        return a(gson, (Reader) (new StringReader(s)), typetoken, flag);
+    }
+
+    @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass, boolean flag) {
         return a(gson, (Reader) (new StringReader(s)), oclass, flag);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken) {
+        return a(gson, reader, typetoken, false);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, String s, TypeToken<T> typetoken) {
+        return a(gson, s, typetoken, false);
     }
 
     @Nullable
@@ -296,7 +460,7 @@ public class ChatDeserializer {
     }
 
     public static JsonObject a(Reader reader, boolean flag) {
-        return (JsonObject) a(ChatDeserializer.a, reader, JsonObject.class, flag);
+        return (JsonObject) a(ChatDeserializer.GSON, reader, JsonObject.class, flag);
     }
 
     public static JsonObject a(String s) {
@@ -305,5 +469,9 @@ public class ChatDeserializer {
 
     public static JsonObject a(Reader reader) {
         return a(reader, false);
+    }
+
+    public static JsonArray b(Reader reader) {
+        return (JsonArray) a(ChatDeserializer.GSON, reader, JsonArray.class, false);
     }
 }

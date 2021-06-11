@@ -8,46 +8,46 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
 
-    private final EntityInsentient a;
-    private EntityLiving b;
-    private final float c;
+    private final EntityInsentient mob;
+    private EntityLiving target;
+    private final float yd;
 
     public PathfinderGoalLeapAtTarget(EntityInsentient entityinsentient, float f) {
-        this.a = entityinsentient;
-        this.c = f;
+        this.mob = entityinsentient;
+        this.yd = f;
         this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
     }
 
     @Override
     public boolean a() {
-        if (this.a.isVehicle()) {
+        if (this.mob.isVehicle()) {
             return false;
         } else {
-            this.b = this.a.getGoalTarget();
-            if (this.b == null) {
+            this.target = this.mob.getGoalTarget();
+            if (this.target == null) {
                 return false;
             } else {
-                double d0 = this.a.h((Entity) this.b);
+                double d0 = this.mob.f((Entity) this.target);
 
-                return d0 >= 4.0D && d0 <= 16.0D ? (!this.a.isOnGround() ? false : this.a.getRandom().nextInt(5) == 0) : false;
+                return d0 >= 4.0D && d0 <= 16.0D ? (!this.mob.isOnGround() ? false : this.mob.getRandom().nextInt(5) == 0) : false;
             }
         }
     }
 
     @Override
     public boolean b() {
-        return !this.a.isOnGround();
+        return !this.mob.isOnGround();
     }
 
     @Override
     public void c() {
-        Vec3D vec3d = this.a.getMot();
-        Vec3D vec3d1 = new Vec3D(this.b.locX() - this.a.locX(), 0.0D, this.b.locZ() - this.a.locZ());
+        Vec3D vec3d = this.mob.getMot();
+        Vec3D vec3d1 = new Vec3D(this.target.locX() - this.mob.locX(), 0.0D, this.target.locZ() - this.mob.locZ());
 
         if (vec3d1.g() > 1.0E-7D) {
             vec3d1 = vec3d1.d().a(0.4D).e(vec3d.a(0.2D));
         }
 
-        this.a.setMot(vec3d1.x, (double) this.c, vec3d1.z);
+        this.mob.setMot(vec3d1.x, (double) this.yd, vec3d1.z);
     }
 }

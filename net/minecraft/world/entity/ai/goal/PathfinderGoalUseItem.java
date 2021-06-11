@@ -10,39 +10,39 @@ import net.minecraft.world.item.ItemStack;
 
 public class PathfinderGoalUseItem<T extends EntityInsentient> extends PathfinderGoal {
 
-    private final T a;
-    private final ItemStack b;
-    private final Predicate<? super T> c;
-    private final SoundEffect d;
+    private final T mob;
+    private final ItemStack item;
+    private final Predicate<? super T> canUseSelector;
+    private final SoundEffect finishUsingSound;
 
     public PathfinderGoalUseItem(T t0, ItemStack itemstack, @Nullable SoundEffect soundeffect, Predicate<? super T> predicate) {
-        this.a = t0;
-        this.b = itemstack;
-        this.d = soundeffect;
-        this.c = predicate;
+        this.mob = t0;
+        this.item = itemstack;
+        this.finishUsingSound = soundeffect;
+        this.canUseSelector = predicate;
     }
 
     @Override
     public boolean a() {
-        return this.c.test(this.a);
+        return this.canUseSelector.test(this.mob);
     }
 
     @Override
     public boolean b() {
-        return this.a.isHandRaised();
+        return this.mob.isHandRaised();
     }
 
     @Override
     public void c() {
-        this.a.setSlot(EnumItemSlot.MAINHAND, this.b.cloneItemStack());
-        this.a.c(EnumHand.MAIN_HAND);
+        this.mob.setSlot(EnumItemSlot.MAINHAND, this.item.cloneItemStack());
+        this.mob.c(EnumHand.MAIN_HAND);
     }
 
     @Override
     public void d() {
-        this.a.setSlot(EnumItemSlot.MAINHAND, ItemStack.b);
-        if (this.d != null) {
-            this.a.playSound(this.d, 1.0F, this.a.getRandom().nextFloat() * 0.2F + 0.9F);
+        this.mob.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+        if (this.finishUsingSound != null) {
+            this.mob.playSound(this.finishUsingSound, 1.0F, this.mob.getRandom().nextFloat() * 0.2F + 0.9F);
         }
 
     }

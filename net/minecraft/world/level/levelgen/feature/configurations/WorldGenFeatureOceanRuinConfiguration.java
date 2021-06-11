@@ -6,22 +6,22 @@ import net.minecraft.world.level.levelgen.structure.WorldGenFeatureOceanRuin;
 
 public class WorldGenFeatureOceanRuinConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureOceanRuinConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureOceanRuin.Temperature.c.fieldOf("biome_temp").forGetter((worldgenfeatureoceanruinconfiguration) -> {
-            return worldgenfeatureoceanruinconfiguration.b;
+    public static final Codec<WorldGenFeatureOceanRuinConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureOceanRuin.Temperature.CODEC.fieldOf("biome_temp").forGetter((worldgenfeatureoceanruinconfiguration) -> {
+            return worldgenfeatureoceanruinconfiguration.biomeTemp;
         }), Codec.floatRange(0.0F, 1.0F).fieldOf("large_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
-            return worldgenfeatureoceanruinconfiguration.c;
+            return worldgenfeatureoceanruinconfiguration.largeProbability;
         }), Codec.floatRange(0.0F, 1.0F).fieldOf("cluster_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
-            return worldgenfeatureoceanruinconfiguration.d;
+            return worldgenfeatureoceanruinconfiguration.clusterProbability;
         })).apply(instance, WorldGenFeatureOceanRuinConfiguration::new);
     });
-    public final WorldGenFeatureOceanRuin.Temperature b;
-    public final float c;
-    public final float d;
+    public final WorldGenFeatureOceanRuin.Temperature biomeTemp;
+    public final float largeProbability;
+    public final float clusterProbability;
 
     public WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature worldgenfeatureoceanruin_temperature, float f, float f1) {
-        this.b = worldgenfeatureoceanruin_temperature;
-        this.c = f;
-        this.d = f1;
+        this.biomeTemp = worldgenfeatureoceanruin_temperature;
+        this.largeProbability = f;
+        this.clusterProbability = f1;
     }
 }

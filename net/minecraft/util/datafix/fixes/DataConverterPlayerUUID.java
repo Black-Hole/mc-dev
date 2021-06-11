@@ -13,7 +13,7 @@ public class DataConverterPlayerUUID extends DataConverterUUIDBase {
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("PlayerUUIDFix", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("PlayerUUIDFix", this.getInputSchema().getType(this.typeReference), (typed) -> {
             OpticFinder<?> opticfinder = typed.getType().findField("RootVehicle");
 
             return typed.updateTyped(opticfinder, opticfinder.type(), (typed1) -> {

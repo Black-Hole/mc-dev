@@ -23,8 +23,8 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackFolder extends ResourcePackAbstract {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final boolean c = SystemUtils.i() == SystemUtils.OS.WINDOWS;
-    private static final CharMatcher d = CharMatcher.is('\\');
+    private static final boolean ON_WINDOWS = SystemUtils.i() == SystemUtils.OS.WINDOWS;
+    private static final CharMatcher BACKSLASH_MATCHER = CharMatcher.is('\\');
 
     public ResourcePackFolder(File file) {
         super(file);
@@ -33,8 +33,8 @@ public class ResourcePackFolder extends ResourcePackAbstract {
     public static boolean a(File file, String s) throws IOException {
         String s1 = file.getCanonicalPath();
 
-        if (ResourcePackFolder.c) {
-            s1 = ResourcePackFolder.d.replaceFrom(s1, '/');
+        if (ResourcePackFolder.ON_WINDOWS) {
+            s1 = ResourcePackFolder.BACKSLASH_MATCHER.replaceFrom(s1, '/');
         }
 
         return s1.endsWith(s);
@@ -45,7 +45,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
         File file = this.e(s);
 
         if (file == null) {
-            throw new ResourceNotFoundException(this.a, s);
+            throw new ResourceNotFoundException(this.file, s);
         } else {
             return new FileInputStream(file);
         }
@@ -59,7 +59,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
     @Nullable
     private File e(String s) {
         try {
-            File file = new File(this.a, s);
+            File file = new File(this.file, s);
 
             if (file.isFile() && a(file, s)) {
                 return file;
@@ -74,7 +74,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
     @Override
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
         Set<String> set = Sets.newHashSet();
-        File file = new File(this.a, enumresourcepacktype.a());
+        File file = new File(this.file, enumresourcepacktype.a());
         File[] afile = file.listFiles(DirectoryFileFilter.DIRECTORY);
 
         if (afile != null) {
@@ -101,7 +101,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
 
     @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {
-        File file = new File(this.a, enumresourcepacktype.a());
+        File file = new File(this.file, enumresourcepacktype.a());
         List<MinecraftKey> list = Lists.newArrayList();
 
         this.a(new File(new File(file, s), s1), i, s, list, s1 + "/", predicate);

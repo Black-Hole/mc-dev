@@ -21,22 +21,24 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class BlockMagma extends Block {
 
+    private static final int BUBBLE_COLUMN_CHECK_DELAY = 20;
+
     public BlockMagma(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public void stepOn(World world, BlockPosition blockposition, Entity entity) {
+    public void stepOn(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
         if (!entity.isFireProof() && entity instanceof EntityLiving && !EnchantmentManager.i((EntityLiving) entity)) {
             entity.damageEntity(DamageSource.HOT_FLOOR, 1.0F);
         }
 
-        super.stepOn(world, blockposition, entity);
+        super.stepOn(world, blockposition, iblockdata, entity);
     }
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        BlockBubbleColumn.a(worldserver, blockposition.up(), true);
+        BlockBubbleColumn.b((GeneratorAccess) worldserver, blockposition.up(), iblockdata);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class BlockMagma extends Block {
         BlockPosition blockposition1 = blockposition.up();
 
         if (worldserver.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
-            worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldserver.random.nextFloat() - worldserver.random.nextFloat()) * 0.8F);
+            worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldserver.random.nextFloat() - worldserver.random.nextFloat()) * 0.8F);
             worldserver.a(Particles.LARGE_SMOKE, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.25D, (double) blockposition1.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D);
         }
 

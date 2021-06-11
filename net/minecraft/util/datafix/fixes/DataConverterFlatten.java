@@ -21,7 +21,7 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterFlatten extends DataFix {
 
-    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:stone.0", "minecraft:stone");
         hashmap.put("minecraft:stone.1", "minecraft:granite");
         hashmap.put("minecraft:stone.2", "minecraft:polished_granite");
@@ -343,10 +343,10 @@ public class DataConverterFlatten extends DataFix {
         hashmap.put("minecraft:record_wait.0", "minecraft:music_disc_wait");
         hashmap.put("minecraft:record_ward.0", "minecraft:music_disc_ward");
     });
-    private static final Set<String> b = (Set) DataConverterFlatten.a.keySet().stream().map((s) -> {
+    private static final Set<String> IDS = (Set) DataConverterFlatten.MAP.keySet().stream().map((s) -> {
         return s.substring(0, s.indexOf(46));
     }).collect(Collectors.toSet());
-    private static final Set<String> c = Sets.newHashSet(new String[]{"minecraft:bow", "minecraft:carrot_on_a_stick", "minecraft:chainmail_boots", "minecraft:chainmail_chestplate", "minecraft:chainmail_helmet", "minecraft:chainmail_leggings", "minecraft:diamond_axe", "minecraft:diamond_boots", "minecraft:diamond_chestplate", "minecraft:diamond_helmet", "minecraft:diamond_hoe", "minecraft:diamond_leggings", "minecraft:diamond_pickaxe", "minecraft:diamond_shovel", "minecraft:diamond_sword", "minecraft:elytra", "minecraft:fishing_rod", "minecraft:flint_and_steel", "minecraft:golden_axe", "minecraft:golden_boots", "minecraft:golden_chestplate", "minecraft:golden_helmet", "minecraft:golden_hoe", "minecraft:golden_leggings", "minecraft:golden_pickaxe", "minecraft:golden_shovel", "minecraft:golden_sword", "minecraft:iron_axe", "minecraft:iron_boots", "minecraft:iron_chestplate", "minecraft:iron_helmet", "minecraft:iron_hoe", "minecraft:iron_leggings", "minecraft:iron_pickaxe", "minecraft:iron_shovel", "minecraft:iron_sword", "minecraft:leather_boots", "minecraft:leather_chestplate", "minecraft:leather_helmet", "minecraft:leather_leggings", "minecraft:shears", "minecraft:shield", "minecraft:stone_axe", "minecraft:stone_hoe", "minecraft:stone_pickaxe", "minecraft:stone_shovel", "minecraft:stone_sword", "minecraft:wooden_axe", "minecraft:wooden_hoe", "minecraft:wooden_pickaxe", "minecraft:wooden_shovel", "minecraft:wooden_sword"});
+    private static final Set<String> DAMAGE_IDS = Sets.newHashSet(new String[]{"minecraft:bow", "minecraft:carrot_on_a_stick", "minecraft:chainmail_boots", "minecraft:chainmail_chestplate", "minecraft:chainmail_helmet", "minecraft:chainmail_leggings", "minecraft:diamond_axe", "minecraft:diamond_boots", "minecraft:diamond_chestplate", "minecraft:diamond_helmet", "minecraft:diamond_hoe", "minecraft:diamond_leggings", "minecraft:diamond_pickaxe", "minecraft:diamond_shovel", "minecraft:diamond_sword", "minecraft:elytra", "minecraft:fishing_rod", "minecraft:flint_and_steel", "minecraft:golden_axe", "minecraft:golden_boots", "minecraft:golden_chestplate", "minecraft:golden_helmet", "minecraft:golden_hoe", "minecraft:golden_leggings", "minecraft:golden_pickaxe", "minecraft:golden_shovel", "minecraft:golden_sword", "minecraft:iron_axe", "minecraft:iron_boots", "minecraft:iron_chestplate", "minecraft:iron_helmet", "minecraft:iron_hoe", "minecraft:iron_leggings", "minecraft:iron_pickaxe", "minecraft:iron_shovel", "minecraft:iron_sword", "minecraft:leather_boots", "minecraft:leather_chestplate", "minecraft:leather_helmet", "minecraft:leather_leggings", "minecraft:shears", "minecraft:shield", "minecraft:stone_axe", "minecraft:stone_hoe", "minecraft:stone_pickaxe", "minecraft:stone_shovel", "minecraft:stone_sword", "minecraft:wooden_axe", "minecraft:wooden_hoe", "minecraft:wooden_pickaxe", "minecraft:wooden_shovel", "minecraft:wooden_sword"});
 
     public DataConverterFlatten(Schema schema, boolean flag) {
         super(schema, flag);
@@ -372,7 +372,7 @@ public class DataConverterFlatten extends DataFix {
                     typed1 = typed.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), s));
                 }
 
-                if (DataConverterFlatten.c.contains(((Pair) optional.get()).getSecond())) {
+                if (DataConverterFlatten.DAMAGE_IDS.contains(((Pair) optional.get()).getSecond())) {
                     Typed<?> typed2 = typed.getOrCreateTyped(opticfinder1);
                     Dynamic<?> dynamic1 = (Dynamic) typed2.get(DSL.remainderFinder());
 
@@ -388,10 +388,10 @@ public class DataConverterFlatten extends DataFix {
 
     @Nullable
     public static String a(@Nullable String s, int i) {
-        if (DataConverterFlatten.b.contains(s)) {
-            String s1 = (String) DataConverterFlatten.a.get(s + '.' + i);
+        if (DataConverterFlatten.IDS.contains(s)) {
+            String s1 = (String) DataConverterFlatten.MAP.get(s + "." + i);
 
-            return s1 == null ? (String) DataConverterFlatten.a.get(s + ".0") : s1;
+            return s1 == null ? (String) DataConverterFlatten.MAP.get(s + ".0") : s1;
         } else {
             return null;
         }

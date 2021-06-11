@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.FluidTypeFlowing;
 public interface VoxelShapeCollision {
 
     static VoxelShapeCollision a() {
-        return VoxelShapeCollisionEntity.a;
+        return VoxelShapeCollisionEntity.EMPTY;
     }
 
     static VoxelShapeCollision a(Entity entity) {
@@ -21,6 +21,8 @@ public interface VoxelShapeCollision {
     boolean a(VoxelShape voxelshape, BlockPosition blockposition, boolean flag);
 
     boolean a(Item item);
+
+    boolean b(Item item);
 
     boolean a(Fluid fluid, FluidTypeFlowing fluidtypeflowing);
 }

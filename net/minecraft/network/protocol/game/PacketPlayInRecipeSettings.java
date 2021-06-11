@@ -1,30 +1,32 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.inventory.RecipeBookType;
 
 public class PacketPlayInRecipeSettings implements Packet<PacketListenerPlayIn> {
 
-    private RecipeBookType a;
-    private boolean b;
-    private boolean c;
+    private final RecipeBookType bookType;
+    private final boolean isOpen;
+    private final boolean isFiltering;
 
-    public PacketPlayInRecipeSettings() {}
+    public PacketPlayInRecipeSettings(RecipeBookType recipebooktype, boolean flag, boolean flag1) {
+        this.bookType = recipebooktype;
+        this.isOpen = flag;
+        this.isFiltering = flag1;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (RecipeBookType) packetdataserializer.a(RecipeBookType.class);
-        this.b = packetdataserializer.readBoolean();
-        this.c = packetdataserializer.readBoolean();
+    public PacketPlayInRecipeSettings(PacketDataSerializer packetdataserializer) {
+        this.bookType = (RecipeBookType) packetdataserializer.a(RecipeBookType.class);
+        this.isOpen = packetdataserializer.readBoolean();
+        this.isFiltering = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
-        packetdataserializer.writeBoolean(this.b);
-        packetdataserializer.writeBoolean(this.c);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.bookType);
+        packetdataserializer.writeBoolean(this.isOpen);
+        packetdataserializer.writeBoolean(this.isFiltering);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -32,14 +34,14 @@ public class PacketPlayInRecipeSettings implements Packet<PacketListenerPlayIn> 
     }
 
     public RecipeBookType b() {
-        return this.a;
+        return this.bookType;
     }
 
     public boolean c() {
-        return this.b;
+        return this.isOpen;
     }
 
     public boolean d() {
-        return this.c;
+        return this.isFiltering;
     }
 }

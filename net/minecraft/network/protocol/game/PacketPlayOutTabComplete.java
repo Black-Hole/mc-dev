@@ -1,11 +1,9 @@
 package net.minecraft.network.protocol.game;
 
-import com.google.common.collect.Lists;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
-import java.io.IOException;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.chat.ChatComponentUtils;
@@ -14,56 +12,53 @@ import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private Suggestions b;
-
-    public PacketPlayOutTabComplete() {}
+    private final int id;
+    private final Suggestions suggestions;
 
     public PacketPlayOutTabComplete(int i, Suggestions suggestions) {
-        this.a = i;
-        this.b = suggestions;
+        this.id = i;
+        this.suggestions = suggestions;
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        int i = packetdataserializer.i();
-        int j = packetdataserializer.i();
+    public PacketPlayOutTabComplete(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        int i = packetdataserializer.j();
+        int j = packetdataserializer.j();
         StringRange stringrange = StringRange.between(i, i + j);
-        int k = packetdataserializer.i();
-        List<Suggestion> list = Lists.newArrayListWithCapacity(k);
+        List<Suggestion> list = packetdataserializer.a((packetdataserializer1) -> {
+            String s = packetdataserializer1.p();
+            IChatBaseComponent ichatbasecomponent = packetdataserializer1.readBoolean() ? packetdataserializer1.i() : null;
 
-        for (int l = 0; l < k; ++l) {
-            String s = packetdataserializer.e(32767);
-            IChatBaseComponent ichatbasecomponent = packetdataserializer.readBoolean() ? packetdataserializer.h() : null;
+            return new Suggestion(stringrange, s, ichatbasecomponent);
+        });
 
-            list.add(new Suggestion(stringrange, s, ichatbasecomponent));
-        }
-
-        this.b = new Suggestions(stringrange, list);
+        this.suggestions = new Suggestions(stringrange, list);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.d(this.b.getRange().getStart());
-        packetdataserializer.d(this.b.getRange().getLength());
-        packetdataserializer.d(this.b.getList().size());
-        Iterator iterator = this.b.getList().iterator();
-
-        while (iterator.hasNext()) {
-            Suggestion suggestion = (Suggestion) iterator.next();
-
-            packetdataserializer.a(suggestion.getText());
-            packetdataserializer.writeBoolean(suggestion.getTooltip() != null);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.d(this.suggestions.getRange().getStart());
+        packetdataserializer.d(this.suggestions.getRange().getLength());
+        packetdataserializer.a((Collection) this.suggestions.getList(), (packetdataserializer1, suggestion) -> {
+            packetdataserializer1.a(suggestion.getText());
+            packetdataserializer1.writeBoolean(suggestion.getTooltip() != null);
             if (suggestion.getTooltip() != null) {
-                packetdataserializer.a(ChatComponentUtils.a(suggestion.getTooltip()));
+                packetdataserializer1.a(ChatComponentUtils.a(suggestion.getTooltip()));
             }
-        }
 
+        });
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.id;
+    }
+
+    public Suggestions c() {
+        return this.suggestions;
     }
 }

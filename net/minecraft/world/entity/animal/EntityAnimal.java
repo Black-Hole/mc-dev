@@ -25,12 +25,14 @@ import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 
 public abstract class EntityAnimal extends EntityAgeable {
 
-    public int loveTicks;
-    public UUID breedCause;
+    static final int PARENT_AGE_AFTER_BREEDING = 6000;
+    public int inLove;
+    public UUID loveCause;
 
     protected EntityAnimal(EntityTypes<? extends EntityAnimal> entitytypes, World world) {
         super(entitytypes, world);
@@ -41,7 +43,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     @Override
     protected void mobTick() {
         if (this.getAge() != 0) {
-            this.loveTicks = 0;
+            this.inLove = 0;
         }
 
         super.mobTick();
@@ -51,17 +53,17 @@ public abstract class EntityAnimal extends EntityAgeable {
     public void movementTick() {
         super.movementTick();
         if (this.getAge() != 0) {
-            this.loveTicks = 0;
+            this.inLove = 0;
         }
 
-        if (this.loveTicks > 0) {
-            --this.loveTicks;
-            if (this.loveTicks % 10 == 0) {
+        if (this.inLove > 0) {
+            --this.inLove;
+            if (this.inLove % 10 == 0) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
 
-                this.world.addParticle(Particles.HEART, this.d(1.0D), this.cF() + 0.5D, this.g(1.0D), d0, d1, d2);
+                this.level.addParticle(Particles.HEART, this.d(1.0D), this.da() + 0.5D, this.g(1.0D), d0, d1, d2);
             }
         }
 
@@ -72,36 +74,36 @@ public abstract class EntityAnimal extends EntityAgeable {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.loveTicks = 0;
+            this.inLove = 0;
             return super.damageEntity(damagesource, f);
         }
     }
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).a(Blocks.GRASS_BLOCK) ? 10.0F : iworldreader.y(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).a(Blocks.GRASS_BLOCK) ? 10.0F : iworldreader.z(blockposition) - 0.5F;
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("InLove", this.loveTicks);
-        if (this.breedCause != null) {
-            nbttagcompound.a("LoveCause", this.breedCause);
+        nbttagcompound.setInt("InLove", this.inLove);
+        if (this.loveCause != null) {
+            nbttagcompound.a("LoveCause", this.loveCause);
         }
 
     }
 
     @Override
-    public double bb() {
+    public double bk() {
         return 0.14D;
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.loveTicks = nbttagcompound.getInt("InLove");
-        this.breedCause = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
+        this.inLove = nbttagcompound.getInt("InLove");
+        this.loveCause = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
     }
 
     public static boolean b(EntityTypes<? extends EntityAnimal> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -109,7 +111,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     }
 
     @Override
-    public int D() {
+    public int J() {
         return 120;
     }
 
@@ -120,33 +122,35 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     @Override
     protected int getExpValue(EntityHuman entityhuman) {
-        return 1 + this.world.random.nextInt(3);
+        return 1 + this.level.random.nextInt(3);
     }
 
-    public boolean k(ItemStack itemstack) {
-        return itemstack.getItem() == Items.WHEAT;
+    public boolean n(ItemStack itemstack) {
+        return itemstack.a(Items.WHEAT);
     }
 
     @Override
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (this.k(itemstack)) {
+        if (this.n(itemstack)) {
             int i = this.getAge();
 
-            if (!this.world.isClientSide && i == 0 && this.eP()) {
-                this.a(entityhuman, itemstack);
+            if (!this.level.isClientSide && i == 0 && this.fy()) {
+                this.a(entityhuman, enumhand, itemstack);
                 this.g(entityhuman);
+                this.a(GameEvent.MOB_INTERACT, this.cT());
                 return EnumInteractionResult.SUCCESS;
             }
 
             if (this.isBaby()) {
-                this.a(entityhuman, itemstack);
+                this.a(entityhuman, enumhand, itemstack);
                 this.setAge((int) ((float) (-i / 20) * 0.1F), true);
-                return EnumInteractionResult.a(this.world.isClientSide);
+                this.a(GameEvent.MOB_INTERACT, this.cT());
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
 
-            if (this.world.isClientSide) {
+            if (this.level.isClientSide) {
                 return EnumInteractionResult.CONSUME;
             }
         }
@@ -154,51 +158,51 @@ public abstract class EntityAnimal extends EntityAgeable {
         return super.b(entityhuman, enumhand);
     }
 
-    protected void a(EntityHuman entityhuman, ItemStack itemstack) {
-        if (!entityhuman.abilities.canInstantlyBuild) {
+    protected void a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+        if (!entityhuman.getAbilities().instabuild) {
             itemstack.subtract(1);
         }
 
     }
 
-    public boolean eP() {
-        return this.loveTicks <= 0;
+    public boolean fy() {
+        return this.inLove <= 0;
     }
 
     public void g(@Nullable EntityHuman entityhuman) {
-        this.loveTicks = 600;
+        this.inLove = 600;
         if (entityhuman != null) {
-            this.breedCause = entityhuman.getUniqueID();
+            this.loveCause = entityhuman.getUniqueID();
         }
 
-        this.world.broadcastEntityEffect(this, (byte) 18);
+        this.level.broadcastEntityEffect(this, (byte) 18);
     }
 
     public void setLoveTicks(int i) {
-        this.loveTicks = i;
+        this.inLove = i;
     }
 
-    public int eQ() {
-        return this.loveTicks;
+    public int fz() {
+        return this.inLove;
     }
 
     @Nullable
     public EntityPlayer getBreedCause() {
-        if (this.breedCause == null) {
+        if (this.loveCause == null) {
             return null;
         } else {
-            EntityHuman entityhuman = this.world.b(this.breedCause);
+            EntityHuman entityhuman = this.level.b(this.loveCause);
 
             return entityhuman instanceof EntityPlayer ? (EntityPlayer) entityhuman : null;
         }
     }
 
     public boolean isInLove() {
-        return this.loveTicks > 0;
+        return this.inLove > 0;
     }
 
     public void resetLove() {
-        this.loveTicks = 0;
+        this.inLove = 0;
     }
 
     public boolean mate(EntityAnimal entityanimal) {
@@ -217,7 +221,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
             if (entityplayer != null) {
                 entityplayer.a(StatisticList.ANIMALS_BRED);
-                CriterionTriggers.o.a(entityplayer, this, entityanimal, entityageable);
+                CriterionTriggers.BRED_ANIMALS.a(entityplayer, this, entityanimal, entityageable);
             }
 
             this.setAgeRaw(6000);
@@ -228,10 +232,26 @@ public abstract class EntityAnimal extends EntityAgeable {
             entityageable.setPositionRotation(this.locX(), this.locY(), this.locZ(), 0.0F, 0.0F);
             worldserver.addAllEntities(entityageable);
             worldserver.broadcastEntityEffect(this, (byte) 18);
-            if (worldserver.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+            if (worldserver.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 worldserver.addEntity(new EntityExperienceOrb(worldserver, this.locX(), this.locY(), this.locZ(), this.getRandom().nextInt(7) + 1));
             }
 
         }
+    }
+
+    @Override
+    public void a(byte b0) {
+        if (b0 == 18) {
+            for (int i = 0; i < 7; ++i) {
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+
+                this.level.addParticle(Particles.HEART, this.d(1.0D), this.da() + 0.5D, this.g(1.0D), d0, d1, d2);
+            }
+        } else {
+            super.a(b0);
+        }
+
     }
 }

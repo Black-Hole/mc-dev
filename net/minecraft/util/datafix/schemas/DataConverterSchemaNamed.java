@@ -11,7 +11,7 @@ import net.minecraft.resources.MinecraftKey;
 
 public class DataConverterSchemaNamed extends Schema {
 
-    public static final PrimitiveCodec<String> a = new PrimitiveCodec<String>() {
+    public static final PrimitiveCodec<String> NAMESPACED_STRING_CODEC = new PrimitiveCodec<String>() {
         public <T> DataResult<String> read(DynamicOps<T> dynamicops, T t0) {
             return dynamicops.getStringValue(t0).map(DataConverterSchemaNamed::a);
         }
@@ -24,7 +24,7 @@ public class DataConverterSchemaNamed extends Schema {
             return "NamespacedString";
         }
     };
-    private static final Type<String> b = new PrimitiveType(DataConverterSchemaNamed.a);
+    private static final Type<String> NAMESPACED_STRING = new PrimitiveType(DataConverterSchemaNamed.NAMESPACED_STRING_CODEC);
 
     public DataConverterSchemaNamed(int i, Schema schema) {
         super(i, schema);
@@ -37,7 +37,7 @@ public class DataConverterSchemaNamed extends Schema {
     }
 
     public static Type<String> a() {
-        return DataConverterSchemaNamed.b;
+        return DataConverterSchemaNamed.NAMESPACED_STRING;
     }
 
     public Type<?> getChoiceType(TypeReference typereference, String s) {

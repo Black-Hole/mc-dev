@@ -3,6 +3,7 @@ package net.minecraft.world.entity.ai.goal;
 import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.core.particles.ParticleParamItem;
 import net.minecraft.core.particles.Particles;
 import net.minecraft.server.level.WorldServer;
@@ -22,46 +23,47 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
-    private final Block g;
-    private final EntityInsentient entity;
-    private int i;
+    private final Block blockToRemove;
+    private final EntityInsentient removerMob;
+    private int ticksSinceReachedGoal;
+    private static final int WAIT_AFTER_BLOCK_FOUND = 20;
 
     public PathfinderGoalRemoveBlock(Block block, EntityCreature entitycreature, double d0, int i) {
         super(entitycreature, d0, 24, i);
-        this.g = block;
-        this.entity = entitycreature;
+        this.blockToRemove = block;
+        this.removerMob = entitycreature;
     }
 
     @Override
     public boolean a() {
-        if (!this.entity.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+        if (!this.removerMob.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             return false;
-        } else if (this.c > 0) {
-            --this.c;
+        } else if (this.nextStartTick > 0) {
+            --this.nextStartTick;
             return false;
         } else if (this.n()) {
-            this.c = 20;
+            this.nextStartTick = 20;
             return true;
         } else {
-            this.c = this.a(this.a);
+            this.nextStartTick = this.a(this.mob);
             return false;
         }
     }
 
     private boolean n() {
-        return this.e != null && this.a((IWorldReader) this.a.world, this.e) ? true : this.m();
+        return this.blockPos != null && this.a((IWorldReader) this.mob.level, this.blockPos) ? true : this.m();
     }
 
     @Override
     public void d() {
         super.d();
-        this.entity.fallDistance = 1.0F;
+        this.removerMob.fallDistance = 1.0F;
     }
 
     @Override
     public void c() {
         super.c();
-        this.i = 0;
+        this.ticksSinceReachedGoal = 0;
     }
 
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {}
@@ -71,33 +73,33 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
     @Override
     public void e() {
         super.e();
-        World world = this.entity.world;
-        BlockPosition blockposition = this.entity.getChunkCoordinates();
+        World world = this.removerMob.level;
+        BlockPosition blockposition = this.removerMob.getChunkCoordinates();
         BlockPosition blockposition1 = this.a(blockposition, (IBlockAccess) world);
-        Random random = this.entity.getRandom();
+        Random random = this.removerMob.getRandom();
 
         if (this.l() && blockposition1 != null) {
             Vec3D vec3d;
             double d0;
 
-            if (this.i > 0) {
-                vec3d = this.entity.getMot();
-                this.entity.setMot(vec3d.x, 0.3D, vec3d.z);
+            if (this.ticksSinceReachedGoal > 0) {
+                vec3d = this.removerMob.getMot();
+                this.removerMob.setMot(vec3d.x, 0.3D, vec3d.z);
                 if (!world.isClientSide) {
                     d0 = 0.08D;
                     ((WorldServer) world).a(new ParticleParamItem(Particles.ITEM, new ItemStack(Items.EGG)), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.7D, (double) blockposition1.getZ() + 0.5D, 3, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, 0.15000000596046448D);
                 }
             }
 
-            if (this.i % 2 == 0) {
-                vec3d = this.entity.getMot();
-                this.entity.setMot(vec3d.x, -0.3D, vec3d.z);
-                if (this.i % 6 == 0) {
-                    this.a((GeneratorAccess) world, this.e);
+            if (this.ticksSinceReachedGoal % 2 == 0) {
+                vec3d = this.removerMob.getMot();
+                this.removerMob.setMot(vec3d.x, -0.3D, vec3d.z);
+                if (this.ticksSinceReachedGoal % 6 == 0) {
+                    this.a((GeneratorAccess) world, this.blockPos);
                 }
             }
 
-            if (this.i > 60) {
+            if (this.ticksSinceReachedGoal > 60) {
                 world.a(blockposition1, false);
                 if (!world.isClientSide) {
                     for (int i = 0; i < 20; ++i) {
@@ -112,14 +114,14 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
                 }
             }
 
-            ++this.i;
+            ++this.ticksSinceReachedGoal;
         }
 
     }
 
     @Nullable
     private BlockPosition a(BlockPosition blockposition, IBlockAccess iblockaccess) {
-        if (iblockaccess.getType(blockposition).a(this.g)) {
+        if (iblockaccess.getType(blockposition).a(this.blockToRemove)) {
             return blockposition;
         } else {
             BlockPosition[] ablockposition = new BlockPosition[]{blockposition.down(), blockposition.west(), blockposition.east(), blockposition.north(), blockposition.south(), blockposition.down().down()};
@@ -129,7 +131,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
             for (int j = 0; j < i; ++j) {
                 BlockPosition blockposition1 = ablockposition1[j];
 
-                if (iblockaccess.getType(blockposition1).a(this.g)) {
+                if (iblockaccess.getType(blockposition1).a(this.blockToRemove)) {
                     return blockposition1;
                 }
             }
@@ -140,8 +142,8 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     @Override
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = iworldreader.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4, ChunkStatus.FULL, false);
+        IChunkAccess ichunkaccess = iworldreader.getChunkAt(SectionPosition.a(blockposition.getX()), SectionPosition.a(blockposition.getZ()), ChunkStatus.FULL, false);
 
-        return ichunkaccess == null ? false : ichunkaccess.getType(blockposition).a(this.g) && ichunkaccess.getType(blockposition.up()).isAir() && ichunkaccess.getType(blockposition.up(2)).isAir();
+        return ichunkaccess == null ? false : ichunkaccess.getType(blockposition).a(this.blockToRemove) && ichunkaccess.getType(blockposition.up()).isAir() && ichunkaccess.getType(blockposition.up(2)).isAir();
     }
 }

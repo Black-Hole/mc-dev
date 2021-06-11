@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.MinecraftKey;
@@ -9,46 +8,72 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlayOut> {
 
-    private MinecraftKey a;
-    private SoundCategory b;
-    private int c;
-    private int d = Integer.MAX_VALUE;
-    private int e;
-    private float f;
-    private float g;
-
-    public PacketPlayOutCustomSoundEffect() {}
+    public static final float LOCATION_ACCURACY = 8.0F;
+    private final MinecraftKey name;
+    private final SoundCategory source;
+    private final int x;
+    private final int y;
+    private final int z;
+    private final float volume;
+    private final float pitch;
 
     public PacketPlayOutCustomSoundEffect(MinecraftKey minecraftkey, SoundCategory soundcategory, Vec3D vec3d, float f, float f1) {
-        this.a = minecraftkey;
-        this.b = soundcategory;
-        this.c = (int) (vec3d.x * 8.0D);
-        this.d = (int) (vec3d.y * 8.0D);
-        this.e = (int) (vec3d.z * 8.0D);
-        this.f = f;
-        this.g = f1;
+        this.name = minecraftkey;
+        this.source = soundcategory;
+        this.x = (int) (vec3d.x * 8.0D);
+        this.y = (int) (vec3d.y * 8.0D);
+        this.z = (int) (vec3d.z * 8.0D);
+        this.volume = f;
+        this.pitch = f1;
+    }
+
+    public PacketPlayOutCustomSoundEffect(PacketDataSerializer packetdataserializer) {
+        this.name = packetdataserializer.q();
+        this.source = (SoundCategory) packetdataserializer.a(SoundCategory.class);
+        this.x = packetdataserializer.readInt();
+        this.y = packetdataserializer.readInt();
+        this.z = packetdataserializer.readInt();
+        this.volume = packetdataserializer.readFloat();
+        this.pitch = packetdataserializer.readFloat();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.p();
-        this.b = (SoundCategory) packetdataserializer.a(SoundCategory.class);
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.e = packetdataserializer.readInt();
-        this.f = packetdataserializer.readFloat();
-        this.g = packetdataserializer.readFloat();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.name);
+        packetdataserializer.a((Enum) this.source);
+        packetdataserializer.writeInt(this.x);
+        packetdataserializer.writeInt(this.y);
+        packetdataserializer.writeInt(this.z);
+        packetdataserializer.writeFloat(this.volume);
+        packetdataserializer.writeFloat(this.pitch);
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a((Enum) this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeInt(this.e);
-        packetdataserializer.writeFloat(this.f);
-        packetdataserializer.writeFloat(this.g);
+    public MinecraftKey b() {
+        return this.name;
+    }
+
+    public SoundCategory c() {
+        return this.source;
+    }
+
+    public double d() {
+        return (double) ((float) this.x / 8.0F);
+    }
+
+    public double e() {
+        return (double) ((float) this.y / 8.0F);
+    }
+
+    public double f() {
+        return (double) ((float) this.z / 8.0F);
+    }
+
+    public float g() {
+        return this.volume;
+    }
+
+    public float h() {
+        return this.pitch;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

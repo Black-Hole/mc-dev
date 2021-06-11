@@ -15,35 +15,35 @@ import net.minecraft.util.INamable;
 
 public class BlockStateEnum<T extends Enum<T> & INamable> extends IBlockState<T> {
 
-    private final ImmutableSet<T> a;
-    private final Map<String, T> b = Maps.newHashMap();
+    private final ImmutableSet<T> values;
+    private final Map<String, T> names = Maps.newHashMap();
 
     protected BlockStateEnum(String s, Class<T> oclass, Collection<T> collection) {
         super(s, oclass);
-        this.a = ImmutableSet.copyOf(collection);
+        this.values = ImmutableSet.copyOf(collection);
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             T t0 = (Enum) iterator.next();
             String s1 = ((INamable) t0).getName();
 
-            if (this.b.containsKey(s1)) {
+            if (this.names.containsKey(s1)) {
                 throw new IllegalArgumentException("Multiple values have the same name '" + s1 + "'");
             }
 
-            this.b.put(s1, t0);
+            this.names.put(s1, t0);
         }
 
     }
 
     @Override
     public Collection<T> getValues() {
-        return this.a;
+        return this.values;
     }
 
     @Override
     public Optional<T> b(String s) {
-        return Optional.ofNullable(this.b.get(s));
+        return Optional.ofNullable((Enum) this.names.get(s));
     }
 
     public String a(T t0) {
@@ -57,7 +57,7 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends IBlockState<T>
         } else if (object instanceof BlockStateEnum && super.equals(object)) {
             BlockStateEnum<?> blockstateenum = (BlockStateEnum) object;
 
-            return this.a.equals(blockstateenum.a) && this.b.equals(blockstateenum.b);
+            return this.values.equals(blockstateenum.values) && this.names.equals(blockstateenum.names);
         } else {
             return false;
         }
@@ -67,8 +67,8 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends IBlockState<T>
     public int b() {
         int i = super.b();
 
-        i = 31 * i + this.a.hashCode();
-        i = 31 * i + this.b.hashCode();
+        i = 31 * i + this.values.hashCode();
+        i = 31 * i + this.names.hashCode();
         return i;
     }
 
@@ -77,7 +77,7 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends IBlockState<T>
     }
 
     public static <T extends Enum<T> & INamable> BlockStateEnum<T> a(String s, Class<T> oclass, Predicate<T> predicate) {
-        return a(s, oclass, (Collection) Arrays.stream(oclass.getEnumConstants()).filter(predicate).collect(Collectors.toList()));
+        return a(s, oclass, (Collection) Arrays.stream((Enum[]) oclass.getEnumConstants()).filter(predicate).collect(Collectors.toList()));
     }
 
     public static <T extends Enum<T> & INamable> BlockStateEnum<T> of(String s, Class<T> oclass, T... at) {

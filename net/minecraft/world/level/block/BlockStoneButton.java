@@ -12,6 +12,6 @@ public class BlockStoneButton extends BlockButtonAbstract {
 
     @Override
     protected SoundEffect a(boolean flag) {
-        return flag ? SoundEffects.BLOCK_STONE_BUTTON_CLICK_ON : SoundEffects.BLOCK_STONE_BUTTON_CLICK_OFF;
+        return flag ? SoundEffects.STONE_BUTTON_CLICK_ON : SoundEffects.STONE_BUTTON_CLICK_OFF;
     }
 }

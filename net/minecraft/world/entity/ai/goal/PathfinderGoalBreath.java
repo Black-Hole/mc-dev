@@ -15,16 +15,16 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalBreath extends PathfinderGoal {
 
-    private final EntityCreature a;
+    private final EntityCreature mob;
 
     public PathfinderGoalBreath(EntityCreature entitycreature) {
-        this.a = entitycreature;
+        this.mob = entitycreature;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
     @Override
     public boolean a() {
-        return this.a.getAirTicks() < 140;
+        return this.mob.getAirTicks() < 140;
     }
 
     @Override
@@ -43,31 +43,31 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     private void g() {
-        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX() - 1.0D), MathHelper.floor(this.a.locY()), MathHelper.floor(this.a.locZ() - 1.0D), MathHelper.floor(this.a.locX() + 1.0D), MathHelper.floor(this.a.locY() + 8.0D), MathHelper.floor(this.a.locZ() + 1.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.mob.locX() - 1.0D), this.mob.cY(), MathHelper.floor(this.mob.locZ() - 1.0D), MathHelper.floor(this.mob.locX() + 1.0D), MathHelper.floor(this.mob.locY() + 8.0D), MathHelper.floor(this.mob.locZ() + 1.0D));
         BlockPosition blockposition = null;
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-            if (this.a(this.a.world, blockposition1)) {
+            if (this.a(this.mob.level, blockposition1)) {
                 blockposition = blockposition1;
                 break;
             }
         }
 
         if (blockposition == null) {
-            blockposition = new BlockPosition(this.a.locX(), this.a.locY() + 8.0D, this.a.locZ());
+            blockposition = new BlockPosition(this.mob.locX(), this.mob.locY() + 8.0D, this.mob.locZ());
         }
 
-        this.a.getNavigation().a((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), 1.0D);
+        this.mob.getNavigation().a((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), 1.0D);
     }
 
     @Override
     public void e() {
         this.g();
-        this.a.a(0.02F, new Vec3D((double) this.a.aR, (double) this.a.aS, (double) this.a.aT));
-        this.a.move(EnumMoveType.SELF, this.a.getMot());
+        this.mob.a(0.02F, new Vec3D((double) this.mob.xxa, (double) this.mob.yya, (double) this.mob.zza));
+        this.mob.move(EnumMoveType.SELF, this.mob.getMot());
     }
 
     private boolean a(IWorldReader iworldreader, BlockPosition blockposition) {

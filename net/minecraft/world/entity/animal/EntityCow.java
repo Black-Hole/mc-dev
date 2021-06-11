@@ -48,28 +48,28 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder p() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_COW_AMBIENT;
+        return SoundEffects.COW_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_COW_HURT;
+        return SoundEffects.COW_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_COW_DEATH;
+        return SoundEffects.COW_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.COW_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class EntityCow extends EntityAnimal {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.BUCKET && !this.isBaby()) {
-            entityhuman.playSound(SoundEffects.ENTITY_COW_MILK, 1.0F, 1.0F);
+        if (itemstack.a(Items.BUCKET) && !this.isBaby()) {
+            entityhuman.playSound(SoundEffects.COW_MILK, 1.0F, 1.0F);
             ItemStack itemstack1 = ItemLiquidUtil.a(itemstack, entityhuman, Items.MILK_BUCKET.createItemStack());
 
             entityhuman.a(enumhand, itemstack1);
-            return EnumInteractionResult.a(this.world.isClientSide);
+            return EnumInteractionResult.a(this.level.isClientSide);
         } else {
             return super.b(entityhuman, enumhand);
         }

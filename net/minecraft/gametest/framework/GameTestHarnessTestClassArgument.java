@@ -16,7 +16,7 @@ import net.minecraft.network.chat.ChatComponentText;
 
 public class GameTestHarnessTestClassArgument implements ArgumentType<String> {
 
-    private static final Collection<String> a = Arrays.asList("techtests", "mobtests");
+    private static final Collection<String> EXAMPLES = Arrays.asList("techtests", "mobtests");
 
     public GameTestHarnessTestClassArgument() {}
 
@@ -45,6 +45,6 @@ public class GameTestHarnessTestClassArgument implements ArgumentType<String> {
     }
 
     public Collection<String> getExamples() {
-        return GameTestHarnessTestClassArgument.a;
+        return GameTestHarnessTestClassArgument.EXAMPLES;
     }
 }

@@ -9,76 +9,77 @@ import net.minecraft.world.level.block.Block;
 
 public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
 
-    private final Predicate<EnumDifficulty> g;
-    protected int a;
-    protected int b;
-    protected int c;
+    private static final int DEFAULT_DOOR_BREAK_TIME = 240;
+    private final Predicate<EnumDifficulty> validDifficulties;
+    protected int breakTime;
+    protected int lastBreakProgress;
+    protected int doorBreakTime;
 
     public PathfinderGoalBreakDoor(EntityInsentient entityinsentient, Predicate<EnumDifficulty> predicate) {
         super(entityinsentient);
-        this.b = -1;
-        this.c = -1;
-        this.g = predicate;
+        this.lastBreakProgress = -1;
+        this.doorBreakTime = -1;
+        this.validDifficulties = predicate;
     }
 
     public PathfinderGoalBreakDoor(EntityInsentient entityinsentient, int i, Predicate<EnumDifficulty> predicate) {
         this(entityinsentient, predicate);
-        this.c = i;
+        this.doorBreakTime = i;
     }
 
     protected int f() {
-        return Math.max(240, this.c);
+        return Math.max(240, this.doorBreakTime);
     }
 
     @Override
     public boolean a() {
-        return !super.a() ? false : (!this.entity.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? false : this.a(this.entity.world.getDifficulty()) && !this.g());
+        return !super.a() ? false : (!this.mob.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? false : this.a(this.mob.level.getDifficulty()) && !this.g());
     }
 
     @Override
     public void c() {
         super.c();
-        this.a = 0;
+        this.breakTime = 0;
     }
 
     @Override
     public boolean b() {
-        return this.a <= this.f() && !this.g() && this.door.a((IPosition) this.entity.getPositionVector(), 2.0D) && this.a(this.entity.world.getDifficulty());
+        return this.breakTime <= this.f() && !this.g() && this.doorPos.a((IPosition) this.mob.getPositionVector(), 2.0D) && this.a(this.mob.level.getDifficulty());
     }
 
     @Override
     public void d() {
         super.d();
-        this.entity.world.a(this.entity.getId(), this.door, -1);
+        this.mob.level.a(this.mob.getId(), this.doorPos, -1);
     }
 
     @Override
     public void e() {
         super.e();
-        if (this.entity.getRandom().nextInt(20) == 0) {
-            this.entity.world.triggerEffect(1019, this.door, 0);
-            if (!this.entity.ai) {
-                this.entity.swingHand(this.entity.getRaisedHand());
+        if (this.mob.getRandom().nextInt(20) == 0) {
+            this.mob.level.triggerEffect(1019, this.doorPos, 0);
+            if (!this.mob.swinging) {
+                this.mob.swingHand(this.mob.getRaisedHand());
             }
         }
 
-        ++this.a;
-        int i = (int) ((float) this.a / (float) this.f() * 10.0F);
+        ++this.breakTime;
+        int i = (int) ((float) this.breakTime / (float) this.f() * 10.0F);
 
-        if (i != this.b) {
-            this.entity.world.a(this.entity.getId(), this.door, i);
-            this.b = i;
+        if (i != this.lastBreakProgress) {
+            this.mob.level.a(this.mob.getId(), this.doorPos, i);
+            this.lastBreakProgress = i;
         }
 
-        if (this.a == this.f() && this.a(this.entity.world.getDifficulty())) {
-            this.entity.world.a(this.door, false);
-            this.entity.world.triggerEffect(1021, this.door, 0);
-            this.entity.world.triggerEffect(2001, this.door, Block.getCombinedId(this.entity.world.getType(this.door)));
+        if (this.breakTime == this.f() && this.a(this.mob.level.getDifficulty())) {
+            this.mob.level.a(this.doorPos, false);
+            this.mob.level.triggerEffect(1021, this.doorPos, 0);
+            this.mob.level.triggerEffect(2001, this.doorPos, Block.getCombinedId(this.mob.level.getType(this.doorPos)));
         }
 
     }
 
     private boolean a(EnumDifficulty enumdifficulty) {
-        return this.g.test(enumdifficulty);
+        return this.validDifficulties.test(enumdifficulty);
     }
 }

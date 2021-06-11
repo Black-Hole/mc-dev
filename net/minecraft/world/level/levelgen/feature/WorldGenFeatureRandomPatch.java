@@ -8,7 +8,6 @@ import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRandomPatchConfiguration;
 
@@ -18,11 +17,16 @@ public class WorldGenFeatureRandomPatch extends WorldGenerator<WorldGenFeatureRa
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
-        IBlockData iblockdata = worldgenfeaturerandompatchconfiguration.b.a(random, blockposition);
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureRandomPatchConfiguration> featureplacecontext) {
+        WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration = (WorldGenFeatureRandomPatchConfiguration) featureplacecontext.e();
+        Random random = featureplacecontext.c();
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        IBlockData iblockdata = worldgenfeaturerandompatchconfiguration.stateProvider.a(random, blockposition);
         BlockPosition blockposition1;
 
-        if (worldgenfeaturerandompatchconfiguration.l) {
+        if (worldgenfeaturerandompatchconfiguration.project) {
             blockposition1 = generatoraccessseed.getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE_WG, blockposition);
         } else {
             blockposition1 = blockposition;
@@ -31,13 +35,13 @@ public class WorldGenFeatureRandomPatch extends WorldGenerator<WorldGenFeatureRa
         int i = 0;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        for (int j = 0; j < worldgenfeaturerandompatchconfiguration.f; ++j) {
-            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition1, random.nextInt(worldgenfeaturerandompatchconfiguration.g + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.g + 1), random.nextInt(worldgenfeaturerandompatchconfiguration.h + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.h + 1), random.nextInt(worldgenfeaturerandompatchconfiguration.i + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.i + 1));
+        for (int j = 0; j < worldgenfeaturerandompatchconfiguration.tries; ++j) {
+            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition1, random.nextInt(worldgenfeaturerandompatchconfiguration.xspread + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.xspread + 1), random.nextInt(worldgenfeaturerandompatchconfiguration.yspread + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.yspread + 1), random.nextInt(worldgenfeaturerandompatchconfiguration.zspread + 1) - random.nextInt(worldgenfeaturerandompatchconfiguration.zspread + 1));
             BlockPosition blockposition2 = blockposition_mutableblockposition.down();
             IBlockData iblockdata1 = generatoraccessseed.getType(blockposition2);
 
-            if ((generatoraccessseed.isEmpty(blockposition_mutableblockposition) || worldgenfeaturerandompatchconfiguration.j && generatoraccessseed.getType(blockposition_mutableblockposition).getMaterial().isReplaceable()) && iblockdata.canPlace(generatoraccessseed, blockposition_mutableblockposition) && (worldgenfeaturerandompatchconfiguration.d.isEmpty() || worldgenfeaturerandompatchconfiguration.d.contains(iblockdata1.getBlock())) && !worldgenfeaturerandompatchconfiguration.e.contains(iblockdata1) && (!worldgenfeaturerandompatchconfiguration.m || generatoraccessseed.getFluid(blockposition2.west()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.east()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.north()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.south()).a((Tag) TagsFluid.WATER))) {
-                worldgenfeaturerandompatchconfiguration.c.a(generatoraccessseed, blockposition_mutableblockposition, iblockdata, random);
+            if ((generatoraccessseed.isEmpty(blockposition_mutableblockposition) || worldgenfeaturerandompatchconfiguration.canReplace && generatoraccessseed.getType(blockposition_mutableblockposition).getMaterial().isReplaceable()) && iblockdata.canPlace(generatoraccessseed, blockposition_mutableblockposition) && (worldgenfeaturerandompatchconfiguration.whitelist.isEmpty() || worldgenfeaturerandompatchconfiguration.whitelist.contains(iblockdata1.getBlock())) && !worldgenfeaturerandompatchconfiguration.blacklist.contains(iblockdata1) && (!worldgenfeaturerandompatchconfiguration.needWater || generatoraccessseed.getFluid(blockposition2.west()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.east()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.north()).a((Tag) TagsFluid.WATER) || generatoraccessseed.getFluid(blockposition2.south()).a((Tag) TagsFluid.WATER))) {
+                worldgenfeaturerandompatchconfiguration.blockPlacer.a(generatoraccessseed, blockposition_mutableblockposition, iblockdata, random);
                 ++i;
             }
         }

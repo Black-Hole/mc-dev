@@ -3,17 +3,21 @@ package net.minecraft.network.chat;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
+import net.minecraft.locale.LocaleLanguage;
 import net.minecraft.util.FormattedString;
 
 public abstract class ChatBaseComponent implements IChatMutableComponent {
 
     protected final List<IChatBaseComponent> siblings = Lists.newArrayList();
-    private FormattedString d;
-    private ChatModifier f;
+    private FormattedString visualOrderText;
+    @Nullable
+    private LocaleLanguage decomposedWith;
+    private ChatModifier style;
 
     public ChatBaseComponent() {
-        this.d = FormattedString.a;
-        this.f = ChatModifier.a;
+        this.visualOrderText = FormattedString.EMPTY;
+        this.style = ChatModifier.EMPTY;
     }
 
     @Override
@@ -34,13 +38,13 @@ public abstract class ChatBaseComponent implements IChatMutableComponent {
 
     @Override
     public IChatMutableComponent setChatModifier(ChatModifier chatmodifier) {
-        this.f = chatmodifier;
+        this.style = chatmodifier;
         return this;
     }
 
     @Override
     public ChatModifier getChatModifier() {
-        return this.f;
+        return this.style;
     }
 
     @Override
@@ -51,8 +55,20 @@ public abstract class ChatBaseComponent implements IChatMutableComponent {
         ChatBaseComponent chatbasecomponent = this.g();
 
         chatbasecomponent.siblings.addAll(this.siblings);
-        chatbasecomponent.setChatModifier(this.f);
+        chatbasecomponent.setChatModifier(this.style);
         return chatbasecomponent;
+    }
+
+    @Override
+    public FormattedString f() {
+        LocaleLanguage localelanguage = LocaleLanguage.a();
+
+        if (this.decomposedWith != localelanguage) {
+            this.visualOrderText = localelanguage.a((IChatFormatted) this);
+            this.decomposedWith = localelanguage;
+        }
+
+        return this.visualOrderText;
     }
 
     public boolean equals(Object object) {
@@ -72,6 +88,6 @@ public abstract class ChatBaseComponent implements IChatMutableComponent {
     }
 
     public String toString() {
-        return "BaseComponent{style=" + this.f + ", siblings=" + this.siblings + '}';
+        return "BaseComponent{style=" + this.style + ", siblings=" + this.siblings + "}";
     }
 }

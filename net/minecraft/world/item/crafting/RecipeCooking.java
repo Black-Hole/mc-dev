@@ -8,8 +8,8 @@ import net.minecraft.world.level.World;
 
 public abstract class RecipeCooking implements IRecipe<IInventory> {
 
-    protected final Recipes<?> a;
-    protected final MinecraftKey key;
+    protected final Recipes<?> type;
+    protected final MinecraftKey id;
     protected final String group;
     protected final RecipeItemStack ingredient;
     protected final ItemStack result;
@@ -17,8 +17,8 @@ public abstract class RecipeCooking implements IRecipe<IInventory> {
     protected final int cookingTime;
 
     public RecipeCooking(Recipes<?> recipes, MinecraftKey minecraftkey, String s, RecipeItemStack recipeitemstack, ItemStack itemstack, float f, int i) {
-        this.a = recipes;
-        this.key = minecraftkey;
+        this.type = recipes;
+        this.id = minecraftkey;
         this.group = s;
         this.ingredient = recipeitemstack;
         this.result = itemstack;
@@ -34,6 +34,11 @@ public abstract class RecipeCooking implements IRecipe<IInventory> {
     @Override
     public ItemStack a(IInventory iinventory) {
         return this.result.cloneItemStack();
+    }
+
+    @Override
+    public boolean a(int i, int j) {
+        return true;
     }
 
     @Override
@@ -53,17 +58,22 @@ public abstract class RecipeCooking implements IRecipe<IInventory> {
         return this.result;
     }
 
+    @Override
+    public String d() {
+        return this.group;
+    }
+
     public int getCookingTime() {
         return this.cookingTime;
     }
 
     @Override
     public MinecraftKey getKey() {
-        return this.key;
+        return this.id;
     }
 
     @Override
     public Recipes<?> g() {
-        return this.a;
+        return this.type;
     }
 }

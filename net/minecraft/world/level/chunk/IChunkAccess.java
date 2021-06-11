@@ -17,6 +17,7 @@ import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEventDispatcher;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -25,10 +26,14 @@ import org.apache.logging.log4j.LogManager;
 
 public interface IChunkAccess extends IBlockAccess, IStructureAccess {
 
+    default GameEventDispatcher a(int i) {
+        return GameEventDispatcher.NOOP;
+    }
+
     @Nullable
     IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag);
 
-    void setTileEntity(BlockPosition blockposition, TileEntity tileentity);
+    void setTileEntity(TileEntity tileentity);
 
     void a(Entity entity);
 
@@ -50,40 +55,52 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
     default int b() {
         ChunkSection chunksection = this.a();
 
-        return chunksection == null ? 0 : chunksection.getYPosition();
+        return chunksection == null ? this.getMinBuildHeight() : chunksection.getYPosition();
     }
 
     Set<BlockPosition> c();
 
     ChunkSection[] getSections();
 
-    Collection<Entry<HeightMap.Type, HeightMap>> f();
+    default ChunkSection b(int i) {
+        ChunkSection[] achunksection = this.getSections();
 
-    void a(HeightMap.Type heightmap_type, long[] along);
+        if (achunksection[i] == Chunk.EMPTY_SECTION) {
+            achunksection[i] = new ChunkSection(this.getSectionYFromSectionIndex(i));
+        }
+
+        return achunksection[i];
+    }
+
+    Collection<Entry<HeightMap.Type, HeightMap>> e();
+
+    default void a(HeightMap.Type heightmap_type, long[] along) {
+        this.a(heightmap_type).a(this, heightmap_type, along);
+    }
 
     HeightMap a(HeightMap.Type heightmap_type);
 
     int getHighestBlock(HeightMap.Type heightmap_type, int i, int j);
 
+    BlockPosition b(HeightMap.Type heightmap_type);
+
     ChunkCoordIntPair getPos();
 
-    void setLastSaved(long i);
-
-    Map<StructureGenerator<?>, StructureStart<?>> h();
+    Map<StructureGenerator<?>, StructureStart<?>> g();
 
     void a(Map<StructureGenerator<?>, StructureStart<?>> map);
 
     default boolean a(int i, int j) {
-        if (i < 0) {
-            i = 0;
+        if (i < this.getMinBuildHeight()) {
+            i = this.getMinBuildHeight();
         }
 
-        if (j >= 256) {
-            j = 255;
+        if (j >= this.getMaxBuildHeight()) {
+            j = this.getMaxBuildHeight() - 1;
         }
 
         for (int k = i; k <= j; k += 16) {
-            if (!ChunkSection.a(this.getSections()[k >> 4])) {
+            if (!ChunkSection.a(this.getSections()[this.getSectionIndex(k)])) {
                 return false;
             }
         }
@@ -106,10 +123,10 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
         LogManager.getLogger().warn("Trying to mark a block for PostProcessing @ {}, but this operation is not supported.", blockposition);
     }
 
-    ShortList[] l();
+    ShortList[] k();
 
     default void a(short short0, int i) {
-        a(this.l(), i).add(short0);
+        a(this.k(), i).add(short0);
     }
 
     default void a(NBTTagCompound nbttagcompound) {
@@ -117,18 +134,18 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
     }
 
     @Nullable
-    NBTTagCompound i(BlockPosition blockposition);
+    NBTTagCompound f(BlockPosition blockposition);
 
     @Nullable
-    NBTTagCompound j(BlockPosition blockposition);
+    NBTTagCompound g(BlockPosition blockposition);
 
-    Stream<BlockPosition> m();
+    Stream<BlockPosition> n();
 
-    TickList<Block> n();
+    TickList<Block> o();
 
-    TickList<FluidType> o();
+    TickList<FluidType> p();
 
-    ChunkConverter p();
+    ChunkConverter q();
 
     void setInhabitedTime(long i);
 
@@ -142,7 +159,7 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
         return ashortlist[i];
     }
 
-    boolean r();
+    boolean s();
 
     void b(boolean flag);
 }

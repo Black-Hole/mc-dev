@@ -14,46 +14,53 @@ import net.minecraft.network.chat.IChatMutableComponent;
 
 public class ScoreboardTeam extends ScoreboardTeamBase {
 
-    private final Scoreboard a;
-    private final String b;
-    private final Set<String> c = Sets.newHashSet();
-    private IChatBaseComponent d;
-    private IChatBaseComponent e;
-    private IChatBaseComponent f;
-    private boolean g;
-    private boolean h;
-    private ScoreboardTeamBase.EnumNameTagVisibility i;
-    private ScoreboardTeamBase.EnumNameTagVisibility j;
-    private EnumChatFormat k;
-    private ScoreboardTeamBase.EnumTeamPush l;
-    private final ChatModifier m;
+    public static final int MAX_NAME_LENGTH = 16;
+    private static final int BIT_FRIENDLY_FIRE = 0;
+    private static final int BIT_SEE_INVISIBLES = 1;
+    private final Scoreboard scoreboard;
+    private final String name;
+    private final Set<String> players = Sets.newHashSet();
+    private IChatBaseComponent displayName;
+    private IChatBaseComponent playerPrefix;
+    private IChatBaseComponent playerSuffix;
+    private boolean allowFriendlyFire;
+    private boolean seeFriendlyInvisibles;
+    private ScoreboardTeamBase.EnumNameTagVisibility nameTagVisibility;
+    private ScoreboardTeamBase.EnumNameTagVisibility deathMessageVisibility;
+    private EnumChatFormat color;
+    private ScoreboardTeamBase.EnumTeamPush collisionRule;
+    private final ChatModifier displayNameStyle;
 
     public ScoreboardTeam(Scoreboard scoreboard, String s) {
-        this.e = ChatComponentText.d;
-        this.f = ChatComponentText.d;
-        this.g = true;
-        this.h = true;
-        this.i = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
-        this.j = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
-        this.k = EnumChatFormat.RESET;
-        this.l = ScoreboardTeamBase.EnumTeamPush.ALWAYS;
-        this.a = scoreboard;
-        this.b = s;
-        this.d = new ChatComponentText(s);
-        this.m = ChatModifier.a.setInsertion(s).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(s)));
+        this.playerPrefix = ChatComponentText.EMPTY;
+        this.playerSuffix = ChatComponentText.EMPTY;
+        this.allowFriendlyFire = true;
+        this.seeFriendlyInvisibles = true;
+        this.nameTagVisibility = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
+        this.deathMessageVisibility = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
+        this.color = EnumChatFormat.RESET;
+        this.collisionRule = ScoreboardTeamBase.EnumTeamPush.ALWAYS;
+        this.scoreboard = scoreboard;
+        this.name = s;
+        this.displayName = new ChatComponentText(s);
+        this.displayNameStyle = ChatModifier.EMPTY.setInsertion(s).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(s)));
+    }
+
+    public Scoreboard a() {
+        return this.scoreboard;
     }
 
     @Override
     public String getName() {
-        return this.b;
+        return this.name;
     }
 
     public IChatBaseComponent getDisplayName() {
-        return this.d;
+        return this.displayName;
     }
 
     public IChatMutableComponent d() {
-        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) this.d.mutableCopy().c(this.m));
+        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) this.displayName.mutableCopy().c(this.displayNameStyle));
         EnumChatFormat enumchatformat = this.getColor();
 
         if (enumchatformat != EnumChatFormat.RESET) {
@@ -67,37 +74,37 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         if (ichatbasecomponent == null) {
             throw new IllegalArgumentException("Name cannot be null");
         } else {
-            this.d = ichatbasecomponent;
-            this.a.handleTeamChanged(this);
+            this.displayName = ichatbasecomponent;
+            this.scoreboard.handleTeamChanged(this);
         }
     }
 
     public void setPrefix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.e = ichatbasecomponent == null ? ChatComponentText.d : ichatbasecomponent;
-        this.a.handleTeamChanged(this);
+        this.playerPrefix = ichatbasecomponent == null ? ChatComponentText.EMPTY : ichatbasecomponent;
+        this.scoreboard.handleTeamChanged(this);
     }
 
     public IChatBaseComponent getPrefix() {
-        return this.e;
+        return this.playerPrefix;
     }
 
     public void setSuffix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.f = ichatbasecomponent == null ? ChatComponentText.d : ichatbasecomponent;
-        this.a.handleTeamChanged(this);
+        this.playerSuffix = ichatbasecomponent == null ? ChatComponentText.EMPTY : ichatbasecomponent;
+        this.scoreboard.handleTeamChanged(this);
     }
 
     public IChatBaseComponent getSuffix() {
-        return this.f;
+        return this.playerSuffix;
     }
 
     @Override
     public Collection<String> getPlayerNameSet() {
-        return this.c;
+        return this.players;
     }
 
     @Override
     public IChatMutableComponent getFormattedName(IChatBaseComponent ichatbasecomponent) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("")).addSibling(this.e).addSibling(ichatbasecomponent).addSibling(this.f);
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("")).addSibling(this.playerPrefix).addSibling(ichatbasecomponent).addSibling(this.playerSuffix);
         EnumChatFormat enumchatformat = this.getColor();
 
         if (enumchatformat != EnumChatFormat.RESET) {
@@ -113,50 +120,52 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
 
     @Override
     public boolean allowFriendlyFire() {
-        return this.g;
+        return this.allowFriendlyFire;
     }
 
     public void setAllowFriendlyFire(boolean flag) {
-        this.g = flag;
-        this.a.handleTeamChanged(this);
+        this.allowFriendlyFire = flag;
+        this.scoreboard.handleTeamChanged(this);
     }
 
+    @Override
     public boolean canSeeFriendlyInvisibles() {
-        return this.h;
+        return this.seeFriendlyInvisibles;
     }
 
     public void setCanSeeFriendlyInvisibles(boolean flag) {
-        this.h = flag;
-        this.a.handleTeamChanged(this);
+        this.seeFriendlyInvisibles = flag;
+        this.scoreboard.handleTeamChanged(this);
     }
 
+    @Override
     public ScoreboardTeamBase.EnumNameTagVisibility getNameTagVisibility() {
-        return this.i;
+        return this.nameTagVisibility;
     }
 
     @Override
     public ScoreboardTeamBase.EnumNameTagVisibility getDeathMessageVisibility() {
-        return this.j;
+        return this.deathMessageVisibility;
     }
 
     public void setNameTagVisibility(ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) {
-        this.i = scoreboardteambase_enumnametagvisibility;
-        this.a.handleTeamChanged(this);
+        this.nameTagVisibility = scoreboardteambase_enumnametagvisibility;
+        this.scoreboard.handleTeamChanged(this);
     }
 
     public void setDeathMessageVisibility(ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) {
-        this.j = scoreboardteambase_enumnametagvisibility;
-        this.a.handleTeamChanged(this);
+        this.deathMessageVisibility = scoreboardteambase_enumnametagvisibility;
+        this.scoreboard.handleTeamChanged(this);
     }
 
     @Override
     public ScoreboardTeamBase.EnumTeamPush getCollisionRule() {
-        return this.l;
+        return this.collisionRule;
     }
 
     public void setCollisionRule(ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush) {
-        this.l = scoreboardteambase_enumteampush;
-        this.a.handleTeamChanged(this);
+        this.collisionRule = scoreboardteambase_enumteampush;
+        this.scoreboard.handleTeamChanged(this);
     }
 
     public int packOptionData() {
@@ -173,12 +182,18 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return i;
     }
 
-    public void setColor(EnumChatFormat enumchatformat) {
-        this.k = enumchatformat;
-        this.a.handleTeamChanged(this);
+    public void a(int i) {
+        this.setAllowFriendlyFire((i & 1) > 0);
+        this.setCanSeeFriendlyInvisibles((i & 2) > 0);
     }
 
+    public void setColor(EnumChatFormat enumchatformat) {
+        this.color = enumchatformat;
+        this.scoreboard.handleTeamChanged(this);
+    }
+
+    @Override
     public EnumChatFormat getColor() {
-        return this.k;
+        return this.color;
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.EntitySize;
 import net.minecraft.world.entity.EntityTypes;
@@ -28,12 +29,12 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class EntityEndermite extends EntityMonster {
 
-    private int b;
-    private boolean c;
+    private static final int MAX_LIFE = 2400;
+    private int life;
 
     public EntityEndermite(EntityTypes<? extends EntityEndermite> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 3;
+        this.xpReward = 3;
     }
 
     @Override
@@ -52,87 +53,77 @@ public class EntityEndermite extends EntityMonster {
         return 0.13F;
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
     }
 
     @Override
-    protected boolean playStepSound() {
-        return false;
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.EVENTS;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_ENDERMITE_AMBIENT;
+        return SoundEffects.ENDERMITE_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_ENDERMITE_HURT;
+        return SoundEffects.ENDERMITE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_ENDERMITE_DEATH;
+        return SoundEffects.ENDERMITE_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_ENDERMITE_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENDERMITE_STEP, 0.15F, 1.0F);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.b = nbttagcompound.getInt("Lifetime");
-        this.c = nbttagcompound.getBoolean("PlayerSpawned");
+        this.life = nbttagcompound.getInt("Lifetime");
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("Lifetime", this.b);
-        nbttagcompound.setBoolean("PlayerSpawned", this.c);
+        nbttagcompound.setInt("Lifetime", this.life);
     }
 
     @Override
     public void tick() {
-        this.aA = this.yaw;
+        this.yBodyRot = this.getYRot();
         super.tick();
     }
 
     @Override
-    public void n(float f) {
-        this.yaw = f;
-        super.n(f);
+    public void m(float f) {
+        this.setYRot(f);
+        super.m(f);
     }
 
     @Override
-    public double bb() {
+    public double bk() {
         return 0.1D;
-    }
-
-    public boolean isPlayerSpawned() {
-        return this.c;
-    }
-
-    public void setPlayerSpawned(boolean flag) {
-        this.c = flag;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.world.isClientSide) {
+        if (this.level.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cF(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.level.addParticle(Particles.PORTAL, this.d(0.5D), this.da(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {
-                ++this.b;
+                ++this.life;
             }
 
-            if (this.b >= 2400) {
+            if (this.life >= 2400) {
                 this.die();
             }
         }

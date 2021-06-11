@@ -8,32 +8,35 @@ import javax.annotation.Nullable;
 import net.minecraft.util.INamable;
 
 public class WorldGenStage {
+
+    public WorldGenStage() {}
+
     public static enum Features implements INamable {
 
         AIR("air"), LIQUID("liquid");
 
-        public static final Codec<WorldGenStage.Features> c = INamable.a(WorldGenStage.Features::values, WorldGenStage.Features::a);
-        private static final Map<String, WorldGenStage.Features> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Features::b, (worldgenstage_features) -> {
+        public static final Codec<WorldGenStage.Features> CODEC = INamable.a(WorldGenStage.Features::values, WorldGenStage.Features::a);
+        private static final Map<String, WorldGenStage.Features> BY_NAME = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Features::a, (worldgenstage_features) -> {
             return worldgenstage_features;
         }));
-        private final String e;
+        private final String name;
 
         private Features(String s) {
-            this.e = s;
+            this.name = s;
         }
 
-        public String b() {
-            return this.e;
+        public String a() {
+            return this.name;
         }
 
         @Nullable
         public static WorldGenStage.Features a(String s) {
-            return (WorldGenStage.Features) WorldGenStage.Features.d.get(s);
+            return (WorldGenStage.Features) WorldGenStage.Features.BY_NAME.get(s);
         }
 
         @Override
         public String getName() {
-            return this.e;
+            return this.name;
         }
     }
 

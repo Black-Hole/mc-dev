@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.ICommandListener;
 import net.minecraft.core.BaseBlockPosition;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.ChatMessage;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.inventory.ContainerLectern;
 import net.minecraft.world.inventory.IContainerProperties;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemWrittenBook;
 import net.minecraft.world.item.Items;
@@ -29,7 +29,11 @@ import net.minecraft.world.phys.Vec3D;
 
 public class TileEntityLectern extends TileEntity implements Clearable, ITileInventory {
 
-    public final IInventory inventory = new IInventory() {
+    public static final int DATA_PAGE = 0;
+    public static final int NUM_DATA = 1;
+    public static final int SLOT_BOOK = 0;
+    public static final int NUM_SLOTS = 1;
+    public final IInventory bookAccess = new IInventory() {
         @Override
         public int getSize() {
             return 1;
@@ -42,7 +46,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
         @Override
         public ItemStack getItem(int i) {
-            return i == 0 ? TileEntityLectern.this.book : ItemStack.b;
+            return i == 0 ? TileEntityLectern.this.book : ItemStack.EMPTY;
         }
 
         @Override
@@ -51,12 +55,12 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
                 ItemStack itemstack = TileEntityLectern.this.book.cloneAndSubtract(j);
 
                 if (TileEntityLectern.this.book.isEmpty()) {
-                    TileEntityLectern.this.k();
+                    TileEntityLectern.this.j();
                 }
 
                 return itemstack;
             } else {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
         }
 
@@ -65,11 +69,11 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
             if (i == 0) {
                 ItemStack itemstack = TileEntityLectern.this.book;
 
-                TileEntityLectern.this.book = ItemStack.b;
-                TileEntityLectern.this.k();
+                TileEntityLectern.this.book = ItemStack.EMPTY;
+                TileEntityLectern.this.j();
                 return itemstack;
             } else {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
         }
 
@@ -88,7 +92,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
         @Override
         public boolean a(EntityHuman entityhuman) {
-            return TileEntityLectern.this.world.getTileEntity(TileEntityLectern.this.position) != TileEntityLectern.this ? false : (entityhuman.h((double) TileEntityLectern.this.position.getX() + 0.5D, (double) TileEntityLectern.this.position.getY() + 0.5D, (double) TileEntityLectern.this.position.getZ() + 0.5D) > 64.0D ? false : TileEntityLectern.this.hasBook());
+            return TileEntityLectern.this.level.getTileEntity(TileEntityLectern.this.worldPosition) != TileEntityLectern.this ? false : (entityhuman.h((double) TileEntityLectern.this.worldPosition.getX() + 0.5D, (double) TileEntityLectern.this.worldPosition.getY() + 0.5D, (double) TileEntityLectern.this.worldPosition.getZ() + 0.5D) > 64.0D ? false : TileEntityLectern.this.hasBook());
         }
 
         @Override
@@ -99,7 +103,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
         @Override
         public void clear() {}
     };
-    private final IContainerProperties containerProperties = new IContainerProperties() {
+    private final IContainerProperties dataAccess = new IContainerProperties() {
         @Override
         public int getProperty(int i) {
             return i == 0 ? TileEntityLectern.this.page : 0;
@@ -118,13 +122,13 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
             return 1;
         }
     };
-    private ItemStack book;
-    private int page;
-    private int maxPage;
+    ItemStack book;
+    int page;
+    private int pageCount;
 
-    public TileEntityLectern() {
-        super(TileEntityTypes.LECTERN);
-        this.book = ItemStack.b;
+    public TileEntityLectern(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.LECTERN, blockposition, iblockdata);
+        this.book = ItemStack.EMPTY;
     }
 
     public ItemStack getBook() {
@@ -132,30 +136,28 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
     }
 
     public boolean hasBook() {
-        Item item = this.book.getItem();
-
-        return item == Items.WRITABLE_BOOK || item == Items.WRITTEN_BOOK;
+        return this.book.a(Items.WRITABLE_BOOK) || this.book.a(Items.WRITTEN_BOOK);
     }
 
     public void setBook(ItemStack itemstack) {
         this.a(itemstack, (EntityHuman) null);
     }
 
-    private void k() {
+    void j() {
         this.page = 0;
-        this.maxPage = 0;
+        this.pageCount = 0;
         BlockLectern.setHasBook(this.getWorld(), this.getPosition(), this.getBlock(), false);
     }
 
     public void a(ItemStack itemstack, @Nullable EntityHuman entityhuman) {
         this.book = this.b(itemstack, entityhuman);
         this.page = 0;
-        this.maxPage = ItemWrittenBook.g(this.book);
+        this.pageCount = ItemWrittenBook.k(this.book);
         this.update();
     }
 
     public void setPage(int i) {
-        int j = MathHelper.clamp(i, 0, this.maxPage - 1);
+        int j = MathHelper.clamp(i, 0, this.pageCount - 1);
 
         if (j != this.page) {
             this.page = j;
@@ -169,14 +171,14 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
         return this.page;
     }
 
-    public int j() {
-        float f = this.maxPage > 1 ? (float) this.getPage() / ((float) this.maxPage - 1.0F) : 1.0F;
+    public int i() {
+        float f = this.pageCount > 1 ? (float) this.getPage() / ((float) this.pageCount - 1.0F) : 1.0F;
 
         return MathHelper.d(f * 14.0F) + (this.hasBook() ? 1 : 0);
     }
 
     private ItemStack b(ItemStack itemstack, @Nullable EntityHuman entityhuman) {
-        if (this.world instanceof WorldServer && itemstack.getItem() == Items.WRITTEN_BOOK) {
+        if (this.level instanceof WorldServer && itemstack.a(Items.WRITTEN_BOOK)) {
             ItemWrittenBook.a(itemstack, this.a(entityhuman), entityhuman);
         }
 
@@ -195,9 +197,9 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
             object = entityhuman.getScoreboardDisplayName();
         }
 
-        Vec3D vec3d = Vec3D.a((BaseBlockPosition) this.position);
+        Vec3D vec3d = Vec3D.a((BaseBlockPosition) this.worldPosition);
 
-        return new CommandListenerWrapper(ICommandListener.DUMMY, vec3d, Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityhuman);
+        return new CommandListenerWrapper(ICommandListener.NULL, vec3d, Vec2F.ZERO, (WorldServer) this.level, 2, s, (IChatBaseComponent) object, this.level.getMinecraftServer(), entityhuman);
     }
 
     @Override
@@ -206,16 +208,16 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Book", 10)) {
             this.book = this.b(ItemStack.a(nbttagcompound.getCompound("Book")), (EntityHuman) null);
         } else {
-            this.book = ItemStack.b;
+            this.book = ItemStack.EMPTY;
         }
 
-        this.maxPage = ItemWrittenBook.g(this.book);
-        this.page = MathHelper.clamp(nbttagcompound.getInt("Page"), 0, this.maxPage - 1);
+        this.pageCount = ItemWrittenBook.k(this.book);
+        this.page = MathHelper.clamp(nbttagcompound.getInt("Page"), 0, this.pageCount - 1);
     }
 
     @Override
@@ -231,12 +233,12 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
     @Override
     public void clear() {
-        this.setBook(ItemStack.b);
+        this.setBook(ItemStack.EMPTY);
     }
 
     @Override
     public Container createMenu(int i, PlayerInventory playerinventory, EntityHuman entityhuman) {
-        return new ContainerLectern(i, this.inventory, this.containerProperties);
+        return new ContainerLectern(i, this.bookAccess, this.dataAccess);
     }
 
     @Override

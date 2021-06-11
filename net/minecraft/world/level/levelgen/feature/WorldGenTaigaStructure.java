@@ -5,8 +5,7 @@ import java.util.Iterator;
 import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureLakeConfiguration;
 
 public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureLakeConfiguration> {
@@ -15,44 +14,43 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureLakeCo
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
-        while (true) {
-            if (blockposition.getY() > 3) {
-                label38:
-                {
-                    if (!generatoraccessseed.isEmpty(blockposition.down())) {
-                        Block block = generatoraccessseed.getType(blockposition.down()).getBlock();
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureLakeConfiguration> featureplacecontext) {
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
 
-                        if (b(block) || a(block)) {
-                            break label38;
-                        }
-                    }
+        WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration;
 
-                    blockposition = blockposition.down();
-                    continue;
+        for (worldgenfeaturelakeconfiguration = (WorldGenFeatureLakeConfiguration) featureplacecontext.e(); blockposition.getY() > generatoraccessseed.getMinBuildHeight() + 3; blockposition = blockposition.down()) {
+            if (!generatoraccessseed.isEmpty(blockposition.down())) {
+                IBlockData iblockdata = generatoraccessseed.getType(blockposition.down());
+
+                if (b(iblockdata) || a(iblockdata)) {
+                    break;
                 }
             }
+        }
 
-            if (blockposition.getY() <= 3) {
-                return false;
-            }
-
+        if (blockposition.getY() <= generatoraccessseed.getMinBuildHeight() + 3) {
+            return false;
+        } else {
             for (int i = 0; i < 3; ++i) {
                 int j = random.nextInt(2);
                 int k = random.nextInt(2);
                 int l = random.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                Iterator iterator = BlockPosition.a(blockposition.b(-j, -k, -l), blockposition.b(j, k, l)).iterator();
+                Iterator iterator = BlockPosition.a(blockposition.c(-j, -k, -l), blockposition.c(j, k, l)).iterator();
 
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
                     if (blockposition1.j(blockposition) <= (double) (f * f)) {
-                        generatoraccessseed.setTypeAndData(blockposition1, worldgenfeaturelakeconfiguration.b, 4);
+                        generatoraccessseed.setTypeAndData(blockposition1, worldgenfeaturelakeconfiguration.state, 4);
                     }
                 }
 
-                blockposition = blockposition.b(-1 + random.nextInt(2), -random.nextInt(2), -1 + random.nextInt(2));
+                blockposition = blockposition.c(-1 + random.nextInt(2), -random.nextInt(2), -1 + random.nextInt(2));
             }
 
             return true;

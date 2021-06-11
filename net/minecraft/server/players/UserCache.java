@@ -31,10 +31,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+import net.minecraft.SystemUtils;
 import net.minecraft.world.entity.player.EntityHuman;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,17 +46,22 @@ import org.apache.logging.log4j.Logger;
 public class UserCache {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static boolean b;
-    private final Map<String, UserCache.UserCacheEntry> c = Maps.newConcurrentMap();
-    private final Map<UUID, UserCache.UserCacheEntry> d = Maps.newConcurrentMap();
-    private final GameProfileRepository e;
-    private final Gson f = (new GsonBuilder()).create();
-    private final File g;
-    private final AtomicLong h = new AtomicLong();
+    private static final int GAMEPROFILES_MRU_LIMIT = 1000;
+    private static final int GAMEPROFILES_EXPIRATION_MONTHS = 1;
+    private static boolean usesAuthentication;
+    private final Map<String, UserCache.UserCacheEntry> profilesByName = Maps.newConcurrentMap();
+    private final Map<UUID, UserCache.UserCacheEntry> profilesByUUID = Maps.newConcurrentMap();
+    private final Map<String, CompletableFuture<GameProfile>> requests = Maps.newConcurrentMap();
+    private final GameProfileRepository profileRepository;
+    private final Gson gson = (new GsonBuilder()).create();
+    private final File file;
+    private final AtomicLong operationCount = new AtomicLong();
+    @Nullable
+    private Executor executor;
 
     public UserCache(GameProfileRepository gameprofilerepository, File file) {
-        this.e = gameprofilerepository;
-        this.g = file;
+        this.profileRepository = gameprofilerepository;
+        this.file = file;
         Lists.reverse(this.a()).forEach(this::a);
     }
 
@@ -63,13 +72,13 @@ public class UserCache {
         String s = gameprofile.getName();
 
         if (s != null) {
-            this.c.put(s.toLowerCase(Locale.ROOT), usercache_usercacheentry);
+            this.profilesByName.put(s.toLowerCase(Locale.ROOT), usercache_usercacheentry);
         }
 
         UUID uuid = gameprofile.getId();
 
         if (uuid != null) {
-            this.d.put(uuid, usercache_usercacheentry);
+            this.profilesByUUID.put(uuid, usercache_usercacheentry);
         }
 
     }
@@ -100,11 +109,11 @@ public class UserCache {
     }
 
     public static void a(boolean flag) {
-        UserCache.b = flag;
+        UserCache.usesAuthentication = flag;
     }
 
     private static boolean c() {
-        return UserCache.b;
+        return UserCache.usesAuthentication;
     }
 
     public void a(GameProfile gameprofile) {
@@ -120,18 +129,18 @@ public class UserCache {
     }
 
     private long d() {
-        return this.h.incrementAndGet();
+        return this.operationCount.incrementAndGet();
     }
 
     @Nullable
     public GameProfile getProfile(String s) {
         String s1 = s.toLowerCase(Locale.ROOT);
-        UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.c.get(s1);
+        UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.profilesByName.get(s1);
         boolean flag = false;
 
-        if (usercache_usercacheentry != null && (new Date()).getTime() >= usercache_usercacheentry.b.getTime()) {
-            this.d.remove(usercache_usercacheentry.a().getId());
-            this.c.remove(usercache_usercacheentry.a().getName().toLowerCase(Locale.ROOT));
+        if (usercache_usercacheentry != null && (new Date()).getTime() >= usercache_usercacheentry.expirationDate.getTime()) {
+            this.profilesByUUID.remove(usercache_usercacheentry.a().getId());
+            this.profilesByName.remove(usercache_usercacheentry.a().getName().toLowerCase(Locale.ROOT));
             flag = true;
             usercache_usercacheentry = null;
         }
@@ -142,7 +151,7 @@ public class UserCache {
             usercache_usercacheentry.a(this.d());
             gameprofile = usercache_usercacheentry.a();
         } else {
-            gameprofile = a(this.e, s1);
+            gameprofile = a(this.profileRepository, s1);
             if (gameprofile != null) {
                 this.a(gameprofile);
                 flag = false;
@@ -156,9 +165,32 @@ public class UserCache {
         return gameprofile;
     }
 
+    public void a(String s, Consumer<GameProfile> consumer) {
+        if (this.executor == null) {
+            throw new IllegalStateException("No executor");
+        } else {
+            CompletableFuture<GameProfile> completablefuture = (CompletableFuture) this.requests.get(s);
+
+            if (completablefuture != null) {
+                this.requests.put(s, completablefuture.whenCompleteAsync((gameprofile, throwable) -> {
+                    consumer.accept(gameprofile);
+                }, this.executor));
+            } else {
+                this.requests.put(s, CompletableFuture.supplyAsync(() -> {
+                    return this.getProfile(s);
+                }, SystemUtils.f()).whenCompleteAsync((gameprofile, throwable) -> {
+                    this.requests.remove(s);
+                }, this.executor).whenCompleteAsync((gameprofile, throwable) -> {
+                    consumer.accept(gameprofile);
+                }, this.executor));
+            }
+
+        }
+    }
+
     @Nullable
     public GameProfile getProfile(UUID uuid) {
-        UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.d.get(uuid);
+        UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.profilesByUUID.get(uuid);
 
         if (usercache_usercacheentry == null) {
             return null;
@@ -166,6 +198,10 @@ public class UserCache {
             usercache_usercacheentry.a(this.d());
             return usercache_usercacheentry.a();
         }
+    }
+
+    public void a(Executor executor) {
+        this.executor = executor;
     }
 
     private static DateFormat e() {
@@ -176,52 +212,56 @@ public class UserCache {
         ArrayList arraylist = Lists.newArrayList();
 
         try {
-            BufferedReader bufferedreader = Files.newReader(this.g, StandardCharsets.UTF_8);
-            Throwable throwable = null;
+            BufferedReader bufferedreader = Files.newReader(this.file, StandardCharsets.UTF_8);
 
-            ArrayList arraylist1;
+            label54:
+            {
+                ArrayList arraylist1;
 
-            try {
-                JsonArray jsonarray = (JsonArray) this.f.fromJson(bufferedreader, JsonArray.class);
+                try {
+                    JsonArray jsonarray = (JsonArray) this.gson.fromJson(bufferedreader, JsonArray.class);
 
-                if (jsonarray != null) {
-                    DateFormat dateformat = e();
+                    if (jsonarray != null) {
+                        DateFormat dateformat = e();
 
-                    jsonarray.forEach((jsonelement) -> {
-                        UserCache.UserCacheEntry usercache_usercacheentry = a(jsonelement, dateformat);
+                        jsonarray.forEach((jsonelement) -> {
+                            UserCache.UserCacheEntry usercache_usercacheentry = a(jsonelement, dateformat);
 
-                        if (usercache_usercacheentry != null) {
-                            arraylist.add(usercache_usercacheentry);
-                        }
+                            if (usercache_usercacheentry != null) {
+                                arraylist.add(usercache_usercacheentry);
+                            }
 
-                    });
-                    return arraylist;
-                }
+                        });
+                        break label54;
+                    }
 
-                arraylist1 = arraylist;
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (bufferedreader != null) {
-                    if (throwable != null) {
+                    arraylist1 = arraylist;
+                } catch (Throwable throwable) {
+                    if (bufferedreader != null) {
                         try {
                             bufferedreader.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
+                        } catch (Throwable throwable1) {
+                            throwable.addSuppressed(throwable1);
                         }
-                    } else {
-                        bufferedreader.close();
                     }
+
+                    throw throwable;
                 }
 
+                if (bufferedreader != null) {
+                    bufferedreader.close();
+                }
+
+                return arraylist1;
             }
 
-            return arraylist1;
+            if (bufferedreader != null) {
+                bufferedreader.close();
+            }
         } catch (FileNotFoundException filenotfoundexception) {
             ;
         } catch (JsonParseException | IOException ioexception) {
-            UserCache.LOGGER.warn("Failed to load profile cache {}", this.g, ioexception);
+            UserCache.LOGGER.warn("Failed to load profile cache {}", this.file, ioexception);
         }
 
         return arraylist;
@@ -234,30 +274,27 @@ public class UserCache {
         this.a(1000).forEach((usercache_usercacheentry) -> {
             jsonarray.add(a(usercache_usercacheentry, dateformat));
         });
-        String s = this.f.toJson(jsonarray);
+        String s = this.gson.toJson(jsonarray);
 
         try {
-            BufferedWriter bufferedwriter = Files.newWriter(this.g, StandardCharsets.UTF_8);
-            Throwable throwable = null;
+            BufferedWriter bufferedwriter = Files.newWriter(this.file, StandardCharsets.UTF_8);
 
             try {
                 bufferedwriter.write(s);
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (bufferedwriter != null) {
-                    if (throwable != null) {
-                        try {
-                            bufferedwriter.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         bufferedwriter.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (bufferedwriter != null) {
+                bufferedwriter.close();
             }
         } catch (IOException ioexception) {
             ;
@@ -266,7 +303,7 @@ public class UserCache {
     }
 
     private Stream<UserCache.UserCacheEntry> a(int i) {
-        return ImmutableList.copyOf(this.d.values()).stream().sorted(Comparator.comparing(UserCache.UserCacheEntry::c).reversed()).limit((long) i);
+        return ImmutableList.copyOf(this.profilesByUUID.values()).stream().sorted(Comparator.comparing(UserCache.UserCacheEntry::c).reversed()).limit((long) i);
     }
 
     private static JsonElement a(UserCache.UserCacheEntry usercache_usercacheentry, DateFormat dateformat) {
@@ -322,31 +359,31 @@ public class UserCache {
         }
     }
 
-    static class UserCacheEntry {
+    private static class UserCacheEntry {
 
-        private final GameProfile a;
-        private final Date b;
-        private volatile long c;
+        private final GameProfile profile;
+        final Date expirationDate;
+        private volatile long lastAccess;
 
-        private UserCacheEntry(GameProfile gameprofile, Date date) {
-            this.a = gameprofile;
-            this.b = date;
+        UserCacheEntry(GameProfile gameprofile, Date date) {
+            this.profile = gameprofile;
+            this.expirationDate = date;
         }
 
         public GameProfile a() {
-            return this.a;
+            return this.profile;
         }
 
         public Date b() {
-            return this.b;
+            return this.expirationDate;
         }
 
         public void a(long i) {
-            this.c = i;
+            this.lastAccess = i;
         }
 
         public long c() {
-            return this.c;
+            return this.lastAccess;
         }
     }
 }

@@ -13,11 +13,11 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public abstract class DataConverterBlockRename extends DataFix {
 
-    private final String a;
+    private final String name;
 
     public DataConverterBlockRename(Schema schema, String s) {
         super(schema, false);
-        this.a = s;
+        this.name = s;
     }
 
     public TypeRewriteRule makeRule() {
@@ -27,12 +27,12 @@ public abstract class DataConverterBlockRename extends DataFix {
         if (!Objects.equals(type, type1)) {
             throw new IllegalStateException("block type is not what was expected.");
         } else {
-            TypeRewriteRule typerewriterule = this.fixTypeEverywhere(this.a + " for block", type1, (dynamicops) -> {
+            TypeRewriteRule typerewriterule = this.fixTypeEverywhere(this.name + " for block", type1, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond(this::a);
                 };
             });
-            TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped(this.a + " for block_state", this.getInputSchema().getType(DataConverterTypes.BLOCK_STATE), (typed) -> {
+            TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped(this.name + " for block_state", this.getInputSchema().getType(DataConverterTypes.BLOCK_STATE), (typed) -> {
                 return typed.update(DSL.remainderFinder(), (dynamic) -> {
                     Optional<String> optional = dynamic.get("Name").asString().result();
 

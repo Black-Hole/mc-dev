@@ -2,10 +2,16 @@ package net.minecraft.world.level.block;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.sounds.SoundCategory;
+import net.minecraft.sounds.SoundEffects;
 import net.minecraft.stats.StatisticList;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsItem;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
@@ -16,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockStateInteger;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathMode;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -23,25 +30,46 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCake extends Block {
 
-    public static final BlockStateInteger BITES = BlockProperties.al;
-    protected static final VoxelShape[] b = new VoxelShape[]{Block.a(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(3.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(5.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(7.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(9.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(11.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(13.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D)};
+    public static final int MAX_BITES = 6;
+    public static final BlockStateInteger BITES = BlockProperties.BITES;
+    public static final int FULL_CAKE_SIGNAL = b(0);
+    protected static final float AABB_OFFSET = 1.0F;
+    protected static final float AABB_SIZE_PER_BITE = 2.0F;
+    protected static final VoxelShape[] SHAPE_BY_BITE = new VoxelShape[]{Block.a(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(3.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(5.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(7.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(9.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(11.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(13.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D)};
 
     protected BlockCake(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockCake.BITES, 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCake.b[(Integer) iblockdata.get(BlockCake.BITES)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCake.SHAPE_BY_BITE[(Integer) iblockdata.get(BlockCake.BITES)];
     }
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (world.isClientSide) {
-            ItemStack itemstack = entityhuman.b(enumhand);
+        ItemStack itemstack = entityhuman.b(enumhand);
+        Item item = itemstack.getItem();
 
-            if (this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman).a()) {
+        if (itemstack.a((Tag) TagsItem.CANDLES) && (Integer) iblockdata.get(BlockCake.BITES) == 0) {
+            Block block = Block.asBlock(item);
+
+            if (block instanceof CandleBlock) {
+                if (!entityhuman.isCreative()) {
+                    itemstack.subtract(1);
+                }
+
+                world.playSound((EntityHuman) null, blockposition, SoundEffects.CAKE_ADD_CANDLE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.setTypeUpdate(blockposition, CandleCakeBlock.a(block));
+                world.a((Entity) entityhuman, GameEvent.BLOCK_CHANGE, blockposition);
+                entityhuman.b(StatisticList.ITEM_USED.b(item));
+                return EnumInteractionResult.SUCCESS;
+            }
+        }
+
+        if (world.isClientSide) {
+            if (a((GeneratorAccess) world, blockposition, iblockdata, entityhuman).a()) {
                 return EnumInteractionResult.SUCCESS;
             }
 
@@ -50,21 +78,23 @@ public class BlockCake extends Block {
             }
         }
 
-        return this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman);
+        return a((GeneratorAccess) world, blockposition, iblockdata, entityhuman);
     }
 
-    private EnumInteractionResult a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!entityhuman.q(false)) {
+    protected static EnumInteractionResult a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        if (!entityhuman.s(false)) {
             return EnumInteractionResult.PASS;
         } else {
             entityhuman.a(StatisticList.EAT_CAKE_SLICE);
             entityhuman.getFoodData().eat(2, 0.1F);
             int i = (Integer) iblockdata.get(BlockCake.BITES);
 
+            generatoraccess.a((Entity) entityhuman, GameEvent.EAT, blockposition);
             if (i < 6) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCake.BITES, i + 1), 3);
             } else {
                 generatoraccess.a(blockposition, false);
+                generatoraccess.a((Entity) entityhuman, GameEvent.BLOCK_DESTROY, blockposition);
             }
 
             return EnumInteractionResult.SUCCESS;
@@ -88,7 +118,11 @@ public class BlockCake extends Block {
 
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return (7 - (Integer) iblockdata.get(BlockCake.BITES)) * 2;
+        return b((Integer) iblockdata.get(BlockCake.BITES));
+    }
+
+    public static int b(int i) {
+        return (7 - i) * 2;
     }
 
     @Override

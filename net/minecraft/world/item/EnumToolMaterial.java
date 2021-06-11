@@ -22,49 +22,49 @@ public enum EnumToolMaterial implements ToolMaterial {
         return RecipeItemStack.a(Items.NETHERITE_INGOT);
     });
 
-    private final int g;
-    private final int h;
-    private final float i;
-    private final float j;
-    private final int k;
-    private final LazyInitVar<RecipeItemStack> l;
+    private final int level;
+    private final int uses;
+    private final float speed;
+    private final float damage;
+    private final int enchantmentValue;
+    private final LazyInitVar<RecipeItemStack> repairIngredient;
 
     private EnumToolMaterial(int i, int j, float f, float f1, int k, Supplier supplier) {
-        this.g = i;
-        this.h = j;
-        this.i = f;
-        this.j = f1;
-        this.k = k;
-        this.l = new LazyInitVar<>(supplier);
+        this.level = i;
+        this.uses = j;
+        this.speed = f;
+        this.damage = f1;
+        this.enchantmentValue = k;
+        this.repairIngredient = new LazyInitVar<>(supplier);
     }
 
     @Override
     public int a() {
-        return this.h;
+        return this.uses;
     }
 
     @Override
     public float b() {
-        return this.i;
+        return this.speed;
     }
 
     @Override
     public float c() {
-        return this.j;
+        return this.damage;
     }
 
     @Override
     public int d() {
-        return this.g;
+        return this.level;
     }
 
     @Override
     public int e() {
-        return this.k;
+        return this.enchantmentValue;
     }
 
     @Override
     public RecipeItemStack f() {
-        return (RecipeItemStack) this.l.a();
+        return (RecipeItemStack) this.repairIngredient.a();
     }
 }

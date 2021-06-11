@@ -5,32 +5,35 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import java.util.UUID;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.game.PacketPlayOutTileEntityData;
 import net.minecraft.server.players.UserCache;
 import net.minecraft.util.UtilColor;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;
 
-public class TileEntitySkull extends TileEntity implements ITickable {
+public class TileEntitySkull extends TileEntity {
 
+    public static final String TAG_SKULL_OWNER = "SkullOwner";
     @Nullable
-    private static UserCache userCache;
+    private static UserCache profileCache;
     @Nullable
     private static MinecraftSessionService sessionService;
     @Nullable
-    public GameProfile gameProfile;
-    private int g;
-    private boolean h;
+    public GameProfile owner;
+    private int mouthTickCount;
+    private boolean isMovingMouth;
 
-    public TileEntitySkull() {
-        super(TileEntityTypes.SKULL);
+    public TileEntitySkull(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.SKULL, blockposition, iblockdata);
     }
 
     public static void a(UserCache usercache) {
-        TileEntitySkull.userCache = usercache;
+        TileEntitySkull.profileCache = usercache;
     }
 
     public static void a(MinecraftSessionService minecraftsessionservice) {
@@ -40,10 +43,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (this.gameProfile != null) {
+        if (this.owner != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            GameProfileSerializer.serialize(nbttagcompound1, this.gameProfile);
+            GameProfileSerializer.serialize(nbttagcompound1, this.owner);
             nbttagcompound.set("SkullOwner", nbttagcompound1);
         }
 
@@ -51,8 +54,8 @@ public class TileEntitySkull extends TileEntity implements ITickable {
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
             this.setGameProfile(GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner")));
         } else if (nbttagcompound.hasKeyOfType("ExtraType", 8)) {
@@ -65,66 +68,65 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
-    @Override
-    public void tick() {
-        IBlockData iblockdata = this.getBlock();
-
-        if (iblockdata.a(Blocks.DRAGON_HEAD) || iblockdata.a(Blocks.DRAGON_WALL_HEAD)) {
-            if (this.world.isBlockIndirectlyPowered(this.position)) {
-                this.h = true;
-                ++this.g;
-            } else {
-                this.h = false;
-            }
+    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, TileEntitySkull tileentityskull) {
+        if (world.isBlockIndirectlyPowered(blockposition)) {
+            tileentityskull.isMovingMouth = true;
+            ++tileentityskull.mouthTickCount;
+        } else {
+            tileentityskull.isMovingMouth = false;
         }
 
+    }
+
+    public float a(float f) {
+        return this.isMovingMouth ? (float) this.mouthTickCount + f : (float) this.mouthTickCount;
+    }
+
+    @Nullable
+    public GameProfile d() {
+        return this.owner;
     }
 
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.b());
+        return new PacketPlayOutTileEntityData(this.worldPosition, 4, this.Z_());
     }
 
     @Override
-    public NBTTagCompound b() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
     public void setGameProfile(@Nullable GameProfile gameprofile) {
-        this.gameProfile = gameprofile;
+        synchronized (this) {
+            this.owner = gameprofile;
+        }
+
         this.f();
     }
 
     private void f() {
-        this.gameProfile = b(this.gameProfile);
-        this.update();
+        a(this.owner, (gameprofile) -> {
+            this.owner = gameprofile;
+            this.update();
+        });
     }
 
-    @Nullable
-    public static GameProfile b(@Nullable GameProfile gameprofile) {
-        if (gameprofile != null && !UtilColor.b(gameprofile.getName())) {
-            if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
-                return gameprofile;
-            } else if (TileEntitySkull.userCache != null && TileEntitySkull.sessionService != null) {
-                GameProfile gameprofile1 = TileEntitySkull.userCache.getProfile(gameprofile.getName());
+    public static void a(@Nullable GameProfile gameprofile, Consumer<GameProfile> consumer) {
+        if (gameprofile != null && !UtilColor.b(gameprofile.getName()) && (!gameprofile.isComplete() || !gameprofile.getProperties().containsKey("textures")) && TileEntitySkull.profileCache != null && TileEntitySkull.sessionService != null) {
+            TileEntitySkull.profileCache.a(gameprofile.getName(), (gameprofile1) -> {
+                Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
 
-                if (gameprofile1 == null) {
-                    return gameprofile;
-                } else {
-                    Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
-
-                    if (property == null) {
-                        gameprofile1 = TileEntitySkull.sessionService.fillProfileProperties(gameprofile1, true);
-                    }
-
-                    return gameprofile1;
+                if (property == null) {
+                    gameprofile1 = TileEntitySkull.sessionService.fillProfileProperties(gameprofile1, true);
                 }
-            } else {
-                return gameprofile;
-            }
+
+                TileEntitySkull.profileCache.a(gameprofile1);
+                consumer.accept(gameprofile1);
+            });
         } else {
-            return gameprofile;
+            consumer.accept(gameprofile);
         }
     }
 }

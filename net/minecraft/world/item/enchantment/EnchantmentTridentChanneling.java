@@ -22,9 +22,4 @@ public class EnchantmentTridentChanneling extends Enchantment {
     public int getMaxLevel() {
         return 1;
     }
-
-    @Override
-    public boolean a(Enchantment enchantment) {
-        return super.a(enchantment);
-    }
 }

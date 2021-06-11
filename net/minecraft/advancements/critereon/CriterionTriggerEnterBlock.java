@@ -12,13 +12,13 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class CriterionTriggerEnterBlock extends CriterionTriggerAbstract<CriterionTriggerEnterBlock.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("enter_block");
+    static final MinecraftKey ID = new MinecraftKey("enter_block");
 
     public CriterionTriggerEnterBlock() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerEnterBlock.a;
+        return CriterionTriggerEnterBlock.ID;
     }
 
     @Override
@@ -56,33 +56,33 @@ public class CriterionTriggerEnterBlock extends CriterionTriggerAbstract<Criteri
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final Block a;
-        private final CriterionTriggerProperties b;
+        private final Block block;
+        private final CriterionTriggerProperties state;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable Block block, CriterionTriggerProperties criteriontriggerproperties) {
-            super(CriterionTriggerEnterBlock.a, criterionconditionentity_b);
-            this.a = block;
-            this.b = criteriontriggerproperties;
+            super(CriterionTriggerEnterBlock.ID, criterionconditionentity_b);
+            this.block = block;
+            this.state = criteriontriggerproperties;
         }
 
         public static CriterionTriggerEnterBlock.a a(Block block) {
-            return new CriterionTriggerEnterBlock.a(CriterionConditionEntity.b.a, block, CriterionTriggerProperties.a);
+            return new CriterionTriggerEnterBlock.a(CriterionConditionEntity.b.ANY, block, CriterionTriggerProperties.ANY);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            if (this.a != null) {
-                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.a).toString());
+            if (this.block != null) {
+                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.block).toString());
             }
 
-            jsonobject.add("state", this.b.a());
+            jsonobject.add("state", this.state.a());
             return jsonobject;
         }
 
         public boolean a(IBlockData iblockdata) {
-            return this.a != null && !iblockdata.a(this.a) ? false : this.b.a(iblockdata);
+            return this.block != null && !iblockdata.a(this.block) ? false : this.state.a(iblockdata);
         }
     }
 }

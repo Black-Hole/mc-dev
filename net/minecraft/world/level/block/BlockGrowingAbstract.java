@@ -16,23 +16,23 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public abstract class BlockGrowingAbstract extends Block {
 
-    protected final EnumDirection a;
-    protected final boolean b;
-    protected final VoxelShape c;
+    protected final EnumDirection growthDirection;
+    protected final boolean scheduleFluidTicks;
+    protected final VoxelShape shape;
 
     protected BlockGrowingAbstract(BlockBase.Info blockbase_info, EnumDirection enumdirection, VoxelShape voxelshape, boolean flag) {
         super(blockbase_info);
-        this.a = enumdirection;
-        this.c = voxelshape;
-        this.b = flag;
+        this.growthDirection = enumdirection;
+        this.shape = voxelshape;
+        this.scheduleFluidTicks = flag;
     }
 
     @Nullable
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(this.a));
+        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(this.growthDirection));
 
-        return !iblockdata.a((Block) this.c()) && !iblockdata.a(this.d()) ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : this.d().getBlockData();
+        return !iblockdata.a((Block) this.d()) && !iblockdata.a(this.c()) ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : this.c().getBlockData();
     }
 
     public IBlockData a(GeneratorAccess generatoraccess) {
@@ -41,11 +41,10 @@ public abstract class BlockGrowingAbstract extends Block {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        BlockPosition blockposition1 = blockposition.shift(this.a.opposite());
+        BlockPosition blockposition1 = blockposition.shift(this.growthDirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
-        Block block = iblockdata1.getBlock();
 
-        return !this.c(block) ? false : block == this.c() || block == this.d() || iblockdata1.d(iworldreader, blockposition1, this.a);
+        return !this.h(iblockdata1) ? false : iblockdata1.a((Block) this.d()) || iblockdata1.a(this.c()) || iblockdata1.d(iworldreader, blockposition1, this.growthDirection);
     }
 
     @Override
@@ -56,16 +55,16 @@ public abstract class BlockGrowingAbstract extends Block {
 
     }
 
-    protected boolean c(Block block) {
+    protected boolean h(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.c;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.shape;
     }
 
-    protected abstract BlockGrowingTop c();
+    protected abstract BlockGrowingTop d();
 
-    protected abstract Block d();
+    protected abstract Block c();
 }

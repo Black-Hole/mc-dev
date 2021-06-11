@@ -38,20 +38,19 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
         if (worldgenfeatureconfigured == null) {
             return false;
         } else {
-            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.f).b();
             IBlockData iblockdata1 = Blocks.AIR.getBlockData();
 
-            worldserver.setTypeAndData(blockposition.b(i, 0, j), iblockdata1, 4);
-            worldserver.setTypeAndData(blockposition.b(i + 1, 0, j), iblockdata1, 4);
-            worldserver.setTypeAndData(blockposition.b(i, 0, j + 1), iblockdata1, 4);
-            worldserver.setTypeAndData(blockposition.b(i + 1, 0, j + 1), iblockdata1, 4);
-            if (worldgenfeatureconfigured.a(worldserver, chunkgenerator, random, blockposition.b(i, 0, j))) {
+            worldserver.setTypeAndData(blockposition.c(i, 0, j), iblockdata1, 4);
+            worldserver.setTypeAndData(blockposition.c(i + 1, 0, j), iblockdata1, 4);
+            worldserver.setTypeAndData(blockposition.c(i, 0, j + 1), iblockdata1, 4);
+            worldserver.setTypeAndData(blockposition.c(i + 1, 0, j + 1), iblockdata1, 4);
+            if (worldgenfeatureconfigured.a(worldserver, chunkgenerator, random, blockposition.c(i, 0, j))) {
                 return true;
             } else {
-                worldserver.setTypeAndData(blockposition.b(i, 0, j), iblockdata, 4);
-                worldserver.setTypeAndData(blockposition.b(i + 1, 0, j), iblockdata, 4);
-                worldserver.setTypeAndData(blockposition.b(i, 0, j + 1), iblockdata, 4);
-                worldserver.setTypeAndData(blockposition.b(i + 1, 0, j + 1), iblockdata, 4);
+                worldserver.setTypeAndData(blockposition.c(i, 0, j), iblockdata, 4);
+                worldserver.setTypeAndData(blockposition.c(i + 1, 0, j), iblockdata, 4);
+                worldserver.setTypeAndData(blockposition.c(i, 0, j + 1), iblockdata, 4);
+                worldserver.setTypeAndData(blockposition.c(i + 1, 0, j + 1), iblockdata, 4);
                 return false;
             }
         }
@@ -60,6 +59,6 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
     public static boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, int i, int j) {
         Block block = iblockdata.getBlock();
 
-        return block == iblockaccess.getType(blockposition.b(i, 0, j)).getBlock() && block == iblockaccess.getType(blockposition.b(i + 1, 0, j)).getBlock() && block == iblockaccess.getType(blockposition.b(i, 0, j + 1)).getBlock() && block == iblockaccess.getType(blockposition.b(i + 1, 0, j + 1)).getBlock();
+        return iblockaccess.getType(blockposition.c(i, 0, j)).a(block) && iblockaccess.getType(blockposition.c(i + 1, 0, j)).a(block) && iblockaccess.getType(blockposition.c(i, 0, j + 1)).a(block) && iblockaccess.getType(blockposition.c(i + 1, 0, j + 1)).a(block);
     }
 }

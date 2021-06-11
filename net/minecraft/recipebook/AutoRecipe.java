@@ -12,9 +12,7 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.entity.player.AutoRecipeStackManager;
 import net.minecraft.world.entity.player.PlayerInventory;
-import net.minecraft.world.inventory.ContainerPlayer;
 import net.minecraft.world.inventory.ContainerRecipeBook;
-import net.minecraft.world.inventory.ContainerWorkbench;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.IRecipe;
@@ -24,74 +22,55 @@ import org.apache.logging.log4j.Logger;
 public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Integer> {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    protected final AutoRecipeStackManager b = new AutoRecipeStackManager();
-    protected PlayerInventory c;
-    protected ContainerRecipeBook<C> d;
+    protected final AutoRecipeStackManager stackedContents = new AutoRecipeStackManager();
+    protected PlayerInventory inventory;
+    protected ContainerRecipeBook<C> menu;
 
     public AutoRecipe(ContainerRecipeBook<C> containerrecipebook) {
-        this.d = containerrecipebook;
+        this.menu = containerrecipebook;
     }
 
     public void a(EntityPlayer entityplayer, @Nullable IRecipe<C> irecipe, boolean flag) {
         if (irecipe != null && entityplayer.getRecipeBook().b(irecipe)) {
-            this.c = entityplayer.inventory;
-            if (this.b() || entityplayer.isCreative()) {
-                this.b.a();
-                entityplayer.inventory.a(this.b);
-                this.d.a(this.b);
-                if (this.b.a(irecipe, (IntList) null)) {
+            this.inventory = entityplayer.getInventory();
+            if (this.a() || entityplayer.isCreative()) {
+                this.stackedContents.a();
+                entityplayer.getInventory().a(this.stackedContents);
+                this.menu.a(this.stackedContents);
+                if (this.stackedContents.a(irecipe, (IntList) null)) {
                     this.a(irecipe, flag);
                 } else {
-                    this.a();
-                    entityplayer.playerConnection.sendPacket(new PacketPlayOutAutoRecipe(entityplayer.activeContainer.windowId, irecipe));
+                    this.a(true);
+                    entityplayer.connection.sendPacket(new PacketPlayOutAutoRecipe(entityplayer.containerMenu.containerId, irecipe));
                 }
 
-                entityplayer.inventory.update();
+                entityplayer.getInventory().update();
             }
         }
     }
 
-    protected void a() {
-        for (int i = 0; i < this.d.g() * this.d.h() + 1; ++i) {
-            if (i != this.d.f() || !(this.d instanceof ContainerWorkbench) && !(this.d instanceof ContainerPlayer)) {
-                this.a(i);
+    protected void a(boolean flag) {
+        for (int i = 0; i < this.menu.m(); ++i) {
+            if (this.menu.d(i)) {
+                ItemStack itemstack = this.menu.getSlot(i).getItem().cloneItemStack();
+
+                this.inventory.a(itemstack, false);
+                this.menu.getSlot(i).set(itemstack);
             }
         }
 
-        this.d.e();
-    }
-
-    protected void a(int i) {
-        ItemStack itemstack = this.d.getSlot(i).getItem();
-
-        if (!itemstack.isEmpty()) {
-            for (; itemstack.getCount() > 0; this.d.getSlot(i).a(1)) {
-                int j = this.c.firstPartial(itemstack);
-
-                if (j == -1) {
-                    j = this.c.getFirstEmptySlotIndex();
-                }
-
-                ItemStack itemstack1 = itemstack.cloneItemStack();
-
-                itemstack1.setCount(1);
-                if (!this.c.c(j, itemstack1)) {
-                    AutoRecipe.LOGGER.error("Can't find any space for item in the inventory");
-                }
-            }
-
-        }
+        this.menu.i();
     }
 
     protected void a(IRecipe<C> irecipe, boolean flag) {
-        boolean flag1 = this.d.a(irecipe);
-        int i = this.b.b(irecipe, (IntList) null);
+        boolean flag1 = this.menu.a(irecipe);
+        int i = this.stackedContents.b(irecipe, (IntList) null);
         int j;
 
         if (flag1) {
-            for (j = 0; j < this.d.h() * this.d.g() + 1; ++j) {
-                if (j != this.d.f()) {
-                    ItemStack itemstack = this.d.getSlot(j).getItem();
+            for (j = 0; j < this.menu.l() * this.menu.k() + 1; ++j) {
+                if (j != this.menu.j()) {
+                    ItemStack itemstack = this.menu.getSlot(j).getItem();
 
                     if (!itemstack.isEmpty() && Math.min(i, itemstack.getMaxStackSize()) < itemstack.getCount() + 1) {
                         return;
@@ -103,7 +82,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         j = this.a(flag, i, flag1);
         IntArrayList intarraylist = new IntArrayList();
 
-        if (this.b.a(irecipe, intarraylist, j)) {
+        if (this.stackedContents.a(irecipe, intarraylist, j)) {
             int k = j;
             IntListIterator intlistiterator = intarraylist.iterator();
 
@@ -116,9 +95,9 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
                 }
             }
 
-            if (this.b.a(irecipe, intarraylist, k)) {
-                this.a();
-                this.a(this.d.g(), this.d.h(), this.d.f(), irecipe, intarraylist.iterator(), k);
+            if (this.stackedContents.a(irecipe, intarraylist, k)) {
+                this.a(false);
+                this.a(this.menu.k(), this.menu.l(), this.menu.j(), irecipe, intarraylist.iterator(), k);
             }
         }
 
@@ -126,7 +105,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
 
     @Override
     public void a(Iterator<Integer> iterator, int i, int j, int k, int l) {
-        Slot slot = this.d.getSlot(i);
+        Slot slot = this.menu.getSlot(i);
         ItemStack itemstack = AutoRecipeStackManager.a((Integer) iterator.next());
 
         if (!itemstack.isEmpty()) {
@@ -145,9 +124,9 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         } else if (flag1) {
             j = 64;
 
-            for (int k = 0; k < this.d.g() * this.d.h() + 1; ++k) {
-                if (k != this.d.f()) {
-                    ItemStack itemstack = this.d.getSlot(k).getItem();
+            for (int k = 0; k < this.menu.k() * this.menu.l() + 1; ++k) {
+                if (k != this.menu.j()) {
+                    ItemStack itemstack = this.menu.getSlot(k).getItem();
 
                     if (!itemstack.isEmpty() && j > itemstack.getCount()) {
                         j = itemstack.getCount();
@@ -164,16 +143,16 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
     }
 
     protected void a(Slot slot, ItemStack itemstack) {
-        int i = this.c.c(itemstack);
+        int i = this.inventory.c(itemstack);
 
         if (i != -1) {
-            ItemStack itemstack1 = this.c.getItem(i).cloneItemStack();
+            ItemStack itemstack1 = this.inventory.getItem(i).cloneItemStack();
 
             if (!itemstack1.isEmpty()) {
                 if (itemstack1.getCount() > 1) {
-                    this.c.splitStack(i, 1);
+                    this.inventory.splitStack(i, 1);
                 } else {
-                    this.c.splitWithoutUpdate(i);
+                    this.inventory.splitWithoutUpdate(i);
                 }
 
                 itemstack1.setCount(1);
@@ -187,16 +166,16 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         }
     }
 
-    private boolean b() {
+    private boolean a() {
         List<ItemStack> list = Lists.newArrayList();
-        int i = this.c();
+        int i = this.b();
 
-        for (int j = 0; j < this.d.g() * this.d.h() + 1; ++j) {
-            if (j != this.d.f()) {
-                ItemStack itemstack = this.d.getSlot(j).getItem().cloneItemStack();
+        for (int j = 0; j < this.menu.k() * this.menu.l() + 1; ++j) {
+            if (j != this.menu.j()) {
+                ItemStack itemstack = this.menu.getSlot(j).getItem().cloneItemStack();
 
                 if (!itemstack.isEmpty()) {
-                    int k = this.c.firstPartial(itemstack);
+                    int k = this.inventory.firstPartial(itemstack);
 
                     if (k == -1 && list.size() <= i) {
                         Iterator iterator = list.iterator();
@@ -228,9 +207,9 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         return true;
     }
 
-    private int c() {
+    private int b() {
         int i = 0;
-        Iterator iterator = this.c.items.iterator();
+        Iterator iterator = this.inventory.items.iterator();
 
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();

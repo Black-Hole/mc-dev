@@ -13,4 +13,6 @@ public interface TickList<T> {
     void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority);
 
     boolean b(BlockPosition blockposition, T t0);
+
+    int a();
 }

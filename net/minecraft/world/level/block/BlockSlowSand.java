@@ -16,7 +16,8 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockSlowSand extends Block {
 
-    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
+    private static final int BUBBLE_COLUMN_CHECK_DELAY = 20;
 
     public BlockSlowSand(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -24,22 +25,22 @@ public class BlockSlowSand extends Block {
 
     @Override
     public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockSlowSand.a;
+        return BlockSlowSand.SHAPE;
     }
 
     @Override
-    public VoxelShape e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return VoxelShapes.b();
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.b();
     }
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        BlockBubbleColumn.a(worldserver, blockposition.up(), false);
+        BlockBubbleColumn.b((GeneratorAccess) worldserver, blockposition.up(), iblockdata);
     }
 
     @Override

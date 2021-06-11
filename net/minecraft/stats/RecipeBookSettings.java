@@ -11,11 +11,11 @@ import net.minecraft.world.inventory.RecipeBookType;
 
 public final class RecipeBookSettings {
 
-    private static final Map<RecipeBookType, Pair<String, String>> a = ImmutableMap.of(RecipeBookType.CRAFTING, Pair.of("isGuiOpen", "isFilteringCraftable"), RecipeBookType.FURNACE, Pair.of("isFurnaceGuiOpen", "isFurnaceFilteringCraftable"), RecipeBookType.BLAST_FURNACE, Pair.of("isBlastingFurnaceGuiOpen", "isBlastingFurnaceFilteringCraftable"), RecipeBookType.SMOKER, Pair.of("isSmokerGuiOpen", "isSmokerFilteringCraftable"));
-    private final Map<RecipeBookType, RecipeBookSettings.a> b;
+    private static final Map<RecipeBookType, Pair<String, String>> TAG_FIELDS = ImmutableMap.of(RecipeBookType.CRAFTING, Pair.of("isGuiOpen", "isFilteringCraftable"), RecipeBookType.FURNACE, Pair.of("isFurnaceGuiOpen", "isFurnaceFilteringCraftable"), RecipeBookType.BLAST_FURNACE, Pair.of("isBlastingFurnaceGuiOpen", "isBlastingFurnaceFilteringCraftable"), RecipeBookType.SMOKER, Pair.of("isSmokerGuiOpen", "isSmokerFilteringCraftable"));
+    private final Map<RecipeBookType, RecipeBookSettings.a> states;
 
     private RecipeBookSettings(Map<RecipeBookType, RecipeBookSettings.a> map) {
-        this.b = map;
+        this.states = map;
     }
 
     public RecipeBookSettings() {
@@ -32,12 +32,20 @@ public final class RecipeBookSettings {
         }));
     }
 
+    public boolean a(RecipeBookType recipebooktype) {
+        return ((RecipeBookSettings.a) this.states.get(recipebooktype)).open;
+    }
+
     public void a(RecipeBookType recipebooktype, boolean flag) {
-        ((RecipeBookSettings.a) this.b.get(recipebooktype)).a = flag;
+        ((RecipeBookSettings.a) this.states.get(recipebooktype)).open = flag;
+    }
+
+    public boolean b(RecipeBookType recipebooktype) {
+        return ((RecipeBookSettings.a) this.states.get(recipebooktype)).filtering;
     }
 
     public void b(RecipeBookType recipebooktype, boolean flag) {
-        ((RecipeBookSettings.a) this.b.get(recipebooktype)).b = flag;
+        ((RecipeBookSettings.a) this.states.get(recipebooktype)).filtering = flag;
     }
 
     public static RecipeBookSettings a(PacketDataSerializer packetdataserializer) {
@@ -62,14 +70,14 @@ public final class RecipeBookSettings {
 
         for (int j = 0; j < i; ++j) {
             RecipeBookType recipebooktype = arecipebooktype[j];
-            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.b.get(recipebooktype);
+            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.states.get(recipebooktype);
 
             if (recipebooksettings_a == null) {
                 packetdataserializer.writeBoolean(false);
                 packetdataserializer.writeBoolean(false);
             } else {
-                packetdataserializer.writeBoolean(recipebooksettings_a.a);
-                packetdataserializer.writeBoolean(recipebooksettings_a.b);
+                packetdataserializer.writeBoolean(recipebooksettings_a.open);
+                packetdataserializer.writeBoolean(recipebooksettings_a.filtering);
             }
         }
 
@@ -78,7 +86,7 @@ public final class RecipeBookSettings {
     public static RecipeBookSettings a(NBTTagCompound nbttagcompound) {
         Map<RecipeBookType, RecipeBookSettings.a> map = Maps.newEnumMap(RecipeBookType.class);
 
-        RecipeBookSettings.a.forEach((recipebooktype, pair) -> {
+        RecipeBookSettings.TAG_FIELDS.forEach((recipebooktype, pair) -> {
             boolean flag = nbttagcompound.getBoolean((String) pair.getFirst());
             boolean flag1 = nbttagcompound.getBoolean((String) pair.getSecond());
 
@@ -88,11 +96,11 @@ public final class RecipeBookSettings {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        RecipeBookSettings.a.forEach((recipebooktype, pair) -> {
-            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.b.get(recipebooktype);
+        RecipeBookSettings.TAG_FIELDS.forEach((recipebooktype, pair) -> {
+            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.states.get(recipebooktype);
 
-            nbttagcompound.setBoolean((String) pair.getFirst(), recipebooksettings_a.a);
-            nbttagcompound.setBoolean((String) pair.getSecond(), recipebooksettings_a.b);
+            nbttagcompound.setBoolean((String) pair.getFirst(), recipebooksettings_a.open);
+            nbttagcompound.setBoolean((String) pair.getSecond(), recipebooksettings_a.filtering);
         });
     }
 
@@ -103,7 +111,7 @@ public final class RecipeBookSettings {
 
         for (int j = 0; j < i; ++j) {
             RecipeBookType recipebooktype = arecipebooktype[j];
-            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.b.get(recipebooktype);
+            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) this.states.get(recipebooktype);
 
             map.put(recipebooktype, recipebooksettings_a.a());
         }
@@ -112,39 +120,39 @@ public final class RecipeBookSettings {
     }
 
     public void a(RecipeBookSettings recipebooksettings) {
-        this.b.clear();
+        this.states.clear();
         RecipeBookType[] arecipebooktype = RecipeBookType.values();
         int i = arecipebooktype.length;
 
         for (int j = 0; j < i; ++j) {
             RecipeBookType recipebooktype = arecipebooktype[j];
-            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) recipebooksettings.b.get(recipebooktype);
+            RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) recipebooksettings.states.get(recipebooktype);
 
-            this.b.put(recipebooktype, recipebooksettings_a.a());
+            this.states.put(recipebooktype, recipebooksettings_a.a());
         }
 
     }
 
     public boolean equals(Object object) {
-        return this == object || object instanceof RecipeBookSettings && this.b.equals(((RecipeBookSettings) object).b);
+        return this == object || object instanceof RecipeBookSettings && this.states.equals(((RecipeBookSettings) object).states);
     }
 
     public int hashCode() {
-        return this.b.hashCode();
+        return this.states.hashCode();
     }
 
-    static final class a {
+    private static final class a {
 
-        private boolean a;
-        private boolean b;
+        boolean open;
+        boolean filtering;
 
         public a(boolean flag, boolean flag1) {
-            this.a = flag;
-            this.b = flag1;
+            this.open = flag;
+            this.filtering = flag1;
         }
 
         public RecipeBookSettings.a a() {
-            return new RecipeBookSettings.a(this.a, this.b);
+            return new RecipeBookSettings.a(this.open, this.filtering);
         }
 
         public boolean equals(Object object) {
@@ -155,19 +163,19 @@ public final class RecipeBookSettings {
             } else {
                 RecipeBookSettings.a recipebooksettings_a = (RecipeBookSettings.a) object;
 
-                return this.a == recipebooksettings_a.a && this.b == recipebooksettings_a.b;
+                return this.open == recipebooksettings_a.open && this.filtering == recipebooksettings_a.filtering;
             }
         }
 
         public int hashCode() {
-            int i = this.a ? 1 : 0;
+            int i = this.open ? 1 : 0;
 
-            i = 31 * i + (this.b ? 1 : 0);
+            i = 31 * i + (this.filtering ? 1 : 0);
             return i;
         }
 
         public String toString() {
-            return "[open=" + this.a + ", filtering=" + this.b + ']';
+            return "[open=" + this.open + ", filtering=" + this.filtering + "]";
         }
     }
 }

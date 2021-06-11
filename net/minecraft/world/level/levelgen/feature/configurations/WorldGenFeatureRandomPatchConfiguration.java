@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -15,127 +16,127 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.WorldGenFeature
 
 public class WorldGenFeatureRandomPatchConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureRandomPatchConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureStateProvider.a.fieldOf("state_provider").forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.b;
-        }), WorldGenBlockPlacer.a.fieldOf("block_placer").forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.c;
-        }), IBlockData.b.listOf().fieldOf("whitelist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return (List) worldgenfeaturerandompatchconfiguration.d.stream().map(Block::getBlockData).collect(Collectors.toList());
-        }), IBlockData.b.listOf().fieldOf("blacklist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return ImmutableList.copyOf(worldgenfeaturerandompatchconfiguration.e);
-        }), Codec.INT.fieldOf("tries").orElse(128).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.f;
-        }), Codec.INT.fieldOf("xspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.g;
-        }), Codec.INT.fieldOf("yspread").orElse(3).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.h;
-        }), Codec.INT.fieldOf("zspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.i;
+    public static final Codec<WorldGenFeatureRandomPatchConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureStateProvider.CODEC.fieldOf("state_provider").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.stateProvider;
+        }), WorldGenBlockPlacer.CODEC.fieldOf("block_placer").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.blockPlacer;
+        }), IBlockData.CODEC.listOf().fieldOf("whitelist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return (List) worldgenfeaturerandompatchconfiguration.whitelist.stream().map(Block::getBlockData).collect(Collectors.toList());
+        }), IBlockData.CODEC.listOf().fieldOf("blacklist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return ImmutableList.copyOf(worldgenfeaturerandompatchconfiguration.blacklist);
+        }), ExtraCodecs.POSITIVE_INT.fieldOf("tries").orElse(128).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.tries;
+        }), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.xspread;
+        }), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("yspread").orElse(3).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.yspread;
+        }), ExtraCodecs.NON_NEGATIVE_INT.fieldOf("zspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.zspread;
         }), Codec.BOOL.fieldOf("can_replace").orElse(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.j;
+            return worldgenfeaturerandompatchconfiguration.canReplace;
         }), Codec.BOOL.fieldOf("project").orElse(true).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.l;
+            return worldgenfeaturerandompatchconfiguration.project;
         }), Codec.BOOL.fieldOf("need_water").orElse(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
-            return worldgenfeaturerandompatchconfiguration.m;
+            return worldgenfeaturerandompatchconfiguration.needWater;
         })).apply(instance, WorldGenFeatureRandomPatchConfiguration::new);
     });
-    public final WorldGenFeatureStateProvider b;
-    public final WorldGenBlockPlacer c;
-    public final Set<Block> d;
-    public final Set<IBlockData> e;
-    public final int f;
-    public final int g;
-    public final int h;
-    public final int i;
-    public final boolean j;
-    public final boolean l;
-    public final boolean m;
+    public final WorldGenFeatureStateProvider stateProvider;
+    public final WorldGenBlockPlacer blockPlacer;
+    public final Set<Block> whitelist;
+    public final Set<IBlockData> blacklist;
+    public final int tries;
+    public final int xspread;
+    public final int yspread;
+    public final int zspread;
+    public final boolean canReplace;
+    public final boolean project;
+    public final boolean needWater;
 
     private WorldGenFeatureRandomPatchConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer, List<IBlockData> list, List<IBlockData> list1, int i, int j, int k, int l, boolean flag, boolean flag1, boolean flag2) {
         this(worldgenfeaturestateprovider, worldgenblockplacer, (Set) list.stream().map(BlockBase.BlockData::getBlock).collect(Collectors.toSet()), (Set) ImmutableSet.copyOf(list1), i, j, k, l, flag, flag1, flag2);
     }
 
-    private WorldGenFeatureRandomPatchConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer, Set<Block> set, Set<IBlockData> set1, int i, int j, int k, int l, boolean flag, boolean flag1, boolean flag2) {
-        this.b = worldgenfeaturestateprovider;
-        this.c = worldgenblockplacer;
-        this.d = set;
-        this.e = set1;
-        this.f = i;
-        this.g = j;
-        this.h = k;
-        this.i = l;
-        this.j = flag;
-        this.l = flag1;
-        this.m = flag2;
+    WorldGenFeatureRandomPatchConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer, Set<Block> set, Set<IBlockData> set1, int i, int j, int k, int l, boolean flag, boolean flag1, boolean flag2) {
+        this.stateProvider = worldgenfeaturestateprovider;
+        this.blockPlacer = worldgenblockplacer;
+        this.whitelist = set;
+        this.blacklist = set1;
+        this.tries = i;
+        this.xspread = j;
+        this.yspread = k;
+        this.zspread = l;
+        this.canReplace = flag;
+        this.project = flag1;
+        this.needWater = flag2;
     }
 
     public static class a {
 
-        private final WorldGenFeatureStateProvider a;
-        private final WorldGenBlockPlacer b;
-        private Set<Block> c = ImmutableSet.of();
-        private Set<IBlockData> d = ImmutableSet.of();
-        private int e = 64;
-        private int f = 7;
-        private int g = 3;
-        private int h = 7;
-        private boolean i;
-        private boolean j = true;
-        private boolean k = false;
+        private final WorldGenFeatureStateProvider stateProvider;
+        private final WorldGenBlockPlacer blockPlacer;
+        private Set<Block> whitelist = ImmutableSet.of();
+        private Set<IBlockData> blacklist = ImmutableSet.of();
+        private int tries = 64;
+        private int xspread = 7;
+        private int yspread = 3;
+        private int zspread = 7;
+        private boolean canReplace;
+        private boolean project = true;
+        private boolean needWater;
 
         public a(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer) {
-            this.a = worldgenfeaturestateprovider;
-            this.b = worldgenblockplacer;
+            this.stateProvider = worldgenfeaturestateprovider;
+            this.blockPlacer = worldgenblockplacer;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a a(Set<Block> set) {
-            this.c = set;
+            this.whitelist = set;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a b(Set<IBlockData> set) {
-            this.d = set;
+            this.blacklist = set;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a a(int i) {
-            this.e = i;
+            this.tries = i;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a b(int i) {
-            this.f = i;
+            this.xspread = i;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a c(int i) {
-            this.g = i;
+            this.yspread = i;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a d(int i) {
-            this.h = i;
+            this.zspread = i;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a a() {
-            this.i = true;
+            this.canReplace = true;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a b() {
-            this.j = false;
+            this.project = false;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration.a c() {
-            this.k = true;
+            this.needWater = true;
             return this;
         }
 
         public WorldGenFeatureRandomPatchConfiguration d() {
-            return new WorldGenFeatureRandomPatchConfiguration(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k);
+            return new WorldGenFeatureRandomPatchConfiguration(this.stateProvider, this.blockPlacer, this.whitelist, this.blacklist, this.tries, this.xspread, this.yspread, this.zspread, this.canReplace, this.project, this.needWater);
         }
     }
 }

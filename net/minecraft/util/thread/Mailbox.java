@@ -1,13 +1,14 @@
 package net.minecraft.util.thread;
 
 import com.mojang.datafixers.util.Either;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface Mailbox<Msg> extends AutoCloseable {
 
-    String bj();
+    String bo();
 
     void a(Msg msg);
 
@@ -16,7 +17,7 @@ public interface Mailbox<Msg> extends AutoCloseable {
     default <Source> CompletableFuture<Source> b(Function<? super Mailbox<Source>, ? extends Msg> function) {
         CompletableFuture<Source> completablefuture = new CompletableFuture();
 
-        completablefuture.getClass();
+        Objects.requireNonNull(completablefuture);
         Msg msg = function.apply(a("ask future procesor handle", completablefuture::complete));
 
         this.a(msg);
@@ -26,7 +27,9 @@ public interface Mailbox<Msg> extends AutoCloseable {
     default <Source> CompletableFuture<Source> c(Function<? super Mailbox<Either<Source, Exception>>, ? extends Msg> function) {
         CompletableFuture<Source> completablefuture = new CompletableFuture();
         Msg msg = function.apply(a("ask future procesor handle", (either) -> {
+            Objects.requireNonNull(completablefuture);
             either.ifLeft(completablefuture::complete);
+            Objects.requireNonNull(completablefuture);
             either.ifRight(completablefuture::completeExceptionally);
         }));
 
@@ -37,7 +40,7 @@ public interface Mailbox<Msg> extends AutoCloseable {
     static <Msg> Mailbox<Msg> a(final String s, final Consumer<Msg> consumer) {
         return new Mailbox<Msg>() {
             @Override
-            public String bj() {
+            public String bo() {
                 return s;
             }
 

@@ -9,13 +9,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerVillagerTrade extends CriterionTriggerAbstract<CriterionTriggerVillagerTrade.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("villager_trade");
+    static final MinecraftKey ID = new MinecraftKey("villager_trade");
 
     public CriterionTriggerVillagerTrade() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerVillagerTrade.a;
+        return CriterionTriggerVillagerTrade.ID;
     }
 
     @Override
@@ -36,29 +36,29 @@ public class CriterionTriggerVillagerTrade extends CriterionTriggerAbstract<Crit
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b a;
-        private final CriterionConditionItem b;
+        private final CriterionConditionEntity.b villager;
+        private final CriterionConditionItem item;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerVillagerTrade.a, criterionconditionentity_b);
-            this.a = criterionconditionentity_b1;
-            this.b = criterionconditionitem;
+            super(CriterionTriggerVillagerTrade.ID, criterionconditionentity_b);
+            this.villager = criterionconditionentity_b1;
+            this.item = criterionconditionitem;
         }
 
         public static CriterionTriggerVillagerTrade.a c() {
-            return new CriterionTriggerVillagerTrade.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionItem.a);
+            return new CriterionTriggerVillagerTrade.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY, CriterionConditionItem.ANY);
         }
 
         public boolean a(LootTableInfo loottableinfo, ItemStack itemstack) {
-            return !this.a.a(loottableinfo) ? false : this.b.a(itemstack);
+            return !this.villager.a(loottableinfo) ? false : this.item.a(itemstack);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.b.a());
-            jsonobject.add("villager", this.a.a(lootserializationcontext));
+            jsonobject.add("item", this.item.a());
+            jsonobject.add("villager", this.villager.a(lootserializationcontext));
             return jsonobject;
         }
     }

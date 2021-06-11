@@ -38,21 +38,21 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CommandListenerWrapper implements ICompletionProvider {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.player"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.entity"));
-    public final ICommandListener base;
-    private final Vec3D d;
-    private final WorldServer e;
-    private final int f;
-    private final String g;
-    private final IChatBaseComponent h;
-    private final MinecraftServer i;
-    private final boolean j;
+    public static final SimpleCommandExceptionType ERROR_NOT_PLAYER = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.player"));
+    public static final SimpleCommandExceptionType ERROR_NOT_ENTITY = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.entity"));
+    public final ICommandListener source;
+    private final Vec3D worldPosition;
+    private final WorldServer level;
+    private final int permissionLevel;
+    private final String textName;
+    private final IChatBaseComponent displayName;
+    private final MinecraftServer server;
+    private final boolean silent;
     @Nullable
-    private final Entity k;
-    private final ResultConsumer<CommandListenerWrapper> l;
-    private final ArgumentAnchor.Anchor m;
-    private final Vec2F n;
+    private final Entity entity;
+    private final ResultConsumer<CommandListenerWrapper> consumer;
+    private final ArgumentAnchor.Anchor anchor;
+    private final Vec2F rotation;
 
     public CommandListenerWrapper(ICommandListener icommandlistener, Vec3D vec3d, Vec2F vec2f, WorldServer worldserver, int i, String s, IChatBaseComponent ichatbasecomponent, MinecraftServer minecraftserver, @Nullable Entity entity) {
         this(icommandlistener, vec3d, vec2f, worldserver, i, s, ichatbasecomponent, minecraftserver, entity, false, (commandcontext, flag, j) -> {
@@ -60,79 +60,83 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     protected CommandListenerWrapper(ICommandListener icommandlistener, Vec3D vec3d, Vec2F vec2f, WorldServer worldserver, int i, String s, IChatBaseComponent ichatbasecomponent, MinecraftServer minecraftserver, @Nullable Entity entity, boolean flag, ResultConsumer<CommandListenerWrapper> resultconsumer, ArgumentAnchor.Anchor argumentanchor_anchor) {
-        this.base = icommandlistener;
-        this.d = vec3d;
-        this.e = worldserver;
-        this.j = flag;
-        this.k = entity;
-        this.f = i;
-        this.g = s;
-        this.h = ichatbasecomponent;
-        this.i = minecraftserver;
-        this.l = resultconsumer;
-        this.m = argumentanchor_anchor;
-        this.n = vec2f;
+        this.source = icommandlistener;
+        this.worldPosition = vec3d;
+        this.level = worldserver;
+        this.silent = flag;
+        this.entity = entity;
+        this.permissionLevel = i;
+        this.textName = s;
+        this.displayName = ichatbasecomponent;
+        this.server = minecraftserver;
+        this.consumer = resultconsumer;
+        this.anchor = argumentanchor_anchor;
+        this.rotation = vec2f;
+    }
+
+    public CommandListenerWrapper a(ICommandListener icommandlistener) {
+        return this.source == icommandlistener ? this : new CommandListenerWrapper(icommandlistener, this.worldPosition, this.rotation, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper a(Entity entity) {
-        return this.k == entity ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, this.f, entity.getDisplayName().getString(), entity.getScoreboardDisplayName(), this.i, entity, this.j, this.l, this.m);
+        return this.entity == entity ? this : new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, this.permissionLevel, entity.getDisplayName().getString(), entity.getScoreboardDisplayName(), this.server, entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper a(Vec3D vec3d) {
-        return this.d.equals(vec3d) ? this : new CommandListenerWrapper(this.base, vec3d, this.n, this.e, this.f, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        return this.worldPosition.equals(vec3d) ? this : new CommandListenerWrapper(this.source, vec3d, this.rotation, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper a(Vec2F vec2f) {
-        return this.n.c(vec2f) ? this : new CommandListenerWrapper(this.base, this.d, vec2f, this.e, this.f, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        return this.rotation.c(vec2f) ? this : new CommandListenerWrapper(this.source, this.worldPosition, vec2f, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper a(ResultConsumer<CommandListenerWrapper> resultconsumer) {
-        return this.l.equals(resultconsumer) ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, this.f, this.g, this.h, this.i, this.k, this.j, resultconsumer, this.m);
+        return this.consumer.equals(resultconsumer) ? this : new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, resultconsumer, this.anchor);
     }
 
     public CommandListenerWrapper a(ResultConsumer<CommandListenerWrapper> resultconsumer, BinaryOperator<ResultConsumer<CommandListenerWrapper>> binaryoperator) {
-        ResultConsumer<CommandListenerWrapper> resultconsumer1 = (ResultConsumer) binaryoperator.apply(this.l, resultconsumer);
+        ResultConsumer<CommandListenerWrapper> resultconsumer1 = (ResultConsumer) binaryoperator.apply(this.consumer, resultconsumer);
 
         return this.a(resultconsumer1);
     }
 
     public CommandListenerWrapper a() {
-        return this.j ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, this.f, this.g, this.h, this.i, this.k, true, this.l, this.m);
+        return !this.silent && !this.source.c_() ? new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, true, this.consumer, this.anchor) : this;
     }
 
     public CommandListenerWrapper a(int i) {
-        return i == this.f ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, i, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        return i == this.permissionLevel ? this : new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, i, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper b(int i) {
-        return i <= this.f ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, i, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        return i <= this.permissionLevel ? this : new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, i, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
     }
 
     public CommandListenerWrapper a(ArgumentAnchor.Anchor argumentanchor_anchor) {
-        return argumentanchor_anchor == this.m ? this : new CommandListenerWrapper(this.base, this.d, this.n, this.e, this.f, this.g, this.h, this.i, this.k, this.j, this.l, argumentanchor_anchor);
+        return argumentanchor_anchor == this.anchor ? this : new CommandListenerWrapper(this.source, this.worldPosition, this.rotation, this.level, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, argumentanchor_anchor);
     }
 
     public CommandListenerWrapper a(WorldServer worldserver) {
-        if (worldserver == this.e) {
+        if (worldserver == this.level) {
             return this;
         } else {
-            double d0 = DimensionManager.a(this.e.getDimensionManager(), worldserver.getDimensionManager());
-            Vec3D vec3d = new Vec3D(this.d.x * d0, this.d.y, this.d.z * d0);
+            double d0 = DimensionManager.a(this.level.getDimensionManager(), worldserver.getDimensionManager());
+            Vec3D vec3d = new Vec3D(this.worldPosition.x * d0, this.worldPosition.y, this.worldPosition.z * d0);
 
-            return new CommandListenerWrapper(this.base, vec3d, this.n, worldserver, this.f, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+            return new CommandListenerWrapper(this.source, vec3d, this.rotation, worldserver, this.permissionLevel, this.textName, this.displayName, this.server, this.entity, this.silent, this.consumer, this.anchor);
         }
     }
 
-    public CommandListenerWrapper a(Entity entity, ArgumentAnchor.Anchor argumentanchor_anchor) throws CommandSyntaxException {
+    public CommandListenerWrapper a(Entity entity, ArgumentAnchor.Anchor argumentanchor_anchor) {
         return this.b(argumentanchor_anchor.a(entity));
     }
 
-    public CommandListenerWrapper b(Vec3D vec3d) throws CommandSyntaxException {
-        Vec3D vec3d1 = this.m.a(this);
+    public CommandListenerWrapper b(Vec3D vec3d) {
+        Vec3D vec3d1 = this.anchor.a(this);
         double d0 = vec3d.x - vec3d1.x;
         double d1 = vec3d.y - vec3d1.y;
         double d2 = vec3d.z - vec3d1.z;
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
         float f = MathHelper.g((float) (-(MathHelper.d(d1, d3) * 57.2957763671875D)));
         float f1 = MathHelper.g((float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F);
 
@@ -140,65 +144,65 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public IChatBaseComponent getScoreboardDisplayName() {
-        return this.h;
+        return this.displayName;
     }
 
     public String getName() {
-        return this.g;
+        return this.textName;
     }
 
     @Override
     public boolean hasPermission(int i) {
-        return this.f >= i;
+        return this.permissionLevel >= i;
     }
 
     public Vec3D getPosition() {
-        return this.d;
+        return this.worldPosition;
     }
 
     public WorldServer getWorld() {
-        return this.e;
+        return this.level;
     }
 
     @Nullable
     public Entity getEntity() {
-        return this.k;
+        return this.entity;
     }
 
     public Entity g() throws CommandSyntaxException {
-        if (this.k == null) {
-            throw CommandListenerWrapper.b.create();
+        if (this.entity == null) {
+            throw CommandListenerWrapper.ERROR_NOT_ENTITY.create();
         } else {
-            return this.k;
+            return this.entity;
         }
     }
 
     public EntityPlayer h() throws CommandSyntaxException {
-        if (!(this.k instanceof EntityPlayer)) {
-            throw CommandListenerWrapper.a.create();
+        if (!(this.entity instanceof EntityPlayer)) {
+            throw CommandListenerWrapper.ERROR_NOT_PLAYER.create();
         } else {
-            return (EntityPlayer) this.k;
+            return (EntityPlayer) this.entity;
         }
     }
 
     public Vec2F i() {
-        return this.n;
+        return this.rotation;
     }
 
     public MinecraftServer getServer() {
-        return this.i;
+        return this.server;
     }
 
     public ArgumentAnchor.Anchor k() {
-        return this.m;
+        return this.anchor;
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent, boolean flag) {
-        if (this.base.shouldSendSuccess() && !this.j) {
-            this.base.sendMessage(ichatbasecomponent, SystemUtils.b);
+        if (this.source.shouldSendSuccess() && !this.silent) {
+            this.source.sendMessage(ichatbasecomponent, SystemUtils.NIL_UUID);
         }
 
-        if (flag && this.base.shouldBroadcastCommands() && !this.j) {
+        if (flag && this.source.shouldBroadcastCommands() && !this.silent) {
             this.sendAdminMessage(ichatbasecomponent);
         }
 
@@ -207,46 +211,46 @@ public class CommandListenerWrapper implements ICompletionProvider {
     private void sendAdminMessage(IChatBaseComponent ichatbasecomponent) {
         IChatMutableComponent ichatmutablecomponent = (new ChatMessage("chat.type.admin", new Object[]{this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
 
-        if (this.i.getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
-            Iterator iterator = this.i.getPlayerList().getPlayers().iterator();
+        if (this.server.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK)) {
+            Iterator iterator = this.server.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                if (entityplayer != this.base && this.i.getPlayerList().isOp(entityplayer.getProfile())) {
-                    entityplayer.sendMessage(ichatmutablecomponent, SystemUtils.b);
+                if (entityplayer != this.source && this.server.getPlayerList().isOp(entityplayer.getProfile())) {
+                    entityplayer.sendMessage(ichatmutablecomponent, SystemUtils.NIL_UUID);
                 }
             }
         }
 
-        if (this.base != this.i && this.i.getGameRules().getBoolean(GameRules.LOG_ADMIN_COMMANDS)) {
-            this.i.sendMessage(ichatmutablecomponent, SystemUtils.b);
+        if (this.source != this.server && this.server.getGameRules().getBoolean(GameRules.RULE_LOGADMINCOMMANDS)) {
+            this.server.sendMessage(ichatmutablecomponent, SystemUtils.NIL_UUID);
         }
 
     }
 
     public void sendFailureMessage(IChatBaseComponent ichatbasecomponent) {
-        if (this.base.shouldSendFailure() && !this.j) {
-            this.base.sendMessage((new ChatComponentText("")).addSibling(ichatbasecomponent).a(EnumChatFormat.RED), SystemUtils.b);
+        if (this.source.shouldSendFailure() && !this.silent) {
+            this.source.sendMessage((new ChatComponentText("")).addSibling(ichatbasecomponent).a(EnumChatFormat.RED), SystemUtils.NIL_UUID);
         }
 
     }
 
     public void a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag, int i) {
-        if (this.l != null) {
-            this.l.onCommandComplete(commandcontext, flag, i);
+        if (this.consumer != null) {
+            this.consumer.onCommandComplete(commandcontext, flag, i);
         }
 
     }
 
     @Override
     public Collection<String> l() {
-        return Lists.newArrayList(this.i.getPlayers());
+        return Lists.newArrayList(this.server.getPlayers());
     }
 
     @Override
     public Collection<String> m() {
-        return this.i.getScoreboard().f();
+        return this.server.getScoreboard().f();
     }
 
     @Override
@@ -256,7 +260,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public Stream<MinecraftKey> o() {
-        return this.i.getCraftingManager().d();
+        return this.server.getCraftingManager().d();
     }
 
     @Override
@@ -266,11 +270,11 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public Set<ResourceKey<World>> p() {
-        return this.i.F();
+        return this.server.G();
     }
 
     @Override
     public IRegistryCustom q() {
-        return this.i.getCustomRegistry();
+        return this.server.getCustomRegistry();
     }
 }

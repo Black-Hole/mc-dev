@@ -23,6 +23,8 @@ import org.apache.logging.log4j.Logger;
 public class DataConverterTrappedChest extends DataFix {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int SIZE = 4096;
+    private static final short SIZE_BITS = 12;
 
     public DataConverterTrappedChest(Schema schema, boolean flag) {
         super(schema, flag);
@@ -108,7 +110,7 @@ public class DataConverterTrappedChest extends DataFix {
     public static final class a extends DataConverterLeaves.b {
 
         @Nullable
-        private IntSet e;
+        private IntSet chestIds;
 
         public a(Typed<?> typed, Schema schema) {
             super(typed, schema);
@@ -116,22 +118,22 @@ public class DataConverterTrappedChest extends DataFix {
 
         @Override
         protected boolean a() {
-            this.e = new IntOpenHashSet();
+            this.chestIds = new IntOpenHashSet();
 
-            for (int i = 0; i < this.b.size(); ++i) {
-                Dynamic<?> dynamic = (Dynamic) this.b.get(i);
+            for (int i = 0; i < this.palette.size(); ++i) {
+                Dynamic<?> dynamic = (Dynamic) this.palette.get(i);
                 String s = dynamic.get("Name").asString("");
 
                 if (Objects.equals(s, "minecraft:trapped_chest")) {
-                    this.e.add(i);
+                    this.chestIds.add(i);
                 }
             }
 
-            return this.e.isEmpty();
+            return this.chestIds.isEmpty();
         }
 
         public boolean a(int i) {
-            return this.e.contains(i);
+            return this.chestIds.contains(i);
         }
     }
 }

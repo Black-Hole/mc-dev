@@ -1,8 +1,15 @@
 package net.minecraft.world.level.material;
 
+import java.util.Optional;
 import java.util.Random;
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.particles.ParticleParam;
+import net.minecraft.core.particles.Particles;
+import net.minecraft.sounds.SoundCategory;
+import net.minecraft.sounds.SoundEffect;
+import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.world.item.Item;
@@ -19,6 +26,8 @@ import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
 
 public abstract class FluidTypeLava extends FluidTypeFlowing {
+
+    public static final float MIN_LEVEL_CUTOFF = 0.44444445F;
 
     public FluidTypeLava() {}
 
@@ -38,16 +47,37 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     @Override
+    public void a(World world, BlockPosition blockposition, Fluid fluid, Random random) {
+        BlockPosition blockposition1 = blockposition.up();
+
+        if (world.getType(blockposition1).isAir() && !world.getType(blockposition1).i(world, blockposition1)) {
+            if (random.nextInt(100) == 0) {
+                double d0 = (double) blockposition.getX() + random.nextDouble();
+                double d1 = (double) blockposition.getY() + 1.0D;
+                double d2 = (double) blockposition.getZ() + random.nextDouble();
+
+                world.addParticle(Particles.LAVA, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                world.a(d0, d1, d2, SoundEffects.LAVA_POP, SoundCategory.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
+            }
+
+            if (random.nextInt(200) == 0) {
+                world.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), SoundEffects.LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
+            }
+        }
+
+    }
+
+    @Override
     public void b(World world, BlockPosition blockposition, Fluid fluid, Random random) {
-        if (world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
+        if (world.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
             int i = random.nextInt(3);
 
             if (i > 0) {
                 BlockPosition blockposition1 = blockposition;
 
                 for (int j = 0; j < i; ++j) {
-                    blockposition1 = blockposition1.b(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                    if (!world.p(blockposition1)) {
+                    blockposition1 = blockposition1.c(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
+                    if (!world.o(blockposition1)) {
                         return;
                     }
 
@@ -64,9 +94,9 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
                 }
             } else {
                 for (int k = 0; k < 3; ++k) {
-                    BlockPosition blockposition2 = blockposition.b(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
+                    BlockPosition blockposition2 = blockposition.c(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-                    if (!world.p(blockposition2)) {
+                    if (!world.o(blockposition2)) {
                         return;
                     }
 
@@ -95,7 +125,13 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     private boolean b(IWorldReader iworldreader, BlockPosition blockposition) {
-        return blockposition.getY() >= 0 && blockposition.getY() < 256 && !iworldreader.isLoaded(blockposition) ? false : iworldreader.getType(blockposition).getMaterial().isBurnable();
+        return blockposition.getY() >= iworldreader.getMinBuildHeight() && blockposition.getY() < iworldreader.getMaxBuildHeight() && !iworldreader.isLoaded(blockposition) ? false : iworldreader.getType(blockposition).getMaterial().isBurnable();
+    }
+
+    @Nullable
+    @Override
+    public ParticleParam i() {
+        return Particles.DRIPPING_LAVA;
     }
 
     @Override
@@ -179,6 +215,11 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     @Override
     protected float c() {
         return 100.0F;
+    }
+
+    @Override
+    public Optional<SoundEffect> k() {
+        return Optional.of(SoundEffects.BUCKET_FILL_LAVA);
     }
 
     public static class a extends FluidTypeLava {

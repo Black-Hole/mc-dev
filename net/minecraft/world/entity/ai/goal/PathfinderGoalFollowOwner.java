@@ -17,25 +17,29 @@ import net.minecraft.world.level.pathfinder.PathfinderNormal;
 
 public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
-    private final EntityTameableAnimal a;
-    private EntityLiving b;
-    private final IWorldReader c;
-    private final double d;
-    private final NavigationAbstract e;
-    private int f;
-    private final float g;
-    private final float h;
-    private float i;
-    private final boolean j;
+    public static final int TELEPORT_WHEN_DISTANCE_IS = 12;
+    private static final int MIN_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 2;
+    private static final int MAX_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 3;
+    private static final int MAX_VERTICAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 1;
+    private final EntityTameableAnimal tamable;
+    private EntityLiving owner;
+    private final IWorldReader level;
+    private final double speedModifier;
+    private final NavigationAbstract navigation;
+    private int timeToRecalcPath;
+    private final float stopDistance;
+    private final float startDistance;
+    private float oldWaterCost;
+    private final boolean canFly;
 
     public PathfinderGoalFollowOwner(EntityTameableAnimal entitytameableanimal, double d0, float f, float f1, boolean flag) {
-        this.a = entitytameableanimal;
-        this.c = entitytameableanimal.world;
-        this.d = d0;
-        this.e = entitytameableanimal.getNavigation();
-        this.h = f;
-        this.g = f1;
-        this.j = flag;
+        this.tamable = entitytameableanimal;
+        this.level = entitytameableanimal.level;
+        this.speedModifier = d0;
+        this.navigation = entitytameableanimal.getNavigation();
+        this.startDistance = f;
+        this.stopDistance = f1;
+        this.canFly = flag;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         if (!(entitytameableanimal.getNavigation() instanceof Navigation) && !(entitytameableanimal.getNavigation() instanceof NavigationFlying)) {
             throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
@@ -44,51 +48,51 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        EntityLiving entityliving = this.a.getOwner();
+        EntityLiving entityliving = this.tamable.getOwner();
 
         if (entityliving == null) {
             return false;
         } else if (entityliving.isSpectator()) {
             return false;
-        } else if (this.a.isWillSit()) {
+        } else if (this.tamable.isWillSit()) {
             return false;
-        } else if (this.a.h((Entity) entityliving) < (double) (this.h * this.h)) {
+        } else if (this.tamable.f((Entity) entityliving) < (double) (this.startDistance * this.startDistance)) {
             return false;
         } else {
-            this.b = entityliving;
+            this.owner = entityliving;
             return true;
         }
     }
 
     @Override
     public boolean b() {
-        return this.e.m() ? false : (this.a.isWillSit() ? false : this.a.h((Entity) this.b) > (double) (this.g * this.g));
+        return this.navigation.m() ? false : (this.tamable.isWillSit() ? false : this.tamable.f((Entity) this.owner) > (double) (this.stopDistance * this.stopDistance));
     }
 
     @Override
     public void c() {
-        this.f = 0;
-        this.i = this.a.a(PathType.WATER);
-        this.a.a(PathType.WATER, 0.0F);
+        this.timeToRecalcPath = 0;
+        this.oldWaterCost = this.tamable.a(PathType.WATER);
+        this.tamable.a(PathType.WATER, 0.0F);
     }
 
     @Override
     public void d() {
-        this.b = null;
-        this.e.o();
-        this.a.a(PathType.WATER, this.i);
+        this.owner = null;
+        this.navigation.o();
+        this.tamable.a(PathType.WATER, this.oldWaterCost);
     }
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b, 10.0F, (float) this.a.O());
-        if (--this.f <= 0) {
-            this.f = 10;
-            if (!this.a.isLeashed() && !this.a.isPassenger()) {
-                if (this.a.h((Entity) this.b) >= 144.0D) {
+        this.tamable.getControllerLook().a(this.owner, 10.0F, (float) this.tamable.eY());
+        if (--this.timeToRecalcPath <= 0) {
+            this.timeToRecalcPath = 10;
+            if (!this.tamable.isLeashed() && !this.tamable.isPassenger()) {
+                if (this.tamable.f((Entity) this.owner) >= 144.0D) {
                     this.g();
                 } else {
-                    this.e.a((Entity) this.b, this.d);
+                    this.navigation.a((Entity) this.owner, this.speedModifier);
                 }
 
             }
@@ -96,7 +100,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     private void g() {
-        BlockPosition blockposition = this.b.getChunkCoordinates();
+        BlockPosition blockposition = this.owner.getChunkCoordinates();
 
         for (int i = 0; i < 10; ++i) {
             int j = this.a(-3, 3);
@@ -112,36 +116,36 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     private boolean a(int i, int j, int k) {
-        if (Math.abs((double) i - this.b.locX()) < 2.0D && Math.abs((double) k - this.b.locZ()) < 2.0D) {
+        if (Math.abs((double) i - this.owner.locX()) < 2.0D && Math.abs((double) k - this.owner.locZ()) < 2.0D) {
             return false;
         } else if (!this.a(new BlockPosition(i, j, k))) {
             return false;
         } else {
-            this.a.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, this.a.yaw, this.a.pitch);
-            this.e.o();
+            this.tamable.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, this.tamable.getYRot(), this.tamable.getXRot());
+            this.navigation.o();
             return true;
         }
     }
 
     private boolean a(BlockPosition blockposition) {
-        PathType pathtype = PathfinderNormal.a((IBlockAccess) this.c, blockposition.i());
+        PathType pathtype = PathfinderNormal.a((IBlockAccess) this.level, blockposition.i());
 
         if (pathtype != PathType.WALKABLE) {
             return false;
         } else {
-            IBlockData iblockdata = this.c.getType(blockposition.down());
+            IBlockData iblockdata = this.level.getType(blockposition.down());
 
-            if (!this.j && iblockdata.getBlock() instanceof BlockLeaves) {
+            if (!this.canFly && iblockdata.getBlock() instanceof BlockLeaves) {
                 return false;
             } else {
-                BlockPosition blockposition1 = blockposition.b(this.a.getChunkCoordinates());
+                BlockPosition blockposition1 = blockposition.e(this.tamable.getChunkCoordinates());
 
-                return this.c.getCubes(this.a, this.a.getBoundingBox().a(blockposition1));
+                return this.level.getCubes(this.tamable, this.tamable.getBoundingBox().a(blockposition1));
             }
         }
     }
 
     private int a(int i, int j) {
-        return this.a.getRandom().nextInt(j - i + 1) + i;
+        return this.tamable.getRandom().nextInt(j - i + 1) + i;
     }
 }

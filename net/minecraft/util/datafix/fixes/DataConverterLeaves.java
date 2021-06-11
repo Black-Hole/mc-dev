@@ -36,8 +36,19 @@ import net.minecraft.util.datafix.DataBitsPacked;
 
 public class DataConverterLeaves extends DataFix {
 
-    private static final int[][] a = new int[][]{{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}};
-    private static final Object2IntMap<String> b = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
+    private static final int NORTH_WEST_MASK = 128;
+    private static final int WEST_MASK = 64;
+    private static final int SOUTH_WEST_MASK = 32;
+    private static final int SOUTH_MASK = 16;
+    private static final int SOUTH_EAST_MASK = 8;
+    private static final int EAST_MASK = 4;
+    private static final int NORTH_EAST_MASK = 2;
+    private static final int NORTH_MASK = 1;
+    private static final int[][] DIRECTIONS = new int[][]{{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}};
+    private static final int DECAY_DISTANCE = 7;
+    private static final int SIZE_BITS = 12;
+    private static final int SIZE = 4096;
+    static final Object2IntMap<String> LEAVES = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
         object2intopenhashmap.put("minecraft:acacia_leaves", 0);
         object2intopenhashmap.put("minecraft:birch_leaves", 1);
         object2intopenhashmap.put("minecraft:dark_oak_leaves", 2);
@@ -45,7 +56,7 @@ public class DataConverterLeaves extends DataFix {
         object2intopenhashmap.put("minecraft:oak_leaves", 4);
         object2intopenhashmap.put("minecraft:spruce_leaves", 5);
     });
-    private static final Set<String> c = ImmutableSet.of("minecraft:acacia_bark", "minecraft:birch_bark", "minecraft:dark_oak_bark", "minecraft:jungle_bark", "minecraft:oak_bark", "minecraft:spruce_bark", new String[]{"minecraft:acacia_log", "minecraft:birch_log", "minecraft:dark_oak_log", "minecraft:jungle_log", "minecraft:oak_log", "minecraft:spruce_log", "minecraft:stripped_acacia_log", "minecraft:stripped_birch_log", "minecraft:stripped_dark_oak_log", "minecraft:stripped_jungle_log", "minecraft:stripped_oak_log", "minecraft:stripped_spruce_log"});
+    static final Set<String> LOGS = ImmutableSet.of("minecraft:acacia_bark", "minecraft:birch_bark", "minecraft:dark_oak_bark", "minecraft:jungle_bark", "minecraft:oak_bark", "minecraft:spruce_bark", new String[]{"minecraft:acacia_log", "minecraft:birch_log", "minecraft:dark_oak_log", "minecraft:jungle_log", "minecraft:oak_log", "minecraft:spruce_log", "minecraft:stripped_acacia_log", "minecraft:stripped_birch_log", "minecraft:stripped_dark_oak_log", "minecraft:stripped_jungle_log", "minecraft:stripped_oak_log", "minecraft:stripped_spruce_log"});
 
     public DataConverterLeaves(Schema schema, boolean flag) {
         super(schema, flag);
@@ -117,7 +128,7 @@ public class DataConverterLeaves extends DataFix {
                                     k = this.a(j);
                                     int j1 = this.b(j);
                                     int k1 = this.c(j);
-                                    int[][] aint1 = DataConverterLeaves.a;
+                                    int[][] aint1 = DataConverterLeaves.DIRECTIONS;
                                     int l1 = aint1.length;
 
                                     for (int i2 = 0; i2 < l1; ++i2) {
@@ -213,12 +224,15 @@ public class DataConverterLeaves extends DataFix {
 
     public static final class a extends DataConverterLeaves.b {
 
+        private static final String PERSISTENT = "persistent";
+        private static final String DECAYABLE = "decayable";
+        private static final String DISTANCE = "distance";
         @Nullable
-        private IntSet e;
+        private IntSet leaveIds;
         @Nullable
-        private IntSet f;
+        private IntSet logIds;
         @Nullable
-        private Int2IntMap g;
+        private Int2IntMap stateToIdMap;
 
         public a(Typed<?> typed, Schema schema) {
             super(typed, schema);
@@ -226,28 +240,28 @@ public class DataConverterLeaves extends DataFix {
 
         @Override
         protected boolean a() {
-            this.e = new IntOpenHashSet();
-            this.f = new IntOpenHashSet();
-            this.g = new Int2IntOpenHashMap();
+            this.leaveIds = new IntOpenHashSet();
+            this.logIds = new IntOpenHashSet();
+            this.stateToIdMap = new Int2IntOpenHashMap();
 
-            for (int i = 0; i < this.b.size(); ++i) {
-                Dynamic<?> dynamic = (Dynamic) this.b.get(i);
+            for (int i = 0; i < this.palette.size(); ++i) {
+                Dynamic<?> dynamic = (Dynamic) this.palette.get(i);
                 String s = dynamic.get("Name").asString("");
 
-                if (DataConverterLeaves.b.containsKey(s)) {
+                if (DataConverterLeaves.LEAVES.containsKey(s)) {
                     boolean flag = Objects.equals(dynamic.get("Properties").get("decayable").asString(""), "false");
 
-                    this.e.add(i);
-                    this.g.put(this.a(s, flag, 7), i);
-                    this.b.set(i, this.a(dynamic, s, flag, 7));
+                    this.leaveIds.add(i);
+                    this.stateToIdMap.put(this.a(s, flag, 7), i);
+                    this.palette.set(i, this.a(dynamic, s, flag, 7));
                 }
 
-                if (DataConverterLeaves.c.contains(s)) {
-                    this.f.add(i);
+                if (DataConverterLeaves.LOGS.contains(s)) {
+                    this.logIds.add(i);
                 }
             }
 
-            return this.e.isEmpty() && this.f.isEmpty();
+            return this.leaveIds.isEmpty() && this.logIds.isEmpty();
         }
 
         private Dynamic<?> a(Dynamic<?> dynamic, String s, boolean flag, int i) {
@@ -263,107 +277,110 @@ public class DataConverterLeaves extends DataFix {
         }
 
         public boolean a(int i) {
-            return this.f.contains(i);
+            return this.logIds.contains(i);
         }
 
         public boolean b(int i) {
-            return this.e.contains(i);
+            return this.leaveIds.contains(i);
         }
 
-        private int d(int i) {
-            return this.a(i) ? 0 : Integer.parseInt(((Dynamic) this.b.get(i)).get("Properties").get("distance").asString(""));
+        int d(int i) {
+            return this.a(i) ? 0 : Integer.parseInt(((Dynamic) this.palette.get(i)).get("Properties").get("distance").asString(""));
         }
 
-        private void a(int i, int j, int k) {
-            Dynamic<?> dynamic = (Dynamic) this.b.get(j);
+        void a(int i, int j, int k) {
+            Dynamic<?> dynamic = (Dynamic) this.palette.get(j);
             String s = dynamic.get("Name").asString("");
             boolean flag = Objects.equals(dynamic.get("Properties").get("persistent").asString(""), "true");
             int l = this.a(s, flag, k);
             int i1;
 
-            if (!this.g.containsKey(l)) {
-                i1 = this.b.size();
-                this.e.add(i1);
-                this.g.put(l, i1);
-                this.b.add(this.a(dynamic, s, flag, k));
+            if (!this.stateToIdMap.containsKey(l)) {
+                i1 = this.palette.size();
+                this.leaveIds.add(i1);
+                this.stateToIdMap.put(l, i1);
+                this.palette.add(this.a(dynamic, s, flag, k));
             }
 
-            i1 = this.g.get(l);
-            if (1 << this.d.b() <= i1) {
-                DataBitsPacked databitspacked = new DataBitsPacked(this.d.b() + 1, 4096);
+            i1 = this.stateToIdMap.get(l);
+            if (1 << this.storage.b() <= i1) {
+                DataBitsPacked databitspacked = new DataBitsPacked(this.storage.b() + 1, 4096);
 
                 for (int j1 = 0; j1 < 4096; ++j1) {
-                    databitspacked.a(j1, this.d.a(j1));
+                    databitspacked.a(j1, this.storage.a(j1));
                 }
 
-                this.d = databitspacked;
+                this.storage = databitspacked;
             }
 
-            this.d.a(i, i1);
+            this.storage.a(i, i1);
         }
     }
 
     public abstract static class b {
 
-        private final Type<Pair<String, Dynamic<?>>> e;
-        protected final OpticFinder<List<Pair<String, Dynamic<?>>>> a;
-        protected final List<Dynamic<?>> b;
-        protected final int c;
+        protected static final String BLOCK_STATES_TAG = "BlockStates";
+        protected static final String NAME_TAG = "Name";
+        protected static final String PROPERTIES_TAG = "Properties";
+        private final Type<Pair<String, Dynamic<?>>> blockStateType;
+        protected final OpticFinder<List<Pair<String, Dynamic<?>>>> paletteFinder;
+        protected final List<Dynamic<?>> palette;
+        protected final int index;
         @Nullable
-        protected DataBitsPacked d;
+        protected DataBitsPacked storage;
 
         public b(Typed<?> typed, Schema schema) {
-            this.e = DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType());
-            this.a = DSL.fieldFinder("Palette", DSL.list(this.e));
-            if (!Objects.equals(schema.getType(DataConverterTypes.BLOCK_STATE), this.e)) {
+            this.blockStateType = DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType());
+            this.paletteFinder = DSL.fieldFinder("Palette", DSL.list(this.blockStateType));
+            if (!Objects.equals(schema.getType(DataConverterTypes.BLOCK_STATE), this.blockStateType)) {
                 throw new IllegalStateException("Block state type is not what was expected.");
             } else {
-                Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.a);
+                Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.paletteFinder);
 
-                this.b = (List) optional.map((list) -> {
+                this.palette = (List) optional.map((list) -> {
                     return (List) list.stream().map(Pair::getSecond).collect(Collectors.toList());
                 }).orElse(ImmutableList.of());
                 Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
-                this.c = dynamic.get("Y").asInt(0);
+                this.index = dynamic.get("Y").asInt(0);
                 this.a(dynamic);
             }
         }
 
         protected void a(Dynamic<?> dynamic) {
             if (this.a()) {
-                this.d = null;
+                this.storage = null;
             } else {
                 long[] along = dynamic.get("BlockStates").asLongStream().toArray();
-                int i = Math.max(4, DataFixUtils.ceillog2(this.b.size()));
+                int i = Math.max(4, DataFixUtils.ceillog2(this.palette.size()));
 
-                this.d = new DataBitsPacked(i, 4096, along);
+                this.storage = new DataBitsPacked(i, 4096, along);
             }
 
         }
 
         public Typed<?> a(Typed<?> typed) {
             return this.b() ? typed : typed.update(DSL.remainderFinder(), (dynamic) -> {
-                return dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(this.d.a())));
-            }).set(this.a, this.b.stream().map((dynamic) -> {
+                return dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(this.storage.a())));
+            }).set(this.paletteFinder, (List) this.palette.stream().map((dynamic) -> {
                 return Pair.of(DataConverterTypes.BLOCK_STATE.typeName(), dynamic);
             }).collect(Collectors.toList()));
         }
 
         public boolean b() {
-            return this.d == null;
+            return this.storage == null;
         }
 
         public int c(int i) {
-            return this.d.a(i);
+            return this.storage.a(i);
         }
 
         protected int a(String s, boolean flag, int i) {
-            return DataConverterLeaves.b.get(s) << 5 | (flag ? 16 : 0) | i;
+            return DataConverterLeaves.LEAVES.get(s) << 5 | (flag ? 16 : 0) | i;
         }
 
         int c() {
-            return this.c;
+            return this.index;
         }
 
         protected abstract boolean a();

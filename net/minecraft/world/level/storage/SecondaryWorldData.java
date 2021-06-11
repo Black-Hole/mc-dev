@@ -7,57 +7,58 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.level.EnumGamemode;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.timers.CustomFunctionCallbackTimerQueue;
 
 public class SecondaryWorldData implements IWorldDataServer {
 
-    private final SaveData a;
-    private final IWorldDataServer b;
+    private final SaveData worldData;
+    private final IWorldDataServer wrapped;
 
     public SecondaryWorldData(SaveData savedata, IWorldDataServer iworlddataserver) {
-        this.a = savedata;
-        this.b = iworlddataserver;
+        this.worldData = savedata;
+        this.wrapped = iworlddataserver;
     }
 
     @Override
     public int a() {
-        return this.b.a();
+        return this.wrapped.a();
     }
 
     @Override
     public int b() {
-        return this.b.b();
+        return this.wrapped.b();
     }
 
     @Override
     public int c() {
-        return this.b.c();
+        return this.wrapped.c();
     }
 
     @Override
     public float d() {
-        return this.b.d();
+        return this.wrapped.d();
     }
 
     @Override
     public long getTime() {
-        return this.b.getTime();
+        return this.wrapped.getTime();
     }
 
     @Override
     public long getDayTime() {
-        return this.b.getDayTime();
+        return this.wrapped.getDayTime();
     }
 
     @Override
     public String getName() {
-        return this.a.getName();
+        return this.worldData.getName();
     }
 
     @Override
     public int getClearWeatherTime() {
-        return this.b.getClearWeatherTime();
+        return this.wrapped.getClearWeatherTime();
     }
 
     @Override
@@ -65,27 +66,27 @@ public class SecondaryWorldData implements IWorldDataServer {
 
     @Override
     public boolean isThundering() {
-        return this.b.isThundering();
+        return this.wrapped.isThundering();
     }
 
     @Override
     public int getThunderDuration() {
-        return this.b.getThunderDuration();
+        return this.wrapped.getThunderDuration();
     }
 
     @Override
     public boolean hasStorm() {
-        return this.b.hasStorm();
+        return this.wrapped.hasStorm();
     }
 
     @Override
     public int getWeatherDuration() {
-        return this.b.getWeatherDuration();
+        return this.wrapped.getWeatherDuration();
     }
 
     @Override
     public EnumGamemode getGameType() {
-        return this.a.getGameType();
+        return this.worldData.getGameType();
     }
 
     @Override
@@ -126,17 +127,17 @@ public class SecondaryWorldData implements IWorldDataServer {
 
     @Override
     public boolean isHardcore() {
-        return this.a.isHardcore();
+        return this.worldData.isHardcore();
     }
 
     @Override
     public boolean o() {
-        return this.a.o();
+        return this.worldData.o();
     }
 
     @Override
     public boolean p() {
-        return this.b.p();
+        return this.wrapped.p();
     }
 
     @Override
@@ -144,12 +145,12 @@ public class SecondaryWorldData implements IWorldDataServer {
 
     @Override
     public GameRules q() {
-        return this.a.q();
+        return this.worldData.q();
     }
 
     @Override
     public WorldBorder.c r() {
-        return this.b.r();
+        return this.wrapped.r();
     }
 
     @Override
@@ -157,17 +158,17 @@ public class SecondaryWorldData implements IWorldDataServer {
 
     @Override
     public EnumDifficulty getDifficulty() {
-        return this.a.getDifficulty();
+        return this.worldData.getDifficulty();
     }
 
     @Override
     public boolean isDifficultyLocked() {
-        return this.a.isDifficultyLocked();
+        return this.worldData.isDifficultyLocked();
     }
 
     @Override
     public CustomFunctionCallbackTimerQueue<MinecraftServer> u() {
-        return this.b.u();
+        return this.wrapped.u();
     }
 
     @Override
@@ -187,11 +188,16 @@ public class SecondaryWorldData implements IWorldDataServer {
     public void h(int i) {}
 
     @Override
+    public UUID x() {
+        return null;
+    }
+
+    @Override
     public void a(UUID uuid) {}
 
     @Override
-    public void a(CrashReportSystemDetails crashreportsystemdetails) {
+    public void a(CrashReportSystemDetails crashreportsystemdetails, LevelHeightAccessor levelheightaccessor) {
         crashreportsystemdetails.a("Derived", (Object) true);
-        this.b.a(crashreportsystemdetails);
+        this.wrapped.a(crashreportsystemdetails, levelheightaccessor);
     }
 }

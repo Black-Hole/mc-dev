@@ -12,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemRecord;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GeneratorAccess;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityJukeBox;
@@ -25,11 +24,11 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockJukeBox extends BlockTileEntity {
 
-    public static final BlockStateBoolean HAS_RECORD = BlockProperties.n;
+    public static final BlockStateBoolean HAS_RECORD = BlockProperties.HAS_RECORD;
 
     protected BlockJukeBox(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
     }
 
     @Override
@@ -102,8 +101,8 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityJukeBox();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityJukeBox(blockposition, iblockdata);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class BlockJukeBox extends BlockTileEntity {
             Item item = ((TileEntityJukeBox) tileentity).getRecord().getItem();
 
             if (item instanceof ItemRecord) {
-                return ((ItemRecord) item).f();
+                return ((ItemRecord) item).i();
             }
         }
 
@@ -127,7 +126,7 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

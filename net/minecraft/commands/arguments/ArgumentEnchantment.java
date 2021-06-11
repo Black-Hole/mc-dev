@@ -19,8 +19,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
-    private static final Collection<String> b = Arrays.asList("unbreaking", "silk_touch");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("unbreaking", "silk_touch");
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_ENCHANTMENT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("enchantment.unknown", new Object[]{object});
     });
 
@@ -38,7 +38,7 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
 
         return (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
-            return ArgumentEnchantment.a.create(minecraftkey);
+            return ArgumentEnchantment.ERROR_UNKNOWN_ENCHANTMENT.create(minecraftkey);
         });
     }
 
@@ -47,6 +47,6 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentEnchantment.b;
+        return ArgumentEnchantment.EXAMPLES;
     }
 }

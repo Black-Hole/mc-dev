@@ -22,69 +22,73 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public final class VoxelShapes {
 
-    private static final VoxelShape b = (VoxelShape) SystemUtils.a(() -> {
+    public static final double EPSILON = 1.0E-7D;
+    public static final double BIG_EPSILON = 1.0E-6D;
+    private static final VoxelShape BLOCK = (VoxelShape) SystemUtils.a(() -> {
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(1, 1, 1);
 
-        voxelshapebitset.a(0, 0, 0, true, true);
+        voxelshapebitset.c(0, 0, 0);
         return new VoxelShapeCube(voxelshapebitset);
     });
-    public static final VoxelShape a = create(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-    private static final VoxelShape c = new VoxelShapeArray(new VoxelShapeBitSet(0, 0, 0), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}));
+    public static final VoxelShape INFINITY = create(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    private static final VoxelShape EMPTY = new VoxelShapeArray(new VoxelShapeBitSet(0, 0, 0), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}));
+
+    public VoxelShapes() {}
 
     public static VoxelShape a() {
-        return VoxelShapes.c;
+        return VoxelShapes.EMPTY;
     }
 
     public static VoxelShape b() {
-        return VoxelShapes.b;
+        return VoxelShapes.BLOCK;
     }
 
     public static VoxelShape create(double d0, double d1, double d2, double d3, double d4, double d5) {
-        return a(new AxisAlignedBB(d0, d1, d2, d3, d4, d5));
-    }
-
-    public static VoxelShape a(AxisAlignedBB axisalignedbb) {
-        int i = a(axisalignedbb.minX, axisalignedbb.maxX);
-        int j = a(axisalignedbb.minY, axisalignedbb.maxY);
-        int k = a(axisalignedbb.minZ, axisalignedbb.maxZ);
-
-        if (i >= 0 && j >= 0 && k >= 0) {
-            if (i == 0 && j == 0 && k == 0) {
-                return axisalignedbb.e(0.5D, 0.5D, 0.5D) ? b() : a();
-            } else {
-                int l = 1 << i;
-                int i1 = 1 << j;
-                int j1 = 1 << k;
-                int k1 = (int) Math.round(axisalignedbb.minX * (double) l);
-                int l1 = (int) Math.round(axisalignedbb.maxX * (double) l);
-                int i2 = (int) Math.round(axisalignedbb.minY * (double) i1);
-                int j2 = (int) Math.round(axisalignedbb.maxY * (double) i1);
-                int k2 = (int) Math.round(axisalignedbb.minZ * (double) j1);
-                int l2 = (int) Math.round(axisalignedbb.maxZ * (double) j1);
-                VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(l, i1, j1, k1, i2, k2, l1, j2, l2);
-
-                for (long i3 = (long) k1; i3 < (long) l1; ++i3) {
-                    for (long j3 = (long) i2; j3 < (long) j2; ++j3) {
-                        for (long k3 = (long) k2; k3 < (long) l2; ++k3) {
-                            voxelshapebitset.a((int) i3, (int) j3, (int) k3, false, true);
-                        }
-                    }
-                }
-
-                return new VoxelShapeCube(voxelshapebitset);
-            }
+        if (d0 <= d3 && d1 <= d4 && d2 <= d5) {
+            return b(d0, d1, d2, d3, d4, d5);
         } else {
-            return new VoxelShapeArray(VoxelShapes.b.a, new double[]{axisalignedbb.minX, axisalignedbb.maxX}, new double[]{axisalignedbb.minY, axisalignedbb.maxY}, new double[]{axisalignedbb.minZ, axisalignedbb.maxZ});
+            throw new IllegalArgumentException("The min values need to be smaller or equals to the max values");
         }
     }
 
-    private static int a(double d0, double d1) {
+    public static VoxelShape b(double d0, double d1, double d2, double d3, double d4, double d5) {
+        if (d3 - d0 >= 1.0E-7D && d4 - d1 >= 1.0E-7D && d5 - d2 >= 1.0E-7D) {
+            int i = a(d0, d3);
+            int j = a(d1, d4);
+            int k = a(d2, d5);
+
+            if (i >= 0 && j >= 0 && k >= 0) {
+                if (i == 0 && j == 0 && k == 0) {
+                    return b();
+                } else {
+                    int l = 1 << i;
+                    int i1 = 1 << j;
+                    int j1 = 1 << k;
+                    VoxelShapeBitSet voxelshapebitset = VoxelShapeBitSet.a(l, i1, j1, (int) Math.round(d0 * (double) l), (int) Math.round(d1 * (double) i1), (int) Math.round(d2 * (double) j1), (int) Math.round(d3 * (double) l), (int) Math.round(d4 * (double) i1), (int) Math.round(d5 * (double) j1));
+
+                    return new VoxelShapeCube(voxelshapebitset);
+                }
+            } else {
+                return new VoxelShapeArray(VoxelShapes.BLOCK.shape, DoubleArrayList.wrap(new double[]{d0, d3}), DoubleArrayList.wrap(new double[]{d1, d4}), DoubleArrayList.wrap(new double[]{d2, d5}));
+            }
+        } else {
+            return a();
+        }
+    }
+
+    public static VoxelShape a(AxisAlignedBB axisalignedbb) {
+        return b(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ);
+    }
+
+    @VisibleForTesting
+    protected static int a(double d0, double d1) {
         if (d0 >= -1.0E-7D && d1 <= 1.0000001D) {
             for (int i = 0; i <= 3; ++i) {
-                double d2 = d0 * (double) (1 << i);
-                double d3 = d1 * (double) (1 << i);
-                boolean flag = Math.abs(d2 - Math.floor(d2)) < 1.0E-7D;
-                boolean flag1 = Math.abs(d3 - Math.floor(d3)) < 1.0E-7D;
+                int j = 1 << i;
+                double d2 = d0 * (double) j;
+                double d3 = d1 * (double) j;
+                boolean flag = Math.abs(d2 - (double) Math.round(d2)) < 1.0E-7D * (double) j;
+                boolean flag1 = Math.abs(d3 - (double) Math.round(d3)) < 1.0E-7D * (double) j;
 
                 if (flag && flag1) {
                     return i;
@@ -128,9 +132,9 @@ public final class VoxelShapes {
                 return flag ? voxelshape : a();
             } else {
                 VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag, flag1);
-                VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.a().size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
-                VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.a().size() - 1) * (voxelshapemerger1.a().size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
-                VoxelShapeBitSet voxelshapebitset = VoxelShapeBitSet.a(voxelshape.a, voxelshape1.a, voxelshapemerger, voxelshapemerger1, voxelshapemerger2, operatorboolean);
+                VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
+                VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.size() - 1) * (voxelshapemerger1.size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
+                VoxelShapeBitSet voxelshapebitset = VoxelShapeBitSet.a(voxelshape.shape, voxelshape1.shape, voxelshapemerger, voxelshapemerger1, voxelshapemerger2, operatorboolean);
 
                 return (VoxelShape) (voxelshapemerger instanceof VoxelShapeCubeMerger && voxelshapemerger1 instanceof VoxelShapeCubeMerger && voxelshapemerger2 instanceof VoxelShapeCubeMerger ? new VoxelShapeCube(voxelshapebitset) : new VoxelShapeArray(voxelshapebitset, voxelshapemerger.a(), voxelshapemerger1.a(), voxelshapemerger2.a()));
             }
@@ -140,35 +144,40 @@ public final class VoxelShapes {
     public static boolean c(VoxelShape voxelshape, VoxelShape voxelshape1, OperatorBoolean operatorboolean) {
         if (operatorboolean.apply(false, false)) {
             throw (IllegalArgumentException) SystemUtils.c((Throwable) (new IllegalArgumentException()));
-        } else if (voxelshape == voxelshape1) {
-            return operatorboolean.apply(true, true);
-        } else if (voxelshape.isEmpty()) {
-            return operatorboolean.apply(false, !voxelshape1.isEmpty());
-        } else if (voxelshape1.isEmpty()) {
-            return operatorboolean.apply(!voxelshape.isEmpty(), false);
         } else {
-            boolean flag = operatorboolean.apply(true, false);
-            boolean flag1 = operatorboolean.apply(false, true);
-            EnumDirection.EnumAxis[] aenumdirection_enumaxis = EnumAxisCycle.d;
-            int i = aenumdirection_enumaxis.length;
+            boolean flag = voxelshape.isEmpty();
+            boolean flag1 = voxelshape1.isEmpty();
 
-            for (int j = 0; j < i; ++j) {
-                EnumDirection.EnumAxis enumdirection_enumaxis = aenumdirection_enumaxis[j];
+            if (!flag && !flag1) {
+                if (voxelshape == voxelshape1) {
+                    return operatorboolean.apply(true, true);
+                } else {
+                    boolean flag2 = operatorboolean.apply(true, false);
+                    boolean flag3 = operatorboolean.apply(false, true);
+                    EnumDirection.EnumAxis[] aenumdirection_enumaxis = EnumAxisCycle.AXIS_VALUES;
+                    int i = aenumdirection_enumaxis.length;
 
-                if (voxelshape.c(enumdirection_enumaxis) < voxelshape1.b(enumdirection_enumaxis) - 1.0E-7D) {
-                    return flag || flag1;
+                    for (int j = 0; j < i; ++j) {
+                        EnumDirection.EnumAxis enumdirection_enumaxis = aenumdirection_enumaxis[j];
+
+                        if (voxelshape.c(enumdirection_enumaxis) < voxelshape1.b(enumdirection_enumaxis) - 1.0E-7D) {
+                            return flag2 || flag3;
+                        }
+
+                        if (voxelshape1.c(enumdirection_enumaxis) < voxelshape.b(enumdirection_enumaxis) - 1.0E-7D) {
+                            return flag2 || flag3;
+                        }
+                    }
+
+                    VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag2, flag3);
+                    VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag2, flag3);
+                    VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.size() - 1) * (voxelshapemerger1.size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag2, flag3);
+
+                    return a(voxelshapemerger, voxelshapemerger1, voxelshapemerger2, voxelshape.shape, voxelshape1.shape, operatorboolean);
                 }
-
-                if (voxelshape1.c(enumdirection_enumaxis) < voxelshape.b(enumdirection_enumaxis) - 1.0E-7D) {
-                    return flag || flag1;
-                }
+            } else {
+                return operatorboolean.apply(!flag, !flag1);
             }
-
-            VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag, flag1);
-            VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.a().size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
-            VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.a().size() - 1) * (voxelshapemerger1.a().size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
-
-            return a(voxelshapemerger, voxelshapemerger1, voxelshapemerger2, voxelshape.a, voxelshape1.a, operatorboolean);
         }
     }
 
@@ -176,7 +185,7 @@ public final class VoxelShapes {
         return !voxelshapemerger.a((i, j, k) -> {
             return voxelshapemerger1.a((l, i1, j1) -> {
                 return voxelshapemerger2.a((k1, l1, i2) -> {
-                    return !operatorboolean.apply(voxelshapediscrete.c(i, l, k1), voxelshapediscrete1.c(j, i1, l1));
+                    return !operatorboolean.apply(voxelshapediscrete.d(i, l, k1), voxelshapediscrete1.d(j, i1, l1));
                 });
             });
         });
@@ -278,6 +287,22 @@ public final class VoxelShapes {
         return d0 > 0.0D ? MathHelper.floor(d2 + d0) + 1 : MathHelper.floor(d1 + d0) - 1;
     }
 
+    public static boolean a(VoxelShape voxelshape, VoxelShape voxelshape1, EnumDirection enumdirection) {
+        if (voxelshape == b() && voxelshape1 == b()) {
+            return true;
+        } else if (voxelshape1.isEmpty()) {
+            return false;
+        } else {
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
+            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.e();
+            VoxelShape voxelshape2 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape : voxelshape1;
+            VoxelShape voxelshape3 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape1 : voxelshape;
+            OperatorBoolean operatorboolean = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? OperatorBoolean.ONLY_FIRST : OperatorBoolean.ONLY_SECOND;
+
+            return DoubleMath.fuzzyEquals(voxelshape2.c(enumdirection_enumaxis), 1.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(voxelshape3.b(enumdirection_enumaxis), 0.0D, 1.0E-7D) && !c(new VoxelShapeSlice(voxelshape2, enumdirection_enumaxis, voxelshape2.shape.c(enumdirection_enumaxis) - 1), new VoxelShapeSlice(voxelshape3, enumdirection_enumaxis, 0), operatorboolean);
+        }
+    }
+
     public static VoxelShape a(VoxelShape voxelshape, EnumDirection enumdirection) {
         if (voxelshape == b()) {
             return b();
@@ -288,7 +313,7 @@ public final class VoxelShapes {
 
             if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
                 flag = DoubleMath.fuzzyEquals(voxelshape.c(enumdirection_enumaxis), 1.0D, 1.0E-7D);
-                i = voxelshape.a.c(enumdirection_enumaxis) - 1;
+                i = voxelshape.shape.c(enumdirection_enumaxis) - 1;
             } else {
                 flag = DoubleMath.fuzzyEquals(voxelshape.b(enumdirection_enumaxis), 0.0D, 1.0E-7D);
                 i = 0;
@@ -313,7 +338,7 @@ public final class VoxelShapes {
                 voxelshape3 = a();
             }
 
-            return !c(b(), b(new VoxelShapeSlice(voxelshape2, enumdirection_enumaxis, voxelshape2.a.c(enumdirection_enumaxis) - 1), new VoxelShapeSlice(voxelshape3, enumdirection_enumaxis, 0), OperatorBoolean.OR), OperatorBoolean.ONLY_FIRST);
+            return !c(b(), b(new VoxelShapeSlice(voxelshape2, enumdirection_enumaxis, voxelshape2.shape.c(enumdirection_enumaxis) - 1), new VoxelShapeSlice(voxelshape3, enumdirection_enumaxis, 0), OperatorBoolean.OR), OperatorBoolean.ONLY_FIRST);
         } else {
             return true;
         }
@@ -336,7 +361,7 @@ public final class VoxelShapes {
             }
         }
 
-        return (VoxelShapeMerger) (doublelist.getDouble(j) < doublelist1.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist, doublelist1, false) : (doublelist1.getDouble(k) < doublelist.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist1, doublelist, true) : (j == k && Objects.equals(doublelist, doublelist1) ? (doublelist instanceof VoxelShapeMergerIdentical ? (VoxelShapeMerger) doublelist : (doublelist1 instanceof VoxelShapeMergerIdentical ? (VoxelShapeMerger) doublelist1 : new VoxelShapeMergerIdentical(doublelist))) : new VoxelShapeMergerList(doublelist, doublelist1, flag, flag1))));
+        return (VoxelShapeMerger) (doublelist.getDouble(j) < doublelist1.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist, doublelist1, false) : (doublelist1.getDouble(k) < doublelist.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist1, doublelist, true) : (j == k && Objects.equals(doublelist, doublelist1) ? new VoxelShapeMergerIdentical(doublelist) : new VoxelShapeMergerList(doublelist, doublelist1, flag, flag1))));
     }
 
     public interface a {

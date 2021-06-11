@@ -10,7 +10,7 @@ import net.minecraft.core.IRegistryWritable;
 
 public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
 
-    private final IRegistryCustom b;
+    private final IRegistryCustom registryAccess;
 
     public static <T> RegistryWriteOps<T> a(DynamicOps<T> dynamicops, IRegistryCustom iregistrycustom) {
         return new RegistryWriteOps<>(dynamicops, iregistrycustom);
@@ -18,11 +18,11 @@ public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
 
     private RegistryWriteOps(DynamicOps<T> dynamicops, IRegistryCustom iregistrycustom) {
         super(dynamicops);
-        this.b = iregistrycustom;
+        this.registryAccess = iregistrycustom;
     }
 
     protected <E> DataResult<T> a(E e0, T t0, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec) {
-        Optional<IRegistryWritable<E>> optional = this.b.a(resourcekey);
+        Optional<IRegistryWritable<E>> optional = this.registryAccess.a(resourcekey);
 
         if (optional.isPresent()) {
             IRegistryWritable<E> iregistrywritable = (IRegistryWritable) optional.get();
@@ -31,7 +31,7 @@ public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
             if (optional1.isPresent()) {
                 ResourceKey<E> resourcekey1 = (ResourceKey) optional1.get();
 
-                return MinecraftKey.a.encode(resourcekey1.a(), this.a, t0);
+                return MinecraftKey.CODEC.encode(resourcekey1.a(), this.delegate, t0);
             }
         }
 

@@ -16,13 +16,14 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.ICompletionProvider;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.World;
 
 public class ArgumentPosition implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> c = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "~0.5 ~1 ~-5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos.unloaded"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.outofworld"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "~0.5 ~1 ~-5");
+    public static final SimpleCommandExceptionType ERROR_NOT_LOADED = new SimpleCommandExceptionType(new ChatMessage("argument.pos.unloaded"));
+    public static final SimpleCommandExceptionType ERROR_OUT_OF_WORLD = new SimpleCommandExceptionType(new ChatMessage("argument.pos.outofworld"));
+    public static final SimpleCommandExceptionType ERROR_OUT_OF_BOUNDS = new SimpleCommandExceptionType(new ChatMessage("argument.pos.outofbounds"));
 
     public ArgumentPosition() {}
 
@@ -34,19 +35,22 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
         BlockPosition blockposition = ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).c((CommandListenerWrapper) commandcontext.getSource());
 
         if (!((CommandListenerWrapper) commandcontext.getSource()).getWorld().isLoaded(blockposition)) {
-            throw ArgumentPosition.a.create();
+            throw ArgumentPosition.ERROR_NOT_LOADED.create();
+        } else if (!((CommandListenerWrapper) commandcontext.getSource()).getWorld().isValidLocation(blockposition)) {
+            throw ArgumentPosition.ERROR_OUT_OF_WORLD.create();
         } else {
-            ((CommandListenerWrapper) commandcontext.getSource()).getWorld();
-            if (!WorldServer.isValidLocation(blockposition)) {
-                throw ArgumentPosition.b.create();
-            } else {
-                return blockposition;
-            }
+            return blockposition;
         }
     }
 
     public static BlockPosition b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
-        return ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).c((CommandListenerWrapper) commandcontext.getSource());
+        BlockPosition blockposition = ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).c((CommandListenerWrapper) commandcontext.getSource());
+
+        if (!World.l(blockposition)) {
+            throw ArgumentPosition.ERROR_OUT_OF_BOUNDS.create();
+        } else {
+            return blockposition;
+        }
     }
 
     public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
@@ -61,7 +65,7 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
             Object object;
 
             if (!s.isEmpty() && s.charAt(0) == '^') {
-                object = Collections.singleton(ICompletionProvider.a.a);
+                object = Collections.singleton(ICompletionProvider.a.DEFAULT_LOCAL);
             } else {
                 object = ((ICompletionProvider) commandcontext.getSource()).s();
             }
@@ -71,6 +75,6 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentPosition.c;
+        return ArgumentPosition.EXAMPLES;
     }
 }

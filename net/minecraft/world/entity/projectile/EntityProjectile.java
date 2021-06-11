@@ -2,8 +2,6 @@ package net.minecraft.world.entity.projectile;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.particles.Particles;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
@@ -33,6 +31,18 @@ public abstract class EntityProjectile extends IProjectile {
     }
 
     @Override
+    public boolean a(double d0) {
+        double d1 = this.getBoundingBox().a() * 4.0D;
+
+        if (Double.isNaN(d1)) {
+            d1 = 4.0D;
+        }
+
+        d1 *= 64.0D;
+        return d0 < d1 * d1;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
@@ -40,16 +50,16 @@ public abstract class EntityProjectile extends IProjectile {
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
             BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectposition).getBlockPosition();
-            IBlockData iblockdata = this.world.getType(blockposition);
+            IBlockData iblockdata = this.level.getType(blockposition);
 
             if (iblockdata.a(Blocks.NETHER_PORTAL)) {
                 this.d(blockposition);
                 flag = true;
             } else if (iblockdata.a(Blocks.END_GATEWAY)) {
-                TileEntity tileentity = this.world.getTileEntity(blockposition);
+                TileEntity tileentity = this.level.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityEndGateway && TileEntityEndGateway.a((Entity) this)) {
-                    ((TileEntityEndGateway) tileentity).b((Entity) this);
+                    TileEntityEndGateway.a(this.level, blockposition, iblockdata, this, (TileEntityEndGateway) tileentity);
                 }
 
                 flag = true;
@@ -66,14 +76,14 @@ public abstract class EntityProjectile extends IProjectile {
         double d1 = this.locY() + vec3d.y;
         double d2 = this.locZ() + vec3d.z;
 
-        this.x();
+        this.z();
         float f;
 
         if (this.isInWater()) {
             for (int i = 0; i < 4; ++i) {
                 float f1 = 0.25F;
 
-                this.world.addParticle(Particles.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
+                this.level.addParticle(Particles.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
             }
 
             f = 0.8F;
@@ -85,18 +95,13 @@ public abstract class EntityProjectile extends IProjectile {
         if (!this.isNoGravity()) {
             Vec3D vec3d1 = this.getMot();
 
-            this.setMot(vec3d1.x, vec3d1.y - (double) this.k(), vec3d1.z);
+            this.setMot(vec3d1.x, vec3d1.y - (double) this.l(), vec3d1.z);
         }
 
         this.setPosition(d0, d1, d2);
     }
 
-    protected float k() {
+    protected float l() {
         return 0.03F;
-    }
-
-    @Override
-    public Packet<?> P() {
-        return new PacketPlayOutSpawnEntity(this);
     }
 }

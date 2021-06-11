@@ -26,6 +26,6 @@ public class EnchantmentTridentImpaling extends Enchantment {
 
     @Override
     public float a(int i, EnumMonsterType enummonstertype) {
-        return enummonstertype == EnumMonsterType.WATER_MOB ? (float) i * 2.5F : 0.0F;
+        return enummonstertype == EnumMonsterType.WATER ? (float) i * 2.5F : 0.0F;
     }
 }

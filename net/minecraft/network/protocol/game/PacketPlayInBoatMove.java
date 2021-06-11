@@ -1,31 +1,27 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInBoatMove implements Packet<PacketListenerPlayIn> {
 
-    private boolean a;
-    private boolean b;
-
-    public PacketPlayInBoatMove() {}
+    private final boolean left;
+    private final boolean right;
 
     public PacketPlayInBoatMove(boolean flag, boolean flag1) {
-        this.a = flag;
-        this.b = flag1;
+        this.left = flag;
+        this.right = flag1;
+    }
+
+    public PacketPlayInBoatMove(PacketDataSerializer packetdataserializer) {
+        this.left = packetdataserializer.readBoolean();
+        this.right = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readBoolean();
-        this.b = packetdataserializer.readBoolean();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeBoolean(this.a);
-        packetdataserializer.writeBoolean(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeBoolean(this.left);
+        packetdataserializer.writeBoolean(this.right);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -33,10 +29,10 @@ public class PacketPlayInBoatMove implements Packet<PacketListenerPlayIn> {
     }
 
     public boolean b() {
-        return this.a;
+        return this.left;
     }
 
     public boolean c() {
-        return this.b;
+        return this.right;
     }
 }

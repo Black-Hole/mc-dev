@@ -6,28 +6,35 @@ import net.minecraft.util.MathHelper;
 @Immutable
 public class DifficultyDamageScaler {
 
-    private final EnumDifficulty a;
-    private final float b;
+    private static final float DIFFICULTY_TIME_GLOBAL_OFFSET = -72000.0F;
+    private static final float MAX_DIFFICULTY_TIME_GLOBAL = 1440000.0F;
+    private static final float MAX_DIFFICULTY_TIME_LOCAL = 3600000.0F;
+    private final EnumDifficulty base;
+    private final float effectiveDifficulty;
 
     public DifficultyDamageScaler(EnumDifficulty enumdifficulty, long i, long j, float f) {
-        this.a = enumdifficulty;
-        this.b = this.a(enumdifficulty, i, j, f);
+        this.base = enumdifficulty;
+        this.effectiveDifficulty = this.a(enumdifficulty, i, j, f);
     }
 
     public EnumDifficulty a() {
-        return this.a;
+        return this.base;
     }
 
     public float b() {
-        return this.b;
+        return this.effectiveDifficulty;
+    }
+
+    public boolean c() {
+        return this.effectiveDifficulty >= (float) EnumDifficulty.HARD.ordinal();
     }
 
     public boolean a(float f) {
-        return this.b > f;
+        return this.effectiveDifficulty > f;
     }
 
     public float d() {
-        return this.b < 2.0F ? 0.0F : (this.b > 4.0F ? 1.0F : (this.b - 2.0F) / 2.0F);
+        return this.effectiveDifficulty < 2.0F ? 0.0F : (this.effectiveDifficulty > 4.0F ? 1.0F : (this.effectiveDifficulty - 2.0F) / 2.0F);
     }
 
     private float a(EnumDifficulty enumdifficulty, long i, long j, float f) {

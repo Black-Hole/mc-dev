@@ -12,7 +12,7 @@ public class ItemWorldMapBase extends Item {
     }
 
     @Override
-    public boolean ac_() {
+    public boolean M_() {
         return true;
     }
 

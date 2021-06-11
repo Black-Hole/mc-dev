@@ -11,123 +11,123 @@ import net.minecraft.world.item.Items;
 
 public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> extends PathfinderGoal {
 
-    private final T a;
-    private final double b;
-    private int c;
-    private final float d;
-    private int e = -1;
-    private int f;
-    private boolean g;
-    private boolean h;
-    private int i = -1;
+    private final T mob;
+    private final double speedModifier;
+    private int attackIntervalMin;
+    private final float attackRadiusSqr;
+    private int attackTime = -1;
+    private int seeTime;
+    private boolean strafingClockwise;
+    private boolean strafingBackwards;
+    private int strafingTime = -1;
 
     public PathfinderGoalBowShoot(T t0, double d0, int i, float f) {
-        this.a = t0;
-        this.b = d0;
-        this.c = i;
-        this.d = f * f;
+        this.mob = t0;
+        this.speedModifier = d0;
+        this.attackIntervalMin = i;
+        this.attackRadiusSqr = f * f;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
     public void a(int i) {
-        this.c = i;
+        this.attackIntervalMin = i;
     }
 
     @Override
     public boolean a() {
-        return this.a.getGoalTarget() == null ? false : this.g();
+        return this.mob.getGoalTarget() == null ? false : this.g();
     }
 
     protected boolean g() {
-        return this.a.a(Items.BOW);
+        return this.mob.a(Items.BOW);
     }
 
     @Override
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().m()) && this.g();
+        return (this.a() || !this.mob.getNavigation().m()) && this.g();
     }
 
     @Override
     public void c() {
         super.c();
-        this.a.setAggressive(true);
+        this.mob.setAggressive(true);
     }
 
     @Override
     public void d() {
         super.d();
-        this.a.setAggressive(false);
-        this.f = 0;
-        this.e = -1;
-        this.a.clearActiveItem();
+        this.mob.setAggressive(false);
+        this.seeTime = 0;
+        this.attackTime = -1;
+        this.mob.clearActiveItem();
     }
 
     @Override
     public void e() {
-        EntityLiving entityliving = this.a.getGoalTarget();
+        EntityLiving entityliving = this.mob.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
-            boolean flag = this.a.getEntitySenses().a(entityliving);
-            boolean flag1 = this.f > 0;
+            double d0 = this.mob.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
+            boolean flag = this.mob.getEntitySenses().a(entityliving);
+            boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
-                this.f = 0;
+                this.seeTime = 0;
             }
 
             if (flag) {
-                ++this.f;
+                ++this.seeTime;
             } else {
-                --this.f;
+                --this.seeTime;
             }
 
-            if (d0 <= (double) this.d && this.f >= 20) {
-                this.a.getNavigation().o();
-                ++this.i;
+            if (d0 <= (double) this.attackRadiusSqr && this.seeTime >= 20) {
+                this.mob.getNavigation().o();
+                ++this.strafingTime;
             } else {
-                this.a.getNavigation().a((Entity) entityliving, this.b);
-                this.i = -1;
+                this.mob.getNavigation().a((Entity) entityliving, this.speedModifier);
+                this.strafingTime = -1;
             }
 
-            if (this.i >= 20) {
-                if ((double) this.a.getRandom().nextFloat() < 0.3D) {
-                    this.g = !this.g;
+            if (this.strafingTime >= 20) {
+                if ((double) this.mob.getRandom().nextFloat() < 0.3D) {
+                    this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double) this.a.getRandom().nextFloat() < 0.3D) {
-                    this.h = !this.h;
+                if ((double) this.mob.getRandom().nextFloat() < 0.3D) {
+                    this.strafingBackwards = !this.strafingBackwards;
                 }
 
-                this.i = 0;
+                this.strafingTime = 0;
             }
 
-            if (this.i > -1) {
-                if (d0 > (double) (this.d * 0.75F)) {
-                    this.h = false;
-                } else if (d0 < (double) (this.d * 0.25F)) {
-                    this.h = true;
+            if (this.strafingTime > -1) {
+                if (d0 > (double) (this.attackRadiusSqr * 0.75F)) {
+                    this.strafingBackwards = false;
+                } else if (d0 < (double) (this.attackRadiusSqr * 0.25F)) {
+                    this.strafingBackwards = true;
                 }
 
-                this.a.getControllerMove().a(this.h ? -0.5F : 0.5F, this.g ? 0.5F : -0.5F);
-                this.a.a((Entity) entityliving, 30.0F, 30.0F);
+                this.mob.getControllerMove().a(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.mob.a((Entity) entityliving, 30.0F, 30.0F);
             } else {
-                this.a.getControllerLook().a(entityliving, 30.0F, 30.0F);
+                this.mob.getControllerLook().a(entityliving, 30.0F, 30.0F);
             }
 
-            if (this.a.isHandRaised()) {
-                if (!flag && this.f < -60) {
-                    this.a.clearActiveItem();
+            if (this.mob.isHandRaised()) {
+                if (!flag && this.seeTime < -60) {
+                    this.mob.clearActiveItem();
                 } else if (flag) {
-                    int i = this.a.ea();
+                    int i = this.mob.eI();
 
                     if (i >= 20) {
-                        this.a.clearActiveItem();
-                        ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
-                        this.e = this.c;
+                        this.mob.clearActiveItem();
+                        ((IRangedEntity) this.mob).a(entityliving, ItemBow.a(i));
+                        this.attackTime = this.attackIntervalMin;
                     }
                 }
-            } else if (--this.e <= 0 && this.f >= -60) {
-                this.a.c(ProjectileHelper.a((EntityLiving) this.a, Items.BOW));
+            } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+                this.mob.c(ProjectileHelper.a((EntityLiving) this.mob, Items.BOW));
             }
 
         }

@@ -35,13 +35,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntityGhast extends EntityFlying implements IMonster {
 
-    private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityGhast.class, DataWatcherRegistry.i);
-    private int c = 1;
+    private static final DataWatcherObject<Boolean> DATA_IS_CHARGING = DataWatcher.a(EntityGhast.class, DataWatcherRegistry.BOOLEAN);
+    private int explosionPower = 1;
 
     public EntityGhast(EntityTypes<? extends EntityGhast> entitytypes, World world) {
         super(entitytypes, world);
-        this.f = 5;
-        this.moveController = new EntityGhast.ControllerGhast(this);
+        this.xpReward = 5;
+        this.moveControl = new EntityGhast.ControllerGhast(this);
     }
 
     @Override
@@ -54,16 +54,20 @@ public class EntityGhast extends EntityFlying implements IMonster {
         }));
     }
 
-    public void t(boolean flag) {
-        this.datawatcher.set(EntityGhast.b, flag);
+    public boolean n() {
+        return (Boolean) this.entityData.get(EntityGhast.DATA_IS_CHARGING);
+    }
+
+    public void v(boolean flag) {
+        this.entityData.set(EntityGhast.DATA_IS_CHARGING, flag);
     }
 
     public int getPower() {
-        return this.c;
+        return this.explosionPower;
     }
 
     @Override
-    protected boolean L() {
+    protected boolean Q() {
         return true;
     }
 
@@ -71,7 +75,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
-        } else if (damagesource.j() instanceof EntityLargeFireball && damagesource.getEntity() instanceof EntityHuman) {
+        } else if (damagesource.k() instanceof EntityLargeFireball && damagesource.getEntity() instanceof EntityHuman) {
             super.damageEntity(damagesource, 1000.0F);
             return true;
         } else {
@@ -82,11 +86,11 @@ public class EntityGhast extends EntityFlying implements IMonster {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityGhast.b, false);
+        this.entityData.register(EntityGhast.DATA_IS_CHARGING, false);
     }
 
-    public static AttributeProvider.Builder eJ() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FOLLOW_RANGE, 100.0D);
+    public static AttributeProvider.Builder t() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FOLLOW_RANGE, 100.0D);
     }
 
     @Override
@@ -96,17 +100,17 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_GHAST_AMBIENT;
+        return SoundEffects.GHAST_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_GHAST_HURT;
+        return SoundEffects.GHAST_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_GHAST_DEATH;
+        return SoundEffects.GHAST_DEATH;
     }
 
     @Override
@@ -126,14 +130,14 @@ public class EntityGhast extends EntityFlying implements IMonster {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("ExplosionPower", this.c);
+        nbttagcompound.setByte("ExplosionPower", (byte) this.explosionPower);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("ExplosionPower", 99)) {
-            this.c = nbttagcompound.getInt("ExplosionPower");
+            this.explosionPower = nbttagcompound.getByte("ExplosionPower");
         }
 
     }
@@ -143,125 +147,68 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return 2.6F;
     }
 
-    static class PathfinderGoalGhastAttackTarget extends PathfinderGoal {
+    private static class ControllerGhast extends ControllerMove {
 
         private final EntityGhast ghast;
-        public int a;
+        private int floatDuration;
 
-        public PathfinderGoalGhastAttackTarget(EntityGhast entityghast) {
+        public ControllerGhast(EntityGhast entityghast) {
+            super(entityghast);
             this.ghast = entityghast;
         }
 
         @Override
-        public boolean a() {
-            return this.ghast.getGoalTarget() != null;
-        }
+        public void a() {
+            if (this.operation == ControllerMove.Operation.MOVE_TO) {
+                if (this.floatDuration-- <= 0) {
+                    this.floatDuration += this.ghast.getRandom().nextInt(5) + 2;
+                    Vec3D vec3d = new Vec3D(this.wantedX - this.ghast.locX(), this.wantedY - this.ghast.locY(), this.wantedZ - this.ghast.locZ());
+                    double d0 = vec3d.f();
 
-        @Override
-        public void c() {
-            this.a = 0;
-        }
-
-        @Override
-        public void d() {
-            this.ghast.t(false);
-        }
-
-        @Override
-        public void e() {
-            EntityLiving entityliving = this.ghast.getGoalTarget();
-            double d0 = 64.0D;
-
-            if (entityliving.h((Entity) this.ghast) < 4096.0D && this.ghast.hasLineOfSight(entityliving)) {
-                World world = this.ghast.world;
-
-                ++this.a;
-                if (this.a == 10 && !this.ghast.isSilent()) {
-                    world.a((EntityHuman) null, 1015, this.ghast.getChunkCoordinates(), 0);
-                }
-
-                if (this.a == 20) {
-                    double d1 = 4.0D;
-                    Vec3D vec3d = this.ghast.f(1.0F);
-                    double d2 = entityliving.locX() - (this.ghast.locX() + vec3d.x * 4.0D);
-                    double d3 = entityliving.e(0.5D) - (0.5D + this.ghast.e(0.5D));
-                    double d4 = entityliving.locZ() - (this.ghast.locZ() + vec3d.z * 4.0D);
-
-                    if (!this.ghast.isSilent()) {
-                        world.a((EntityHuman) null, 1016, this.ghast.getChunkCoordinates(), 0);
+                    vec3d = vec3d.d();
+                    if (this.a(vec3d, MathHelper.e(d0))) {
+                        this.ghast.setMot(this.ghast.getMot().e(vec3d.a(0.1D)));
+                    } else {
+                        this.operation = ControllerMove.Operation.WAIT;
                     }
-
-                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.ghast, d2, d3, d4);
-
-                    entitylargefireball.yield = this.ghast.getPower();
-                    entitylargefireball.setPosition(this.ghast.locX() + vec3d.x * 4.0D, this.ghast.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
-                    world.addEntity(entitylargefireball);
-                    this.a = -40;
                 }
-            } else if (this.a > 0) {
-                --this.a;
+
+            }
+        }
+
+        private boolean a(Vec3D vec3d, int i) {
+            AxisAlignedBB axisalignedbb = this.ghast.getBoundingBox();
+
+            for (int j = 1; j < i; ++j) {
+                axisalignedbb = axisalignedbb.c(vec3d);
+                if (!this.ghast.level.getCubes(this.ghast, axisalignedbb)) {
+                    return false;
+                }
             }
 
-            this.ghast.t(this.a > 10);
-        }
-    }
-
-    static class PathfinderGoalGhastMoveTowardsTarget extends PathfinderGoal {
-
-        private final EntityGhast a;
-
-        public PathfinderGoalGhastMoveTowardsTarget(EntityGhast entityghast) {
-            this.a = entityghast;
-            this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
-        }
-
-        @Override
-        public boolean a() {
             return true;
         }
-
-        @Override
-        public void e() {
-            if (this.a.getGoalTarget() == null) {
-                Vec3D vec3d = this.a.getMot();
-
-                this.a.yaw = -((float) MathHelper.d(vec3d.x, vec3d.z)) * 57.295776F;
-                this.a.aA = this.a.yaw;
-            } else {
-                EntityLiving entityliving = this.a.getGoalTarget();
-                double d0 = 64.0D;
-
-                if (entityliving.h((Entity) this.a) < 4096.0D) {
-                    double d1 = entityliving.locX() - this.a.locX();
-                    double d2 = entityliving.locZ() - this.a.locZ();
-
-                    this.a.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                    this.a.aA = this.a.yaw;
-                }
-            }
-
-        }
     }
 
-    static class PathfinderGoalGhastIdleMove extends PathfinderGoal {
+    private static class PathfinderGoalGhastIdleMove extends PathfinderGoal {
 
-        private final EntityGhast a;
+        private final EntityGhast ghast;
 
         public PathfinderGoalGhastIdleMove(EntityGhast entityghast) {
-            this.a = entityghast;
+            this.ghast = entityghast;
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean a() {
-            ControllerMove controllermove = this.a.getControllerMove();
+            ControllerMove controllermove = this.ghast.getControllerMove();
 
             if (!controllermove.b()) {
                 return true;
             } else {
-                double d0 = controllermove.d() - this.a.locX();
-                double d1 = controllermove.e() - this.a.locY();
-                double d2 = controllermove.f() - this.a.locZ();
+                double d0 = controllermove.d() - this.ghast.locX();
+                double d1 = controllermove.e() - this.ghast.locY();
+                double d2 = controllermove.f() - this.ghast.locZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 return d3 < 1.0D || d3 > 3600.0D;
@@ -275,55 +222,111 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
         @Override
         public void c() {
-            Random random = this.a.getRandom();
-            double d0 = this.a.locX() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            double d1 = this.a.locY() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            double d2 = this.a.locZ() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            Random random = this.ghast.getRandom();
+            double d0 = this.ghast.locX() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d1 = this.ghast.locY() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d2 = this.ghast.locZ() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
 
-            this.a.getControllerMove().a(d0, d1, d2, 1.0D);
+            this.ghast.getControllerMove().a(d0, d1, d2, 1.0D);
         }
     }
 
-    static class ControllerGhast extends ControllerMove {
+    private static class PathfinderGoalGhastMoveTowardsTarget extends PathfinderGoal {
 
-        private final EntityGhast i;
-        private int j;
+        private final EntityGhast ghast;
 
-        public ControllerGhast(EntityGhast entityghast) {
-            super(entityghast);
-            this.i = entityghast;
+        public PathfinderGoalGhastMoveTowardsTarget(EntityGhast entityghast) {
+            this.ghast = entityghast;
+            this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
         }
 
         @Override
-        public void a() {
-            if (this.h == ControllerMove.Operation.MOVE_TO) {
-                if (this.j-- <= 0) {
-                    this.j += this.i.getRandom().nextInt(5) + 2;
-                    Vec3D vec3d = new Vec3D(this.b - this.i.locX(), this.c - this.i.locY(), this.d - this.i.locZ());
-                    double d0 = vec3d.f();
-
-                    vec3d = vec3d.d();
-                    if (this.a(vec3d, MathHelper.f(d0))) {
-                        this.i.setMot(this.i.getMot().e(vec3d.a(0.1D)));
-                    } else {
-                        this.h = ControllerMove.Operation.WAIT;
-                    }
-                }
-
-            }
+        public boolean a() {
+            return true;
         }
 
-        private boolean a(Vec3D vec3d, int i) {
-            AxisAlignedBB axisalignedbb = this.i.getBoundingBox();
+        @Override
+        public void e() {
+            if (this.ghast.getGoalTarget() == null) {
+                Vec3D vec3d = this.ghast.getMot();
 
-            for (int j = 1; j < i; ++j) {
-                axisalignedbb = axisalignedbb.c(vec3d);
-                if (!this.i.world.getCubes(this.i, axisalignedbb)) {
-                    return false;
+                this.ghast.setYRot(-((float) MathHelper.d(vec3d.x, vec3d.z)) * 57.295776F);
+                this.ghast.yBodyRot = this.ghast.getYRot();
+            } else {
+                EntityLiving entityliving = this.ghast.getGoalTarget();
+                double d0 = 64.0D;
+
+                if (entityliving.f((Entity) this.ghast) < 4096.0D) {
+                    double d1 = entityliving.locX() - this.ghast.locX();
+                    double d2 = entityliving.locZ() - this.ghast.locZ();
+
+                    this.ghast.setYRot(-((float) MathHelper.d(d1, d2)) * 57.295776F);
+                    this.ghast.yBodyRot = this.ghast.getYRot();
                 }
             }
 
-            return true;
+        }
+    }
+
+    private static class PathfinderGoalGhastAttackTarget extends PathfinderGoal {
+
+        private final EntityGhast ghast;
+        public int chargeTime;
+
+        public PathfinderGoalGhastAttackTarget(EntityGhast entityghast) {
+            this.ghast = entityghast;
+        }
+
+        @Override
+        public boolean a() {
+            return this.ghast.getGoalTarget() != null;
+        }
+
+        @Override
+        public void c() {
+            this.chargeTime = 0;
+        }
+
+        @Override
+        public void d() {
+            this.ghast.v(false);
+        }
+
+        @Override
+        public void e() {
+            EntityLiving entityliving = this.ghast.getGoalTarget();
+            double d0 = 64.0D;
+
+            if (entityliving.f((Entity) this.ghast) < 4096.0D && this.ghast.hasLineOfSight(entityliving)) {
+                World world = this.ghast.level;
+
+                ++this.chargeTime;
+                if (this.chargeTime == 10 && !this.ghast.isSilent()) {
+                    world.a((EntityHuman) null, 1015, this.ghast.getChunkCoordinates(), 0);
+                }
+
+                if (this.chargeTime == 20) {
+                    double d1 = 4.0D;
+                    Vec3D vec3d = this.ghast.e(1.0F);
+                    double d2 = entityliving.locX() - (this.ghast.locX() + vec3d.x * 4.0D);
+                    double d3 = entityliving.e(0.5D) - (0.5D + this.ghast.e(0.5D));
+                    double d4 = entityliving.locZ() - (this.ghast.locZ() + vec3d.z * 4.0D);
+
+                    if (!this.ghast.isSilent()) {
+                        world.a((EntityHuman) null, 1016, this.ghast.getChunkCoordinates(), 0);
+                    }
+
+                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.ghast, d2, d3, d4, this.ghast.getPower());
+
+                    entitylargefireball.setPosition(this.ghast.locX() + vec3d.x * 4.0D, this.ghast.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
+                    world.addEntity(entitylargefireball);
+                    this.chargeTime = -40;
+                }
+            } else if (this.chargeTime > 0) {
+                --this.chargeTime;
+            }
+
+            this.ghast.v(this.chargeTime > 10);
         }
     }
 }

@@ -1,29 +1,41 @@
 package net.minecraft.world.level.block;
 
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
+import net.minecraft.EnumChatFormat;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.stats.StatisticList;
+import net.minecraft.world.ContainerUtil;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.IInventory;
-import net.minecraft.world.ShulkerUtil;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.item.EntityItem;
+import net.minecraft.world.entity.monster.EntityShulker;
 import net.minecraft.world.entity.monster.piglin.PiglinAI;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.item.EnumColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockActionContext;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityShulkerBox;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -31,6 +43,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateEnum;
 import net.minecraft.world.level.material.EnumPistonReaction;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
+import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapeCollision;
@@ -38,24 +51,30 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockShulkerBox extends BlockTileEntity {
 
-    public static final BlockStateEnum<EnumDirection> a = BlockDirectional.FACING;
-    public static final MinecraftKey b = new MinecraftKey("contents");
+    public static final BlockStateEnum<EnumDirection> FACING = BlockDirectional.FACING;
+    public static final MinecraftKey CONTENTS = new MinecraftKey("contents");
     @Nullable
     public final EnumColor color;
 
     public BlockShulkerBox(@Nullable EnumColor enumcolor, BlockBase.Info blockbase_info) {
         super(blockbase_info);
         this.color = enumcolor;
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockShulkerBox.FACING, EnumDirection.UP));
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityShulkerBox(this.color);
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityShulkerBox(this.color, blockposition, iblockdata);
+    }
+
+    @Nullable
+    @Override
+    public <T extends TileEntity> BlockEntityTicker<T> a(World world, IBlockData iblockdata, TileEntityTypes<T> tileentitytypes) {
+        return a(tileentitytypes, TileEntityTypes.SHULKER_BOX, TileEntityShulkerBox::a);
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
@@ -70,17 +89,8 @@ public class BlockShulkerBox extends BlockTileEntity {
 
             if (tileentity instanceof TileEntityShulkerBox) {
                 TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
-                boolean flag;
 
-                if (tileentityshulkerbox.j() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
-                    EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
-
-                    flag = world.b(ShulkerUtil.a(blockposition, enumdirection));
-                } else {
-                    flag = true;
-                }
-
-                if (flag) {
+                if (a(iblockdata, world, blockposition, tileentityshulkerbox)) {
                     entityhuman.openContainer(tileentityshulkerbox);
                     entityhuman.a(StatisticList.OPEN_SHULKER_BOX);
                     PiglinAI.a(entityhuman, true);
@@ -93,14 +103,24 @@ public class BlockShulkerBox extends BlockTileEntity {
         }
     }
 
+    private static boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, TileEntityShulkerBox tileentityshulkerbox) {
+        if (tileentityshulkerbox.h() != TileEntityShulkerBox.AnimationPhase.CLOSED) {
+            return true;
+        } else {
+            AxisAlignedBB axisalignedbb = EntityShulker.a((EnumDirection) iblockdata.get(BlockShulkerBox.FACING), 0.0F, 0.5F).a(blockposition).shrink(1.0E-6D);
+
+            return world.b(axisalignedbb);
+        }
+    }
+
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockShulkerBox.a, blockactioncontext.getClickedFace());
+        return (IBlockData) this.getBlockData().set(BlockShulkerBox.FACING, blockactioncontext.getClickedFace());
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockShulkerBox.a);
+        blockstatelist_a.a(BlockShulkerBox.FACING);
     }
 
     @Override
@@ -112,7 +132,7 @@ public class BlockShulkerBox extends BlockTileEntity {
 
             if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isEmpty()) {
                 ItemStack itemstack = b(this.c());
-                NBTTagCompound nbttagcompound = tileentityshulkerbox.e(new NBTTagCompound());
+                NBTTagCompound nbttagcompound = tileentityshulkerbox.f(new NBTTagCompound());
 
                 if (!nbttagcompound.isEmpty()) {
                     itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
@@ -127,7 +147,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                 entityitem.defaultPickupDelay();
                 world.addEntity(entityitem);
             } else {
-                tileentityshulkerbox.d(entityhuman);
+                tileentityshulkerbox.e(entityhuman);
             }
         }
 
@@ -141,7 +161,7 @@ public class BlockShulkerBox extends BlockTileEntity {
         if (tileentity instanceof TileEntityShulkerBox) {
             TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
 
-            loottableinfo_builder = loottableinfo_builder.a(BlockShulkerBox.b, (loottableinfo, consumer) -> {
+            loottableinfo_builder = loottableinfo_builder.a(BlockShulkerBox.CONTENTS, (loottableinfo, consumer) -> {
                 for (int i = 0; i < tileentityshulkerbox.getSize(); ++i) {
                     consumer.accept(tileentityshulkerbox.getItem(i));
                 }
@@ -178,12 +198,53 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Override
+    public void a(ItemStack itemstack, @Nullable IBlockAccess iblockaccess, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        super.a(itemstack, iblockaccess, list, tooltipflag);
+        NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
+
+        if (nbttagcompound != null) {
+            if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
+                list.add(new ChatComponentText("???????"));
+            }
+
+            if (nbttagcompound.hasKeyOfType("Items", 9)) {
+                NonNullList<ItemStack> nonnulllist = NonNullList.a(27, ItemStack.EMPTY);
+
+                ContainerUtil.b(nbttagcompound, nonnulllist);
+                int i = 0;
+                int j = 0;
+                Iterator iterator = nonnulllist.iterator();
+
+                while (iterator.hasNext()) {
+                    ItemStack itemstack1 = (ItemStack) iterator.next();
+
+                    if (!itemstack1.isEmpty()) {
+                        ++j;
+                        if (i <= 4) {
+                            ++i;
+                            IChatMutableComponent ichatmutablecomponent = itemstack1.getName().mutableCopy();
+
+                            ichatmutablecomponent.c(" x").c(String.valueOf(itemstack1.getCount()));
+                            list.add(ichatmutablecomponent);
+                        }
+                    }
+                }
+
+                if (j - i > 0) {
+                    list.add((new ChatMessage("container.shulkerBox.more", new Object[]{j - i})).a(EnumChatFormat.ITALIC));
+                }
+            }
+        }
+
+    }
+
+    @Override
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityShulkerBox ? VoxelShapes.a(((TileEntityShulkerBox) tileentity).a(iblockdata)) : VoxelShapes.b();
@@ -197,6 +258,29 @@ public class BlockShulkerBox extends BlockTileEntity {
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.b((IInventory) world.getTileEntity(blockposition));
+    }
+
+    @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        ItemStack itemstack = super.a(iblockaccess, blockposition, iblockdata);
+        TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) iblockaccess.getTileEntity(blockposition);
+        NBTTagCompound nbttagcompound = tileentityshulkerbox.f(new NBTTagCompound());
+
+        if (!nbttagcompound.isEmpty()) {
+            itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
+        }
+
+        return itemstack;
+    }
+
+    @Nullable
+    public static EnumColor b(Item item) {
+        return a(Block.asBlock(item));
+    }
+
+    @Nullable
+    public static EnumColor a(Block block) {
+        return block instanceof BlockShulkerBox ? ((BlockShulkerBox) block).c() : null;
     }
 
     public static Block a(@Nullable EnumColor enumcolor) {
@@ -252,11 +336,11 @@ public class BlockShulkerBox extends BlockTileEntity {
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockShulkerBox.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockShulkerBox.a)));
+        return (IBlockData) iblockdata.set(BlockShulkerBox.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockShulkerBox.FACING)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockShulkerBox.a)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockShulkerBox.FACING)));
     }
 }

@@ -18,8 +18,8 @@ import net.minecraft.world.scores.ScoreboardTeam;
 
 public class ArgumentScoreboardTeam implements ArgumentType<String> {
 
-    private static final Collection<String> a = Arrays.asList("foo", "123");
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("foo", "123");
+    private static final DynamicCommandExceptionType ERROR_TEAM_NOT_FOUND = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("team.notFound", new Object[]{object});
     });
 
@@ -35,7 +35,7 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
         ScoreboardTeam scoreboardteam = scoreboardserver.getTeam(s1);
 
         if (scoreboardteam == null) {
-            throw ArgumentScoreboardTeam.b.create(s1);
+            throw ArgumentScoreboardTeam.ERROR_TEAM_NOT_FOUND.create(s1);
         } else {
             return scoreboardteam;
         }
@@ -50,6 +50,6 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentScoreboardTeam.a;
+        return ArgumentScoreboardTeam.EXAMPLES;
     }
 }

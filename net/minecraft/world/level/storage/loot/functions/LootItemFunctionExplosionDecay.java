@@ -10,13 +10,13 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionExplosionDecay extends LootItemFunctionConditional {
 
-    private LootItemFunctionExplosionDecay(LootItemCondition[] alootitemcondition) {
+    LootItemFunctionExplosionDecay(LootItemCondition[] alootitemcondition) {
         super(alootitemcondition);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.r;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.EXPLOSION_DECAY;
     }
 
     @Override

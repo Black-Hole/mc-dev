@@ -3,15 +3,13 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.util.MathHelper;
 
 public class NBTTagDouble extends NBTNumber {
 
-    public static final NBTTagDouble a = new NBTTagDouble(0.0D);
-    public static final NBTTagType<NBTTagDouble> b = new NBTTagType<NBTTagDouble>() {
+    private static final int SELF_SIZE_IN_BITS = 128;
+    public static final NBTTagDouble ZERO = new NBTTagDouble(0.0D);
+    public static final NBTTagType<NBTTagDouble> TYPE = new NBTTagType<NBTTagDouble>() {
         @Override
         public NBTTagDouble b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(128L);
@@ -40,7 +38,7 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     public static NBTTagDouble a(double d0) {
-        return d0 == 0.0D ? NBTTagDouble.a : new NBTTagDouble(d0);
+        return d0 == 0.0D ? NBTTagDouble.ZERO : new NBTTagDouble(d0);
     }
 
     @Override
@@ -55,12 +53,7 @@ public class NBTTagDouble extends NBTNumber {
 
     @Override
     public NBTTagType<NBTTagDouble> b() {
-        return NBTTagDouble.b;
-    }
-
-    @Override
-    public String toString() {
-        return this.data + "d";
+        return NBTTagDouble.TYPE;
     }
 
     @Override
@@ -79,10 +72,8 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("d")).a(NBTTagDouble.g);
-
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagDouble.f);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override

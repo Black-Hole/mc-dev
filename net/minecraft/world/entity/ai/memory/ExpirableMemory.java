@@ -3,20 +3,21 @@ package net.minecraft.world.entity.ai.memory;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Optional;
+import net.minecraft.util.VisibleForDebug;
 
 public class ExpirableMemory<T> {
 
-    private final T a;
-    private long b;
+    private final T value;
+    private long timeToLive;
 
     public ExpirableMemory(T t0, long i) {
-        this.a = t0;
-        this.b = i;
+        this.value = t0;
+        this.timeToLive = i;
     }
 
     public void a() {
         if (this.e()) {
-            --this.b;
+            --this.timeToLive;
         }
 
     }
@@ -29,28 +30,33 @@ public class ExpirableMemory<T> {
         return new ExpirableMemory<>(t0, i);
     }
 
+    public long b() {
+        return this.timeToLive;
+    }
+
     public T c() {
-        return this.a;
+        return this.value;
     }
 
     public boolean d() {
-        return this.b <= 0L;
+        return this.timeToLive <= 0L;
     }
 
     public String toString() {
-        return this.a.toString() + (this.e() ? " (ttl: " + this.b + ")" : "");
+        return this.value + (this.e() ? " (ttl: " + this.timeToLive + ")" : "");
     }
 
+    @VisibleForDebug
     public boolean e() {
-        return this.b != Long.MAX_VALUE;
+        return this.timeToLive != Long.MAX_VALUE;
     }
 
     public static <T> Codec<ExpirableMemory<T>> a(Codec<T> codec) {
         return RecordCodecBuilder.create((instance) -> {
             return instance.group(codec.fieldOf("value").forGetter((expirablememory) -> {
-                return expirablememory.a;
+                return expirablememory.value;
             }), Codec.LONG.optionalFieldOf("ttl").forGetter((expirablememory) -> {
-                return expirablememory.e() ? Optional.of(expirablememory.b) : Optional.empty();
+                return expirablememory.e() ? Optional.of(expirablememory.timeToLive) : Optional.empty();
             })).apply(instance, (object, optional) -> {
                 return new ExpirableMemory<>(object, (Long) optional.orElse(Long.MAX_VALUE));
             });

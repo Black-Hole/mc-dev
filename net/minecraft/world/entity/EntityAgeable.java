@@ -13,10 +13,12 @@ import net.minecraft.world.level.WorldAccess;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bo = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
-    protected int b;
-    protected int c;
-    protected int d;
+    private static final DataWatcherObject<Boolean> DATA_BABY_ID = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.BOOLEAN);
+    public static final int BABY_START_AGE = -24000;
+    private static final int FORCED_AGE_PARTICLE_TICKS = 40;
+    protected int age;
+    protected int forcedAge;
+    protected int forcedAgeTimer;
 
     protected EntityAgeable(EntityTypes<? extends EntityAgeable> entitytypes, World world) {
         super(entitytypes, world);
@@ -44,7 +46,7 @@ public abstract class EntityAgeable extends EntityCreature {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityAgeable.bo, false);
+        this.entityData.register(EntityAgeable.DATA_BABY_ID, false);
     }
 
     public boolean canBreed() {
@@ -52,7 +54,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public int getAge() {
-        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bo) ? -1 : 1) : this.b;
+        return this.level.isClientSide ? ((Boolean) this.entityData.get(EntityAgeable.DATA_BABY_ID) ? -1 : 1) : this.age;
     }
 
     public void setAge(int i, boolean flag) {
@@ -68,14 +70,14 @@ public abstract class EntityAgeable extends EntityCreature {
 
         this.setAgeRaw(j);
         if (flag) {
-            this.c += l;
-            if (this.d == 0) {
-                this.d = 40;
+            this.forcedAge += l;
+            if (this.forcedAgeTimer == 0) {
+                this.forcedAgeTimer = 40;
             }
         }
 
         if (this.getAge() == 0) {
-            this.setAgeRaw(this.c);
+            this.setAgeRaw(this.forcedAge);
         }
 
     }
@@ -85,12 +87,12 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void setAgeRaw(int i) {
-        int j = this.b;
+        int j = this.age;
 
-        this.b = i;
+        this.age = i;
         if (j < 0 && i >= 0 || j >= 0 && i < 0) {
-            this.datawatcher.set(EntityAgeable.bo, i < 0);
-            this.m();
+            this.entityData.set(EntityAgeable.DATA_BABY_ID, i < 0);
+            this.n();
         }
 
     }
@@ -99,19 +101,19 @@ public abstract class EntityAgeable extends EntityCreature {
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setInt("Age", this.getAge());
-        nbttagcompound.setInt("ForcedAge", this.c);
+        nbttagcompound.setInt("ForcedAge", this.forcedAge);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.setAgeRaw(nbttagcompound.getInt("Age"));
-        this.c = nbttagcompound.getInt("ForcedAge");
+        this.forcedAge = nbttagcompound.getInt("ForcedAge");
     }
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bo.equals(datawatcherobject)) {
+        if (EntityAgeable.DATA_BABY_ID.equals(datawatcherobject)) {
             this.updateSize();
         }
 
@@ -121,13 +123,13 @@ public abstract class EntityAgeable extends EntityCreature {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.world.isClientSide) {
-            if (this.d > 0) {
-                if (this.d % 4 == 0) {
-                    this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cF() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
+        if (this.level.isClientSide) {
+            if (this.forcedAgeTimer > 0) {
+                if (this.forcedAgeTimer % 4 == 0) {
+                    this.level.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.da() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
                 }
 
-                --this.d;
+                --this.forcedAgeTimer;
             }
         } else if (this.isAlive()) {
             int i = this.getAge();
@@ -143,7 +145,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     }
 
-    protected void m() {}
+    protected void n() {}
 
     @Override
     public boolean isBaby() {
@@ -157,13 +159,13 @@ public abstract class EntityAgeable extends EntityCreature {
 
     public static class a implements GroupDataEntity {
 
-        private int a;
-        private final boolean b;
-        private final float c;
+        private int groupSize;
+        private final boolean shouldSpawnBaby;
+        private final float babySpawnChance;
 
         private a(boolean flag, float f) {
-            this.b = flag;
-            this.c = f;
+            this.shouldSpawnBaby = flag;
+            this.babySpawnChance = f;
         }
 
         public a(boolean flag) {
@@ -175,19 +177,19 @@ public abstract class EntityAgeable extends EntityCreature {
         }
 
         public int a() {
-            return this.a;
+            return this.groupSize;
         }
 
         public void b() {
-            ++this.a;
+            ++this.groupSize;
         }
 
         public boolean c() {
-            return this.b;
+            return this.shouldSpawnBaby;
         }
 
         public float d() {
-            return this.c;
+            return this.babySpawnChance;
         }
     }
 }

@@ -5,17 +5,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
-import net.minecraft.world.level.VirtualLevelWritable;
+import net.minecraft.world.level.VirtualLevelReadable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureTreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.WorldGenFoilagePlacer;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class TrunkPlacerForking extends TrunkPlacer {
 
-    public static final Codec<TrunkPlacerForking> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<TrunkPlacerForking> CODEC = RecordCodecBuilder.create((instance) -> {
         return a(instance).apply(instance, TrunkPlacerForking::new);
     });
 
@@ -25,13 +25,13 @@ public class TrunkPlacerForking extends TrunkPlacer {
 
     @Override
     protected TrunkPlacers<?> a() {
-        return TrunkPlacers.b;
+        return TrunkPlacers.FORKING_TRUNK_PLACER;
     }
 
     @Override
-    public List<WorldGenFoilagePlacer.b> a(VirtualLevelWritable virtuallevelwritable, Random random, int i, BlockPosition blockposition, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
-        a(virtuallevelwritable, blockposition.down());
-        List<WorldGenFoilagePlacer.b> list = Lists.newArrayList();
+    public List<WorldGenFoilagePlacer.a> a(VirtualLevelReadable virtuallevelreadable, BiConsumer<BlockPosition, IBlockData> biconsumer, Random random, int i, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        a(virtuallevelreadable, biconsumer, random, blockposition.down(), worldgenfeaturetreeconfiguration);
+        List<WorldGenFoilagePlacer.a> list = Lists.newArrayList();
         EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
         int j = i - random.nextInt(4) - 1;
         int k = 3 - random.nextInt(3);
@@ -50,12 +50,12 @@ public class TrunkPlacerForking extends TrunkPlacer {
                 --k;
             }
 
-            if (a(virtuallevelwritable, random, (BlockPosition) blockposition_mutableblockposition.d(l, k1, i1), set, structureboundingbox, worldgenfeaturetreeconfiguration)) {
+            if (b(virtuallevelreadable, biconsumer, random, blockposition_mutableblockposition.d(l, k1, i1), worldgenfeaturetreeconfiguration)) {
                 j1 = k1 + 1;
             }
         }
 
-        list.add(new WorldGenFoilagePlacer.b(new BlockPosition(l, j1, i1), 1, false));
+        list.add(new WorldGenFoilagePlacer.a(new BlockPosition(l, j1, i1), 1, false));
         l = blockposition.getX();
         i1 = blockposition.getZ();
         EnumDirection enumdirection1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
@@ -72,7 +72,7 @@ public class TrunkPlacerForking extends TrunkPlacer {
 
                     l += enumdirection1.getAdjacentX();
                     i1 += enumdirection1.getAdjacentZ();
-                    if (a(virtuallevelwritable, random, (BlockPosition) blockposition_mutableblockposition.d(l, k2, i1), set, structureboundingbox, worldgenfeaturetreeconfiguration)) {
+                    if (b(virtuallevelreadable, biconsumer, random, blockposition_mutableblockposition.d(l, k2, i1), worldgenfeaturetreeconfiguration)) {
                         j1 = k2 + 1;
                     }
                 }
@@ -81,7 +81,7 @@ public class TrunkPlacerForking extends TrunkPlacer {
             }
 
             if (j1 > 1) {
-                list.add(new WorldGenFoilagePlacer.b(new BlockPosition(l, j1, i1), 0, false));
+                list.add(new WorldGenFoilagePlacer.a(new BlockPosition(l, j1, i1), 0, false));
             }
         }
 

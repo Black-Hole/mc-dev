@@ -7,44 +7,49 @@ import net.minecraft.world.level.saveddata.PersistentBase;
 
 public class PersistentIndexed extends PersistentBase {
 
-    private LongSet a = new LongOpenHashSet();
-    private LongSet b = new LongOpenHashSet();
+    private static final String TAG_REMAINING_INDEXES = "Remaining";
+    private static final String TAG_All_INDEXES = "All";
+    private final LongSet all;
+    private final LongSet remaining;
 
-    public PersistentIndexed(String s) {
-        super(s);
+    private PersistentIndexed(LongSet longset, LongSet longset1) {
+        this.all = longset;
+        this.remaining = longset1;
+    }
+
+    public PersistentIndexed() {
+        this(new LongOpenHashSet(), new LongOpenHashSet());
+    }
+
+    public static PersistentIndexed b(NBTTagCompound nbttagcompound) {
+        return new PersistentIndexed(new LongOpenHashSet(nbttagcompound.getLongArray("All")), new LongOpenHashSet(nbttagcompound.getLongArray("Remaining")));
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        this.a = new LongOpenHashSet(nbttagcompound.getLongArray("All"));
-        this.b = new LongOpenHashSet(nbttagcompound.getLongArray("Remaining"));
-    }
-
-    @Override
-    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.a("All", this.a.toLongArray());
-        nbttagcompound.a("Remaining", this.b.toLongArray());
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+        nbttagcompound.a("All", this.all.toLongArray());
+        nbttagcompound.a("Remaining", this.remaining.toLongArray());
         return nbttagcompound;
     }
 
     public void a(long i) {
-        this.a.add(i);
-        this.b.add(i);
+        this.all.add(i);
+        this.remaining.add(i);
     }
 
     public boolean b(long i) {
-        return this.a.contains(i);
+        return this.all.contains(i);
     }
 
     public boolean c(long i) {
-        return this.b.contains(i);
+        return this.remaining.contains(i);
     }
 
     public void d(long i) {
-        this.b.remove(i);
+        this.remaining.remove(i);
     }
 
     public LongSet a() {
-        return this.a;
+        return this.all;
     }
 }

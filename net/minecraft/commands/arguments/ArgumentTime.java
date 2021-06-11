@@ -18,12 +18,12 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class ArgumentTime implements ArgumentType<Integer> {
 
-    private static final Collection<String> a = Arrays.asList("0d", "0s", "0t", "0");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.time.invalid_unit"));
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("0d", "0s", "0t", "0");
+    private static final SimpleCommandExceptionType ERROR_INVALID_UNIT = new SimpleCommandExceptionType(new ChatMessage("argument.time.invalid_unit"));
+    private static final DynamicCommandExceptionType ERROR_INVALID_TICK_COUNT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.time.invalid_tick_count", new Object[]{object});
     });
-    private static final Object2IntMap<String> d = new Object2IntOpenHashMap();
+    private static final Object2IntMap<String> UNITS = new Object2IntOpenHashMap();
 
     public ArgumentTime() {}
 
@@ -34,15 +34,15 @@ public class ArgumentTime implements ArgumentType<Integer> {
     public Integer parse(StringReader stringreader) throws CommandSyntaxException {
         float f = stringreader.readFloat();
         String s = stringreader.readUnquotedString();
-        int i = ArgumentTime.d.getOrDefault(s, 0);
+        int i = ArgumentTime.UNITS.getOrDefault(s, 0);
 
         if (i == 0) {
-            throw ArgumentTime.b.create();
+            throw ArgumentTime.ERROR_INVALID_UNIT.create();
         } else {
             int j = Math.round(f * (float) i);
 
             if (j < 0) {
-                throw ArgumentTime.c.create(j);
+                throw ArgumentTime.ERROR_INVALID_TICK_COUNT.create(j);
             } else {
                 return j;
             }
@@ -58,17 +58,17 @@ public class ArgumentTime implements ArgumentType<Integer> {
             return suggestionsbuilder.buildFuture();
         }
 
-        return ICompletionProvider.b((Iterable) ArgumentTime.d.keySet(), suggestionsbuilder.createOffset(suggestionsbuilder.getStart() + stringreader.getCursor()));
+        return ICompletionProvider.b((Iterable) ArgumentTime.UNITS.keySet(), suggestionsbuilder.createOffset(suggestionsbuilder.getStart() + stringreader.getCursor()));
     }
 
     public Collection<String> getExamples() {
-        return ArgumentTime.a;
+        return ArgumentTime.EXAMPLES;
     }
 
     static {
-        ArgumentTime.d.put("d", 24000);
-        ArgumentTime.d.put("s", 20);
-        ArgumentTime.d.put("t", 1);
-        ArgumentTime.d.put("", 1);
+        ArgumentTime.UNITS.put("d", 24000);
+        ArgumentTime.UNITS.put("s", 20);
+        ArgumentTime.UNITS.put("t", 1);
+        ArgumentTime.UNITS.put("", 1);
     }
 }

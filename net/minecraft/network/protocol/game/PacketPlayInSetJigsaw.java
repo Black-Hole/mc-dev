@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -9,33 +8,39 @@ import net.minecraft.world.level.block.entity.TileEntityJigsaw;
 
 public class PacketPlayInSetJigsaw implements Packet<PacketListenerPlayIn> {
 
-    private BlockPosition a;
-    private MinecraftKey b;
-    private MinecraftKey c;
-    private MinecraftKey d;
-    private String e;
-    private TileEntityJigsaw.JointType f;
+    private final BlockPosition pos;
+    private final MinecraftKey name;
+    private final MinecraftKey target;
+    private final MinecraftKey pool;
+    private final String finalState;
+    private final TileEntityJigsaw.JointType joint;
 
-    public PacketPlayInSetJigsaw() {}
+    public PacketPlayInSetJigsaw(BlockPosition blockposition, MinecraftKey minecraftkey, MinecraftKey minecraftkey1, MinecraftKey minecraftkey2, String s, TileEntityJigsaw.JointType tileentityjigsaw_jointtype) {
+        this.pos = blockposition;
+        this.name = minecraftkey;
+        this.target = minecraftkey1;
+        this.pool = minecraftkey2;
+        this.finalState = s;
+        this.joint = tileentityjigsaw_jointtype;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.p();
-        this.c = packetdataserializer.p();
-        this.d = packetdataserializer.p();
-        this.e = packetdataserializer.e(32767);
-        this.f = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(packetdataserializer.e(32767)).orElse(TileEntityJigsaw.JointType.ALIGNED);
+    public PacketPlayInSetJigsaw(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+        this.name = packetdataserializer.q();
+        this.target = packetdataserializer.q();
+        this.pool = packetdataserializer.q();
+        this.finalState = packetdataserializer.p();
+        this.joint = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(packetdataserializer.p()).orElse(TileEntityJigsaw.JointType.ALIGNED);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.a(this.c);
-        packetdataserializer.a(this.d);
-        packetdataserializer.a(this.e);
-        packetdataserializer.a(this.f.getName());
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
+        packetdataserializer.a(this.name);
+        packetdataserializer.a(this.target);
+        packetdataserializer.a(this.pool);
+        packetdataserializer.a(this.finalState);
+        packetdataserializer.a(this.joint.getName());
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -43,26 +48,26 @@ public class PacketPlayInSetJigsaw implements Packet<PacketListenerPlayIn> {
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public MinecraftKey c() {
-        return this.b;
+        return this.name;
     }
 
     public MinecraftKey d() {
-        return this.c;
+        return this.target;
     }
 
     public MinecraftKey e() {
-        return this.d;
+        return this.pool;
     }
 
     public String f() {
-        return this.e;
+        return this.finalState;
     }
 
     public TileEntityJigsaw.JointType g() {
-        return this.f;
+        return this.joint;
     }
 }

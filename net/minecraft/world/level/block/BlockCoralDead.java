@@ -9,14 +9,15 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCoralDead extends BlockCoralBase {
 
-    protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 15.0D, 14.0D);
+    protected static final float AABB_OFFSET = 6.0F;
+    protected static final VoxelShape SHAPE = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 15.0D, 14.0D);
 
     protected BlockCoralDead(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCoralDead.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCoralDead.SHAPE;
     }
 }

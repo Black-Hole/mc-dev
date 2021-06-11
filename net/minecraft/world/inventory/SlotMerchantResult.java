@@ -8,16 +8,16 @@ import net.minecraft.world.item.trading.MerchantRecipe;
 
 public class SlotMerchantResult extends Slot {
 
-    private final InventoryMerchant a;
-    private final EntityHuman b;
-    private int g;
-    private final IMerchant h;
+    private final InventoryMerchant slots;
+    private final EntityHuman player;
+    private int removeCount;
+    private final IMerchant merchant;
 
     public SlotMerchantResult(EntityHuman entityhuman, IMerchant imerchant, InventoryMerchant inventorymerchant, int i, int j, int k) {
         super(inventorymerchant, i, j, k);
-        this.b = entityhuman;
-        this.h = imerchant;
-        this.a = inventorymerchant;
+        this.player = entityhuman;
+        this.merchant = imerchant;
+        this.slots = inventorymerchant;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SlotMerchantResult extends Slot {
     @Override
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.g += Math.min(i, this.getItem().getCount());
+            this.removeCount += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
@@ -36,35 +36,34 @@ public class SlotMerchantResult extends Slot {
 
     @Override
     protected void a(ItemStack itemstack, int i) {
-        this.g += i;
-        this.c(itemstack);
+        this.removeCount += i;
+        this.b_(itemstack);
     }
 
     @Override
-    protected void c(ItemStack itemstack) {
-        itemstack.a(this.b.world, this.b, this.g);
-        this.g = 0;
+    protected void b_(ItemStack itemstack) {
+        itemstack.a(this.player.level, this.player, this.removeCount);
+        this.removeCount = 0;
     }
 
     @Override
-    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-        this.c(itemstack);
-        MerchantRecipe merchantrecipe = this.a.getRecipe();
+    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+        this.b_(itemstack);
+        MerchantRecipe merchantrecipe = this.slots.getRecipe();
 
         if (merchantrecipe != null) {
-            ItemStack itemstack1 = this.a.getItem(0);
-            ItemStack itemstack2 = this.a.getItem(1);
+            ItemStack itemstack1 = this.slots.getItem(0);
+            ItemStack itemstack2 = this.slots.getItem(1);
 
             if (merchantrecipe.b(itemstack1, itemstack2) || merchantrecipe.b(itemstack2, itemstack1)) {
-                this.h.a(merchantrecipe);
+                this.merchant.a(merchantrecipe);
                 entityhuman.a(StatisticList.TRADED_WITH_VILLAGER);
-                this.a.setItem(0, itemstack1);
-                this.a.setItem(1, itemstack2);
+                this.slots.setItem(0, itemstack1);
+                this.slots.setItem(1, itemstack2);
             }
 
-            this.h.setForcedExperience(this.h.getExperience() + merchantrecipe.getXp());
+            this.merchant.setForcedExperience(this.merchant.getExperience() + merchantrecipe.getXp());
         }
 
-        return itemstack;
     }
 }

@@ -1,31 +1,34 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.World;
 
 public class PacketPlayOutCamera implements Packet<PacketListenerPlayOut> {
 
-    public int a;
-
-    public PacketPlayOutCamera() {}
+    private final int cameraId;
 
     public PacketPlayOutCamera(Entity entity) {
-        this.a = entity.getId();
+        this.cameraId = entity.getId();
+    }
+
+    public PacketPlayOutCamera(PacketDataSerializer packetdataserializer) {
+        this.cameraId = packetdataserializer.j();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.cameraId);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    @Nullable
+    public Entity a(World world) {
+        return world.getEntity(this.cameraId);
     }
 }

@@ -45,8 +45,8 @@ public class DataConverterHorse extends DataConverterEntityName {
             Type<?> type = (Type) this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY).types().get(s1);
             DataResult dataresult = typed.write();
 
-            type.getClass();
-            return Pair.of(s1, ((Pair) dataresult.flatMap(type::readTyped).result().orElseThrow(() -> {
+            Objects.requireNonNull(type);
+            return Pair.of(s1, (Typed) ((Pair) dataresult.flatMap(type::readTyped).result().orElseThrow(() -> {
                 return new IllegalStateException("Could not parse the new horse");
             })).getFirst());
         } else {

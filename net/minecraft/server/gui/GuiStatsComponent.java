@@ -13,33 +13,37 @@ import net.minecraft.server.MinecraftServer;
 
 public class GuiStatsComponent extends JComponent {
 
-    private static final DecimalFormat a = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("########0.000")), (decimalformat) -> {
+    private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("########0.000")), (decimalformat) -> {
         decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
     });
-    private final int[] b = new int[256];
-    private int c;
-    private final String[] d = new String[11];
-    private final MinecraftServer e;
-    private final Timer f;
+    private final int[] values = new int[256];
+    private int vp;
+    private final String[] msgs = new String[11];
+    private final MinecraftServer server;
+    private final Timer timer;
 
     public GuiStatsComponent(MinecraftServer minecraftserver) {
-        this.e = minecraftserver;
+        this.server = minecraftserver;
         this.setPreferredSize(new Dimension(456, 246));
         this.setMinimumSize(new Dimension(456, 246));
         this.setMaximumSize(new Dimension(456, 246));
-        this.f = new Timer(500, (actionevent) -> {
+        this.timer = new Timer(500, (actionevent) -> {
             this.b();
         });
-        this.f.start();
+        this.timer.start();
         this.setBackground(Color.BLACK);
     }
 
     private void b() {
         long i = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        this.d[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.h) * 1.0E-6D) + " ms";
-        this.b[this.c++ & 255] = (int) (i * 100L / Runtime.getRuntime().maxMemory());
+        this.msgs[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
+        String[] astring = this.msgs;
+        DecimalFormat decimalformat = GuiStatsComponent.DECIMAL_FORMAT;
+        double d0 = this.a(this.server.tickTimes);
+
+        astring[1] = "Avg tick: " + decimalformat.format(d0 * 1.0E-6D) + " ms";
+        this.values[this.vp++ & 255] = (int) (i * 100L / Runtime.getRuntime().maxMemory());
         this.repaint();
     }
 
@@ -64,7 +68,7 @@ public class GuiStatsComponent extends JComponent {
         int i;
 
         for (i = 0; i < 256; ++i) {
-            int j = this.b[i + this.c & 255];
+            int j = this.values[i + this.vp & 255];
 
             graphics.setColor(new Color(j + 28 << 16));
             graphics.fillRect(i, 100 - j, 1, j);
@@ -72,8 +76,8 @@ public class GuiStatsComponent extends JComponent {
 
         graphics.setColor(Color.BLACK);
 
-        for (i = 0; i < this.d.length; ++i) {
-            String s = this.d[i];
+        for (i = 0; i < this.msgs.length; ++i) {
+            String s = this.msgs[i];
 
             if (s != null) {
                 graphics.drawString(s, 32, 116 + i * 16);
@@ -83,6 +87,6 @@ public class GuiStatsComponent extends JComponent {
     }
 
     public void a() {
-        this.f.stop();
+        this.timer.stop();
     }
 }

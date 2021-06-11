@@ -9,33 +9,35 @@ import java.util.function.Supplier;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.levelgen.Aquifer;
 
 public class WorldGenCarverWrapper<WC extends WorldGenCarverConfiguration> {
 
-    public static final Codec<WorldGenCarverWrapper<?>> a = IRegistry.CARVER.dispatch((worldgencarverwrapper) -> {
-        return worldgencarverwrapper.d;
+    public static final Codec<WorldGenCarverWrapper<?>> DIRECT_CODEC = IRegistry.CARVER.dispatch((worldgencarverwrapper) -> {
+        return worldgencarverwrapper.worldCarver;
     }, WorldGenCarverAbstract::c);
-    public static final Codec<Supplier<WorldGenCarverWrapper<?>>> b = RegistryFileCodec.a(IRegistry.at, WorldGenCarverWrapper.a);
-    public static final Codec<List<Supplier<WorldGenCarverWrapper<?>>>> c = RegistryFileCodec.b(IRegistry.at, WorldGenCarverWrapper.a);
-    private final WorldGenCarverAbstract<WC> d;
-    private final WC e;
+    public static final Codec<Supplier<WorldGenCarverWrapper<?>>> CODEC = RegistryFileCodec.a(IRegistry.CONFIGURED_CARVER_REGISTRY, WorldGenCarverWrapper.DIRECT_CODEC);
+    public static final Codec<List<Supplier<WorldGenCarverWrapper<?>>>> LIST_CODEC = RegistryFileCodec.b(IRegistry.CONFIGURED_CARVER_REGISTRY, WorldGenCarverWrapper.DIRECT_CODEC);
+    private final WorldGenCarverAbstract<WC> worldCarver;
+    private final WC config;
 
     public WorldGenCarverWrapper(WorldGenCarverAbstract<WC> worldgencarverabstract, WC wc) {
-        this.d = worldgencarverabstract;
-        this.e = wc;
+        this.worldCarver = worldgencarverabstract;
+        this.config = wc;
     }
 
     public WC a() {
-        return this.e;
+        return this.config;
     }
 
-    public boolean a(Random random, int i, int j) {
-        return this.d.a(random, i, j, this.e);
+    public boolean a(Random random) {
+        return this.worldCarver.a(this.config, random);
     }
 
-    public boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, int i, int j, int k, int l, int i1, BitSet bitset) {
-        return this.d.a(ichunkaccess, function, random, i, j, k, l, i1, bitset, this.e);
+    public boolean a(CarvingContext carvingcontext, IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, Aquifer aquifer, ChunkCoordIntPair chunkcoordintpair, BitSet bitset) {
+        return this.worldCarver.a(carvingcontext, this.config, ichunkaccess, function, random, aquifer, chunkcoordintpair, bitset);
     }
 }

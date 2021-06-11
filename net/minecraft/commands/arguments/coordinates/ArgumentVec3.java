@@ -19,13 +19,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> c = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed"));
-    private final boolean d;
+    private static final Collection<String> EXAMPLES = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5");
+    public static final SimpleCommandExceptionType ERROR_NOT_COMPLETE = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete"));
+    public static final SimpleCommandExceptionType ERROR_MIXED_TYPE = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed"));
+    private final boolean centerCorrect;
 
     public ArgumentVec3(boolean flag) {
-        this.d = flag;
+        this.centerCorrect = flag;
     }
 
     public static ArgumentVec3 a() {
@@ -36,7 +36,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
         return new ArgumentVec3(flag);
     }
 
-    public static Vec3D a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+    public static Vec3D a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).a((CommandListenerWrapper) commandcontext.getSource());
     }
 
@@ -45,7 +45,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
     }
 
     public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
-        return (IVectorPosition) (stringreader.canRead() && stringreader.peek() == '^' ? ArgumentVectorPosition.a(stringreader) : VectorPosition.a(stringreader, this.d));
+        return (IVectorPosition) (stringreader.canRead() && stringreader.peek() == '^' ? ArgumentVectorPosition.a(stringreader) : VectorPosition.a(stringreader, this.centerCorrect));
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
@@ -56,7 +56,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
             Object object;
 
             if (!s.isEmpty() && s.charAt(0) == '^') {
-                object = Collections.singleton(ICompletionProvider.a.a);
+                object = Collections.singleton(ICompletionProvider.a.DEFAULT_LOCAL);
             } else {
                 object = ((ICompletionProvider) commandcontext.getSource()).t();
             }
@@ -66,6 +66,6 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentVec3.c;
+        return ArgumentVec3.EXAMPLES;
     }
 }

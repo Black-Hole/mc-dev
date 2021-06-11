@@ -1,65 +1,115 @@
 package net.minecraft.tags;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import java.util.Map;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import net.minecraft.core.IRegistry;
+import net.minecraft.core.IRegistryCustom;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.resources.IReloadListener;
 import net.minecraft.server.packs.resources.IResourceManager;
 import net.minecraft.util.profiling.GameProfilerFiller;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.FluidType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TagRegistry implements IReloadListener {
 
-    private final TagDataPack<Block> blockTags;
-    private final TagDataPack<Item> itemTags;
-    private final TagDataPack<FluidType> fluidTags;
-    private final TagDataPack<EntityTypes<?>> entityTags;
-    private ITagRegistry e;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final IRegistryCustom registryAccess;
+    private ITagRegistry tags;
 
-    public TagRegistry() {
-        this.blockTags = new TagDataPack<>(IRegistry.BLOCK::getOptional, "tags/blocks", "block");
-        this.itemTags = new TagDataPack<>(IRegistry.ITEM::getOptional, "tags/items", "item");
-        this.fluidTags = new TagDataPack<>(IRegistry.FLUID::getOptional, "tags/fluids", "fluid");
-        this.entityTags = new TagDataPack<>(IRegistry.ENTITY_TYPE::getOptional, "tags/entity_types", "entity_type");
-        this.e = ITagRegistry.a;
+    public TagRegistry(IRegistryCustom iregistrycustom) {
+        this.tags = ITagRegistry.EMPTY;
+        this.registryAccess = iregistrycustom;
     }
 
     public ITagRegistry a() {
-        return this.e;
+        return this.tags;
     }
 
     @Override
     public CompletableFuture<Void> a(IReloadListener.a ireloadlistener_a, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller, GameProfilerFiller gameprofilerfiller1, Executor executor, Executor executor1) {
-        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture = this.blockTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture1 = this.itemTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture2 = this.fluidTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture3 = this.entityTags.a(iresourcemanager, executor);
-        CompletableFuture completablefuture4 = CompletableFuture.allOf(completablefuture, completablefuture1, completablefuture2, completablefuture3);
+        List<TagRegistry.a<?>> list = Lists.newArrayList();
 
-        ireloadlistener_a.getClass();
-        return completablefuture4.thenCompose(ireloadlistener_a::a).thenAcceptAsync((ovoid) -> {
-            Tags<Block> tags = this.blockTags.a((Map) completablefuture.join());
-            Tags<Item> tags1 = this.itemTags.a((Map) completablefuture1.join());
-            Tags<FluidType> tags2 = this.fluidTags.a((Map) completablefuture2.join());
-            Tags<EntityTypes<?>> tags3 = this.entityTags.a((Map) completablefuture3.join());
-            ITagRegistry itagregistry = ITagRegistry.a(tags, tags1, tags2, tags3);
-            Multimap<MinecraftKey, MinecraftKey> multimap = TagStatic.b(itagregistry);
+        TagStatic.a((tagutil) -> {
+            TagRegistry.a<?> tagregistry_a = this.a(iresourcemanager, executor, tagutil);
+
+            if (tagregistry_a != null) {
+                list.add(tagregistry_a);
+            }
+
+        });
+        CompletableFuture completablefuture = CompletableFuture.allOf((CompletableFuture[]) list.stream().map((tagregistry_a) -> {
+            return tagregistry_a.pendingLoad;
+        }).toArray((i) -> {
+            return new CompletableFuture[i];
+        }));
+
+        Objects.requireNonNull(ireloadlistener_a);
+        return completablefuture.thenCompose(ireloadlistener_a::a).thenAcceptAsync((ovoid) -> {
+            ITagRegistry.a itagregistry_a = new ITagRegistry.a();
+
+            list.forEach((tagregistry_a) -> {
+                tagregistry_a.a(itagregistry_a);
+            });
+            ITagRegistry itagregistry = itagregistry_a.a();
+            Multimap<ResourceKey<? extends IRegistry<?>>, MinecraftKey> multimap = TagStatic.b(itagregistry);
 
             if (!multimap.isEmpty()) {
-                throw new IllegalStateException("Missing required tags: " + (String) multimap.entries().stream().map((entry) -> {
-                    return entry.getKey() + ":" + entry.getValue();
-                }).sorted().collect(Collectors.joining(",")));
+                Stream stream = multimap.entries().stream().map((entry) -> {
+                    Object object = entry.getKey();
+
+                    return object + ":" + entry.getValue();
+                }).sorted();
+
+                throw new IllegalStateException("Missing required tags: " + (String) stream.collect(Collectors.joining(",")));
             } else {
                 TagsInstance.a(itagregistry);
-                this.e = itagregistry;
+                this.tags = itagregistry;
             }
         }, executor1);
+    }
+
+    @Nullable
+    private <T> TagRegistry.a<T> a(IResourceManager iresourcemanager, Executor executor, TagUtil<T> tagutil) {
+        Optional<? extends IRegistry<T>> optional = this.registryAccess.c(tagutil.c());
+
+        if (optional.isPresent()) {
+            IRegistry<T> iregistry = (IRegistry) optional.get();
+
+            Objects.requireNonNull(iregistry);
+            TagDataPack<T> tagdatapack = new TagDataPack<>(iregistry::getOptional, tagutil.d());
+            CompletableFuture<? extends Tags<T>> completablefuture = CompletableFuture.supplyAsync(() -> {
+                return tagdatapack.b(iresourcemanager);
+            }, executor);
+
+            return new TagRegistry.a<>(tagutil, completablefuture);
+        } else {
+            TagRegistry.LOGGER.warn("Can't find registry for {}", tagutil.c());
+            return null;
+        }
+    }
+
+    private static class a<T> {
+
+        private final TagUtil<T> helper;
+        final CompletableFuture<? extends Tags<T>> pendingLoad;
+
+        a(TagUtil<T> tagutil, CompletableFuture<? extends Tags<T>> completablefuture) {
+            this.helper = tagutil;
+            this.pendingLoad = completablefuture;
+        }
+
+        public void a(ITagRegistry.a itagregistry_a) {
+            itagregistry_a.a(this.helper.c(), (Tags) this.pendingLoad.join());
+        }
     }
 }

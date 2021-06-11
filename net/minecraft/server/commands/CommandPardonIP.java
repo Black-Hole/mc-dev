@@ -14,8 +14,10 @@ import net.minecraft.server.players.IpBanList;
 
 public class CommandPardonIP {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.invalid"));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.failed"));
+    private static final SimpleCommandExceptionType ERROR_INVALID = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.invalid"));
+    private static final SimpleCommandExceptionType ERROR_NOT_BANNED = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.failed"));
+
+    public CommandPardonIP() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pardon-ip").requires((commandlistenerwrapper) -> {
@@ -28,15 +30,15 @@ public class CommandPardonIP {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
-        Matcher matcher = CommandBanIp.a.matcher(s);
+        Matcher matcher = CommandBanIp.IP_ADDRESS_PATTERN.matcher(s);
 
         if (!matcher.matches()) {
-            throw CommandPardonIP.a.create();
+            throw CommandPardonIP.ERROR_INVALID.create();
         } else {
             IpBanList ipbanlist = commandlistenerwrapper.getServer().getPlayerList().getIPBans();
 
             if (!ipbanlist.a(s)) {
-                throw CommandPardonIP.b.create();
+                throw CommandPardonIP.ERROR_NOT_BANNED.create();
             } else {
                 ipbanlist.remove(s);
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardonip.success", new Object[]{s}), true);

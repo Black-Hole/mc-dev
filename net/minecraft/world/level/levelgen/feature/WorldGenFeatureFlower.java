@@ -14,18 +14,18 @@ public class WorldGenFeatureFlower extends WorldGenFlowers<WorldGenFeatureRandom
     }
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
-        return !worldgenfeaturerandompatchconfiguration.e.contains(generatoraccess.getType(blockposition));
+        return !worldgenfeaturerandompatchconfiguration.blacklist.contains(generatoraccess.getType(blockposition));
     }
 
     public int a(WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
-        return worldgenfeaturerandompatchconfiguration.f;
+        return worldgenfeaturerandompatchconfiguration.tries;
     }
 
     public BlockPosition a(Random random, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
-        return blockposition.b(random.nextInt(worldgenfeaturerandompatchconfiguration.g) - random.nextInt(worldgenfeaturerandompatchconfiguration.g), random.nextInt(worldgenfeaturerandompatchconfiguration.h) - random.nextInt(worldgenfeaturerandompatchconfiguration.h), random.nextInt(worldgenfeaturerandompatchconfiguration.i) - random.nextInt(worldgenfeaturerandompatchconfiguration.i));
+        return blockposition.c(random.nextInt(worldgenfeaturerandompatchconfiguration.xspread) - random.nextInt(worldgenfeaturerandompatchconfiguration.xspread), random.nextInt(worldgenfeaturerandompatchconfiguration.yspread) - random.nextInt(worldgenfeaturerandompatchconfiguration.yspread), random.nextInt(worldgenfeaturerandompatchconfiguration.zspread) - random.nextInt(worldgenfeaturerandompatchconfiguration.zspread));
     }
 
     public IBlockData b(Random random, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
-        return worldgenfeaturerandompatchconfiguration.b.a(random, blockposition);
+        return worldgenfeaturerandompatchconfiguration.stateProvider.a(random, blockposition);
     }
 }

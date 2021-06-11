@@ -27,12 +27,12 @@ import javax.annotation.Nullable;
 
 public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
-    public static final DynamicOpsNBT a = new DynamicOpsNBT();
+    public static final DynamicOpsNBT INSTANCE = new DynamicOpsNBT();
 
     protected DynamicOpsNBT() {}
 
     public NBTBase empty() {
-        return NBTTagEnd.b;
+        return NBTTagEnd.INSTANCE;
     }
 
     public <U> U convertTo(DynamicOps<U> dynamicops, NBTBase nbtbase) {
@@ -150,7 +150,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         if (!(nbtbase instanceof NBTList) && !(nbtbase instanceof NBTTagEnd)) {
             return DataResult.error("mergeToList called with not a list: " + nbtbase, nbtbase);
         } else {
-            NBTList<?> nbtlist = a(nbtbase instanceof NBTList ? ((NBTList) nbtbase).d_() : 0, nbtbase1.getTypeId());
+            NBTList<?> nbtlist = a(nbtbase instanceof NBTList ? ((NBTList) nbtbase).e() : 0, nbtbase1.getTypeId());
 
             a(nbtlist, nbtbase, nbtbase1);
             return DataResult.success(nbtlist);
@@ -161,7 +161,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         if (!(nbtbase instanceof NBTList) && !(nbtbase instanceof NBTTagEnd)) {
             return DataResult.error("mergeToList called with not a list: " + nbtbase, nbtbase);
         } else {
-            NBTList<?> nbtlist = a(nbtbase instanceof NBTList ? ((NBTList) nbtbase).d_() : 0, (Byte) list.stream().findFirst().map(NBTBase::getTypeId).orElse((byte) 0));
+            NBTList<?> nbtlist = a(nbtbase instanceof NBTList ? ((NBTList) nbtbase).e() : 0, (Byte) list.stream().findFirst().map(NBTBase::getTypeId).orElse((byte) 0));
 
             a(nbtlist, nbtbase, list);
             return DataResult.success(nbtlist);
@@ -293,7 +293,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         if (nbtbase instanceof NBTList) {
             NBTList<?> nbtlist = (NBTList) nbtbase;
 
-            nbtlist.getClass();
+            Objects.requireNonNull(nbtlist);
             return DataResult.success(nbtlist::forEach);
         } else {
             return DataResult.error("Not a list: " + nbtbase);
@@ -388,7 +388,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         return new DynamicOpsNBT.a();
     }
 
-    class a extends AbstractStringBuilder<NBTBase, NBTTagCompound> {
+    private class a extends AbstractStringBuilder<NBTBase, NBTTagCompound> {
 
         protected a() {
             super(DynamicOpsNBT.this);
@@ -404,7 +404,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         }
 
         protected DataResult<NBTBase> build(NBTTagCompound nbttagcompound, NBTBase nbtbase) {
-            if (nbtbase != null && nbtbase != NBTTagEnd.b) {
+            if (nbtbase != null && nbtbase != NBTTagEnd.INSTANCE) {
                 if (!(nbtbase instanceof NBTTagCompound)) {
                     return DataResult.error("mergeToMap called with not a map: " + nbtbase, nbtbase);
                 } else {

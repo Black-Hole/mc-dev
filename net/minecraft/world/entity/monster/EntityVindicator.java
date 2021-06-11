@@ -48,10 +48,11 @@ import net.minecraft.world.level.WorldAccess;
 
 public class EntityVindicator extends EntityIllagerAbstract {
 
-    private static final Predicate<EnumDifficulty> b = (enumdifficulty) -> {
+    private static final String TAG_JOHNNY = "Johnny";
+    static final Predicate<EnumDifficulty> DOOR_BREAKING_PREDICATE = (enumdifficulty) -> {
         return enumdifficulty == EnumDifficulty.NORMAL || enumdifficulty == EnumDifficulty.HARD;
     };
-    private boolean bo;
+    boolean isJohnny;
 
     public EntityVindicator(EntityTypes<? extends EntityVindicator> entitytypes, World world) {
         super(entitytypes, world);
@@ -78,7 +79,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     @Override
     protected void mobTick() {
         if (!this.isNoAI() && PathfinderGoalUtil.a(this)) {
-            boolean flag = ((WorldServer) this.world).c_(this.getChunkCoordinates());
+            boolean flag = ((WorldServer) this.level).d(this.getChunkCoordinates());
 
             ((Navigation) this.getNavigation()).a(flag);
         }
@@ -86,31 +87,36 @@ public class EntityVindicator extends EntityIllagerAbstract {
         super.mobTick();
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+    public static AttributeProvider.Builder p() {
+        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        if (this.bo) {
+        if (this.isJohnny) {
             nbttagcompound.setBoolean("Johnny", true);
         }
 
     }
 
     @Override
+    public EntityIllagerAbstract.a n() {
+        return this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : (this.fM() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
+    }
+
+    @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Johnny", 99)) {
-            this.bo = nbttagcompound.getBoolean("Johnny");
+            this.isJohnny = nbttagcompound.getBoolean("Johnny");
         }
 
     }
 
     @Override
-    public SoundEffect eL() {
-        return SoundEffects.ENTITY_VINDICATOR_CELEBRATE;
+    public SoundEffect t() {
+        return SoundEffects.VINDICATOR_CELEBRATE;
     }
 
     @Nullable
@@ -126,45 +132,45 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.fa() == null) {
+        if (this.fJ() == null) {
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
 
     }
 
     @Override
-    public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
+    public boolean p(Entity entity) {
+        return super.p(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
     }
 
     @Override
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
         super.setCustomName(ichatbasecomponent);
-        if (!this.bo && ichatbasecomponent != null && ichatbasecomponent.getString().equals("Johnny")) {
-            this.bo = true;
+        if (!this.isJohnny && ichatbasecomponent != null && ichatbasecomponent.getString().equals("Johnny")) {
+            this.isJohnny = true;
         }
 
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_VINDICATOR_AMBIENT;
+        return SoundEffects.VINDICATOR_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_VINDICATOR_DEATH;
+        return SoundEffects.VINDICATOR_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_VINDICATOR_HURT;
+        return SoundEffects.VINDICATOR_HURT;
     }
 
     @Override
     public void a(int i, boolean flag) {
         ItemStack itemstack = new ItemStack(Items.IRON_AXE);
-        Raid raid = this.fa();
+        Raid raid = this.fJ();
         byte b0 = 1;
 
         if (i > raid.a(EnumDifficulty.NORMAL)) {
@@ -176,60 +182,42 @@ public class EntityVindicator extends EntityIllagerAbstract {
         if (flag1) {
             Map<Enchantment, Integer> map = Maps.newHashMap();
 
-            map.put(Enchantments.DAMAGE_ALL, Integer.valueOf(b0));
+            map.put(Enchantments.SHARPNESS, Integer.valueOf(b0));
             EnchantmentManager.a((Map) map, itemstack);
         }
 
         this.setSlot(EnumItemSlot.MAINHAND, itemstack);
     }
 
-    static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
-
-        public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::ei);
-        }
-
-        @Override
-        public boolean a() {
-            return ((EntityVindicator) this.e).bo && super.a();
-        }
-
-        @Override
-        public void c() {
-            super.c();
-            this.e.n(0);
-        }
-    }
-
-    static class a extends PathfinderGoalBreakDoor {
+    private static class a extends PathfinderGoalBreakDoor {
 
         public a(EntityInsentient entityinsentient) {
-            super(entityinsentient, 6, EntityVindicator.b);
+            super(entityinsentient, 6, EntityVindicator.DOOR_BREAKING_PREDICATE);
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean b() {
-            EntityVindicator entityvindicator = (EntityVindicator) this.entity;
+            EntityVindicator entityvindicator = (EntityVindicator) this.mob;
 
-            return entityvindicator.fb() && super.b();
+            return entityvindicator.fK() && super.b();
         }
 
         @Override
         public boolean a() {
-            EntityVindicator entityvindicator = (EntityVindicator) this.entity;
+            EntityVindicator entityvindicator = (EntityVindicator) this.mob;
 
-            return entityvindicator.fb() && entityvindicator.random.nextInt(10) == 0 && super.a();
+            return entityvindicator.fK() && entityvindicator.random.nextInt(10) == 0 && super.a();
         }
 
         @Override
         public void c() {
             super.c();
-            this.entity.n(0);
+            this.mob.o(0);
         }
     }
 
-    class c extends PathfinderGoalMeleeAttack {
+    private class c extends PathfinderGoalMeleeAttack {
 
         public c(EntityVindicator entityvindicator) {
             super(entityvindicator, 1.0D, false);
@@ -237,13 +225,31 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
         @Override
         protected double a(EntityLiving entityliving) {
-            if (this.a.getVehicle() instanceof EntityRavager) {
-                float f = this.a.getVehicle().getWidth() - 0.1F;
+            if (this.mob.getVehicle() instanceof EntityRavager) {
+                float f = this.mob.getVehicle().getWidth() - 0.1F;
 
                 return (double) (f * 2.0F * f * 2.0F + entityliving.getWidth());
             } else {
                 return super.a(entityliving);
             }
+        }
+    }
+
+    private static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
+
+        public b(EntityVindicator entityvindicator) {
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::eQ);
+        }
+
+        @Override
+        public boolean a() {
+            return ((EntityVindicator) this.mob).isJohnny && super.a();
+        }
+
+        @Override
+        public void c() {
+            super.c();
+            this.mob.o(0);
         }
     }
 }

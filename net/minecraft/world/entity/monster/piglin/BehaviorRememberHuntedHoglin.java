@@ -24,6 +24,6 @@ public class BehaviorRememberHuntedHoglin<E extends EntityPiglin> extends Behavi
     private boolean a(E e0) {
         EntityLiving entityliving = (EntityLiving) e0.getBehaviorController().getMemory(MemoryModuleType.ATTACK_TARGET).get();
 
-        return entityliving.getEntityType() == EntityTypes.HOGLIN && entityliving.dl();
+        return entityliving.getEntityType() == EntityTypes.HOGLIN && entityliving.dV();
     }
 }

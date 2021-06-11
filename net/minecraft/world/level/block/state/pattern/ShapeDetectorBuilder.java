@@ -15,25 +15,25 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ShapeDetectorBuilder {
 
-    private static final Joiner a = Joiner.on(",");
-    private final List<String[]> b = Lists.newArrayList();
-    private final Map<Character, Predicate<ShapeDetectorBlock>> c = Maps.newHashMap();
-    private int d;
-    private int e;
+    private static final Joiner COMMA_JOINED = Joiner.on(",");
+    private final List<String[]> pattern = Lists.newArrayList();
+    private final Map<Character, Predicate<ShapeDetectorBlock>> lookup = Maps.newHashMap();
+    private int height;
+    private int width;
 
     private ShapeDetectorBuilder() {
-        this.c.put(' ', Predicates.alwaysTrue());
+        this.lookup.put(' ', Predicates.alwaysTrue());
     }
 
     public ShapeDetectorBuilder a(String... astring) {
         if (!ArrayUtils.isEmpty(astring) && !StringUtils.isEmpty(astring[0])) {
-            if (this.b.isEmpty()) {
-                this.d = astring.length;
-                this.e = astring[0].length();
+            if (this.pattern.isEmpty()) {
+                this.height = astring.length;
+                this.width = astring[0].length();
             }
 
-            if (astring.length != this.d) {
-                throw new IllegalArgumentException("Expected aisle with height of " + this.d + ", but was given one with a height of " + astring.length + ")");
+            if (astring.length != this.height) {
+                throw new IllegalArgumentException("Expected aisle with height of " + this.height + ", but was given one with a height of " + astring.length + ")");
             } else {
                 String[] astring1 = astring;
                 int i = astring.length;
@@ -41,8 +41,8 @@ public class ShapeDetectorBuilder {
                 for (int j = 0; j < i; ++j) {
                     String s = astring1[j];
 
-                    if (s.length() != this.e) {
-                        throw new IllegalArgumentException("Not all rows in the given aisle are the correct width (expected " + this.e + ", found one with " + s.length() + ")");
+                    if (s.length() != this.width) {
+                        throw new IllegalArgumentException("Not all rows in the given aisle are the correct width (expected " + this.width + ", found one with " + s.length() + ")");
                     }
 
                     char[] achar = s.toCharArray();
@@ -51,13 +51,13 @@ public class ShapeDetectorBuilder {
                     for (int l = 0; l < k; ++l) {
                         char c0 = achar[l];
 
-                        if (!this.c.containsKey(c0)) {
-                            this.c.put(c0, (Object) null);
+                        if (!this.lookup.containsKey(c0)) {
+                            this.lookup.put(c0, (Object) null);
                         }
                     }
                 }
 
-                this.b.add(astring);
+                this.pattern.add(astring);
                 return this;
             }
         } else {
@@ -70,7 +70,7 @@ public class ShapeDetectorBuilder {
     }
 
     public ShapeDetectorBuilder a(char c0, Predicate<ShapeDetectorBlock> predicate) {
-        this.c.put(c0, predicate);
+        this.lookup.put(c0, predicate);
         return this;
     }
 
@@ -80,12 +80,12 @@ public class ShapeDetectorBuilder {
 
     private Predicate<ShapeDetectorBlock>[][][] c() {
         this.d();
-        Predicate<ShapeDetectorBlock>[][][] apredicate = (Predicate[][][]) ((Predicate[][][]) Array.newInstance(Predicate.class, new int[]{this.b.size(), this.d, this.e}));
+        Predicate<ShapeDetectorBlock>[][][] apredicate = (Predicate[][][]) Array.newInstance(Predicate.class, new int[]{this.pattern.size(), this.height, this.width});
 
-        for (int i = 0; i < this.b.size(); ++i) {
-            for (int j = 0; j < this.d; ++j) {
-                for (int k = 0; k < this.e; ++k) {
-                    apredicate[i][j][k] = (Predicate) this.c.get(((String[]) this.b.get(i))[j].charAt(k));
+        for (int i = 0; i < this.pattern.size(); ++i) {
+            for (int j = 0; j < this.height; ++j) {
+                for (int k = 0; k < this.width; ++k) {
+                    apredicate[i][j][k] = (Predicate) this.lookup.get(((String[]) this.pattern.get(i))[j].charAt(k));
                 }
             }
         }
@@ -95,18 +95,18 @@ public class ShapeDetectorBuilder {
 
     private void d() {
         List<Character> list = Lists.newArrayList();
-        Iterator iterator = this.c.entrySet().iterator();
+        Iterator iterator = this.lookup.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry<Character, Predicate<ShapeDetectorBlock>> entry = (Entry) iterator.next();
 
             if (entry.getValue() == null) {
-                list.add(entry.getKey());
+                list.add((Character) entry.getKey());
             }
         }
 
         if (!list.isEmpty()) {
-            throw new IllegalStateException("Predicates for character(s) " + ShapeDetectorBuilder.a.join(list) + " are missing");
+            throw new IllegalStateException("Predicates for character(s) " + ShapeDetectorBuilder.COMMA_JOINED.join(list) + " are missing");
         }
     }
 }

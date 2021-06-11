@@ -21,23 +21,23 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockTall extends Block implements IBlockWaterlogged {
 
-    public static final BlockStateBoolean NORTH = BlockSprawling.a;
-    public static final BlockStateBoolean EAST = BlockSprawling.b;
-    public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.d;
-    public static final BlockStateBoolean e = BlockProperties.C;
-    protected static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean NORTH = BlockSprawling.NORTH;
+    public static final BlockStateBoolean EAST = BlockSprawling.EAST;
+    public static final BlockStateBoolean SOUTH = BlockSprawling.SOUTH;
+    public static final BlockStateBoolean WEST = BlockSprawling.WEST;
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    protected static final Map<EnumDirection, BlockStateBoolean> PROPERTY_BY_DIRECTION = (Map) BlockSprawling.PROPERTY_BY_DIRECTION.entrySet().stream().filter((entry) -> {
         return ((EnumDirection) entry.getKey()).n().d();
     }).collect(SystemUtils.a());
-    protected final VoxelShape[] g;
-    protected final VoxelShape[] h;
-    private final Object2IntMap<IBlockData> i = new Object2IntOpenHashMap();
+    protected final VoxelShape[] collisionShapeByIndex;
+    protected final VoxelShape[] shapeByIndex;
+    private final Object2IntMap<IBlockData> stateToIndex = new Object2IntOpenHashMap();
 
     protected BlockTall(float f, float f1, float f2, float f3, float f4, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.g = this.a(f, f1, f4, 0.0F, f4);
-        this.h = this.a(f, f1, f2, 0.0F, f3);
-        UnmodifiableIterator unmodifiableiterator = this.blockStateList.a().iterator();
+        this.collisionShapeByIndex = this.a(f, f1, f4, 0.0F, f4);
+        this.shapeByIndex = this.a(f, f1, f2, 0.0F, f3);
+        UnmodifiableIterator unmodifiableiterator = this.stateDefinition.a().iterator();
 
         while (unmodifiableiterator.hasNext()) {
             IBlockData iblockdata = (IBlockData) unmodifiableiterator.next();
@@ -69,18 +69,18 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return !(Boolean) iblockdata.get(BlockTall.e);
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return !(Boolean) iblockdata.get(BlockTall.WATERLOGGED);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.h[this.g(iblockdata)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.shapeByIndex[this.g(iblockdata)];
     }
 
     @Override
     public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.g[this.g(iblockdata)];
+        return this.collisionShapeByIndex[this.g(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
@@ -88,7 +88,7 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     protected int g(IBlockData iblockdata) {
-        return this.i.computeIntIfAbsent(iblockdata, (iblockdata1) -> {
+        return this.stateToIndex.computeIntIfAbsent(iblockdata, (iblockdata1) -> {
             int i = 0;
 
             if ((Boolean) iblockdata1.get(BlockTall.NORTH)) {
@@ -112,8 +112,8 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTall.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
     }
 
     @Override
@@ -125,11 +125,11 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
             case CLOCKWISE_180:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, (Boolean) iblockdata.get(BlockTall.SOUTH))).set(BlockTall.EAST, (Boolean) iblockdata.get(BlockTall.WEST))).set(BlockTall.SOUTH, (Boolean) iblockdata.get(BlockTall.NORTH))).set(BlockTall.WEST, (Boolean) iblockdata.get(BlockTall.EAST));
             case COUNTERCLOCKWISE_90:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.EAST, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.NORTH));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, (Boolean) iblockdata.get(BlockTall.EAST))).set(BlockTall.EAST, (Boolean) iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, (Boolean) iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, (Boolean) iblockdata.get(BlockTall.NORTH));
             case CLOCKWISE_90:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.EAST, iblockdata.get(BlockTall.NORTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.WEST, iblockdata.get(BlockTall.SOUTH));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, (Boolean) iblockdata.get(BlockTall.WEST))).set(BlockTall.EAST, (Boolean) iblockdata.get(BlockTall.NORTH))).set(BlockTall.SOUTH, (Boolean) iblockdata.get(BlockTall.EAST))).set(BlockTall.WEST, (Boolean) iblockdata.get(BlockTall.SOUTH));
             default:
                 return iblockdata;
         }
@@ -139,9 +139,9 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
             case LEFT_RIGHT:
-                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH));
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, (Boolean) iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, (Boolean) iblockdata.get(BlockTall.NORTH));
             case FRONT_BACK:
-                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.EAST, (Boolean) iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, (Boolean) iblockdata.get(BlockTall.EAST));
             default:
                 return super.a(iblockdata, enumblockmirror);
         }

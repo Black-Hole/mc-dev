@@ -23,19 +23,21 @@ import net.minecraft.world.item.enchantment.EnchantmentManager;
 
 public class CommandEnchant {
 
-    private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_NOT_LIVING_ENTITY = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.enchant.failed.entity", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_NO_ITEM = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.enchant.failed.itemless", new Object[]{object});
     });
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_INCOMPATIBLE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.enchant.failed.incompatible", new Object[]{object});
     });
-    private static final Dynamic2CommandExceptionType d = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final Dynamic2CommandExceptionType ERROR_LEVEL_TOO_HIGH = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.enchant.failed.level", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.enchant.failed"));
+    private static final SimpleCommandExceptionType ERROR_NOTHING_HAPPENED = new SimpleCommandExceptionType(new ChatMessage("commands.enchant.failed"));
+
+    public CommandEnchant() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("enchant").requires((commandlistenerwrapper) -> {
@@ -49,7 +51,7 @@ public class CommandEnchant {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, Enchantment enchantment, int i) throws CommandSyntaxException {
         if (i > enchantment.getMaxLevel()) {
-            throw CommandEnchant.d.create(i, enchantment.getMaxLevel());
+            throw CommandEnchant.ERROR_LEVEL_TOO_HIGH.create(i, enchantment.getMaxLevel());
         } else {
             int j = 0;
             Iterator iterator = collection.iterator();
@@ -66,18 +68,18 @@ public class CommandEnchant {
                             itemstack.addEnchantment(enchantment, i);
                             ++j;
                         } else if (collection.size() == 1) {
-                            throw CommandEnchant.c.create(itemstack.getItem().h(itemstack).getString());
+                            throw CommandEnchant.ERROR_INCOMPATIBLE.create(itemstack.getItem().m(itemstack).getString());
                         }
                     } else if (collection.size() == 1) {
-                        throw CommandEnchant.b.create(entityliving.getDisplayName().getString());
+                        throw CommandEnchant.ERROR_NO_ITEM.create(entityliving.getDisplayName().getString());
                     }
                 } else if (collection.size() == 1) {
-                    throw CommandEnchant.a.create(entity.getDisplayName().getString());
+                    throw CommandEnchant.ERROR_NOT_LIVING_ENTITY.create(entity.getDisplayName().getString());
                 }
             }
 
             if (j == 0) {
-                throw CommandEnchant.e.create();
+                throw CommandEnchant.ERROR_NOTHING_HAPPENED.create();
             } else {
                 if (collection.size() == 1) {
                     commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.single", new Object[]{enchantment.d(i), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);

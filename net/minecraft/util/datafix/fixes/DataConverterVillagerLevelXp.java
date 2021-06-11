@@ -14,10 +14,11 @@ import net.minecraft.util.MathHelper;
 
 public class DataConverterVillagerLevelXp extends DataFix {
 
-    private static final int[] a = new int[]{0, 10, 50, 100, 150};
+    private static final int TRADES_PER_LEVEL = 2;
+    private static final int[] LEVEL_XP_THRESHOLDS = new int[]{0, 10, 50, 100, 150};
 
     public static int a(int i) {
-        return DataConverterVillagerLevelXp.a[MathHelper.clamp(i - 1, 0, DataConverterVillagerLevelXp.a.length - 1)];
+        return DataConverterVillagerLevelXp.LEVEL_XP_THRESHOLDS[MathHelper.clamp(i - 1, 0, DataConverterVillagerLevelXp.LEVEL_XP_THRESHOLDS.length - 1)];
     }
 
     public DataConverterVillagerLevelXp(Schema schema, boolean flag) {

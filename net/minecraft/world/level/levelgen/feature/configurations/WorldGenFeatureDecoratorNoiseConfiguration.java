@@ -5,22 +5,22 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenFeatureDecoratorNoiseConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public static final Codec<WorldGenFeatureDecoratorNoiseConfiguration> a = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<WorldGenFeatureDecoratorNoiseConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.DOUBLE.fieldOf("noise_level").forGetter((worldgenfeaturedecoratornoiseconfiguration) -> {
-            return worldgenfeaturedecoratornoiseconfiguration.c;
+            return worldgenfeaturedecoratornoiseconfiguration.noiseLevel;
         }), Codec.INT.fieldOf("below_noise").forGetter((worldgenfeaturedecoratornoiseconfiguration) -> {
-            return worldgenfeaturedecoratornoiseconfiguration.d;
+            return worldgenfeaturedecoratornoiseconfiguration.belowNoise;
         }), Codec.INT.fieldOf("above_noise").forGetter((worldgenfeaturedecoratornoiseconfiguration) -> {
-            return worldgenfeaturedecoratornoiseconfiguration.e;
+            return worldgenfeaturedecoratornoiseconfiguration.aboveNoise;
         })).apply(instance, WorldGenFeatureDecoratorNoiseConfiguration::new);
     });
-    public final double c;
-    public final int d;
-    public final int e;
+    public final double noiseLevel;
+    public final int belowNoise;
+    public final int aboveNoise;
 
     public WorldGenFeatureDecoratorNoiseConfiguration(double d0, int i, int j) {
-        this.c = d0;
-        this.d = i;
-        this.e = j;
+        this.noiseLevel = d0;
+        this.belowNoise = i;
+        this.aboveNoise = j;
     }
 }

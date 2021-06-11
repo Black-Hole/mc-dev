@@ -7,28 +7,29 @@ import net.minecraft.world.entity.raid.EntityRaider;
 
 public class PathfinderGoalNearestHealableRaider<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
 
-    private int i = 0;
+    private static final int DEFAULT_COOLDOWN = 200;
+    private int cooldown = 0;
 
     public PathfinderGoalNearestHealableRaider(EntityRaider entityraider, Class<T> oclass, boolean flag, @Nullable Predicate<EntityLiving> predicate) {
         super(entityraider, oclass, 500, flag, false, predicate);
     }
 
     public int h() {
-        return this.i;
+        return this.cooldown;
     }
 
     public void j() {
-        --this.i;
+        --this.cooldown;
     }
 
     @Override
     public boolean a() {
-        if (this.i <= 0 && this.e.getRandom().nextBoolean()) {
-            if (!((EntityRaider) this.e).fb()) {
+        if (this.cooldown <= 0 && this.mob.getRandom().nextBoolean()) {
+            if (!((EntityRaider) this.mob).fK()) {
                 return false;
             } else {
                 this.g();
-                return this.c != null;
+                return this.target != null;
             }
         } else {
             return false;
@@ -37,7 +38,7 @@ public class PathfinderGoalNearestHealableRaider<T extends EntityLiving> extends
 
     @Override
     public void c() {
-        this.i = 200;
+        this.cooldown = 200;
         super.c();
     }
 }

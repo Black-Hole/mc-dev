@@ -7,7 +7,9 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemSword;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IWorldReader;
@@ -21,22 +23,23 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockBambooSapling extends Block implements IBlockFragilePlantElement {
 
-    protected static final VoxelShape a = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
+    protected static final float SAPLING_AABB_OFFSET = 4.0F;
+    protected static final VoxelShape SAPLING_SHAPE = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
 
     public BlockBambooSapling(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public BlockBase.EnumRandomOffset ah_() {
+    public BlockBase.EnumRandomOffset S_() {
         return BlockBase.EnumRandomOffset.XZ;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         Vec3D vec3d = iblockdata.n(iblockaccess, blockposition);
 
-        return BlockBambooSapling.a.a(vec3d.x, vec3d.y, vec3d.z);
+        return BlockBambooSapling.SAPLING_SHAPE.a(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @Override
@@ -66,6 +69,11 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     @Override
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.BAMBOO);
+    }
+
+    @Override
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return iblockaccess.getType(blockposition.up()).isAir();
     }
@@ -86,6 +94,6 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     protected void a(World world, BlockPosition blockposition) {
-        world.setTypeAndData(blockposition.up(), (IBlockData) Blocks.BAMBOO.getBlockData().set(BlockBamboo.e, BlockPropertyBambooSize.SMALL), 3);
+        world.setTypeAndData(blockposition.up(), (IBlockData) Blocks.BAMBOO.getBlockData().set(BlockBamboo.LEAVES, BlockPropertyBambooSize.SMALL), 3);
     }
 }

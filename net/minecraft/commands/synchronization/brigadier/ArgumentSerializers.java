@@ -12,6 +12,11 @@ import net.minecraft.commands.synchronization.ArgumentSerializerVoid;
 
 public class ArgumentSerializers {
 
+    private static final byte NUMBER_FLAG_MIN = 1;
+    private static final byte NUMBER_FLAG_MAX = 2;
+
+    public ArgumentSerializers() {}
+
     public static void a() {
         ArgumentRegistry.a("brigadier:bool", BoolArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(BoolArgumentType::bool)));
         ArgumentRegistry.a("brigadier:float", FloatArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerFloat()));

@@ -17,44 +17,44 @@ import org.apache.logging.log4j.Logger;
 public class RemoteControlListener extends RemoteConnectionThread {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final ServerSocket e;
-    private final String f;
-    private final List<RemoteControlSession> g = Lists.newArrayList();
-    private final IMinecraftServer h;
+    private final ServerSocket socket;
+    private final String rconPassword;
+    private final List<RemoteControlSession> clients = Lists.newArrayList();
+    private final IMinecraftServer serverInterface;
 
     private RemoteControlListener(IMinecraftServer iminecraftserver, ServerSocket serversocket, String s) {
         super("RCON Listener");
-        this.h = iminecraftserver;
-        this.e = serversocket;
-        this.f = s;
+        this.serverInterface = iminecraftserver;
+        this.socket = serversocket;
+        this.rconPassword = s;
     }
 
     private void d() {
-        this.g.removeIf((remotecontrolsession) -> {
+        this.clients.removeIf((remotecontrolsession) -> {
             return !remotecontrolsession.c();
         });
     }
 
     public void run() {
         try {
-            while (this.a) {
+            while (this.running) {
                 try {
-                    Socket socket = this.e.accept();
-                    RemoteControlSession remotecontrolsession = new RemoteControlSession(this.h, this.f, socket);
+                    Socket socket = this.socket.accept();
+                    RemoteControlSession remotecontrolsession = new RemoteControlSession(this.serverInterface, this.rconPassword, socket);
 
                     remotecontrolsession.a();
-                    this.g.add(remotecontrolsession);
+                    this.clients.add(remotecontrolsession);
                     this.d();
                 } catch (SocketTimeoutException sockettimeoutexception) {
                     this.d();
                 } catch (IOException ioexception) {
-                    if (this.a) {
+                    if (this.running) {
                         RemoteControlListener.LOGGER.info("IO exception: ", ioexception);
                     }
                 }
             }
         } finally {
-            this.a(this.e);
+            this.a(this.socket);
         }
 
     }
@@ -62,7 +62,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
     @Nullable
     public static RemoteControlListener a(IMinecraftServer iminecraftserver) {
         DedicatedServerProperties dedicatedserverproperties = iminecraftserver.getDedicatedServerProperties();
-        String s = iminecraftserver.h_();
+        String s = iminecraftserver.b();
 
         if (s.isEmpty()) {
             s = "0.0.0.0";
@@ -102,10 +102,10 @@ public class RemoteControlListener extends RemoteConnectionThread {
 
     @Override
     public void b() {
-        this.a = false;
-        this.a(this.e);
+        this.running = false;
+        this.a(this.socket);
         super.b();
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.clients.iterator();
 
         while (iterator.hasNext()) {
             RemoteControlSession remotecontrolsession = (RemoteControlSession) iterator.next();
@@ -115,7 +115,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
             }
         }
 
-        this.g.clear();
+        this.clients.clear();
     }
 
     private void a(ServerSocket serversocket) {

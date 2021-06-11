@@ -1,5 +1,6 @@
 package net.minecraft.world.inventory;
 
+import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.InventorySubcontainer;
@@ -9,14 +10,19 @@ import net.minecraft.world.level.block.entity.TileEntityEnderChest;
 
 public class InventoryEnderChest extends InventorySubcontainer {
 
-    private TileEntityEnderChest a;
+    @Nullable
+    private TileEntityEnderChest activeChest;
 
     public InventoryEnderChest() {
         super(27);
     }
 
     public void a(TileEntityEnderChest tileentityenderchest) {
-        this.a = tileentityenderchest;
+        this.activeChest = tileentityenderchest;
+    }
+
+    public boolean b(TileEntityEnderChest tileentityenderchest) {
+        return this.activeChest == tileentityenderchest;
     }
 
     @Override
@@ -24,7 +30,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
         int i;
 
         for (i = 0; i < this.getSize(); ++i) {
-            this.setItem(i, ItemStack.b);
+            this.setItem(i, ItemStack.EMPTY);
         }
 
         for (i = 0; i < nbttaglist.size(); ++i) {
@@ -59,13 +65,13 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.a != null && !this.a.a(entityhuman) ? false : super.a(entityhuman);
+        return this.activeChest != null && !this.activeChest.c(entityhuman) ? false : super.a(entityhuman);
     }
 
     @Override
     public void startOpen(EntityHuman entityhuman) {
-        if (this.a != null) {
-            this.a.d();
+        if (this.activeChest != null) {
+            this.activeChest.a(entityhuman);
         }
 
         super.startOpen(entityhuman);
@@ -73,11 +79,11 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     @Override
     public void closeContainer(EntityHuman entityhuman) {
-        if (this.a != null) {
-            this.a.f();
+        if (this.activeChest != null) {
+            this.activeChest.b(entityhuman);
         }
 
         super.closeContainer(entityhuman);
-        this.a = null;
+        this.activeChest = null;
     }
 }

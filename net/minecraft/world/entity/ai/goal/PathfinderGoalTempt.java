@@ -4,115 +4,107 @@ import java.util.EnumSet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityLiving;
-import net.minecraft.world.entity.ai.navigation.Navigation;
-import net.minecraft.world.entity.ai.navigation.NavigationFlying;
 import net.minecraft.world.entity.ai.targeting.PathfinderTargetCondition;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeItemStack;
 
 public class PathfinderGoalTempt extends PathfinderGoal {
 
-    private static final PathfinderTargetCondition c = (new PathfinderTargetCondition()).a(10.0D).a().b().d().c();
-    protected final EntityCreature a;
-    private final double d;
-    private double e;
-    private double f;
-    private double g;
-    private double h;
-    private double i;
-    protected EntityHuman target;
-    private int j;
-    private boolean k;
-    private final RecipeItemStack l;
-    private final boolean m;
+    private static final PathfinderTargetCondition TEMP_TARGETING = PathfinderTargetCondition.b().a(10.0D).d();
+    private final PathfinderTargetCondition targetingConditions;
+    protected final EntityCreature mob;
+    private final double speedModifier;
+    private double px;
+    private double py;
+    private double pz;
+    private double pRotX;
+    private double pRotY;
+    protected EntityHuman player;
+    private int calmDown;
+    private boolean isRunning;
+    private final RecipeItemStack items;
+    private final boolean canScare;
 
     public PathfinderGoalTempt(EntityCreature entitycreature, double d0, RecipeItemStack recipeitemstack, boolean flag) {
-        this(entitycreature, d0, flag, recipeitemstack);
-    }
-
-    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, boolean flag, RecipeItemStack recipeitemstack) {
-        this.a = entitycreature;
-        this.d = d0;
-        this.l = recipeitemstack;
-        this.m = flag;
+        this.mob = entitycreature;
+        this.speedModifier = d0;
+        this.items = recipeitemstack;
+        this.canScare = flag;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
-        if (!(entitycreature.getNavigation() instanceof Navigation) && !(entitycreature.getNavigation() instanceof NavigationFlying)) {
-            throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
-        }
+        this.targetingConditions = PathfinderGoalTempt.TEMP_TARGETING.c().a(this::a);
     }
 
     @Override
     public boolean a() {
-        if (this.j > 0) {
-            --this.j;
+        if (this.calmDown > 0) {
+            --this.calmDown;
             return false;
         } else {
-            this.target = this.a.world.a(PathfinderGoalTempt.c, (EntityLiving) this.a);
-            return this.target == null ? false : this.a(this.target.getItemInMainHand()) || this.a(this.target.getItemInOffHand());
+            this.player = this.mob.level.a(this.targetingConditions, (EntityLiving) this.mob);
+            return this.player != null;
         }
     }
 
-    protected boolean a(ItemStack itemstack) {
-        return this.l.test(itemstack);
+    private boolean a(EntityLiving entityliving) {
+        return this.items.test(entityliving.getItemInMainHand()) || this.items.test(entityliving.getItemInOffHand());
     }
 
     @Override
     public boolean b() {
         if (this.g()) {
-            if (this.a.h((Entity) this.target) < 36.0D) {
-                if (this.target.h(this.e, this.f, this.g) > 0.010000000000000002D) {
+            if (this.mob.f((Entity) this.player) < 36.0D) {
+                if (this.player.h(this.px, this.py, this.pz) > 0.010000000000000002D) {
                     return false;
                 }
 
-                if (Math.abs((double) this.target.pitch - this.h) > 5.0D || Math.abs((double) this.target.yaw - this.i) > 5.0D) {
+                if (Math.abs((double) this.player.getXRot() - this.pRotX) > 5.0D || Math.abs((double) this.player.getYRot() - this.pRotY) > 5.0D) {
                     return false;
                 }
             } else {
-                this.e = this.target.locX();
-                this.f = this.target.locY();
-                this.g = this.target.locZ();
+                this.px = this.player.locX();
+                this.py = this.player.locY();
+                this.pz = this.player.locZ();
             }
 
-            this.h = (double) this.target.pitch;
-            this.i = (double) this.target.yaw;
+            this.pRotX = (double) this.player.getXRot();
+            this.pRotY = (double) this.player.getYRot();
         }
 
         return this.a();
     }
 
     protected boolean g() {
-        return this.m;
+        return this.canScare;
     }
 
     @Override
     public void c() {
-        this.e = this.target.locX();
-        this.f = this.target.locY();
-        this.g = this.target.locZ();
-        this.k = true;
+        this.px = this.player.locX();
+        this.py = this.player.locY();
+        this.pz = this.player.locZ();
+        this.isRunning = true;
     }
 
     @Override
     public void d() {
-        this.target = null;
-        this.a.getNavigation().o();
-        this.j = 100;
-        this.k = false;
+        this.player = null;
+        this.mob.getNavigation().o();
+        this.calmDown = 100;
+        this.isRunning = false;
     }
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.target, (float) (this.a.Q() + 20), (float) this.a.O());
-        if (this.a.h((Entity) this.target) < 6.25D) {
-            this.a.getNavigation().o();
+        this.mob.getControllerLook().a(this.player, (float) (this.mob.eZ() + 20), (float) this.mob.eY());
+        if (this.mob.f((Entity) this.player) < 6.25D) {
+            this.mob.getNavigation().o();
         } else {
-            this.a.getNavigation().a((Entity) this.target, this.d);
+            this.mob.getNavigation().a((Entity) this.player, this.speedModifier);
         }
 
     }
 
     public boolean h() {
-        return this.k;
+        return this.isRunning;
     }
 }

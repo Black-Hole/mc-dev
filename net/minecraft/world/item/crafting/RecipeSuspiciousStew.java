@@ -29,14 +29,14 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem() == Blocks.BROWN_MUSHROOM.getItem() && !flag2) {
+                if (itemstack.a(Blocks.BROWN_MUSHROOM.getItem()) && !flag2) {
                     flag2 = true;
-                } else if (itemstack.getItem() == Blocks.RED_MUSHROOM.getItem() && !flag1) {
+                } else if (itemstack.a(Blocks.RED_MUSHROOM.getItem()) && !flag1) {
                     flag1 = true;
-                } else if (itemstack.getItem().a((Tag) TagsItem.SMALL_FLOWERS) && !flag) {
+                } else if (itemstack.a((Tag) TagsItem.SMALL_FLOWERS) && !flag) {
                     flag = true;
                 } else {
-                    if (itemstack.getItem() != Items.BOWL || flag3) {
+                    if (!itemstack.a(Items.BOWL) || flag3) {
                         return false;
                     }
 
@@ -49,12 +49,12 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
 
-            if (!itemstack1.isEmpty() && itemstack1.getItem().a((Tag) TagsItem.SMALL_FLOWERS)) {
+            if (!itemstack1.isEmpty() && itemstack1.a((Tag) TagsItem.SMALL_FLOWERS)) {
                 itemstack = itemstack1;
                 break;
             }
@@ -73,7 +73,12 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i >= 2 && j >= 2;
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.n;
+        return RecipeSerializer.SUSPICIOUS_STEW;
     }
 }

@@ -3,15 +3,13 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 import net.minecraft.util.MathHelper;
 
 public class NBTTagFloat extends NBTNumber {
 
-    public static final NBTTagFloat a = new NBTTagFloat(0.0F);
-    public static final NBTTagType<NBTTagFloat> b = new NBTTagType<NBTTagFloat>() {
+    private static final int SELF_SIZE_IN_BITS = 96;
+    public static final NBTTagFloat ZERO = new NBTTagFloat(0.0F);
+    public static final NBTTagType<NBTTagFloat> TYPE = new NBTTagType<NBTTagFloat>() {
         @Override
         public NBTTagFloat b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(96L);
@@ -40,7 +38,7 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     public static NBTTagFloat a(float f) {
-        return f == 0.0F ? NBTTagFloat.a : new NBTTagFloat(f);
+        return f == 0.0F ? NBTTagFloat.ZERO : new NBTTagFloat(f);
     }
 
     @Override
@@ -55,12 +53,7 @@ public class NBTTagFloat extends NBTNumber {
 
     @Override
     public NBTTagType<NBTTagFloat> b() {
-        return NBTTagFloat.b;
-    }
-
-    @Override
-    public String toString() {
-        return this.data + "f";
+        return NBTTagFloat.TYPE;
     }
 
     @Override
@@ -77,10 +70,8 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("f")).a(NBTTagFloat.g);
-
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagFloat.f);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override

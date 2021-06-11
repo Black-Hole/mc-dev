@@ -13,22 +13,22 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BlockActionContext extends ItemActionContext {
 
-    private final BlockPosition b;
-    protected boolean a;
+    private final BlockPosition relativePos;
+    protected boolean replaceClicked;
 
     public BlockActionContext(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
-        this(entityhuman.world, entityhuman, enumhand, itemstack, movingobjectpositionblock);
+        this(entityhuman.level, entityhuman, enumhand, itemstack, movingobjectpositionblock);
     }
 
     public BlockActionContext(ItemActionContext itemactioncontext) {
-        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand(), itemactioncontext.getItemStack(), itemactioncontext.i());
+        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand(), itemactioncontext.getItemStack(), itemactioncontext.j());
     }
 
     protected BlockActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
         super(world, entityhuman, enumhand, itemstack, movingobjectpositionblock);
-        this.a = true;
-        this.b = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
-        this.a = world.getType(movingobjectpositionblock.getBlockPosition()).a(this);
+        this.replaceClicked = true;
+        this.relativePos = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
+        this.replaceClicked = world.getType(movingobjectpositionblock.getBlockPosition()).a(this);
     }
 
     public static BlockActionContext a(BlockActionContext blockactioncontext, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -37,25 +37,29 @@ public class BlockActionContext extends ItemActionContext {
 
     @Override
     public BlockPosition getClickPosition() {
-        return this.a ? super.getClickPosition() : this.b;
+        return this.replaceClicked ? super.getClickPosition() : this.relativePos;
     }
 
     public boolean b() {
-        return this.a || this.getWorld().getType(this.getClickPosition()).a(this);
+        return this.replaceClicked || this.getWorld().getType(this.getClickPosition()).a(this);
     }
 
     public boolean c() {
-        return this.a;
+        return this.replaceClicked;
     }
 
     public EnumDirection d() {
         return EnumDirection.a((Entity) this.getEntity())[0];
     }
 
-    public EnumDirection[] e() {
+    public EnumDirection e() {
+        return EnumDirection.a((Entity) this.getEntity(), EnumDirection.EnumAxis.Y);
+    }
+
+    public EnumDirection[] f() {
         EnumDirection[] aenumdirection = EnumDirection.a((Entity) this.getEntity());
 
-        if (this.a) {
+        if (this.replaceClicked) {
             return aenumdirection;
         } else {
             EnumDirection enumdirection = this.getClickedFace();

@@ -4,16 +4,18 @@ import it.unimi.dsi.fastutil.doubles.DoubleList;
 
 public class VoxelShapeMergerIdentical implements VoxelShapeMerger {
 
-    private final DoubleList a;
+    private final DoubleList coords;
 
     public VoxelShapeMergerIdentical(DoubleList doublelist) {
-        this.a = doublelist;
+        this.coords = doublelist;
     }
 
     @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
-        for (int i = 0; i <= this.a.size(); ++i) {
-            if (!voxelshapemerger_a.merge(i, i, i)) {
+        int i = this.coords.size() - 1;
+
+        for (int j = 0; j < i; ++j) {
+            if (!voxelshapemerger_a.merge(j, j, j)) {
                 return false;
             }
         }
@@ -22,7 +24,12 @@ public class VoxelShapeMergerIdentical implements VoxelShapeMerger {
     }
 
     @Override
+    public int size() {
+        return this.coords.size();
+    }
+
+    @Override
     public DoubleList a() {
-        return this.a;
+        return this.coords;
     }
 }

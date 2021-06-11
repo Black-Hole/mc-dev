@@ -13,9 +13,15 @@ public class WorldGenFeatureChoice extends WorldGenerator<WorldGenFeatureChoiceC
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureChoiceConfiguration> featureplacecontext) {
+        Random random = featureplacecontext.c();
+        WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration = (WorldGenFeatureChoiceConfiguration) featureplacecontext.e();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        ChunkGenerator chunkgenerator = featureplacecontext.b();
+        BlockPosition blockposition = featureplacecontext.d();
         boolean flag = random.nextBoolean();
 
-        return flag ? ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.b.get()).a(generatoraccessseed, chunkgenerator, random, blockposition) : ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.c.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
+        return flag ? ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.featureTrue.get()).a(generatoraccessseed, chunkgenerator, random, blockposition) : ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.featureFalse.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
     }
 }

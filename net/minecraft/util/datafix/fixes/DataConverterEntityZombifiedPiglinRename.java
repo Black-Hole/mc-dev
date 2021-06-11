@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class DataConverterEntityZombifiedPiglinRename extends DataConverterEntityRenameAbstract {
 
-    public static final Map<String, String> a = ImmutableMap.builder().put("minecraft:zombie_pigman_spawn_egg", "minecraft:zombified_piglin_spawn_egg").build();
+    public static final Map<String, String> RENAMED_IDS = ImmutableMap.builder().put("minecraft:zombie_pigman_spawn_egg", "minecraft:zombified_piglin_spawn_egg").build();
 
     public DataConverterEntityZombifiedPiglinRename(Schema schema) {
         super("EntityZombifiedPiglinRenameFix", schema, true);

@@ -11,17 +11,17 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 
 public class BehaviorBetterJob extends Behavior<EntityVillager> {
 
-    final VillagerProfession b;
+    final VillagerProfession profession;
 
     public BehaviorBetterJob(VillagerProfession villagerprofession) {
-        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.MOBS, MemoryStatus.VALUE_PRESENT));
-        this.b = villagerprofession;
+        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT));
+        this.profession = villagerprofession;
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE).get();
 
-        worldserver.y().c(globalpos.getBlockPosition()).ifPresent((villageplacetype) -> {
+        worldserver.A().c(globalpos.getBlockPosition()).ifPresent((villageplacetype) -> {
             BehaviorUtil.a(entityvillager, (entityvillager1) -> {
                 return this.a(globalpos, villageplacetype, entityvillager1);
             }).reduce(entityvillager, BehaviorBetterJob::a);

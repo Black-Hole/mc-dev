@@ -16,13 +16,13 @@ import net.minecraft.world.level.World;
 
 public class ShapelessRecipes implements RecipeCrafting {
 
-    private final MinecraftKey key;
-    private final String group;
-    private final ItemStack result;
-    private final NonNullList<RecipeItemStack> ingredients;
+    private final MinecraftKey id;
+    final String group;
+    final ItemStack result;
+    final NonNullList<RecipeItemStack> ingredients;
 
     public ShapelessRecipes(MinecraftKey minecraftkey, String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
-        this.key = minecraftkey;
+        this.id = minecraftkey;
         this.group = s;
         this.result = itemstack;
         this.ingredients = nonnulllist;
@@ -30,12 +30,17 @@ public class ShapelessRecipes implements RecipeCrafting {
 
     @Override
     public MinecraftKey getKey() {
-        return this.key;
+        return this.id;
     }
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.b;
+        return RecipeSerializer.SHAPELESS_RECIPE;
+    }
+
+    @Override
+    public String d() {
+        return this.group;
     }
 
     @Override
@@ -66,6 +71,11 @@ public class ShapelessRecipes implements RecipeCrafting {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         return this.result.cloneItemStack();
+    }
+
+    @Override
+    public boolean a(int i, int j) {
+        return i * j >= this.ingredients.size();
     }
 
     public static class a implements RecipeSerializer<ShapelessRecipes> {
@@ -104,15 +114,15 @@ public class ShapelessRecipes implements RecipeCrafting {
 
         @Override
         public ShapelessRecipes a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-            String s = packetdataserializer.e(32767);
-            int i = packetdataserializer.i();
-            NonNullList<RecipeItemStack> nonnulllist = NonNullList.a(i, RecipeItemStack.a);
+            String s = packetdataserializer.p();
+            int i = packetdataserializer.j();
+            NonNullList<RecipeItemStack> nonnulllist = NonNullList.a(i, RecipeItemStack.EMPTY);
 
             for (int j = 0; j < nonnulllist.size(); ++j) {
                 nonnulllist.set(j, RecipeItemStack.b(packetdataserializer));
             }
 
-            ItemStack itemstack = packetdataserializer.n();
+            ItemStack itemstack = packetdataserializer.o();
 
             return new ShapelessRecipes(minecraftkey, s, itemstack, nonnulllist);
         }

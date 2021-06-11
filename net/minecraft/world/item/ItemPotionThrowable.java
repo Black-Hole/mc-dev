@@ -21,15 +21,15 @@ public class ItemPotionThrowable extends ItemPotion {
             EntityPotion entitypotion = new EntityPotion(world, entityhuman);
 
             entitypotion.setItem(itemstack);
-            entitypotion.a(entityhuman, entityhuman.pitch, entityhuman.yaw, -20.0F, 0.5F, 1.0F);
+            entitypotion.a(entityhuman, entityhuman.getXRot(), entityhuman.getYRot(), -20.0F, 0.5F, 1.0F);
             world.addEntity(entitypotion);
         }
 
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        if (!entityhuman.abilities.canInstantlyBuild) {
+        if (!entityhuman.getAbilities().instabuild) {
             itemstack.subtract(1);
         }
 
-        return InteractionResultWrapper.a(itemstack, world.s_());
+        return InteractionResultWrapper.a(itemstack, world.isClientSide());
     }
 }

@@ -12,6 +12,9 @@ import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 import net.minecraft.SharedConstants;
 import net.minecraft.SystemUtils;
+import net.minecraft.util.datafix.fixes.AbstractArrowPickupFix;
+import net.minecraft.util.datafix.fixes.BlockRenameFixWithJigsaw;
+import net.minecraft.util.datafix.fixes.CauldronRenameFix;
 import net.minecraft.util.datafix.fixes.ChunkConverterPalette;
 import net.minecraft.util.datafix.fixes.DataConverterAddChoices;
 import net.minecraft.util.datafix.fixes.DataConverterAdvancement;
@@ -124,7 +127,6 @@ import net.minecraft.util.datafix.fixes.DataConverterSpawnEgg;
 import net.minecraft.util.datafix.fixes.DataConverterStatistic;
 import net.minecraft.util.datafix.fixes.DataConverterStriderGravity;
 import net.minecraft.util.datafix.fixes.DataConverterStructureReference;
-import net.minecraft.util.datafix.fixes.DataConverterSwimStats;
 import net.minecraft.util.datafix.fixes.DataConverterTeamDisplayName;
 import net.minecraft.util.datafix.fixes.DataConverterTileEntity;
 import net.minecraft.util.datafix.fixes.DataConverterTrappedChest;
@@ -143,6 +145,8 @@ import net.minecraft.util.datafix.fixes.DataConverterWorldGenSettingsBuilding;
 import net.minecraft.util.datafix.fixes.DataConverterZombie;
 import net.minecraft.util.datafix.fixes.DataConverterZombieType;
 import net.minecraft.util.datafix.fixes.DataConverterZombieVillagerLevelXp;
+import net.minecraft.util.datafix.fixes.SavedDataFeaturePoolElementFix;
+import net.minecraft.util.datafix.fixes.StatsRenameFix;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaV100;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaV102;
@@ -194,12 +198,20 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaV704;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaV705;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaV808;
 import net.minecraft.util.datafix.schemas.DataConverterSchemaV99;
+import net.minecraft.util.datafix.schemas.V2571;
+import net.minecraft.util.datafix.schemas.V2684;
+import net.minecraft.util.datafix.schemas.V2686;
+import net.minecraft.util.datafix.schemas.V2688;
+import net.minecraft.util.datafix.schemas.V2704;
+import net.minecraft.util.datafix.schemas.V2707;
 
 public class DataConverterRegistry {
 
-    private static final BiFunction<Integer, Schema, Schema> a = Schema::new;
-    private static final BiFunction<Integer, Schema, Schema> b = DataConverterSchemaNamed::new;
-    private static final DataFixer c = b();
+    private static final BiFunction<Integer, Schema, Schema> SAME = Schema::new;
+    private static final BiFunction<Integer, Schema, Schema> SAME_NAMESPACED = DataConverterSchemaNamed::new;
+    private static final DataFixer DATA_FIXER = b();
+
+    public DataConverterRegistry() {}
 
     private static DataFixer b() {
         DataFixerBuilder datafixerbuilder = new DataFixerBuilder(SharedConstants.getGameVersion().getWorldVersion());
@@ -209,7 +221,7 @@ public class DataConverterRegistry {
     }
 
     public static DataFixer a() {
-        return DataConverterRegistry.c;
+        return DataConverterRegistry.DATA_FIXER;
     }
 
     private static void a(DataFixerBuilder datafixerbuilder) {
@@ -217,14 +229,14 @@ public class DataConverterRegistry {
         Schema schema1 = datafixerbuilder.addSchema(100, DataConverterSchemaV100::new);
 
         datafixerbuilder.addFixer(new DataConverterEquipment(schema1, true));
-        Schema schema2 = datafixerbuilder.addSchema(101, DataConverterRegistry.a);
+        Schema schema2 = datafixerbuilder.addSchema(101, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterSignText(schema2, false));
         Schema schema3 = datafixerbuilder.addSchema(102, DataConverterSchemaV102::new);
 
         datafixerbuilder.addFixer(new DataConverterMaterialId(schema3, true));
         datafixerbuilder.addFixer(new DataConverterPotionId(schema3, false));
-        Schema schema4 = datafixerbuilder.addSchema(105, DataConverterRegistry.a);
+        Schema schema4 = datafixerbuilder.addSchema(105, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterSpawnEgg(schema4, true));
         Schema schema5 = datafixerbuilder.addSchema(106, DataConverterSchemaV106::new);
@@ -233,19 +245,19 @@ public class DataConverterRegistry {
         Schema schema6 = datafixerbuilder.addSchema(107, DataConverterSchemaV107::new);
 
         datafixerbuilder.addFixer(new DataConverterMinecart(schema6, true));
-        Schema schema7 = datafixerbuilder.addSchema(108, DataConverterRegistry.a);
+        Schema schema7 = datafixerbuilder.addSchema(108, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterUUID(schema7, true));
-        Schema schema8 = datafixerbuilder.addSchema(109, DataConverterRegistry.a);
+        Schema schema8 = datafixerbuilder.addSchema(109, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterHealth(schema8, true));
-        Schema schema9 = datafixerbuilder.addSchema(110, DataConverterRegistry.a);
+        Schema schema9 = datafixerbuilder.addSchema(110, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterSaddle(schema9, true));
-        Schema schema10 = datafixerbuilder.addSchema(111, DataConverterRegistry.a);
+        Schema schema10 = datafixerbuilder.addSchema(111, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterHanging(schema10, true));
-        Schema schema11 = datafixerbuilder.addSchema(113, DataConverterRegistry.a);
+        Schema schema11 = datafixerbuilder.addSchema(113, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterDropChances(schema11, true));
         Schema schema12 = datafixerbuilder.addSchema(135, DataConverterSchemaV135::new);
@@ -254,22 +266,22 @@ public class DataConverterRegistry {
         Schema schema13 = datafixerbuilder.addSchema(143, DataConverterSchemaV143::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityTippedArrow(schema13, true));
-        Schema schema14 = datafixerbuilder.addSchema(147, DataConverterRegistry.a);
+        Schema schema14 = datafixerbuilder.addSchema(147, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterArmorStand(schema14, true));
-        Schema schema15 = datafixerbuilder.addSchema(165, DataConverterRegistry.a);
+        Schema schema15 = datafixerbuilder.addSchema(165, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterBook(schema15, true));
         Schema schema16 = datafixerbuilder.addSchema(501, DataConverterSchemaV501::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema16, "Add 1.10 entities fix", DataConverterTypes.ENTITY));
-        Schema schema17 = datafixerbuilder.addSchema(502, DataConverterRegistry.a);
+        Schema schema17 = datafixerbuilder.addSchema(502, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema17, "cooked_fished item renamer", (s) -> {
             return Objects.equals(DataConverterSchemaNamed.a(s), "minecraft:cooked_fished") ? "minecraft:cooked_fish" : s;
         }));
         datafixerbuilder.addFixer(new DataConverterZombie(schema17, false));
-        Schema schema18 = datafixerbuilder.addSchema(505, DataConverterRegistry.a);
+        Schema schema18 = datafixerbuilder.addSchema(505, DataConverterRegistry.SAME);
 
         datafixerbuilder.addFixer(new DataConverterVBO(schema18, false));
         Schema schema19 = datafixerbuilder.addSchema(700, DataConverterSchemaV700::new);
@@ -290,26 +302,26 @@ public class DataConverterRegistry {
         Schema schema24 = datafixerbuilder.addSchema(705, DataConverterSchemaV705::new);
 
         datafixerbuilder.addFixer(new DataConverterEntity(schema24, true));
-        Schema schema25 = datafixerbuilder.addSchema(804, DataConverterRegistry.b);
+        Schema schema25 = datafixerbuilder.addSchema(804, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterBanner(schema25, true));
-        Schema schema26 = datafixerbuilder.addSchema(806, DataConverterRegistry.b);
+        Schema schema26 = datafixerbuilder.addSchema(806, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterPotionWater(schema26, false));
         Schema schema27 = datafixerbuilder.addSchema(808, DataConverterSchemaV808::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema27, "added shulker box", DataConverterTypes.BLOCK_ENTITY));
-        Schema schema28 = datafixerbuilder.addSchema(808, 1, DataConverterRegistry.b);
+        Schema schema28 = datafixerbuilder.addSchema(808, 1, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterShulker(schema28, false));
-        Schema schema29 = datafixerbuilder.addSchema(813, DataConverterRegistry.b);
+        Schema schema29 = datafixerbuilder.addSchema(813, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterShulkerBoxItem(schema29, false));
         datafixerbuilder.addFixer(new DataConverterShulkerBoxBlock(schema29, false));
-        Schema schema30 = datafixerbuilder.addSchema(816, DataConverterRegistry.b);
+        Schema schema30 = datafixerbuilder.addSchema(816, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterLang(schema30, false));
-        Schema schema31 = datafixerbuilder.addSchema(820, DataConverterRegistry.b);
+        Schema schema31 = datafixerbuilder.addSchema(820, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema31, "totem item renamer", a("minecraft:totem", "minecraft:totem_of_undying")));
         Schema schema32 = datafixerbuilder.addSchema(1022, DataConverterSchemaV1022::new);
@@ -319,13 +331,13 @@ public class DataConverterRegistry {
 
         datafixerbuilder.addFixer(new DataConverterBedBlock(schema33, true));
         datafixerbuilder.addFixer(new DataConverterBedItem(schema33, false));
-        Schema schema34 = datafixerbuilder.addSchema(1344, DataConverterRegistry.b);
+        Schema schema34 = datafixerbuilder.addSchema(1344, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterKeybind(schema34, false));
-        Schema schema35 = datafixerbuilder.addSchema(1446, DataConverterRegistry.b);
+        Schema schema35 = datafixerbuilder.addSchema(1446, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterKeybind2(schema35, false));
-        Schema schema36 = datafixerbuilder.addSchema(1450, DataConverterRegistry.b);
+        Schema schema36 = datafixerbuilder.addSchema(1450, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterFlattenState(schema36, false));
         Schema schema37 = datafixerbuilder.addSchema(1451, DataConverterSchemaV1451::new);
@@ -355,17 +367,18 @@ public class DataConverterRegistry {
         Schema schema43 = datafixerbuilder.addSchema(1451, 6, DataConverterSchemaV1451_6::new);
 
         datafixerbuilder.addFixer(new DataConverterStatistic(schema43, true));
+        datafixerbuilder.addFixer(new DataConverterShoulderEntity(schema43, "Rewrite objectives", DataConverterTypes.OBJECTIVE));
         datafixerbuilder.addFixer(new DataConverterJukeBox(schema43, false));
         Schema schema44 = datafixerbuilder.addSchema(1451, 7, DataConverterSchemaV1451_7::new);
 
         datafixerbuilder.addFixer(new DataConverterVillage(schema44, true));
-        Schema schema45 = datafixerbuilder.addSchema(1451, 7, DataConverterRegistry.b);
+        Schema schema45 = datafixerbuilder.addSchema(1451, 7, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterVillagerTrade(schema45, false));
-        Schema schema46 = datafixerbuilder.addSchema(1456, DataConverterRegistry.b);
+        Schema schema46 = datafixerbuilder.addSchema(1456, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterItemFrame(schema46, false));
-        Schema schema47 = datafixerbuilder.addSchema(1458, DataConverterRegistry.b);
+        Schema schema47 = datafixerbuilder.addSchema(1458, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterCustomNameEntity(schema47, false));
         datafixerbuilder.addFixer(new DataConverterCustomNameItem(schema47, false));
@@ -379,7 +392,7 @@ public class DataConverterRegistry {
         Schema schema50 = datafixerbuilder.addSchema(1470, DataConverterSchemaV1470::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema50, "Add 1.13 entities fix", DataConverterTypes.ENTITY));
-        Schema schema51 = datafixerbuilder.addSchema(1474, DataConverterRegistry.b);
+        Schema schema51 = datafixerbuilder.addSchema(1474, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterColorlessShulkerEntity(schema51, false));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema51, "Colorless shulker block fixer", (s) -> {
@@ -388,21 +401,21 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(DataConverterItemName.a(schema51, "Colorless shulker item fixer", (s) -> {
             return Objects.equals(DataConverterSchemaNamed.a(s), "minecraft:purple_shulker_box") ? "minecraft:shulker_box" : s;
         }));
-        Schema schema52 = datafixerbuilder.addSchema(1475, DataConverterRegistry.b);
+        Schema schema52 = datafixerbuilder.addSchema(1475, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema52, "Flowing fixer", a((Map) ImmutableMap.of("minecraft:flowing_water", "minecraft:water", "minecraft:flowing_lava", "minecraft:lava"))));
-        Schema schema53 = datafixerbuilder.addSchema(1480, DataConverterRegistry.b);
+        Schema schema53 = datafixerbuilder.addSchema(1480, DataConverterRegistry.SAME_NAMESPACED);
 
-        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema53, "Rename coral blocks", a(DataConverterCoral.a)));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema53, "Rename coral items", a(DataConverterCoral.a)));
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema53, "Rename coral blocks", a(DataConverterCoral.RENAMED_IDS)));
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema53, "Rename coral items", a(DataConverterCoral.RENAMED_IDS)));
         Schema schema54 = datafixerbuilder.addSchema(1481, DataConverterSchemaV1481::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema54, "Add conduit", DataConverterTypes.BLOCK_ENTITY));
         Schema schema55 = datafixerbuilder.addSchema(1483, DataConverterSchemaV1483::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityPufferfish(schema55, true));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema55, "Rename pufferfish egg item", a(DataConverterEntityPufferfish.a)));
-        Schema schema56 = datafixerbuilder.addSchema(1484, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema55, "Rename pufferfish egg item", a(DataConverterEntityPufferfish.RENAMED_IDS)));
+        Schema schema56 = datafixerbuilder.addSchema(1484, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema56, "Rename seagrass items", a((Map) ImmutableMap.of("minecraft:sea_grass", "minecraft:seagrass", "minecraft:tall_sea_grass", "minecraft:tall_seagrass"))));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema56, "Rename seagrass blocks", a((Map) ImmutableMap.of("minecraft:sea_grass", "minecraft:seagrass", "minecraft:tall_sea_grass", "minecraft:tall_seagrass"))));
@@ -410,12 +423,12 @@ public class DataConverterRegistry {
         Schema schema57 = datafixerbuilder.addSchema(1486, DataConverterSchemaV1486::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityCodSalmon(schema57, true));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema57, "Rename cod/salmon egg items", a(DataConverterEntityCodSalmon.b)));
-        Schema schema58 = datafixerbuilder.addSchema(1487, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema57, "Rename cod/salmon egg items", a(DataConverterEntityCodSalmon.RENAMED_EGG_IDS)));
+        Schema schema58 = datafixerbuilder.addSchema(1487, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema58, "Rename prismarine_brick(s)_* blocks", a((Map) ImmutableMap.of("minecraft:prismarine_bricks_slab", "minecraft:prismarine_brick_slab", "minecraft:prismarine_bricks_stairs", "minecraft:prismarine_brick_stairs"))));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema58, "Rename prismarine_brick(s)_* items", a((Map) ImmutableMap.of("minecraft:prismarine_bricks_slab", "minecraft:prismarine_brick_slab", "minecraft:prismarine_bricks_stairs", "minecraft:prismarine_brick_stairs"))));
-        Schema schema59 = datafixerbuilder.addSchema(1488, DataConverterRegistry.b);
+        Schema schema59 = datafixerbuilder.addSchema(1488, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema59, "Rename kelp/kelptop", a((Map) ImmutableMap.of("minecraft:kelp_top", "minecraft:kelp", "minecraft:kelp", "minecraft:kelp_plant"))));
         datafixerbuilder.addFixer(DataConverterItemName.a(schema59, "Rename kelptop", a("minecraft:kelp_top", "minecraft:kelp")));
@@ -432,68 +445,68 @@ public class DataConverterRegistry {
             }
         });
         datafixerbuilder.addFixer(new DataConverterIglooMetadataRemoval(schema59, false));
-        Schema schema60 = datafixerbuilder.addSchema(1490, DataConverterRegistry.b);
+        Schema schema60 = datafixerbuilder.addSchema(1490, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema60, "Rename melon_block", a("minecraft:melon_block", "minecraft:melon")));
         datafixerbuilder.addFixer(DataConverterItemName.a(schema60, "Rename melon_block/melon/speckled_melon", a((Map) ImmutableMap.of("minecraft:melon_block", "minecraft:melon", "minecraft:melon", "minecraft:melon_slice", "minecraft:speckled_melon", "minecraft:glistering_melon_slice"))));
-        Schema schema61 = datafixerbuilder.addSchema(1492, DataConverterRegistry.b);
+        Schema schema61 = datafixerbuilder.addSchema(1492, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterChunkStructuresTemplateRename(schema61, false));
-        Schema schema62 = datafixerbuilder.addSchema(1494, DataConverterRegistry.b);
+        Schema schema62 = datafixerbuilder.addSchema(1494, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterItemStackEnchantment(schema62, false));
-        Schema schema63 = datafixerbuilder.addSchema(1496, DataConverterRegistry.b);
+        Schema schema63 = datafixerbuilder.addSchema(1496, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterLeaves(schema63, false));
-        Schema schema64 = datafixerbuilder.addSchema(1500, DataConverterRegistry.b);
+        Schema schema64 = datafixerbuilder.addSchema(1500, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterBlockEntityKeepPacked(schema64, false));
-        Schema schema65 = datafixerbuilder.addSchema(1501, DataConverterRegistry.b);
+        Schema schema65 = datafixerbuilder.addSchema(1501, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterAdvancement(schema65, false));
-        Schema schema66 = datafixerbuilder.addSchema(1502, DataConverterRegistry.b);
+        Schema schema66 = datafixerbuilder.addSchema(1502, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterRecipes(schema66, false));
-        Schema schema67 = datafixerbuilder.addSchema(1506, DataConverterRegistry.b);
+        Schema schema67 = datafixerbuilder.addSchema(1506, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterLevelDataGeneratorOptions(schema67, false));
         Schema schema68 = datafixerbuilder.addSchema(1510, DataConverterSchemaV1510::new);
 
-        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema68, "Block renamening fix", a(DataConverterEntityRename.b)));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema68, "Item renamening fix", a(DataConverterEntityRename.c)));
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema68, "Block renamening fix", a(DataConverterEntityRename.RENAMED_BLOCKS)));
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema68, "Item renamening fix", a(DataConverterEntityRename.RENAMED_ITEMS)));
         datafixerbuilder.addFixer(new DataConverterRecipeRename(schema68, false));
         datafixerbuilder.addFixer(new DataConverterEntityRename(schema68, true));
-        datafixerbuilder.addFixer(new DataConverterSwimStats(schema68, false));
-        Schema schema69 = datafixerbuilder.addSchema(1514, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new StatsRenameFix(schema68, "SwimStatsRenameFix", ImmutableMap.of("minecraft:swim_one_cm", "minecraft:walk_on_water_one_cm", "minecraft:dive_one_cm", "minecraft:walk_under_water_one_cm")));
+        Schema schema69 = datafixerbuilder.addSchema(1514, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterObjectiveDisplayName(schema69, false));
         datafixerbuilder.addFixer(new DataConverterTeamDisplayName(schema69, false));
         datafixerbuilder.addFixer(new DataConverterObjectiveRenderType(schema69, false));
-        Schema schema70 = datafixerbuilder.addSchema(1515, DataConverterRegistry.b);
+        Schema schema70 = datafixerbuilder.addSchema(1515, DataConverterRegistry.SAME_NAMESPACED);
 
-        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema70, "Rename coral fan blocks", a(DataConverterCoralFan.a)));
-        Schema schema71 = datafixerbuilder.addSchema(1624, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema70, "Rename coral fan blocks", a(DataConverterCoralFan.RENAMED_IDS)));
+        Schema schema71 = datafixerbuilder.addSchema(1624, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterTrappedChest(schema71, false));
         Schema schema72 = datafixerbuilder.addSchema(1800, DataConverterSchemaV1800::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema72, "Added 1.14 mobs fix", DataConverterTypes.ENTITY));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema72, "Rename dye items", a(DataConverterDye.a)));
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema72, "Rename dye items", a(DataConverterDye.RENAMED_IDS)));
         Schema schema73 = datafixerbuilder.addSchema(1801, DataConverterSchemaV1801::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema73, "Added Illager Beast", DataConverterTypes.ENTITY));
-        Schema schema74 = datafixerbuilder.addSchema(1802, DataConverterRegistry.b);
+        Schema schema74 = datafixerbuilder.addSchema(1802, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema74, "Rename sign blocks & stone slabs", a((Map) ImmutableMap.of("minecraft:stone_slab", "minecraft:smooth_stone_slab", "minecraft:sign", "minecraft:oak_sign", "minecraft:wall_sign", "minecraft:oak_wall_sign"))));
         datafixerbuilder.addFixer(DataConverterItemName.a(schema74, "Rename sign item & stone slabs", a((Map) ImmutableMap.of("minecraft:stone_slab", "minecraft:smooth_stone_slab", "minecraft:sign", "minecraft:oak_sign"))));
-        Schema schema75 = datafixerbuilder.addSchema(1803, DataConverterRegistry.b);
+        Schema schema75 = datafixerbuilder.addSchema(1803, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterItemLoreComponentize(schema75, false));
         Schema schema76 = datafixerbuilder.addSchema(1904, DataConverterSchemaV1904::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema76, "Added Cats", DataConverterTypes.ENTITY));
         datafixerbuilder.addFixer(new DataConverterEntityCatSplit(schema76, false));
-        Schema schema77 = datafixerbuilder.addSchema(1905, DataConverterRegistry.b);
+        Schema schema77 = datafixerbuilder.addSchema(1905, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterChunkStatus(schema77, false));
         Schema schema78 = datafixerbuilder.addSchema(1906, DataConverterSchemaV1906::new);
@@ -502,13 +515,13 @@ public class DataConverterRegistry {
         Schema schema79 = datafixerbuilder.addSchema(1909, DataConverterSchemaV1909::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema79, "Add jigsaw", DataConverterTypes.BLOCK_ENTITY));
-        Schema schema80 = datafixerbuilder.addSchema(1911, DataConverterRegistry.b);
+        Schema schema80 = datafixerbuilder.addSchema(1911, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterChunkStatus2(schema80, false));
-        Schema schema81 = datafixerbuilder.addSchema(1917, DataConverterRegistry.b);
+        Schema schema81 = datafixerbuilder.addSchema(1917, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterCatType(schema81, false));
-        Schema schema82 = datafixerbuilder.addSchema(1918, DataConverterRegistry.b);
+        Schema schema82 = datafixerbuilder.addSchema(1918, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema82, "minecraft:villager"));
         datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema82, "minecraft:zombie_villager"));
@@ -516,39 +529,39 @@ public class DataConverterRegistry {
 
         datafixerbuilder.addFixer(new DataConverterNewVillage(schema83, false));
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema83, "Add campfire", DataConverterTypes.BLOCK_ENTITY));
-        Schema schema84 = datafixerbuilder.addSchema(1925, DataConverterRegistry.b);
+        Schema schema84 = datafixerbuilder.addSchema(1925, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterMapId(schema84, false));
         Schema schema85 = datafixerbuilder.addSchema(1928, DataConverterSchemaV1928::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityRavagerRename(schema85, true));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema85, "Rename ravager egg item", a(DataConverterEntityRavagerRename.a)));
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema85, "Rename ravager egg item", a(DataConverterEntityRavagerRename.RENAMED_IDS)));
         Schema schema86 = datafixerbuilder.addSchema(1929, DataConverterSchemaV1929::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema86, "Add Wandering Trader and Trader Llama", DataConverterTypes.ENTITY));
         Schema schema87 = datafixerbuilder.addSchema(1931, DataConverterSchemaV1931::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema87, "Added Fox", DataConverterTypes.ENTITY));
-        Schema schema88 = datafixerbuilder.addSchema(1936, DataConverterRegistry.b);
+        Schema schema88 = datafixerbuilder.addSchema(1936, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterOptionsAddTextBackground(schema88, false));
-        Schema schema89 = datafixerbuilder.addSchema(1946, DataConverterRegistry.b);
+        Schema schema89 = datafixerbuilder.addSchema(1946, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterPOI(schema89, false));
-        Schema schema90 = datafixerbuilder.addSchema(1948, DataConverterRegistry.b);
+        Schema schema90 = datafixerbuilder.addSchema(1948, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterOminousBannerRename(schema90, false));
-        Schema schema91 = datafixerbuilder.addSchema(1953, DataConverterRegistry.b);
+        Schema schema91 = datafixerbuilder.addSchema(1953, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterOminousBannerBlockEntityRename(schema91, false));
-        Schema schema92 = datafixerbuilder.addSchema(1955, DataConverterRegistry.b);
+        Schema schema92 = datafixerbuilder.addSchema(1955, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterVillagerLevelXp(schema92, false));
         datafixerbuilder.addFixer(new DataConverterZombieVillagerLevelXp(schema92, false));
-        Schema schema93 = datafixerbuilder.addSchema(1961, DataConverterRegistry.b);
+        Schema schema93 = datafixerbuilder.addSchema(1961, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterChunkLightRemove(schema93, false));
-        Schema schema94 = datafixerbuilder.addSchema(1963, DataConverterRegistry.b);
+        Schema schema94 = datafixerbuilder.addSchema(1963, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterRemoveGolemGossip(schema94, false));
         Schema schema95 = datafixerbuilder.addSchema(2100, DataConverterSchemaV2100::new);
@@ -557,18 +570,18 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Add beehive", DataConverterTypes.BLOCK_ENTITY));
         datafixerbuilder.addFixer(new DataConverterRecipeBase(schema95, false, "Rename sugar recipe", a("minecraft:sugar", "sugar_from_sugar_cane")));
         datafixerbuilder.addFixer(new DataConverterAdvancementBase(schema95, false, "Rename sugar recipe advancement", a("minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane")));
-        Schema schema96 = datafixerbuilder.addSchema(2202, DataConverterRegistry.b);
+        Schema schema96 = datafixerbuilder.addSchema(2202, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterLeavesBiome(schema96, false));
-        Schema schema97 = datafixerbuilder.addSchema(2209, DataConverterRegistry.b);
+        Schema schema97 = datafixerbuilder.addSchema(2209, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema97, "Rename bee_hive item to beehive", a("minecraft:bee_hive", "minecraft:beehive")));
         datafixerbuilder.addFixer(new DataConverterBeehive(schema97));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema97, "Rename bee_hive block to beehive", a("minecraft:bee_hive", "minecraft:beehive")));
-        Schema schema98 = datafixerbuilder.addSchema(2211, DataConverterRegistry.b);
+        Schema schema98 = datafixerbuilder.addSchema(2211, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterStructureReference(schema98, false));
-        Schema schema99 = datafixerbuilder.addSchema(2218, DataConverterRegistry.b);
+        Schema schema99 = datafixerbuilder.addSchema(2218, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterPOIRebuild(schema99, false));
         Schema schema100 = datafixerbuilder.addSchema(2501, DataConverterSchemaV2501::new);
@@ -577,7 +590,7 @@ public class DataConverterRegistry {
         Schema schema101 = datafixerbuilder.addSchema(2502, DataConverterSchemaV2502::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema101, "Added Hoglin", DataConverterTypes.ENTITY));
-        Schema schema102 = datafixerbuilder.addSchema(2503, DataConverterRegistry.b);
+        Schema schema102 = datafixerbuilder.addSchema(2503, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterWallProperty(schema102, false));
         datafixerbuilder.addFixer(new DataConverterAdvancementBase(schema102, false, "Composter category change", a("minecraft:recipes/misc/composter", "minecraft:recipes/decorations/composter")));
@@ -585,18 +598,18 @@ public class DataConverterRegistry {
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema103, "Added Piglin", DataConverterTypes.ENTITY));
         datafixerbuilder.addFixer(new DataConverterMemoryExpiry(schema103, "minecraft:villager"));
-        Schema schema104 = datafixerbuilder.addSchema(2508, DataConverterRegistry.b);
+        Schema schema104 = datafixerbuilder.addSchema(2508, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema104, "Renamed fungi items to fungus", a((Map) ImmutableMap.of("minecraft:warped_fungi", "minecraft:warped_fungus", "minecraft:crimson_fungi", "minecraft:crimson_fungus"))));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema104, "Renamed fungi blocks to fungus", a((Map) ImmutableMap.of("minecraft:warped_fungi", "minecraft:warped_fungus", "minecraft:crimson_fungi", "minecraft:crimson_fungus"))));
         Schema schema105 = datafixerbuilder.addSchema(2509, DataConverterSchemaV2509::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityZombifiedPiglinRename(schema105));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema105, "Rename zombie pigman egg item", a(DataConverterEntityZombifiedPiglinRename.a)));
-        Schema schema106 = datafixerbuilder.addSchema(2511, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema105, "Rename zombie pigman egg item", a(DataConverterEntityZombifiedPiglinRename.RENAMED_IDS)));
+        Schema schema106 = datafixerbuilder.addSchema(2511, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterEntityProjectileOwner(schema106));
-        Schema schema107 = datafixerbuilder.addSchema(2514, DataConverterRegistry.b);
+        Schema schema107 = datafixerbuilder.addSchema(2514, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterEntityUUID(schema107));
         datafixerbuilder.addFixer(new DataConverterBlockEntityUUID(schema107));
@@ -604,11 +617,11 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterMiscUUID(schema107));
         datafixerbuilder.addFixer(new DataConverterSavedDataUUID(schema107));
         datafixerbuilder.addFixer(new DataConverterItemStackUUID(schema107));
-        Schema schema108 = datafixerbuilder.addSchema(2516, DataConverterRegistry.b);
+        Schema schema108 = datafixerbuilder.addSchema(2516, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterGossip(schema108, "minecraft:villager"));
         datafixerbuilder.addFixer(new DataConverterGossip(schema108, "minecraft:zombie_villager"));
-        Schema schema109 = datafixerbuilder.addSchema(2518, DataConverterRegistry.b);
+        Schema schema109 = datafixerbuilder.addSchema(2518, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterJigsawProperties(schema109, false));
         datafixerbuilder.addFixer(new DataConverterJigsawRotation(schema109, false));
@@ -618,47 +631,104 @@ public class DataConverterRegistry {
         Schema schema111 = datafixerbuilder.addSchema(2522, DataConverterSchemaV2522::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema111, "Added Zoglin", DataConverterTypes.ENTITY));
-        Schema schema112 = datafixerbuilder.addSchema(2523, DataConverterRegistry.b);
+        Schema schema112 = datafixerbuilder.addSchema(2523, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterAttributes(schema112));
-        Schema schema113 = datafixerbuilder.addSchema(2527, DataConverterRegistry.b);
+        Schema schema113 = datafixerbuilder.addSchema(2527, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterBitStorageAlign(schema113));
-        Schema schema114 = datafixerbuilder.addSchema(2528, DataConverterRegistry.b);
+        Schema schema114 = datafixerbuilder.addSchema(2528, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(DataConverterItemName.a(schema114, "Rename soul fire torch and soul fire lantern", a((Map) ImmutableMap.of("minecraft:soul_fire_torch", "minecraft:soul_torch", "minecraft:soul_fire_lantern", "minecraft:soul_lantern"))));
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema114, "Rename soul fire torch and soul fire lantern", a((Map) ImmutableMap.of("minecraft:soul_fire_torch", "minecraft:soul_torch", "minecraft:soul_fire_wall_torch", "minecraft:soul_wall_torch", "minecraft:soul_fire_lantern", "minecraft:soul_lantern"))));
-        Schema schema115 = datafixerbuilder.addSchema(2529, DataConverterRegistry.b);
+        Schema schema115 = datafixerbuilder.addSchema(2529, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterStriderGravity(schema115, false));
-        Schema schema116 = datafixerbuilder.addSchema(2531, DataConverterRegistry.b);
+        Schema schema116 = datafixerbuilder.addSchema(2531, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterRedstoneConnections(schema116));
-        Schema schema117 = datafixerbuilder.addSchema(2533, DataConverterRegistry.b);
+        Schema schema117 = datafixerbuilder.addSchema(2533, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterVillagerFollowRange(schema117));
-        Schema schema118 = datafixerbuilder.addSchema(2535, DataConverterRegistry.b);
+        Schema schema118 = datafixerbuilder.addSchema(2535, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterEntityShulkerRotation(schema118));
-        Schema schema119 = datafixerbuilder.addSchema(2550, DataConverterRegistry.b);
+        Schema schema119 = datafixerbuilder.addSchema(2550, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterWorldGenSettingsBuilding(schema119));
         Schema schema120 = datafixerbuilder.addSchema(2551, DataConverterSchemaV2551::new);
 
         datafixerbuilder.addFixer(new DataConverterShoulderEntity(schema120, "add types to WorldGenData", DataConverterTypes.WORLD_GEN_SETTINGS));
-        Schema schema121 = datafixerbuilder.addSchema(2552, DataConverterRegistry.b);
+        Schema schema121 = datafixerbuilder.addSchema(2552, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterBiomeBase(schema121, false, "Nether biome rename", ImmutableMap.of("minecraft:nether", "minecraft:nether_wastes")));
-        Schema schema122 = datafixerbuilder.addSchema(2553, DataConverterRegistry.b);
+        Schema schema122 = datafixerbuilder.addSchema(2553, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterBiome(schema122, false));
-        Schema schema123 = datafixerbuilder.addSchema(2558, DataConverterRegistry.b);
+        Schema schema123 = datafixerbuilder.addSchema(2558, DataConverterRegistry.SAME_NAMESPACED);
 
         datafixerbuilder.addFixer(new DataConverterMissingDimension(schema123, false));
         datafixerbuilder.addFixer(new DataConverterSettingRename(schema123, false, "Rename swapHands setting", "key_key.swapHands", "key_key.swapOffhand"));
         Schema schema124 = datafixerbuilder.addSchema(2568, DataConverterSchemaV2568::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema124, "Added Piglin Brute", DataConverterTypes.ENTITY));
+        Schema schema125 = datafixerbuilder.addSchema(2571, V2571::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema125, "Added Goat", DataConverterTypes.ENTITY));
+        Schema schema126 = datafixerbuilder.addSchema(2679, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(new CauldronRenameFix(schema126, false));
+        Schema schema127 = datafixerbuilder.addSchema(2680, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema127, "Renamed grass path item to dirt path", a("minecraft:grass_path", "minecraft:dirt_path")));
+        datafixerbuilder.addFixer(BlockRenameFixWithJigsaw.b(schema127, "Renamed grass path block to dirt path", a("minecraft:grass_path", "minecraft:dirt_path")));
+        Schema schema128 = datafixerbuilder.addSchema(2684, V2684::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema128, "Added Sculk Sensor", DataConverterTypes.BLOCK_ENTITY));
+        Schema schema129 = datafixerbuilder.addSchema(2686, V2686::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema129, "Added Axolotl", DataConverterTypes.ENTITY));
+        Schema schema130 = datafixerbuilder.addSchema(2688, V2688::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema130, "Added Glow Squid", DataConverterTypes.ENTITY));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema130, "Added Glow Item Frame", DataConverterTypes.ENTITY));
+        Schema schema131 = datafixerbuilder.addSchema(2690, DataConverterRegistry.SAME_NAMESPACED);
+        ImmutableMap<String, String> immutablemap = ImmutableMap.builder().put("minecraft:weathered_copper_block", "minecraft:oxidized_copper_block").put("minecraft:semi_weathered_copper_block", "minecraft:weathered_copper_block").put("minecraft:lightly_weathered_copper_block", "minecraft:exposed_copper_block").put("minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper").put("minecraft:semi_weathered_cut_copper", "minecraft:weathered_cut_copper").put("minecraft:lightly_weathered_cut_copper", "minecraft:exposed_cut_copper").put("minecraft:weathered_cut_copper_stairs", "minecraft:oxidized_cut_copper_stairs").put("minecraft:semi_weathered_cut_copper_stairs", "minecraft:weathered_cut_copper_stairs").put("minecraft:lightly_weathered_cut_copper_stairs", "minecraft:exposed_cut_copper_stairs").put("minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab").put("minecraft:semi_weathered_cut_copper_slab", "minecraft:weathered_cut_copper_slab").put("minecraft:lightly_weathered_cut_copper_slab", "minecraft:exposed_cut_copper_slab").put("minecraft:waxed_semi_weathered_copper", "minecraft:waxed_weathered_copper").put("minecraft:waxed_lightly_weathered_copper", "minecraft:waxed_exposed_copper").put("minecraft:waxed_semi_weathered_cut_copper", "minecraft:waxed_weathered_cut_copper").put("minecraft:waxed_lightly_weathered_cut_copper", "minecraft:waxed_exposed_cut_copper").put("minecraft:waxed_semi_weathered_cut_copper_stairs", "minecraft:waxed_weathered_cut_copper_stairs").put("minecraft:waxed_lightly_weathered_cut_copper_stairs", "minecraft:waxed_exposed_cut_copper_stairs").put("minecraft:waxed_semi_weathered_cut_copper_slab", "minecraft:waxed_weathered_cut_copper_slab").put("minecraft:waxed_lightly_weathered_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab").build();
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema131, "Renamed copper block items to new oxidized terms", a((Map) immutablemap)));
+        datafixerbuilder.addFixer(BlockRenameFixWithJigsaw.b(schema131, "Renamed copper blocks to new oxidized terms", a((Map) immutablemap)));
+        Schema schema132 = datafixerbuilder.addSchema(2691, DataConverterRegistry.SAME_NAMESPACED);
+        ImmutableMap<String, String> immutablemap1 = ImmutableMap.builder().put("minecraft:waxed_copper", "minecraft:waxed_copper_block").put("minecraft:oxidized_copper_block", "minecraft:oxidized_copper").put("minecraft:weathered_copper_block", "minecraft:weathered_copper").put("minecraft:exposed_copper_block", "minecraft:exposed_copper").build();
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema132, "Rename copper item suffixes", a((Map) immutablemap1)));
+        datafixerbuilder.addFixer(BlockRenameFixWithJigsaw.b(schema132, "Rename copper blocks suffixes", a((Map) immutablemap1)));
+        Schema schema133 = datafixerbuilder.addSchema(2696, DataConverterRegistry.SAME_NAMESPACED);
+        ImmutableMap<String, String> immutablemap2 = ImmutableMap.builder().put("minecraft:grimstone", "minecraft:deepslate").put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab").put("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs").put("minecraft:grimstone_wall", "minecraft:cobbled_deepslate_wall").put("minecraft:polished_grimstone", "minecraft:polished_deepslate").put("minecraft:polished_grimstone_slab", "minecraft:polished_deepslate_slab").put("minecraft:polished_grimstone_stairs", "minecraft:polished_deepslate_stairs").put("minecraft:polished_grimstone_wall", "minecraft:polished_deepslate_wall").put("minecraft:grimstone_tiles", "minecraft:deepslate_tiles").put("minecraft:grimstone_tile_slab", "minecraft:deepslate_tile_slab").put("minecraft:grimstone_tile_stairs", "minecraft:deepslate_tile_stairs").put("minecraft:grimstone_tile_wall", "minecraft:deepslate_tile_wall").put("minecraft:grimstone_bricks", "minecraft:deepslate_bricks").put("minecraft:grimstone_brick_slab", "minecraft:deepslate_brick_slab").put("minecraft:grimstone_brick_stairs", "minecraft:deepslate_brick_stairs").put("minecraft:grimstone_brick_wall", "minecraft:deepslate_brick_wall").put("minecraft:chiseled_grimstone", "minecraft:chiseled_deepslate").build();
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema133, "Renamed grimstone block items to deepslate", a((Map) immutablemap2)));
+        datafixerbuilder.addFixer(BlockRenameFixWithJigsaw.b(schema133, "Renamed grimstone blocks to deepslate", a((Map) immutablemap2)));
+        Schema schema134 = datafixerbuilder.addSchema(2700, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(BlockRenameFixWithJigsaw.b(schema134, "Renamed cave vines blocks", a((Map) ImmutableMap.of("minecraft:cave_vines_head", "minecraft:cave_vines", "minecraft:cave_vines_body", "minecraft:cave_vines_plant"))));
+        Schema schema135 = datafixerbuilder.addSchema(2701, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(new SavedDataFeaturePoolElementFix(schema135));
+        Schema schema136 = datafixerbuilder.addSchema(2702, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(new AbstractArrowPickupFix(schema136));
+        Schema schema137 = datafixerbuilder.addSchema(2704, V2704::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema137, "Added Goat", DataConverterTypes.ENTITY));
+        Schema schema138 = datafixerbuilder.addSchema(2707, V2707::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema138, "Added Marker", DataConverterTypes.ENTITY));
+        Schema schema139 = datafixerbuilder.addSchema(2710, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(new StatsRenameFix(schema139, "Renamed play_one_minute stat to play_time", ImmutableMap.of("minecraft:play_one_minute", "minecraft:play_time")));
+        Schema schema140 = datafixerbuilder.addSchema(2717, DataConverterRegistry.SAME_NAMESPACED);
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema140, "Rename azalea_leaves_flowers", a((Map) ImmutableMap.of("minecraft:azalea_leaves_flowers", "minecraft:flowering_azalea_leaves"))));
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema140, "Rename azalea_leaves_flowers items", a((Map) ImmutableMap.of("minecraft:azalea_leaves_flowers", "minecraft:flowering_azalea_leaves"))));
     }
 
     private static UnaryOperator<String> a(Map<String, String> map) {

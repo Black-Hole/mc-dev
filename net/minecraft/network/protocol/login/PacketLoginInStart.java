@@ -1,29 +1,25 @@
 package net.minecraft.network.protocol.login;
 
 import com.mojang.authlib.GameProfile;
-import java.io.IOException;
 import java.util.UUID;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketLoginInStart implements Packet<PacketLoginInListener> {
 
-    private GameProfile a;
-
-    public PacketLoginInStart() {}
+    private final GameProfile gameProfile;
 
     public PacketLoginInStart(GameProfile gameprofile) {
-        this.a = gameprofile;
+        this.gameProfile = gameprofile;
+    }
+
+    public PacketLoginInStart(PacketDataSerializer packetdataserializer) {
+        this.gameProfile = new GameProfile((UUID) null, packetdataserializer.e(16));
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new GameProfile((UUID) null, packetdataserializer.e(16));
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a.getName());
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.gameProfile.getName());
     }
 
     public void a(PacketLoginInListener packetlogininlistener) {
@@ -31,6 +27,6 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
     }
 
     public GameProfile b() {
-        return this.a;
+        return this.gameProfile;
     }
 }

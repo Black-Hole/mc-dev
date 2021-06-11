@@ -5,49 +5,57 @@ import java.util.BitSet;
 import java.util.Random;
 import java.util.function.Function;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.chunk.IChunkAccess;
-import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureConfigurationChance;
+import net.minecraft.world.level.levelgen.Aquifer;
 
-public class WorldGenCaves extends WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> {
+public class WorldGenCaves extends WorldGenCarverAbstract<CaveCarverConfiguration> {
 
-    public WorldGenCaves(Codec<WorldGenFeatureConfigurationChance> codec, int i) {
-        super(codec, i);
+    public WorldGenCaves(Codec<CaveCarverConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(Random random, int i, int j, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        return random.nextFloat() <= worldgenfeatureconfigurationchance.c;
+    public boolean a(CaveCarverConfiguration cavecarverconfiguration, Random random) {
+        return random.nextFloat() <= cavecarverconfiguration.probability;
     }
 
-    public boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, int i, int j, int k, int l, int i1, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        int j1 = (this.d() * 2 - 1) * 16;
-        int k1 = random.nextInt(random.nextInt(random.nextInt(this.a()) + 1) + 1);
+    public boolean a(CarvingContext carvingcontext, CaveCarverConfiguration cavecarverconfiguration, IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, Aquifer aquifer, ChunkCoordIntPair chunkcoordintpair, BitSet bitset) {
+        int i = SectionPosition.c(this.d() * 2 - 1);
+        int j = random.nextInt(random.nextInt(random.nextInt(this.a()) + 1) + 1);
 
-        for (int l1 = 0; l1 < k1; ++l1) {
-            double d0 = (double) (j * 16 + random.nextInt(16));
-            double d1 = (double) this.b(random);
-            double d2 = (double) (k * 16 + random.nextInt(16));
-            int i2 = 1;
+        for (int k = 0; k < j; ++k) {
+            double d0 = (double) chunkcoordintpair.a(random.nextInt(16));
+            double d1 = (double) cavecarverconfiguration.y.a(random, carvingcontext);
+            double d2 = (double) chunkcoordintpair.b(random.nextInt(16));
+            double d3 = (double) cavecarverconfiguration.horizontalRadiusMultiplier.a(random);
+            double d4 = (double) cavecarverconfiguration.verticalRadiusMultiplier.a(random);
+            double d5 = (double) cavecarverconfiguration.floorLevel.a(random);
+            WorldGenCarverAbstract.a worldgencarverabstract_a = (carvingcontext1, d6, d7, d8, l) -> {
+                return a(d6, d7, d8, d5);
+            };
+            int l = 1;
             float f;
 
             if (random.nextInt(4) == 0) {
-                double d3 = 0.5D;
+                double d6 = (double) cavecarverconfiguration.yScale.a(random);
 
                 f = 1.0F + random.nextFloat() * 6.0F;
-                this.a(ichunkaccess, function, random.nextLong(), i, l, i1, d0, d1, d2, f, 0.5D, bitset);
-                i2 += random.nextInt(4);
+                this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, random.nextLong(), aquifer, d0, d1, d2, f, d6, bitset, worldgencarverabstract_a);
+                l += random.nextInt(4);
             }
 
-            for (int j2 = 0; j2 < i2; ++j2) {
+            for (int i1 = 0; i1 < l; ++i1) {
                 float f1 = random.nextFloat() * 6.2831855F;
 
                 f = (random.nextFloat() - 0.5F) / 4.0F;
                 float f2 = this.a(random);
-                int k2 = j1 - random.nextInt(j1 / 4);
+                int j1 = i - random.nextInt(i / 4);
                 boolean flag = false;
 
-                this.a(ichunkaccess, function, random.nextLong(), i, l, i1, d0, d1, d2, f2, f1, f, 0, k2, this.b(), bitset);
+                this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, random.nextLong(), aquifer, d0, d1, d2, d3, d4, f2, f1, f, 0, j1, this.b(), bitset, worldgencarverabstract_a);
             }
         }
 
@@ -72,27 +80,23 @@ public class WorldGenCaves extends WorldGenCarverAbstract<WorldGenFeatureConfigu
         return 1.0D;
     }
 
-    protected int b(Random random) {
-        return random.nextInt(random.nextInt(120) + 8);
-    }
-
-    protected void a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, long i, int j, int k, int l, double d0, double d1, double d2, float f, double d3, BitSet bitset) {
+    protected void a(CarvingContext carvingcontext, CaveCarverConfiguration cavecarverconfiguration, IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, long i, Aquifer aquifer, double d0, double d1, double d2, float f, double d3, BitSet bitset, WorldGenCarverAbstract.a worldgencarverabstract_a) {
         double d4 = 1.5D + (double) (MathHelper.sin(1.5707964F) * f);
         double d5 = d4 * d3;
 
-        this.a(ichunkaccess, function, i, j, k, l, d0 + 1.0D, d1, d2, d4, d5, bitset);
+        this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, i, aquifer, d0 + 1.0D, d1, d2, d4, d5, bitset, worldgencarverabstract_a);
     }
 
-    protected void a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, long i, int j, int k, int l, double d0, double d1, double d2, float f, float f1, float f2, int i1, int j1, double d3, BitSet bitset) {
+    protected void a(CarvingContext carvingcontext, CaveCarverConfiguration cavecarverconfiguration, IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, long i, Aquifer aquifer, double d0, double d1, double d2, double d3, double d4, float f, float f1, float f2, int j, int k, double d5, BitSet bitset, WorldGenCarverAbstract.a worldgencarverabstract_a) {
         Random random = new Random(i);
-        int k1 = random.nextInt(j1 / 2) + j1 / 4;
+        int l = random.nextInt(k / 2) + k / 4;
         boolean flag = random.nextInt(6) == 0;
         float f3 = 0.0F;
         float f4 = 0.0F;
 
-        for (int l1 = i1; l1 < j1; ++l1) {
-            double d4 = 1.5D + (double) (MathHelper.sin(3.1415927F * (float) l1 / (float) j1) * f);
-            double d5 = d4 * d3;
+        for (int i1 = j; i1 < k; ++i1) {
+            double d6 = 1.5D + (double) (MathHelper.sin(3.1415927F * (float) i1 / (float) k) * f);
+            double d7 = d6 * d5;
             float f5 = MathHelper.cos(f2);
 
             d0 += (double) (MathHelper.cos(f1) * f5);
@@ -105,25 +109,24 @@ public class WorldGenCaves extends WorldGenCarverAbstract<WorldGenFeatureConfigu
             f3 *= 0.75F;
             f4 += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 2.0F;
             f3 += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 4.0F;
-            if (l1 == k1 && f > 1.0F) {
-                this.a(ichunkaccess, function, random.nextLong(), j, k, l, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 - 1.5707964F, f2 / 3.0F, l1, j1, 1.0D, bitset);
-                this.a(ichunkaccess, function, random.nextLong(), j, k, l, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 + 1.5707964F, f2 / 3.0F, l1, j1, 1.0D, bitset);
+            if (i1 == l && f > 1.0F) {
+                this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, random.nextLong(), aquifer, d0, d1, d2, d3, d4, random.nextFloat() * 0.5F + 0.5F, f1 - 1.5707964F, f2 / 3.0F, i1, k, 1.0D, bitset, worldgencarverabstract_a);
+                this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, random.nextLong(), aquifer, d0, d1, d2, d3, d4, random.nextFloat() * 0.5F + 0.5F, f1 + 1.5707964F, f2 / 3.0F, i1, k, 1.0D, bitset, worldgencarverabstract_a);
                 return;
             }
 
             if (random.nextInt(4) != 0) {
-                if (!this.a(k, l, d0, d2, l1, j1, f)) {
+                if (!a(ichunkaccess.getPos(), d0, d2, i1, k, f)) {
                     return;
                 }
 
-                this.a(ichunkaccess, function, i, j, k, l, d0, d1, d2, d4, d5, bitset);
+                this.a(carvingcontext, cavecarverconfiguration, ichunkaccess, function, i, aquifer, d0, d1, d2, d6 * d3, d7 * d4, bitset, worldgencarverabstract_a);
             }
         }
 
     }
 
-    @Override
-    protected boolean a(double d0, double d1, double d2, int i) {
-        return d1 <= -0.7D || d0 * d0 + d1 * d1 + d2 * d2 >= 1.0D;
+    private static boolean a(double d0, double d1, double d2, double d3) {
+        return d1 <= d3 ? true : d0 * d0 + d1 * d1 + d2 * d2 >= 1.0D;
     }
 }

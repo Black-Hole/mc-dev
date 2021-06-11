@@ -11,9 +11,11 @@ import net.minecraft.world.EnumDifficulty;
 
 public class CommandDifficulty {
 
-    private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType ERROR_ALREADY_DIFFICULT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.difficulty.failure", new Object[]{object});
     });
+
+    public CommandDifficulty() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = net.minecraft.commands.CommandDispatcher.a("difficulty");
@@ -42,7 +44,7 @@ public class CommandDifficulty {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
         if (minecraftserver.getSaveData().getDifficulty() == enumdifficulty) {
-            throw CommandDifficulty.a.create(enumdifficulty.c());
+            throw CommandDifficulty.ERROR_ALREADY_DIFFICULT.create(enumdifficulty.c());
         } else {
             minecraftserver.a(enumdifficulty, true);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.difficulty.success", new Object[]{enumdifficulty.b()}), true);

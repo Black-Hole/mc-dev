@@ -19,7 +19,7 @@ public class BlockGlazedTerracotta extends BlockFacingHorizontal {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockGlazedTerracotta.FACING, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockGlazedTerracotta.FACING, blockactioncontext.g().opposite());
     }
 
     @Override

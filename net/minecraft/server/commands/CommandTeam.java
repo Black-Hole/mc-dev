@@ -29,20 +29,22 @@ import net.minecraft.world.scores.ScoreboardTeamBase;
 
 public class CommandTeam {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.team.add.duplicate"));
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_EXISTS = new SimpleCommandExceptionType(new ChatMessage("commands.team.add.duplicate"));
+    private static final DynamicCommandExceptionType ERROR_TEAM_NAME_TOO_LONG = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.team.add.longName", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.team.empty.unchanged"));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.name.unchanged"));
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.color.unchanged"));
-    private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyEnabled"));
-    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyDisabled"));
-    private static final SimpleCommandExceptionType h = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.seeFriendlyInvisibles.alreadyEnabled"));
-    private static final SimpleCommandExceptionType i = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.seeFriendlyInvisibles.alreadyDisabled"));
-    private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.nametagVisibility.unchanged"));
-    private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.deathMessageVisibility.unchanged"));
-    private static final SimpleCommandExceptionType l = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.collisionRule.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_EMPTY = new SimpleCommandExceptionType(new ChatMessage("commands.team.empty.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_NAME = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.name.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_COLOR = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.color.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_FRIENDLYFIRE_ENABLED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyEnabled"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_FRIENDLYFIRE_DISABLED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyDisabled"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_FRIENDLYINVISIBLES_ENABLED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.seeFriendlyInvisibles.alreadyEnabled"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_ALREADY_FRIENDLYINVISIBLES_DISABLED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.seeFriendlyInvisibles.alreadyDisabled"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_NAMETAG_VISIBLITY_UNCHANGED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.nametagVisibility.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_DEATH_MESSAGE_VISIBLITY_UNCHANGED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.deathMessageVisibility.unchanged"));
+    private static final SimpleCommandExceptionType ERROR_TEAM_COLLISION_UNCHANGED = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.collisionRule.unchanged"));
+
+    public CommandTeam() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("team").requires((commandlistenerwrapper) -> {
@@ -61,9 +63,9 @@ public class CommandTeam {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"));
         })))).then(net.minecraft.commands.CommandDispatcher.a("join").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), (Collection) Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).g().getName()));
-        })).then(net.minecraft.commands.CommandDispatcher.a("members", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).executes((commandcontext) -> {
+        })).then(net.minecraft.commands.CommandDispatcher.a("members", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentScoreholder.c(commandcontext, "members"));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("leave").then(net.minecraft.commands.CommandDispatcher.a("members", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).executes((commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("leave").then(net.minecraft.commands.CommandDispatcher.a("members", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "members"));
         })))).then(net.minecraft.commands.CommandDispatcher.a("modify").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).then(net.minecraft.commands.CommandDispatcher.a("displayName").then(net.minecraft.commands.CommandDispatcher.a("displayName", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "displayName"));
@@ -144,7 +146,7 @@ public class CommandTeam {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) throws CommandSyntaxException {
         if (scoreboardteam.getNameTagVisibility() == scoreboardteambase_enumnametagvisibility) {
-            throw CommandTeam.j.create();
+            throw CommandTeam.ERROR_TEAM_NAMETAG_VISIBLITY_UNCHANGED.create();
         } else {
             scoreboardteam.setNameTagVisibility(scoreboardteambase_enumnametagvisibility);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.nametagVisibility.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
@@ -154,7 +156,7 @@ public class CommandTeam {
 
     private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) throws CommandSyntaxException {
         if (scoreboardteam.getDeathMessageVisibility() == scoreboardteambase_enumnametagvisibility) {
-            throw CommandTeam.k.create();
+            throw CommandTeam.ERROR_TEAM_DEATH_MESSAGE_VISIBLITY_UNCHANGED.create();
         } else {
             scoreboardteam.setDeathMessageVisibility(scoreboardteambase_enumnametagvisibility);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.deathMessageVisibility.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
@@ -164,10 +166,10 @@ public class CommandTeam {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush) throws CommandSyntaxException {
         if (scoreboardteam.getCollisionRule() == scoreboardteambase_enumteampush) {
-            throw CommandTeam.l.create();
+            throw CommandTeam.ERROR_TEAM_COLLISION_UNCHANGED.create();
         } else {
             scoreboardteam.setCollisionRule(scoreboardteambase_enumteampush);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.collisionRule.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumteampush.b()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.collisionRule.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumteampush.a()}), true);
             return 0;
         }
     }
@@ -175,9 +177,9 @@ public class CommandTeam {
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, boolean flag) throws CommandSyntaxException {
         if (scoreboardteam.canSeeFriendlyInvisibles() == flag) {
             if (flag) {
-                throw CommandTeam.h.create();
+                throw CommandTeam.ERROR_TEAM_ALREADY_FRIENDLYINVISIBLES_ENABLED.create();
             } else {
-                throw CommandTeam.i.create();
+                throw CommandTeam.ERROR_TEAM_ALREADY_FRIENDLYINVISIBLES_DISABLED.create();
             }
         } else {
             scoreboardteam.setCanSeeFriendlyInvisibles(flag);
@@ -189,9 +191,9 @@ public class CommandTeam {
     private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, boolean flag) throws CommandSyntaxException {
         if (scoreboardteam.allowFriendlyFire() == flag) {
             if (flag) {
-                throw CommandTeam.f.create();
+                throw CommandTeam.ERROR_TEAM_ALREADY_FRIENDLYFIRE_ENABLED.create();
             } else {
-                throw CommandTeam.g.create();
+                throw CommandTeam.ERROR_TEAM_ALREADY_FRIENDLYFIRE_DISABLED.create();
             }
         } else {
             scoreboardteam.setAllowFriendlyFire(flag);
@@ -202,7 +204,7 @@ public class CommandTeam {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
         if (scoreboardteam.getDisplayName().equals(ichatbasecomponent)) {
-            throw CommandTeam.d.create();
+            throw CommandTeam.ERROR_TEAM_ALREADY_NAME.create();
         } else {
             scoreboardteam.setDisplayName(ichatbasecomponent);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.name.success", new Object[]{scoreboardteam.d()}), true);
@@ -212,7 +214,7 @@ public class CommandTeam {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, EnumChatFormat enumchatformat) throws CommandSyntaxException {
         if (scoreboardteam.getColor() == enumchatformat) {
-            throw CommandTeam.e.create();
+            throw CommandTeam.ERROR_TEAM_ALREADY_COLOR.create();
         } else {
             scoreboardteam.setColor(enumchatformat);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.color.success", new Object[]{scoreboardteam.d(), enumchatformat.f()}), true);
@@ -225,7 +227,7 @@ public class CommandTeam {
         Collection<String> collection = Lists.newArrayList(scoreboardteam.getPlayerNameSet());
 
         if (collection.isEmpty()) {
-            throw CommandTeam.c.create();
+            throw CommandTeam.ERROR_TEAM_ALREADY_EMPTY.create();
         } else {
             Iterator iterator = collection.iterator();
 
@@ -256,9 +258,9 @@ public class CommandTeam {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (scoreboardserver.getTeam(s) != null) {
-            throw CommandTeam.a.create();
+            throw CommandTeam.ERROR_TEAM_ALREADY_EXISTS.create();
         } else if (s.length() > 16) {
-            throw CommandTeam.b.create(16);
+            throw CommandTeam.ERROR_TEAM_NAME_TOO_LONG.create(16);
         } else {
             ScoreboardTeam scoreboardteam = scoreboardserver.createTeam(s);
 

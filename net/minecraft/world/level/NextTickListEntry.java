@@ -5,23 +5,23 @@ import net.minecraft.core.BlockPosition;
 
 public class NextTickListEntry<T> {
 
-    private static long d;
-    private final T e;
-    public final BlockPosition a;
-    public final long b;
-    public final TickListPriority c;
-    private final long f;
+    private static long counter;
+    private final T type;
+    public final BlockPosition pos;
+    public final long triggerTick;
+    public final TickListPriority priority;
+    private final long c;
 
     public NextTickListEntry(BlockPosition blockposition, T t0) {
         this(blockposition, t0, 0L, TickListPriority.NORMAL);
     }
 
     public NextTickListEntry(BlockPosition blockposition, T t0, long i, TickListPriority ticklistpriority) {
-        this.f = (long) (NextTickListEntry.d++);
-        this.a = blockposition.immutableCopy();
-        this.e = t0;
-        this.b = i;
-        this.c = ticklistpriority;
+        this.c = (long) (NextTickListEntry.counter++);
+        this.pos = blockposition.immutableCopy();
+        this.type = t0;
+        this.triggerTick = i;
+        this.priority = ticklistpriority;
     }
 
     public boolean equals(Object object) {
@@ -30,29 +30,29 @@ public class NextTickListEntry<T> {
         } else {
             NextTickListEntry<?> nextticklistentry = (NextTickListEntry) object;
 
-            return this.a.equals(nextticklistentry.a) && this.e == nextticklistentry.e;
+            return this.pos.equals(nextticklistentry.pos) && this.type == nextticklistentry.type;
         }
     }
 
     public int hashCode() {
-        return this.a.hashCode();
+        return this.pos.hashCode();
     }
 
     public static <T> Comparator<NextTickListEntry<T>> a() {
         return Comparator.comparingLong((nextticklistentry) -> {
-            return nextticklistentry.b;
+            return nextticklistentry.triggerTick;
         }).thenComparing((nextticklistentry) -> {
-            return nextticklistentry.c;
+            return nextticklistentry.priority;
         }).thenComparingLong((nextticklistentry) -> {
-            return nextticklistentry.f;
+            return nextticklistentry.c;
         });
     }
 
     public String toString() {
-        return this.e + ": " + this.a + ", " + this.b + ", " + this.c + ", " + this.f;
+        return this.type + ": " + this.pos + ", " + this.triggerTick + ", " + this.priority + ", " + this.c;
     }
 
     public T b() {
-        return this.e;
+        return this.type;
     }
 }

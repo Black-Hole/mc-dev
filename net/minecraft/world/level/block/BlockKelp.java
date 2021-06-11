@@ -18,25 +18,26 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockKelp extends BlockGrowingTop implements IFluidContainer {
 
-    protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
+    protected static final VoxelShape SHAPE = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
+    private static final double GROW_PER_TICK_PROBABILITY = 0.14D;
 
     protected BlockKelp(BlockBase.Info blockbase_info) {
-        super(blockbase_info, EnumDirection.UP, BlockKelp.e, true, 0.14D);
+        super(blockbase_info, EnumDirection.UP, BlockKelp.SHAPE, true, 0.14D);
     }
 
     @Override
-    protected boolean h(IBlockData iblockdata) {
+    protected boolean g(IBlockData iblockdata) {
         return iblockdata.a(Blocks.WATER);
     }
 
     @Override
-    protected Block d() {
+    protected Block c() {
         return Blocks.KELP_PLANT;
     }
 
     @Override
-    protected boolean c(Block block) {
-        return block != Blocks.MAGMA_BLOCK;
+    protected boolean h(IBlockData iblockdata) {
+        return !iblockdata.a(Blocks.MAGMA_BLOCK);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class BlockKelp extends BlockGrowingTop implements IFluidContainer {
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
+    public Fluid c_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 }

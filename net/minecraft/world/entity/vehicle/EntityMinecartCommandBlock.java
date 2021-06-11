@@ -16,13 +16,15 @@ import net.minecraft.world.level.CommandBlockListenerAbstract;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.phys.Vec3D;
 
 public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
-    public static final DataWatcherObject<String> COMMAND = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
-    private static final DataWatcherObject<IChatBaseComponent> c = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.e);
-    private final CommandBlockListenerAbstract d = new EntityMinecartCommandBlock.a();
-    private int e;
+    public static final DataWatcherObject<String> DATA_ID_COMMAND_NAME = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.STRING);
+    static final DataWatcherObject<IChatBaseComponent> DATA_ID_LAST_OUTPUT = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.COMPONENT);
+    private final CommandBlockListenerAbstract commandBlock = new EntityMinecartCommandBlock.a();
+    private static final int ACTIVATION_DELAY = 4;
+    private int lastActivated;
 
     public EntityMinecartCommandBlock(EntityTypes<? extends EntityMinecartCommandBlock> entitytypes, World world) {
         super(entitytypes, world);
@@ -35,22 +37,22 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.getDataWatcher().register(EntityMinecartCommandBlock.COMMAND, "");
-        this.getDataWatcher().register(EntityMinecartCommandBlock.c, ChatComponentText.d);
+        this.getDataWatcher().register(EntityMinecartCommandBlock.DATA_ID_COMMAND_NAME, "");
+        this.getDataWatcher().register(EntityMinecartCommandBlock.DATA_ID_LAST_OUTPUT, ChatComponentText.EMPTY);
     }
 
     @Override
     protected void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.d.b(nbttagcompound);
-        this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommandBlock().getCommand());
-        this.getDataWatcher().set(EntityMinecartCommandBlock.c, this.getCommandBlock().j());
+        this.commandBlock.b(nbttagcompound);
+        this.getDataWatcher().set(EntityMinecartCommandBlock.DATA_ID_COMMAND_NAME, this.getCommandBlock().getCommand());
+        this.getDataWatcher().set(EntityMinecartCommandBlock.DATA_ID_LAST_OUTPUT, this.getCommandBlock().k());
     }
 
     @Override
     protected void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        this.d.a(nbttagcompound);
+        this.commandBlock.a(nbttagcompound);
     }
 
     @Override
@@ -59,45 +61,45 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     }
 
     @Override
-    public IBlockData q() {
+    public IBlockData r() {
         return Blocks.COMMAND_BLOCK.getBlockData();
     }
 
     public CommandBlockListenerAbstract getCommandBlock() {
-        return this.d;
+        return this.commandBlock;
     }
 
     @Override
     public void a(int i, int j, int k, boolean flag) {
-        if (flag && this.ticksLived - this.e >= 4) {
-            this.getCommandBlock().a(this.world);
-            this.e = this.ticksLived;
+        if (flag && this.tickCount - this.lastActivated >= 4) {
+            this.getCommandBlock().a(this.level);
+            this.lastActivated = this.tickCount;
         }
 
     }
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
-        return this.d.a(entityhuman);
+        return this.commandBlock.a(entityhuman);
     }
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         super.a(datawatcherobject);
-        if (EntityMinecartCommandBlock.c.equals(datawatcherobject)) {
+        if (EntityMinecartCommandBlock.DATA_ID_LAST_OUTPUT.equals(datawatcherobject)) {
             try {
-                this.d.b((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.c));
+                this.commandBlock.b((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.DATA_ID_LAST_OUTPUT));
             } catch (Throwable throwable) {
                 ;
             }
-        } else if (EntityMinecartCommandBlock.COMMAND.equals(datawatcherobject)) {
-            this.d.setCommand((String) this.getDataWatcher().get(EntityMinecartCommandBlock.COMMAND));
+        } else if (EntityMinecartCommandBlock.DATA_ID_COMMAND_NAME.equals(datawatcherobject)) {
+            this.commandBlock.setCommand((String) this.getDataWatcher().get(EntityMinecartCommandBlock.DATA_ID_COMMAND_NAME));
         }
 
     }
 
     @Override
-    public boolean cj() {
+    public boolean cy() {
         return true;
     }
 
@@ -106,19 +108,28 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         public a() {}
 
         @Override
-        public WorldServer d() {
-            return (WorldServer) EntityMinecartCommandBlock.this.world;
+        public WorldServer e() {
+            return (WorldServer) EntityMinecartCommandBlock.this.level;
         }
 
         @Override
-        public void e() {
-            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommand());
-            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.c, this.j());
+        public void f() {
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.DATA_ID_COMMAND_NAME, this.getCommand());
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.DATA_ID_LAST_OUTPUT, this.k());
+        }
+
+        @Override
+        public Vec3D g() {
+            return EntityMinecartCommandBlock.this.getPositionVector();
+        }
+
+        public EntityMinecartCommandBlock h() {
+            return EntityMinecartCommandBlock.this;
         }
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.bi(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
+            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.br(), this.e(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.e().getMinecraftServer(), EntityMinecartCommandBlock.this);
         }
     }
 }

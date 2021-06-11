@@ -44,7 +44,7 @@ public class EnchantmentFrostWalker extends Enchantment {
             IBlockData iblockdata = Blocks.FROSTED_ICE.getBlockData();
             float f = (float) Math.min(16, 2 + i);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            Iterator iterator = BlockPosition.a(blockposition.a((double) (-f), -1.0D, (double) (-f)), blockposition.a((double) f, -1.0D, (double) f)).iterator();
+            Iterator iterator = BlockPosition.a(blockposition.b((double) (-f), -1.0D, (double) (-f)), blockposition.b((double) f, -1.0D, (double) f)).iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();

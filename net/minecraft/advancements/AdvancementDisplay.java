@@ -19,51 +19,72 @@ import net.minecraft.world.item.ItemStack;
 
 public class AdvancementDisplay {
 
-    private final IChatBaseComponent a;
-    private final IChatBaseComponent b;
-    private final ItemStack c;
-    private final MinecraftKey d;
-    private final AdvancementFrameType e;
-    private final boolean f;
-    private final boolean g;
-    private final boolean h;
-    private float i;
-    private float j;
+    private final IChatBaseComponent title;
+    private final IChatBaseComponent description;
+    private final ItemStack icon;
+    private final MinecraftKey background;
+    private final AdvancementFrameType frame;
+    private final boolean showToast;
+    private final boolean announceChat;
+    private final boolean hidden;
+    private float x;
+    private float y;
 
     public AdvancementDisplay(ItemStack itemstack, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, @Nullable MinecraftKey minecraftkey, AdvancementFrameType advancementframetype, boolean flag, boolean flag1, boolean flag2) {
-        this.a = ichatbasecomponent;
-        this.b = ichatbasecomponent1;
-        this.c = itemstack;
-        this.d = minecraftkey;
-        this.e = advancementframetype;
-        this.f = flag;
-        this.g = flag1;
-        this.h = flag2;
+        this.title = ichatbasecomponent;
+        this.description = ichatbasecomponent1;
+        this.icon = itemstack;
+        this.background = minecraftkey;
+        this.frame = advancementframetype;
+        this.showToast = flag;
+        this.announceChat = flag1;
+        this.hidden = flag2;
     }
 
     public void a(float f, float f1) {
-        this.i = f;
-        this.j = f1;
+        this.x = f;
+        this.y = f1;
     }
 
     public IChatBaseComponent a() {
-        return this.a;
+        return this.title;
     }
 
     public IChatBaseComponent b() {
-        return this.b;
+        return this.description;
+    }
+
+    public ItemStack c() {
+        return this.icon;
+    }
+
+    @Nullable
+    public MinecraftKey d() {
+        return this.background;
     }
 
     public AdvancementFrameType e() {
-        return this.e;
+        return this.frame;
+    }
+
+    public float f() {
+        return this.x;
+    }
+
+    public float g() {
+        return this.y;
+    }
+
+    public boolean h() {
+        return this.showToast;
     }
 
     public boolean i() {
-        return this.g;
+        return this.announceChat;
     }
 
     public boolean j() {
-        return this.h;
+        return this.hidden;
     }
 
     public static AdvancementDisplay a(JsonObject jsonobject) {
@@ -111,40 +132,40 @@ public class AdvancementDisplay {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.a(this.c);
-        packetdataserializer.a((Enum) this.e);
+        packetdataserializer.a(this.title);
+        packetdataserializer.a(this.description);
+        packetdataserializer.a(this.icon);
+        packetdataserializer.a((Enum) this.frame);
         int i = 0;
 
-        if (this.d != null) {
+        if (this.background != null) {
             i |= 1;
         }
 
-        if (this.f) {
+        if (this.showToast) {
             i |= 2;
         }
 
-        if (this.h) {
+        if (this.hidden) {
             i |= 4;
         }
 
         packetdataserializer.writeInt(i);
-        if (this.d != null) {
-            packetdataserializer.a(this.d);
+        if (this.background != null) {
+            packetdataserializer.a(this.background);
         }
 
-        packetdataserializer.writeFloat(this.i);
-        packetdataserializer.writeFloat(this.j);
+        packetdataserializer.writeFloat(this.x);
+        packetdataserializer.writeFloat(this.y);
     }
 
     public static AdvancementDisplay b(PacketDataSerializer packetdataserializer) {
-        IChatBaseComponent ichatbasecomponent = packetdataserializer.h();
-        IChatBaseComponent ichatbasecomponent1 = packetdataserializer.h();
-        ItemStack itemstack = packetdataserializer.n();
+        IChatBaseComponent ichatbasecomponent = packetdataserializer.i();
+        IChatBaseComponent ichatbasecomponent1 = packetdataserializer.i();
+        ItemStack itemstack = packetdataserializer.o();
         AdvancementFrameType advancementframetype = (AdvancementFrameType) packetdataserializer.a(AdvancementFrameType.class);
         int i = packetdataserializer.readInt();
-        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.p() : null;
+        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.q() : null;
         boolean flag = (i & 2) != 0;
         boolean flag1 = (i & 4) != 0;
         AdvancementDisplay advancementdisplay = new AdvancementDisplay(itemstack, ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, false, flag1);
@@ -157,14 +178,14 @@ public class AdvancementDisplay {
         JsonObject jsonobject = new JsonObject();
 
         jsonobject.add("icon", this.l());
-        jsonobject.add("title", IChatBaseComponent.ChatSerializer.b(this.a));
-        jsonobject.add("description", IChatBaseComponent.ChatSerializer.b(this.b));
-        jsonobject.addProperty("frame", this.e.a());
-        jsonobject.addProperty("show_toast", this.f);
-        jsonobject.addProperty("announce_to_chat", this.g);
-        jsonobject.addProperty("hidden", this.h);
-        if (this.d != null) {
-            jsonobject.addProperty("background", this.d.toString());
+        jsonobject.add("title", IChatBaseComponent.ChatSerializer.b(this.title));
+        jsonobject.add("description", IChatBaseComponent.ChatSerializer.b(this.description));
+        jsonobject.addProperty("frame", this.frame.a());
+        jsonobject.addProperty("show_toast", this.showToast);
+        jsonobject.addProperty("announce_to_chat", this.announceChat);
+        jsonobject.addProperty("hidden", this.hidden);
+        if (this.background != null) {
+            jsonobject.addProperty("background", this.background.toString());
         }
 
         return jsonobject;
@@ -173,9 +194,9 @@ public class AdvancementDisplay {
     private JsonObject l() {
         JsonObject jsonobject = new JsonObject();
 
-        jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.c.getItem()).toString());
-        if (this.c.hasTag()) {
-            jsonobject.addProperty("nbt", this.c.getTag().toString());
+        jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.icon.getItem()).toString());
+        if (this.icon.hasTag()) {
+            jsonobject.addProperty("nbt", this.icon.getTag().toString());
         }
 
         return jsonobject;

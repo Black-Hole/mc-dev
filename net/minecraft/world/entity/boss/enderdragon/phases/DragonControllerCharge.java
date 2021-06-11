@@ -9,8 +9,9 @@ import org.apache.logging.log4j.Logger;
 public class DragonControllerCharge extends AbstractDragonController {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private Vec3D c;
-    private int d;
+    private static final int CHARGE_RECOVERY_TIME = 10;
+    private Vec3D targetLocation;
+    private int timeSinceCharge;
 
     public DragonControllerCharge(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -18,16 +19,16 @@ public class DragonControllerCharge extends AbstractDragonController {
 
     @Override
     public void c() {
-        if (this.c == null) {
+        if (this.targetLocation == null) {
             DragonControllerCharge.LOGGER.warn("Aborting charge player as no target was set.");
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
-        } else if (this.d > 0 && this.d++ >= 10) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
+            this.dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
+        } else if (this.timeSinceCharge > 0 && this.timeSinceCharge++ >= 10) {
+            this.dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else {
-            double d0 = this.c.c(this.a.locX(), this.a.locY(), this.a.locZ());
+            double d0 = this.targetLocation.c(this.dragon.locX(), this.dragon.locY(), this.dragon.locZ());
 
-            if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.v) {
-                ++this.d;
+            if (d0 < 100.0D || d0 > 22500.0D || this.dragon.horizontalCollision || this.dragon.verticalCollision) {
+                ++this.timeSinceCharge;
             }
 
         }
@@ -35,12 +36,12 @@ public class DragonControllerCharge extends AbstractDragonController {
 
     @Override
     public void d() {
-        this.c = null;
-        this.d = 0;
+        this.targetLocation = null;
+        this.timeSinceCharge = 0;
     }
 
     public void a(Vec3D vec3d) {
-        this.c = vec3d;
+        this.targetLocation = vec3d;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class DragonControllerCharge extends AbstractDragonController {
     @Nullable
     @Override
     public Vec3D g() {
-        return this.c;
+        return this.targetLocation;
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface IStructureAccess {
 
     void a(StructureGenerator<?> structuregenerator, long i);
 
-    Map<StructureGenerator<?>, LongSet> v();
+    Map<StructureGenerator<?>, LongSet> w();
 
     void b(Map<StructureGenerator<?>, LongSet> map);
 }

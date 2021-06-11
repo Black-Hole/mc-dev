@@ -7,7 +7,6 @@ import net.minecraft.core.EnumDirection;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 import net.minecraft.world.level.material.Material;
 
@@ -17,7 +16,12 @@ public class WorldGenFeatureBlueIce extends WorldGenerator<WorldGenFeatureEmptyC
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        Random random = featureplacecontext.c();
+
         if (blockposition.getY() > generatoraccessseed.getSeaLevel() - 1) {
             return false;
         } else if (!generatoraccessseed.getType(blockposition).a(Blocks.WATER) && !generatoraccessseed.getType(blockposition.down()).a(Blocks.WATER)) {
@@ -51,7 +55,7 @@ public class WorldGenFeatureBlueIce extends WorldGenerator<WorldGenFeatureEmptyC
                     }
 
                     if (j >= 1) {
-                        BlockPosition blockposition1 = blockposition.b(random.nextInt(j) - random.nextInt(j), i, random.nextInt(j) - random.nextInt(j));
+                        BlockPosition blockposition1 = blockposition.c(random.nextInt(j) - random.nextInt(j), i, random.nextInt(j) - random.nextInt(j));
                         IBlockData iblockdata = generatoraccessseed.getType(blockposition1);
 
                         if (iblockdata.getMaterial() == Material.AIR || iblockdata.a(Blocks.WATER) || iblockdata.a(Blocks.PACKED_ICE) || iblockdata.a(Blocks.ICE)) {

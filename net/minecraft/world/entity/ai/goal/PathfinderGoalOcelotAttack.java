@@ -8,45 +8,45 @@ import net.minecraft.world.level.IBlockAccess;
 
 public class PathfinderGoalOcelotAttack extends PathfinderGoal {
 
-    private final IBlockAccess a;
-    private final EntityInsentient b;
-    private EntityLiving c;
-    private int d;
+    private final IBlockAccess level;
+    private final EntityInsentient mob;
+    private EntityLiving target;
+    private int attackTime;
 
     public PathfinderGoalOcelotAttack(EntityInsentient entityinsentient) {
-        this.b = entityinsentient;
-        this.a = entityinsentient.world;
+        this.mob = entityinsentient;
+        this.level = entityinsentient.level;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
     @Override
     public boolean a() {
-        EntityLiving entityliving = this.b.getGoalTarget();
+        EntityLiving entityliving = this.mob.getGoalTarget();
 
         if (entityliving == null) {
             return false;
         } else {
-            this.c = entityliving;
+            this.target = entityliving;
             return true;
         }
     }
 
     @Override
     public boolean b() {
-        return !this.c.isAlive() ? false : (this.b.h((Entity) this.c) > 225.0D ? false : !this.b.getNavigation().m() || this.a());
+        return !this.target.isAlive() ? false : (this.mob.f((Entity) this.target) > 225.0D ? false : !this.mob.getNavigation().m() || this.a());
     }
 
     @Override
     public void d() {
-        this.c = null;
-        this.b.getNavigation().o();
+        this.target = null;
+        this.mob.getNavigation().o();
     }
 
     @Override
     public void e() {
-        this.b.getControllerLook().a(this.c, 30.0F, 30.0F);
-        double d0 = (double) (this.b.getWidth() * 2.0F * this.b.getWidth() * 2.0F);
-        double d1 = this.b.h(this.c.locX(), this.c.locY(), this.c.locZ());
+        this.mob.getControllerLook().a(this.target, 30.0F, 30.0F);
+        double d0 = (double) (this.mob.getWidth() * 2.0F * this.mob.getWidth() * 2.0F);
+        double d1 = this.mob.h(this.target.locX(), this.target.locY(), this.target.locZ());
         double d2 = 0.8D;
 
         if (d1 > d0 && d1 < 16.0D) {
@@ -55,12 +55,12 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
             d2 = 0.6D;
         }
 
-        this.b.getNavigation().a((Entity) this.c, d2);
-        this.d = Math.max(this.d - 1, 0);
+        this.mob.getNavigation().a((Entity) this.target, d2);
+        this.attackTime = Math.max(this.attackTime - 1, 0);
         if (d1 <= d0) {
-            if (this.d <= 0) {
-                this.d = 20;
-                this.b.attackEntity(this.c);
+            if (this.attackTime <= 0) {
+                this.attackTime = 20;
+                this.mob.attackEntity(this.target);
             }
         }
     }

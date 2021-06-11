@@ -14,69 +14,84 @@ import net.minecraft.advancements.critereon.CriterionConditionValue;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentEntity;
 import net.minecraft.network.chat.ChatComponentUtils;
-import net.minecraft.network.chat.IChatMutableComponent;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.Vec3D;
 
 public class EntitySelector {
 
-    private final int a;
-    private final boolean b;
-    private final boolean c;
-    private final Predicate<Entity> d;
-    private final CriterionConditionValue.FloatRange e;
-    private final Function<Vec3D, Vec3D> f;
-    @Nullable
-    private final AxisAlignedBB g;
-    private final BiConsumer<Vec3D, List<? extends Entity>> h;
-    private final boolean i;
-    @Nullable
-    private final String j;
-    @Nullable
-    private final UUID k;
-    @Nullable
-    private final EntityTypes<?> l;
-    private final boolean checkPermissions;
+    public static final int INFINITE = Integer.MAX_VALUE;
+    private static final EntityTypeTest<Entity, ?> ANY_TYPE = new EntityTypeTest<Entity, Entity>() {
+        public Entity a(Entity entity) {
+            return entity;
+        }
 
-    public EntitySelector(int i, boolean flag, boolean flag1, Predicate<Entity> predicate, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, Function<Vec3D, Vec3D> function, @Nullable AxisAlignedBB axisalignedbb, BiConsumer<Vec3D, List<? extends Entity>> biconsumer, boolean flag2, @Nullable String s, @Nullable UUID uuid, @Nullable EntityTypes<?> entitytypes, boolean flag3) {
-        this.a = i;
-        this.b = flag;
-        this.c = flag1;
-        this.d = predicate;
-        this.e = criterionconditionvalue_floatrange;
-        this.f = function;
-        this.g = axisalignedbb;
-        this.h = biconsumer;
-        this.i = flag2;
-        this.j = s;
-        this.k = uuid;
-        this.l = entitytypes;
-        this.checkPermissions = flag3;
+        @Override
+        public Class<? extends Entity> a() {
+            return Entity.class;
+        }
+    };
+    private final int maxResults;
+    private final boolean includesEntities;
+    private final boolean worldLimited;
+    private final Predicate<Entity> predicate;
+    private final CriterionConditionValue.DoubleRange range;
+    private final Function<Vec3D, Vec3D> position;
+    @Nullable
+    private final AxisAlignedBB aabb;
+    private final BiConsumer<Vec3D, List<? extends Entity>> order;
+    private final boolean currentEntity;
+    @Nullable
+    private final String playerName;
+    @Nullable
+    private final UUID entityUUID;
+    private EntityTypeTest<Entity, ?> type;
+    private final boolean usesSelector;
+
+    public EntitySelector(int i, boolean flag, boolean flag1, Predicate<Entity> predicate, CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange, Function<Vec3D, Vec3D> function, @Nullable AxisAlignedBB axisalignedbb, BiConsumer<Vec3D, List<? extends Entity>> biconsumer, boolean flag2, @Nullable String s, @Nullable UUID uuid, @Nullable EntityTypes<?> entitytypes, boolean flag3) {
+        this.maxResults = i;
+        this.includesEntities = flag;
+        this.worldLimited = flag1;
+        this.predicate = predicate;
+        this.range = criterionconditionvalue_doublerange;
+        this.position = function;
+        this.aabb = axisalignedbb;
+        this.order = biconsumer;
+        this.currentEntity = flag2;
+        this.playerName = s;
+        this.entityUUID = uuid;
+        this.type = (EntityTypeTest) (entitytypes == null ? EntitySelector.ANY_TYPE : entitytypes);
+        this.usesSelector = flag3;
     }
 
     public int a() {
-        return this.a;
+        return this.maxResults;
     }
 
     public boolean b() {
-        return this.b;
+        return this.includesEntities;
     }
 
     public boolean c() {
-        return this.i;
+        return this.currentEntity;
     }
 
     public boolean d() {
-        return this.c;
+        return this.worldLimited;
+    }
+
+    public boolean e() {
+        return this.usesSelector;
     }
 
     private void e(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-        if (this.checkPermissions && !commandlistenerwrapper.hasPermission(2)) {
-            throw ArgumentEntity.f.create();
+        if (this.usesSelector && !commandlistenerwrapper.hasPermission(2)) {
+            throw ArgumentEntity.ERROR_SELECTORS_NOT_ALLOWED.create();
         }
     }
 
@@ -85,9 +100,9 @@ public class EntitySelector {
         List<? extends Entity> list = this.getEntities(commandlistenerwrapper);
 
         if (list.isEmpty()) {
-            throw ArgumentEntity.d.create();
+            throw ArgumentEntity.NO_ENTITIES_FOUND.create();
         } else if (list.size() > 1) {
-            throw ArgumentEntity.a.create();
+            throw ArgumentEntity.ERROR_NOT_SINGLE_ENTITY.create();
         } else {
             return (Entity) list.get(0);
         }
@@ -95,13 +110,13 @@ public class EntitySelector {
 
     public List<? extends Entity> getEntities(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         this.e(commandlistenerwrapper);
-        if (!this.b) {
+        if (!this.includesEntities) {
             return this.d(commandlistenerwrapper);
-        } else if (this.j != null) {
-            EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.j);
+        } else if (this.playerName != null) {
+            EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.playerName);
 
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
-        } else if (this.k != null) {
+        } else if (this.entityUUID != null) {
             Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
             Entity entity;
@@ -113,15 +128,15 @@ public class EntitySelector {
 
                 WorldServer worldserver = (WorldServer) iterator.next();
 
-                entity = worldserver.getEntity(this.k);
+                entity = worldserver.getEntity(this.entityUUID);
             } while (entity == null);
 
             return Lists.newArrayList(new Entity[]{entity});
         } else {
-            Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
+            Vec3D vec3d = (Vec3D) this.position.apply(commandlistenerwrapper.getPosition());
             Predicate<Entity> predicate = this.a(vec3d);
 
-            if (this.i) {
+            if (this.currentEntity) {
                 return (List) (commandlistenerwrapper.getEntity() != null && predicate.test(commandlistenerwrapper.getEntity()) ? Lists.newArrayList(new Entity[]{commandlistenerwrapper.getEntity()}) : Collections.emptyList());
             } else {
                 List<Entity> list = Lists.newArrayList();
@@ -144,10 +159,10 @@ public class EntitySelector {
     }
 
     private void a(List<Entity> list, WorldServer worldserver, Vec3D vec3d, Predicate<Entity> predicate) {
-        if (this.g != null) {
-            list.addAll(worldserver.a(this.l, this.g.c(vec3d), predicate));
+        if (this.aabb != null) {
+            list.addAll(worldserver.a(this.type, this.aabb.c(vec3d), predicate));
         } else {
-            list.addAll(worldserver.a(this.l, predicate));
+            list.addAll(worldserver.a(this.type, predicate));
         }
 
     }
@@ -157,7 +172,7 @@ public class EntitySelector {
         List<EntityPlayer> list = this.d(commandlistenerwrapper);
 
         if (list.size() != 1) {
-            throw ArgumentEntity.e.create();
+            throw ArgumentEntity.NO_PLAYERS_FOUND.create();
         } else {
             return (EntityPlayer) list.get(0);
         }
@@ -167,17 +182,17 @@ public class EntitySelector {
         this.e(commandlistenerwrapper);
         EntityPlayer entityplayer;
 
-        if (this.j != null) {
-            entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.j);
+        if (this.playerName != null) {
+            entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.playerName);
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
-        } else if (this.k != null) {
-            entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.k);
+        } else if (this.entityUUID != null) {
+            entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.entityUUID);
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else {
-            Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
+            Vec3D vec3d = (Vec3D) this.position.apply(commandlistenerwrapper.getPosition());
             Predicate<Entity> predicate = this.a(vec3d);
 
-            if (this.i) {
+            if (this.currentEntity) {
                 if (commandlistenerwrapper.getEntity() instanceof EntityPlayer) {
                     EntityPlayer entityplayer1 = (EntityPlayer) commandlistenerwrapper.getEntity();
 
@@ -191,10 +206,7 @@ public class EntitySelector {
                 Object object;
 
                 if (this.d()) {
-                    WorldServer worldserver = commandlistenerwrapper.getWorld();
-
-                    predicate.getClass();
-                    object = worldserver.a(predicate::test);
+                    object = commandlistenerwrapper.getWorld().a(predicate);
                 } else {
                     object = Lists.newArrayList();
                     Iterator iterator = commandlistenerwrapper.getServer().getPlayerList().getPlayers().iterator();
@@ -214,19 +226,19 @@ public class EntitySelector {
     }
 
     private Predicate<Entity> a(Vec3D vec3d) {
-        Predicate<Entity> predicate = this.d;
+        Predicate<Entity> predicate = this.predicate;
 
-        if (this.g != null) {
-            AxisAlignedBB axisalignedbb = this.g.c(vec3d);
+        if (this.aabb != null) {
+            AxisAlignedBB axisalignedbb = this.aabb.c(vec3d);
 
             predicate = predicate.and((entity) -> {
                 return axisalignedbb.c(entity.getBoundingBox());
             });
         }
 
-        if (!this.e.c()) {
+        if (!this.range.c()) {
             predicate = predicate.and((entity) -> {
-                return this.e.a(entity.e(vec3d));
+                return this.range.e(entity.e(vec3d));
             });
         }
 
@@ -235,13 +247,13 @@ public class EntitySelector {
 
     private <T extends Entity> List<T> a(Vec3D vec3d, List<T> list) {
         if (list.size() > 1) {
-            this.h.accept(vec3d, list);
+            this.order.accept(vec3d, list);
         }
 
-        return list.subList(0, Math.min(this.a, list.size()));
+        return list.subList(0, Math.min(this.maxResults, list.size()));
     }
 
-    public static IChatMutableComponent a(List<? extends Entity> list) {
+    public static IChatBaseComponent a(List<? extends Entity> list) {
         return ChatComponentUtils.b(list, Entity::getScoreboardDisplayName);
     }
 }

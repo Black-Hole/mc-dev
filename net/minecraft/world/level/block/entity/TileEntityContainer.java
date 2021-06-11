@@ -1,6 +1,7 @@
 package net.minecraft.world.level.block.entity;
 
 import javax.annotation.Nullable;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
@@ -17,20 +18,20 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public abstract class TileEntityContainer extends TileEntity implements IInventory, ITileInventory, INamableTileEntity {
 
-    public ChestLock chestLock;
-    public IChatBaseComponent customName;
+    public ChestLock lockKey;
+    public IChatBaseComponent name;
 
-    protected TileEntityContainer(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
-        this.chestLock = ChestLock.a;
+    protected TileEntityContainer(TileEntityTypes<?> tileentitytypes, BlockPosition blockposition, IBlockData iblockdata) {
+        super(tileentitytypes, blockposition, iblockdata);
+        this.lockKey = ChestLock.NO_LOCK;
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.chestLock = ChestLock.b(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.lockKey = ChestLock.b(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.customName = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
+            this.name = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
     }
@@ -38,21 +39,21 @@ public abstract class TileEntityContainer extends TileEntity implements IInvento
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        this.chestLock.a(nbttagcompound);
-        if (this.customName != null) {
-            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.customName));
+        this.lockKey.a(nbttagcompound);
+        if (this.name != null) {
+            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.name));
         }
 
         return nbttagcompound;
     }
 
     public void setCustomName(IChatBaseComponent ichatbasecomponent) {
-        this.customName = ichatbasecomponent;
+        this.name = ichatbasecomponent;
     }
 
     @Override
     public IChatBaseComponent getDisplayName() {
-        return this.customName != null ? this.customName : this.getContainerName();
+        return this.name != null ? this.name : this.getContainerName();
     }
 
     @Override
@@ -63,19 +64,19 @@ public abstract class TileEntityContainer extends TileEntity implements IInvento
     @Nullable
     @Override
     public IChatBaseComponent getCustomName() {
-        return this.customName;
+        return this.name;
     }
 
     protected abstract IChatBaseComponent getContainerName();
 
-    public boolean e(EntityHuman entityhuman) {
-        return a(entityhuman, this.chestLock, this.getScoreboardDisplayName());
+    public boolean d(EntityHuman entityhuman) {
+        return a(entityhuman, this.lockKey, this.getScoreboardDisplayName());
     }
 
     public static boolean a(EntityHuman entityhuman, ChestLock chestlock, IChatBaseComponent ichatbasecomponent) {
         if (!entityhuman.isSpectator() && !chestlock.a(entityhuman.getItemInMainHand())) {
             entityhuman.a((IChatBaseComponent) (new ChatMessage("container.isLocked", new Object[]{ichatbasecomponent})), true);
-            entityhuman.a(SoundEffects.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            entityhuman.a(SoundEffects.CHEST_LOCKED, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return false;
         } else {
             return true;
@@ -85,7 +86,7 @@ public abstract class TileEntityContainer extends TileEntity implements IInvento
     @Nullable
     @Override
     public Container createMenu(int i, PlayerInventory playerinventory, EntityHuman entityhuman) {
-        return this.e(entityhuman) ? this.createContainer(i, playerinventory) : null;
+        return this.d(entityhuman) ? this.createContainer(i, playerinventory) : null;
     }
 
     protected abstract Container createContainer(int i, PlayerInventory playerinventory);

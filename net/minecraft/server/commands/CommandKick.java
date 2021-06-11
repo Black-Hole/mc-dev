@@ -15,6 +15,8 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class CommandKick {
 
+    public CommandKick() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("kick").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(3);
@@ -31,7 +33,7 @@ public class CommandKick {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.playerConnection.disconnect(ichatbasecomponent);
+            entityplayer.connection.disconnect(ichatbasecomponent);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.kick.success", new Object[]{entityplayer.getScoreboardDisplayName(), ichatbasecomponent}), true);
         }
 

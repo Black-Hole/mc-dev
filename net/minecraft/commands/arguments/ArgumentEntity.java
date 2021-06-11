@@ -25,19 +25,21 @@ import net.minecraft.world.entity.Entity;
 
 public class ArgumentEntity implements ArgumentType<EntitySelector> {
 
-    private static final Collection<String> g = Arrays.asList("Player", "0123", "@e", "@e[type=foo]", "dd12be42-52a9-4a91-a8a1-11c01849e498");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.toomany"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.player.toomany"));
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.player.entities"));
-    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.entity"));
-    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.player"));
-    public static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed"));
-    private final boolean h;
-    private final boolean i;
+    private static final Collection<String> EXAMPLES = Arrays.asList("Player", "0123", "@e", "@e[type=foo]", "dd12be42-52a9-4a91-a8a1-11c01849e498");
+    public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_ENTITY = new SimpleCommandExceptionType(new ChatMessage("argument.entity.toomany"));
+    public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_PLAYER = new SimpleCommandExceptionType(new ChatMessage("argument.player.toomany"));
+    public static final SimpleCommandExceptionType ERROR_ONLY_PLAYERS_ALLOWED = new SimpleCommandExceptionType(new ChatMessage("argument.player.entities"));
+    public static final SimpleCommandExceptionType NO_ENTITIES_FOUND = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.entity"));
+    public static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.player"));
+    public static final SimpleCommandExceptionType ERROR_SELECTORS_NOT_ALLOWED = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed"));
+    private static final byte FLAG_SINGLE = 1;
+    private static final byte FLAG_PLAYERS_ONLY = 2;
+    final boolean single;
+    final boolean playersOnly;
 
     protected ArgumentEntity(boolean flag, boolean flag1) {
-        this.h = flag;
-        this.i = flag1;
+        this.single = flag;
+        this.playersOnly = flag1;
     }
 
     public static ArgumentEntity a() {
@@ -56,7 +58,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         Collection<? extends Entity> collection = c(commandcontext, s);
 
         if (collection.isEmpty()) {
-            throw ArgumentEntity.d.create();
+            throw ArgumentEntity.NO_ENTITIES_FOUND.create();
         } else {
             return collection;
         }
@@ -86,7 +88,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         List<EntityPlayer> list = ((EntitySelector) commandcontext.getArgument(s, EntitySelector.class)).d((CommandListenerWrapper) commandcontext.getSource());
 
         if (list.isEmpty()) {
-            throw ArgumentEntity.e.create();
+            throw ArgumentEntity.NO_PLAYERS_FOUND.create();
         } else {
             return list;
         }
@@ -97,17 +99,17 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
         EntitySelector entityselector = argumentparserselector.parse();
 
-        if (entityselector.a() > 1 && this.h) {
-            if (this.i) {
+        if (entityselector.a() > 1 && this.single) {
+            if (this.playersOnly) {
                 stringreader.setCursor(0);
-                throw ArgumentEntity.b.createWithContext(stringreader);
+                throw ArgumentEntity.ERROR_NOT_SINGLE_PLAYER.createWithContext(stringreader);
             } else {
                 stringreader.setCursor(0);
-                throw ArgumentEntity.a.createWithContext(stringreader);
+                throw ArgumentEntity.ERROR_NOT_SINGLE_ENTITY.createWithContext(stringreader);
             }
-        } else if (entityselector.b() && this.i && !entityselector.c()) {
+        } else if (entityselector.b() && this.playersOnly && !entityselector.c()) {
             stringreader.setCursor(0);
-            throw ArgumentEntity.c.createWithContext(stringreader);
+            throw ArgumentEntity.ERROR_ONLY_PLAYERS_ALLOWED.createWithContext(stringreader);
         } else {
             return entityselector;
         }
@@ -129,7 +131,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
 
             return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder1) -> {
                 Collection<String> collection = icompletionprovider.l();
-                Iterable<String> iterable = this.i ? collection : Iterables.concat(collection, icompletionprovider.r());
+                Iterable<String> iterable = this.playersOnly ? collection : Iterables.concat(collection, icompletionprovider.r());
 
                 ICompletionProvider.b((Iterable) iterable, suggestionsbuilder1);
             });
@@ -139,7 +141,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentEntity.g;
+        return ArgumentEntity.EXAMPLES;
     }
 
     public static class a implements ArgumentSerializer<ArgumentEntity> {
@@ -149,11 +151,11 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         public void a(ArgumentEntity argumententity, PacketDataSerializer packetdataserializer) {
             byte b0 = 0;
 
-            if (argumententity.h) {
+            if (argumententity.single) {
                 b0 = (byte) (b0 | 1);
             }
 
-            if (argumententity.i) {
+            if (argumententity.playersOnly) {
                 b0 = (byte) (b0 | 2);
             }
 
@@ -168,8 +170,8 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         }
 
         public void a(ArgumentEntity argumententity, JsonObject jsonobject) {
-            jsonobject.addProperty("amount", argumententity.h ? "single" : "multiple");
-            jsonobject.addProperty("type", argumententity.i ? "players" : "entities");
+            jsonobject.addProperty("amount", argumententity.single ? "single" : "multiple");
+            jsonobject.addProperty("type", argumententity.playersOnly ? "players" : "entities");
         }
     }
 }

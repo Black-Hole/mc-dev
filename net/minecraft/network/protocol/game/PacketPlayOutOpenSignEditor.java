@@ -1,31 +1,31 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutOpenSignEditor implements Packet<PacketListenerPlayOut> {
 
-    private BlockPosition a;
-
-    public PacketPlayOutOpenSignEditor() {}
+    private final BlockPosition pos;
 
     public PacketPlayOutOpenSignEditor(BlockPosition blockposition) {
-        this.a = blockposition;
+        this.pos = blockposition;
+    }
+
+    public PacketPlayOutOpenSignEditor(PacketDataSerializer packetdataserializer) {
+        this.pos = packetdataserializer.f();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.pos);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public BlockPosition b() {
+        return this.pos;
     }
 }

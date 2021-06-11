@@ -1,29 +1,48 @@
 package net.minecraft.server.level;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.SectionPosition;
+import net.minecraft.world.level.ChunkCoordIntPair;
 
 public class BlockPosition2D {
 
-    public final int a;
-    public final int b;
+    private static final long COORD_BITS = 32L;
+    private static final long COORD_MASK = 4294967295L;
+    private static final int HASH_A = 1664525;
+    private static final int HASH_C = 1013904223;
+    private static final int HASH_Z_XOR = -559038737;
+    public final int x;
+    public final int z;
 
     public BlockPosition2D(int i, int j) {
-        this.a = i;
-        this.b = j;
+        this.x = i;
+        this.z = j;
     }
 
     public BlockPosition2D(BlockPosition blockposition) {
-        this.a = blockposition.getX();
-        this.b = blockposition.getZ();
+        this.x = blockposition.getX();
+        this.z = blockposition.getZ();
+    }
+
+    public ChunkCoordIntPair a() {
+        return new ChunkCoordIntPair(SectionPosition.a(this.x), SectionPosition.a(this.z));
+    }
+
+    public long b() {
+        return a(this.x, this.z);
+    }
+
+    public static long a(int i, int j) {
+        return (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
     }
 
     public String toString() {
-        return "[" + this.a + ", " + this.b + "]";
+        return "[" + this.x + ", " + this.z + "]";
     }
 
     public int hashCode() {
-        int i = 1664525 * this.a + 1013904223;
-        int j = 1664525 * (this.b ^ -559038737) + 1013904223;
+        int i = 1664525 * this.x + 1013904223;
+        int j = 1664525 * (this.z ^ -559038737) + 1013904223;
 
         return i ^ j;
     }
@@ -36,7 +55,7 @@ public class BlockPosition2D {
         } else {
             BlockPosition2D blockposition2d = (BlockPosition2D) object;
 
-            return this.a == blockposition2d.a && this.b == blockposition2d.b;
+            return this.x == blockposition2d.x && this.z == blockposition2d.z;
         }
     }
 }

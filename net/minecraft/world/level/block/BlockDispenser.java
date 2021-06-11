@@ -23,7 +23,6 @@ import net.minecraft.world.inventory.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IMaterial;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
@@ -35,23 +34,25 @@ import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 import net.minecraft.world.level.block.state.properties.BlockStateDirection;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockDispenser extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockDirectional.FACING;
-    public static final BlockStateBoolean TRIGGERED = BlockProperties.A;
-    public static final Map<Item, IDispenseBehavior> REGISTRY = (Map) SystemUtils.a((Object) (new Object2ObjectOpenHashMap()), (object2objectopenhashmap) -> {
+    public static final BlockStateBoolean TRIGGERED = BlockProperties.TRIGGERED;
+    public static final Map<Item, IDispenseBehavior> DISPENSER_REGISTRY = (Map) SystemUtils.a((Object) (new Object2ObjectOpenHashMap()), (object2objectopenhashmap) -> {
         object2objectopenhashmap.defaultReturnValue(new DispenseBehaviorItem());
     });
+    private static final int TRIGGER_DURATION = 4;
 
     public static void a(IMaterial imaterial, IDispenseBehavior idispensebehavior) {
-        BlockDispenser.REGISTRY.put(imaterial.getItem(), idispensebehavior);
+        BlockDispenser.DISPENSER_REGISTRY.put(imaterial.getItem(), idispensebehavior);
     }
 
     protected BlockDispenser(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
     }
 
     @Override
@@ -81,11 +82,12 @@ public class BlockDispenser extends BlockTileEntity {
 
         if (i < 0) {
             worldserver.triggerEffect(1001, blockposition, 0);
+            worldserver.a(GameEvent.DISPENSE_FAIL, blockposition);
         } else {
             ItemStack itemstack = tileentitydispenser.getItem(i);
             IDispenseBehavior idispensebehavior = this.a(itemstack);
 
-            if (idispensebehavior != IDispenseBehavior.NONE) {
+            if (idispensebehavior != IDispenseBehavior.NOOP) {
                 tileentitydispenser.setItem(i, idispensebehavior.dispense(sourceblock, itemstack));
             }
 
@@ -93,7 +95,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     protected IDispenseBehavior a(ItemStack itemstack) {
-        return (IDispenseBehavior) BlockDispenser.REGISTRY.get(itemstack.getItem());
+        return (IDispenseBehavior) BlockDispenser.DISPENSER_REGISTRY.get(itemstack.getItem());
     }
 
     @Override
@@ -116,8 +118,8 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityDispenser();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityDispenser(blockposition, iblockdata);
     }
 
     @Override
@@ -171,7 +173,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

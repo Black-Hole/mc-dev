@@ -7,7 +7,7 @@ import net.minecraft.core.IRegistry;
 
 public abstract class PosRuleTest {
 
-    public static final Codec<PosRuleTest> c = IRegistry.POS_RULE_TEST.dispatch("predicate_type", PosRuleTest::a, PosRuleTestType::codec);
+    public static final Codec<PosRuleTest> CODEC = IRegistry.POS_RULE_TEST.dispatch("predicate_type", PosRuleTest::a, PosRuleTestType::codec);
 
     public PosRuleTest() {}
 

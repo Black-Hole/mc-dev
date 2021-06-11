@@ -3,7 +3,7 @@ package net.minecraft.server.players;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import java.io.File;
-import java.util.Iterator;
+import java.util.Objects;
 
 public class GameProfileBanList extends JsonList<GameProfile, GameProfileBanEntry> {
 
@@ -22,16 +22,9 @@ public class GameProfileBanList extends JsonList<GameProfile, GameProfileBanEntr
 
     @Override
     public String[] getEntries() {
-        String[] astring = new String[this.d().size()];
-        int i = 0;
-
-        JsonListEntry jsonlistentry;
-
-        for (Iterator iterator = this.d().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) jsonlistentry.getKey()).getName()) {
-            jsonlistentry = (JsonListEntry) iterator.next();
-        }
-
-        return astring;
+        return (String[]) this.d().stream().map(JsonListEntry::getKey).filter(Objects::nonNull).map(GameProfile::getName).toArray((i) -> {
+            return new String[i];
+        });
     }
 
     protected String a(GameProfile gameprofile) {

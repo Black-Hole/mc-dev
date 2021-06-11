@@ -19,7 +19,8 @@ import net.minecraft.world.level.pathfinder.PathPoint;
 
 public class BehaviorSleep extends Behavior<EntityLiving> {
 
-    private long b;
+    public static final int COOLDOWN_AFTER_BEING_WOKEN = 100;
+    private long nextOkStartTime;
 
     public BehaviorSleep() {
         super(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LAST_WOKEN, MemoryStatus.REGISTERED));
@@ -48,7 +49,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
 
                 IBlockData iblockdata = worldserver.getType(globalpos.getBlockPosition());
 
-                return globalpos.getBlockPosition().a((IPosition) entityliving.getPositionVector(), 2.0D) && iblockdata.getBlock().a((Tag) TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
+                return globalpos.getBlockPosition().a((IPosition) entityliving.getPositionVector(), 2.0D) && iblockdata.a((Tag) TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
             }
         }
     }
@@ -68,7 +69,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
-        if (i > this.b) {
+        if (i > this.nextOkStartTime) {
             BehaviorInteractDoor.a(worldserver, entityliving, (PathPoint) null, (PathPoint) null);
             entityliving.entitySleep(((GlobalPos) entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME).get()).getBlockPosition());
         }
@@ -84,7 +85,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     protected void c(WorldServer worldserver, EntityLiving entityliving, long i) {
         if (entityliving.isSleeping()) {
             entityliving.entityWakeup();
-            this.b = i + 40L;
+            this.nextOkStartTime = i + 40L;
         }
 
     }

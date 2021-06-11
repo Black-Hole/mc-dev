@@ -11,7 +11,7 @@ public class PacketSplitter extends ByteToMessageDecoder {
 
     public PacketSplitter() {}
 
-    protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) {
         bytebuf.markReaderIndex();
         byte[] abyte = new byte[3];
 
@@ -26,7 +26,7 @@ public class PacketSplitter extends ByteToMessageDecoder {
                 PacketDataSerializer packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(abyte));
 
                 try {
-                    int j = packetdataserializer.i();
+                    int j = packetdataserializer.j();
 
                     if (bytebuf.readableBytes() >= j) {
                         list.add(bytebuf.readBytes(j));

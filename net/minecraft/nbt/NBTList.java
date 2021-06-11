@@ -16,5 +16,5 @@ public abstract class NBTList<T extends NBTBase> extends AbstractList<T> impleme
 
     public abstract boolean b(int i, NBTBase nbtbase);
 
-    public abstract byte d_();
+    public abstract byte e();
 }

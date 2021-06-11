@@ -1,34 +1,23 @@
 package net.minecraft.world.level.chunk;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
-import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
 import net.minecraft.data.worldgen.biome.BiomeRegistry;
 import net.minecraft.server.level.PlayerChunk;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidTypes;
-import net.minecraft.world.phys.AxisAlignedBB;
 
 public class ChunkEmpty extends Chunk {
 
-    private static final BiomeBase[] b = (BiomeBase[]) SystemUtils.a((Object) (new BiomeBase[BiomeStorage.a]), (abiomebase) -> {
-        Arrays.fill(abiomebase, BiomeRegistry.a);
-    });
-
     public ChunkEmpty(World world, ChunkCoordIntPair chunkcoordintpair) {
-        super(world, chunkcoordintpair, new BiomeStorage(world.r().b(IRegistry.ay), ChunkEmpty.b));
+        super(world, chunkcoordintpair, (BiomeStorage) (new ChunkEmpty.a(world)));
     }
 
     @Override
@@ -47,25 +36,10 @@ public class ChunkEmpty extends Chunk {
         return FluidTypes.EMPTY.h();
     }
 
-    @Nullable
     @Override
-    public LightEngine e() {
-        return null;
-    }
-
-    @Override
-    public int g(BlockPosition blockposition) {
+    public int h(BlockPosition blockposition) {
         return 0;
     }
-
-    @Override
-    public void a(Entity entity) {}
-
-    @Override
-    public void b(Entity entity) {}
-
-    @Override
-    public void a(Entity entity, int i) {}
 
     @Nullable
     @Override
@@ -74,22 +48,16 @@ public class ChunkEmpty extends Chunk {
     }
 
     @Override
-    public void a(TileEntity tileentity) {}
+    public void b(TileEntity tileentity) {}
 
     @Override
-    public void setTileEntity(BlockPosition blockposition, TileEntity tileentity) {}
+    public void setTileEntity(TileEntity tileentity) {}
 
     @Override
     public void removeTileEntity(BlockPosition blockposition) {}
 
     @Override
     public void markDirty() {}
-
-    @Override
-    public void a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, List<Entity> list, Predicate<? super Entity> predicate) {}
-
-    @Override
-    public <T extends Entity> void a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, List<T> list, Predicate<? super T> predicate) {}
 
     @Override
     public boolean isEmpty() {
@@ -104,5 +72,24 @@ public class ChunkEmpty extends Chunk {
     @Override
     public PlayerChunk.State getState() {
         return PlayerChunk.State.BORDER;
+    }
+
+    private static class a extends BiomeStorage {
+
+        private static final BiomeBase[] EMPTY_BIOMES = new BiomeBase[0];
+
+        public a(World world) {
+            super(world.t().d(IRegistry.BIOME_REGISTRY), world, ChunkEmpty.a.EMPTY_BIOMES);
+        }
+
+        @Override
+        public int[] a() {
+            throw new UnsupportedOperationException("Can not write biomes of an empty chunk");
+        }
+
+        @Override
+        public BiomeBase getBiome(int i, int j, int k) {
+            return BiomeRegistry.PLAINS;
+        }
     }
 }

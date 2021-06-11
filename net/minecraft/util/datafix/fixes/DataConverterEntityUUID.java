@@ -12,45 +12,45 @@ import java.util.Set;
 
 public class DataConverterEntityUUID extends DataConverterUUIDBase {
 
-    private static final Set<String> c = Sets.newHashSet();
-    private static final Set<String> d = Sets.newHashSet();
-    private static final Set<String> e = Sets.newHashSet();
-    private static final Set<String> f = Sets.newHashSet();
-    private static final Set<String> g = Sets.newHashSet();
-    private static final Set<String> h = Sets.newHashSet();
+    private static final Set<String> ABSTRACT_HORSES = Sets.newHashSet();
+    private static final Set<String> TAMEABLE_ANIMALS = Sets.newHashSet();
+    private static final Set<String> ANIMALS = Sets.newHashSet();
+    private static final Set<String> MOBS = Sets.newHashSet();
+    private static final Set<String> LIVING_ENTITIES = Sets.newHashSet();
+    private static final Set<String> PROJECTILES = Sets.newHashSet();
 
     public DataConverterEntityUUID(Schema schema) {
         super(schema, DataConverterTypes.ENTITY);
     }
 
     protected TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("EntityUUIDFixes", this.getInputSchema().getType(this.b), (typed) -> {
+        return this.fixTypeEverywhereTyped("EntityUUIDFixes", this.getInputSchema().getType(this.typeReference), (typed) -> {
             typed = typed.update(DSL.remainderFinder(), DataConverterEntityUUID::c);
 
             String s;
             Iterator iterator;
 
-            for (iterator = DataConverterEntityUUID.c.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::l)) {
+            for (iterator = DataConverterEntityUUID.ABSTRACT_HORSES.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::l)) {
                 s = (String) iterator.next();
             }
 
-            for (iterator = DataConverterEntityUUID.d.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::l)) {
+            for (iterator = DataConverterEntityUUID.TAMEABLE_ANIMALS.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::l)) {
                 s = (String) iterator.next();
             }
 
-            for (iterator = DataConverterEntityUUID.e.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::m)) {
+            for (iterator = DataConverterEntityUUID.ANIMALS.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::m)) {
                 s = (String) iterator.next();
             }
 
-            for (iterator = DataConverterEntityUUID.f.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::n)) {
+            for (iterator = DataConverterEntityUUID.MOBS.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::n)) {
                 s = (String) iterator.next();
             }
 
-            for (iterator = DataConverterEntityUUID.g.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::b)) {
+            for (iterator = DataConverterEntityUUID.LIVING_ENTITIES.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::b)) {
                 s = (String) iterator.next();
             }
 
-            for (iterator = DataConverterEntityUUID.h.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::o)) {
+            for (iterator = DataConverterEntityUUID.PROJECTILES.iterator(); iterator.hasNext(); typed = this.a(typed, s, DataConverterEntityUUID::o)) {
                 s = (String) iterator.next();
             }
 
@@ -162,87 +162,87 @@ public class DataConverterEntityUUID extends DataConverterUUIDBase {
     }
 
     static {
-        DataConverterEntityUUID.c.add("minecraft:donkey");
-        DataConverterEntityUUID.c.add("minecraft:horse");
-        DataConverterEntityUUID.c.add("minecraft:llama");
-        DataConverterEntityUUID.c.add("minecraft:mule");
-        DataConverterEntityUUID.c.add("minecraft:skeleton_horse");
-        DataConverterEntityUUID.c.add("minecraft:trader_llama");
-        DataConverterEntityUUID.c.add("minecraft:zombie_horse");
-        DataConverterEntityUUID.d.add("minecraft:cat");
-        DataConverterEntityUUID.d.add("minecraft:parrot");
-        DataConverterEntityUUID.d.add("minecraft:wolf");
-        DataConverterEntityUUID.e.add("minecraft:bee");
-        DataConverterEntityUUID.e.add("minecraft:chicken");
-        DataConverterEntityUUID.e.add("minecraft:cow");
-        DataConverterEntityUUID.e.add("minecraft:fox");
-        DataConverterEntityUUID.e.add("minecraft:mooshroom");
-        DataConverterEntityUUID.e.add("minecraft:ocelot");
-        DataConverterEntityUUID.e.add("minecraft:panda");
-        DataConverterEntityUUID.e.add("minecraft:pig");
-        DataConverterEntityUUID.e.add("minecraft:polar_bear");
-        DataConverterEntityUUID.e.add("minecraft:rabbit");
-        DataConverterEntityUUID.e.add("minecraft:sheep");
-        DataConverterEntityUUID.e.add("minecraft:turtle");
-        DataConverterEntityUUID.e.add("minecraft:hoglin");
-        DataConverterEntityUUID.f.add("minecraft:bat");
-        DataConverterEntityUUID.f.add("minecraft:blaze");
-        DataConverterEntityUUID.f.add("minecraft:cave_spider");
-        DataConverterEntityUUID.f.add("minecraft:cod");
-        DataConverterEntityUUID.f.add("minecraft:creeper");
-        DataConverterEntityUUID.f.add("minecraft:dolphin");
-        DataConverterEntityUUID.f.add("minecraft:drowned");
-        DataConverterEntityUUID.f.add("minecraft:elder_guardian");
-        DataConverterEntityUUID.f.add("minecraft:ender_dragon");
-        DataConverterEntityUUID.f.add("minecraft:enderman");
-        DataConverterEntityUUID.f.add("minecraft:endermite");
-        DataConverterEntityUUID.f.add("minecraft:evoker");
-        DataConverterEntityUUID.f.add("minecraft:ghast");
-        DataConverterEntityUUID.f.add("minecraft:giant");
-        DataConverterEntityUUID.f.add("minecraft:guardian");
-        DataConverterEntityUUID.f.add("minecraft:husk");
-        DataConverterEntityUUID.f.add("minecraft:illusioner");
-        DataConverterEntityUUID.f.add("minecraft:magma_cube");
-        DataConverterEntityUUID.f.add("minecraft:pufferfish");
-        DataConverterEntityUUID.f.add("minecraft:zombified_piglin");
-        DataConverterEntityUUID.f.add("minecraft:salmon");
-        DataConverterEntityUUID.f.add("minecraft:shulker");
-        DataConverterEntityUUID.f.add("minecraft:silverfish");
-        DataConverterEntityUUID.f.add("minecraft:skeleton");
-        DataConverterEntityUUID.f.add("minecraft:slime");
-        DataConverterEntityUUID.f.add("minecraft:snow_golem");
-        DataConverterEntityUUID.f.add("minecraft:spider");
-        DataConverterEntityUUID.f.add("minecraft:squid");
-        DataConverterEntityUUID.f.add("minecraft:stray");
-        DataConverterEntityUUID.f.add("minecraft:tropical_fish");
-        DataConverterEntityUUID.f.add("minecraft:vex");
-        DataConverterEntityUUID.f.add("minecraft:villager");
-        DataConverterEntityUUID.f.add("minecraft:iron_golem");
-        DataConverterEntityUUID.f.add("minecraft:vindicator");
-        DataConverterEntityUUID.f.add("minecraft:pillager");
-        DataConverterEntityUUID.f.add("minecraft:wandering_trader");
-        DataConverterEntityUUID.f.add("minecraft:witch");
-        DataConverterEntityUUID.f.add("minecraft:wither");
-        DataConverterEntityUUID.f.add("minecraft:wither_skeleton");
-        DataConverterEntityUUID.f.add("minecraft:zombie");
-        DataConverterEntityUUID.f.add("minecraft:zombie_villager");
-        DataConverterEntityUUID.f.add("minecraft:phantom");
-        DataConverterEntityUUID.f.add("minecraft:ravager");
-        DataConverterEntityUUID.f.add("minecraft:piglin");
-        DataConverterEntityUUID.g.add("minecraft:armor_stand");
-        DataConverterEntityUUID.h.add("minecraft:arrow");
-        DataConverterEntityUUID.h.add("minecraft:dragon_fireball");
-        DataConverterEntityUUID.h.add("minecraft:firework_rocket");
-        DataConverterEntityUUID.h.add("minecraft:fireball");
-        DataConverterEntityUUID.h.add("minecraft:llama_spit");
-        DataConverterEntityUUID.h.add("minecraft:small_fireball");
-        DataConverterEntityUUID.h.add("minecraft:snowball");
-        DataConverterEntityUUID.h.add("minecraft:spectral_arrow");
-        DataConverterEntityUUID.h.add("minecraft:egg");
-        DataConverterEntityUUID.h.add("minecraft:ender_pearl");
-        DataConverterEntityUUID.h.add("minecraft:experience_bottle");
-        DataConverterEntityUUID.h.add("minecraft:potion");
-        DataConverterEntityUUID.h.add("minecraft:trident");
-        DataConverterEntityUUID.h.add("minecraft:wither_skull");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:donkey");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:horse");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:llama");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:mule");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:skeleton_horse");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:trader_llama");
+        DataConverterEntityUUID.ABSTRACT_HORSES.add("minecraft:zombie_horse");
+        DataConverterEntityUUID.TAMEABLE_ANIMALS.add("minecraft:cat");
+        DataConverterEntityUUID.TAMEABLE_ANIMALS.add("minecraft:parrot");
+        DataConverterEntityUUID.TAMEABLE_ANIMALS.add("minecraft:wolf");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:bee");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:chicken");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:cow");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:fox");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:mooshroom");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:ocelot");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:panda");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:pig");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:polar_bear");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:rabbit");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:sheep");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:turtle");
+        DataConverterEntityUUID.ANIMALS.add("minecraft:hoglin");
+        DataConverterEntityUUID.MOBS.add("minecraft:bat");
+        DataConverterEntityUUID.MOBS.add("minecraft:blaze");
+        DataConverterEntityUUID.MOBS.add("minecraft:cave_spider");
+        DataConverterEntityUUID.MOBS.add("minecraft:cod");
+        DataConverterEntityUUID.MOBS.add("minecraft:creeper");
+        DataConverterEntityUUID.MOBS.add("minecraft:dolphin");
+        DataConverterEntityUUID.MOBS.add("minecraft:drowned");
+        DataConverterEntityUUID.MOBS.add("minecraft:elder_guardian");
+        DataConverterEntityUUID.MOBS.add("minecraft:ender_dragon");
+        DataConverterEntityUUID.MOBS.add("minecraft:enderman");
+        DataConverterEntityUUID.MOBS.add("minecraft:endermite");
+        DataConverterEntityUUID.MOBS.add("minecraft:evoker");
+        DataConverterEntityUUID.MOBS.add("minecraft:ghast");
+        DataConverterEntityUUID.MOBS.add("minecraft:giant");
+        DataConverterEntityUUID.MOBS.add("minecraft:guardian");
+        DataConverterEntityUUID.MOBS.add("minecraft:husk");
+        DataConverterEntityUUID.MOBS.add("minecraft:illusioner");
+        DataConverterEntityUUID.MOBS.add("minecraft:magma_cube");
+        DataConverterEntityUUID.MOBS.add("minecraft:pufferfish");
+        DataConverterEntityUUID.MOBS.add("minecraft:zombified_piglin");
+        DataConverterEntityUUID.MOBS.add("minecraft:salmon");
+        DataConverterEntityUUID.MOBS.add("minecraft:shulker");
+        DataConverterEntityUUID.MOBS.add("minecraft:silverfish");
+        DataConverterEntityUUID.MOBS.add("minecraft:skeleton");
+        DataConverterEntityUUID.MOBS.add("minecraft:slime");
+        DataConverterEntityUUID.MOBS.add("minecraft:snow_golem");
+        DataConverterEntityUUID.MOBS.add("minecraft:spider");
+        DataConverterEntityUUID.MOBS.add("minecraft:squid");
+        DataConverterEntityUUID.MOBS.add("minecraft:stray");
+        DataConverterEntityUUID.MOBS.add("minecraft:tropical_fish");
+        DataConverterEntityUUID.MOBS.add("minecraft:vex");
+        DataConverterEntityUUID.MOBS.add("minecraft:villager");
+        DataConverterEntityUUID.MOBS.add("minecraft:iron_golem");
+        DataConverterEntityUUID.MOBS.add("minecraft:vindicator");
+        DataConverterEntityUUID.MOBS.add("minecraft:pillager");
+        DataConverterEntityUUID.MOBS.add("minecraft:wandering_trader");
+        DataConverterEntityUUID.MOBS.add("minecraft:witch");
+        DataConverterEntityUUID.MOBS.add("minecraft:wither");
+        DataConverterEntityUUID.MOBS.add("minecraft:wither_skeleton");
+        DataConverterEntityUUID.MOBS.add("minecraft:zombie");
+        DataConverterEntityUUID.MOBS.add("minecraft:zombie_villager");
+        DataConverterEntityUUID.MOBS.add("minecraft:phantom");
+        DataConverterEntityUUID.MOBS.add("minecraft:ravager");
+        DataConverterEntityUUID.MOBS.add("minecraft:piglin");
+        DataConverterEntityUUID.LIVING_ENTITIES.add("minecraft:armor_stand");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:arrow");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:dragon_fireball");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:firework_rocket");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:fireball");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:llama_spit");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:small_fireball");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:snowball");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:spectral_arrow");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:egg");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:ender_pearl");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:experience_bottle");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:potion");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:trident");
+        DataConverterEntityUUID.PROJECTILES.add("minecraft:wither_skull");
     }
 }

@@ -6,18 +6,18 @@ public enum BlockPropertyBambooSize implements INamable {
 
     NONE("none"), SMALL("small"), LARGE("large");
 
-    private final String d;
+    private final String name;
 
     private BlockPropertyBambooSize(String s) {
-        this.d = s;
+        this.name = s;
     }
 
     public String toString() {
-        return this.d;
+        return this.name;
     }
 
     @Override
     public String getName() {
-        return this.d;
+        return this.name;
     }
 }

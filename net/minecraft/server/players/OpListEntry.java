@@ -3,30 +3,31 @@ package net.minecraft.server.players;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class OpListEntry extends JsonListEntry<GameProfile> {
 
-    private final int a;
-    private final boolean b;
+    private final int level;
+    private final boolean bypassesPlayerLimit;
 
     public OpListEntry(GameProfile gameprofile, int i, boolean flag) {
         super(gameprofile);
-        this.a = i;
-        this.b = flag;
+        this.level = i;
+        this.bypassesPlayerLimit = flag;
     }
 
     public OpListEntry(JsonObject jsonobject) {
         super(b(jsonobject));
-        this.a = jsonobject.has("level") ? jsonobject.get("level").getAsInt() : 0;
-        this.b = jsonobject.has("bypassesPlayerLimit") && jsonobject.get("bypassesPlayerLimit").getAsBoolean();
+        this.level = jsonobject.has("level") ? jsonobject.get("level").getAsInt() : 0;
+        this.bypassesPlayerLimit = jsonobject.has("bypassesPlayerLimit") && jsonobject.get("bypassesPlayerLimit").getAsBoolean();
     }
 
     public int a() {
-        return this.a;
+        return this.level;
     }
 
     public boolean b() {
-        return this.b;
+        return this.bypassesPlayerLimit;
     }
 
     @Override
@@ -34,11 +35,12 @@ public class OpListEntry extends JsonListEntry<GameProfile> {
         if (this.getKey() != null) {
             jsonobject.addProperty("uuid", ((GameProfile) this.getKey()).getId() == null ? "" : ((GameProfile) this.getKey()).getId().toString());
             jsonobject.addProperty("name", ((GameProfile) this.getKey()).getName());
-            jsonobject.addProperty("level", this.a);
-            jsonobject.addProperty("bypassesPlayerLimit", this.b);
+            jsonobject.addProperty("level", this.level);
+            jsonobject.addProperty("bypassesPlayerLimit", this.bypassesPlayerLimit);
         }
     }
 
+    @Nullable
     private static GameProfile b(JsonObject jsonobject) {
         if (jsonobject.has("uuid") && jsonobject.has("name")) {
             String s = jsonobject.get("uuid").getAsString();

@@ -10,36 +10,40 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorPositionEntity implements BehaviorPosition {
 
-    private final Entity a;
-    private final boolean b;
+    private final Entity entity;
+    private final boolean trackEyeHeight;
 
     public BehaviorPositionEntity(Entity entity, boolean flag) {
-        this.a = entity;
-        this.b = flag;
+        this.entity = entity;
+        this.trackEyeHeight = flag;
     }
 
     @Override
     public Vec3D a() {
-        return this.b ? this.a.getPositionVector().add(0.0D, (double) this.a.getHeadHeight(), 0.0D) : this.a.getPositionVector();
+        return this.trackEyeHeight ? this.entity.getPositionVector().add(0.0D, (double) this.entity.getHeadHeight(), 0.0D) : this.entity.getPositionVector();
     }
 
     @Override
     public BlockPosition b() {
-        return this.a.getChunkCoordinates();
+        return this.entity.getChunkCoordinates();
     }
 
     @Override
     public boolean a(EntityLiving entityliving) {
-        if (!(this.a instanceof EntityLiving)) {
+        if (!(this.entity instanceof EntityLiving)) {
             return true;
         } else {
-            Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS);
+            Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
 
-            return this.a.isAlive() && optional.isPresent() && ((List) optional.get()).contains(this.a);
+            return this.entity.isAlive() && optional.isPresent() && ((List) optional.get()).contains(this.entity);
         }
     }
 
+    public Entity c() {
+        return this.entity;
+    }
+
     public String toString() {
-        return "EntityTracker for " + this.a;
+        return "EntityTracker for " + this.entity;
     }
 }

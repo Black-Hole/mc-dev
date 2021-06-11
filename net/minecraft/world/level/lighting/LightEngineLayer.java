@@ -18,27 +18,29 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S extends LightEngineStorage<M>> extends LightEngineGraph implements LightEngineLayerEventListener {
 
-    private static final EnumDirection[] e = EnumDirection.values();
-    protected final ILightAccess a;
-    protected final EnumSkyBlock b;
-    protected final S c;
-    private boolean f;
-    protected final BlockPosition.MutableBlockPosition d = new BlockPosition.MutableBlockPosition();
-    private final long[] g = new long[2];
-    private final IBlockAccess[] h = new IBlockAccess[2];
+    public static final long SELF_SOURCE = Long.MAX_VALUE;
+    private static final EnumDirection[] DIRECTIONS = EnumDirection.values();
+    protected final ILightAccess chunkSource;
+    protected final EnumSkyBlock layer;
+    protected final S storage;
+    private boolean runningLightUpdates;
+    protected final BlockPosition.MutableBlockPosition pos = new BlockPosition.MutableBlockPosition();
+    private static final int CACHE_SIZE = 2;
+    private final long[] lastChunkPos = new long[2];
+    private final IBlockAccess[] lastChunk = new IBlockAccess[2];
 
     public LightEngineLayer(ILightAccess ilightaccess, EnumSkyBlock enumskyblock, S s0) {
         super(16, 256, 8192);
-        this.a = ilightaccess;
-        this.b = enumskyblock;
-        this.c = s0;
+        this.chunkSource = ilightaccess;
+        this.layer = enumskyblock;
+        this.storage = s0;
         this.d();
     }
 
     @Override
     protected void f(long i) {
-        this.c.d();
-        if (this.c.g(SectionPosition.e(i))) {
+        this.storage.d();
+        if (this.storage.g(SectionPosition.e(i))) {
             super.f(i);
         }
 
@@ -49,26 +51,26 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         long k = ChunkCoordIntPair.pair(i, j);
 
         for (int l = 0; l < 2; ++l) {
-            if (k == this.g[l]) {
-                return this.h[l];
+            if (k == this.lastChunkPos[l]) {
+                return this.lastChunk[l];
             }
         }
 
-        IBlockAccess iblockaccess = this.a.c(i, j);
+        IBlockAccess iblockaccess = this.chunkSource.c(i, j);
 
         for (int i1 = 1; i1 > 0; --i1) {
-            this.g[i1] = this.g[i1 - 1];
-            this.h[i1] = this.h[i1 - 1];
+            this.lastChunkPos[i1] = this.lastChunkPos[i1 - 1];
+            this.lastChunk[i1] = this.lastChunk[i1 - 1];
         }
 
-        this.g[0] = k;
-        this.h[0] = iblockaccess;
+        this.lastChunkPos[0] = k;
+        this.lastChunk[0] = iblockaccess;
         return iblockaccess;
     }
 
     private void d() {
-        Arrays.fill(this.g, ChunkCoordIntPair.a);
-        Arrays.fill(this.h, (Object) null);
+        Arrays.fill(this.lastChunkPos, ChunkCoordIntPair.INVALID_CHUNK_POS);
+        Arrays.fill(this.lastChunk, (Object) null);
     }
 
     protected IBlockData a(long i, @Nullable MutableInt mutableint) {
@@ -79,8 +81,8 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
             return Blocks.AIR.getBlockData();
         } else {
-            int j = SectionPosition.a(BlockPosition.b(i));
-            int k = SectionPosition.a(BlockPosition.d(i));
+            int j = SectionPosition.a(BlockPosition.a(i));
+            int k = SectionPosition.a(BlockPosition.c(i));
             IBlockAccess iblockaccess = this.a(j, k);
 
             if (iblockaccess == null) {
@@ -90,12 +92,12 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
                 return Blocks.BEDROCK.getBlockData();
             } else {
-                this.d.g(i);
-                IBlockData iblockdata = iblockaccess.getType(this.d);
+                this.pos.f(i);
+                IBlockData iblockdata = iblockaccess.getType(this.pos);
                 boolean flag = iblockdata.l() && iblockdata.e();
 
                 if (mutableint != null) {
-                    mutableint.setValue(iblockdata.b(this.a.getWorld(), (BlockPosition) this.d));
+                    mutableint.setValue(iblockdata.b(this.chunkSource.getWorld(), (BlockPosition) this.pos));
                 }
 
                 return flag ? iblockdata : Blocks.AIR.getBlockData();
@@ -104,7 +106,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     }
 
     protected VoxelShape a(IBlockData iblockdata, long i, EnumDirection enumdirection) {
-        return iblockdata.l() ? iblockdata.a(this.a.getWorld(), this.d.g(i), enumdirection) : VoxelShapes.a();
+        return iblockdata.l() ? iblockdata.a(this.chunkSource.getWorld(), this.pos.f(i), enumdirection) : VoxelShapes.a();
     }
 
     public static int a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, IBlockData iblockdata1, BlockPosition blockposition1, EnumDirection enumdirection, int i) {
@@ -133,16 +135,16 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
     @Override
     protected int c(long i) {
-        return i == Long.MAX_VALUE ? 0 : 15 - this.c.i(i);
+        return i == Long.MAX_VALUE ? 0 : 15 - this.storage.i(i);
     }
 
     protected int a(NibbleArray nibblearray, long i) {
-        return 15 - nibblearray.a(SectionPosition.b(BlockPosition.b(i)), SectionPosition.b(BlockPosition.c(i)), SectionPosition.b(BlockPosition.d(i)));
+        return 15 - nibblearray.a(SectionPosition.b(BlockPosition.a(i)), SectionPosition.b(BlockPosition.b(i)), SectionPosition.b(BlockPosition.c(i)));
     }
 
     @Override
     protected void a(long i, int j) {
-        this.c.b(i, Math.min(15, 15 - j));
+        this.storage.b(i, Math.min(15, 15 - j));
     }
 
     @Override
@@ -150,23 +152,25 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         return 0;
     }
 
-    public boolean a() {
-        return this.b() || this.c.b() || this.c.a();
+    @Override
+    public boolean z_() {
+        return this.b() || this.storage.b() || this.storage.a();
     }
 
+    @Override
     public int a(int i, boolean flag, boolean flag1) {
-        if (!this.f) {
-            if (this.c.b()) {
-                i = this.c.b(i);
+        if (!this.runningLightUpdates) {
+            if (this.storage.b()) {
+                i = this.storage.b(i);
                 if (i == 0) {
                     return i;
                 }
             }
 
-            this.c.a(this, flag, flag1);
+            this.storage.a(this, flag, flag1);
         }
 
-        this.f = true;
+        this.runningLightUpdates = true;
         if (this.b()) {
             i = this.b(i);
             this.d();
@@ -175,31 +179,38 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             }
         }
 
-        this.f = false;
-        this.c.e();
+        this.runningLightUpdates = false;
+        this.storage.e();
         return i;
     }
 
     protected void a(long i, @Nullable NibbleArray nibblearray, boolean flag) {
-        this.c.a(i, nibblearray, flag);
+        this.storage.a(i, nibblearray, flag);
     }
 
     @Nullable
     @Override
     public NibbleArray a(SectionPosition sectionposition) {
-        return this.c.h(sectionposition.s());
+        return this.storage.h(sectionposition.s());
     }
 
     @Override
     public int b(BlockPosition blockposition) {
-        return this.c.d(blockposition.asLong());
+        return this.storage.d(blockposition.asLong());
     }
 
+    public String b(long i) {
+        int j = this.storage.c(i);
+
+        return j.makeConcatWithConstants < invokedynamic > (j);
+    }
+
+    @Override
     public void a(BlockPosition blockposition) {
         long i = blockposition.asLong();
 
         this.f(i);
-        EnumDirection[] aenumdirection = LightEngineLayer.e;
+        EnumDirection[] aenumdirection = LightEngineLayer.DIRECTIONS;
         int j = aenumdirection.length;
 
         for (int k = 0; k < j; ++k) {
@@ -210,22 +221,24 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
     }
 
+    @Override
     public void a(BlockPosition blockposition, int i) {}
 
     @Override
     public void a(SectionPosition sectionposition, boolean flag) {
-        this.c.d(sectionposition.s(), flag);
+        this.storage.d(sectionposition.s(), flag);
     }
 
+    @Override
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         long i = SectionPosition.f(SectionPosition.b(chunkcoordintpair.x, 0, chunkcoordintpair.z));
 
-        this.c.b(i, flag);
+        this.storage.b(i, flag);
     }
 
     public void b(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         long i = SectionPosition.f(SectionPosition.b(chunkcoordintpair.x, 0, chunkcoordintpair.z));
 
-        this.c.c(i, flag);
+        this.storage.c(i, flag);
     }
 }

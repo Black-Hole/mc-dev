@@ -1,10 +1,7 @@
 package net.minecraft.network.protocol.game;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -13,73 +10,59 @@ import net.minecraft.stats.RecipeBookSettings;
 
 public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
 
-    private PacketPlayOutRecipes.Action a;
-    private List<MinecraftKey> b;
-    private List<MinecraftKey> c;
-    private RecipeBookSettings d;
-
-    public PacketPlayOutRecipes() {}
+    private final PacketPlayOutRecipes.Action state;
+    private final List<MinecraftKey> recipes;
+    private final List<MinecraftKey> toHighlight;
+    private final RecipeBookSettings bookSettings;
 
     public PacketPlayOutRecipes(PacketPlayOutRecipes.Action packetplayoutrecipes_action, Collection<MinecraftKey> collection, Collection<MinecraftKey> collection1, RecipeBookSettings recipebooksettings) {
-        this.a = packetplayoutrecipes_action;
-        this.b = ImmutableList.copyOf(collection);
-        this.c = ImmutableList.copyOf(collection1);
-        this.d = recipebooksettings;
+        this.state = packetplayoutrecipes_action;
+        this.recipes = ImmutableList.copyOf(collection);
+        this.toHighlight = ImmutableList.copyOf(collection1);
+        this.bookSettings = recipebooksettings;
+    }
+
+    public PacketPlayOutRecipes(PacketDataSerializer packetdataserializer) {
+        this.state = (PacketPlayOutRecipes.Action) packetdataserializer.a(PacketPlayOutRecipes.Action.class);
+        this.bookSettings = RecipeBookSettings.a(packetdataserializer);
+        this.recipes = packetdataserializer.a(PacketDataSerializer::q);
+        if (this.state == PacketPlayOutRecipes.Action.INIT) {
+            this.toHighlight = packetdataserializer.a(PacketDataSerializer::q);
+        } else {
+            this.toHighlight = ImmutableList.of();
+        }
+
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.state);
+        this.bookSettings.b(packetdataserializer);
+        packetdataserializer.a((Collection) this.recipes, PacketDataSerializer::a);
+        if (this.state == PacketPlayOutRecipes.Action.INIT) {
+            packetdataserializer.a((Collection) this.toHighlight, PacketDataSerializer::a);
+        }
+
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (PacketPlayOutRecipes.Action) packetdataserializer.a(PacketPlayOutRecipes.Action.class);
-        this.d = RecipeBookSettings.a(packetdataserializer);
-        int i = packetdataserializer.i();
-
-        this.b = Lists.newArrayList();
-
-        int j;
-
-        for (j = 0; j < i; ++j) {
-            this.b.add(packetdataserializer.p());
-        }
-
-        if (this.a == PacketPlayOutRecipes.Action.INIT) {
-            i = packetdataserializer.i();
-            this.c = Lists.newArrayList();
-
-            for (j = 0; j < i; ++j) {
-                this.c.add(packetdataserializer.p());
-            }
-        }
-
+    public List<MinecraftKey> b() {
+        return this.recipes;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
-        this.d.b(packetdataserializer);
-        packetdataserializer.d(this.b.size());
-        Iterator iterator = this.b.iterator();
+    public List<MinecraftKey> c() {
+        return this.toHighlight;
+    }
 
-        MinecraftKey minecraftkey;
+    public RecipeBookSettings d() {
+        return this.bookSettings;
+    }
 
-        while (iterator.hasNext()) {
-            minecraftkey = (MinecraftKey) iterator.next();
-            packetdataserializer.a(minecraftkey);
-        }
-
-        if (this.a == PacketPlayOutRecipes.Action.INIT) {
-            packetdataserializer.d(this.c.size());
-            iterator = this.c.iterator();
-
-            while (iterator.hasNext()) {
-                minecraftkey = (MinecraftKey) iterator.next();
-                packetdataserializer.a(minecraftkey);
-            }
-        }
-
+    public PacketPlayOutRecipes.Action e() {
+        return this.state;
     }
 
     public static enum Action {

@@ -10,20 +10,20 @@ public interface CustomFunctionCallbackTimer<T> {
 
     public abstract static class a<T, C extends CustomFunctionCallbackTimer<T>> {
 
-        private final MinecraftKey a;
-        private final Class<?> b;
+        private final MinecraftKey id;
+        private final Class<?> cls;
 
         public a(MinecraftKey minecraftkey, Class<?> oclass) {
-            this.a = minecraftkey;
-            this.b = oclass;
+            this.id = minecraftkey;
+            this.cls = oclass;
         }
 
         public MinecraftKey a() {
-            return this.a;
+            return this.id;
         }
 
         public Class<?> b() {
-            return this.b;
+            return this.cls;
         }
 
         public abstract void a(NBTTagCompound nbttagcompound, C c0);

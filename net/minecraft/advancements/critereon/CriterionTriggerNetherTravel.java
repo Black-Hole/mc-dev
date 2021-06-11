@@ -8,13 +8,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<CriterionTriggerNetherTravel.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("nether_travel");
+    static final MinecraftKey ID = new MinecraftKey("nether_travel");
 
     public CriterionTriggerNetherTravel() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerNetherTravel.a;
+        return CriterionTriggerNetherTravel.ID;
     }
 
     @Override
@@ -34,32 +34,32 @@ public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<Crite
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionLocation a;
-        private final CriterionConditionLocation b;
-        private final CriterionConditionDistance c;
+        private final CriterionConditionLocation entered;
+        private final CriterionConditionLocation exited;
+        private final CriterionConditionDistance distance;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionLocation criterionconditionlocation, CriterionConditionLocation criterionconditionlocation1, CriterionConditionDistance criterionconditiondistance) {
-            super(CriterionTriggerNetherTravel.a, criterionconditionentity_b);
-            this.a = criterionconditionlocation;
-            this.b = criterionconditionlocation1;
-            this.c = criterionconditiondistance;
+            super(CriterionTriggerNetherTravel.ID, criterionconditionentity_b);
+            this.entered = criterionconditionlocation;
+            this.exited = criterionconditionlocation1;
+            this.distance = criterionconditiondistance;
         }
 
         public static CriterionTriggerNetherTravel.a a(CriterionConditionDistance criterionconditiondistance) {
-            return new CriterionTriggerNetherTravel.a(CriterionConditionEntity.b.a, CriterionConditionLocation.a, CriterionConditionLocation.a, criterionconditiondistance);
+            return new CriterionTriggerNetherTravel.a(CriterionConditionEntity.b.ANY, CriterionConditionLocation.ANY, CriterionConditionLocation.ANY, criterionconditiondistance);
         }
 
         public boolean a(WorldServer worldserver, Vec3D vec3d, double d0, double d1, double d2) {
-            return !this.a.a(worldserver, vec3d.x, vec3d.y, vec3d.z) ? false : (!this.b.a(worldserver, d0, d1, d2) ? false : this.c.a(vec3d.x, vec3d.y, vec3d.z, d0, d1, d2));
+            return !this.entered.a(worldserver, vec3d.x, vec3d.y, vec3d.z) ? false : (!this.exited.a(worldserver, d0, d1, d2) ? false : this.distance.a(vec3d.x, vec3d.y, vec3d.z, d0, d1, d2));
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("entered", this.a.a());
-            jsonobject.add("exited", this.b.a());
-            jsonobject.add("distance", this.c.a());
+            jsonobject.add("entered", this.entered.a());
+            jsonobject.add("exited", this.exited.a());
+            jsonobject.add("distance", this.distance.a());
             return jsonobject;
         }
     }

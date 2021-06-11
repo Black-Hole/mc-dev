@@ -10,7 +10,7 @@ import com.mojang.serialization.Dynamic;
 
 public class DataConverterHanging extends DataFix {
 
-    private static final int[][] a = new int[][]{{0, 0, 1}, {-1, 0, 0}, {0, 0, -1}, {1, 0, 0}};
+    private static final int[][] DIRECTIONS = new int[][]{{0, 0, 1}, {-1, 0, 0}, {0, 0, -1}, {1, 0, 0}};
 
     public DataConverterHanging(Schema schema, boolean flag) {
         super(schema, flag);
@@ -21,8 +21,8 @@ public class DataConverterHanging extends DataFix {
             int i;
 
             if (dynamic.get("Direction").asNumber().result().isPresent()) {
-                i = dynamic.get("Direction").asByte((byte) 0) % DataConverterHanging.a.length;
-                int[] aint = DataConverterHanging.a[i];
+                i = dynamic.get("Direction").asByte((byte) 0) % DataConverterHanging.DIRECTIONS.length;
+                int[] aint = DataConverterHanging.DIRECTIONS[i];
 
                 dynamic = dynamic.set("TileX", dynamic.createInt(dynamic.get("TileX").asInt(0) + aint[0]));
                 dynamic = dynamic.set("TileY", dynamic.createInt(dynamic.get("TileY").asInt(0) + aint[1]));
@@ -32,7 +32,7 @@ public class DataConverterHanging extends DataFix {
                     dynamic = dynamic.set("ItemRotation", dynamic.createByte((byte) (dynamic.get("ItemRotation").asByte((byte) 0) * 2)));
                 }
             } else {
-                i = dynamic.get("Dir").asByte((byte) 0) % DataConverterHanging.a.length;
+                i = dynamic.get("Dir").asByte((byte) 0) % DataConverterHanging.DIRECTIONS.length;
                 dynamic = dynamic.remove("Dir");
             }
 

@@ -16,7 +16,8 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterPotionId extends DataFix {
 
-    private static final String[] a = (String[]) DataFixUtils.make(new String[128], (astring) -> {
+    private static final int SPLASH = 16384;
+    private static final String[] POTIONS = (String[]) DataFixUtils.make(new String[128], (astring) -> {
         astring[0] = "minecraft:water";
         astring[1] = "minecraft:regeneration";
         astring[2] = "minecraft:swiftness";
@@ -146,6 +147,7 @@ public class DataConverterPotionId extends DataFix {
         astring[126] = "minecraft:long_invisibility";
         astring[127] = null;
     });
+    public static final String DEFAULT = "minecraft:water";
 
     public DataConverterPotionId(Schema schema, boolean flag) {
         super(schema, flag);
@@ -170,7 +172,7 @@ public class DataConverterPotionId extends DataFix {
                     Optional<String> optional2 = dynamic1.get("Potion").asString().result();
 
                     if (!optional2.isPresent()) {
-                        String s = DataConverterPotionId.a[short0 & 127];
+                        String s = DataConverterPotionId.POTIONS[short0 & 127];
                         Typed<?> typed2 = ((Typed) optional1.get()).set(DSL.remainderFinder(), dynamic1.set("Potion", dynamic1.createString(s == null ? "minecraft:water" : s)));
 
                         typed1 = typed.set(opticfinder1, typed2);

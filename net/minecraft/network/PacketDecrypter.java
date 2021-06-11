@@ -8,13 +8,13 @@ import javax.crypto.Cipher;
 
 public class PacketDecrypter extends MessageToMessageDecoder<ByteBuf> {
 
-    private final PacketEncryptionHandler a;
+    private final PacketEncryptionHandler cipher;
 
     public PacketDecrypter(Cipher cipher) {
-        this.a = new PacketEncryptionHandler(cipher);
+        this.cipher = new PacketEncryptionHandler(cipher);
     }
 
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
-        list.add(this.a.a(channelhandlercontext, bytebuf));
+        list.add(this.cipher.a(channelhandlercontext, bytebuf));
     }
 }

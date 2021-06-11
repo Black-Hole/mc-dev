@@ -10,8 +10,8 @@ import net.minecraft.world.effect.MobEffect;
 
 public class PotionRegistry {
 
-    private final String a;
-    private final ImmutableList<MobEffect> b;
+    private final String name;
+    private final ImmutableList<MobEffect> effects;
 
     public static PotionRegistry a(String s) {
         return (PotionRegistry) IRegistry.POTION.get(MinecraftKey.a(s));
@@ -22,21 +22,21 @@ public class PotionRegistry {
     }
 
     public PotionRegistry(@Nullable String s, MobEffect... amobeffect) {
-        this.a = s;
-        this.b = ImmutableList.copyOf(amobeffect);
+        this.name = s;
+        this.effects = ImmutableList.copyOf(amobeffect);
     }
 
     public String b(String s) {
-        return s + (this.a == null ? IRegistry.POTION.getKey(this).getKey() : this.a);
+        return s + (this.name == null ? IRegistry.POTION.getKey(this).getKey() : this.name);
     }
 
     public List<MobEffect> a() {
-        return this.b;
+        return this.effects;
     }
 
     public boolean b() {
-        if (!this.b.isEmpty()) {
-            UnmodifiableIterator unmodifiableiterator = this.b.iterator();
+        if (!this.effects.isEmpty()) {
+            UnmodifiableIterator unmodifiableiterator = this.effects.iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) unmodifiableiterator.next();

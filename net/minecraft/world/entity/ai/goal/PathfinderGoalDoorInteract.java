@@ -11,29 +11,29 @@ import net.minecraft.world.level.pathfinder.PathPoint;
 
 public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
-    protected EntityInsentient entity;
-    protected BlockPosition door;
-    protected boolean f;
-    private boolean a;
-    private float b;
-    private float c;
+    protected EntityInsentient mob;
+    protected BlockPosition doorPos;
+    protected boolean hasDoor;
+    private boolean passed;
+    private float doorOpenDirX;
+    private float doorOpenDirZ;
 
     public PathfinderGoalDoorInteract(EntityInsentient entityinsentient) {
-        this.door = BlockPosition.ZERO;
-        this.entity = entityinsentient;
+        this.doorPos = BlockPosition.ZERO;
+        this.mob = entityinsentient;
         if (!PathfinderGoalUtil.a(entityinsentient)) {
             throw new IllegalArgumentException("Unsupported mob type for DoorInteractGoal");
         }
     }
 
     protected boolean g() {
-        if (!this.f) {
+        if (!this.hasDoor) {
             return false;
         } else {
-            IBlockData iblockdata = this.entity.world.getType(this.door);
+            IBlockData iblockdata = this.mob.level.getType(this.doorPos);
 
             if (!(iblockdata.getBlock() instanceof BlockDoor)) {
-                this.f = false;
+                this.hasDoor = false;
                 return false;
             } else {
                 return (Boolean) iblockdata.get(BlockDoor.OPEN);
@@ -42,11 +42,11 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     }
 
     protected void a(boolean flag) {
-        if (this.f) {
-            IBlockData iblockdata = this.entity.world.getType(this.door);
+        if (this.hasDoor) {
+            IBlockData iblockdata = this.mob.level.getType(this.doorPos);
 
             if (iblockdata.getBlock() instanceof BlockDoor) {
-                ((BlockDoor) iblockdata.getBlock()).setDoor(this.entity.world, iblockdata, this.door, flag);
+                ((BlockDoor) iblockdata.getBlock()).setDoor(this.mob, this.mob.level, iblockdata, this.doorPos, flag);
             }
         }
 
@@ -54,30 +54,30 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (!PathfinderGoalUtil.a(this.entity)) {
+        if (!PathfinderGoalUtil.a(this.mob)) {
             return false;
-        } else if (!this.entity.positionChanged) {
+        } else if (!this.mob.horizontalCollision) {
             return false;
         } else {
-            Navigation navigation = (Navigation) this.entity.getNavigation();
+            Navigation navigation = (Navigation) this.mob.getNavigation();
             PathEntity pathentity = navigation.k();
 
             if (pathentity != null && !pathentity.c() && navigation.f()) {
                 for (int i = 0; i < Math.min(pathentity.f() + 2, pathentity.e()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
-                    this.door = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-                    if (this.entity.h((double) this.door.getX(), this.entity.locY(), (double) this.door.getZ()) <= 2.25D) {
-                        this.f = BlockDoor.a(this.entity.world, this.door);
-                        if (this.f) {
+                    this.doorPos = new BlockPosition(pathpoint.x, pathpoint.y + 1, pathpoint.z);
+                    if (this.mob.h((double) this.doorPos.getX(), this.mob.locY(), (double) this.doorPos.getZ()) <= 2.25D) {
+                        this.hasDoor = BlockDoor.a(this.mob.level, this.doorPos);
+                        if (this.hasDoor) {
                             return true;
                         }
                     }
                 }
 
-                this.door = this.entity.getChunkCoordinates().up();
-                this.f = BlockDoor.a(this.entity.world, this.door);
-                return this.f;
+                this.doorPos = this.mob.getChunkCoordinates().up();
+                this.hasDoor = BlockDoor.a(this.mob.level, this.doorPos);
+                return this.hasDoor;
             } else {
                 return false;
             }
@@ -86,24 +86,24 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return !this.a;
+        return !this.passed;
     }
 
     @Override
     public void c() {
-        this.a = false;
-        this.b = (float) ((double) this.door.getX() + 0.5D - this.entity.locX());
-        this.c = (float) ((double) this.door.getZ() + 0.5D - this.entity.locZ());
+        this.passed = false;
+        this.doorOpenDirX = (float) ((double) this.doorPos.getX() + 0.5D - this.mob.locX());
+        this.doorOpenDirZ = (float) ((double) this.doorPos.getZ() + 0.5D - this.mob.locZ());
     }
 
     @Override
     public void e() {
-        float f = (float) ((double) this.door.getX() + 0.5D - this.entity.locX());
-        float f1 = (float) ((double) this.door.getZ() + 0.5D - this.entity.locZ());
-        float f2 = this.b * f + this.c * f1;
+        float f = (float) ((double) this.doorPos.getX() + 0.5D - this.mob.locX());
+        float f1 = (float) ((double) this.doorPos.getZ() + 0.5D - this.mob.locZ());
+        float f2 = this.doorOpenDirX * f + this.doorOpenDirZ * f1;
 
         if (f2 < 0.0F) {
-            this.a = true;
+            this.passed = true;
         }
 
     }

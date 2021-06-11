@@ -25,7 +25,7 @@ import net.minecraft.world.level.material.Fluid;
 
 public class MobSpawnerPhantom implements MobSpawner {
 
-    private int a;
+    private int nextTick;
 
     public MobSpawnerPhantom() {}
 
@@ -33,17 +33,17 @@ public class MobSpawnerPhantom implements MobSpawner {
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
-        } else if (!worldserver.getGameRules().getBoolean(GameRules.DO_INSOMNIA)) {
+        } else if (!worldserver.getGameRules().getBoolean(GameRules.RULE_DOINSOMNIA)) {
             return 0;
         } else {
             Random random = worldserver.random;
 
-            --this.a;
-            if (this.a > 0) {
+            --this.nextTick;
+            if (this.nextTick > 0) {
                 return 0;
             } else {
-                this.a += (60 + random.nextInt(60)) * 20;
-                if (worldserver.c() < 5 && worldserver.getDimensionManager().hasSkyLight()) {
+                this.nextTick += (60 + random.nextInt(60)) * 20;
+                if (worldserver.n_() < 5 && worldserver.getDimensionManager().hasSkyLight()) {
                     return 0;
                 } else {
                     int i = 0;
@@ -55,7 +55,7 @@ public class MobSpawnerPhantom implements MobSpawner {
                         if (!entityhuman.isSpectator()) {
                             BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                            if (!worldserver.getDimensionManager().hasSkyLight() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.e(blockposition)) {
+                            if (!worldserver.getDimensionManager().hasSkyLight() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.g(blockposition)) {
                                 DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(blockposition);
 
                                 if (difficultydamagescaler.a(random.nextFloat() * 3.0F)) {

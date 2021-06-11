@@ -13,6 +13,8 @@ import net.minecraft.server.level.EntityPlayer;
 
 public class CommandTellRaw {
 
+    public CommandTellRaw() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("tellraw").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
@@ -22,7 +24,7 @@ public class CommandTellRaw {
             for (Iterator iterator = ArgumentEntity.f(commandcontext, "targets").iterator(); iterator.hasNext(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer, 0), SystemUtils.b);
+                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer, 0), SystemUtils.NIL_UUID);
             }
 
             return i;

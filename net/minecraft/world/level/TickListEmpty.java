@@ -4,12 +4,12 @@ import net.minecraft.core.BlockPosition;
 
 public class TickListEmpty<T> implements TickList<T> {
 
-    private static final TickListEmpty<Object> a = new TickListEmpty<>();
+    private static final TickListEmpty<Object> INSTANCE = new TickListEmpty<>();
 
     public TickListEmpty() {}
 
     public static <T> TickListEmpty<T> b() {
-        return TickListEmpty.a;
+        return TickListEmpty.INSTANCE;
     }
 
     @Override
@@ -26,5 +26,10 @@ public class TickListEmpty<T> implements TickList<T> {
     @Override
     public boolean b(BlockPosition blockposition, T t0) {
         return false;
+    }
+
+    @Override
+    public int a() {
+        return 0;
     }
 }

@@ -4,23 +4,23 @@ import net.minecraft.world.entity.EntityInsentient;
 
 public class PathfinderGoalDoorOpen extends PathfinderGoalDoorInteract {
 
-    private final boolean a;
-    private int b;
+    private final boolean closeDoor;
+    private int forgetTime;
 
     public PathfinderGoalDoorOpen(EntityInsentient entityinsentient, boolean flag) {
         super(entityinsentient);
-        this.entity = entityinsentient;
-        this.a = flag;
+        this.mob = entityinsentient;
+        this.closeDoor = flag;
     }
 
     @Override
     public boolean b() {
-        return this.a && this.b > 0 && super.b();
+        return this.closeDoor && this.forgetTime > 0 && super.b();
     }
 
     @Override
     public void c() {
-        this.b = 20;
+        this.forgetTime = 20;
         this.a(true);
     }
 
@@ -31,7 +31,7 @@ public class PathfinderGoalDoorOpen extends PathfinderGoalDoorInteract {
 
     @Override
     public void e() {
-        --this.b;
+        --this.forgetTime;
         super.e();
     }
 }

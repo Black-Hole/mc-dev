@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.network.PacketDataSerializer;
@@ -8,24 +7,27 @@ import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
 
-    private BlockPosition a;
-    private EnumDirection b;
-    private PacketPlayInBlockDig.EnumPlayerDigType c;
+    private final BlockPosition pos;
+    private final EnumDirection direction;
+    private final PacketPlayInBlockDig.EnumPlayerDigType action;
 
-    public PacketPlayInBlockDig() {}
+    public PacketPlayInBlockDig(PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, BlockPosition blockposition, EnumDirection enumdirection) {
+        this.action = packetplayinblockdig_enumplayerdigtype;
+        this.pos = blockposition.immutableCopy();
+        this.direction = enumdirection;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.c = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
-        this.a = packetdataserializer.e();
-        this.b = EnumDirection.fromType1(packetdataserializer.readUnsignedByte());
+    public PacketPlayInBlockDig(PacketDataSerializer packetdataserializer) {
+        this.action = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
+        this.pos = packetdataserializer.f();
+        this.direction = EnumDirection.fromType1(packetdataserializer.readUnsignedByte());
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.c);
-        packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.b.c());
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.action);
+        packetdataserializer.a(this.pos);
+        packetdataserializer.writeByte(this.direction.b());
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -33,15 +35,15 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
     }
 
     public BlockPosition b() {
-        return this.a;
+        return this.pos;
     }
 
     public EnumDirection c() {
-        return this.b;
+        return this.direction;
     }
 
     public PacketPlayInBlockDig.EnumPlayerDigType d() {
-        return this.c;
+        return this.action;
     }
 
     public static enum EnumPlayerDigType {

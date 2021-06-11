@@ -14,7 +14,7 @@ public class BehaviorStopAdmiring<E extends EntityPiglin> extends Behavior<E> {
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
-        return !e0.getItemInOffHand().isEmpty() && e0.getItemInOffHand().getItem() != Items.SHIELD;
+        return !e0.getItemInOffHand().isEmpty() && !e0.getItemInOffHand().a(Items.SHIELD);
     }
 
     protected void a(WorldServer worldserver, E e0, long i) {

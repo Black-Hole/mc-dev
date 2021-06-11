@@ -16,14 +16,14 @@ import net.minecraft.util.ChatDeserializer;
 
 public class Criterion {
 
-    private final CriterionInstance a;
+    private final CriterionInstance trigger;
 
     public Criterion(CriterionInstance criterioninstance) {
-        this.a = criterioninstance;
+        this.trigger = criterioninstance;
     }
 
     public Criterion() {
-        this.a = null;
+        this.trigger = null;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {}
@@ -52,46 +52,32 @@ public class Criterion {
         while (iterator.hasNext()) {
             Entry<String, JsonElement> entry = (Entry) iterator.next();
 
-            map.put(entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), lootdeserializationcontext));
+            map.put((String) entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), lootdeserializationcontext));
         }
 
         return map;
     }
 
     public static Map<String, Criterion> c(PacketDataSerializer packetdataserializer) {
-        Map<String, Criterion> map = Maps.newHashMap();
-        int i = packetdataserializer.i();
-
-        for (int j = 0; j < i; ++j) {
-            map.put(packetdataserializer.e(32767), b(packetdataserializer));
-        }
-
-        return map;
+        return packetdataserializer.a(PacketDataSerializer::p, Criterion::b);
     }
 
     public static void a(Map<String, Criterion> map, PacketDataSerializer packetdataserializer) {
-        packetdataserializer.d(map.size());
-        Iterator iterator = map.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Entry<String, Criterion> entry = (Entry) iterator.next();
-
-            packetdataserializer.a((String) entry.getKey());
-            ((Criterion) entry.getValue()).a(packetdataserializer);
-        }
-
+        packetdataserializer.a(map, PacketDataSerializer::a, (packetdataserializer1, criterion) -> {
+            criterion.a(packetdataserializer1);
+        });
     }
 
     @Nullable
     public CriterionInstance a() {
-        return this.a;
+        return this.trigger;
     }
 
     public JsonElement b() {
         JsonObject jsonobject = new JsonObject();
 
-        jsonobject.addProperty("trigger", this.a.a().toString());
-        JsonObject jsonobject1 = this.a.a(LootSerializationContext.a);
+        jsonobject.addProperty("trigger", this.trigger.a().toString());
+        JsonObject jsonobject1 = this.trigger.a(LootSerializationContext.INSTANCE);
 
         if (jsonobject1.size() != 0) {
             jsonobject.add("conditions", jsonobject1);

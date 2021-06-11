@@ -7,10 +7,10 @@ import net.minecraft.world.level.IWorldReader;
 
 public class DefinedStructureProcessorNop extends DefinedStructureProcessor {
 
-    public static final Codec<DefinedStructureProcessorNop> a = Codec.unit(() -> {
-        return DefinedStructureProcessorNop.b;
+    public static final Codec<DefinedStructureProcessorNop> CODEC = Codec.unit(() -> {
+        return DefinedStructureProcessorNop.INSTANCE;
     });
-    public static final DefinedStructureProcessorNop b = new DefinedStructureProcessorNop();
+    public static final DefinedStructureProcessorNop INSTANCE = new DefinedStructureProcessorNop();
 
     private DefinedStructureProcessorNop() {}
 
@@ -22,6 +22,6 @@ public class DefinedStructureProcessorNop extends DefinedStructureProcessor {
 
     @Override
     protected DefinedStructureStructureProcessorType<?> a() {
-        return DefinedStructureStructureProcessorType.f;
+        return DefinedStructureStructureProcessorType.NOP;
     }
 }

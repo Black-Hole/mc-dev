@@ -29,8 +29,8 @@ public class EntitySpectralArrow extends EntityArrow {
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide && !this.inGround) {
-            this.world.addParticle(Particles.INSTANT_EFFECT, this.locX(), this.locY(), this.locZ(), 0.0D, 0.0D, 0.0D);
+        if (this.level.isClientSide && !this.inGround) {
+            this.level.addParticle(Particles.INSTANT_EFFECT, this.locX(), this.locY(), this.locZ(), 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -45,7 +45,7 @@ public class EntitySpectralArrow extends EntityArrow {
         super.a(entityliving);
         MobEffect mobeffect = new MobEffect(MobEffects.GLOWING, this.duration, 0);
 
-        entityliving.addEffect(mobeffect);
+        entityliving.addEffect(mobeffect, this.x());
     }
 
     @Override

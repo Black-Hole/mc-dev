@@ -1,12 +1,12 @@
 package net.minecraft.network.protocol.game;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -16,100 +16,63 @@ import net.minecraft.resources.MinecraftKey;
 
 public class PacketPlayOutAdvancements implements Packet<PacketListenerPlayOut> {
 
-    private boolean a;
-    private Map<MinecraftKey, Advancement.SerializedAdvancement> b;
-    private Set<MinecraftKey> c;
-    private Map<MinecraftKey, AdvancementProgress> d;
-
-    public PacketPlayOutAdvancements() {}
+    private final boolean reset;
+    private final Map<MinecraftKey, Advancement.SerializedAdvancement> added;
+    private final Set<MinecraftKey> removed;
+    private final Map<MinecraftKey, AdvancementProgress> progress;
 
     public PacketPlayOutAdvancements(boolean flag, Collection<Advancement> collection, Set<MinecraftKey> set, Map<MinecraftKey, AdvancementProgress> map) {
-        this.a = flag;
-        this.b = Maps.newHashMap();
+        this.reset = flag;
+        Builder<MinecraftKey, Advancement.SerializedAdvancement> builder = ImmutableMap.builder();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
 
-            this.b.put(advancement.getName(), advancement.a());
+            builder.put(advancement.getName(), advancement.a());
         }
 
-        this.c = set;
-        this.d = Maps.newHashMap(map);
+        this.added = builder.build();
+        this.removed = ImmutableSet.copyOf(set);
+        this.progress = ImmutableMap.copyOf(map);
+    }
+
+    public PacketPlayOutAdvancements(PacketDataSerializer packetdataserializer) {
+        this.reset = packetdataserializer.readBoolean();
+        this.added = packetdataserializer.a(PacketDataSerializer::q, Advancement.SerializedAdvancement::b);
+        this.removed = (Set) packetdataserializer.a(Sets::newLinkedHashSetWithExpectedSize, PacketDataSerializer::q);
+        this.progress = packetdataserializer.a(PacketDataSerializer::q, AdvancementProgress::b);
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeBoolean(this.reset);
+        packetdataserializer.a(this.added, PacketDataSerializer::a, (packetdataserializer1, advancement_serializedadvancement) -> {
+            advancement_serializedadvancement.a(packetdataserializer1);
+        });
+        packetdataserializer.a((Collection) this.removed, PacketDataSerializer::a);
+        packetdataserializer.a(this.progress, PacketDataSerializer::a, (packetdataserializer1, advancementprogress) -> {
+            advancementprogress.a(packetdataserializer1);
+        });
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readBoolean();
-        this.b = Maps.newHashMap();
-        this.c = Sets.newLinkedHashSet();
-        this.d = Maps.newHashMap();
-        int i = packetdataserializer.i();
-
-        MinecraftKey minecraftkey;
-        int j;
-
-        for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.p();
-            Advancement.SerializedAdvancement advancement_serializedadvancement = Advancement.SerializedAdvancement.b(packetdataserializer);
-
-            this.b.put(minecraftkey, advancement_serializedadvancement);
-        }
-
-        i = packetdataserializer.i();
-
-        for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.p();
-            this.c.add(minecraftkey);
-        }
-
-        i = packetdataserializer.i();
-
-        for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.p();
-            this.d.put(minecraftkey, AdvancementProgress.b(packetdataserializer));
-        }
-
+    public Map<MinecraftKey, Advancement.SerializedAdvancement> b() {
+        return this.added;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeBoolean(this.a);
-        packetdataserializer.d(this.b.size());
-        Iterator iterator = this.b.entrySet().iterator();
+    public Set<MinecraftKey> c() {
+        return this.removed;
+    }
 
-        Entry entry;
+    public Map<MinecraftKey, AdvancementProgress> d() {
+        return this.progress;
+    }
 
-        while (iterator.hasNext()) {
-            entry = (Entry) iterator.next();
-            MinecraftKey minecraftkey = (MinecraftKey) entry.getKey();
-            Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) entry.getValue();
-
-            packetdataserializer.a(minecraftkey);
-            advancement_serializedadvancement.a(packetdataserializer);
-        }
-
-        packetdataserializer.d(this.c.size());
-        iterator = this.c.iterator();
-
-        while (iterator.hasNext()) {
-            MinecraftKey minecraftkey1 = (MinecraftKey) iterator.next();
-
-            packetdataserializer.a(minecraftkey1);
-        }
-
-        packetdataserializer.d(this.d.size());
-        iterator = this.d.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            entry = (Entry) iterator.next();
-            packetdataserializer.a((MinecraftKey) entry.getKey());
-            ((AdvancementProgress) entry.getValue()).a(packetdataserializer);
-        }
-
+    public boolean e() {
+        return this.reset;
     }
 }

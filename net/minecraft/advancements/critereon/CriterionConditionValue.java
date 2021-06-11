@@ -5,9 +5,11 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.BuiltInExceptionProvider;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -17,44 +19,44 @@ import net.minecraft.util.ChatDeserializer;
 
 public abstract class CriterionConditionValue<T extends Number> {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.range.empty"));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.range.swapped"));
-    protected final T c;
-    protected final T d;
+    public static final SimpleCommandExceptionType ERROR_EMPTY = new SimpleCommandExceptionType(new ChatMessage("argument.range.empty"));
+    public static final SimpleCommandExceptionType ERROR_SWAPPED = new SimpleCommandExceptionType(new ChatMessage("argument.range.swapped"));
+    protected final T min;
+    protected final T max;
 
     protected CriterionConditionValue(@Nullable T t0, @Nullable T t1) {
-        this.c = t0;
-        this.d = t1;
+        this.min = t0;
+        this.max = t1;
     }
 
     @Nullable
     public T a() {
-        return this.c;
+        return this.min;
     }
 
     @Nullable
     public T b() {
-        return this.d;
+        return this.max;
     }
 
     public boolean c() {
-        return this.c == null && this.d == null;
+        return this.min == null && this.max == null;
     }
 
     public JsonElement d() {
         if (this.c()) {
             return JsonNull.INSTANCE;
-        } else if (this.c != null && this.c.equals(this.d)) {
-            return new JsonPrimitive(this.c);
+        } else if (this.min != null && this.min.equals(this.max)) {
+            return new JsonPrimitive(this.min);
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (this.c != null) {
-                jsonobject.addProperty("min", this.c);
+            if (this.min != null) {
+                jsonobject.addProperty("min", this.min);
             }
 
-            if (this.d != null) {
-                jsonobject.addProperty("max", this.d);
+            if (this.max != null) {
+                jsonobject.addProperty("max", this.max);
             }
 
             return jsonobject;
@@ -81,7 +83,7 @@ public abstract class CriterionConditionValue<T extends Number> {
 
     protected static <T extends Number, R extends CriterionConditionValue<T>> R a(StringReader stringreader, CriterionConditionValue.b<T, R> criterionconditionvalue_b, Function<String, T> function, Supplier<DynamicCommandExceptionType> supplier, Function<T, T> function1) throws CommandSyntaxException {
         if (!stringreader.canRead()) {
-            throw CriterionConditionValue.a.createWithContext(stringreader);
+            throw CriterionConditionValue.ERROR_EMPTY.createWithContext(stringreader);
         } else {
             int i = stringreader.getCursor();
 
@@ -94,14 +96,14 @@ public abstract class CriterionConditionValue<T extends Number> {
                     stringreader.skip();
                     number = (Number) a(a(stringreader, function, supplier), function1);
                     if (t0 == null && number == null) {
-                        throw CriterionConditionValue.a.createWithContext(stringreader);
+                        throw CriterionConditionValue.ERROR_EMPTY.createWithContext(stringreader);
                     }
                 } else {
                     number = t0;
                 }
 
                 if (t0 == null && number == null) {
-                    throw CriterionConditionValue.a.createWithContext(stringreader);
+                    throw CriterionConditionValue.ERROR_EMPTY.createWithContext(stringreader);
                 } else {
                     return criterionconditionvalue_b.create(stringreader, t0, number);
                 }
@@ -145,78 +147,95 @@ public abstract class CriterionConditionValue<T extends Number> {
     }
 
     @FunctionalInterface
-    public interface b<T extends Number, R extends CriterionConditionValue<T>> {
-
-        R create(StringReader stringreader, @Nullable T t0, @Nullable T t1) throws CommandSyntaxException;
-    }
-
-    @FunctionalInterface
-    public interface a<T extends Number, R extends CriterionConditionValue<T>> {
+    protected interface a<T extends Number, R extends CriterionConditionValue<T>> {
 
         R create(@Nullable T t0, @Nullable T t1);
     }
 
-    public static class FloatRange extends CriterionConditionValue<Float> {
+    @FunctionalInterface
+    protected interface b<T extends Number, R extends CriterionConditionValue<T>> {
 
-        public static final CriterionConditionValue.FloatRange e = new CriterionConditionValue.FloatRange((Float) null, (Float) null);
-        private final Double f;
-        private final Double g;
+        R create(StringReader stringreader, @Nullable T t0, @Nullable T t1) throws CommandSyntaxException;
+    }
 
-        private static CriterionConditionValue.FloatRange a(StringReader stringreader, @Nullable Float ofloat, @Nullable Float ofloat1) throws CommandSyntaxException {
-            if (ofloat != null && ofloat1 != null && ofloat > ofloat1) {
-                throw CriterionConditionValue.FloatRange.b.createWithContext(stringreader);
+    public static class DoubleRange extends CriterionConditionValue<Double> {
+
+        public static final CriterionConditionValue.DoubleRange ANY = new CriterionConditionValue.DoubleRange((Double) null, (Double) null);
+        private final Double minSq;
+        private final Double maxSq;
+
+        private static CriterionConditionValue.DoubleRange a(StringReader stringreader, @Nullable Double odouble, @Nullable Double odouble1) throws CommandSyntaxException {
+            if (odouble != null && odouble1 != null && odouble > odouble1) {
+                throw CriterionConditionValue.DoubleRange.ERROR_SWAPPED.createWithContext(stringreader);
             } else {
-                return new CriterionConditionValue.FloatRange(ofloat, ofloat1);
+                return new CriterionConditionValue.DoubleRange(odouble, odouble1);
             }
         }
 
         @Nullable
-        private static Double a(@Nullable Float ofloat) {
-            return ofloat == null ? null : ofloat.doubleValue() * ofloat.doubleValue();
+        private static Double a(@Nullable Double odouble) {
+            return odouble == null ? null : odouble * odouble;
         }
 
-        private FloatRange(@Nullable Float ofloat, @Nullable Float ofloat1) {
-            super(ofloat, ofloat1);
-            this.f = a(ofloat);
-            this.g = a(ofloat1);
+        private DoubleRange(@Nullable Double odouble, @Nullable Double odouble1) {
+            super(odouble, odouble1);
+            this.minSq = a(odouble);
+            this.maxSq = a(odouble1);
         }
 
-        public static CriterionConditionValue.FloatRange b(float f) {
-            return new CriterionConditionValue.FloatRange(f, (Float) null);
+        public static CriterionConditionValue.DoubleRange a(double d0) {
+            return new CriterionConditionValue.DoubleRange(d0, d0);
         }
 
-        public boolean d(float f) {
-            return this.c != null && (Float) this.c > f ? false : this.d == null || (Float) this.d >= f;
+        public static CriterionConditionValue.DoubleRange a(double d0, double d1) {
+            return new CriterionConditionValue.DoubleRange(d0, d1);
         }
 
-        public boolean a(double d0) {
-            return this.f != null && this.f > d0 ? false : this.g == null || this.g >= d0;
+        public static CriterionConditionValue.DoubleRange b(double d0) {
+            return new CriterionConditionValue.DoubleRange(d0, (Double) null);
         }
 
-        public static CriterionConditionValue.FloatRange a(@Nullable JsonElement jsonelement) {
-            return (CriterionConditionValue.FloatRange) a(jsonelement, CriterionConditionValue.FloatRange.e, ChatDeserializer::e, CriterionConditionValue.FloatRange::new);
+        public static CriterionConditionValue.DoubleRange c(double d0) {
+            return new CriterionConditionValue.DoubleRange((Double) null, d0);
         }
 
-        public static CriterionConditionValue.FloatRange a(StringReader stringreader) throws CommandSyntaxException {
-            return a(stringreader, (ofloat) -> {
-                return ofloat;
+        public boolean d(double d0) {
+            return this.min != null && (Double) this.min > d0 ? false : this.max == null || (Double) this.max >= d0;
+        }
+
+        public boolean e(double d0) {
+            return this.minSq != null && this.minSq > d0 ? false : this.maxSq == null || this.maxSq >= d0;
+        }
+
+        public static CriterionConditionValue.DoubleRange a(@Nullable JsonElement jsonelement) {
+            return (CriterionConditionValue.DoubleRange) a(jsonelement, CriterionConditionValue.DoubleRange.ANY, ChatDeserializer::d, CriterionConditionValue.DoubleRange::new);
+        }
+
+        public static CriterionConditionValue.DoubleRange a(StringReader stringreader) throws CommandSyntaxException {
+            return a(stringreader, (odouble) -> {
+                return odouble;
             });
         }
 
-        public static CriterionConditionValue.FloatRange a(StringReader stringreader, Function<Float, Float> function) throws CommandSyntaxException {
-            return (CriterionConditionValue.FloatRange) a(stringreader, CriterionConditionValue.FloatRange::a, Float::parseFloat, CommandSyntaxException.BUILT_IN_EXCEPTIONS::readerInvalidFloat, function);
+        public static CriterionConditionValue.DoubleRange a(StringReader stringreader, Function<Double, Double> function) throws CommandSyntaxException {
+            CriterionConditionValue.b criterionconditionvalue_b = CriterionConditionValue.DoubleRange::a;
+            Function function1 = Double::parseDouble;
+            BuiltInExceptionProvider builtinexceptionprovider = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
+
+            Objects.requireNonNull(builtinexceptionprovider);
+            return (CriterionConditionValue.DoubleRange) a(stringreader, criterionconditionvalue_b, function1, builtinexceptionprovider::readerInvalidDouble, function);
         }
     }
 
     public static class IntegerRange extends CriterionConditionValue<Integer> {
 
-        public static final CriterionConditionValue.IntegerRange e = new CriterionConditionValue.IntegerRange((Integer) null, (Integer) null);
-        private final Long f;
-        private final Long g;
+        public static final CriterionConditionValue.IntegerRange ANY = new CriterionConditionValue.IntegerRange((Integer) null, (Integer) null);
+        private final Long minSq;
+        private final Long maxSq;
 
         private static CriterionConditionValue.IntegerRange a(StringReader stringreader, @Nullable Integer integer, @Nullable Integer integer1) throws CommandSyntaxException {
             if (integer != null && integer1 != null && integer > integer1) {
-                throw CriterionConditionValue.IntegerRange.b.createWithContext(stringreader);
+                throw CriterionConditionValue.IntegerRange.ERROR_SWAPPED.createWithContext(stringreader);
             } else {
                 return new CriterionConditionValue.IntegerRange(integer, integer1);
             }
@@ -229,24 +248,36 @@ public abstract class CriterionConditionValue<T extends Number> {
 
         private IntegerRange(@Nullable Integer integer, @Nullable Integer integer1) {
             super(integer, integer1);
-            this.f = a(integer);
-            this.g = a(integer1);
+            this.minSq = a(integer);
+            this.maxSq = a(integer1);
         }
 
         public static CriterionConditionValue.IntegerRange a(int i) {
             return new CriterionConditionValue.IntegerRange(i, i);
         }
 
+        public static CriterionConditionValue.IntegerRange a(int i, int j) {
+            return new CriterionConditionValue.IntegerRange(i, j);
+        }
+
         public static CriterionConditionValue.IntegerRange b(int i) {
             return new CriterionConditionValue.IntegerRange(i, (Integer) null);
         }
 
+        public static CriterionConditionValue.IntegerRange c(int i) {
+            return new CriterionConditionValue.IntegerRange((Integer) null, i);
+        }
+
         public boolean d(int i) {
-            return this.c != null && (Integer) this.c > i ? false : this.d == null || (Integer) this.d >= i;
+            return this.min != null && (Integer) this.min > i ? false : this.max == null || (Integer) this.max >= i;
+        }
+
+        public boolean a(long i) {
+            return this.minSq != null && this.minSq > i ? false : this.maxSq == null || this.maxSq >= i;
         }
 
         public static CriterionConditionValue.IntegerRange a(@Nullable JsonElement jsonelement) {
-            return (CriterionConditionValue.IntegerRange) a(jsonelement, CriterionConditionValue.IntegerRange.e, ChatDeserializer::g, CriterionConditionValue.IntegerRange::new);
+            return (CriterionConditionValue.IntegerRange) a(jsonelement, CriterionConditionValue.IntegerRange.ANY, ChatDeserializer::g, CriterionConditionValue.IntegerRange::new);
         }
 
         public static CriterionConditionValue.IntegerRange a(StringReader stringreader) throws CommandSyntaxException {
@@ -256,7 +287,12 @@ public abstract class CriterionConditionValue<T extends Number> {
         }
 
         public static CriterionConditionValue.IntegerRange a(StringReader stringreader, Function<Integer, Integer> function) throws CommandSyntaxException {
-            return (CriterionConditionValue.IntegerRange) a(stringreader, CriterionConditionValue.IntegerRange::a, Integer::parseInt, CommandSyntaxException.BUILT_IN_EXCEPTIONS::readerInvalidInt, function);
+            CriterionConditionValue.b criterionconditionvalue_b = CriterionConditionValue.IntegerRange::a;
+            Function function1 = Integer::parseInt;
+            BuiltInExceptionProvider builtinexceptionprovider = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
+
+            Objects.requireNonNull(builtinexceptionprovider);
+            return (CriterionConditionValue.IntegerRange) a(stringreader, criterionconditionvalue_b, function1, builtinexceptionprovider::readerInvalidInt, function);
         }
     }
 }

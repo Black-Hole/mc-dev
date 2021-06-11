@@ -6,7 +6,7 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public interface LootItemCondition extends LootItemUser, Predicate<LootTableInfo> {
 
-    LootItemConditionType b();
+    LootItemConditionType a();
 
     @FunctionalInterface
     public interface a {

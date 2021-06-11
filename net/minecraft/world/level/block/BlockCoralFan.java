@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.GeneratorAccess;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.BlockBase;
@@ -14,11 +13,11 @@ import net.minecraft.world.level.material.FluidTypes;
 
 public class BlockCoralFan extends BlockCoralFanAbstract {
 
-    private final Block a;
+    private final Block deadBlock;
 
     protected BlockCoralFan(Block block, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.a = block;
+        this.deadBlock = block;
     }
 
     @Override
@@ -28,8 +27,8 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!c(iblockdata, (IBlockAccess) worldserver, blockposition)) {
-            worldserver.setTypeAndData(blockposition, (IBlockData) this.a.getBlockData().set(BlockCoralFan.b, false), 2);
+        if (!e(iblockdata, worldserver, blockposition)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) this.deadBlock.getBlockData().set(BlockCoralFan.WATERLOGGED, false), 2);
         }
 
     }
@@ -40,7 +39,7 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
             return Blocks.AIR.getBlockData();
         } else {
             this.a(iblockdata, generatoraccess, blockposition);
-            if ((Boolean) iblockdata.get(BlockCoralFan.b)) {
+            if ((Boolean) iblockdata.get(BlockCoralFan.WATERLOGGED)) {
                 generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
 

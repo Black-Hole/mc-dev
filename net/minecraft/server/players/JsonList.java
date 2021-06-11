@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.SystemUtils;
 import net.minecraft.util.ChatDeserializer;
@@ -26,20 +28,20 @@ import org.apache.logging.log4j.Logger;
 public abstract class JsonList<K, V extends JsonListEntry<K>> {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson b = (new GsonBuilder()).setPrettyPrinting().create();
-    private final File c;
-    private final Map<String, V> d = Maps.newHashMap();
+    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+    private final File file;
+    private final Map<String, V> map = Maps.newHashMap();
 
     public JsonList(File file) {
-        this.c = file;
+        this.file = file;
     }
 
     public File b() {
-        return this.c;
+        return this.file;
     }
 
     public void add(V v0) {
-        this.d.put(this.a(v0.getKey()), v0);
+        this.map.put(this.a(v0.getKey()), v0);
 
         try {
             this.save();
@@ -52,11 +54,11 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
     @Nullable
     public V get(K k0) {
         this.g();
-        return (JsonListEntry) this.d.get(this.a(k0));
+        return (JsonListEntry) this.map.get(this.a(k0));
     }
 
     public void remove(K k0) {
-        this.d.remove(this.a(k0));
+        this.map.remove(this.a(k0));
 
         try {
             this.save();
@@ -71,11 +73,11 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
     }
 
     public String[] getEntries() {
-        return (String[]) this.d.keySet().toArray(new String[this.d.size()]);
+        return (String[]) this.map.keySet().toArray(new String[0]);
     }
 
     public boolean isEmpty() {
-        return this.d.size() < 1;
+        return this.map.size() < 1;
     }
 
     protected String a(K k0) {
@@ -83,12 +85,12 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
     }
 
     protected boolean d(K k0) {
-        return this.d.containsKey(this.a(k0));
+        return this.map.containsKey(this.a(k0));
     }
 
     private void g() {
         List<K> list = Lists.newArrayList();
-        Iterator iterator = this.d.values().iterator();
+        Iterator iterator = this.map.values().iterator();
 
         while (iterator.hasNext()) {
             V v0 = (JsonListEntry) iterator.next();
@@ -103,7 +105,7 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
         while (iterator.hasNext()) {
             K k0 = iterator.next();
 
-            this.d.remove(this.a(k0));
+            this.map.remove(this.a(k0));
         }
 
     }
@@ -111,52 +113,50 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
     protected abstract JsonListEntry<K> a(JsonObject jsonobject);
 
     public Collection<V> d() {
-        return this.d.values();
+        return this.map.values();
     }
 
     public void save() throws IOException {
         JsonArray jsonarray = new JsonArray();
-
-        this.d.values().stream().map((jsonlistentry) -> {
+        Stream stream = this.map.values().stream().map((jsonlistentry) -> {
             JsonObject jsonobject = new JsonObject();
 
-            jsonlistentry.getClass();
+            Objects.requireNonNull(jsonlistentry);
             return (JsonObject) SystemUtils.a((Object) jsonobject, jsonlistentry::a);
-        }).forEach(jsonarray::add);
-        BufferedWriter bufferedwriter = Files.newWriter(this.c, StandardCharsets.UTF_8);
-        Throwable throwable = null;
+        });
+
+        Objects.requireNonNull(jsonarray);
+        stream.forEach(jsonarray::add);
+        BufferedWriter bufferedwriter = Files.newWriter(this.file, StandardCharsets.UTF_8);
 
         try {
-            JsonList.b.toJson(jsonarray, bufferedwriter);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
+            JsonList.GSON.toJson(jsonarray, bufferedwriter);
+        } catch (Throwable throwable) {
             if (bufferedwriter != null) {
-                if (throwable != null) {
-                    try {
-                        bufferedwriter.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
+                try {
                     bufferedwriter.close();
+                } catch (Throwable throwable1) {
+                    throwable.addSuppressed(throwable1);
                 }
             }
 
+            throw throwable;
+        }
+
+        if (bufferedwriter != null) {
+            bufferedwriter.close();
         }
 
     }
 
     public void load() throws IOException {
-        if (this.c.exists()) {
-            BufferedReader bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
-            Throwable throwable = null;
+        if (this.file.exists()) {
+            BufferedReader bufferedreader = Files.newReader(this.file, StandardCharsets.UTF_8);
 
             try {
-                JsonArray jsonarray = (JsonArray) JsonList.b.fromJson(bufferedreader, JsonArray.class);
+                JsonArray jsonarray = (JsonArray) JsonList.GSON.fromJson(bufferedreader, JsonArray.class);
 
-                this.d.clear();
+                this.map.clear();
                 Iterator iterator = jsonarray.iterator();
 
                 while (iterator.hasNext()) {
@@ -165,25 +165,23 @@ public abstract class JsonList<K, V extends JsonListEntry<K>> {
                     JsonListEntry<K> jsonlistentry = this.a(jsonobject);
 
                     if (jsonlistentry.getKey() != null) {
-                        this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                        this.map.put(this.a(jsonlistentry.getKey()), jsonlistentry);
                     }
                 }
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (bufferedreader != null) {
-                    if (throwable != null) {
-                        try {
-                            bufferedreader.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         bufferedreader.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (bufferedreader != null) {
+                bufferedreader.close();
             }
 
         }

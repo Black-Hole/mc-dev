@@ -22,7 +22,7 @@ public class SensorPiglinBruteSpecific extends Sensor<EntityLiving> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEARBY_ADULT_PIGLINS);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_NEMESIS, MemoryModuleType.NEARBY_ADULT_PIGLINS);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class SensorPiglinBruteSpecific extends Sensor<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         Optional<EntityInsentient> optional = Optional.empty();
         List<EntityPiglinAbstract> list = Lists.newArrayList();
-        List<EntityLiving> list1 = (List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).orElse(ImmutableList.of());
+        List<EntityLiving> list1 = (List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of());
         Iterator iterator = list1.iterator();
 
         while (iterator.hasNext()) {
@@ -42,18 +42,18 @@ public class SensorPiglinBruteSpecific extends Sensor<EntityLiving> {
             }
         }
 
-        List<EntityLiving> list2 = (List) behaviorcontroller.getMemory(MemoryModuleType.MOBS).orElse(ImmutableList.of());
+        List<EntityLiving> list2 = (List) behaviorcontroller.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(ImmutableList.of());
         Iterator iterator1 = list2.iterator();
 
         while (iterator1.hasNext()) {
             EntityLiving entityliving2 = (EntityLiving) iterator1.next();
 
-            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).eM()) {
+            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fv()) {
                 list.add((EntityPiglinAbstract) entityliving2);
             }
         }
 
-        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_NEMSIS, optional);
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_NEMESIS, optional);
         behaviorcontroller.setMemory(MemoryModuleType.NEARBY_ADULT_PIGLINS, (Object) list);
     }
 }

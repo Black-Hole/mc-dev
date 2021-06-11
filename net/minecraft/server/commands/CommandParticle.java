@@ -22,15 +22,17 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CommandParticle {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.particle.failed"));
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.particle.failed"));
+
+    public CommandParticle() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("particle").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("name", (ArgumentType) ArgumentParticle.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentParticle.a(commandcontext, "name"), ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), Vec3D.ORIGIN, 0.0F, 0, false, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getPlayers());
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentParticle.a(commandcontext, "name"), ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), Vec3D.ZERO, 0.0F, 0, false, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getPlayers());
         })).then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentParticle.a(commandcontext, "name"), ArgumentVec3.a(commandcontext, "pos"), Vec3D.ORIGIN, 0.0F, 0, false, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getPlayers());
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentParticle.a(commandcontext, "name"), ArgumentVec3.a(commandcontext, "pos"), Vec3D.ZERO, 0.0F, 0, false, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getPlayers());
         })).then(net.minecraft.commands.CommandDispatcher.a("delta", (ArgumentType) ArgumentVec3.a(false)).then(net.minecraft.commands.CommandDispatcher.a("speed", (ArgumentType) FloatArgumentType.floatArg(0.0F)).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentParticle.a(commandcontext, "name"), ArgumentVec3.a(commandcontext, "pos"), ArgumentVec3.a(commandcontext, "delta"), FloatArgumentType.getFloat(commandcontext, "speed"), IntegerArgumentType.getInteger(commandcontext, "count"), false, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getPlayers());
         })).then(((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("force").executes((commandcontext) -> {
@@ -57,7 +59,7 @@ public class CommandParticle {
         }
 
         if (j == 0) {
-            throw CommandParticle.a.create();
+            throw CommandParticle.ERROR_FAILED.create();
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.particle.success", new Object[]{IRegistry.PARTICLE_TYPE.getKey(particleparam.getParticle()).toString()}), true);
             return j;

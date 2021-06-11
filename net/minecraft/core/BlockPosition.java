@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 @Immutable
 public class BlockPosition extends BaseBlockPosition {
 
-    public static final Codec<BlockPosition> a = Codec.INT_STREAM.comapFlatMap((intstream) -> {
+    public static final Codec<BlockPosition> CODEC = Codec.INT_STREAM.comapFlatMap((intstream) -> {
         return SystemUtils.a(intstream, 3).map((aint) -> {
             return new BlockPosition(aint[0], aint[1], aint[2]);
         });
@@ -31,14 +31,15 @@ public class BlockPosition extends BaseBlockPosition {
     }).stable();
     private static final Logger LOGGER = LogManager.getLogger();
     public static final BlockPosition ZERO = new BlockPosition(0, 0, 0);
-    private static final int f = 1 + MathHelper.f(MathHelper.c(30000000));
-    private static final int g = BlockPosition.f;
-    private static final int h = 64 - BlockPosition.f - BlockPosition.g;
-    private static final long i = (1L << BlockPosition.f) - 1L;
-    private static final long j = (1L << BlockPosition.h) - 1L;
-    private static final long k = (1L << BlockPosition.g) - 1L;
-    private static final int l = BlockPosition.h;
-    private static final int m = BlockPosition.h + BlockPosition.g;
+    private static final int PACKED_X_LENGTH = 1 + MathHelper.f(MathHelper.c(30000000));
+    private static final int PACKED_Z_LENGTH = BlockPosition.PACKED_X_LENGTH;
+    public static final int PACKED_Y_LENGTH = 64 - BlockPosition.PACKED_X_LENGTH - BlockPosition.PACKED_Z_LENGTH;
+    private static final long PACKED_X_MASK = (1L << BlockPosition.PACKED_X_LENGTH) - 1L;
+    private static final long PACKED_Y_MASK = (1L << BlockPosition.PACKED_Y_LENGTH) - 1L;
+    private static final long PACKED_Z_MASK = (1L << BlockPosition.PACKED_Z_LENGTH) - 1L;
+    private static final int Y_OFFSET = 0;
+    private static final int Z_OFFSET = BlockPosition.PACKED_Y_LENGTH;
+    private static final int X_OFFSET = BlockPosition.PACKED_Y_LENGTH + BlockPosition.PACKED_Z_LENGTH;
 
     public BlockPosition(int i, int j, int k) {
         super(i, j, k);
@@ -65,23 +66,23 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public static long a(long i, int j, int k, int l) {
-        return a(b(i) + j, c(i) + k, d(i) + l);
+        return a(a(i) + j, b(i) + k, c(i) + l);
+    }
+
+    public static int a(long i) {
+        return (int) (i << 64 - BlockPosition.X_OFFSET - BlockPosition.PACKED_X_LENGTH >> 64 - BlockPosition.PACKED_X_LENGTH);
     }
 
     public static int b(long i) {
-        return (int) (i << 64 - BlockPosition.m - BlockPosition.f >> 64 - BlockPosition.f);
+        return (int) (i << 64 - BlockPosition.PACKED_Y_LENGTH >> 64 - BlockPosition.PACKED_Y_LENGTH);
     }
 
     public static int c(long i) {
-        return (int) (i << 64 - BlockPosition.h >> 64 - BlockPosition.h);
-    }
-
-    public static int d(long i) {
-        return (int) (i << 64 - BlockPosition.l - BlockPosition.g >> 64 - BlockPosition.g);
+        return (int) (i << 64 - BlockPosition.Z_OFFSET - BlockPosition.PACKED_Z_LENGTH >> 64 - BlockPosition.PACKED_Z_LENGTH);
     }
 
     public static BlockPosition fromLong(long i) {
-        return new BlockPosition(b(i), c(i), d(i));
+        return new BlockPosition(a(i), b(i), c(i));
     }
 
     public long asLong() {
@@ -91,30 +92,39 @@ public class BlockPosition extends BaseBlockPosition {
     public static long a(int i, int j, int k) {
         long l = 0L;
 
-        l |= ((long) i & BlockPosition.i) << BlockPosition.m;
-        l |= ((long) j & BlockPosition.j) << 0;
-        l |= ((long) k & BlockPosition.k) << BlockPosition.l;
+        l |= ((long) i & BlockPosition.PACKED_X_MASK) << BlockPosition.X_OFFSET;
+        l |= ((long) j & BlockPosition.PACKED_Y_MASK) << 0;
+        l |= ((long) k & BlockPosition.PACKED_Z_MASK) << BlockPosition.Z_OFFSET;
         return l;
     }
 
-    public static long f(long i) {
+    public static long e(long i) {
         return i & -16L;
     }
 
-    public BlockPosition a(double d0, double d1, double d2) {
+    @Override
+    public BlockPosition b(double d0, double d1, double d2) {
         return d0 == 0.0D && d1 == 0.0D && d2 == 0.0D ? this : new BlockPosition((double) this.getX() + d0, (double) this.getY() + d1, (double) this.getZ() + d2);
     }
 
-    public BlockPosition b(int i, int j, int k) {
+    @Override
+    public BlockPosition c(int i, int j, int k) {
         return i == 0 && j == 0 && k == 0 ? this : new BlockPosition(this.getX() + i, this.getY() + j, this.getZ() + k);
     }
 
-    public BlockPosition a(BaseBlockPosition baseblockposition) {
-        return this.b(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
+    @Override
+    public BlockPosition f(BaseBlockPosition baseblockposition) {
+        return this.c(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
     }
 
-    public BlockPosition b(BaseBlockPosition baseblockposition) {
-        return this.b(-baseblockposition.getX(), -baseblockposition.getY(), -baseblockposition.getZ());
+    @Override
+    public BlockPosition e(BaseBlockPosition baseblockposition) {
+        return this.c(-baseblockposition.getX(), -baseblockposition.getY(), -baseblockposition.getZ());
+    }
+
+    @Override
+    public BlockPosition o(int i) {
+        return i == 1 ? this : (i == 0 ? BlockPosition.ZERO : new BlockPosition(this.getX() * i, this.getY() * i, this.getZ() * i));
     }
 
     @Override
@@ -137,38 +147,47 @@ public class BlockPosition extends BaseBlockPosition {
         return this.shift(EnumDirection.DOWN, i);
     }
 
+    @Override
     public BlockPosition north() {
         return this.shift(EnumDirection.NORTH);
     }
 
+    @Override
     public BlockPosition north(int i) {
         return this.shift(EnumDirection.NORTH, i);
     }
 
+    @Override
     public BlockPosition south() {
         return this.shift(EnumDirection.SOUTH);
     }
 
+    @Override
     public BlockPosition south(int i) {
         return this.shift(EnumDirection.SOUTH, i);
     }
 
+    @Override
     public BlockPosition west() {
         return this.shift(EnumDirection.WEST);
     }
 
+    @Override
     public BlockPosition west(int i) {
         return this.shift(EnumDirection.WEST, i);
     }
 
+    @Override
     public BlockPosition east() {
         return this.shift(EnumDirection.EAST);
     }
 
+    @Override
     public BlockPosition east(int i) {
         return this.shift(EnumDirection.EAST, i);
     }
 
+    @Override
     public BlockPosition shift(EnumDirection enumdirection) {
         return new BlockPosition(this.getX() + enumdirection.getAdjacentX(), this.getY() + enumdirection.getAdjacentY(), this.getZ() + enumdirection.getAdjacentZ());
     }
@@ -178,7 +197,8 @@ public class BlockPosition extends BaseBlockPosition {
         return i == 0 ? this : new BlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
     }
 
-    public BlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
+    @Override
+    public BlockPosition b(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
         if (i == 0) {
             return this;
         } else {
@@ -209,12 +229,20 @@ public class BlockPosition extends BaseBlockPosition {
         return new BlockPosition(this.getY() * baseblockposition.getZ() - this.getZ() * baseblockposition.getY(), this.getZ() * baseblockposition.getX() - this.getX() * baseblockposition.getZ(), this.getX() * baseblockposition.getY() - this.getY() * baseblockposition.getX());
     }
 
+    public BlockPosition h(int i) {
+        return new BlockPosition(this.getX(), i, this.getZ());
+    }
+
     public BlockPosition immutableCopy() {
         return this;
     }
 
     public BlockPosition.MutableBlockPosition i() {
         return new BlockPosition.MutableBlockPosition(this.getX(), this.getY(), this.getZ());
+    }
+
+    public static Iterable<BlockPosition> a(Random random, int i, BlockPosition blockposition, int j) {
+        return a(random, i, blockposition.getX() - j, blockposition.getY() - j, blockposition.getZ() - j, blockposition.getX() + j, blockposition.getY() + j, blockposition.getZ() + j);
     }
 
     public static Iterable<BlockPosition> a(Random random, int i, int j, int k, int l, int i1, int j1, int k1) {
@@ -224,16 +252,16 @@ public class BlockPosition extends BaseBlockPosition {
 
         return () -> {
             return new AbstractIterator<BlockPosition>() {
-                final BlockPosition.MutableBlockPosition a = new BlockPosition.MutableBlockPosition();
-                int b = i;
+                final BlockPosition.MutableBlockPosition nextPos = new BlockPosition.MutableBlockPosition();
+                int counter = i;
 
                 protected BlockPosition computeNext() {
-                    if (this.b <= 0) {
+                    if (this.counter <= 0) {
                         return (BlockPosition) this.endOfData();
                     } else {
-                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.a.d(j + random.nextInt(l1), k + random.nextInt(i2), l + random.nextInt(j2));
+                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.nextPos.d(j + random.nextInt(l1), k + random.nextInt(i2), l + random.nextInt(j2));
 
-                        --this.b;
+                        --this.counter;
                         return blockposition_mutableblockposition;
                     }
                 }
@@ -249,46 +277,46 @@ public class BlockPosition extends BaseBlockPosition {
 
         return () -> {
             return new AbstractIterator<BlockPosition>() {
-                private final BlockPosition.MutableBlockPosition h = new BlockPosition.MutableBlockPosition();
-                private int i;
-                private int j;
-                private int k;
-                private int l;
-                private int m;
-                private boolean n;
+                private final BlockPosition.MutableBlockPosition cursor = new BlockPosition.MutableBlockPosition();
+                private int currentDepth;
+                private int maxX;
+                private int maxY;
+                private int x;
+                private int y;
+                private boolean zMirror;
 
                 protected BlockPosition computeNext() {
-                    if (this.n) {
-                        this.n = false;
-                        this.h.q(k1 - (this.h.getZ() - k1));
-                        return this.h;
+                    if (this.zMirror) {
+                        this.zMirror = false;
+                        this.cursor.s(k1 - (this.cursor.getZ() - k1));
+                        return this.cursor;
                     } else {
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition;
 
-                        for (blockposition_mutableblockposition = null; blockposition_mutableblockposition == null; ++this.m) {
-                            if (this.m > this.k) {
-                                ++this.l;
-                                if (this.l > this.j) {
-                                    ++this.i;
-                                    if (this.i > l) {
+                        for (blockposition_mutableblockposition = null; blockposition_mutableblockposition == null; ++this.y) {
+                            if (this.y > this.maxY) {
+                                ++this.x;
+                                if (this.x > this.maxX) {
+                                    ++this.currentDepth;
+                                    if (this.currentDepth > l) {
                                         return (BlockPosition) this.endOfData();
                                     }
 
-                                    this.j = Math.min(i, this.i);
-                                    this.l = -this.j;
+                                    this.maxX = Math.min(i, this.currentDepth);
+                                    this.x = -this.maxX;
                                 }
 
-                                this.k = Math.min(j, this.i - Math.abs(this.l));
-                                this.m = -this.k;
+                                this.maxY = Math.min(j, this.currentDepth - Math.abs(this.x));
+                                this.y = -this.maxY;
                             }
 
-                            int l1 = this.l;
-                            int i2 = this.m;
-                            int j2 = this.i - Math.abs(l1) - Math.abs(i2);
+                            int l1 = this.x;
+                            int i2 = this.y;
+                            int j2 = this.currentDepth - Math.abs(l1) - Math.abs(i2);
 
                             if (j2 <= k) {
-                                this.n = j2 != 0;
-                                blockposition_mutableblockposition = this.h.d(i1 + l1, j1 + i2, k1 + j2);
+                                this.zMirror = j2 != 0;
+                                blockposition_mutableblockposition = this.cursor.d(i1 + l1, j1 + i2, k1 + j2);
                             }
                         }
 
@@ -316,7 +344,7 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public static Stream<BlockPosition> a(StructureBoundingBox structureboundingbox) {
-        return a(Math.min(structureboundingbox.a, structureboundingbox.d), Math.min(structureboundingbox.b, structureboundingbox.e), Math.min(structureboundingbox.c, structureboundingbox.f), Math.max(structureboundingbox.a, structureboundingbox.d), Math.max(structureboundingbox.b, structureboundingbox.e), Math.max(structureboundingbox.c, structureboundingbox.f));
+        return a(Math.min(structureboundingbox.g(), structureboundingbox.j()), Math.min(structureboundingbox.h(), structureboundingbox.k()), Math.min(structureboundingbox.i(), structureboundingbox.l()), Math.max(structureboundingbox.g(), structureboundingbox.j()), Math.max(structureboundingbox.h(), structureboundingbox.k()), Math.max(structureboundingbox.i(), structureboundingbox.l()));
     }
 
     public static Stream<BlockPosition> a(AxisAlignedBB axisalignedbb) {
@@ -335,20 +363,20 @@ public class BlockPosition extends BaseBlockPosition {
 
         return () -> {
             return new AbstractIterator<BlockPosition>() {
-                private final BlockPosition.MutableBlockPosition g = new BlockPosition.MutableBlockPosition();
-                private int h;
+                private final BlockPosition.MutableBlockPosition cursor = new BlockPosition.MutableBlockPosition();
+                private int index;
 
                 protected BlockPosition computeNext() {
-                    if (this.h == j2) {
+                    if (this.index == j2) {
                         return (BlockPosition) this.endOfData();
                     } else {
-                        int k2 = this.h % k1;
-                        int l2 = this.h / k1;
+                        int k2 = this.index % k1;
+                        int l2 = this.index / k1;
                         int i3 = l2 % l1;
                         int j3 = l2 / l1;
 
-                        ++this.h;
-                        return this.g.d(i + k2, j + i3, k + j3);
+                        ++this.index;
+                        return this.cursor.d(i + k2, j + i3, k + j3);
                     }
                 }
             };
@@ -359,39 +387,39 @@ public class BlockPosition extends BaseBlockPosition {
         Validate.validState(enumdirection.n() != enumdirection1.n(), "The two directions cannot be on the same axis", new Object[0]);
         return () -> {
             return new AbstractIterator<BlockPosition.MutableBlockPosition>() {
-                private final EnumDirection[] e = new EnumDirection[]{enumdirection, enumdirection1, enumdirection.opposite(), enumdirection1.opposite()};
-                private final BlockPosition.MutableBlockPosition f = blockposition.i().c(enumdirection1);
-                private final int g = 4 * i;
-                private int h = -1;
-                private int i;
-                private int j;
-                private int k;
-                private int l;
-                private int m;
+                private final EnumDirection[] directions = new EnumDirection[]{enumdirection, enumdirection1, enumdirection.opposite(), enumdirection1.opposite()};
+                private final BlockPosition.MutableBlockPosition cursor = blockposition.i().c(enumdirection1);
+                private final int legs = 4 * i;
+                private int leg = -1;
+                private int legSize;
+                private int legIndex;
+                private int lastX;
+                private int lastY;
+                private int lastZ;
 
                 {
-                    this.k = this.f.getX();
-                    this.l = this.f.getY();
-                    this.m = this.f.getZ();
+                    this.lastX = this.cursor.getX();
+                    this.lastY = this.cursor.getY();
+                    this.lastZ = this.cursor.getZ();
                 }
 
                 protected BlockPosition.MutableBlockPosition computeNext() {
-                    this.f.d(this.k, this.l, this.m).c(this.e[(this.h + 4) % 4]);
-                    this.k = this.f.getX();
-                    this.l = this.f.getY();
-                    this.m = this.f.getZ();
-                    if (this.j >= this.i) {
-                        if (this.h >= this.g) {
+                    this.cursor.d(this.lastX, this.lastY, this.lastZ).c(this.directions[(this.leg + 4) % 4]);
+                    this.lastX = this.cursor.getX();
+                    this.lastY = this.cursor.getY();
+                    this.lastZ = this.cursor.getZ();
+                    if (this.legIndex >= this.legSize) {
+                        if (this.leg >= this.legs) {
                             return (BlockPosition.MutableBlockPosition) this.endOfData();
                         }
 
-                        ++this.h;
-                        this.j = 0;
-                        this.i = this.h / 2 + 1;
+                        ++this.leg;
+                        this.legIndex = 0;
+                        this.legSize = this.leg / 2 + 1;
                     }
 
-                    ++this.j;
-                    return this.f;
+                    ++this.legIndex;
+                    return this.cursor;
                 }
             };
         };
@@ -412,13 +440,18 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         @Override
-        public BlockPosition a(double d0, double d1, double d2) {
-            return super.a(d0, d1, d2).immutableCopy();
+        public BlockPosition b(double d0, double d1, double d2) {
+            return super.b(d0, d1, d2).immutableCopy();
         }
 
         @Override
-        public BlockPosition b(int i, int j, int k) {
-            return super.b(i, j, k).immutableCopy();
+        public BlockPosition c(int i, int j, int k) {
+            return super.c(i, j, k).immutableCopy();
+        }
+
+        @Override
+        public BlockPosition o(int i) {
+            return super.o(i).immutableCopy();
         }
 
         @Override
@@ -427,8 +460,8 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         @Override
-        public BlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
-            return super.a(enumdirection_enumaxis, i).immutableCopy();
+        public BlockPosition b(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
+            return super.b(enumdirection_enumaxis, i).immutableCopy();
         }
 
         @Override
@@ -437,9 +470,9 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         public BlockPosition.MutableBlockPosition d(int i, int j, int k) {
-            this.o(i);
-            this.p(j);
-            this.q(k);
+            this.u(i);
+            this.t(j);
+            this.s(k);
             return this;
         }
 
@@ -451,8 +484,8 @@ public class BlockPosition extends BaseBlockPosition {
             return this.d(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
         }
 
-        public BlockPosition.MutableBlockPosition g(long i) {
-            return this.d(b(i), c(i), d(i));
+        public BlockPosition.MutableBlockPosition f(long i) {
+            return this.d(a(i), b(i), c(i));
         }
 
         public BlockPosition.MutableBlockPosition a(EnumAxisCycle enumaxiscycle, int i, int j, int k) {
@@ -465,6 +498,10 @@ public class BlockPosition extends BaseBlockPosition {
 
         public BlockPosition.MutableBlockPosition a(BaseBlockPosition baseblockposition, int i, int j, int k) {
             return this.d(baseblockposition.getX() + i, baseblockposition.getY() + j, baseblockposition.getZ() + k);
+        }
+
+        public BlockPosition.MutableBlockPosition a(BaseBlockPosition baseblockposition, BaseBlockPosition baseblockposition1) {
+            return this.d(baseblockposition.getX() + baseblockposition1.getX(), baseblockposition.getY() + baseblockposition1.getY(), baseblockposition.getZ() + baseblockposition1.getZ());
         }
 
         public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection) {
@@ -497,18 +534,21 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         @Override
-        public void o(int i) {
-            super.o(i);
+        public BlockPosition.MutableBlockPosition u(int i) {
+            super.u(i);
+            return this;
         }
 
         @Override
-        public void p(int i) {
-            super.p(i);
+        public BlockPosition.MutableBlockPosition t(int i) {
+            super.t(i);
+            return this;
         }
 
         @Override
-        public void q(int i) {
-            super.q(i);
+        public BlockPosition.MutableBlockPosition s(int i) {
+            super.s(i);
+            return this;
         }
 
         @Override

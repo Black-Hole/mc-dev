@@ -10,11 +10,12 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public abstract class Behavior<E extends EntityLiving> {
 
-    protected final Map<MemoryModuleType<?>, MemoryStatus> a;
-    private Behavior.Status b;
-    private long c;
-    private final int d;
-    private final int e;
+    private static final int DEFAULT_DURATION = 60;
+    protected final Map<MemoryModuleType<?>, MemoryStatus> entryCondition;
+    private Behavior.Status status;
+    private long endTimestamp;
+    private final int minDuration;
+    private final int maxDuration;
 
     public Behavior(Map<MemoryModuleType<?>, MemoryStatus> map) {
         this(map, 60);
@@ -25,22 +26,22 @@ public abstract class Behavior<E extends EntityLiving> {
     }
 
     public Behavior(Map<MemoryModuleType<?>, MemoryStatus> map, int i, int j) {
-        this.b = Behavior.Status.STOPPED;
-        this.d = i;
-        this.e = j;
-        this.a = map;
+        this.status = Behavior.Status.STOPPED;
+        this.minDuration = i;
+        this.maxDuration = j;
+        this.entryCondition = map;
     }
 
     public Behavior.Status a() {
-        return this.b;
+        return this.status;
     }
 
     public final boolean e(WorldServer worldserver, E e0, long i) {
         if (this.a(e0) && this.a(worldserver, e0)) {
-            this.b = Behavior.Status.RUNNING;
-            int j = this.d + worldserver.getRandom().nextInt(this.e + 1 - this.d);
+            this.status = Behavior.Status.RUNNING;
+            int j = this.minDuration + worldserver.getRandom().nextInt(this.maxDuration + 1 - this.minDuration);
 
-            this.c = i + (long) j;
+            this.endTimestamp = i + (long) j;
             this.a(worldserver, e0, i);
             return true;
         } else {
@@ -62,7 +63,7 @@ public abstract class Behavior<E extends EntityLiving> {
     protected void d(WorldServer worldserver, E e0, long i) {}
 
     public final void g(WorldServer worldserver, E e0, long i) {
-        this.b = Behavior.Status.STOPPED;
+        this.status = Behavior.Status.STOPPED;
         this.c(worldserver, e0, i);
     }
 
@@ -73,7 +74,7 @@ public abstract class Behavior<E extends EntityLiving> {
     }
 
     protected boolean a(long i) {
-        return i > this.c;
+        return i > this.endTimestamp;
     }
 
     protected boolean a(WorldServer worldserver, E e0) {
@@ -85,7 +86,7 @@ public abstract class Behavior<E extends EntityLiving> {
     }
 
     private boolean a(E e0) {
-        Iterator iterator = this.a.entrySet().iterator();
+        Iterator iterator = this.entryCondition.entrySet().iterator();
 
         MemoryModuleType memorymoduletype;
         MemoryStatus memorystatus;

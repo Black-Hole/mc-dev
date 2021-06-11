@@ -11,12 +11,12 @@ import net.minecraft.world.level.IMaterial;
 
 public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeSerializer<T> {
 
-    private final int v;
-    private final RecipeSerializerCooking.a<T> w;
+    private final int defaultCookingTime;
+    private final RecipeSerializerCooking.a<T> factory;
 
     public RecipeSerializerCooking(RecipeSerializerCooking.a<T> recipeserializercooking_a, int i) {
-        this.v = i;
-        this.w = recipeserializercooking_a;
+        this.defaultCookingTime = i;
+        this.factory = recipeserializercooking_a;
     }
 
     @Override
@@ -30,20 +30,20 @@ public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeS
             return new IllegalStateException("Item: " + s1 + " does not exist");
         }));
         float f = ChatDeserializer.a(jsonobject, "experience", 0.0F);
-        int i = ChatDeserializer.a(jsonobject, "cookingtime", this.v);
+        int i = ChatDeserializer.a(jsonobject, "cookingtime", this.defaultCookingTime);
 
-        return this.w.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
+        return this.factory.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
     }
 
     @Override
     public T a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-        String s = packetdataserializer.e(32767);
+        String s = packetdataserializer.p();
         RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
-        ItemStack itemstack = packetdataserializer.n();
+        ItemStack itemstack = packetdataserializer.o();
         float f = packetdataserializer.readFloat();
-        int i = packetdataserializer.i();
+        int i = packetdataserializer.j();
 
-        return this.w.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
+        return this.factory.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
     }
 
     public void a(PacketDataSerializer packetdataserializer, T t0) {

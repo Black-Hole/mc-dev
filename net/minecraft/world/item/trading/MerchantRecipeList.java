@@ -70,12 +70,12 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
         int i = packetdataserializer.readByte() & 255;
 
         for (int j = 0; j < i; ++j) {
-            ItemStack itemstack = packetdataserializer.n();
-            ItemStack itemstack1 = packetdataserializer.n();
-            ItemStack itemstack2 = ItemStack.b;
+            ItemStack itemstack = packetdataserializer.o();
+            ItemStack itemstack1 = packetdataserializer.o();
+            ItemStack itemstack2 = ItemStack.EMPTY;
 
             if (packetdataserializer.readBoolean()) {
-                itemstack2 = packetdataserializer.n();
+                itemstack2 = packetdataserializer.o();
             }
 
             boolean flag = packetdataserializer.readBoolean();

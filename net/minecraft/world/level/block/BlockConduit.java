@@ -12,9 +12,11 @@ import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBeacon;
 import net.minecraft.world.level.block.entity.TileEntityConduit;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -28,37 +30,44 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
 
-    public static final BlockStateBoolean a = BlockProperties.C;
-    protected static final VoxelShape b = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    private static final int SIZE = 3;
+    protected static final VoxelShape SHAPE = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
     public BlockConduit(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockConduit.WATERLOGGED, true));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockConduit.a);
+        blockstatelist_a.a(BlockConduit.WATERLOGGED);
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityConduit();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityConduit(blockposition, iblockdata);
+    }
+
+    @Nullable
+    @Override
+    public <T extends TileEntity> BlockEntityTicker<T> a(World world, IBlockData iblockdata, TileEntityTypes<T> tileentitytypes) {
+        return a(tileentitytypes, TileEntityTypes.CONDUIT, world.isClientSide ? TileEntityConduit::a : TileEntityConduit::b);
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockConduit.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockConduit.a)) {
+        if ((Boolean) iblockdata.get(BlockConduit.WATERLOGGED)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
@@ -66,8 +75,8 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockConduit.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockConduit.SHAPE;
     }
 
     @Override
@@ -87,7 +96,7 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
+        return (IBlockData) this.getBlockData().set(BlockConduit.WATERLOGGED, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
     }
 
     @Override

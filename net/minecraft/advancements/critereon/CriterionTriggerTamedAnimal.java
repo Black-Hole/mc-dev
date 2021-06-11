@@ -8,13 +8,13 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class CriterionTriggerTamedAnimal extends CriterionTriggerAbstract<CriterionTriggerTamedAnimal.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("tame_animal");
+    static final MinecraftKey ID = new MinecraftKey("tame_animal");
 
     public CriterionTriggerTamedAnimal() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerTamedAnimal.a;
+        return CriterionTriggerTamedAnimal.ID;
     }
 
     @Override
@@ -34,30 +34,30 @@ public class CriterionTriggerTamedAnimal extends CriterionTriggerAbstract<Criter
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity.b a;
+        private final CriterionConditionEntity.b entity;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1) {
-            super(CriterionTriggerTamedAnimal.a, criterionconditionentity_b);
-            this.a = criterionconditionentity_b1;
+            super(CriterionTriggerTamedAnimal.ID, criterionconditionentity_b);
+            this.entity = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerTamedAnimal.a c() {
-            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
+            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.ANY);
         }
 
         public static CriterionTriggerTamedAnimal.a a(CriterionConditionEntity criterionconditionentity) {
-            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity));
+            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.ANY, CriterionConditionEntity.b.a(criterionconditionentity));
         }
 
         public boolean a(LootTableInfo loottableinfo) {
-            return this.a.a(loottableinfo);
+            return this.entity.a(loottableinfo);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("entity", this.a.a(lootserializationcontext));
+            jsonobject.add("entity", this.entity.a(lootserializationcontext));
             return jsonobject;
         }
     }

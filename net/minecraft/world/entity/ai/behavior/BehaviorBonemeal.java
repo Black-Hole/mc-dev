@@ -22,22 +22,23 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class BehaviorBonemeal extends Behavior<EntityVillager> {
 
-    private long b;
-    private long c;
-    private int d;
-    private Optional<BlockPosition> e = Optional.empty();
+    private static final int BONEMEALING_DURATION = 80;
+    private long nextWorkCycleTime;
+    private long lastBonemealingSession;
+    private int timeWorkedSoFar;
+    private Optional<BlockPosition> cropPos = Optional.empty();
 
     public BehaviorBonemeal() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        if (entityvillager.ticksLived % 10 == 0 && (this.c == 0L || this.c + 160L <= (long) entityvillager.ticksLived)) {
+        if (entityvillager.tickCount % 10 == 0 && (this.lastBonemealingSession == 0L || this.lastBonemealingSession + 160L <= (long) entityvillager.tickCount)) {
             if (entityvillager.getInventory().a(Items.BONE_MEAL) <= 0) {
                 return false;
             } else {
-                this.e = this.b(worldserver, entityvillager);
-                return this.e.isPresent();
+                this.cropPos = this.b(worldserver, entityvillager);
+                return this.cropPos.isPresent();
             }
         } else {
             return false;
@@ -45,7 +46,7 @@ public class BehaviorBonemeal extends Behavior<EntityVillager> {
     }
 
     protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.d < 80 && this.e.isPresent();
+        return this.timeWorkedSoFar < 80 && this.cropPos.isPresent();
     }
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityVillager entityvillager) {
@@ -80,12 +81,12 @@ public class BehaviorBonemeal extends Behavior<EntityVillager> {
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         this.a(entityvillager);
         entityvillager.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.BONE_MEAL));
-        this.b = i;
-        this.d = 0;
+        this.nextWorkCycleTime = i;
+        this.timeWorkedSoFar = 0;
     }
 
     private void a(EntityVillager entityvillager) {
-        this.e.ifPresent((blockposition) -> {
+        this.cropPos.ifPresent((blockposition) -> {
             BehaviorTarget behaviortarget = new BehaviorTarget(blockposition);
 
             entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) behaviortarget);
@@ -94,35 +95,35 @@ public class BehaviorBonemeal extends Behavior<EntityVillager> {
     }
 
     protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.b);
-        this.c = (long) entityvillager.ticksLived;
+        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+        this.lastBonemealingSession = (long) entityvillager.tickCount;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        BlockPosition blockposition = (BlockPosition) this.e.get();
+        BlockPosition blockposition = (BlockPosition) this.cropPos.get();
 
-        if (i >= this.b && blockposition.a((IPosition) entityvillager.getPositionVector(), 1.0D)) {
-            ItemStack itemstack = ItemStack.b;
+        if (i >= this.nextWorkCycleTime && blockposition.a((IPosition) entityvillager.getPositionVector(), 1.0D)) {
+            ItemStack itemstack = ItemStack.EMPTY;
             InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
             int j = inventorysubcontainer.getSize();
 
             for (int k = 0; k < j; ++k) {
                 ItemStack itemstack1 = inventorysubcontainer.getItem(k);
 
-                if (itemstack1.getItem() == Items.BONE_MEAL) {
+                if (itemstack1.a(Items.BONE_MEAL)) {
                     itemstack = itemstack1;
                     break;
                 }
             }
 
             if (!itemstack.isEmpty() && ItemBoneMeal.a(itemstack, (World) worldserver, blockposition)) {
-                worldserver.triggerEffect(2005, blockposition, 0);
-                this.e = this.b(worldserver, entityvillager);
+                worldserver.triggerEffect(1505, blockposition, 0);
+                this.cropPos = this.b(worldserver, entityvillager);
                 this.a(entityvillager);
-                this.b = i + 40L;
+                this.nextWorkCycleTime = i + 40L;
             }
 
-            ++this.d;
+            ++this.timeWorkedSoFar;
         }
     }
 }

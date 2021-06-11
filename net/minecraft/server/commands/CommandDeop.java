@@ -16,7 +16,9 @@ import net.minecraft.server.players.PlayerList;
 
 public class CommandDeop {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.deop.failed"));
+    private static final SimpleCommandExceptionType ERROR_NOT_OP = new SimpleCommandExceptionType(new ChatMessage("commands.deop.failed"));
+
+    public CommandDeop() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("deop").requires((commandlistenerwrapper) -> {
@@ -44,7 +46,7 @@ public class CommandDeop {
         }
 
         if (i == 0) {
-            throw CommandDeop.a.create();
+            throw CommandDeop.ERROR_NOT_OP.create();
         } else {
             commandlistenerwrapper.getServer().a(commandlistenerwrapper);
             return i;

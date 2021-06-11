@@ -1,15 +1,22 @@
 package net.minecraft.util.profiling;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 
 public class MethodProfilerResultsEmpty implements MethodProfilerResults {
 
-    public static final MethodProfilerResultsEmpty a = new MethodProfilerResultsEmpty();
+    public static final MethodProfilerResultsEmpty EMPTY = new MethodProfilerResultsEmpty();
 
     private MethodProfilerResultsEmpty() {}
 
     @Override
-    public boolean a(File file) {
+    public List<MethodProfilerResultsField> a(String s) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean a(Path path) {
         return false;
     }
 
@@ -31,5 +38,10 @@ public class MethodProfilerResultsEmpty implements MethodProfilerResults {
     @Override
     public int d() {
         return 0;
+    }
+
+    @Override
+    public String e() {
+        return "";
     }
 }

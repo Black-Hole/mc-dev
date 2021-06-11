@@ -13,9 +13,9 @@ import net.minecraft.world.phys.Vec3D;
 
 public class DragonControllerLandingFly extends AbstractDragonController {
 
-    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(128.0D);
-    private PathEntity c;
-    private Vec3D d;
+    private static final PathfinderTargetCondition NEAR_EGG_TARGETING = PathfinderTargetCondition.a().d();
+    private PathEntity currentPath;
+    private Vec3D targetLocation;
 
     public DragonControllerLandingFly(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -28,15 +28,15 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     @Override
     public void d() {
-        this.c = null;
-        this.d = null;
+        this.currentPath = null;
+        this.targetLocation = null;
     }
 
     @Override
     public void c() {
-        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX(), this.a.locY(), this.a.locZ());
+        double d0 = this.targetLocation == null ? 0.0D : this.targetLocation.c(this.dragon.locX(), this.dragon.locY(), this.dragon.locZ());
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.v) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.dragon.horizontalCollision || this.dragon.verticalCollision) {
             this.j();
         }
 
@@ -45,54 +45,54 @@ public class DragonControllerLandingFly extends AbstractDragonController {
     @Nullable
     @Override
     public Vec3D g() {
-        return this.d;
+        return this.targetLocation;
     }
 
     private void j() {
-        if (this.c == null || this.c.c()) {
-            int i = this.a.eI();
-            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
-            EntityHuman entityhuman = this.a.world.a(DragonControllerLandingFly.b, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
+        if (this.currentPath == null || this.currentPath.c()) {
+            int i = this.dragon.p();
+            BlockPosition blockposition = this.dragon.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.END_PODIUM_LOCATION);
+            EntityHuman entityhuman = this.dragon.level.a(DragonControllerLandingFly.NEAR_EGG_TARGETING, this.dragon, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
             int j;
 
             if (entityhuman != null) {
                 Vec3D vec3d = (new Vec3D(entityhuman.locX(), 0.0D, entityhuman.locZ())).d();
 
-                j = this.a.p(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+                j = this.dragon.q(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
             } else {
-                j = this.a.p(40.0D, (double) blockposition.getY(), 0.0D);
+                j = this.dragon.q(40.0D, (double) blockposition.getY(), 0.0D);
             }
 
             PathPoint pathpoint = new PathPoint(blockposition.getX(), blockposition.getY(), blockposition.getZ());
 
-            this.c = this.a.a(i, j, pathpoint);
-            if (this.c != null) {
-                this.c.a();
+            this.currentPath = this.dragon.a(i, j, pathpoint);
+            if (this.currentPath != null) {
+                this.currentPath.a();
             }
         }
 
         this.k();
-        if (this.c != null && this.c.c()) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.LANDING);
+        if (this.currentPath != null && this.currentPath.c()) {
+            this.dragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.LANDING);
         }
 
     }
 
     private void k() {
-        if (this.c != null && !this.c.c()) {
-            BlockPosition blockposition = this.c.g();
+        if (this.currentPath != null && !this.currentPath.c()) {
+            BlockPosition blockposition = this.currentPath.g();
 
-            this.c.a();
+            this.currentPath.a();
             double d0 = (double) blockposition.getX();
             double d1 = (double) blockposition.getZ();
 
             double d2;
 
             do {
-                d2 = (double) ((float) blockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+                d2 = (double) ((float) blockposition.getY() + this.dragon.getRandom().nextFloat() * 20.0F);
             } while (d2 < (double) blockposition.getY());
 
-            this.d = new Vec3D(d0, d2, d1);
+            this.targetLocation = new Vec3D(d0, d2, d1);
         }
 
     }

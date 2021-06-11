@@ -13,6 +13,7 @@ import net.minecraft.commands.CommandDispatcher;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentEntity;
 import net.minecraft.commands.arguments.ArgumentNBTKey;
+import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -22,8 +23,8 @@ import net.minecraft.world.entity.player.EntityHuman;
 
 public class CommandDataAccessorEntity implements CommandDataAccessor {
 
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.entity.invalid"));
-    public static final Function<String, CommandData.c> a = (s) -> {
+    private static final SimpleCommandExceptionType ERROR_NO_PLAYERS = new SimpleCommandExceptionType(new ChatMessage("commands.data.entity.invalid"));
+    public static final Function<String, CommandData.c> PROVIDER = (s) -> {
         return new CommandData.c() {
             @Override
             public CommandDataAccessor a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
@@ -36,41 +37,41 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
             }
         };
     };
-    private final Entity c;
+    private final Entity entity;
 
     public CommandDataAccessorEntity(Entity entity) {
-        this.c = entity;
+        this.entity = entity;
     }
 
     @Override
     public void a(NBTTagCompound nbttagcompound) throws CommandSyntaxException {
-        if (this.c instanceof EntityHuman) {
-            throw CommandDataAccessorEntity.b.create();
+        if (this.entity instanceof EntityHuman) {
+            throw CommandDataAccessorEntity.ERROR_NO_PLAYERS.create();
         } else {
-            UUID uuid = this.c.getUniqueID();
+            UUID uuid = this.entity.getUniqueID();
 
-            this.c.load(nbttagcompound);
-            this.c.a_(uuid);
+            this.entity.load(nbttagcompound);
+            this.entity.a_(uuid);
         }
     }
 
     @Override
     public NBTTagCompound a() {
-        return CriterionConditionNBT.b(this.c);
+        return CriterionConditionNBT.b(this.entity);
     }
 
     @Override
     public IChatBaseComponent b() {
-        return new ChatMessage("commands.data.entity.modified", new Object[]{this.c.getScoreboardDisplayName()});
+        return new ChatMessage("commands.data.entity.modified", new Object[]{this.entity.getScoreboardDisplayName()});
     }
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.entity.query", new Object[]{this.c.getScoreboardDisplayName(), nbtbase.l()});
+        return new ChatMessage("commands.data.entity.query", new Object[]{this.entity.getScoreboardDisplayName(), GameProfileSerializer.c(nbtbase)});
     }
 
     @Override
-    public IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i) {
-        return new ChatMessage("commands.data.entity.get", new Object[]{argumentnbtkey_h, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
+    public IChatBaseComponent a(ArgumentNBTKey.g argumentnbtkey_g, double d0, int i) {
+        return new ChatMessage("commands.data.entity.get", new Object[]{argumentnbtkey_g, this.entity.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

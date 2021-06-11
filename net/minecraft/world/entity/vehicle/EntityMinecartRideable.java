@@ -18,7 +18,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
-        return entityhuman.eq() ? EnumInteractionResult.PASS : (this.isVehicle() ? EnumInteractionResult.PASS : (!this.world.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS));
+        return entityhuman.eY() ? EnumInteractionResult.PASS : (this.isVehicle() ? EnumInteractionResult.PASS : (!this.level.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
             }
 
             if (this.getType() == 0) {
-                this.d(-this.n());
+                this.d(-this.o());
                 this.c(10);
                 this.setDamage(50.0F);
                 this.velocityChanged();

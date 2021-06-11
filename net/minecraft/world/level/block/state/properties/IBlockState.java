@@ -3,6 +3,7 @@ package net.minecraft.world.level.block.state.properties;
 import com.google.common.base.MoreObjects;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -10,21 +11,21 @@ import net.minecraft.world.level.block.state.IBlockDataHolder;
 
 public abstract class IBlockState<T extends Comparable<T>> {
 
-    private final Class<T> a;
-    private final String b;
-    private Integer c;
-    private final Codec<T> d;
-    private final Codec<IBlockState.a<T>> e;
+    private final Class<T> clazz;
+    private final String name;
+    private Integer hashCode;
+    private final Codec<T> codec;
+    private final Codec<IBlockState.a<T>> valueCodec;
 
     protected IBlockState(String s, Class<T> oclass) {
-        this.d = Codec.STRING.comapFlatMap((s1) -> {
+        this.codec = Codec.STRING.comapFlatMap((s1) -> {
             return (DataResult) this.b(s1).map(DataResult::success).orElseGet(() -> {
                 return DataResult.error("Unable to read property: " + this + " with value: " + s1);
             });
         }, this::a);
-        this.e = this.d.xmap(this::b, IBlockState.a::b);
-        this.a = oclass;
-        this.b = s;
+        this.valueCodec = this.codec.xmap(this::b, IBlockState.a::b);
+        this.clazz = oclass;
+        this.name = s;
     }
 
     public IBlockState.a<T> b(T t0) {
@@ -39,16 +40,20 @@ public abstract class IBlockState<T extends Comparable<T>> {
         return this.getValues().stream().map(this::b);
     }
 
+    public Codec<T> d() {
+        return this.codec;
+    }
+
     public Codec<IBlockState.a<T>> e() {
-        return this.e;
+        return this.valueCodec;
     }
 
     public String getName() {
-        return this.b;
+        return this.name;
     }
 
     public Class<T> getType() {
-        return this.a;
+        return this.clazz;
     }
 
     public abstract Collection<T> getValues();
@@ -58,7 +63,7 @@ public abstract class IBlockState<T extends Comparable<T>> {
     public abstract Optional<T> b(String s);
 
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("name", this.b).add("clazz", this.a).add("values", this.getValues()).toString();
+        return MoreObjects.toStringHelper(this).add("name", this.name).add("clazz", this.clazz).add("values", this.getValues()).toString();
     }
 
     public boolean equals(Object object) {
@@ -69,46 +74,56 @@ public abstract class IBlockState<T extends Comparable<T>> {
         } else {
             IBlockState<?> iblockstate = (IBlockState) object;
 
-            return this.a.equals(iblockstate.a) && this.b.equals(iblockstate.b);
+            return this.clazz.equals(iblockstate.clazz) && this.name.equals(iblockstate.name);
         }
     }
 
     public final int hashCode() {
-        if (this.c == null) {
-            this.c = this.b();
+        if (this.hashCode == null) {
+            this.hashCode = this.b();
         }
 
-        return this.c;
+        return this.hashCode;
     }
 
     public int b() {
-        return 31 * this.a.hashCode() + this.b.hashCode();
+        return 31 * this.clazz.hashCode() + this.name.hashCode();
+    }
+
+    public <U, S extends IBlockDataHolder<?, S>> DataResult<S> a(DynamicOps<U> dynamicops, S s0, U u0) {
+        DataResult<T> dataresult = this.codec.parse(dynamicops, u0);
+
+        return dataresult.map((comparable) -> {
+            return (IBlockDataHolder) s0.set(this, comparable);
+        }).setPartial(s0);
     }
 
     public static final class a<T extends Comparable<T>> {
 
-        private final IBlockState<T> a;
-        private final T b;
+        private final IBlockState<T> property;
+        private final T value;
 
-        private a(IBlockState<T> iblockstate, T t0) {
+        a(IBlockState<T> iblockstate, T t0) {
             if (!iblockstate.getValues().contains(t0)) {
                 throw new IllegalArgumentException("Value " + t0 + " does not belong to property " + iblockstate);
             } else {
-                this.a = iblockstate;
-                this.b = t0;
+                this.property = iblockstate;
+                this.value = t0;
             }
         }
 
         public IBlockState<T> a() {
-            return this.a;
+            return this.property;
         }
 
         public T b() {
-            return this.b;
+            return this.value;
         }
 
         public String toString() {
-            return this.a.getName() + "=" + this.a.a(this.b);
+            String s = this.property.getName();
+
+            return s + "=" + this.property.a(this.value);
         }
 
         public boolean equals(Object object) {
@@ -119,14 +134,14 @@ public abstract class IBlockState<T extends Comparable<T>> {
             } else {
                 IBlockState.a<?> iblockstate_a = (IBlockState.a) object;
 
-                return this.a == iblockstate_a.a && this.b.equals(iblockstate_a.b);
+                return this.property == iblockstate_a.property && this.value.equals(iblockstate_a.value);
             }
         }
 
         public int hashCode() {
-            int i = this.a.hashCode();
+            int i = this.property.hashCode();
 
-            i = 31 * i + this.b.hashCode();
+            i = 31 * i + this.value.hashCode();
             return i;
         }
     }

@@ -1,11 +1,15 @@
 package net.minecraft.world.entity.projectile;
 
+import net.minecraft.core.particles.ParticleParam;
+import net.minecraft.core.particles.ParticleParamItem;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.EntityBlaze;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.World;
 import net.minecraft.world.phys.MovingObjectPosition;
@@ -30,6 +34,24 @@ public class EntitySnowball extends EntityProjectileThrowable {
         return Items.SNOWBALL;
     }
 
+    private ParticleParam n() {
+        ItemStack itemstack = this.getItem();
+
+        return (ParticleParam) (itemstack.isEmpty() ? Particles.ITEM_SNOWBALL : new ParticleParamItem(Particles.ITEM, itemstack));
+    }
+
+    @Override
+    public void a(byte b0) {
+        if (b0 == 3) {
+            ParticleParam particleparam = this.n();
+
+            for (int i = 0; i < 8; ++i) {
+                this.level.addParticle(particleparam, this.locX(), this.locY(), this.locZ(), 0.0D, 0.0D, 0.0D);
+            }
+        }
+
+    }
+
     @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         super.a(movingobjectpositionentity);
@@ -42,8 +64,8 @@ public class EntitySnowball extends EntityProjectileThrowable {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (!this.world.isClientSide) {
-            this.world.broadcastEntityEffect(this, (byte) 3);
+        if (!this.level.isClientSide) {
+            this.level.broadcastEntityEffect(this, (byte) 3);
             this.die();
         }
 

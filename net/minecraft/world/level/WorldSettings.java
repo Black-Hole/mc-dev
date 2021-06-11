@@ -11,7 +11,7 @@ public final class WorldSettings {
     private final EnumDifficulty difficulty;
     private final boolean allowCommands;
     private final GameRules gameRules;
-    private final DataPackConfiguration g;
+    private final DataPackConfiguration dataPackConfig;
 
     public WorldSettings(String s, EnumGamemode enumgamemode, boolean flag, EnumDifficulty enumdifficulty, boolean flag1, GameRules gamerules, DataPackConfiguration datapackconfiguration) {
         this.levelName = s;
@@ -20,7 +20,7 @@ public final class WorldSettings {
         this.difficulty = enumdifficulty;
         this.allowCommands = flag1;
         this.gameRules = gamerules;
-        this.g = datapackconfiguration;
+        this.dataPackConfig = datapackconfiguration;
     }
 
     public static WorldSettings a(Dynamic<?> dynamic, DataPackConfiguration datapackconfiguration) {
@@ -56,15 +56,15 @@ public final class WorldSettings {
     }
 
     public DataPackConfiguration g() {
-        return this.g;
+        return this.dataPackConfig;
     }
 
     public WorldSettings a(EnumGamemode enumgamemode) {
-        return new WorldSettings(this.levelName, enumgamemode, this.hardcore, this.difficulty, this.allowCommands, this.gameRules, this.g);
+        return new WorldSettings(this.levelName, enumgamemode, this.hardcore, this.difficulty, this.allowCommands, this.gameRules, this.dataPackConfig);
     }
 
     public WorldSettings a(EnumDifficulty enumdifficulty) {
-        return new WorldSettings(this.levelName, this.gameType, this.hardcore, enumdifficulty, this.allowCommands, this.gameRules, this.g);
+        return new WorldSettings(this.levelName, this.gameType, this.hardcore, enumdifficulty, this.allowCommands, this.gameRules, this.dataPackConfig);
     }
 
     public WorldSettings a(DataPackConfiguration datapackconfiguration) {
@@ -72,6 +72,6 @@ public final class WorldSettings {
     }
 
     public WorldSettings h() {
-        return new WorldSettings(this.levelName, this.gameType, this.hardcore, this.difficulty, this.allowCommands, this.gameRules.b(), this.g);
+        return new WorldSettings(this.levelName, this.gameType, this.hardcore, this.difficulty, this.allowCommands, this.gameRules.b(), this.dataPackConfig);
     }
 }

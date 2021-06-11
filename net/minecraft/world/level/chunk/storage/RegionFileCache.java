@@ -16,34 +16,38 @@ import net.minecraft.world.level.ChunkCoordIntPair;
 
 public final class RegionFileCache implements AutoCloseable {
 
-    public final Long2ObjectLinkedOpenHashMap<RegionFile> cache = new Long2ObjectLinkedOpenHashMap();
-    private final File b;
-    private final boolean c;
+    public static final String ANVIL_EXTENSION = ".mca";
+    private static final int MAX_CACHE_SIZE = 256;
+    public final Long2ObjectLinkedOpenHashMap<RegionFile> regionCache = new Long2ObjectLinkedOpenHashMap();
+    private final File folder;
+    private final boolean sync;
 
     RegionFileCache(File file, boolean flag) {
-        this.b = file;
-        this.c = flag;
+        this.folder = file;
+        this.sync = flag;
     }
 
     private RegionFile getFile(ChunkCoordIntPair chunkcoordintpair) throws IOException {
         long i = ChunkCoordIntPair.pair(chunkcoordintpair.getRegionX(), chunkcoordintpair.getRegionZ());
-        RegionFile regionfile = (RegionFile) this.cache.getAndMoveToFirst(i);
+        RegionFile regionfile = (RegionFile) this.regionCache.getAndMoveToFirst(i);
 
         if (regionfile != null) {
             return regionfile;
         } else {
-            if (this.cache.size() >= 256) {
-                ((RegionFile) this.cache.removeLast()).close();
+            if (this.regionCache.size() >= 256) {
+                ((RegionFile) this.regionCache.removeLast()).close();
             }
 
-            if (!this.b.exists()) {
-                this.b.mkdirs();
+            if (!this.folder.exists()) {
+                this.folder.mkdirs();
             }
 
-            File file = new File(this.b, "r." + chunkcoordintpair.getRegionX() + "." + chunkcoordintpair.getRegionZ() + ".mca");
-            RegionFile regionfile1 = new RegionFile(file, this.b, this.c);
+            File file = this.folder;
+            int j = chunkcoordintpair.getRegionX();
+            File file1 = new File(file, "r." + j + "." + chunkcoordintpair.getRegionZ() + ".mca");
+            RegionFile regionfile1 = new RegionFile(file1, this.folder, this.sync);
 
-            this.cache.putAndMoveToFirst(i, regionfile1);
+            this.regionCache.putAndMoveToFirst(i, regionfile1);
             return regionfile1;
         }
     }
@@ -52,68 +56,75 @@ public final class RegionFileCache implements AutoCloseable {
     public NBTTagCompound read(ChunkCoordIntPair chunkcoordintpair) throws IOException {
         RegionFile regionfile = this.getFile(chunkcoordintpair);
         DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
-        Throwable throwable = null;
 
         NBTTagCompound nbttagcompound;
+        label43:
+        {
+            try {
+                if (datainputstream != null) {
+                    nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
+                    break label43;
+                }
 
-        try {
-            if (datainputstream != null) {
-                nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
-                return nbttagcompound;
-            }
-
-            nbttagcompound = null;
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (datainputstream != null) {
-                if (throwable != null) {
+                nbttagcompound = null;
+            } catch (Throwable throwable) {
+                if (datainputstream != null) {
                     try {
                         datainputstream.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
-                } else {
-                    datainputstream.close();
                 }
+
+                throw throwable;
             }
 
+            if (datainputstream != null) {
+                datainputstream.close();
+            }
+
+            return nbttagcompound;
+        }
+
+        if (datainputstream != null) {
+            datainputstream.close();
         }
 
         return nbttagcompound;
     }
 
-    protected void write(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) throws IOException {
+    protected void write(ChunkCoordIntPair chunkcoordintpair, @Nullable NBTTagCompound nbttagcompound) throws IOException {
         RegionFile regionfile = this.getFile(chunkcoordintpair);
-        DataOutputStream dataoutputstream = regionfile.c(chunkcoordintpair);
-        Throwable throwable = null;
 
-        try {
-            NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (dataoutputstream != null) {
-                if (throwable != null) {
+        if (nbttagcompound == null) {
+            regionfile.d(chunkcoordintpair);
+        } else {
+            DataOutputStream dataoutputstream = regionfile.c(chunkcoordintpair);
+
+            try {
+                NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
+            } catch (Throwable throwable) {
+                if (dataoutputstream != null) {
                     try {
                         dataoutputstream.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
-                } else {
-                    dataoutputstream.close();
                 }
+
+                throw throwable;
             }
 
+            if (dataoutputstream != null) {
+                dataoutputstream.close();
+            }
         }
 
     }
 
     public void close() throws IOException {
         ExceptionSuppressor<IOException> exceptionsuppressor = new ExceptionSuppressor<>();
-        ObjectIterator objectiterator = this.cache.values().iterator();
+        ObjectIterator objectiterator = this.regionCache.values().iterator();
 
         while (objectiterator.hasNext()) {
             RegionFile regionfile = (RegionFile) objectiterator.next();
@@ -129,7 +140,7 @@ public final class RegionFileCache implements AutoCloseable {
     }
 
     public void a() throws IOException {
-        ObjectIterator objectiterator = this.cache.values().iterator();
+        ObjectIterator objectiterator = this.regionCache.values().iterator();
 
         while (objectiterator.hasNext()) {
             RegionFile regionfile = (RegionFile) objectiterator.next();

@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class ArgumentNBTTag implements ArgumentType<NBTTagCompound> {
 
-    private static final Collection<String> a = Arrays.asList("{}", "{foo=bar}");
+    private static final Collection<String> EXAMPLES = Arrays.asList("{}", "{foo=bar}");
 
     private ArgumentNBTTag() {}
 
@@ -28,6 +28,6 @@ public class ArgumentNBTTag implements ArgumentType<NBTTagCompound> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentNBTTag.a;
+        return ArgumentNBTTag.EXAMPLES;
     }
 }

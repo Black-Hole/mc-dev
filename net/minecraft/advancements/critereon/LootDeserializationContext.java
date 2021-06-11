@@ -2,6 +2,7 @@ package net.minecraft.advancements.critereon;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import java.util.Objects;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.level.storage.loot.LootCollector;
 import net.minecraft.world.level.storage.loot.LootPredicateManager;
@@ -14,20 +15,20 @@ import org.apache.logging.log4j.Logger;
 public class LootDeserializationContext {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final MinecraftKey b;
-    private final LootPredicateManager c;
-    private final Gson d = LootSerialization.a().create();
+    private final MinecraftKey id;
+    private final LootPredicateManager predicateManager;
+    private final Gson predicateGson = LootSerialization.a().create();
 
     public LootDeserializationContext(MinecraftKey minecraftkey, LootPredicateManager lootpredicatemanager) {
-        this.b = minecraftkey;
-        this.c = lootpredicatemanager;
+        this.id = minecraftkey;
+        this.predicateManager = lootpredicatemanager;
     }
 
     public final LootItemCondition[] a(JsonArray jsonarray, String s, LootContextParameterSet lootcontextparameterset) {
-        LootItemCondition[] alootitemcondition = (LootItemCondition[]) this.d.fromJson(jsonarray, LootItemCondition[].class);
-        LootPredicateManager lootpredicatemanager = this.c;
+        LootItemCondition[] alootitemcondition = (LootItemCondition[]) this.predicateGson.fromJson(jsonarray, LootItemCondition[].class);
+        LootPredicateManager lootpredicatemanager = this.predicateManager;
 
-        this.c.getClass();
+        Objects.requireNonNull(this.predicateManager);
         LootCollector lootcollector = new LootCollector(lootcontextparameterset, lootpredicatemanager::a, (minecraftkey) -> {
             return null;
         });
@@ -47,6 +48,6 @@ public class LootDeserializationContext {
     }
 
     public MinecraftKey a() {
-        return this.b;
+        return this.id;
     }
 }

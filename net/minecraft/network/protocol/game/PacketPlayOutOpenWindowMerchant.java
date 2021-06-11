@@ -1,51 +1,71 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.item.trading.MerchantRecipeList;
 
 public class PacketPlayOutOpenWindowMerchant implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private MerchantRecipeList b;
-    private int c;
-    private int d;
-    private boolean e;
-    private boolean f;
-
-    public PacketPlayOutOpenWindowMerchant() {}
+    private final int containerId;
+    private final MerchantRecipeList offers;
+    private final int villagerLevel;
+    private final int villagerXp;
+    private final boolean showProgress;
+    private final boolean canRestock;
 
     public PacketPlayOutOpenWindowMerchant(int i, MerchantRecipeList merchantrecipelist, int j, int k, boolean flag, boolean flag1) {
-        this.a = i;
-        this.b = merchantrecipelist;
-        this.c = j;
-        this.d = k;
-        this.e = flag;
-        this.f = flag1;
+        this.containerId = i;
+        this.offers = merchantrecipelist;
+        this.villagerLevel = j;
+        this.villagerXp = k;
+        this.showProgress = flag;
+        this.canRestock = flag1;
+    }
+
+    public PacketPlayOutOpenWindowMerchant(PacketDataSerializer packetdataserializer) {
+        this.containerId = packetdataserializer.j();
+        this.offers = MerchantRecipeList.b(packetdataserializer);
+        this.villagerLevel = packetdataserializer.j();
+        this.villagerXp = packetdataserializer.j();
+        this.showProgress = packetdataserializer.readBoolean();
+        this.canRestock = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = MerchantRecipeList.b(packetdataserializer);
-        this.c = packetdataserializer.i();
-        this.d = packetdataserializer.i();
-        this.e = packetdataserializer.readBoolean();
-        this.f = packetdataserializer.readBoolean();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        this.b.a(packetdataserializer);
-        packetdataserializer.d(this.c);
-        packetdataserializer.d(this.d);
-        packetdataserializer.writeBoolean(this.e);
-        packetdataserializer.writeBoolean(this.f);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.containerId);
+        this.offers.a(packetdataserializer);
+        packetdataserializer.d(this.villagerLevel);
+        packetdataserializer.d(this.villagerXp);
+        packetdataserializer.writeBoolean(this.showProgress);
+        packetdataserializer.writeBoolean(this.canRestock);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public int b() {
+        return this.containerId;
+    }
+
+    public MerchantRecipeList c() {
+        return this.offers;
+    }
+
+    public int d() {
+        return this.villagerLevel;
+    }
+
+    public int e() {
+        return this.villagerXp;
+    }
+
+    public boolean f() {
+        return this.showProgress;
+    }
+
+    public boolean g() {
+        return this.canRestock;
     }
 }

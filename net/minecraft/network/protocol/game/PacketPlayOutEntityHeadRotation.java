@@ -1,35 +1,40 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.World;
 
 public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private byte b;
-
-    public PacketPlayOutEntityHeadRotation() {}
+    private final int entityId;
+    private final byte yHeadRot;
 
     public PacketPlayOutEntityHeadRotation(Entity entity, byte b0) {
-        this.a = entity.getId();
-        this.b = b0;
+        this.entityId = entity.getId();
+        this.yHeadRot = b0;
+    }
+
+    public PacketPlayOutEntityHeadRotation(PacketDataSerializer packetdataserializer) {
+        this.entityId = packetdataserializer.j();
+        this.yHeadRot = packetdataserializer.readByte();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.readByte();
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.writeByte(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.entityId);
+        packetdataserializer.writeByte(this.yHeadRot);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public Entity a(World world) {
+        return world.getEntity(this.entityId);
+    }
+
+    public byte b() {
+        return this.yHeadRot;
     }
 }

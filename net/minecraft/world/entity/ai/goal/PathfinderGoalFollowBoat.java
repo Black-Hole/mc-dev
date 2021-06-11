@@ -14,18 +14,18 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalFollowBoat extends PathfinderGoal {
 
-    private int a;
-    private final EntityCreature b;
-    private EntityHuman c;
-    private PathfinderGoalBoat d;
+    private int timeToRecalcPath;
+    private final EntityCreature mob;
+    private EntityHuman following;
+    private PathfinderGoalBoat currentGoal;
 
     public PathfinderGoalFollowBoat(EntityCreature entitycreature) {
-        this.b = entitycreature;
+        this.mob = entitycreature;
     }
 
     @Override
     public boolean a() {
-        List<EntityBoat> list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
+        List<EntityBoat> list = this.mob.level.a(EntityBoat.class, this.mob.getBoundingBox().g(5.0D));
         boolean flag = false;
         Iterator iterator = list.iterator();
 
@@ -33,13 +33,13 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
             EntityBoat entityboat = (EntityBoat) iterator.next();
             Entity entity = entityboat.getRidingPassenger();
 
-            if (entity instanceof EntityHuman && (MathHelper.e(((EntityHuman) entity).aR) > 0.0F || MathHelper.e(((EntityHuman) entity).aT) > 0.0F)) {
+            if (entity instanceof EntityHuman && (MathHelper.e(((EntityHuman) entity).xxa) > 0.0F || MathHelper.e(((EntityHuman) entity).zza) > 0.0F)) {
                 flag = true;
                 break;
             }
         }
 
-        return this.c != null && (MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F) || flag;
+        return this.following != null && (MathHelper.e(this.following.xxa) > 0.0F || MathHelper.e(this.following.zza) > 0.0F) || flag;
     }
 
     @Override
@@ -49,58 +49,58 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.c != null && this.c.isPassenger() && (MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F);
+        return this.following != null && this.following.isPassenger() && (MathHelper.e(this.following.xxa) > 0.0F || MathHelper.e(this.following.zza) > 0.0F);
     }
 
     @Override
     public void c() {
-        List<EntityBoat> list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
+        List<EntityBoat> list = this.mob.level.a(EntityBoat.class, this.mob.getBoundingBox().g(5.0D));
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             EntityBoat entityboat = (EntityBoat) iterator.next();
 
             if (entityboat.getRidingPassenger() != null && entityboat.getRidingPassenger() instanceof EntityHuman) {
-                this.c = (EntityHuman) entityboat.getRidingPassenger();
+                this.following = (EntityHuman) entityboat.getRidingPassenger();
                 break;
             }
         }
 
-        this.a = 0;
-        this.d = PathfinderGoalBoat.GO_TO_BOAT;
+        this.timeToRecalcPath = 0;
+        this.currentGoal = PathfinderGoalBoat.GO_TO_BOAT;
     }
 
     @Override
     public void d() {
-        this.c = null;
+        this.following = null;
     }
 
     @Override
     public void e() {
-        boolean flag = MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F;
-        float f = this.d == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION ? (flag ? 0.01F : 0.0F) : 0.015F;
+        boolean flag = MathHelper.e(this.following.xxa) > 0.0F || MathHelper.e(this.following.zza) > 0.0F;
+        float f = this.currentGoal == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION ? (flag ? 0.01F : 0.0F) : 0.015F;
 
-        this.b.a(f, new Vec3D((double) this.b.aR, (double) this.b.aS, (double) this.b.aT));
-        this.b.move(EnumMoveType.SELF, this.b.getMot());
-        if (--this.a <= 0) {
-            this.a = 10;
-            if (this.d == PathfinderGoalBoat.GO_TO_BOAT) {
-                BlockPosition blockposition = this.c.getChunkCoordinates().shift(this.c.getDirection().opposite());
+        this.mob.a(f, new Vec3D((double) this.mob.xxa, (double) this.mob.yya, (double) this.mob.zza));
+        this.mob.move(EnumMoveType.SELF, this.mob.getMot());
+        if (--this.timeToRecalcPath <= 0) {
+            this.timeToRecalcPath = 10;
+            if (this.currentGoal == PathfinderGoalBoat.GO_TO_BOAT) {
+                BlockPosition blockposition = this.following.getChunkCoordinates().shift(this.following.getDirection().opposite());
 
-                blockposition = blockposition.b(0, -1, 0);
-                this.b.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
-                if (this.b.g((Entity) this.c) < 4.0F) {
-                    this.a = 0;
-                    this.d = PathfinderGoalBoat.GO_IN_BOAT_DIRECTION;
+                blockposition = blockposition.c(0, -1, 0);
+                this.mob.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
+                if (this.mob.e((Entity) this.following) < 4.0F) {
+                    this.timeToRecalcPath = 0;
+                    this.currentGoal = PathfinderGoalBoat.GO_IN_BOAT_DIRECTION;
                 }
-            } else if (this.d == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION) {
-                EnumDirection enumdirection = this.c.getAdjustedDirection();
-                BlockPosition blockposition1 = this.c.getChunkCoordinates().shift(enumdirection, 10);
+            } else if (this.currentGoal == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION) {
+                EnumDirection enumdirection = this.following.getAdjustedDirection();
+                BlockPosition blockposition1 = this.following.getChunkCoordinates().shift(enumdirection, 10);
 
-                this.b.getNavigation().a((double) blockposition1.getX(), (double) (blockposition1.getY() - 1), (double) blockposition1.getZ(), 1.0D);
-                if (this.b.g((Entity) this.c) > 12.0F) {
-                    this.a = 0;
-                    this.d = PathfinderGoalBoat.GO_TO_BOAT;
+                this.mob.getNavigation().a((double) blockposition1.getX(), (double) (blockposition1.getY() - 1), (double) blockposition1.getZ(), 1.0D);
+                if (this.mob.e((Entity) this.following) > 12.0F) {
+                    this.timeToRecalcPath = 0;
+                    this.currentGoal = PathfinderGoalBoat.GO_TO_BOAT;
                 }
             }
 

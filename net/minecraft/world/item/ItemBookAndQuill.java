@@ -27,7 +27,7 @@ public class ItemBookAndQuill extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        return iblockdata.a(Blocks.LECTERN) ? (BlockLectern.a(world, blockposition, iblockdata, itemactioncontext.getItemStack()) ? EnumInteractionResult.a(world.isClientSide) : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
+        return iblockdata.a(Blocks.LECTERN) ? (BlockLectern.a(itemactioncontext.getEntity(), world, blockposition, iblockdata, itemactioncontext.getItemStack()) ? EnumInteractionResult.a(world.isClientSide) : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ItemBookAndQuill extends Item {
 
         entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return InteractionResultWrapper.a(itemstack, world.s_());
+        return InteractionResultWrapper.a(itemstack, world.isClientSide());
     }
 
     public static boolean a(@Nullable NBTTagCompound nbttagcompound) {

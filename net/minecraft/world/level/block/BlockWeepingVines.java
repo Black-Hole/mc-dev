@@ -8,10 +8,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockWeepingVines extends BlockGrowingTop {
 
-    protected static final VoxelShape e = Block.a(4.0D, 9.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    protected static final VoxelShape SHAPE = Block.a(4.0D, 9.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public BlockWeepingVines(BlockBase.Info blockbase_info) {
-        super(blockbase_info, EnumDirection.DOWN, BlockWeepingVines.e, false, 0.1D);
+        super(blockbase_info, EnumDirection.DOWN, BlockWeepingVines.SHAPE, false, 0.1D);
     }
 
     @Override
@@ -20,12 +20,12 @@ public class BlockWeepingVines extends BlockGrowingTop {
     }
 
     @Override
-    protected Block d() {
+    protected Block c() {
         return Blocks.WEEPING_VINES_PLANT;
     }
 
     @Override
-    protected boolean h(IBlockData iblockdata) {
+    protected boolean g(IBlockData iblockdata) {
         return BlockNetherVinesUtil.a(iblockdata);
     }
 }

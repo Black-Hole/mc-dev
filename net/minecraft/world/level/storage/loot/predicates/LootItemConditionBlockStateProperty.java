@@ -19,32 +19,53 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionBlockStateProperty implements LootItemCondition {
 
-    private final Block a;
-    private final CriterionTriggerProperties b;
+    final Block block;
+    final CriterionTriggerProperties properties;
 
-    private LootItemConditionBlockStateProperty(Block block, CriterionTriggerProperties criteriontriggerproperties) {
-        this.a = block;
-        this.b = criteriontriggerproperties;
+    LootItemConditionBlockStateProperty(Block block, CriterionTriggerProperties criteriontriggerproperties) {
+        this.block = block;
+        this.properties = criteriontriggerproperties;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.h;
+    public LootItemConditionType a() {
+        return LootItemConditions.BLOCK_STATE_PROPERTY;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.BLOCK_STATE);
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         IBlockData iblockdata = (IBlockData) loottableinfo.getContextParameter(LootContextParameters.BLOCK_STATE);
 
-        return iblockdata != null && this.a == iblockdata.getBlock() && this.b.a(iblockdata);
+        return iblockdata != null && iblockdata.a(this.block) && this.properties.a(iblockdata);
     }
 
     public static LootItemConditionBlockStateProperty.a a(Block block) {
         return new LootItemConditionBlockStateProperty.a(block);
+    }
+
+    public static class a implements LootItemCondition.a {
+
+        private final Block block;
+        private CriterionTriggerProperties properties;
+
+        public a(Block block) {
+            this.properties = CriterionTriggerProperties.ANY;
+            this.block = block;
+        }
+
+        public LootItemConditionBlockStateProperty.a a(CriterionTriggerProperties.a criteriontriggerproperties_a) {
+            this.properties = criteriontriggerproperties_a.b();
+            return this;
+        }
+
+        @Override
+        public LootItemCondition build() {
+            return new LootItemConditionBlockStateProperty(this.block, this.properties);
+        }
     }
 
     public static class b implements LootSerializer<LootItemConditionBlockStateProperty> {
@@ -52,8 +73,8 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
         public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionBlockStateProperty lootitemconditionblockstateproperty, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("block", IRegistry.BLOCK.getKey(lootitemconditionblockstateproperty.a).toString());
-            jsonobject.add("properties", lootitemconditionblockstateproperty.b.a());
+            jsonobject.addProperty("block", IRegistry.BLOCK.getKey(lootitemconditionblockstateproperty.block).toString());
+            jsonobject.add("properties", lootitemconditionblockstateproperty.properties.a());
         }
 
         @Override
@@ -68,27 +89,6 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
                 throw new JsonSyntaxException("Block " + block + " has no property " + s);
             });
             return new LootItemConditionBlockStateProperty(block, criteriontriggerproperties);
-        }
-    }
-
-    public static class a implements LootItemCondition.a {
-
-        private final Block a;
-        private CriterionTriggerProperties b;
-
-        public a(Block block) {
-            this.b = CriterionTriggerProperties.a;
-            this.a = block;
-        }
-
-        public LootItemConditionBlockStateProperty.a a(CriterionTriggerProperties.a criteriontriggerproperties_a) {
-            this.b = criteriontriggerproperties_a.b();
-            return this;
-        }
-
-        @Override
-        public LootItemCondition build() {
-            return new LootItemConditionBlockStateProperty(this.a, this.b);
         }
     }
 }

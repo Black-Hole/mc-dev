@@ -10,13 +10,13 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootSelectorEmpty extends LootSelectorEntry {
 
-    private LootSelectorEmpty(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+    LootSelectorEmpty(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(i, j, alootitemcondition, alootitemfunction);
     }
 
     @Override
     public LootEntryType a() {
-        return LootEntries.a;
+        return LootEntries.EMPTY;
     }
 
     @Override

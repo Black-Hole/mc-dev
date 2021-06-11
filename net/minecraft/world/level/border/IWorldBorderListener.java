@@ -18,45 +18,45 @@ public interface IWorldBorderListener {
 
     public static class a implements IWorldBorderListener {
 
-        private final WorldBorder a;
+        private final WorldBorder worldBorder;
 
         public a(WorldBorder worldborder) {
-            this.a = worldborder;
+            this.worldBorder = worldborder;
         }
 
         @Override
         public void a(WorldBorder worldborder, double d0) {
-            this.a.setSize(d0);
+            this.worldBorder.setSize(d0);
         }
 
         @Override
         public void a(WorldBorder worldborder, double d0, double d1, long i) {
-            this.a.transitionSizeBetween(d0, d1, i);
+            this.worldBorder.transitionSizeBetween(d0, d1, i);
         }
 
         @Override
         public void a(WorldBorder worldborder, double d0, double d1) {
-            this.a.setCenter(d0, d1);
+            this.worldBorder.setCenter(d0, d1);
         }
 
         @Override
         public void a(WorldBorder worldborder, int i) {
-            this.a.setWarningTime(i);
+            this.worldBorder.setWarningTime(i);
         }
 
         @Override
         public void b(WorldBorder worldborder, int i) {
-            this.a.setWarningDistance(i);
+            this.worldBorder.setWarningDistance(i);
         }
 
         @Override
         public void b(WorldBorder worldborder, double d0) {
-            this.a.setDamageAmount(d0);
+            this.worldBorder.setDamageAmount(d0);
         }
 
         @Override
         public void c(WorldBorder worldborder, double d0) {
-            this.a.setDamageBuffer(d0);
+            this.worldBorder.setDamageBuffer(d0);
         }
     }
 }

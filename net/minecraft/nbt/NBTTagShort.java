@@ -3,13 +3,11 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 
 public class NBTTagShort extends NBTNumber {
 
-    public static final NBTTagType<NBTTagShort> a = new NBTTagType<NBTTagShort>() {
+    private static final int SELF_SIZE_IN_BITS = 80;
+    public static final NBTTagType<NBTTagShort> TYPE = new NBTTagType<NBTTagShort>() {
         @Override
         public NBTTagShort b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(80L);
@@ -33,12 +31,12 @@ public class NBTTagShort extends NBTNumber {
     };
     private final short data;
 
-    private NBTTagShort(short short0) {
+    NBTTagShort(short short0) {
         this.data = short0;
     }
 
     public static NBTTagShort a(short short0) {
-        return short0 >= -128 && short0 <= 1024 ? NBTTagShort.a.a[short0 + 128] : new NBTTagShort(short0);
+        return short0 >= -128 && short0 <= 1024 ? NBTTagShort.a.cache[short0 - -128] : new NBTTagShort(short0);
     }
 
     @Override
@@ -53,12 +51,7 @@ public class NBTTagShort extends NBTNumber {
 
     @Override
     public NBTTagType<NBTTagShort> b() {
-        return NBTTagShort.a;
-    }
-
-    @Override
-    public String toString() {
-        return this.data + "s";
+        return NBTTagShort.TYPE;
     }
 
     @Override
@@ -75,10 +68,8 @@ public class NBTTagShort extends NBTNumber {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("s")).a(NBTTagShort.g);
-
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagShort.f);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override
@@ -116,13 +107,17 @@ public class NBTTagShort extends NBTNumber {
         return this.data;
     }
 
-    static class a {
+    private static class a {
 
-        static final NBTTagShort[] a = new NBTTagShort[1153];
+        private static final int HIGH = 1024;
+        private static final int LOW = -128;
+        static final NBTTagShort[] cache = new NBTTagShort[1153];
+
+        private a() {}
 
         static {
-            for (int i = 0; i < NBTTagShort.a.a.length; ++i) {
-                NBTTagShort.a.a[i] = new NBTTagShort((short) (-128 + i));
+            for (int i = 0; i < NBTTagShort.a.cache.length; ++i) {
+                NBTTagShort.a.cache[i] = new NBTTagShort((short) (-128 + i));
             }
 
         }

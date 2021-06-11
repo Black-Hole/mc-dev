@@ -6,22 +6,22 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class DefinedStructureTestBlockState extends DefinedStructureRuleTest {
 
-    public static final Codec<DefinedStructureTestBlockState> a = IBlockData.b.fieldOf("block_state").xmap(DefinedStructureTestBlockState::new, (definedstructuretestblockstate) -> {
-        return definedstructuretestblockstate.b;
+    public static final Codec<DefinedStructureTestBlockState> CODEC = IBlockData.CODEC.fieldOf("block_state").xmap(DefinedStructureTestBlockState::new, (definedstructuretestblockstate) -> {
+        return definedstructuretestblockstate.blockState;
     }).codec();
-    private final IBlockData b;
+    private final IBlockData blockState;
 
     public DefinedStructureTestBlockState(IBlockData iblockdata) {
-        this.b = iblockdata;
+        this.blockState = iblockdata;
     }
 
     @Override
     public boolean a(IBlockData iblockdata, Random random) {
-        return iblockdata == this.b;
+        return iblockdata == this.blockState;
     }
 
     @Override
     protected DefinedStructureRuleTestType<?> a() {
-        return DefinedStructureRuleTestType.c;
+        return DefinedStructureRuleTestType.BLOCKSTATE_TEST;
     }
 }

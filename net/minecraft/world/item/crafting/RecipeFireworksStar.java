@@ -17,10 +17,10 @@ import net.minecraft.world.level.World;
 
 public class RecipeFireworksStar extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(Items.FIRE_CHARGE, Items.FEATHER, Items.GOLD_NUGGET, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.CREEPER_HEAD, Items.PLAYER_HEAD, Items.DRAGON_HEAD, Items.ZOMBIE_HEAD);
-    private static final RecipeItemStack b = RecipeItemStack.a(Items.DIAMOND);
-    private static final RecipeItemStack c = RecipeItemStack.a(Items.GLOWSTONE_DUST);
-    private static final Map<Item, ItemFireworks.EffectType> d = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final RecipeItemStack SHAPE_INGREDIENT = RecipeItemStack.a(Items.FIRE_CHARGE, Items.FEATHER, Items.GOLD_NUGGET, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.CREEPER_HEAD, Items.PLAYER_HEAD, Items.DRAGON_HEAD, Items.ZOMBIE_HEAD);
+    private static final RecipeItemStack TRAIL_INGREDIENT = RecipeItemStack.a(Items.DIAMOND);
+    private static final RecipeItemStack FLICKER_INGREDIENT = RecipeItemStack.a(Items.GLOWSTONE_DUST);
+    private static final Map<Item, ItemFireworks.EffectType> SHAPE_BY_ITEM = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(Items.FIRE_CHARGE, ItemFireworks.EffectType.LARGE_BALL);
         hashmap.put(Items.FEATHER, ItemFireworks.EffectType.BURST);
         hashmap.put(Items.GOLD_NUGGET, ItemFireworks.EffectType.STAR);
@@ -31,7 +31,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
         hashmap.put(Items.DRAGON_HEAD, ItemFireworks.EffectType.CREEPER);
         hashmap.put(Items.ZOMBIE_HEAD, ItemFireworks.EffectType.CREEPER);
     });
-    private static final RecipeItemStack e = RecipeItemStack.a(Items.GUNPOWDER);
+    private static final RecipeItemStack GUNPOWDER_INGREDIENT = RecipeItemStack.a(Items.GUNPOWDER);
 
     public RecipeFireworksStar(MinecraftKey minecraftkey) {
         super(minecraftkey);
@@ -48,25 +48,25 @@ public class RecipeFireworksStar extends IRecipeComplex {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                if (RecipeFireworksStar.a.test(itemstack)) {
+                if (RecipeFireworksStar.SHAPE_INGREDIENT.test(itemstack)) {
                     if (flag2) {
                         return false;
                     }
 
                     flag2 = true;
-                } else if (RecipeFireworksStar.c.test(itemstack)) {
+                } else if (RecipeFireworksStar.FLICKER_INGREDIENT.test(itemstack)) {
                     if (flag4) {
                         return false;
                     }
 
                     flag4 = true;
-                } else if (RecipeFireworksStar.b.test(itemstack)) {
+                } else if (RecipeFireworksStar.TRAIL_INGREDIENT.test(itemstack)) {
                     if (flag3) {
                         return false;
                     }
 
                     flag3 = true;
-                } else if (RecipeFireworksStar.e.test(itemstack)) {
+                } else if (RecipeFireworksStar.GUNPOWDER_INGREDIENT.test(itemstack)) {
                     if (flag) {
                         return false;
                     }
@@ -95,11 +95,11 @@ public class RecipeFireworksStar extends IRecipeComplex {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
 
             if (!itemstack1.isEmpty()) {
-                if (RecipeFireworksStar.a.test(itemstack1)) {
-                    itemfireworks_effecttype = (ItemFireworks.EffectType) RecipeFireworksStar.d.get(itemstack1.getItem());
-                } else if (RecipeFireworksStar.c.test(itemstack1)) {
+                if (RecipeFireworksStar.SHAPE_INGREDIENT.test(itemstack1)) {
+                    itemfireworks_effecttype = (ItemFireworks.EffectType) RecipeFireworksStar.SHAPE_BY_ITEM.get(itemstack1.getItem());
+                } else if (RecipeFireworksStar.FLICKER_INGREDIENT.test(itemstack1)) {
                     nbttagcompound.setBoolean("Flicker", true);
-                } else if (RecipeFireworksStar.b.test(itemstack1)) {
+                } else if (RecipeFireworksStar.TRAIL_INGREDIENT.test(itemstack1)) {
                     nbttagcompound.setBoolean("Trail", true);
                 } else if (itemstack1.getItem() instanceof ItemDye) {
                     list.add(((ItemDye) itemstack1.getItem()).d().getFireworksColor());
@@ -113,12 +113,17 @@ public class RecipeFireworksStar extends IRecipeComplex {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return i * j >= 2;
+    }
+
+    @Override
     public ItemStack getResult() {
         return new ItemStack(Items.FIREWORK_STAR);
     }
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.h;
+        return RecipeSerializer.FIREWORK_STAR;
     }
 }

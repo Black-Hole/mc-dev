@@ -11,12 +11,12 @@ import net.minecraft.world.item.crafting.IRecipe;
 
 public class InventoryCraftResult implements IInventory, RecipeHolder {
 
-    private final NonNullList<ItemStack> items;
+    private final NonNullList<ItemStack> itemStacks;
     @Nullable
-    private IRecipe<?> b;
+    private IRecipe<?> recipeUsed;
 
     public InventoryCraftResult() {
-        this.items = NonNullList.a(1, ItemStack.b);
+        this.itemStacks = NonNullList.a(1, ItemStack.EMPTY);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Override
     public boolean isEmpty() {
-        Iterator iterator = this.items.iterator();
+        Iterator iterator = this.itemStacks.iterator();
 
         ItemStack itemstack;
 
@@ -43,22 +43,22 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Override
     public ItemStack getItem(int i) {
-        return (ItemStack) this.items.get(0);
+        return (ItemStack) this.itemStacks.get(0);
     }
 
     @Override
     public ItemStack splitStack(int i, int j) {
-        return ContainerUtil.a(this.items, 0);
+        return ContainerUtil.a(this.itemStacks, 0);
     }
 
     @Override
     public ItemStack splitWithoutUpdate(int i) {
-        return ContainerUtil.a(this.items, 0);
+        return ContainerUtil.a(this.itemStacks, 0);
     }
 
     @Override
     public void setItem(int i, ItemStack itemstack) {
-        this.items.set(0, itemstack);
+        this.itemStacks.set(0, itemstack);
     }
 
     @Override
@@ -71,17 +71,17 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Override
     public void clear() {
-        this.items.clear();
+        this.itemStacks.clear();
     }
 
     @Override
-    public void a(@Nullable IRecipe<?> irecipe) {
-        this.b = irecipe;
+    public void setRecipeUsed(@Nullable IRecipe<?> irecipe) {
+        this.recipeUsed = irecipe;
     }
 
     @Nullable
     @Override
-    public IRecipe<?> ak_() {
-        return this.b;
+    public IRecipe<?> getRecipeUsed() {
+        return this.recipeUsed;
     }
 }

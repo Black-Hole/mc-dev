@@ -5,12 +5,12 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenFeatureLakeConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureLakeConfiguration> a = IBlockData.b.fieldOf("state").xmap(WorldGenFeatureLakeConfiguration::new, (worldgenfeaturelakeconfiguration) -> {
-        return worldgenfeaturelakeconfiguration.b;
+    public static final Codec<WorldGenFeatureLakeConfiguration> CODEC = IBlockData.CODEC.fieldOf("state").xmap(WorldGenFeatureLakeConfiguration::new, (worldgenfeaturelakeconfiguration) -> {
+        return worldgenfeaturelakeconfiguration.state;
     }).codec();
-    public final IBlockData b;
+    public final IBlockData state;
 
     public WorldGenFeatureLakeConfiguration(IBlockData iblockdata) {
-        this.b = iblockdata;
+        this.state = iblockdata;
     }
 }

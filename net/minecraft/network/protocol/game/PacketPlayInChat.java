@@ -1,31 +1,28 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
 
-    private String a;
-
-    public PacketPlayInChat() {}
+    private static final int MAX_MESSAGE_LENGTH = 256;
+    private final String message;
 
     public PacketPlayInChat(String s) {
         if (s.length() > 256) {
             s = s.substring(0, 256);
         }
 
-        this.a = s;
+        this.message = s;
+    }
+
+    public PacketPlayInChat(PacketDataSerializer packetdataserializer) {
+        this.message = packetdataserializer.e(256);
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(256);
-    }
-
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a(this.message);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -33,6 +30,6 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
     }
 
     public String b() {
-        return this.a;
+        return this.message;
     }
 }

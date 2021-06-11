@@ -2,21 +2,21 @@ package net.minecraft;
 
 public class ReportedException extends RuntimeException {
 
-    private final CrashReport a;
+    private final CrashReport report;
 
     public ReportedException(CrashReport crashreport) {
-        this.a = crashreport;
+        this.report = crashreport;
     }
 
     public CrashReport a() {
-        return this.a;
+        return this.report;
     }
 
     public Throwable getCause() {
-        return this.a.b();
+        return this.report.b();
     }
 
     public String getMessage() {
-        return this.a.a();
+        return this.report.a();
     }
 }

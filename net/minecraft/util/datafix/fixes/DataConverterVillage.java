@@ -5,6 +5,7 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class DataConverterVillage extends DataFix {
@@ -24,7 +25,7 @@ public class DataConverterVillage extends DataFix {
     private static <T> Dynamic<T> b(Dynamic<T> dynamic) {
         DataResult dataresult = dynamic.asStreamOpt().map(DataConverterVillage::a);
 
-        dynamic.getClass();
+        Objects.requireNonNull(dynamic);
         return (Dynamic) dataresult.map(dynamic::createList).result().orElse(dynamic);
     }
 

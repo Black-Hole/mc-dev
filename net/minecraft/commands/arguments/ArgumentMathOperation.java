@@ -18,9 +18,9 @@ import net.minecraft.world.scores.ScoreboardScore;
 
 public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation.a> {
 
-    private static final Collection<String> a = Arrays.asList("=", ">", "<");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.invalid"));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.div0"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("=", ">", "<");
+    private static final SimpleCommandExceptionType ERROR_INVALID_OPERATION = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.invalid"));
+    private static final SimpleCommandExceptionType ERROR_DIVIDE_BY_ZERO = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.div0"));
 
     public ArgumentMathOperation() {}
 
@@ -28,13 +28,13 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
         return new ArgumentMathOperation();
     }
 
-    public static ArgumentMathOperation.a a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+    public static ArgumentMathOperation.a a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return (ArgumentMathOperation.a) commandcontext.getArgument(s, ArgumentMathOperation.a.class);
     }
 
     public ArgumentMathOperation.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (!stringreader.canRead()) {
-            throw ArgumentMathOperation.b.create();
+            throw ArgumentMathOperation.ERROR_INVALID_OPERATION.create();
         } else {
             int i = stringreader.getCursor();
 
@@ -51,7 +51,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
     }
 
     public Collection<String> getExamples() {
-        return ArgumentMathOperation.a;
+        return ArgumentMathOperation.EXAMPLES;
     }
 
     private static ArgumentMathOperation.a a(String s) throws CommandSyntaxException {
@@ -128,7 +128,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
             case 4:
                 return (i, j) -> {
                     if (j == 0) {
-                        throw ArgumentMathOperation.c.create();
+                        throw ArgumentMathOperation.ERROR_DIVIDE_BY_ZERO.create();
                     } else {
                         return MathHelper.a(i, j);
                     }
@@ -136,7 +136,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
             case 5:
                 return (i, j) -> {
                     if (j == 0) {
-                        throw ArgumentMathOperation.c.create();
+                        throw ArgumentMathOperation.ERROR_DIVIDE_BY_ZERO.create();
                     } else {
                         return MathHelper.b(i, j);
                     }
@@ -146,18 +146,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
             case 7:
                 return Math::max;
             default:
-                throw ArgumentMathOperation.b.create();
-        }
-    }
-
-    @FunctionalInterface
-    interface b extends ArgumentMathOperation.a {
-
-        int apply(int i, int j) throws CommandSyntaxException;
-
-        @Override
-        default void apply(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) throws CommandSyntaxException {
-            scoreboardscore.setScore(this.apply(scoreboardscore.getScore(), scoreboardscore1.getScore()));
+                throw ArgumentMathOperation.ERROR_INVALID_OPERATION.create();
         }
     }
 
@@ -165,5 +154,16 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
     public interface a {
 
         void apply(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) throws CommandSyntaxException;
+    }
+
+    @FunctionalInterface
+    private interface b extends ArgumentMathOperation.a {
+
+        int apply(int i, int j) throws CommandSyntaxException;
+
+        @Override
+        default void apply(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) throws CommandSyntaxException {
+            scoreboardscore.setScore(this.apply(scoreboardscore.getScore(), scoreboardscore1.getScore()));
+        }
     }
 }

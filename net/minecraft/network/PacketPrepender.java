@@ -8,14 +8,16 @@ import io.netty.handler.codec.MessageToByteEncoder;
 @Sharable
 public class PacketPrepender extends MessageToByteEncoder<ByteBuf> {
 
+    private static final int MAX_BYTES = 3;
+
     public PacketPrepender() {}
 
-    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) {
         int i = bytebuf.readableBytes();
         int j = PacketDataSerializer.a(i);
 
         if (j > 3) {
-            throw new IllegalArgumentException("unable to fit " + i + " into " + 3);
+            throw new IllegalArgumentException("unable to fit " + i + " into 3");
         } else {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 

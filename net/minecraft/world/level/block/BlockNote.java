@@ -24,13 +24,13 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockNote extends Block {
 
-    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.aI;
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
-    public static final BlockStateInteger NOTE = BlockProperties.ax;
+    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.NOTEBLOCK_INSTRUMENT;
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
+    public static final BlockStateInteger NOTE = BlockProperties.NOTE;
 
     public BlockNote(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, 0)).set(BlockNote.POWERED, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, 0)).set(BlockNote.POWERED, false));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class BlockNote extends Block {
         int k = (Integer) iblockdata.get(BlockNote.NOTE);
         float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 
-        world.playSound((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).b(), SoundCategory.RECORDS, 3.0F, f);
+        world.playSound((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).a(), SoundCategory.RECORDS, 3.0F, f);
         world.addParticle(Particles.NOTE, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.2D, (double) blockposition.getZ() + 0.5D, (double) k / 24.0D, 0.0D, 0.0D);
         return true;
     }

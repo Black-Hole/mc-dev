@@ -8,13 +8,13 @@ import net.minecraft.server.AdvancementDataPlayer;
 
 public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTriggerImpossible.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("impossible");
+    static final MinecraftKey ID = new MinecraftKey("impossible");
 
     public CriterionTriggerImpossible() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerImpossible.a;
+        return CriterionTriggerImpossible.ID;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTri
 
         @Override
         public MinecraftKey a() {
-            return CriterionTriggerImpossible.a;
+            return CriterionTriggerImpossible.ID;
         }
 
         @Override

@@ -28,51 +28,58 @@ import net.minecraft.world.level.storage.IWorldDataServer;
 
 public class MobSpawnerTrader implements MobSpawner {
 
-    private final Random a = new Random();
-    private final IWorldDataServer b;
-    private int c;
-    private int d;
-    private int e;
+    private static final int DEFAULT_TICK_DELAY = 1200;
+    public static final int DEFAULT_SPAWN_DELAY = 24000;
+    private static final int MIN_SPAWN_CHANCE = 25;
+    private static final int MAX_SPAWN_CHANCE = 75;
+    private static final int SPAWN_CHANCE_INCREASE = 25;
+    private static final int SPAWN_ONE_IN_X_CHANCE = 10;
+    private static final int NUMBER_OF_SPAWN_ATTEMPTS = 10;
+    private final Random random = new Random();
+    private final IWorldDataServer serverLevelData;
+    private int tickDelay;
+    private int spawnDelay;
+    private int spawnChance;
 
     public MobSpawnerTrader(IWorldDataServer iworlddataserver) {
-        this.b = iworlddataserver;
-        this.c = 1200;
-        this.d = iworlddataserver.v();
-        this.e = iworlddataserver.w();
-        if (this.d == 0 && this.e == 0) {
-            this.d = 24000;
-            iworlddataserver.g(this.d);
-            this.e = 25;
-            iworlddataserver.h(this.e);
+        this.serverLevelData = iworlddataserver;
+        this.tickDelay = 1200;
+        this.spawnDelay = iworlddataserver.v();
+        this.spawnChance = iworlddataserver.w();
+        if (this.spawnDelay == 0 && this.spawnChance == 0) {
+            this.spawnDelay = 24000;
+            iworlddataserver.g(this.spawnDelay);
+            this.spawnChance = 25;
+            iworlddataserver.h(this.spawnChance);
         }
 
     }
 
     @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
-        if (!worldserver.getGameRules().getBoolean(GameRules.DO_TRADER_SPAWNING)) {
+        if (!worldserver.getGameRules().getBoolean(GameRules.RULE_DO_TRADER_SPAWNING)) {
             return 0;
-        } else if (--this.c > 0) {
+        } else if (--this.tickDelay > 0) {
             return 0;
         } else {
-            this.c = 1200;
-            this.d -= 1200;
-            this.b.g(this.d);
-            if (this.d > 0) {
+            this.tickDelay = 1200;
+            this.spawnDelay -= 1200;
+            this.serverLevelData.g(this.spawnDelay);
+            if (this.spawnDelay > 0) {
                 return 0;
             } else {
-                this.d = 24000;
-                if (!worldserver.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+                this.spawnDelay = 24000;
+                if (!worldserver.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
                     return 0;
                 } else {
-                    int i = this.e;
+                    int i = this.spawnChance;
 
-                    this.e = MathHelper.clamp(this.e + 25, 25, 75);
-                    this.b.h(this.e);
-                    if (this.a.nextInt(100) > i) {
+                    this.spawnChance = MathHelper.clamp(this.spawnChance + 25, 25, 75);
+                    this.serverLevelData.h(this.spawnChance);
+                    if (this.random.nextInt(100) > i) {
                         return 0;
                     } else if (this.a(worldserver)) {
-                        this.e = 25;
+                        this.spawnChance = 25;
                         return 1;
                     } else {
                         return 0;
@@ -83,24 +90,24 @@ public class MobSpawnerTrader implements MobSpawner {
     }
 
     private boolean a(WorldServer worldserver) {
-        EntityPlayer entityplayer = worldserver.q_();
+        EntityPlayer entityplayer = worldserver.i();
 
         if (entityplayer == null) {
             return true;
-        } else if (this.a.nextInt(10) != 0) {
+        } else if (this.random.nextInt(10) != 0) {
             return false;
         } else {
             BlockPosition blockposition = entityplayer.getChunkCoordinates();
             boolean flag = true;
-            VillagePlace villageplace = worldserver.y();
-            Optional<BlockPosition> optional = villageplace.c(VillagePlaceType.s.c(), (blockposition1) -> {
+            VillagePlace villageplace = worldserver.A();
+            Optional<BlockPosition> optional = villageplace.c(VillagePlaceType.MEETING.c(), (blockposition1) -> {
                 return true;
             }, blockposition, 48, VillagePlace.Occupancy.ANY);
             BlockPosition blockposition1 = (BlockPosition) optional.orElse(blockposition);
             BlockPosition blockposition2 = this.a((IWorldReader) worldserver, blockposition1, 48);
 
             if (blockposition2 != null && this.a(worldserver, blockposition2)) {
-                if (worldserver.i(blockposition2).equals(Optional.of(Biomes.THE_VOID))) {
+                if (worldserver.j(blockposition2).equals(Optional.of(Biomes.THE_VOID))) {
                     return false;
                 }
 
@@ -111,7 +118,7 @@ public class MobSpawnerTrader implements MobSpawner {
                         this.a(worldserver, entityvillagertrader, 4);
                     }
 
-                    this.b.a(entityvillagertrader.getUniqueID());
+                    this.serverLevelData.a(entityvillagertrader.getUniqueID());
                     entityvillagertrader.setDespawnDelay(48000);
                     entityvillagertrader.g(blockposition1);
                     entityvillagertrader.a(blockposition1, 16);
@@ -140,8 +147,8 @@ public class MobSpawnerTrader implements MobSpawner {
         BlockPosition blockposition1 = null;
 
         for (int j = 0; j < 10; ++j) {
-            int k = blockposition.getX() + this.a.nextInt(i * 2) - i;
-            int l = blockposition.getZ() + this.a.nextInt(i * 2) - i;
+            int k = blockposition.getX() + this.random.nextInt(i * 2) - i;
+            int l = blockposition.getZ() + this.random.nextInt(i * 2) - i;
             int i1 = iworldreader.a(HeightMap.Type.WORLD_SURFACE, k, l);
             BlockPosition blockposition2 = new BlockPosition(k, i1, l);
 
@@ -155,7 +162,7 @@ public class MobSpawnerTrader implements MobSpawner {
     }
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Iterator iterator = BlockPosition.a(blockposition, blockposition.b(1, 2, 1)).iterator();
+        Iterator iterator = BlockPosition.a(blockposition, blockposition.c(1, 2, 1)).iterator();
 
         BlockPosition blockposition1;
 

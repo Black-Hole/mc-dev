@@ -14,8 +14,8 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.EnumAxis>> {
 
-    private static final Collection<String> a = Arrays.asList("xyz", "x");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("arguments.swizzle.invalid"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("xyz", "x");
+    private static final SimpleCommandExceptionType ERROR_INVALID = new SimpleCommandExceptionType(new ChatMessage("arguments.swizzle.invalid"));
 
     public ArgumentRotationAxis() {}
 
@@ -45,11 +45,11 @@ public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.
                     enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
                     break;
                 default:
-                    throw ArgumentRotationAxis.b.create();
+                    throw ArgumentRotationAxis.ERROR_INVALID.create();
             }
 
             if (enumset.contains(enumdirection_enumaxis)) {
-                throw ArgumentRotationAxis.b.create();
+                throw ArgumentRotationAxis.ERROR_INVALID.create();
             }
 
             enumset.add(enumdirection_enumaxis);
@@ -59,6 +59,6 @@ public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.
     }
 
     public Collection<String> getExamples() {
-        return ArgumentRotationAxis.a;
+        return ArgumentRotationAxis.EXAMPLES;
     }
 }

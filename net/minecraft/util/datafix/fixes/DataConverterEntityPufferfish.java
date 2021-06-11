@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class DataConverterEntityPufferfish extends DataConverterEntityRenameAbstract {
 
-    public static final Map<String, String> a = ImmutableMap.builder().put("minecraft:puffer_fish_spawn_egg", "minecraft:pufferfish_spawn_egg").build();
+    public static final Map<String, String> RENAMED_IDS = ImmutableMap.builder().put("minecraft:puffer_fish_spawn_egg", "minecraft:pufferfish_spawn_egg").build();
 
     public DataConverterEntityPufferfish(Schema schema, boolean flag) {
         super("EntityPufferfishRenameFix", schema, flag);

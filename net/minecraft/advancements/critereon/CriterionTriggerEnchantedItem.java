@@ -7,13 +7,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<CriterionTriggerEnchantedItem.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("enchanted_item");
+    static final MinecraftKey ID = new MinecraftKey("enchanted_item");
 
     public CriterionTriggerEnchantedItem() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerEnchantedItem.a;
+        return CriterionTriggerEnchantedItem.ID;
     }
 
     @Override
@@ -32,29 +32,29 @@ public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<Crit
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionItem a;
-        private final CriterionConditionValue.IntegerRange b;
+        private final CriterionConditionItem item;
+        private final CriterionConditionValue.IntegerRange levels;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerEnchantedItem.a, criterionconditionentity_b);
-            this.a = criterionconditionitem;
-            this.b = criterionconditionvalue_integerrange;
+            super(CriterionTriggerEnchantedItem.ID, criterionconditionentity_b);
+            this.item = criterionconditionitem;
+            this.levels = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerEnchantedItem.a c() {
-            return new CriterionTriggerEnchantedItem.a(CriterionConditionEntity.b.a, CriterionConditionItem.a, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerEnchantedItem.a(CriterionConditionEntity.b.ANY, CriterionConditionItem.ANY, CriterionConditionValue.IntegerRange.ANY);
         }
 
         public boolean a(ItemStack itemstack, int i) {
-            return !this.a.a(itemstack) ? false : this.b.d(i);
+            return !this.item.a(itemstack) ? false : this.levels.d(i);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("item", this.a.a());
-            jsonobject.add("levels", this.b.d());
+            jsonobject.add("item", this.item.a());
+            jsonobject.add("levels", this.levels.d());
             return jsonobject;
         }
     }

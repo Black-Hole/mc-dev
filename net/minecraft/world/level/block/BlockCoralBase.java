@@ -21,23 +21,23 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockCoralBase extends Block implements IBlockWaterlogged {
 
-    public static final BlockStateBoolean b = BlockProperties.C;
-    private static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D);
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    private static final VoxelShape AABB = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D);
 
     protected BlockCoralBase(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockCoralBase.WATERLOGGED, true));
     }
 
     protected void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!c(iblockdata, (IBlockAccess) generatoraccess, blockposition)) {
+        if (!e(iblockdata, generatoraccess, blockposition)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 60 + generatoraccess.getRandom().nextInt(40));
         }
 
     }
 
-    protected static boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
+    protected static boolean e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if ((Boolean) iblockdata.get(BlockCoralBase.WATERLOGGED)) {
             return true;
         } else {
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -60,17 +60,17 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
+        return (IBlockData) this.getBlockData().set(BlockCoralBase.WATERLOGGED, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCoralBase.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockCoralBase.AABB;
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
+        if ((Boolean) iblockdata.get(BlockCoralBase.WATERLOGGED)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
@@ -86,11 +86,11 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockCoralBase.b);
+        blockstatelist_a.a(BlockCoralBase.WATERLOGGED);
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockCoralBase.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
     }
 }

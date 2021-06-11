@@ -16,13 +16,13 @@ public class LootItemFunctionSmelt extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private LootItemFunctionSmelt(LootItemCondition[] alootitemcondition) {
+    LootItemFunctionSmelt(LootItemCondition[] alootitemcondition) {
         super(alootitemcondition);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.f;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.FURNACE_SMELT;
     }
 
     @Override

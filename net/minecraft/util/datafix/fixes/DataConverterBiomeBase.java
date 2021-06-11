@@ -12,13 +12,13 @@ import net.minecraft.util.datafix.schemas.DataConverterSchemaNamed;
 
 public class DataConverterBiomeBase extends DataFix {
 
-    private final String a;
-    private final Map<String, String> b;
+    private final String name;
+    private final Map<String, String> biomes;
 
     public DataConverterBiomeBase(Schema schema, boolean flag, String s, Map<String, String> map) {
         super(schema, flag);
-        this.b = map;
-        this.a = s;
+        this.biomes = map;
+        this.name = s;
     }
 
     protected TypeRewriteRule makeRule() {
@@ -27,10 +27,10 @@ public class DataConverterBiomeBase extends DataFix {
         if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.BIOME))) {
             throw new IllegalStateException("Biome type is not what was expected.");
         } else {
-            return this.fixTypeEverywhere(this.a, type, (dynamicops) -> {
+            return this.fixTypeEverywhere(this.name, type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((s) -> {
-                        return (String) this.b.getOrDefault(s, s);
+                        return (String) this.biomes.getOrDefault(s, s);
                     });
                 };
             });

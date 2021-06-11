@@ -20,19 +20,19 @@ public class NavigationFlying extends NavigationAbstract {
 
     @Override
     protected Pathfinder a(int i) {
-        this.o = new PathfinderFlying();
-        this.o.a(true);
-        return new Pathfinder(this.o, i);
+        this.nodeEvaluator = new PathfinderFlying();
+        this.nodeEvaluator.a(true);
+        return new Pathfinder(this.nodeEvaluator, i);
     }
 
     @Override
     protected boolean a() {
-        return this.r() && this.p() || !this.a.isPassenger();
+        return this.r() && this.p() || !this.mob.isPassenger();
     }
 
     @Override
     protected Vec3D b() {
-        return this.a.getPositionVector();
+        return this.mob.getPositionVector();
     }
 
     @Override
@@ -42,8 +42,8 @@ public class NavigationFlying extends NavigationAbstract {
 
     @Override
     public void c() {
-        ++this.e;
-        if (this.m) {
+        ++this.tick;
+        if (this.hasDelayedRecomputation) {
             this.j();
         }
 
@@ -52,17 +52,17 @@ public class NavigationFlying extends NavigationAbstract {
 
             if (this.a()) {
                 this.l();
-            } else if (this.c != null && !this.c.c()) {
-                vec3d = this.c.a((Entity) this.a);
-                if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
-                    this.c.a();
+            } else if (this.path != null && !this.path.c()) {
+                vec3d = this.path.a((Entity) this.mob);
+                if (this.mob.cW() == MathHelper.floor(vec3d.x) && this.mob.cY() == MathHelper.floor(vec3d.y) && this.mob.dc() == MathHelper.floor(vec3d.z)) {
+                    this.path.a();
                 }
             }
 
-            PacketDebug.a(this.b, this.a, this.c, this.l);
+            PacketDebug.a(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.m()) {
-                vec3d = this.c.a((Entity) this.a);
-                this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
+                vec3d = this.path.a((Entity) this.mob);
+                this.mob.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.speedModifier);
             }
         }
     }
@@ -138,15 +138,23 @@ public class NavigationFlying extends NavigationAbstract {
     }
 
     public void a(boolean flag) {
-        this.o.b(flag);
+        this.nodeEvaluator.b(flag);
+    }
+
+    public boolean d() {
+        return this.nodeEvaluator.d();
     }
 
     public void b(boolean flag) {
-        this.o.a(flag);
+        this.nodeEvaluator.a(flag);
+    }
+
+    public boolean e() {
+        return this.nodeEvaluator.d();
     }
 
     @Override
     public boolean a(BlockPosition blockposition) {
-        return this.b.getType(blockposition).a((IBlockAccess) this.b, blockposition, (Entity) this.a);
+        return this.level.getType(blockposition).a((IBlockAccess) this.level, blockposition, (Entity) this.mob);
     }
 }

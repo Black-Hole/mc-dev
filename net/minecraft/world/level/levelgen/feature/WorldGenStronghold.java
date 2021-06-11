@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.SeededRandom;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
+import net.minecraft.world.level.levelgen.structure.NoiseAffectingStructureStart;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.WorldGenStrongholdPieces;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 
@@ -27,44 +28,42 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
         return WorldGenStronghold.a::new;
     }
 
-    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return chunkgenerator.a(new ChunkCoordIntPair(j, k));
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair1, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration, LevelHeightAccessor levelheightaccessor) {
+        return chunkgenerator.a(chunkcoordintpair);
     }
 
-    public static class a extends StructureStart<WorldGenFeatureEmptyConfiguration> {
+    public static class a extends NoiseAffectingStructureStart<WorldGenFeatureEmptyConfiguration> {
 
-        private final long e;
+        private final long seed;
 
-        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
-            this.e = l;
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, ChunkCoordIntPair chunkcoordintpair, int i, long j) {
+            super(structuregenerator, chunkcoordintpair, i, j);
+            this.seed = j;
         }
 
-        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-            int k = 0;
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration, LevelHeightAccessor levelheightaccessor) {
+            int i = 0;
 
             WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart;
 
             do {
-                this.b.clear();
-                this.c = StructureBoundingBox.a();
-                this.d.c(this.e + (long) (k++), i, j);
+                this.l();
+                this.random.c(this.seed + (long) (i++), chunkcoordintpair.x, chunkcoordintpair.z);
                 WorldGenStrongholdPieces.a();
-                worldgenstrongholdpieces_worldgenstrongholdstart = new WorldGenStrongholdPieces.WorldGenStrongholdStart(this.d, (i << 4) + 2, (j << 4) + 2);
-                this.b.add(worldgenstrongholdpieces_worldgenstrongholdstart);
-                worldgenstrongholdpieces_worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, this.b, (Random) this.d);
-                List list = worldgenstrongholdpieces_worldgenstrongholdstart.c;
+                worldgenstrongholdpieces_worldgenstrongholdstart = new WorldGenStrongholdPieces.WorldGenStrongholdStart(this.random, chunkcoordintpair.a(2), chunkcoordintpair.b(2));
+                this.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart);
+                worldgenstrongholdpieces_worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (StructurePieceAccessor) this, (Random) this.random);
+                List list = worldgenstrongholdpieces_worldgenstrongholdstart.pendingChildren;
 
                 while (!list.isEmpty()) {
-                    int l = this.d.nextInt(list.size());
-                    StructurePiece structurepiece = (StructurePiece) list.remove(l);
+                    int j = this.random.nextInt(list.size());
+                    StructurePiece structurepiece = (StructurePiece) list.remove(j);
 
-                    structurepiece.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, this.b, (Random) this.d);
+                    structurepiece.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (StructurePieceAccessor) this, (Random) this.random);
                 }
 
-                this.b();
-                this.a(chunkgenerator.getSeaLevel(), this.d, 10);
-            } while (this.b.isEmpty() || worldgenstrongholdpieces_worldgenstrongholdstart.b == null);
+                this.a(chunkgenerator.getSeaLevel(), chunkgenerator.getMinY(), this.random, 10);
+            } while (this.m() || worldgenstrongholdpieces_worldgenstrongholdstart.portalRoomPiece == null);
 
         }
     }

@@ -13,52 +13,52 @@ import javax.annotation.Nullable;
 
 public class RegionFileCompression {
 
-    private static final Int2ObjectMap<RegionFileCompression> d = new Int2ObjectOpenHashMap();
-    public static final RegionFileCompression a = a(new RegionFileCompression(1, GZIPInputStream::new, GZIPOutputStream::new));
-    public static final RegionFileCompression b = a(new RegionFileCompression(2, InflaterInputStream::new, DeflaterOutputStream::new));
-    public static final RegionFileCompression c = a(new RegionFileCompression(3, (inputstream) -> {
+    private static final Int2ObjectMap<RegionFileCompression> VERSIONS = new Int2ObjectOpenHashMap();
+    public static final RegionFileCompression VERSION_GZIP = a(new RegionFileCompression(1, GZIPInputStream::new, GZIPOutputStream::new));
+    public static final RegionFileCompression VERSION_DEFLATE = a(new RegionFileCompression(2, InflaterInputStream::new, DeflaterOutputStream::new));
+    public static final RegionFileCompression VERSION_NONE = a(new RegionFileCompression(3, (inputstream) -> {
         return inputstream;
     }, (outputstream) -> {
         return outputstream;
     }));
-    private final int e;
-    private final RegionFileCompression.a<InputStream> f;
-    private final RegionFileCompression.a<OutputStream> g;
+    private final int id;
+    private final RegionFileCompression.a<InputStream> inputWrapper;
+    private final RegionFileCompression.a<OutputStream> outputWrapper;
 
     private RegionFileCompression(int i, RegionFileCompression.a<InputStream> regionfilecompression_a, RegionFileCompression.a<OutputStream> regionfilecompression_a1) {
-        this.e = i;
-        this.f = regionfilecompression_a;
-        this.g = regionfilecompression_a1;
+        this.id = i;
+        this.inputWrapper = regionfilecompression_a;
+        this.outputWrapper = regionfilecompression_a1;
     }
 
     private static RegionFileCompression a(RegionFileCompression regionfilecompression) {
-        RegionFileCompression.d.put(regionfilecompression.e, regionfilecompression);
+        RegionFileCompression.VERSIONS.put(regionfilecompression.id, regionfilecompression);
         return regionfilecompression;
     }
 
     @Nullable
     public static RegionFileCompression a(int i) {
-        return (RegionFileCompression) RegionFileCompression.d.get(i);
+        return (RegionFileCompression) RegionFileCompression.VERSIONS.get(i);
     }
 
     public static boolean b(int i) {
-        return RegionFileCompression.d.containsKey(i);
+        return RegionFileCompression.VERSIONS.containsKey(i);
     }
 
     public int a() {
-        return this.e;
+        return this.id;
     }
 
     public OutputStream a(OutputStream outputstream) throws IOException {
-        return (OutputStream) this.g.wrap(outputstream);
+        return (OutputStream) this.outputWrapper.wrap(outputstream);
     }
 
     public InputStream a(InputStream inputstream) throws IOException {
-        return (InputStream) this.f.wrap(inputstream);
+        return (InputStream) this.inputWrapper.wrap(inputstream);
     }
 
     @FunctionalInterface
-    interface a<O> {
+    private interface a<O> {
 
         O wrap(O o0) throws IOException;
     }

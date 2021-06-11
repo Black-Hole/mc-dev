@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.util.INamable;
+import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.block.EnumBlockRotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -31,45 +33,42 @@ public class WorldGenFeatureOceanRuin extends StructureGenerator<WorldGenFeature
 
         WARM("warm"), COLD("cold");
 
-        public static final Codec<WorldGenFeatureOceanRuin.Temperature> c = INamable.a(WorldGenFeatureOceanRuin.Temperature::values, WorldGenFeatureOceanRuin.Temperature::a);
-        private static final Map<String, WorldGenFeatureOceanRuin.Temperature> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOceanRuin.Temperature::b, (worldgenfeatureoceanruin_temperature) -> {
+        public static final Codec<WorldGenFeatureOceanRuin.Temperature> CODEC = INamable.a(WorldGenFeatureOceanRuin.Temperature::values, WorldGenFeatureOceanRuin.Temperature::a);
+        private static final Map<String, WorldGenFeatureOceanRuin.Temperature> BY_NAME = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOceanRuin.Temperature::a, (worldgenfeatureoceanruin_temperature) -> {
             return worldgenfeatureoceanruin_temperature;
         }));
-        private final String e;
+        private final String name;
 
         private Temperature(String s) {
-            this.e = s;
+            this.name = s;
         }
 
-        public String b() {
-            return this.e;
+        public String a() {
+            return this.name;
         }
 
         @Nullable
         public static WorldGenFeatureOceanRuin.Temperature a(String s) {
-            return (WorldGenFeatureOceanRuin.Temperature) WorldGenFeatureOceanRuin.Temperature.d.get(s);
+            return (WorldGenFeatureOceanRuin.Temperature) WorldGenFeatureOceanRuin.Temperature.BY_NAME.get(s);
         }
 
         @Override
         public String getName() {
-            return this.e;
+            return this.name;
         }
     }
 
     public static class a extends StructureStart<WorldGenFeatureOceanRuinConfiguration> {
 
-        public a(StructureGenerator<WorldGenFeatureOceanRuinConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
+        public a(StructureGenerator<WorldGenFeatureOceanRuinConfiguration> structuregenerator, ChunkCoordIntPair chunkcoordintpair, int i, long j) {
+            super(structuregenerator, chunkcoordintpair, i, j);
         }
 
-        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration) {
-            int k = i * 16;
-            int l = j * 16;
-            BlockPosition blockposition = new BlockPosition(k, 90, l);
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration, LevelHeightAccessor levelheightaccessor) {
+            BlockPosition blockposition = new BlockPosition(chunkcoordintpair.d(), 90, chunkcoordintpair.e());
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.random);
 
-            WorldGenFeatureOceanRuinPieces.a(definedstructuremanager, blockposition, enumblockrotation, this.b, (Random) this.d, worldgenfeatureoceanruinconfiguration);
-            this.b();
+            WorldGenFeatureOceanRuinPieces.a(definedstructuremanager, blockposition, enumblockrotation, (StructurePieceAccessor) this, (Random) this.random, worldgenfeatureoceanruinconfiguration);
         }
     }
 }

@@ -17,28 +17,28 @@ import net.minecraft.world.item.ItemStack;
 
 public class CriterionConditionNBT {
 
-    public static final CriterionConditionNBT a = new CriterionConditionNBT((NBTTagCompound) null);
+    public static final CriterionConditionNBT ANY = new CriterionConditionNBT((NBTTagCompound) null);
     @Nullable
-    private final NBTTagCompound b;
+    private final NBTTagCompound tag;
 
     public CriterionConditionNBT(@Nullable NBTTagCompound nbttagcompound) {
-        this.b = nbttagcompound;
+        this.tag = nbttagcompound;
     }
 
     public boolean a(ItemStack itemstack) {
-        return this == CriterionConditionNBT.a ? true : this.a((NBTBase) itemstack.getTag());
+        return this == CriterionConditionNBT.ANY ? true : this.a((NBTBase) itemstack.getTag());
     }
 
     public boolean a(Entity entity) {
-        return this == CriterionConditionNBT.a ? true : this.a((NBTBase) b(entity));
+        return this == CriterionConditionNBT.ANY ? true : this.a((NBTBase) b(entity));
     }
 
     public boolean a(@Nullable NBTBase nbtbase) {
-        return nbtbase == null ? this == CriterionConditionNBT.a : this.b == null || GameProfileSerializer.a(this.b, nbtbase, true);
+        return nbtbase == null ? this == CriterionConditionNBT.ANY : this.tag == null || GameProfileSerializer.a(this.tag, nbtbase, true);
     }
 
     public JsonElement a() {
-        return (JsonElement) (this != CriterionConditionNBT.a && this.b != null ? new JsonPrimitive(this.b.toString()) : JsonNull.INSTANCE);
+        return (JsonElement) (this != CriterionConditionNBT.ANY && this.tag != null ? new JsonPrimitive(this.tag.toString()) : JsonNull.INSTANCE);
     }
 
     public static CriterionConditionNBT a(@Nullable JsonElement jsonelement) {
@@ -53,7 +53,7 @@ public class CriterionConditionNBT {
 
             return new CriterionConditionNBT(nbttagcompound);
         } else {
-            return CriterionConditionNBT.a;
+            return CriterionConditionNBT.ANY;
         }
     }
 
@@ -61,7 +61,7 @@ public class CriterionConditionNBT {
         NBTTagCompound nbttagcompound = entity.save(new NBTTagCompound());
 
         if (entity instanceof EntityHuman) {
-            ItemStack itemstack = ((EntityHuman) entity).inventory.getItemInHand();
+            ItemStack itemstack = ((EntityHuman) entity).getInventory().getItemInHand();
 
             if (!itemstack.isEmpty()) {
                 nbttagcompound.set("SelectedItem", itemstack.save(new NBTTagCompound()));

@@ -2,17 +2,19 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutScoreboardDisplayObjective;
 import net.minecraft.network.protocol.game.PacketPlayOutScoreboardObjective;
 import net.minecraft.network.protocol.game.PacketPlayOutScoreboardScore;
 import net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.scores.PersistentScoreboard;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.ScoreboardObjective;
 import net.minecraft.world.scores.ScoreboardScore;
@@ -20,39 +22,39 @@ import net.minecraft.world.scores.ScoreboardTeam;
 
 public class ScoreboardServer extends Scoreboard {
 
-    private final MinecraftServer a;
-    private final Set<ScoreboardObjective> b = Sets.newHashSet();
-    private Runnable[] c = new Runnable[0];
+    private final MinecraftServer server;
+    private final Set<ScoreboardObjective> trackedObjectives = Sets.newHashSet();
+    private final List<Runnable> dirtyListeners = Lists.newArrayList();
 
     public ScoreboardServer(MinecraftServer minecraftserver) {
-        this.a = minecraftserver;
+        this.server = minecraftserver;
     }
 
     @Override
     public void handleScoreChanged(ScoreboardScore scoreboardscore) {
         super.handleScoreChanged(scoreboardscore);
-        if (this.b.contains(scoreboardscore.getObjective())) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
+        if (this.trackedObjectives.contains(scoreboardscore.getObjective())) {
+            this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
         }
 
-        this.b();
+        this.a();
     }
 
     @Override
     public void handlePlayerRemoved(String s) {
         super.handlePlayerRemoved(s);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, (String) null, s, 0));
-        this.b();
+        this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, (String) null, s, 0));
+        this.a();
     }
 
     @Override
     public void a(String s, ScoreboardObjective scoreboardobjective) {
         super.a(s, scoreboardobjective);
-        if (this.b.contains(scoreboardobjective)) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, scoreboardobjective.getName(), s, 0));
+        if (this.trackedObjectives.contains(scoreboardobjective)) {
+            this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, scoreboardobjective.getName(), s, 0));
         }
 
-        this.b();
+        this.a();
     }
 
     @Override
@@ -62,28 +64,28 @@ public class ScoreboardServer extends Scoreboard {
         super.setDisplaySlot(i, scoreboardobjective);
         if (scoreboardobjective1 != scoreboardobjective && scoreboardobjective1 != null) {
             if (this.h(scoreboardobjective1) > 0) {
-                this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
+                this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
             } else {
                 this.g(scoreboardobjective1);
             }
         }
 
         if (scoreboardobjective != null) {
-            if (this.b.contains(scoreboardobjective)) {
-                this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
+            if (this.trackedObjectives.contains(scoreboardobjective)) {
+                this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
             } else {
                 this.e(scoreboardobjective);
             }
         }
 
-        this.b();
+        this.a();
     }
 
     @Override
     public boolean addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
         if (super.addPlayerToTeam(s, scoreboardteam)) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(s), 3));
-            this.b();
+            this.server.getPlayerList().sendAll(PacketPlayOutScoreboardTeam.a(scoreboardteam, s, PacketPlayOutScoreboardTeam.a.ADD));
+            this.a();
             return true;
         } else {
             return false;
@@ -93,68 +95,66 @@ public class ScoreboardServer extends Scoreboard {
     @Override
     public void removePlayerFromTeam(String s, ScoreboardTeam scoreboardteam) {
         super.removePlayerFromTeam(s, scoreboardteam);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(s), 4));
-        this.b();
+        this.server.getPlayerList().sendAll(PacketPlayOutScoreboardTeam.a(scoreboardteam, s, PacketPlayOutScoreboardTeam.a.REMOVE));
+        this.a();
     }
 
     @Override
     public void handleObjectiveAdded(ScoreboardObjective scoreboardobjective) {
         super.handleObjectiveAdded(scoreboardobjective);
-        this.b();
+        this.a();
     }
 
     @Override
     public void handleObjectiveChanged(ScoreboardObjective scoreboardobjective) {
         super.handleObjectiveChanged(scoreboardobjective);
-        if (this.b.contains(scoreboardobjective)) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardObjective(scoreboardobjective, 2));
+        if (this.trackedObjectives.contains(scoreboardobjective)) {
+            this.server.getPlayerList().sendAll(new PacketPlayOutScoreboardObjective(scoreboardobjective, 2));
         }
 
-        this.b();
+        this.a();
     }
 
     @Override
     public void handleObjectiveRemoved(ScoreboardObjective scoreboardobjective) {
         super.handleObjectiveRemoved(scoreboardobjective);
-        if (this.b.contains(scoreboardobjective)) {
+        if (this.trackedObjectives.contains(scoreboardobjective)) {
             this.g(scoreboardobjective);
         }
 
-        this.b();
+        this.a();
     }
 
     @Override
     public void handleTeamAdded(ScoreboardTeam scoreboardteam) {
         super.handleTeamAdded(scoreboardteam);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, 0));
-        this.b();
+        this.server.getPlayerList().sendAll(PacketPlayOutScoreboardTeam.a(scoreboardteam, true));
+        this.a();
     }
 
     @Override
     public void handleTeamChanged(ScoreboardTeam scoreboardteam) {
         super.handleTeamChanged(scoreboardteam);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, 2));
-        this.b();
+        this.server.getPlayerList().sendAll(PacketPlayOutScoreboardTeam.a(scoreboardteam, false));
+        this.a();
     }
 
     @Override
     public void handleTeamRemoved(ScoreboardTeam scoreboardteam) {
         super.handleTeamRemoved(scoreboardteam);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, 1));
-        this.b();
+        this.server.getPlayerList().sendAll(PacketPlayOutScoreboardTeam.a(scoreboardteam));
+        this.a();
     }
 
     public void a(Runnable runnable) {
-        this.c = (Runnable[]) Arrays.copyOf(this.c, this.c.length + 1);
-        this.c[this.c.length - 1] = runnable;
+        this.dirtyListeners.add(runnable);
     }
 
-    protected void b() {
-        Runnable[] arunnable = this.c;
-        int i = arunnable.length;
+    protected void a() {
+        Iterator iterator = this.dirtyListeners.iterator();
 
-        for (int j = 0; j < i; ++j) {
-            Runnable runnable = arunnable[j];
+        while (iterator.hasNext()) {
+            Runnable runnable = (Runnable) iterator.next();
 
             runnable.run();
         }
@@ -185,7 +185,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void e(ScoreboardObjective scoreboardobjective) {
         List<Packet<?>> list = this.getScoreboardScorePacketsForObjective(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().getPlayers().iterator();
+        Iterator iterator = this.server.getPlayerList().getPlayers().iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -194,11 +194,11 @@ public class ScoreboardServer extends Scoreboard {
             while (iterator1.hasNext()) {
                 Packet<?> packet = (Packet) iterator1.next();
 
-                entityplayer.playerConnection.sendPacket(packet);
+                entityplayer.connection.sendPacket(packet);
             }
         }
 
-        this.b.add(scoreboardobjective);
+        this.trackedObjectives.add(scoreboardobjective);
     }
 
     public List<Packet<?>> f(ScoreboardObjective scoreboardobjective) {
@@ -217,7 +217,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void g(ScoreboardObjective scoreboardobjective) {
         List<Packet<?>> list = this.f(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().getPlayers().iterator();
+        Iterator iterator = this.server.getPlayerList().getPlayers().iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -226,11 +226,11 @@ public class ScoreboardServer extends Scoreboard {
             while (iterator1.hasNext()) {
                 Packet<?> packet = (Packet) iterator1.next();
 
-                entityplayer.playerConnection.sendPacket(packet);
+                entityplayer.connection.sendPacket(packet);
             }
         }
 
-        this.b.remove(scoreboardobjective);
+        this.trackedObjectives.remove(scoreboardobjective);
     }
 
     public int h(ScoreboardObjective scoreboardobjective) {
@@ -243,6 +243,18 @@ public class ScoreboardServer extends Scoreboard {
         }
 
         return i;
+    }
+
+    public PersistentScoreboard b() {
+        PersistentScoreboard persistentscoreboard = new PersistentScoreboard(this);
+
+        Objects.requireNonNull(persistentscoreboard);
+        this.a(persistentscoreboard::b);
+        return persistentscoreboard;
+    }
+
+    public PersistentScoreboard a(NBTTagCompound nbttagcompound) {
+        return this.b().b(nbttagcompound);
     }
 
     public static enum Action {

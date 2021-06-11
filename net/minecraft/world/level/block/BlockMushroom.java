@@ -2,8 +2,8 @@ package net.minecraft.world.level.block;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Supplier;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.data.worldgen.BiomeDecoratorGroups;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsBlock;
@@ -18,15 +18,18 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockMushroom extends BlockPlant implements IBlockFragilePlantElement {
 
-    protected static final VoxelShape a = Block.a(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D);
+    protected static final float AABB_OFFSET = 3.0F;
+    protected static final VoxelShape SHAPE = Block.a(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D);
+    private final Supplier<WorldGenFeatureConfigured<?, ?>> featureSupplier;
 
-    public BlockMushroom(BlockBase.Info blockbase_info) {
+    public BlockMushroom(BlockBase.Info blockbase_info, Supplier<WorldGenFeatureConfigured<?, ?>> supplier) {
         super(blockbase_info);
+        this.featureSupplier = supplier;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockMushroom.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockMushroom.SHAPE;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         if (random.nextInt(25) == 0) {
             int i = 5;
             boolean flag = true;
-            Iterator iterator = BlockPosition.a(blockposition.b(-4, -1, -4), blockposition.b(4, 1, 4)).iterator();
+            Iterator iterator = BlockPosition.a(blockposition.c(-4, -1, -4), blockposition.c(4, 1, 4)).iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -47,14 +50,14 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
                 }
             }
 
-            BlockPosition blockposition2 = blockposition.b(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
+            BlockPosition blockposition2 = blockposition.c(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
 
             for (int j = 0; j < 4; ++j) {
                 if (worldserver.isEmpty(blockposition2) && iblockdata.canPlace(worldserver, blockposition2)) {
                     blockposition = blockposition2;
                 }
 
-                blockposition2 = blockposition.b(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
+                blockposition2 = blockposition.c(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
             }
 
             if (worldserver.isEmpty(blockposition2) && iblockdata.canPlace(worldserver, blockposition2)) {
@@ -65,7 +68,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.i(iblockaccess, blockposition);
     }
 
@@ -74,25 +77,12 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iblockdata1.a((Tag) TagsBlock.aD) ? true : iworldreader.getLightLevel(blockposition, 0) < 13 && this.c(iblockdata1, (IBlockAccess) iworldreader, blockposition1);
+        return iblockdata1.a((Tag) TagsBlock.MUSHROOM_GROW_BLOCK) ? true : iworldreader.getLightLevel(blockposition, 0) < 13 && this.d(iblockdata1, iworldreader, blockposition1);
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         worldserver.a(blockposition, false);
-        WorldGenFeatureConfigured worldgenfeatureconfigured;
-
-        if (this == Blocks.BROWN_MUSHROOM) {
-            worldgenfeatureconfigured = BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM;
-        } else {
-            if (this != Blocks.RED_MUSHROOM) {
-                worldserver.setTypeAndData(blockposition, iblockdata, 3);
-                return false;
-            }
-
-            worldgenfeatureconfigured = BiomeDecoratorGroups.HUGE_RED_MUSHROOM;
-        }
-
-        if (worldgenfeatureconfigured.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
+        if (((WorldGenFeatureConfigured) this.featureSupplier.get()).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
             return true;
         } else {
             worldserver.setTypeAndData(blockposition, iblockdata, 3);

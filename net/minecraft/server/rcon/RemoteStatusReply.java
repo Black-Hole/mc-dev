@@ -6,36 +6,44 @@ import java.io.IOException;
 
 public class RemoteStatusReply {
 
-    private final ByteArrayOutputStream a;
-    private final DataOutputStream b;
+    private final ByteArrayOutputStream outputStream;
+    private final DataOutputStream dataOutputStream;
 
     public RemoteStatusReply(int i) {
-        this.a = new ByteArrayOutputStream(i);
-        this.b = new DataOutputStream(this.a);
+        this.outputStream = new ByteArrayOutputStream(i);
+        this.dataOutputStream = new DataOutputStream(this.outputStream);
     }
 
     public void a(byte[] abyte) throws IOException {
-        this.b.write(abyte, 0, abyte.length);
+        this.dataOutputStream.write(abyte, 0, abyte.length);
     }
 
     public void a(String s) throws IOException {
-        this.b.writeBytes(s);
-        this.b.write(0);
+        this.dataOutputStream.writeBytes(s);
+        this.dataOutputStream.write(0);
     }
 
     public void a(int i) throws IOException {
-        this.b.write(i);
+        this.dataOutputStream.write(i);
     }
 
     public void a(short short0) throws IOException {
-        this.b.writeShort(Short.reverseBytes(short0));
+        this.dataOutputStream.writeShort(Short.reverseBytes(short0));
+    }
+
+    public void b(int i) throws IOException {
+        this.dataOutputStream.writeInt(Integer.reverseBytes(i));
+    }
+
+    public void a(float f) throws IOException {
+        this.dataOutputStream.writeInt(Integer.reverseBytes(Float.floatToIntBits(f)));
     }
 
     public byte[] a() {
-        return this.a.toByteArray();
+        return this.outputStream.toByteArray();
     }
 
     public void b() {
-        this.a.reset();
+        this.outputStream.reset();
     }
 }

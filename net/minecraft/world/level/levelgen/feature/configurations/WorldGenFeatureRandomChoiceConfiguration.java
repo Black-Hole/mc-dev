@@ -10,15 +10,15 @@ import net.minecraft.world.level.levelgen.feature.WorldGenFeatureRandomChoiceCon
 
 public class WorldGenFeatureRandomChoiceConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureRandomChoiceConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.apply2(WorldGenFeatureRandomChoiceConfiguration::new, WorldGenFeatureRandomChoiceConfigurationWeight.a.listOf().fieldOf("features").forGetter((worldgenfeaturerandomchoiceconfiguration) -> {
-            return worldgenfeaturerandomchoiceconfiguration.b;
-        }), WorldGenFeatureConfigured.b.fieldOf("default").forGetter((worldgenfeaturerandomchoiceconfiguration) -> {
-            return worldgenfeaturerandomchoiceconfiguration.c;
+    public static final Codec<WorldGenFeatureRandomChoiceConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.apply2(WorldGenFeatureRandomChoiceConfiguration::new, WorldGenFeatureRandomChoiceConfigurationWeight.CODEC.listOf().fieldOf("features").forGetter((worldgenfeaturerandomchoiceconfiguration) -> {
+            return worldgenfeaturerandomchoiceconfiguration.features;
+        }), WorldGenFeatureConfigured.CODEC.fieldOf("default").forGetter((worldgenfeaturerandomchoiceconfiguration) -> {
+            return worldgenfeaturerandomchoiceconfiguration.defaultFeature;
         }));
     });
-    public final List<WorldGenFeatureRandomChoiceConfigurationWeight> b;
-    public final Supplier<WorldGenFeatureConfigured<?, ?>> c;
+    public final List<WorldGenFeatureRandomChoiceConfigurationWeight> features;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> defaultFeature;
 
     public WorldGenFeatureRandomChoiceConfiguration(List<WorldGenFeatureRandomChoiceConfigurationWeight> list, WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
         this(list, () -> {
@@ -27,14 +27,14 @@ public class WorldGenFeatureRandomChoiceConfiguration implements WorldGenFeature
     }
 
     private WorldGenFeatureRandomChoiceConfiguration(List<WorldGenFeatureRandomChoiceConfigurationWeight> list, Supplier<WorldGenFeatureConfigured<?, ?>> supplier) {
-        this.b = list;
-        this.c = supplier;
+        this.features = list;
+        this.defaultFeature = supplier;
     }
 
     @Override
-    public Stream<WorldGenFeatureConfigured<?, ?>> an_() {
-        return Stream.concat(this.b.stream().flatMap((worldgenfeaturerandomchoiceconfigurationweight) -> {
-            return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfigurationweight.b.get()).d();
-        }), ((WorldGenFeatureConfigured) this.c.get()).d());
+    public Stream<WorldGenFeatureConfigured<?, ?>> ab_() {
+        return Stream.concat(this.features.stream().flatMap((worldgenfeaturerandomchoiceconfigurationweight) -> {
+            return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfigurationweight.feature.get()).d();
+        }), ((WorldGenFeatureConfigured) this.defaultFeature.get()).d());
     }
 }

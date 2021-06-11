@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class MobSpawnerPatrol implements MobSpawner {
 
-    private int a;
+    private int nextTick;
 
     public MobSpawnerPatrol() {}
 
@@ -28,16 +28,16 @@ public class MobSpawnerPatrol implements MobSpawner {
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
-        } else if (!worldserver.getGameRules().getBoolean(GameRules.DO_PATROL_SPAWNING)) {
+        } else if (!worldserver.getGameRules().getBoolean(GameRules.RULE_DO_PATROL_SPAWNING)) {
             return 0;
         } else {
             Random random = worldserver.random;
 
-            --this.a;
-            if (this.a > 0) {
+            --this.nextTick;
+            if (this.nextTick > 0) {
                 return 0;
             } else {
-                this.a += 12000 + random.nextInt(1200);
+                this.nextTick += 12000 + random.nextInt(1200);
                 long i = worldserver.getDayTime() / 24000L;
 
                 if (i >= 5L && worldserver.isDay()) {
@@ -59,8 +59,9 @@ public class MobSpawnerPatrol implements MobSpawner {
                                 int k = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 int l = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = entityhuman.getChunkCoordinates().i().e(k, 0, l);
+                                boolean flag2 = true;
 
-                                if (!worldserver.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10)) {
+                                if (!worldserver.b(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getZ() + 10)) {
                                     return 0;
                                 } else {
                                     BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
@@ -74,7 +75,7 @@ public class MobSpawnerPatrol implements MobSpawner {
 
                                         for (int k1 = 0; k1 < j1; ++k1) {
                                             ++i1;
-                                            blockposition_mutableblockposition.p(worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition).getY());
+                                            blockposition_mutableblockposition.t(worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition).getY());
                                             if (k1 == 0) {
                                                 if (!this.a(worldserver, blockposition_mutableblockposition, random, true)) {
                                                     break;
@@ -83,8 +84,8 @@ public class MobSpawnerPatrol implements MobSpawner {
                                                 this.a(worldserver, blockposition_mutableblockposition, random, false);
                                             }
 
-                                            blockposition_mutableblockposition.o(blockposition_mutableblockposition.getX() + random.nextInt(5) - random.nextInt(5));
-                                            blockposition_mutableblockposition.q(blockposition_mutableblockposition.getZ() + random.nextInt(5) - random.nextInt(5));
+                                            blockposition_mutableblockposition.u(blockposition_mutableblockposition.getX() + random.nextInt(5) - random.nextInt(5));
+                                            blockposition_mutableblockposition.s(blockposition_mutableblockposition.getZ() + random.nextInt(5) - random.nextInt(5));
                                         }
 
                                         return i1;
@@ -113,7 +114,7 @@ public class MobSpawnerPatrol implements MobSpawner {
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.eU();
+                    entitymonsterpatrolling.fD();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());

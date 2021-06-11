@@ -1,26 +1,27 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private String b;
+    private final int id;
+    private final String command;
 
-    public PacketPlayInTabComplete() {}
+    public PacketPlayInTabComplete(int i, String s) {
+        this.id = i;
+        this.command = s;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.e(32500);
+    public PacketPlayInTabComplete(PacketDataSerializer packetdataserializer) {
+        this.id = packetdataserializer.j();
+        this.command = packetdataserializer.e(32500);
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.a(this.b, 32500);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.id);
+        packetdataserializer.a(this.command, 32500);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -28,10 +29,10 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
     }
 
     public int b() {
-        return this.a;
+        return this.id;
     }
 
     public String c() {
-        return this.b;
+        return this.command;
     }
 }

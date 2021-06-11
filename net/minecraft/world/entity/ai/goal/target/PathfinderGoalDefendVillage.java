@@ -13,21 +13,21 @@ import net.minecraft.world.phys.AxisAlignedBB;
 
 public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
 
-    private final EntityIronGolem a;
-    private EntityLiving b;
-    private final PathfinderTargetCondition c = (new PathfinderTargetCondition()).a(64.0D);
+    private final EntityIronGolem golem;
+    private EntityLiving potentialTarget;
+    private final PathfinderTargetCondition attackTargeting = PathfinderTargetCondition.a().a(64.0D);
 
     public PathfinderGoalDefendVillage(EntityIronGolem entityirongolem) {
         super(entityirongolem, false, true);
-        this.a = entityirongolem;
+        this.golem = entityirongolem;
         this.a(EnumSet.of(PathfinderGoal.Type.TARGET));
     }
 
     @Override
     public boolean a() {
-        AxisAlignedBB axisalignedbb = this.a.getBoundingBox().grow(10.0D, 8.0D, 10.0D);
-        List<EntityLiving> list = this.a.world.a(EntityVillager.class, this.c, this.a, axisalignedbb);
-        List<EntityHuman> list1 = this.a.world.a(this.c, (EntityLiving) this.a, axisalignedbb);
+        AxisAlignedBB axisalignedbb = this.golem.getBoundingBox().grow(10.0D, 8.0D, 10.0D);
+        List<? extends EntityLiving> list = this.golem.level.a(EntityVillager.class, this.attackTargeting, (EntityLiving) this.golem, axisalignedbb);
+        List<EntityHuman> list1 = this.golem.level.a(this.attackTargeting, (EntityLiving) this.golem, axisalignedbb);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -40,14 +40,14 @@ public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
                 int i = entityvillager.g(entityhuman);
 
                 if (i <= -100) {
-                    this.b = entityhuman;
+                    this.potentialTarget = entityhuman;
                 }
             }
         }
 
-        if (this.b == null) {
+        if (this.potentialTarget == null) {
             return false;
-        } else if (this.b instanceof EntityHuman && (this.b.isSpectator() || ((EntityHuman) this.b).isCreative())) {
+        } else if (this.potentialTarget instanceof EntityHuman && (this.potentialTarget.isSpectator() || ((EntityHuman) this.potentialTarget).isCreative())) {
             return false;
         } else {
             return true;
@@ -56,7 +56,7 @@ public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
 
     @Override
     public void c() {
-        this.a.setGoalTarget(this.b);
+        this.golem.setGoalTarget(this.potentialTarget);
         super.c();
     }
 }

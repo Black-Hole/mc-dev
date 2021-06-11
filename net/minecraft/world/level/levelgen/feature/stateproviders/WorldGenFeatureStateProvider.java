@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public abstract class WorldGenFeatureStateProvider {
 
-    public static final Codec<WorldGenFeatureStateProvider> a = IRegistry.BLOCK_STATE_PROVIDER_TYPE.dispatch(WorldGenFeatureStateProvider::a, WorldGenFeatureStateProviders::a);
+    public static final Codec<WorldGenFeatureStateProvider> CODEC = IRegistry.BLOCKSTATE_PROVIDER_TYPES.dispatch(WorldGenFeatureStateProvider::a, WorldGenFeatureStateProviders::a);
 
     public WorldGenFeatureStateProvider() {}
 

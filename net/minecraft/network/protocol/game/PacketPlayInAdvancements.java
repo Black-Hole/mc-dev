@@ -1,31 +1,45 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.MinecraftKey;
 
 public class PacketPlayInAdvancements implements Packet<PacketListenerPlayIn> {
 
-    private PacketPlayInAdvancements.Status a;
-    private MinecraftKey b;
+    private final PacketPlayInAdvancements.Status action;
+    @Nullable
+    private final MinecraftKey tab;
 
-    public PacketPlayInAdvancements() {}
+    public PacketPlayInAdvancements(PacketPlayInAdvancements.Status packetplayinadvancements_status, @Nullable MinecraftKey minecraftkey) {
+        this.action = packetplayinadvancements_status;
+        this.tab = minecraftkey;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (PacketPlayInAdvancements.Status) packetdataserializer.a(PacketPlayInAdvancements.Status.class);
-        if (this.a == PacketPlayInAdvancements.Status.OPENED_TAB) {
-            this.b = packetdataserializer.p();
+    public static PacketPlayInAdvancements a(Advancement advancement) {
+        return new PacketPlayInAdvancements(PacketPlayInAdvancements.Status.OPENED_TAB, advancement.getName());
+    }
+
+    public static PacketPlayInAdvancements b() {
+        return new PacketPlayInAdvancements(PacketPlayInAdvancements.Status.CLOSED_SCREEN, (MinecraftKey) null);
+    }
+
+    public PacketPlayInAdvancements(PacketDataSerializer packetdataserializer) {
+        this.action = (PacketPlayInAdvancements.Status) packetdataserializer.a(PacketPlayInAdvancements.Status.class);
+        if (this.action == PacketPlayInAdvancements.Status.OPENED_TAB) {
+            this.tab = packetdataserializer.q();
+        } else {
+            this.tab = null;
         }
 
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
-        if (this.a == PacketPlayInAdvancements.Status.OPENED_TAB) {
-            packetdataserializer.a(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.a((Enum) this.action);
+        if (this.action == PacketPlayInAdvancements.Status.OPENED_TAB) {
+            packetdataserializer.a(this.tab);
         }
 
     }
@@ -35,11 +49,12 @@ public class PacketPlayInAdvancements implements Packet<PacketListenerPlayIn> {
     }
 
     public PacketPlayInAdvancements.Status c() {
-        return this.a;
+        return this.action;
     }
 
+    @Nullable
     public MinecraftKey d() {
-        return this.b;
+        return this.tab;
     }
 
     public static enum Status {

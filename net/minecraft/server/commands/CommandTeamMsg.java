@@ -22,8 +22,10 @@ import net.minecraft.world.scores.ScoreboardTeam;
 
 public class CommandTeamMsg {
 
-    private static final ChatModifier a = ChatModifier.a.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.type.team.hover"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/teammsg "));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.teammsg.failed.noteam"));
+    private static final ChatModifier SUGGEST_STYLE = ChatModifier.EMPTY.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.type.team.hover"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/teammsg "));
+    private static final SimpleCommandExceptionType ERROR_NOT_ON_TEAM = new SimpleCommandExceptionType(new ChatMessage("commands.teammsg.failed.noteam"));
+
+    public CommandTeamMsg() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = commanddispatcher.register((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("teammsg").then(net.minecraft.commands.CommandDispatcher.a("message", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
@@ -38,9 +40,9 @@ public class CommandTeamMsg {
         ScoreboardTeam scoreboardteam = (ScoreboardTeam) entity.getScoreboardTeam();
 
         if (scoreboardteam == null) {
-            throw CommandTeamMsg.b.create();
+            throw CommandTeamMsg.ERROR_NOT_ON_TEAM.create();
         } else {
-            IChatMutableComponent ichatmutablecomponent = scoreboardteam.d().c(CommandTeamMsg.a);
+            IChatMutableComponent ichatmutablecomponent = scoreboardteam.d().c(CommandTeamMsg.SUGGEST_STYLE);
             List<EntityPlayer> list = commandlistenerwrapper.getServer().getPlayerList().getPlayers();
             Iterator iterator = list.iterator();
 

@@ -6,14 +6,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockTwistingVinesPlant extends BlockGrowingStem {
 
-    public static final VoxelShape d = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    public static final VoxelShape SHAPE = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public BlockTwistingVinesPlant(BlockBase.Info blockbase_info) {
-        super(blockbase_info, EnumDirection.UP, BlockTwistingVinesPlant.d, false);
+        super(blockbase_info, EnumDirection.UP, BlockTwistingVinesPlant.SHAPE, false);
     }
 
     @Override
-    protected BlockGrowingTop c() {
+    protected BlockGrowingTop d() {
         return (BlockGrowingTop) Blocks.TWISTING_VINES;
     }
 }

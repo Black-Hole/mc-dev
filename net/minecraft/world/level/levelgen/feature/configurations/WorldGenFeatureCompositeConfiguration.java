@@ -10,27 +10,27 @@ import net.minecraft.world.level.levelgen.placement.WorldGenDecoratorConfigured;
 
 public class WorldGenFeatureCompositeConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureCompositeConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureConfigured.b.fieldOf("feature").forGetter((worldgenfeaturecompositeconfiguration) -> {
-            return worldgenfeaturecompositeconfiguration.b;
-        }), WorldGenDecoratorConfigured.a.fieldOf("decorator").forGetter((worldgenfeaturecompositeconfiguration) -> {
-            return worldgenfeaturecompositeconfiguration.c;
+    public static final Codec<WorldGenFeatureCompositeConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureConfigured.CODEC.fieldOf("feature").forGetter((worldgenfeaturecompositeconfiguration) -> {
+            return worldgenfeaturecompositeconfiguration.feature;
+        }), WorldGenDecoratorConfigured.CODEC.fieldOf("decorator").forGetter((worldgenfeaturecompositeconfiguration) -> {
+            return worldgenfeaturecompositeconfiguration.decorator;
         })).apply(instance, WorldGenFeatureCompositeConfiguration::new);
     });
-    public final Supplier<WorldGenFeatureConfigured<?, ?>> b;
-    public final WorldGenDecoratorConfigured<?> c;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> feature;
+    public final WorldGenDecoratorConfigured<?> decorator;
 
     public WorldGenFeatureCompositeConfiguration(Supplier<WorldGenFeatureConfigured<?, ?>> supplier, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured) {
-        this.b = supplier;
-        this.c = worldgendecoratorconfigured;
+        this.feature = supplier;
+        this.decorator = worldgendecoratorconfigured;
     }
 
     public String toString() {
-        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(((WorldGenFeatureConfigured) this.b.get()).b()), this.c);
+        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(((WorldGenFeatureConfigured) this.feature.get()).b()), this.decorator);
     }
 
     @Override
-    public Stream<WorldGenFeatureConfigured<?, ?>> an_() {
-        return ((WorldGenFeatureConfigured) this.b.get()).d();
+    public Stream<WorldGenFeatureConfigured<?, ?>> ab_() {
+        return ((WorldGenFeatureConfigured) this.feature.get()).d();
     }
 }

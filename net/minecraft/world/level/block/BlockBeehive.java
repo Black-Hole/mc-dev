@@ -8,11 +8,16 @@ import net.minecraft.SystemUtils;
 import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffects;
+import net.minecraft.stats.StatisticList;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagsBlock;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +30,7 @@ import net.minecraft.world.entity.monster.EntityCreeper;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.projectile.EntityWitherSkull;
 import net.minecraft.world.entity.vehicle.EntityMinecartTNT;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockActionContext;
@@ -32,30 +38,35 @@ import net.minecraft.world.item.enchantment.EnchantmentManager;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GeneratorAccess;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.BlockStateList;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.block.state.properties.BlockProperties;
 import net.minecraft.world.level.block.state.properties.BlockStateDirection;
 import net.minecraft.world.level.block.state.properties.BlockStateInteger;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 import net.minecraft.world.phys.AxisAlignedBB;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockBeehive extends BlockTileEntity {
 
-    private static final EnumDirection[] c = new EnumDirection[]{EnumDirection.WEST, EnumDirection.EAST, EnumDirection.SOUTH};
-    public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
-    public static final BlockStateInteger b = BlockProperties.au;
+    private static final EnumDirection[] SPAWN_DIRECTIONS = new EnumDirection[]{EnumDirection.WEST, EnumDirection.EAST, EnumDirection.SOUTH};
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    public static final BlockStateInteger HONEY_LEVEL = BlockProperties.LEVEL_HONEY;
+    public static final int MAX_HONEY_LEVELS = 5;
+    private static final int SHEARED_HONEYCOMB_COUNT = 3;
 
     public BlockBeehive(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBeehive.b, 0)).set(BlockBeehive.a, EnumDirection.NORTH));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockBeehive.HONEY_LEVEL, 0)).set(BlockBeehive.FACING, EnumDirection.NORTH));
     }
 
     @Override
@@ -65,7 +76,7 @@ public class BlockBeehive extends BlockTileEntity {
 
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return (Integer) iblockdata.get(BlockBeehive.b);
+        return (Integer) iblockdata.get(BlockBeehive.HONEY_LEVEL);
     }
 
     @Override
@@ -80,7 +91,7 @@ public class BlockBeehive extends BlockTileEntity {
                 this.b(world, blockposition);
             }
 
-            CriterionTriggers.K.a((EntityPlayer) entityhuman, iblockdata.getBlock(), itemstack, tileentitybeehive.getBeeCount());
+            CriterionTriggers.BEE_NEST_DESTROYED.a((EntityPlayer) entityhuman, iblockdata, itemstack, tileentitybeehive.getBeeCount());
         }
 
     }
@@ -111,33 +122,41 @@ public class BlockBeehive extends BlockTileEntity {
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        int i = (Integer) iblockdata.get(BlockBeehive.b);
+        int i = (Integer) iblockdata.get(BlockBeehive.HONEY_LEVEL);
         boolean flag = false;
 
         if (i >= 5) {
-            if (itemstack.getItem() == Items.SHEARS) {
-                world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            Item item = itemstack.getItem();
+
+            if (itemstack.a(Items.SHEARS)) {
+                world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 a(world, blockposition);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.broadcastItemBreak(enumhand);
                 });
                 flag = true;
-            } else if (itemstack.getItem() == Items.GLASS_BOTTLE) {
+                world.a((Entity) entityhuman, GameEvent.SHEAR, blockposition);
+            } else if (itemstack.a(Items.GLASS_BOTTLE)) {
                 itemstack.subtract(1);
-                world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 if (itemstack.isEmpty()) {
                     entityhuman.a(enumhand, new ItemStack(Items.HONEY_BOTTLE));
-                } else if (!entityhuman.inventory.pickup(new ItemStack(Items.HONEY_BOTTLE))) {
+                } else if (!entityhuman.getInventory().pickup(new ItemStack(Items.HONEY_BOTTLE))) {
                     entityhuman.drop(new ItemStack(Items.HONEY_BOTTLE), false);
                 }
 
                 flag = true;
+                world.a((Entity) entityhuman, GameEvent.FLUID_PICKUP, blockposition);
+            }
+
+            if (!world.isClientSide() && flag) {
+                entityhuman.b(StatisticList.ITEM_USED.b(item));
             }
         }
 
         if (flag) {
             if (!BlockCampfire.a(world, blockposition)) {
-                if (this.d(world, blockposition)) {
+                if (this.c(world, blockposition)) {
                     this.b(world, blockposition);
                 }
 
@@ -152,7 +171,7 @@ public class BlockBeehive extends BlockTileEntity {
         }
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean c(World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBeehive) {
@@ -177,60 +196,107 @@ public class BlockBeehive extends BlockTileEntity {
     }
 
     public void a(World world, IBlockData iblockdata, BlockPosition blockposition) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBeehive.b, 0), 3);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBeehive.HONEY_LEVEL, 0), 3);
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Integer) iblockdata.get(BlockBeehive.HONEY_LEVEL) >= 5) {
+            for (int i = 0; i < random.nextInt(1) + 1; ++i) {
+                this.a(world, blockposition, iblockdata);
+            }
+        }
+
+    }
+
+    private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (iblockdata.getFluid().isEmpty() && world.random.nextFloat() >= 0.3F) {
+            VoxelShape voxelshape = iblockdata.getCollisionShape(world, blockposition);
+            double d0 = voxelshape.c(EnumDirection.EnumAxis.Y);
+
+            if (d0 >= 1.0D && !iblockdata.a((Tag) TagsBlock.IMPERMEABLE)) {
+                double d1 = voxelshape.b(EnumDirection.EnumAxis.Y);
+
+                if (d1 > 0.0D) {
+                    this.a(world, blockposition, voxelshape, (double) blockposition.getY() + d1 - 0.05D);
+                } else {
+                    BlockPosition blockposition1 = blockposition.down();
+                    IBlockData iblockdata1 = world.getType(blockposition1);
+                    VoxelShape voxelshape1 = iblockdata1.getCollisionShape(world, blockposition1);
+                    double d2 = voxelshape1.c(EnumDirection.EnumAxis.Y);
+
+                    if ((d2 < 1.0D || !iblockdata1.r(world, blockposition1)) && iblockdata1.getFluid().isEmpty()) {
+                        this.a(world, blockposition, voxelshape, (double) blockposition.getY() - 0.05D);
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void a(World world, BlockPosition blockposition, VoxelShape voxelshape, double d0) {
+        this.a(world, (double) blockposition.getX() + voxelshape.b(EnumDirection.EnumAxis.X), (double) blockposition.getX() + voxelshape.c(EnumDirection.EnumAxis.X), (double) blockposition.getZ() + voxelshape.b(EnumDirection.EnumAxis.Z), (double) blockposition.getZ() + voxelshape.c(EnumDirection.EnumAxis.Z), d0);
+    }
+
+    private void a(World world, double d0, double d1, double d2, double d3, double d4) {
+        world.addParticle(Particles.DRIPPING_HONEY, MathHelper.d(world.random.nextDouble(), d0, d1), d4, MathHelper.d(world.random.nextDouble(), d2, d3), 0.0D, 0.0D, 0.0D);
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockBeehive.a, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockBeehive.FACING, blockactioncontext.g().opposite());
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockBeehive.b, BlockBeehive.a);
+        blockstatelist_a.a(BlockBeehive.HONEY_LEVEL, BlockBeehive.FACING);
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityBeehive();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityBeehive(blockposition, iblockdata);
+    }
+
+    @Nullable
+    @Override
+    public <T extends TileEntity> BlockEntityTicker<T> a(World world, IBlockData iblockdata, TileEntityTypes<T> tileentitytypes) {
+        return world.isClientSide ? null : a(tileentitytypes, TileEntityTypes.BEEHIVE, TileEntityBeehive::a);
     }
 
     @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.isClientSide && entityhuman.isCreative() && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
+        if (!world.isClientSide && entityhuman.isCreative() && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityBeehive) {
                 TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
                 ItemStack itemstack = new ItemStack(this);
-                int i = (Integer) iblockdata.get(BlockBeehive.b);
+                int i = (Integer) iblockdata.get(BlockBeehive.HONEY_LEVEL);
                 boolean flag = !tileentitybeehive.isEmpty();
 
-                if (!flag && i == 0) {
-                    return;
-                }
+                if (flag || i > 0) {
+                    NBTTagCompound nbttagcompound;
 
-                NBTTagCompound nbttagcompound;
+                    if (flag) {
+                        nbttagcompound = new NBTTagCompound();
+                        nbttagcompound.set("Bees", tileentitybeehive.j());
+                        itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
+                    }
 
-                if (flag) {
                     nbttagcompound = new NBTTagCompound();
-                    nbttagcompound.set("Bees", tileentitybeehive.m());
-                    itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
+                    nbttagcompound.setInt("honey_level", i);
+                    itemstack.a("BlockStateTag", (NBTBase) nbttagcompound);
+                    EntityItem entityitem = new EntityItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack);
+
+                    entityitem.defaultPickupDelay();
+                    world.addEntity(entityitem);
                 }
-
-                nbttagcompound = new NBTTagCompound();
-                nbttagcompound.setInt("honey_level", i);
-                itemstack.a("BlockStateTag", (NBTBase) nbttagcompound);
-                EntityItem entityitem = new EntityItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack);
-
-                entityitem.defaultPickupDelay();
-                world.addEntity(entityitem);
             }
         }
 
@@ -270,6 +336,6 @@ public class BlockBeehive extends BlockTileEntity {
     }
 
     public static EnumDirection a(Random random) {
-        return (EnumDirection) SystemUtils.a((Object[]) BlockBeehive.c, random);
+        return (EnumDirection) SystemUtils.a((Object[]) BlockBeehive.SPAWN_DIRECTIONS, random);
     }
 }

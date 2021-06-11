@@ -13,7 +13,7 @@ import net.minecraft.resources.MinecraftKey;
 
 public class DataConverterPainting extends DataConverterNamedEntity {
 
-    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("donkeykong", "donkey_kong");
         hashmap.put("burningskull", "burning_skull");
         hashmap.put("skullandroses", "skull_and_roses");
@@ -29,7 +29,7 @@ public class DataConverterPainting extends DataConverterNamedEntity {
         if (optional.isPresent()) {
             String s = ((String) optional.get()).toLowerCase(Locale.ROOT);
 
-            return dynamic.set("Motive", dynamic.createString((new MinecraftKey((String) DataConverterPainting.a.getOrDefault(s, s))).toString()));
+            return dynamic.set("Motive", dynamic.createString((new MinecraftKey((String) DataConverterPainting.MAP.getOrDefault(s, s))).toString()));
         } else {
             return dynamic;
         }

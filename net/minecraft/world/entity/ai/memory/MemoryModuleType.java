@@ -21,21 +21,22 @@ import net.minecraft.world.entity.monster.hoglin.EntityHoglin;
 import net.minecraft.world.entity.monster.piglin.EntityPiglinAbstract;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.level.pathfinder.PathEntity;
+import net.minecraft.world.phys.Vec3D;
 
 public class MemoryModuleType<U> {
 
     public static final MemoryModuleType<Void> DUMMY = a("dummy");
-    public static final MemoryModuleType<GlobalPos> HOME = a("home", GlobalPos.a);
-    public static final MemoryModuleType<GlobalPos> JOB_SITE = a("job_site", GlobalPos.a);
-    public static final MemoryModuleType<GlobalPos> POTENTIAL_JOB_SITE = a("potential_job_site", GlobalPos.a);
-    public static final MemoryModuleType<GlobalPos> MEETING_POINT = a("meeting_point", GlobalPos.a);
+    public static final MemoryModuleType<GlobalPos> HOME = a("home", GlobalPos.CODEC);
+    public static final MemoryModuleType<GlobalPos> JOB_SITE = a("job_site", GlobalPos.CODEC);
+    public static final MemoryModuleType<GlobalPos> POTENTIAL_JOB_SITE = a("potential_job_site", GlobalPos.CODEC);
+    public static final MemoryModuleType<GlobalPos> MEETING_POINT = a("meeting_point", GlobalPos.CODEC);
     public static final MemoryModuleType<List<GlobalPos>> SECONDARY_JOB_SITE = a("secondary_job_site");
-    public static final MemoryModuleType<List<EntityLiving>> MOBS = a("mobs");
-    public static final MemoryModuleType<List<EntityLiving>> VISIBLE_MOBS = a("visible_mobs");
+    public static final MemoryModuleType<List<EntityLiving>> NEAREST_LIVING_ENTITIES = a("mobs");
+    public static final MemoryModuleType<List<EntityLiving>> NEAREST_VISIBLE_LIVING_ENTITIES = a("visible_mobs");
     public static final MemoryModuleType<List<EntityLiving>> VISIBLE_VILLAGER_BABIES = a("visible_villager_babies");
     public static final MemoryModuleType<List<EntityHuman>> NEAREST_PLAYERS = a("nearest_players");
     public static final MemoryModuleType<EntityHuman> NEAREST_VISIBLE_PLAYER = a("nearest_visible_player");
-    public static final MemoryModuleType<EntityHuman> NEAREST_VISIBLE_TARGETABLE_PLAYER = a("nearest_visible_targetable_player");
+    public static final MemoryModuleType<EntityHuman> NEAREST_VISIBLE_ATTACKABLE_PLAYER = a("nearest_visible_targetable_player");
     public static final MemoryModuleType<MemoryTarget> WALK_TARGET = a("walk_target");
     public static final MemoryModuleType<BehaviorPosition> LOOK_TARGET = a("look_target");
     public static final MemoryModuleType<EntityLiving> ATTACK_TARGET = a("attack_target");
@@ -51,6 +52,7 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<EntityLiving> HURT_BY_ENTITY = a("hurt_by_entity");
     public static final MemoryModuleType<EntityLiving> AVOID_TARGET = a("avoid_target");
     public static final MemoryModuleType<EntityLiving> NEAREST_HOSTILE = a("nearest_hostile");
+    public static final MemoryModuleType<EntityLiving> NEAREST_ATTACKABLE = a("nearest_attackable");
     public static final MemoryModuleType<GlobalPos> HIDING_PLACE = a("hiding_place");
     public static final MemoryModuleType<Long> HEARD_BELL_TIME = a("heard_bell_time");
     public static final MemoryModuleType<Long> CANT_REACH_WALK_TARGET_SINCE = a("cant_reach_walk_target_since");
@@ -58,10 +60,19 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Long> LAST_SLEPT = a("last_slept", Codec.LONG);
     public static final MemoryModuleType<Long> LAST_WOKEN = a("last_woken", Codec.LONG);
     public static final MemoryModuleType<Long> LAST_WORKED_AT_POI = a("last_worked_at_poi", Codec.LONG);
-    public static final MemoryModuleType<EntityAgeable> NEAREST_VISIBLE_ADULY = a("nearest_visible_adult");
+    public static final MemoryModuleType<EntityAgeable> NEAREST_VISIBLE_ADULT = a("nearest_visible_adult");
     public static final MemoryModuleType<EntityItem> NEAREST_VISIBLE_WANTED_ITEM = a("nearest_visible_wanted_item");
-    public static final MemoryModuleType<EntityInsentient> NEAREST_VISIBLE_NEMSIS = a("nearest_visible_nemesis");
-    public static final MemoryModuleType<UUID> ANGRY_AT = a("angry_at", MinecraftSerializableUUID.a);
+    public static final MemoryModuleType<EntityInsentient> NEAREST_VISIBLE_NEMESIS = a("nearest_visible_nemesis");
+    public static final MemoryModuleType<Integer> PLAY_DEAD_TICKS = a("play_dead_ticks", Codec.INT);
+    public static final MemoryModuleType<EntityHuman> TEMPTING_PLAYER = a("tempting_player");
+    public static final MemoryModuleType<Integer> TEMPTATION_COOLDOWN_TICKS = a("temptation_cooldown_ticks", Codec.INT);
+    public static final MemoryModuleType<Boolean> IS_TEMPTED = a("is_tempted", Codec.BOOL);
+    public static final MemoryModuleType<Integer> LONG_JUMP_COOLDOWN_TICKS = a("long_jump_cooling_down", Codec.INT);
+    public static final MemoryModuleType<Boolean> LONG_JUMP_MID_JUMP = a("long_jump_mid_jump");
+    public static final MemoryModuleType<Boolean> HAS_HUNTING_COOLDOWN = a("has_hunting_cooldown", Codec.BOOL);
+    public static final MemoryModuleType<Integer> RAM_COOLDOWN_TICKS = a("ram_cooldown_ticks", Codec.INT);
+    public static final MemoryModuleType<Vec3D> RAM_TARGET = a("ram_target");
+    public static final MemoryModuleType<UUID> ANGRY_AT = a("angry_at", MinecraftSerializableUUID.CODEC);
     public static final MemoryModuleType<Boolean> UNIVERSAL_ANGER = a("universal_anger", Codec.BOOL);
     public static final MemoryModuleType<Boolean> ADMIRING_ITEM = a("admiring_item", Codec.BOOL);
     public static final MemoryModuleType<Integer> TIME_TRYING_TO_REACH_ADMIRE_ITEM = a("time_trying_to_reach_admire_item");
@@ -84,10 +95,10 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Boolean> ATE_RECENTLY = a("ate_recently");
     public static final MemoryModuleType<BlockPosition> NEAREST_REPELLENT = a("nearest_repellent");
     public static final MemoryModuleType<Boolean> PACIFIED = a("pacified");
-    private final Optional<Codec<ExpirableMemory<U>>> ai;
+    private final Optional<Codec<ExpirableMemory<U>>> codec;
 
     private MemoryModuleType(Optional<Codec<U>> optional) {
-        this.ai = optional.map(ExpirableMemory::a);
+        this.codec = optional.map(ExpirableMemory::a);
     }
 
     public String toString() {
@@ -95,7 +106,7 @@ public class MemoryModuleType<U> {
     }
 
     public Optional<Codec<ExpirableMemory<U>>> getSerializer() {
-        return this.ai;
+        return this.codec;
     }
 
     private static <U> MemoryModuleType<U> a(String s, Codec<U> codec) {

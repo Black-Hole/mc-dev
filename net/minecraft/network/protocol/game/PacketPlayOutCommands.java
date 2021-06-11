@@ -14,9 +14,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,46 +31,41 @@ import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
-    private RootCommandNode<ICompletionProvider> a;
-
-    public PacketPlayOutCommands() {}
+    private static final byte MASK_TYPE = 3;
+    private static final byte FLAG_EXECUTABLE = 4;
+    private static final byte FLAG_REDIRECT = 8;
+    private static final byte FLAG_CUSTOM_SUGGESTIONS = 16;
+    private static final byte TYPE_ROOT = 0;
+    private static final byte TYPE_LITERAL = 1;
+    private static final byte TYPE_ARGUMENT = 2;
+    private final RootCommandNode<ICompletionProvider> root;
 
     public PacketPlayOutCommands(RootCommandNode<ICompletionProvider> rootcommandnode) {
-        this.a = rootcommandnode;
+        this.root = rootcommandnode;
+    }
+
+    public PacketPlayOutCommands(PacketDataSerializer packetdataserializer) {
+        List<PacketPlayOutCommands.a> list = packetdataserializer.a(PacketPlayOutCommands::b);
+
+        a(list);
+        int i = packetdataserializer.j();
+
+        this.root = (RootCommandNode) ((PacketPlayOutCommands.a) list.get(i)).node;
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        PacketPlayOutCommands.a[] apacketplayoutcommands_a = new PacketPlayOutCommands.a[packetdataserializer.i()];
+    public void a(PacketDataSerializer packetdataserializer) {
+        Object2IntMap<CommandNode<ICompletionProvider>> object2intmap = a(this.root);
+        List<CommandNode<ICompletionProvider>> list = a(object2intmap);
 
-        for (int i = 0; i < apacketplayoutcommands_a.length; ++i) {
-            apacketplayoutcommands_a[i] = c(packetdataserializer);
-        }
-
-        a(apacketplayoutcommands_a);
-        this.a = (RootCommandNode) apacketplayoutcommands_a[packetdataserializer.i()].e;
+        packetdataserializer.a((Collection) list, (packetdataserializer1, commandnode) -> {
+            a(packetdataserializer1, commandnode, (Map) object2intmap);
+        });
+        packetdataserializer.d(object2intmap.get(this.root));
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        Object2IntMap<CommandNode<ICompletionProvider>> object2intmap = a(this.a);
-        CommandNode<ICompletionProvider>[] acommandnode = a(object2intmap);
-
-        packetdataserializer.d(acommandnode.length);
-        CommandNode[] acommandnode1 = acommandnode;
-        int i = acommandnode.length;
-
-        for (int j = 0; j < i; ++j) {
-            CommandNode<ICompletionProvider> commandnode = acommandnode1[j];
-
-            a(packetdataserializer, commandnode, object2intmap);
-        }
-
-        packetdataserializer.d(object2intmap.get(this.a));
-    }
-
-    private static void a(PacketPlayOutCommands.a[] apacketplayoutcommands_a) {
-        ArrayList arraylist = Lists.newArrayList(apacketplayoutcommands_a);
+    private static void a(List<PacketPlayOutCommands.a> list) {
+        ArrayList arraylist = Lists.newArrayList(list);
 
         boolean flag;
 
@@ -79,7 +75,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
             }
 
             flag = arraylist.removeIf((packetplayoutcommands_a) -> {
-                return packetplayoutcommands_a.a(apacketplayoutcommands_a);
+                return packetplayoutcommands_a.a(list);
             });
         } while (flag);
 
@@ -109,22 +105,25 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         return object2intmap;
     }
 
-    private static CommandNode<ICompletionProvider>[] a(Object2IntMap<CommandNode<ICompletionProvider>> object2intmap) {
-        CommandNode<ICompletionProvider>[] acommandnode = (CommandNode[]) (new CommandNode[object2intmap.size()]);
+    private static List<CommandNode<ICompletionProvider>> a(Object2IntMap<CommandNode<ICompletionProvider>> object2intmap) {
+        ObjectArrayList<CommandNode<ICompletionProvider>> objectarraylist = new ObjectArrayList(object2intmap.size());
 
-        Entry entry;
+        objectarraylist.size(object2intmap.size());
+        ObjectIterator objectiterator = Object2IntMaps.fastIterable(object2intmap).iterator();
 
-        for (ObjectIterator objectiterator = Object2IntMaps.fastIterable(object2intmap).iterator(); objectiterator.hasNext(); acommandnode[entry.getIntValue()] = (CommandNode) entry.getKey()) {
-            entry = (Entry) objectiterator.next();
+        while (objectiterator.hasNext()) {
+            Entry<CommandNode<ICompletionProvider>> entry = (Entry) objectiterator.next();
+
+            objectarraylist.set(entry.getIntValue(), (CommandNode) entry.getKey());
         }
 
-        return acommandnode;
+        return objectarraylist;
     }
 
-    private static PacketPlayOutCommands.a c(PacketDataSerializer packetdataserializer) {
+    private static PacketPlayOutCommands.a b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
-        int[] aint = packetdataserializer.b();
-        int i = (b0 & 8) != 0 ? packetdataserializer.i() : 0;
+        int[] aint = packetdataserializer.c();
+        int i = (b0 & 8) != 0 ? packetdataserializer.j() : 0;
         ArgumentBuilder<ICompletionProvider, ?> argumentbuilder = a(packetdataserializer, b0);
 
         return new PacketPlayOutCommands.a(argumentbuilder, b0, i, aint);
@@ -135,7 +134,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         int i = b0 & 3;
 
         if (i == 2) {
-            String s = packetdataserializer.e(32767);
+            String s = packetdataserializer.p();
             ArgumentType<?> argumenttype = ArgumentRegistry.a(packetdataserializer);
 
             if (argumenttype == null) {
@@ -144,13 +143,13 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
                 RequiredArgumentBuilder<ICompletionProvider, ?> requiredargumentbuilder = RequiredArgumentBuilder.argument(s, argumenttype);
 
                 if ((b0 & 16) != 0) {
-                    requiredargumentbuilder.suggests(CompletionProviders.a(packetdataserializer.p()));
+                    requiredargumentbuilder.suggests(CompletionProviders.a(packetdataserializer.q()));
                 }
 
                 return requiredargumentbuilder;
             }
         } else {
-            return i == 1 ? LiteralArgumentBuilder.literal(packetdataserializer.e(32767)) : null;
+            return i == 1 ? LiteralArgumentBuilder.literal(packetdataserializer.p()) : null;
         }
     }
 
@@ -212,47 +211,51 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    static class a {
+    public RootCommandNode<ICompletionProvider> b() {
+        return this.root;
+    }
+
+    private static class a {
 
         @Nullable
-        private final ArgumentBuilder<ICompletionProvider, ?> a;
-        private final byte b;
-        private final int c;
-        private final int[] d;
+        private final ArgumentBuilder<ICompletionProvider, ?> builder;
+        private final byte flags;
+        private final int redirect;
+        private final int[] children;
         @Nullable
-        private CommandNode<ICompletionProvider> e;
+        CommandNode<ICompletionProvider> node;
 
-        private a(@Nullable ArgumentBuilder<ICompletionProvider, ?> argumentbuilder, byte b0, int i, int[] aint) {
-            this.a = argumentbuilder;
-            this.b = b0;
-            this.c = i;
-            this.d = aint;
+        a(@Nullable ArgumentBuilder<ICompletionProvider, ?> argumentbuilder, byte b0, int i, int[] aint) {
+            this.builder = argumentbuilder;
+            this.flags = b0;
+            this.redirect = i;
+            this.children = aint;
         }
 
-        public boolean a(PacketPlayOutCommands.a[] apacketplayoutcommands_a) {
-            if (this.e == null) {
-                if (this.a == null) {
-                    this.e = new RootCommandNode();
+        public boolean a(List<PacketPlayOutCommands.a> list) {
+            if (this.node == null) {
+                if (this.builder == null) {
+                    this.node = new RootCommandNode();
                 } else {
-                    if ((this.b & 8) != 0) {
-                        if (apacketplayoutcommands_a[this.c].e == null) {
+                    if ((this.flags & 8) != 0) {
+                        if (((PacketPlayOutCommands.a) list.get(this.redirect)).node == null) {
                             return false;
                         }
 
-                        this.a.redirect(apacketplayoutcommands_a[this.c].e);
+                        this.builder.redirect(((PacketPlayOutCommands.a) list.get(this.redirect)).node);
                     }
 
-                    if ((this.b & 4) != 0) {
-                        this.a.executes((commandcontext) -> {
+                    if ((this.flags & 4) != 0) {
+                        this.builder.executes((commandcontext) -> {
                             return 0;
                         });
                     }
 
-                    this.e = this.a.build();
+                    this.node = this.builder.build();
                 }
             }
 
-            int[] aint = this.d;
+            int[] aint = this.children;
             int i = aint.length;
 
             int j;
@@ -260,20 +263,20 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
             for (k = 0; k < i; ++k) {
                 j = aint[k];
-                if (apacketplayoutcommands_a[j].e == null) {
+                if (((PacketPlayOutCommands.a) list.get(j)).node == null) {
                     return false;
                 }
             }
 
-            aint = this.d;
+            aint = this.children;
             i = aint.length;
 
             for (k = 0; k < i; ++k) {
                 j = aint[k];
-                CommandNode<ICompletionProvider> commandnode = apacketplayoutcommands_a[j].e;
+                CommandNode<ICompletionProvider> commandnode = ((PacketPlayOutCommands.a) list.get(j)).node;
 
                 if (!(commandnode instanceof RootCommandNode)) {
-                    this.e.addChild(commandnode);
+                    this.node.addChild(commandnode);
                 }
             }
 

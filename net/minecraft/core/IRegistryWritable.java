@@ -15,4 +15,6 @@ public abstract class IRegistryWritable<T> extends IRegistry<T> {
     public abstract <V extends T> V a(ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle);
 
     public abstract <V extends T> V a(OptionalInt optionalint, ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle);
+
+    public abstract boolean e();
 }

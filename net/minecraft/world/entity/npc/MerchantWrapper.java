@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.inventory.InventoryMerchant;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.IMerchant;
 import net.minecraft.world.item.trading.MerchantRecipe;
@@ -13,20 +12,17 @@ import net.minecraft.world.level.World;
 
 public class MerchantWrapper implements IMerchant {
 
-    private final InventoryMerchant a;
-    private final EntityHuman b;
-    private MerchantRecipeList c = new MerchantRecipeList();
-    private int d;
+    private final EntityHuman source;
+    private MerchantRecipeList offers = new MerchantRecipeList();
+    private int xp;
 
     public MerchantWrapper(EntityHuman entityhuman) {
-        this.b = entityhuman;
-        this.a = new InventoryMerchant(this);
+        this.source = entityhuman;
     }
 
-    @Nullable
     @Override
     public EntityHuman getTrader() {
-        return this.b;
+        return this.source;
     }
 
     @Override
@@ -34,7 +30,12 @@ public class MerchantWrapper implements IMerchant {
 
     @Override
     public MerchantRecipeList getOffers() {
-        return this.c;
+        return this.offers;
+    }
+
+    @Override
+    public void a(MerchantRecipeList merchantrecipelist) {
+        this.offers = merchantrecipelist;
     }
 
     @Override
@@ -43,21 +44,21 @@ public class MerchantWrapper implements IMerchant {
     }
 
     @Override
-    public void k(ItemStack itemstack) {}
+    public void m(ItemStack itemstack) {}
 
     @Override
     public World getWorld() {
-        return this.b.world;
+        return this.source.level;
     }
 
     @Override
     public int getExperience() {
-        return this.d;
+        return this.xp;
     }
 
     @Override
     public void setForcedExperience(int i) {
-        this.d = i;
+        this.xp = i;
     }
 
     @Override
@@ -67,6 +68,6 @@ public class MerchantWrapper implements IMerchant {
 
     @Override
     public SoundEffect getTradeSound() {
-        return SoundEffects.ENTITY_VILLAGER_YES;
+        return SoundEffects.VILLAGER_YES;
     }
 }

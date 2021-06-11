@@ -20,8 +20,8 @@ import net.minecraft.resources.MinecraftKey;
 
 public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
-    private static final Collection<String> b = Arrays.asList("foo", "foo:bar", "particle with options");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("foo", "foo:bar", "particle with options");
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_PARTICLE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("particle.notFound", new Object[]{object});
     });
 
@@ -40,13 +40,13 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentParticle.b;
+        return ArgumentParticle.EXAMPLES;
     }
 
     public static ParticleParam b(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
         Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
-            return ArgumentParticle.a.create(minecraftkey);
+            return ArgumentParticle.ERROR_UNKNOWN_PARTICLE.create(minecraftkey);
         });
 
         return a(stringreader, particle);

@@ -5,13 +5,13 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalWrapped extends PathfinderGoal {
 
-    private final PathfinderGoal a;
-    private final int b;
-    private boolean c;
+    private final PathfinderGoal goal;
+    private final int priority;
+    private boolean isRunning;
 
     public PathfinderGoalWrapped(int i, PathfinderGoal pathfindergoal) {
-        this.b = i;
-        this.a = pathfindergoal;
+        this.priority = i;
+        this.goal = pathfindergoal;
     }
 
     public boolean a(PathfinderGoalWrapped pathfindergoalwrapped) {
@@ -20,67 +20,67 @@ public class PathfinderGoalWrapped extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.a();
+        return this.goal.a();
     }
 
     @Override
     public boolean b() {
-        return this.a.b();
+        return this.goal.b();
     }
 
     @Override
     public boolean C_() {
-        return this.a.C_();
+        return this.goal.C_();
     }
 
     @Override
     public void c() {
-        if (!this.c) {
-            this.c = true;
-            this.a.c();
+        if (!this.isRunning) {
+            this.isRunning = true;
+            this.goal.c();
         }
     }
 
     @Override
     public void d() {
-        if (this.c) {
-            this.c = false;
-            this.a.d();
+        if (this.isRunning) {
+            this.isRunning = false;
+            this.goal.d();
         }
     }
 
     @Override
     public void e() {
-        this.a.e();
+        this.goal.e();
     }
 
     @Override
     public void a(EnumSet<PathfinderGoal.Type> enumset) {
-        this.a.a(enumset);
+        this.goal.a(enumset);
     }
 
     @Override
     public EnumSet<PathfinderGoal.Type> i() {
-        return this.a.i();
+        return this.goal.i();
     }
 
     public boolean g() {
-        return this.c;
+        return this.isRunning;
     }
 
     public int h() {
-        return this.b;
+        return this.priority;
     }
 
     public PathfinderGoal j() {
-        return this.a;
+        return this.goal;
     }
 
     public boolean equals(@Nullable Object object) {
-        return this == object ? true : (object != null && this.getClass() == object.getClass() ? this.a.equals(((PathfinderGoalWrapped) object).a) : false);
+        return this == object ? true : (object != null && this.getClass() == object.getClass() ? this.goal.equals(((PathfinderGoalWrapped) object).goal) : false);
     }
 
     public int hashCode() {
-        return this.a.hashCode();
+        return this.goal.hashCode();
     }
 }

@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 
 public class DataConverterKeybind extends DataFix {
 
-    private static final Int2ObjectMap<String> a = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
+    public static final String KEY_UNKNOWN = "key.unknown";
+    private static final Int2ObjectMap<String> MAP = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
         int2objectopenhashmap.put(0, "key.unknown");
         int2objectopenhashmap.put(11, "key.0");
         int2objectopenhashmap.put(2, "key.1");
@@ -155,14 +156,14 @@ public class DataConverterKeybind extends DataFix {
                                     s = "key.mouse." + (j + 1);
                                 }
 
-                                return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s));
+                                return Pair.of((Dynamic) entry.getKey(), ((Dynamic) entry.getValue()).createString(s));
                             } else {
-                                String s1 = (String) DataConverterKeybind.a.getOrDefault(i, "key.unknown");
+                                String s1 = (String) DataConverterKeybind.MAP.getOrDefault(i, "key.unknown");
 
-                                return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s1));
+                                return Pair.of((Dynamic) entry.getKey(), ((Dynamic) entry.getValue()).createString(s1));
                             }
                         } else {
-                            return Pair.of(entry.getKey(), entry.getValue());
+                            return Pair.of((Dynamic) entry.getKey(), (Dynamic) entry.getValue());
                         }
                     }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
                 }).result().orElse(dynamic);

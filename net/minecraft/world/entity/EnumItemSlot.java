@@ -4,32 +4,36 @@ public enum EnumItemSlot {
 
     MAINHAND(EnumItemSlot.Function.HAND, 0, 0, "mainhand"), OFFHAND(EnumItemSlot.Function.HAND, 1, 5, "offhand"), FEET(EnumItemSlot.Function.ARMOR, 0, 1, "feet"), LEGS(EnumItemSlot.Function.ARMOR, 1, 2, "legs"), CHEST(EnumItemSlot.Function.ARMOR, 2, 3, "chest"), HEAD(EnumItemSlot.Function.ARMOR, 3, 4, "head");
 
-    private final EnumItemSlot.Function g;
-    private final int h;
-    private final int i;
-    private final String j;
+    private final EnumItemSlot.Function type;
+    private final int index;
+    private final int filterFlag;
+    private final String name;
 
     private EnumItemSlot(EnumItemSlot.Function enumitemslot_function, int i, int j, String s) {
-        this.g = enumitemslot_function;
-        this.h = i;
-        this.i = j;
-        this.j = s;
+        this.type = enumitemslot_function;
+        this.index = i;
+        this.filterFlag = j;
+        this.name = s;
     }
 
     public EnumItemSlot.Function a() {
-        return this.g;
+        return this.type;
     }
 
     public int b() {
-        return this.h;
+        return this.index;
+    }
+
+    public int a(int i) {
+        return i + this.index;
     }
 
     public int getSlotFlag() {
-        return this.i;
+        return this.filterFlag;
     }
 
     public String getSlotName() {
-        return this.j;
+        return this.name;
     }
 
     public static EnumItemSlot fromName(String s) {

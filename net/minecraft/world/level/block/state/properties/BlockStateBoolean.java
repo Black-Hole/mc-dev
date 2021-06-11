@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class BlockStateBoolean extends IBlockState<Boolean> {
 
-    private final ImmutableSet<Boolean> a = ImmutableSet.of(true, false);
+    private final ImmutableSet<Boolean> values = ImmutableSet.of(true, false);
 
     protected BlockStateBoolean(String s) {
         super(s, Boolean.class);
@@ -14,7 +14,7 @@ public class BlockStateBoolean extends IBlockState<Boolean> {
 
     @Override
     public Collection<Boolean> getValues() {
-        return this.a;
+        return this.values;
     }
 
     public static BlockStateBoolean of(String s) {
@@ -37,7 +37,7 @@ public class BlockStateBoolean extends IBlockState<Boolean> {
         } else if (object instanceof BlockStateBoolean && super.equals(object)) {
             BlockStateBoolean blockstateboolean = (BlockStateBoolean) object;
 
-            return this.a.equals(blockstateboolean.a);
+            return this.values.equals(blockstateboolean.values);
         } else {
             return false;
         }
@@ -45,6 +45,6 @@ public class BlockStateBoolean extends IBlockState<Boolean> {
 
     @Override
     public int b() {
-        return 31 * super.b() + this.a.hashCode();
+        return 31 * super.b() + this.values.hashCode();
     }
 }

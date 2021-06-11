@@ -11,18 +11,22 @@ import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.BlockGrowingTop;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class WorldGenFeatureWeepingVines extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final EnumDirection[] a = EnumDirection.values();
+    private static final EnumDirection[] DIRECTIONS = EnumDirection.values();
 
     public WorldGenFeatureWeepingVines(Codec<WorldGenFeatureEmptyConfiguration> codec) {
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+
         if (!generatoraccessseed.isEmpty(blockposition)) {
             return false;
         } else {
@@ -47,7 +51,7 @@ public class WorldGenFeatureWeepingVines extends WorldGenerator<WorldGenFeatureE
             blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, random.nextInt(6) - random.nextInt(6), random.nextInt(2) - random.nextInt(5), random.nextInt(6) - random.nextInt(6));
             if (generatoraccess.isEmpty(blockposition_mutableblockposition)) {
                 int j = 0;
-                EnumDirection[] aenumdirection = WorldGenFeatureWeepingVines.a;
+                EnumDirection[] aenumdirection = WorldGenFeatureWeepingVines.DIRECTIONS;
                 int k = aenumdirection.length;
 
                 for (int l = 0; l < k; ++l) {
@@ -104,7 +108,7 @@ public class WorldGenFeatureWeepingVines extends WorldGenerator<WorldGenFeatureE
         for (int l = 0; l <= i; ++l) {
             if (generatoraccess.isEmpty(blockposition_mutableblockposition)) {
                 if (l == i || !generatoraccess.isEmpty(blockposition_mutableblockposition.down())) {
-                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, (IBlockData) Blocks.WEEPING_VINES.getBlockData().set(BlockGrowingTop.d, MathHelper.nextInt(random, j, k)), 2);
+                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, (IBlockData) Blocks.WEEPING_VINES.getBlockData().set(BlockGrowingTop.AGE, MathHelper.nextInt(random, j, k)), 2);
                     break;
                 }
 

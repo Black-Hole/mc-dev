@@ -12,17 +12,17 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionKilledByPlayer implements LootItemCondition {
 
-    private static final LootItemConditionKilledByPlayer a = new LootItemConditionKilledByPlayer();
+    static final LootItemConditionKilledByPlayer INSTANCE = new LootItemConditionKilledByPlayer();
 
     private LootItemConditionKilledByPlayer() {}
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.f;
+    public LootItemConditionType a() {
+        return LootItemConditions.KILLED_BY_PLAYER;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.LAST_DAMAGE_PLAYER);
     }
 
@@ -32,7 +32,7 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
 
     public static LootItemCondition.a c() {
         return () -> {
-            return LootItemConditionKilledByPlayer.a;
+            return LootItemConditionKilledByPlayer.INSTANCE;
         };
     }
 
@@ -44,7 +44,7 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
 
         @Override
         public LootItemConditionKilledByPlayer a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return LootItemConditionKilledByPlayer.a;
+            return LootItemConditionKilledByPlayer.INSTANCE;
         }
     }
 }

@@ -11,23 +11,23 @@ import net.minecraft.world.level.material.Material;
 
 public enum BlockPropertyInstrument implements INamable {
 
-    HARP("harp", SoundEffects.BLOCK_NOTE_BLOCK_HARP), BASEDRUM("basedrum", SoundEffects.BLOCK_NOTE_BLOCK_BASEDRUM), SNARE("snare", SoundEffects.BLOCK_NOTE_BLOCK_SNARE), HAT("hat", SoundEffects.BLOCK_NOTE_BLOCK_HAT), BASS("bass", SoundEffects.BLOCK_NOTE_BLOCK_BASS), FLUTE("flute", SoundEffects.BLOCK_NOTE_BLOCK_FLUTE), BELL("bell", SoundEffects.BLOCK_NOTE_BLOCK_BELL), GUITAR("guitar", SoundEffects.BLOCK_NOTE_BLOCK_GUITAR), CHIME("chime", SoundEffects.BLOCK_NOTE_BLOCK_CHIME), XYLOPHONE("xylophone", SoundEffects.BLOCK_NOTE_BLOCK_XYLOPHONE), IRON_XYLOPHONE("iron_xylophone", SoundEffects.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE), COW_BELL("cow_bell", SoundEffects.BLOCK_NOTE_BLOCK_COW_BELL), DIDGERIDOO("didgeridoo", SoundEffects.BLOCK_NOTE_BLOCK_DIDGERIDOO), BIT("bit", SoundEffects.BLOCK_NOTE_BLOCK_BIT), BANJO("banjo", SoundEffects.BLOCK_NOTE_BLOCK_BANJO), PLING("pling", SoundEffects.BLOCK_NOTE_BLOCK_PLING);
+    HARP("harp", SoundEffects.NOTE_BLOCK_HARP), BASEDRUM("basedrum", SoundEffects.NOTE_BLOCK_BASEDRUM), SNARE("snare", SoundEffects.NOTE_BLOCK_SNARE), HAT("hat", SoundEffects.NOTE_BLOCK_HAT), BASS("bass", SoundEffects.NOTE_BLOCK_BASS), FLUTE("flute", SoundEffects.NOTE_BLOCK_FLUTE), BELL("bell", SoundEffects.NOTE_BLOCK_BELL), GUITAR("guitar", SoundEffects.NOTE_BLOCK_GUITAR), CHIME("chime", SoundEffects.NOTE_BLOCK_CHIME), XYLOPHONE("xylophone", SoundEffects.NOTE_BLOCK_XYLOPHONE), IRON_XYLOPHONE("iron_xylophone", SoundEffects.NOTE_BLOCK_IRON_XYLOPHONE), COW_BELL("cow_bell", SoundEffects.NOTE_BLOCK_COW_BELL), DIDGERIDOO("didgeridoo", SoundEffects.NOTE_BLOCK_DIDGERIDOO), BIT("bit", SoundEffects.NOTE_BLOCK_BIT), BANJO("banjo", SoundEffects.NOTE_BLOCK_BANJO), PLING("pling", SoundEffects.NOTE_BLOCK_PLING);
 
-    private final String q;
-    private final SoundEffect r;
+    private final String name;
+    private final SoundEffect soundEvent;
 
     private BlockPropertyInstrument(String s, SoundEffect soundeffect) {
-        this.q = s;
-        this.r = soundeffect;
+        this.name = s;
+        this.soundEvent = soundeffect;
     }
 
     @Override
     public String getName() {
-        return this.q;
+        return this.name;
     }
 
-    public SoundEffect b() {
-        return this.r;
+    public SoundEffect a() {
+        return this.soundEvent;
     }
 
     public static BlockPropertyInstrument a(IBlockData iblockdata) {
@@ -56,7 +56,7 @@ public enum BlockPropertyInstrument implements INamable {
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material == Material.STONE ? BlockPropertyInstrument.BASEDRUM : (material == Material.SAND ? BlockPropertyInstrument.SNARE : (material == Material.SHATTERABLE ? BlockPropertyInstrument.HAT : (material != Material.WOOD && material != Material.NETHER_WOOD ? BlockPropertyInstrument.HARP : BlockPropertyInstrument.BASS)));
+            return material == Material.STONE ? BlockPropertyInstrument.BASEDRUM : (material == Material.SAND ? BlockPropertyInstrument.SNARE : (material == Material.GLASS ? BlockPropertyInstrument.HAT : (material != Material.WOOD && material != Material.NETHER_WOOD ? BlockPropertyInstrument.HARP : BlockPropertyInstrument.BASS)));
         }
     }
 }

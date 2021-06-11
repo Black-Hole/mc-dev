@@ -13,48 +13,48 @@ import net.minecraft.world.level.World;
 
 public class PathfinderGoalBeg extends PathfinderGoal {
 
-    private final EntityWolf a;
-    private EntityHuman b;
-    private final World c;
-    private final float d;
-    private int e;
-    private final PathfinderTargetCondition f;
+    private final EntityWolf wolf;
+    private EntityHuman player;
+    private final World level;
+    private final float lookDistance;
+    private int lookTime;
+    private final PathfinderTargetCondition begTargeting;
 
     public PathfinderGoalBeg(EntityWolf entitywolf, float f) {
-        this.a = entitywolf;
-        this.c = entitywolf.world;
-        this.d = f;
-        this.f = (new PathfinderTargetCondition()).a((double) f).a().b().d();
+        this.wolf = entitywolf;
+        this.level = entitywolf.level;
+        this.lookDistance = f;
+        this.begTargeting = PathfinderTargetCondition.b().a((double) f);
         this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
     }
 
     @Override
     public boolean a() {
-        this.b = this.c.a(this.f, (EntityLiving) this.a);
-        return this.b == null ? false : this.a(this.b);
+        this.player = this.level.a(this.begTargeting, (EntityLiving) this.wolf);
+        return this.player == null ? false : this.a(this.player);
     }
 
     @Override
     public boolean b() {
-        return !this.b.isAlive() ? false : (this.a.h((Entity) this.b) > (double) (this.d * this.d) ? false : this.e > 0 && this.a(this.b));
+        return !this.player.isAlive() ? false : (this.wolf.f((Entity) this.player) > (double) (this.lookDistance * this.lookDistance) ? false : this.lookTime > 0 && this.a(this.player));
     }
 
     @Override
     public void c() {
-        this.a.x(true);
-        this.e = 40 + this.a.getRandom().nextInt(40);
+        this.wolf.z(true);
+        this.lookTime = 40 + this.wolf.getRandom().nextInt(40);
     }
 
     @Override
     public void d() {
-        this.a.x(false);
-        this.b = null;
+        this.wolf.z(false);
+        this.player = null;
     }
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX(), this.b.getHeadY(), this.b.locZ(), 10.0F, (float) this.a.O());
-        --this.e;
+        this.wolf.getControllerLook().a(this.player.locX(), this.player.getHeadY(), this.player.locZ(), 10.0F, (float) this.wolf.eY());
+        --this.lookTime;
     }
 
     private boolean a(EntityHuman entityhuman) {
@@ -65,11 +65,11 @@ public class PathfinderGoalBeg extends PathfinderGoal {
             EnumHand enumhand = aenumhand[j];
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            if (this.a.isTamed() && itemstack.getItem() == Items.BONE) {
+            if (this.wolf.isTamed() && itemstack.a(Items.BONE)) {
                 return true;
             }
 
-            if (this.a.k(itemstack)) {
+            if (this.wolf.n(itemstack)) {
                 return true;
             }
         }

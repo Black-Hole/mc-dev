@@ -16,7 +16,6 @@ import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockActionContext;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBarrel;
@@ -30,12 +29,12 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockBarrel extends BlockTileEntity {
 
-    public static final BlockStateDirection a = BlockProperties.M;
-    public static final BlockStateBoolean OPEN = BlockProperties.u;
+    public static final BlockStateDirection FACING = BlockProperties.FACING;
+    public static final BlockStateBoolean OPEN = BlockProperties.OPEN;
 
     public BlockBarrel(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.OPEN, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockBarrel.FACING, EnumDirection.NORTH)).set(BlockBarrel.OPEN, false));
     }
 
     @Override
@@ -81,12 +80,12 @@ public class BlockBarrel extends BlockTileEntity {
 
     @Nullable
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityBarrel();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityBarrel(blockposition, iblockdata);
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -114,21 +113,21 @@ public class BlockBarrel extends BlockTileEntity {
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockBarrel.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBarrel.a)));
+        return (IBlockData) iblockdata.set(BlockBarrel.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBarrel.FACING)));
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBarrel.a)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBarrel.FACING)));
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockBarrel.a, BlockBarrel.OPEN);
+        blockstatelist_a.a(BlockBarrel.FACING, BlockBarrel.OPEN);
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockBarrel.a, blockactioncontext.d().opposite());
+        return (IBlockData) this.getBlockData().set(BlockBarrel.FACING, blockactioncontext.d().opposite());
     }
 }

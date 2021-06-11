@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.DataFixUtils;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import net.minecraft.EnumChatFormat;
@@ -14,6 +16,12 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.world.entity.Entity;
 
 public class ChatComponentUtils {
+
+    public static final String DEFAULT_SEPARATOR_TEXT = ", ";
+    public static final IChatBaseComponent DEFAULT_SEPARATOR = (new ChatComponentText(", ")).a(EnumChatFormat.GRAY);
+    public static final IChatBaseComponent DEFAULT_NO_STYLE_SEPARATOR = new ChatComponentText(", ");
+
+    public ChatComponentUtils() {}
 
     public static IChatMutableComponent a(IChatMutableComponent ichatmutablecomponent, ChatModifier chatmodifier) {
         if (chatmodifier.g()) {
@@ -23,6 +31,10 @@ public class ChatComponentUtils {
 
             return chatmodifier1.g() ? ichatmutablecomponent.setChatModifier(chatmodifier) : (chatmodifier1.equals(chatmodifier) ? ichatmutablecomponent : ichatmutablecomponent.setChatModifier(chatmodifier1.setChatModifier(chatmodifier)));
         }
+    }
+
+    public static Optional<IChatMutableComponent> a(@Nullable CommandListenerWrapper commandlistenerwrapper, Optional<IChatBaseComponent> optional, @Nullable Entity entity, int i) throws CommandSyntaxException {
+        return optional.isPresent() ? Optional.of(filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) optional.get(), entity, i)) : Optional.empty();
     }
 
     public static IChatMutableComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity, int i) throws CommandSyntaxException {
@@ -70,9 +82,9 @@ public class ChatComponentUtils {
 
     public static <T extends Comparable<T>> IChatBaseComponent a(Collection<T> collection, Function<T, IChatBaseComponent> function) {
         if (collection.isEmpty()) {
-            return ChatComponentText.d;
+            return ChatComponentText.EMPTY;
         } else if (collection.size() == 1) {
-            return (IChatBaseComponent) function.apply(collection.iterator().next());
+            return (IChatBaseComponent) function.apply((Comparable) collection.iterator().next());
         } else {
             List<T> list = Lists.newArrayList(collection);
 
@@ -81,7 +93,19 @@ public class ChatComponentUtils {
         }
     }
 
-    public static <T> IChatMutableComponent b(Collection<T> collection, Function<T, IChatBaseComponent> function) {
+    public static <T> IChatBaseComponent b(Collection<? extends T> collection, Function<T, IChatBaseComponent> function) {
+        return a(collection, ChatComponentUtils.DEFAULT_SEPARATOR, function);
+    }
+
+    public static <T> IChatMutableComponent a(Collection<? extends T> collection, Optional<? extends IChatBaseComponent> optional, Function<T, IChatBaseComponent> function) {
+        return a(collection, (IChatBaseComponent) DataFixUtils.orElse(optional, ChatComponentUtils.DEFAULT_SEPARATOR), function);
+    }
+
+    public static IChatBaseComponent a(Collection<? extends IChatBaseComponent> collection, IChatBaseComponent ichatbasecomponent) {
+        return a(collection, ichatbasecomponent, Function.identity());
+    }
+
+    public static <T> IChatMutableComponent a(Collection<? extends T> collection, IChatBaseComponent ichatbasecomponent, Function<T, IChatBaseComponent> function) {
         if (collection.isEmpty()) {
             return new ChatComponentText("");
         } else if (collection.size() == 1) {
@@ -94,7 +118,7 @@ public class ChatComponentUtils {
                 T t0 = iterator.next();
 
                 if (!flag) {
-                    chatcomponenttext.addSibling((new ChatComponentText(", ")).a(EnumChatFormat.GRAY));
+                    chatcomponenttext.addSibling(ichatbasecomponent);
                 }
 
                 chatcomponenttext.addSibling((IChatBaseComponent) function.apply(t0));

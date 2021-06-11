@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.WorldPersistentData;
 
 public class PersistentStructureLegacy {
 
-    private static final Map<String, String> a = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> CURRENT_TO_LEGACY_MAP = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put("Village", "Village");
         hashmap.put("Mineshaft", "Mineshaft");
         hashmap.put("Mansion", "Mansion");
@@ -35,39 +35,39 @@ public class PersistentStructureLegacy {
         hashmap.put("Fortress", "Fortress");
         hashmap.put("EndCity", "EndCity");
     });
-    private static final Map<String, String> b = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> LEGACY_TO_CURRENT_MAP = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put("Iglu", "Igloo");
         hashmap.put("TeDP", "Desert_Pyramid");
         hashmap.put("TeJP", "Jungle_Pyramid");
         hashmap.put("TeSH", "Swamp_Hut");
     });
-    private final boolean c;
-    private final Map<String, Long2ObjectMap<NBTTagCompound>> d = Maps.newHashMap();
-    private final Map<String, PersistentIndexed> e = Maps.newHashMap();
-    private final List<String> f;
-    private final List<String> g;
+    private final boolean hasLegacyData;
+    private final Map<String, Long2ObjectMap<NBTTagCompound>> dataMap = Maps.newHashMap();
+    private final Map<String, PersistentIndexed> indexMap = Maps.newHashMap();
+    private final List<String> legacyKeys;
+    private final List<String> currentKeys;
 
     public PersistentStructureLegacy(@Nullable WorldPersistentData worldpersistentdata, List<String> list, List<String> list1) {
-        this.f = list;
-        this.g = list1;
+        this.legacyKeys = list;
+        this.currentKeys = list1;
         this.a(worldpersistentdata);
         boolean flag = false;
 
         String s;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); flag |= this.d.get(s) != null) {
+        for (Iterator iterator = this.currentKeys.iterator(); iterator.hasNext(); flag |= this.dataMap.get(s) != null) {
             s = (String) iterator.next();
         }
 
-        this.c = flag;
+        this.hasLegacyData = flag;
     }
 
     public void a(long i) {
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.legacyKeys.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            PersistentIndexed persistentindexed = (PersistentIndexed) this.e.get(s);
+            PersistentIndexed persistentindexed = (PersistentIndexed) this.indexMap.get(s);
 
             if (persistentindexed != null && persistentindexed.c(i)) {
                 persistentindexed.d(i);
@@ -87,11 +87,11 @@ public class PersistentStructureLegacy {
 
         NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Structures");
         NBTTagCompound nbttagcompound3 = nbttagcompound2.getCompound("References");
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.currentKeys.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.a.get(s.toLowerCase(Locale.ROOT));
+            StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.STRUCTURES_REGISTRY.get(s.toLowerCase(Locale.ROOT));
 
             if (!nbttagcompound3.hasKeyOfType(s, 12) && structuregenerator != null) {
                 boolean flag = true;
@@ -105,7 +105,7 @@ public class PersistentStructureLegacy {
                     }
                 }
 
-                nbttagcompound3.c(s, (List) longarraylist);
+                nbttagcompound3.c(s, longarraylist);
             }
         }
 
@@ -116,14 +116,14 @@ public class PersistentStructureLegacy {
     }
 
     private boolean a(int i, int j, String s) {
-        return !this.c ? false : this.d.get(s) != null && ((PersistentIndexed) this.e.get(PersistentStructureLegacy.a.get(s))).b(ChunkCoordIntPair.pair(i, j));
+        return !this.hasLegacyData ? false : this.dataMap.get(s) != null && ((PersistentIndexed) this.indexMap.get(PersistentStructureLegacy.CURRENT_TO_LEGACY_MAP.get(s))).b(ChunkCoordIntPair.pair(i, j));
     }
 
     private boolean a(int i, int j) {
-        if (!this.c) {
+        if (!this.hasLegacyData) {
             return false;
         } else {
-            Iterator iterator = this.g.iterator();
+            Iterator iterator = this.currentKeys.iterator();
 
             String s;
 
@@ -133,7 +133,7 @@ public class PersistentStructureLegacy {
                 }
 
                 s = (String) iterator.next();
-            } while (this.d.get(s) == null || !((PersistentIndexed) this.e.get(PersistentStructureLegacy.a.get(s))).c(ChunkCoordIntPair.pair(i, j)));
+            } while (this.dataMap.get(s) == null || !((PersistentIndexed) this.indexMap.get(PersistentStructureLegacy.CURRENT_TO_LEGACY_MAP.get(s))).c(ChunkCoordIntPair.pair(i, j)));
 
             return true;
         }
@@ -143,16 +143,16 @@ public class PersistentStructureLegacy {
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
         NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Structures");
         NBTTagCompound nbttagcompound3 = nbttagcompound2.getCompound("Starts");
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.currentKeys.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            Long2ObjectMap<NBTTagCompound> long2objectmap = (Long2ObjectMap) this.d.get(s);
+            Long2ObjectMap<NBTTagCompound> long2objectmap = (Long2ObjectMap) this.dataMap.get(s);
 
             if (long2objectmap != null) {
                 long i = chunkcoordintpair.pair();
 
-                if (((PersistentIndexed) this.e.get(PersistentStructureLegacy.a.get(s))).c(i)) {
+                if (((PersistentIndexed) this.indexMap.get(PersistentStructureLegacy.CURRENT_TO_LEGACY_MAP.get(s))).c(i)) {
                     NBTTagCompound nbttagcompound4 = (NBTTagCompound) long2objectmap.get(i);
 
                     if (nbttagcompound4 != null) {
@@ -170,7 +170,7 @@ public class PersistentStructureLegacy {
 
     private void a(@Nullable WorldPersistentData worldpersistentdata) {
         if (worldpersistentdata != null) {
-            Iterator iterator = this.f.iterator();
+            Iterator iterator = this.legacyKeys.iterator();
 
             while (iterator.hasNext()) {
                 String s = (String) iterator.next();
@@ -196,7 +196,7 @@ public class PersistentStructureLegacy {
 
                     if (!nbttaglist.isEmpty()) {
                         s2 = nbttaglist.getCompound(0).getString("id");
-                        String s3 = (String) PersistentStructureLegacy.b.get(s2);
+                        String s3 = (String) PersistentStructureLegacy.LEGACY_TO_CURRENT_MAP.get(s2);
 
                         if (s3 != null) {
                             nbttagcompound1.setString("id", s3);
@@ -204,22 +204,20 @@ public class PersistentStructureLegacy {
                     }
 
                     s2 = nbttagcompound1.getString("id");
-                    ((Long2ObjectMap) this.d.computeIfAbsent(s2, (s4) -> {
+                    ((Long2ObjectMap) this.dataMap.computeIfAbsent(s2, (s4) -> {
                         return new Long2ObjectOpenHashMap();
                     })).put(i, nbttagcompound1);
                 }
 
                 String s4 = s + "_index";
-                PersistentIndexed persistentindexed = (PersistentIndexed) worldpersistentdata.a(() -> {
-                    return new PersistentIndexed(s4);
-                }, s4);
+                PersistentIndexed persistentindexed = (PersistentIndexed) worldpersistentdata.a(PersistentIndexed::b, PersistentIndexed::new, s4);
 
                 if (!persistentindexed.a().isEmpty()) {
-                    this.e.put(s, persistentindexed);
+                    this.indexMap.put(s, persistentindexed);
                 } else {
-                    PersistentIndexed persistentindexed1 = new PersistentIndexed(s4);
+                    PersistentIndexed persistentindexed1 = new PersistentIndexed();
 
-                    this.e.put(s, persistentindexed1);
+                    this.indexMap.put(s, persistentindexed1);
                     Iterator iterator2 = nbttagcompound.getKeys().iterator();
 
                     while (iterator2.hasNext()) {
@@ -242,10 +240,10 @@ public class PersistentStructureLegacy {
         } else {
             ImmutableList immutablelist;
 
-            if (resourcekey == World.THE_NETHER) {
+            if (resourcekey == World.NETHER) {
                 immutablelist = ImmutableList.of("Fortress");
                 return new PersistentStructureLegacy(worldpersistentdata, immutablelist, immutablelist);
-            } else if (resourcekey == World.THE_END) {
+            } else if (resourcekey == World.END) {
                 immutablelist = ImmutableList.of("EndCity");
                 return new PersistentStructureLegacy(worldpersistentdata, immutablelist, immutablelist);
             } else {

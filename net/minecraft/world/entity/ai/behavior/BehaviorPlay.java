@@ -16,10 +16,17 @@ import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryTarget;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.phys.Vec3D;
 
 public class BehaviorPlay extends Behavior<EntityCreature> {
+
+    private static final int MAX_FLEE_XZ_DIST = 20;
+    private static final int MAX_FLEE_Y_DIST = 8;
+    private static final float FLEE_SPEED_MODIFIER = 0.6F;
+    private static final float CHASE_SPEED_MODIFIER = 0.6F;
+    private static final int MAX_CHASERS_PER_TARGET = 5;
+    private static final int AVERAGE_WAIT_TIME_BETWEEN_RUNS = 10;
 
     public BehaviorPlay() {
         super(ImmutableMap.of(MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED));
@@ -49,9 +56,9 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
 
     private void a(WorldServer worldserver, EntityCreature entitycreature, EntityLiving entityliving) {
         for (int i = 0; i < 10; ++i) {
-            Vec3D vec3d = RandomPositionGenerator.b(entitycreature, 20, 8);
+            Vec3D vec3d = LandRandomPos.a(entitycreature, 20, 8);
 
-            if (vec3d != null && worldserver.a_(new BlockPosition(vec3d))) {
+            if (vec3d != null && worldserver.b(new BlockPosition(vec3d))) {
                 entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, 0.6F, 0)));
                 return;
             }
@@ -83,8 +90,8 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
         Map<EntityLiving, Integer> map = Maps.newHashMap();
 
         this.d(entitycreature).stream().filter(this::c).forEach((entityliving) -> {
-            Integer integer = (Integer) map.compute(this.a(entityliving), (entityliving1, integer1) -> {
-                return integer1 == null ? 1 : integer1 + 1;
+            map.compute(this.a(entityliving), (entityliving1, integer) -> {
+                return integer == null ? 1 : integer + 1;
             });
         });
         return map;

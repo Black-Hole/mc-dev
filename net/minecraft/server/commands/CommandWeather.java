@@ -9,6 +9,10 @@ import net.minecraft.network.chat.ChatMessage;
 
 public class CommandWeather {
 
+    private static final int DEFAULT_TIME = 6000;
+
+    public CommandWeather() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("weather").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);

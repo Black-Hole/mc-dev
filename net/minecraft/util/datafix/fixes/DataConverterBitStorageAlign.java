@@ -17,6 +17,13 @@ import net.minecraft.util.MathHelper;
 
 public class DataConverterBitStorageAlign extends DataFix {
 
+    private static final int BIT_TO_LONG_SHIFT = 6;
+    private static final int SECTION_WIDTH = 16;
+    private static final int SECTION_HEIGHT = 16;
+    private static final int SECTION_SIZE = 4096;
+    private static final int HEIGHTMAP_BITS = 9;
+    private static final int HEIGHTMAP_SIZE = 256;
+
     public DataConverterBitStorageAlign(Schema schema) {
         super(schema, false);
     }

@@ -10,7 +10,9 @@ import net.minecraft.server.level.WorldServer;
 
 public class CommandSaveOff {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOff"));
+    private static final SimpleCommandExceptionType ERROR_ALREADY_OFF = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOff"));
+
+    public CommandSaveOff() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("save-off").requires((commandlistenerwrapper) -> {
@@ -23,14 +25,14 @@ public class CommandSaveOff {
             while (iterator.hasNext()) {
                 WorldServer worldserver = (WorldServer) iterator.next();
 
-                if (worldserver != null && !worldserver.savingDisabled) {
-                    worldserver.savingDisabled = true;
+                if (worldserver != null && !worldserver.noSave) {
+                    worldserver.noSave = true;
                     flag = true;
                 }
             }
 
             if (!flag) {
-                throw CommandSaveOff.a.create();
+                throw CommandSaveOff.ERROR_ALREADY_OFF.create();
             } else {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.disabled"), true);
                 return 1;

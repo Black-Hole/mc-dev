@@ -14,61 +14,81 @@ public class WorldGenSurfaceDefaultBlock extends WorldGenSurface<WorldGenSurface
         super(codec);
     }
 
-    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
-        this.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, worldgensurfaceconfigurationbase.a(), worldgensurfaceconfigurationbase.b(), worldgensurfaceconfigurationbase.c(), l);
+    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, int i1, long j1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
+        this.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, worldgensurfaceconfigurationbase.a(), worldgensurfaceconfigurationbase.b(), worldgensurfaceconfigurationbase.c(), l, i1);
     }
 
-    protected void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, IBlockData iblockdata2, IBlockData iblockdata3, IBlockData iblockdata4, int l) {
-        IBlockData iblockdata5 = iblockdata2;
-        IBlockData iblockdata6 = iblockdata3;
+    protected void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, IBlockData iblockdata2, IBlockData iblockdata3, IBlockData iblockdata4, int l, int i1) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        int i1 = -1;
         int j1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        int k1 = i & 15;
-        int l1 = j & 15;
+        int k1;
+        IBlockData iblockdata5;
 
-        for (int i2 = k; i2 >= 0; --i2) {
-            blockposition_mutableblockposition.d(k1, i2, l1);
-            IBlockData iblockdata7 = ichunkaccess.getType(blockposition_mutableblockposition);
+        if (j1 == 0) {
+            boolean flag = false;
 
-            if (iblockdata7.isAir()) {
-                i1 = -1;
-            } else if (iblockdata7.a(iblockdata.getBlock())) {
-                if (i1 == -1) {
-                    if (j1 <= 0) {
-                        iblockdata5 = Blocks.AIR.getBlockData();
-                        iblockdata6 = iblockdata;
-                    } else if (i2 >= l - 4 && i2 <= l + 1) {
-                        iblockdata5 = iblockdata2;
-                        iblockdata6 = iblockdata3;
-                    }
+            for (k1 = k; k1 >= i1; --k1) {
+                blockposition_mutableblockposition.d(i, k1, j);
+                IBlockData iblockdata6 = ichunkaccess.getType(blockposition_mutableblockposition);
 
-                    if (i2 < l && (iblockdata5 == null || iblockdata5.isAir())) {
-                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.d(i, i2, j)) < 0.15F) {
-                            iblockdata5 = Blocks.ICE.getBlockData();
+                if (iblockdata6.isAir()) {
+                    flag = false;
+                } else if (iblockdata6.a(iblockdata.getBlock())) {
+                    if (!flag) {
+                        if (k1 >= l) {
+                            iblockdata5 = Blocks.AIR.getBlockData();
+                        } else if (k1 == l - 1) {
+                            iblockdata5 = biomebase.getAdjustedTemperature(blockposition_mutableblockposition) < 0.15F ? Blocks.ICE.getBlockData() : iblockdata1;
+                        } else if (k1 >= l - (7 + j1)) {
+                            iblockdata5 = iblockdata;
                         } else {
-                            iblockdata5 = iblockdata1;
+                            iblockdata5 = iblockdata4;
                         }
 
-                        blockposition_mutableblockposition.d(k1, i2, l1);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                     }
 
-                    i1 = j1;
-                    if (i2 >= l - 1) {
-                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
-                    } else if (i2 < l - 7 - j1) {
-                        iblockdata5 = Blocks.AIR.getBlockData();
-                        iblockdata6 = iblockdata;
-                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata4, false);
-                    } else {
-                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata6, false);
-                    }
-                } else if (i1 > 0) {
-                    --i1;
-                    ichunkaccess.setType(blockposition_mutableblockposition, iblockdata6, false);
-                    if (i1 == 0 && iblockdata6.a(Blocks.SAND) && j1 > 1) {
-                        i1 = random.nextInt(4) + Math.max(0, i2 - 63);
-                        iblockdata6 = iblockdata6.a(Blocks.RED_SAND) ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
+                    flag = true;
+                }
+            }
+        } else {
+            IBlockData iblockdata7 = iblockdata3;
+
+            k1 = -1;
+
+            for (int l1 = k; l1 >= i1; --l1) {
+                blockposition_mutableblockposition.d(i, l1, j);
+                iblockdata5 = ichunkaccess.getType(blockposition_mutableblockposition);
+                if (iblockdata5.isAir()) {
+                    k1 = -1;
+                } else if (iblockdata5.a(iblockdata.getBlock())) {
+                    if (k1 == -1) {
+                        k1 = j1;
+                        IBlockData iblockdata8;
+
+                        if (l1 >= l + 2) {
+                            iblockdata8 = iblockdata2;
+                        } else if (l1 >= l - 1) {
+                            iblockdata7 = iblockdata3;
+                            iblockdata8 = iblockdata2;
+                        } else if (l1 >= l - 4) {
+                            iblockdata7 = iblockdata3;
+                            iblockdata8 = iblockdata3;
+                        } else if (l1 >= l - (7 + j1)) {
+                            iblockdata8 = iblockdata7;
+                        } else {
+                            iblockdata7 = iblockdata;
+                            iblockdata8 = iblockdata4;
+                        }
+
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata8, false);
+                    } else if (k1 > 0) {
+                        --k1;
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata7, false);
+                        if (k1 == 0 && iblockdata7.a(Blocks.SAND) && j1 > 1) {
+                            k1 = random.nextInt(4) + Math.max(0, l1 - l);
+                            iblockdata7 = iblockdata7.a(Blocks.RED_SAND) ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
+                        }
                     }
                 }
             }

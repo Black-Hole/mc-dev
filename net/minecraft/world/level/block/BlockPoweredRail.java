@@ -13,12 +13,12 @@ import net.minecraft.world.level.block.state.properties.IBlockState;
 
 public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.ad;
-    public static final BlockStateBoolean POWERED = BlockProperties.w;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.RAIL_SHAPE_STRAIGHT;
+    public static final BlockStateBoolean POWERED = BlockProperties.POWERED;
 
     protected BlockPoweredRail(BlockBase.Info blockbase_info) {
         super(true, blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false)).set(BlockPoweredRail.WATERLOGGED, false));
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, int i) {
@@ -115,7 +115,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         if (flag1 != flag) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockPoweredRail.POWERED, flag1), 3);
             world.applyPhysics(blockposition.down(), this);
-            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).c()) {
+            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).b()) {
                 world.applyPhysics(blockposition.up(), this);
             }
         }
@@ -248,6 +248,6 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockPoweredRail.SHAPE, BlockPoweredRail.POWERED);
+        blockstatelist_a.a(BlockPoweredRail.SHAPE, BlockPoweredRail.POWERED, BlockPoweredRail.WATERLOGGED);
     }
 }

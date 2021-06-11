@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DataConverterTileEntity extends DataFix {
 
-    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> ID_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("Airportal", "minecraft:end_portal");
         hashmap.put("Banner", "minecraft:banner");
         hashmap.put("Beacon", "minecraft:beacon");
@@ -50,7 +50,7 @@ public class DataConverterTileEntity extends DataFix {
         return TypeRewriteRule.seq(this.convertUnchecked("item stack block entity name hook converter", type, type1), this.fixTypeEverywhere("BlockEntityIdFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {
                 return pair.mapFirst((s) -> {
-                    return (String) DataConverterTileEntity.a.getOrDefault(s, s);
+                    return (String) DataConverterTileEntity.ID_MAP.getOrDefault(s, s);
                 });
             };
         }));

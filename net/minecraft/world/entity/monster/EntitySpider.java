@@ -44,7 +44,8 @@ import net.minecraft.world.phys.Vec3D;
 
 public class EntitySpider extends EntityMonster {
 
-    private static final DataWatcherObject<Byte> b = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> DATA_FLAGS_ID = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.BYTE);
+    private static final float SPIDER_SPECIAL_EFFECT_CHANCE = 0.1F;
 
     public EntitySpider(EntityTypes<? extends EntitySpider> entitytypes, World world) {
         super(entitytypes, world);
@@ -64,57 +65,57 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    public double bc() {
+    public double bl() {
         return (double) (this.getHeight() * 0.5F);
     }
 
     @Override
-    protected NavigationAbstract b(World world) {
+    protected NavigationAbstract a(World world) {
         return new NavigationSpider(this, world);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySpider.b, (byte) 0);
+        this.entityData.register(EntitySpider.DATA_FLAGS_ID, (byte) 0);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.world.isClientSide) {
-            this.t(this.positionChanged);
+        if (!this.level.isClientSide) {
+            this.v(this.horizontalCollision);
         }
 
     }
 
-    public static AttributeProvider.Builder eK() {
-        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
+    public static AttributeProvider.Builder p() {
+        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return SoundEffects.ENTITY_SPIDER_AMBIENT;
+        return SoundEffects.SPIDER_AMBIENT;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_SPIDER_HURT;
+        return SoundEffects.SPIDER_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_SPIDER_DEATH;
+        return SoundEffects.SPIDER_DEATH;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Override
     public boolean isClimbing() {
-        return this.eL();
+        return this.t();
     }
 
     @Override
@@ -131,16 +132,16 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    public boolean d(MobEffect mobeffect) {
-        return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.d(mobeffect);
+    public boolean c(MobEffect mobeffect) {
+        return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.c(mobeffect);
     }
 
-    public boolean eL() {
-        return ((Byte) this.datawatcher.get(EntitySpider.b) & 1) != 0;
+    public boolean t() {
+        return ((Byte) this.entityData.get(EntitySpider.DATA_FLAGS_ID) & 1) != 0;
     }
 
-    public void t(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySpider.b);
+    public void v(boolean flag) {
+        byte b0 = (Byte) this.entityData.get(EntitySpider.DATA_FLAGS_ID);
 
         if (flag) {
             b0 = (byte) (b0 | 1);
@@ -148,7 +149,7 @@ public class EntitySpider extends EntityMonster {
             b0 &= -2;
         }
 
-        this.datawatcher.set(EntitySpider.b, b0);
+        this.entityData.set(EntitySpider.DATA_FLAGS_ID, b0);
     }
 
     @Nullable
@@ -157,9 +158,9 @@ public class EntitySpider extends EntityMonster {
         Object object = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         if (worldaccess.getRandom().nextInt(100) == 0) {
-            EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(this.world);
+            EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(this.level);
 
-            entityskeleton.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
+            entityskeleton.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.getYRot(), 0.0F);
             entityskeleton.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) null, (NBTTagCompound) null);
             entityskeleton.startRiding(this);
         }
@@ -172,7 +173,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         if (object instanceof EntitySpider.GroupDataSpider) {
-            MobEffectList mobeffectlist = ((EntitySpider.GroupDataSpider) object).a;
+            MobEffectList mobeffectlist = ((EntitySpider.GroupDataSpider) object).effect;
 
             if (mobeffectlist != null) {
                 this.addEffect(new MobEffect(mobeffectlist, Integer.MAX_VALUE));
@@ -187,21 +188,7 @@ public class EntitySpider extends EntityMonster {
         return 0.65F;
     }
 
-    static class PathfinderGoalSpiderNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
-
-        public PathfinderGoalSpiderNearestAttackableTarget(EntitySpider entityspider, Class<T> oclass) {
-            super(entityspider, oclass, true);
-        }
-
-        @Override
-        public boolean a() {
-            float f = this.e.aR();
-
-            return f >= 0.5F ? false : super.a();
-        }
-    }
-
-    static class PathfinderGoalSpiderMeleeAttack extends PathfinderGoalMeleeAttack {
+    private static class PathfinderGoalSpiderMeleeAttack extends PathfinderGoalMeleeAttack {
 
         public PathfinderGoalSpiderMeleeAttack(EntitySpider entityspider) {
             super(entityspider, 1.0D, true);
@@ -209,15 +196,15 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean a() {
-            return super.a() && !this.a.isVehicle();
+            return super.a() && !this.mob.isVehicle();
         }
 
         @Override
         public boolean b() {
-            float f = this.a.aR();
+            float f = this.mob.aY();
 
-            if (f >= 0.5F && this.a.getRandom().nextInt(100) == 0) {
-                this.a.setGoalTarget((EntityLiving) null);
+            if (f >= 0.5F && this.mob.getRandom().nextInt(100) == 0) {
+                this.mob.setGoalTarget((EntityLiving) null);
                 return false;
             } else {
                 return super.b();
@@ -230,9 +217,23 @@ public class EntitySpider extends EntityMonster {
         }
     }
 
+    private static class PathfinderGoalSpiderNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
+
+        public PathfinderGoalSpiderNearestAttackableTarget(EntitySpider entityspider, Class<T> oclass) {
+            super(entityspider, oclass, true);
+        }
+
+        @Override
+        public boolean a() {
+            float f = this.mob.aY();
+
+            return f >= 0.5F ? false : super.a();
+        }
+    }
+
     public static class GroupDataSpider implements GroupDataEntity {
 
-        public MobEffectList a;
+        public MobEffectList effect;
 
         public GroupDataSpider() {}
 
@@ -240,13 +241,13 @@ public class EntitySpider extends EntityMonster {
             int i = random.nextInt(5);
 
             if (i <= 1) {
-                this.a = MobEffects.FASTER_MOVEMENT;
+                this.effect = MobEffects.MOVEMENT_SPEED;
             } else if (i <= 2) {
-                this.a = MobEffects.INCREASE_DAMAGE;
+                this.effect = MobEffects.DAMAGE_BOOST;
             } else if (i <= 3) {
-                this.a = MobEffects.REGENERATION;
+                this.effect = MobEffects.REGENERATION;
             } else if (i <= 4) {
-                this.a = MobEffects.INVISIBILITY;
+                this.effect = MobEffects.INVISIBILITY;
             }
 
         }

@@ -9,20 +9,23 @@ import net.minecraft.core.Registry;
 
 public class RegistryID<K> implements Registry<K> {
 
-    private static final Object a = null;
-    private K[] b;
-    private int[] c;
-    private K[] d;
-    private int e;
-    private int f;
+    public static final int NOT_FOUND = -1;
+    private static final Object EMPTY_SLOT = null;
+    private static final float LOADFACTOR = 0.8F;
+    private K[] keys;
+    private int[] values;
+    private K[] byId;
+    private int nextId;
+    private int size;
 
     public RegistryID(int i) {
         i = (int) ((float) i / 0.8F);
-        this.b = (Object[]) (new Object[i]);
-        this.c = new int[i];
-        this.d = (Object[]) (new Object[i]);
+        this.keys = new Object[i];
+        this.values = new int[i];
+        this.byId = new Object[i];
     }
 
+    @Override
     public int getId(@Nullable K k0) {
         return this.c(this.b(k0, this.d(k0)));
     }
@@ -30,11 +33,19 @@ public class RegistryID<K> implements Registry<K> {
     @Nullable
     @Override
     public K fromId(int i) {
-        return i >= 0 && i < this.d.length ? this.d[i] : null;
+        return i >= 0 && i < this.byId.length ? this.byId[i] : null;
     }
 
     private int c(int i) {
-        return i == -1 ? -1 : this.c[i];
+        return i == -1 ? -1 : this.values[i];
+    }
+
+    public boolean b(K k0) {
+        return this.getId(k0) != -1;
+    }
+
+    public boolean b(int i) {
+        return this.fromId(i) != null;
     }
 
     public int c(K k0) {
@@ -45,22 +56,22 @@ public class RegistryID<K> implements Registry<K> {
     }
 
     private int c() {
-        while (this.e < this.d.length && this.d[this.e] != null) {
-            ++this.e;
+        while (this.nextId < this.byId.length && this.byId[this.nextId] != null) {
+            ++this.nextId;
         }
 
-        return this.e;
+        return this.nextId;
     }
 
     private void d(int i) {
-        K[] ak = this.b;
-        int[] aint = this.c;
+        K[] ak = this.keys;
+        int[] aint = this.values;
 
-        this.b = (Object[]) (new Object[i]);
-        this.c = new int[i];
-        this.d = (Object[]) (new Object[i]);
-        this.e = 0;
-        this.f = 0;
+        this.keys = new Object[i];
+        this.values = new int[i];
+        this.byId = new Object[i];
+        this.nextId = 0;
+        this.size = 0;
 
         for (int j = 0; j < ak.length; ++j) {
             if (ak[j] != null) {
@@ -71,11 +82,11 @@ public class RegistryID<K> implements Registry<K> {
     }
 
     public void a(K k0, int i) {
-        int j = Math.max(i, this.f + 1);
+        int j = Math.max(i, this.size + 1);
         int k;
 
-        if ((float) j >= (float) this.b.length * 0.8F) {
-            for (k = this.b.length << 1; k < i; k <<= 1) {
+        if ((float) j >= (float) this.keys.length * 0.8F) {
+            for (k = this.keys.length << 1; k < i; k <<= 1) {
                 ;
             }
 
@@ -83,39 +94,39 @@ public class RegistryID<K> implements Registry<K> {
         }
 
         k = this.e(this.d(k0));
-        this.b[k] = k0;
-        this.c[k] = i;
-        this.d[i] = k0;
-        ++this.f;
-        if (i == this.e) {
-            ++this.e;
+        this.keys[k] = k0;
+        this.values[k] = i;
+        this.byId[i] = k0;
+        ++this.size;
+        if (i == this.nextId) {
+            ++this.nextId;
         }
 
     }
 
     private int d(@Nullable K k0) {
-        return (MathHelper.g(System.identityHashCode(k0)) & Integer.MAX_VALUE) % this.b.length;
+        return (MathHelper.g(System.identityHashCode(k0)) & Integer.MAX_VALUE) % this.keys.length;
     }
 
     private int b(@Nullable K k0, int i) {
         int j;
 
-        for (j = i; j < this.b.length; ++j) {
-            if (this.b[j] == k0) {
+        for (j = i; j < this.keys.length; ++j) {
+            if (this.keys[j] == k0) {
                 return j;
             }
 
-            if (this.b[j] == RegistryID.a) {
+            if (this.keys[j] == RegistryID.EMPTY_SLOT) {
                 return -1;
             }
         }
 
         for (j = 0; j < i; ++j) {
-            if (this.b[j] == k0) {
+            if (this.keys[j] == k0) {
                 return j;
             }
 
-            if (this.b[j] == RegistryID.a) {
+            if (this.keys[j] == RegistryID.EMPTY_SLOT) {
                 return -1;
             }
         }
@@ -126,14 +137,14 @@ public class RegistryID<K> implements Registry<K> {
     private int e(int i) {
         int j;
 
-        for (j = i; j < this.b.length; ++j) {
-            if (this.b[j] == RegistryID.a) {
+        for (j = i; j < this.keys.length; ++j) {
+            if (this.keys[j] == RegistryID.EMPTY_SLOT) {
                 return j;
             }
         }
 
         for (j = 0; j < i; ++j) {
-            if (this.b[j] == RegistryID.a) {
+            if (this.keys[j] == RegistryID.EMPTY_SLOT) {
                 return j;
             }
         }
@@ -142,17 +153,17 @@ public class RegistryID<K> implements Registry<K> {
     }
 
     public Iterator<K> iterator() {
-        return Iterators.filter(Iterators.forArray(this.d), Predicates.notNull());
+        return Iterators.filter(Iterators.forArray(this.byId), Predicates.notNull());
     }
 
     public void a() {
-        Arrays.fill(this.b, (Object) null);
-        Arrays.fill(this.d, (Object) null);
-        this.e = 0;
-        this.f = 0;
+        Arrays.fill(this.keys, (Object) null);
+        Arrays.fill(this.byId, (Object) null);
+        this.nextId = 0;
+        this.size = 0;
     }
 
     public int b() {
-        return this.f;
+        return this.size;
     }
 }

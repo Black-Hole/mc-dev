@@ -19,12 +19,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateBoolean;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
-    public static final BlockStateBoolean LIT = BlockProperties.r;
-    private static final Map<IBlockAccess, List<BlockRedstoneTorch.RedstoneUpdateInfo>> b = new WeakHashMap();
+    public static final BlockStateBoolean LIT = BlockProperties.LIT;
+    private static final Map<IBlockAccess, List<BlockRedstoneTorch.RedstoneUpdateInfo>> RECENT_TOGGLES = new WeakHashMap();
+    public static final int RECENT_TOGGLE_TIMER = 60;
+    public static final int MAX_RECENT_TOGGLES = 8;
+    public static final int RESTART_DELAY = 160;
+    private static final int TOGGLE_DELAY = 2;
 
     protected BlockRedstoneTorch(BlockBase.Info blockbase_info) {
-        super(blockbase_info, ParticleParamRedstone.a);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
+        super(blockbase_info, ParticleParamRedstone.REDSTONE);
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockRedstoneTorch.LIT, true));
     }
 
     @Override
@@ -67,9 +71,9 @@ public class BlockRedstoneTorch extends BlockTorch {
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         boolean flag = this.a((World) worldserver, blockposition, iblockdata);
-        List list = (List) BlockRedstoneTorch.b.get(worldserver);
+        List list = (List) BlockRedstoneTorch.RECENT_TOGGLES.get(worldserver);
 
-        while (list != null && !list.isEmpty() && worldserver.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
+        while (list != null && !list.isEmpty() && worldserver.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).when > 60L) {
             list.remove(0);
         }
 
@@ -106,12 +110,23 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)) {
+            double d0 = (double) blockposition.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.2D;
+            double d1 = (double) blockposition.getY() + 0.7D + (random.nextDouble() - 0.5D) * 0.2D;
+            double d2 = (double) blockposition.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.2D;
+
+            world.addParticle(this.flameParticle, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockRedstoneTorch.LIT);
     }
 
     private static boolean a(World world, BlockPosition blockposition, boolean flag) {
-        List<BlockRedstoneTorch.RedstoneUpdateInfo> list = (List) BlockRedstoneTorch.b.computeIfAbsent(world, (iblockaccess) -> {
+        List<BlockRedstoneTorch.RedstoneUpdateInfo> list = (List) BlockRedstoneTorch.RECENT_TOGGLES.computeIfAbsent(world, (iblockaccess) -> {
             return Lists.newArrayList();
         });
 
@@ -124,7 +139,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         for (int j = 0; j < list.size(); ++j) {
             BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) list.get(j);
 
-            if (blockredstonetorch_redstoneupdateinfo.a.equals(blockposition)) {
+            if (blockredstonetorch_redstoneupdateinfo.pos.equals(blockposition)) {
                 ++i;
                 if (i >= 8) {
                     return true;
@@ -137,12 +152,12 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     public static class RedstoneUpdateInfo {
 
-        private final BlockPosition a;
-        private final long b;
+        final BlockPosition pos;
+        final long when;
 
         public RedstoneUpdateInfo(BlockPosition blockposition, long i) {
-            this.a = blockposition;
-            this.b = i;
+            this.pos = blockposition;
+            this.when = i;
         }
     }
 }

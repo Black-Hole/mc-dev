@@ -2,6 +2,7 @@ package net.minecraft.world.item.crafting;
 
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 public class RecipeBlasting extends RecipeCooking {
 
@@ -10,7 +11,12 @@ public class RecipeBlasting extends RecipeCooking {
     }
 
     @Override
+    public ItemStack h() {
+        return new ItemStack(Blocks.BLAST_FURNACE);
+    }
+
+    @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.q;
+        return RecipeSerializer.BLASTING_RECIPE;
     }
 }

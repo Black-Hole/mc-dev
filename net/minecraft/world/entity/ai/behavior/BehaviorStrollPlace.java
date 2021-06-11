@@ -13,35 +13,35 @@ import net.minecraft.world.entity.ai.memory.MemoryTarget;
 
 public class BehaviorStrollPlace extends Behavior<EntityCreature> {
 
-    private final MemoryModuleType<GlobalPos> b;
-    private final int c;
-    private final int d;
-    private final float e;
-    private long f;
+    private final MemoryModuleType<GlobalPos> memoryType;
+    private final int closeEnoughDist;
+    private final int maxDistanceFromPoi;
+    private final float speedModifier;
+    private long nextOkStartTime;
 
     public BehaviorStrollPlace(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, memorymoduletype, MemoryStatus.VALUE_PRESENT));
-        this.b = memorymoduletype;
-        this.e = f;
-        this.c = i;
-        this.d = j;
+        this.memoryType = memorymoduletype;
+        this.speedModifier = f;
+        this.closeEnoughDist = i;
+        this.maxDistanceFromPoi = j;
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        Optional<GlobalPos> optional = entitycreature.getBehaviorController().getMemory(this.b);
+        Optional<GlobalPos> optional = entitycreature.getBehaviorController().getMemory(this.memoryType);
 
-        return optional.isPresent() && worldserver.getDimensionKey() == ((GlobalPos) optional.get()).getDimensionManager() && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entitycreature.getPositionVector(), (double) this.d);
+        return optional.isPresent() && worldserver.getDimensionKey() == ((GlobalPos) optional.get()).getDimensionManager() && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entitycreature.getPositionVector(), (double) this.maxDistanceFromPoi);
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        if (i > this.f) {
+        if (i > this.nextOkStartTime) {
             BehaviorController<?> behaviorcontroller = entitycreature.getBehaviorController();
-            Optional<GlobalPos> optional = behaviorcontroller.getMemory(this.b);
+            Optional<GlobalPos> optional = behaviorcontroller.getMemory(this.memoryType);
 
             optional.ifPresent((globalpos) -> {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.e, this.c)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.speedModifier, this.closeEnoughDist)));
             });
-            this.f = i + 80L;
+            this.nextOkStartTime = i + 80L;
         }
 
     }

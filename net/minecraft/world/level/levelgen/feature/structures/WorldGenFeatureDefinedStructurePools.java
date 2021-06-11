@@ -5,11 +5,11 @@ import net.minecraft.core.IRegistry;
 
 public interface WorldGenFeatureDefinedStructurePools<P extends WorldGenFeatureDefinedStructurePoolStructure> {
 
-    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolSingle> a = a("single_pool_element", WorldGenFeatureDefinedStructurePoolSingle.b);
-    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolList> b = a("list_pool_element", WorldGenFeatureDefinedStructurePoolList.a);
-    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolFeature> c = a("feature_pool_element", WorldGenFeatureDefinedStructurePoolFeature.a);
-    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolEmpty> d = a("empty_pool_element", WorldGenFeatureDefinedStructurePoolEmpty.a);
-    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolLegacySingle> e = a("legacy_single_pool_element", WorldGenFeatureDefinedStructurePoolLegacySingle.a);
+    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolSingle> SINGLE = a("single_pool_element", WorldGenFeatureDefinedStructurePoolSingle.CODEC);
+    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolList> LIST = a("list_pool_element", WorldGenFeatureDefinedStructurePoolList.CODEC);
+    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolFeature> FEATURE = a("feature_pool_element", WorldGenFeatureDefinedStructurePoolFeature.CODEC);
+    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolEmpty> EMPTY = a("empty_pool_element", WorldGenFeatureDefinedStructurePoolEmpty.CODEC);
+    WorldGenFeatureDefinedStructurePools<WorldGenFeatureDefinedStructurePoolLegacySingle> LEGACY = a("legacy_single_pool_element", WorldGenFeatureDefinedStructurePoolLegacySingle.CODEC);
 
     Codec<P> codec();
 

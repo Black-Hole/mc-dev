@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateDirection;
 
 public abstract class BlockFacingHorizontal extends Block {
 
-    public static final BlockStateDirection FACING = BlockProperties.O;
+    public static final BlockStateDirection FACING = BlockProperties.HORIZONTAL_FACING;
 
     protected BlockFacingHorizontal(BlockBase.Info blockbase_info) {
         super(blockbase_info);

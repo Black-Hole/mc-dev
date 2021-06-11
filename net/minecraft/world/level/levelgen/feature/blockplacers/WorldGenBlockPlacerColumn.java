@@ -5,35 +5,32 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenBlockPlacerColumn extends WorldGenBlockPlacer {
 
-    public static final Codec<WorldGenBlockPlacerColumn> b = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("min_size").forGetter((worldgenblockplacercolumn) -> {
-            return worldgenblockplacercolumn.c;
-        }), Codec.INT.fieldOf("extra_size").forGetter((worldgenblockplacercolumn) -> {
-            return worldgenblockplacercolumn.d;
+    public static final Codec<WorldGenBlockPlacerColumn> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IntProvider.NON_NEGATIVE_CODEC.fieldOf("size").forGetter((worldgenblockplacercolumn) -> {
+            return worldgenblockplacercolumn.size;
         })).apply(instance, WorldGenBlockPlacerColumn::new);
     });
-    private final int c;
-    private final int d;
+    private final IntProvider size;
 
-    public WorldGenBlockPlacerColumn(int i, int j) {
-        this.c = i;
-        this.d = j;
+    public WorldGenBlockPlacerColumn(IntProvider intprovider) {
+        this.size = intprovider;
     }
 
     @Override
     protected WorldGenBlockPlacers<?> a() {
-        return WorldGenBlockPlacers.c;
+        return WorldGenBlockPlacers.COLUMN_PLACER;
     }
 
     @Override
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
-        int i = this.c + random.nextInt(random.nextInt(this.d + 1) + 1);
+        int i = this.size.a(random);
 
         for (int j = 0; j < i; ++j) {
             generatoraccess.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);

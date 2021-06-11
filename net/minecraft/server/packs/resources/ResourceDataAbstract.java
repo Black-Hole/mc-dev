@@ -1,5 +1,6 @@
 package net.minecraft.server.packs.resources;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import net.minecraft.util.profiling.GameProfilerFiller;
@@ -14,7 +15,7 @@ public abstract class ResourceDataAbstract<T> implements IReloadListener {
             return this.b(iresourcemanager, gameprofilerfiller);
         }, executor);
 
-        ireloadlistener_a.getClass();
+        Objects.requireNonNull(ireloadlistener_a);
         return completablefuture.thenCompose(ireloadlistener_a::a).thenAcceptAsync((object) -> {
             this.a(object, iresourcemanager, gameprofilerfiller1);
         }, executor1);

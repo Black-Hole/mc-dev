@@ -6,10 +6,10 @@ import net.minecraft.core.BlockPosition;
 
 public class PosRuleTestTrue extends PosRuleTest {
 
-    public static final Codec<PosRuleTestTrue> a = Codec.unit(() -> {
-        return PosRuleTestTrue.b;
+    public static final Codec<PosRuleTestTrue> CODEC = Codec.unit(() -> {
+        return PosRuleTestTrue.INSTANCE;
     });
-    public static final PosRuleTestTrue b = new PosRuleTestTrue();
+    public static final PosRuleTestTrue INSTANCE = new PosRuleTestTrue();
 
     private PosRuleTestTrue() {}
 
@@ -20,6 +20,6 @@ public class PosRuleTestTrue extends PosRuleTest {
 
     @Override
     protected PosRuleTestType<?> a() {
-        return PosRuleTestType.a;
+        return PosRuleTestType.ALWAYS_TRUE_TEST;
     }
 }

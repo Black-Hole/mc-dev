@@ -11,7 +11,7 @@ import net.minecraft.world.entity.decoration.EntityLeash;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.context.ItemActionContext;
 import net.minecraft.world.level.World;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class ItemLeash extends Item {
@@ -24,9 +24,9 @@ public class ItemLeash extends Item {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
-        Block block = world.getType(blockposition).getBlock();
+        IBlockData iblockdata = world.getType(blockposition);
 
-        if (block.a((Tag) TagsBlock.FENCES)) {
+        if (iblockdata.a((Tag) TagsBlock.FENCES)) {
             EntityHuman entityhuman = itemactioncontext.getEntity();
 
             if (!world.isClientSide && entityhuman != null) {
@@ -54,7 +54,8 @@ public class ItemLeash extends Item {
 
             if (entityinsentient.getLeashHolder() == entityhuman) {
                 if (entityleash == null) {
-                    entityleash = EntityLeash.a(world, blockposition);
+                    entityleash = EntityLeash.b(world, blockposition);
+                    entityleash.playPlaceSound();
                 }
 
                 entityinsentient.setLeashHolder(entityleash, true);

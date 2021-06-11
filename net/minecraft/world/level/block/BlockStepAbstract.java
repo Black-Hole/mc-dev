@@ -27,37 +27,37 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockStepAbstract extends Block implements IBlockWaterlogged {
 
-    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.aK;
-    public static final BlockStateBoolean b = BlockProperties.C;
-    protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    protected static final VoxelShape d = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    public static final BlockStateEnum<BlockPropertySlabType> TYPE = BlockProperties.SLAB_TYPE;
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    protected static final VoxelShape BOTTOM_AABB = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+    protected static final VoxelShape TOP_AABB = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
     public BlockStepAbstract(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, false));
+        this.k((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.TYPE, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.WATERLOGGED, false));
     }
 
     @Override
-    public boolean c_(IBlockData iblockdata) {
-        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE;
+    public boolean g_(IBlockData iblockdata) {
+        return iblockdata.get(BlockStepAbstract.TYPE) != BlockPropertySlabType.DOUBLE;
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockStepAbstract.a, BlockStepAbstract.b);
+        blockstatelist_a.a(BlockStepAbstract.TYPE, BlockStepAbstract.WATERLOGGED);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.TYPE);
 
         switch (blockpropertyslabtype) {
             case DOUBLE:
                 return VoxelShapes.b();
             case TOP:
-                return BlockStepAbstract.d;
+                return BlockStepAbstract.TOP_AABB;
             default:
-                return BlockStepAbstract.c;
+                return BlockStepAbstract.BOTTOM_AABB;
         }
     }
 
@@ -68,22 +68,22 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockposition);
 
         if (iblockdata.a((Block) this)) {
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockStepAbstract.a, BlockPropertySlabType.DOUBLE)).set(BlockStepAbstract.b, false);
+            return (IBlockData) ((IBlockData) iblockdata.set(BlockStepAbstract.TYPE, BlockPropertySlabType.DOUBLE)).set(BlockStepAbstract.WATERLOGGED, false);
         } else {
             Fluid fluid = blockactioncontext.getWorld().getFluid(blockposition);
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, fluid.getType() == FluidTypes.WATER);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.TYPE, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.WATERLOGGED, fluid.getType() == FluidTypes.WATER);
             EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-            return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.getPos().y - (double) blockposition.getY() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.a, BlockPropertySlabType.TOP);
+            return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.getPos().y - (double) blockposition.getY() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.TYPE, BlockPropertySlabType.TOP);
         }
     }
 
     @Override
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         ItemStack itemstack = blockactioncontext.getItemStack();
-        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
+        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.TYPE);
 
-        if (blockpropertyslabtype != BlockPropertySlabType.DOUBLE && itemstack.getItem() == this.getItem()) {
+        if (blockpropertyslabtype != BlockPropertySlabType.DOUBLE && itemstack.a(this.getItem())) {
             if (blockactioncontext.c()) {
                 boolean flag = blockactioncontext.getPos().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D;
                 EnumDirection enumdirection = blockactioncontext.getClickedFace();
@@ -98,23 +98,23 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockStepAbstract.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
     }
 
     @Override
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE ? IBlockWaterlogged.super.place(generatoraccess, blockposition, iblockdata, fluid) : false;
+        return iblockdata.get(BlockStepAbstract.TYPE) != BlockPropertySlabType.DOUBLE ? IBlockWaterlogged.super.place(generatoraccess, blockposition, iblockdata, fluid) : false;
     }
 
     @Override
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE ? IBlockWaterlogged.super.canPlace(iblockaccess, blockposition, iblockdata, fluidtype) : false;
+        return iblockdata.get(BlockStepAbstract.TYPE) != BlockPropertySlabType.DOUBLE ? IBlockWaterlogged.super.canPlace(iblockaccess, blockposition, iblockdata, fluidtype) : false;
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockStepAbstract.b)) {
+        if ((Boolean) iblockdata.get(BlockStepAbstract.WATERLOGGED)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 

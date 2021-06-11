@@ -20,26 +20,28 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockChain extends BlockRotatable implements IBlockWaterlogged {
 
-    public static final BlockStateBoolean a = BlockProperties.C;
-    protected static final VoxelShape b = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
-    protected static final VoxelShape c = Block.a(6.5D, 6.5D, 0.0D, 9.5D, 9.5D, 16.0D);
-    protected static final VoxelShape d = Block.a(0.0D, 6.5D, 6.5D, 16.0D, 9.5D, 9.5D);
+    public static final BlockStateBoolean WATERLOGGED = BlockProperties.WATERLOGGED;
+    protected static final float AABB_MIN = 6.5F;
+    protected static final float AABB_MAX = 9.5F;
+    protected static final VoxelShape Y_AXIS_AABB = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
+    protected static final VoxelShape Z_AXIS_AABB = Block.a(6.5D, 6.5D, 0.0D, 9.5D, 9.5D, 16.0D);
+    protected static final VoxelShape X_AXIS_AABB = Block.a(0.0D, 6.5D, 6.5D, 16.0D, 9.5D, 9.5D);
 
     public BlockChain(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChain.a, false)).set(BlockChain.AXIS, EnumDirection.EnumAxis.Y));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockChain.WATERLOGGED, false)).set(BlockChain.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection.EnumAxis) iblockdata.get(BlockChain.AXIS)) {
             case X:
             default:
-                return BlockChain.d;
+                return BlockChain.X_AXIS_AABB;
             case Z:
-                return BlockChain.c;
+                return BlockChain.Z_AXIS_AABB;
             case Y:
-                return BlockChain.b;
+                return BlockChain.Y_AXIS_AABB;
         }
     }
 
@@ -49,12 +51,12 @@ public class BlockChain extends BlockRotatable implements IBlockWaterlogged {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         boolean flag = fluid.getType() == FluidTypes.WATER;
 
-        return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockChain.a, flag);
+        return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockChain.WATERLOGGED, flag);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockChain.a)) {
+        if ((Boolean) iblockdata.get(BlockChain.WATERLOGGED)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
@@ -63,12 +65,12 @@ public class BlockChain extends BlockRotatable implements IBlockWaterlogged {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockChain.a).a(BlockChain.AXIS);
+        blockstatelist_a.a(BlockChain.WATERLOGGED).a(BlockChain.AXIS);
     }
 
     @Override
-    public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockChain.a) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+    public Fluid c_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockChain.WATERLOGGED) ? FluidTypes.WATER.a(false) : super.c_(iblockdata);
     }
 
     @Override

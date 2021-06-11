@@ -11,9 +11,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.World;
 
-public abstract class EntityFireballFireball extends EntityFireball {
+public abstract class EntityFireballFireball extends EntityFireball implements ItemSupplier {
 
-    private static final DataWatcherObject<ItemStack> e = DataWatcher.a(EntityFireballFireball.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<ItemStack> DATA_ITEM_STACK = DataWatcher.a(EntityFireballFireball.class, DataWatcherRegistry.ITEM_STACK);
 
     public EntityFireballFireball(EntityTypes<? extends EntityFireballFireball> entitytypes, World world) {
         super(entitytypes, world);
@@ -28,8 +28,8 @@ public abstract class EntityFireballFireball extends EntityFireball {
     }
 
     public void setItem(ItemStack itemstack) {
-        if (itemstack.getItem() != Items.FIRE_CHARGE || itemstack.hasTag()) {
-            this.getDataWatcher().set(EntityFireballFireball.e, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
+        if (!itemstack.a(Items.FIRE_CHARGE) || itemstack.hasTag()) {
+            this.getDataWatcher().set(EntityFireballFireball.DATA_ITEM_STACK, (ItemStack) SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
                 itemstack1.setCount(1);
             }));
         }
@@ -37,12 +37,19 @@ public abstract class EntityFireballFireball extends EntityFireball {
     }
 
     public ItemStack getItem() {
-        return (ItemStack) this.getDataWatcher().get(EntityFireballFireball.e);
+        return (ItemStack) this.getDataWatcher().get(EntityFireballFireball.DATA_ITEM_STACK);
+    }
+
+    @Override
+    public ItemStack getSuppliedItem() {
+        ItemStack itemstack = this.getItem();
+
+        return itemstack.isEmpty() ? new ItemStack(Items.FIRE_CHARGE) : itemstack;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityFireballFireball.e, ItemStack.b);
+        this.getDataWatcher().register(EntityFireballFireball.DATA_ITEM_STACK, ItemStack.EMPTY);
     }
 
     @Override

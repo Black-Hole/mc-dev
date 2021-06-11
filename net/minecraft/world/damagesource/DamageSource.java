@@ -15,37 +15,43 @@ import net.minecraft.world.phys.Vec3D;
 
 public class DamageSource {
 
-    public static final DamageSource FIRE = (new DamageSource("inFire")).setIgnoreArmor().setFire();
-    public static final DamageSource LIGHTNING = new DamageSource("lightningBolt");
-    public static final DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setFire();
+    public static final DamageSource IN_FIRE = (new DamageSource("inFire")).setIgnoreArmor().setFire();
+    public static final DamageSource LIGHTNING_BOLT = new DamageSource("lightningBolt");
+    public static final DamageSource ON_FIRE = (new DamageSource("onFire")).setIgnoreArmor().setFire();
     public static final DamageSource LAVA = (new DamageSource("lava")).setFire();
     public static final DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setFire();
-    public static final DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
+    public static final DamageSource IN_WALL = (new DamageSource("inWall")).setIgnoreArmor();
     public static final DamageSource CRAMMING = (new DamageSource("cramming")).setIgnoreArmor();
     public static final DamageSource DROWN = (new DamageSource("drown")).setIgnoreArmor();
     public static final DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().setStarvation();
     public static final DamageSource CACTUS = new DamageSource("cactus");
-    public static final DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor();
+    public static final DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor().A();
     public static final DamageSource FLY_INTO_WALL = (new DamageSource("flyIntoWall")).setIgnoreArmor();
     public static final DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().setIgnoresInvulnerability();
     public static final DamageSource GENERIC = (new DamageSource("generic")).setIgnoreArmor();
     public static final DamageSource MAGIC = (new DamageSource("magic")).setIgnoreArmor().setMagic();
     public static final DamageSource WITHER = (new DamageSource("wither")).setIgnoreArmor();
-    public static final DamageSource ANVIL = new DamageSource("anvil");
-    public static final DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
+    public static final DamageSource ANVIL = (new DamageSource("anvil")).n();
+    public static final DamageSource FALLING_BLOCK = (new DamageSource("fallingBlock")).n();
     public static final DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    public static final DamageSource DRYOUT = new DamageSource("dryout");
+    public static final DamageSource DRY_OUT = new DamageSource("dryout");
     public static final DamageSource SWEET_BERRY_BUSH = new DamageSource("sweetBerryBush");
-    private boolean w;
-    private boolean x;
-    private boolean y;
-    private float z = 0.1F;
-    private boolean A;
-    private boolean B;
-    private boolean C;
-    private boolean D;
-    private boolean E;
-    public final String translationIndex;
+    public static final DamageSource FREEZE = (new DamageSource("freeze")).setIgnoreArmor();
+    public static final DamageSource FALLING_STALACTITE = (new DamageSource("fallingStalactite")).n();
+    public static final DamageSource STALAGMITE = (new DamageSource("stalagmite")).setIgnoreArmor().A();
+    private boolean damageHelmet;
+    private boolean bypassArmor;
+    private boolean bypassInvul;
+    private boolean bypassMagic;
+    private float exhaustion = 0.1F;
+    private boolean isFireSource;
+    private boolean isProjectile;
+    private boolean scalesWithDifficulty;
+    private boolean isMagic;
+    private boolean isExplosion;
+    private boolean isFall;
+    private boolean noAggro;
+    public final String msgId;
 
     public static DamageSource b(EntityLiving entityliving) {
         return new EntityDamageSource("sting", entityliving);
@@ -55,7 +61,7 @@ public class DamageSource {
         return new EntityDamageSource("mob", entityliving);
     }
 
-    public static DamageSource a(Entity entity, EntityLiving entityliving) {
+    public static DamageSource a(Entity entity, @Nullable EntityLiving entityliving) {
         return new EntityDamageSourceIndirect("mob", entity, entityliving);
     }
 
@@ -92,7 +98,7 @@ public class DamageSource {
     }
 
     public static DamageSource a(Entity entity) {
-        return (new EntityDamageSource("thorns", entity)).x().setMagic();
+        return (new EntityDamageSource("thorns", entity)).D().setMagic();
     }
 
     public static DamageSource explosion(@Nullable Explosion explosion) {
@@ -100,7 +106,7 @@ public class DamageSource {
     }
 
     public static DamageSource d(@Nullable EntityLiving entityliving) {
-        return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).r().setExplosion() : (new DamageSource("explosion")).r().setExplosion();
+        return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).v().setExplosion() : (new DamageSource("explosion")).v().setExplosion();
     }
 
     public static DamageSource a() {
@@ -108,49 +114,53 @@ public class DamageSource {
     }
 
     public String toString() {
-        return "DamageSource (" + this.translationIndex + ")";
+        return "DamageSource (" + this.msgId + ")";
     }
 
     public boolean b() {
-        return this.B;
+        return this.isProjectile;
     }
 
     public DamageSource c() {
-        this.B = true;
+        this.isProjectile = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.E;
+        return this.isExplosion;
     }
 
     public DamageSource setExplosion() {
-        this.E = true;
+        this.isExplosion = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.w;
+        return this.bypassArmor;
+    }
+
+    public boolean g() {
+        return this.damageHelmet;
     }
 
     public float getExhaustionCost() {
-        return this.z;
+        return this.exhaustion;
     }
 
     public boolean ignoresInvulnerability() {
-        return this.x;
+        return this.bypassInvul;
     }
 
     public boolean isStarvation() {
-        return this.y;
+        return this.bypassMagic;
     }
 
     protected DamageSource(String s) {
-        this.translationIndex = s;
+        this.msgId = s;
     }
 
     @Nullable
-    public Entity j() {
+    public Entity k() {
         return this.getEntity();
     }
 
@@ -160,69 +170,92 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.w = true;
-        this.z = 0.0F;
+        this.bypassArmor = true;
+        this.exhaustion = 0.0F;
+        return this;
+    }
+
+    protected DamageSource n() {
+        this.damageHelmet = true;
         return this;
     }
 
     protected DamageSource setIgnoresInvulnerability() {
-        this.x = true;
+        this.bypassInvul = true;
         return this;
     }
 
     protected DamageSource setStarvation() {
-        this.y = true;
-        this.z = 0.0F;
+        this.bypassMagic = true;
+        this.exhaustion = 0.0F;
         return this;
     }
 
     protected DamageSource setFire() {
-        this.A = true;
+        this.isFireSource = true;
+        return this;
+    }
+
+    public DamageSource r() {
+        this.noAggro = true;
         return this;
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
         EntityLiving entityliving1 = entityliving.getKillingEntity();
-        String s = "death.attack." + this.translationIndex;
+        String s = "death.attack." + this.msgId;
         String s1 = s + ".player";
 
         return entityliving1 != null ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), entityliving1.getScoreboardDisplayName()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName()});
     }
 
     public boolean isFire() {
-        return this.A;
+        return this.isFireSource;
     }
 
-    public String q() {
-        return this.translationIndex;
+    public boolean t() {
+        return this.noAggro;
     }
 
-    public DamageSource r() {
-        this.C = true;
+    public String u() {
+        return this.msgId;
+    }
+
+    public DamageSource v() {
+        this.scalesWithDifficulty = true;
         return this;
     }
 
-    public boolean s() {
-        return this.C;
+    public boolean w() {
+        return this.scalesWithDifficulty;
     }
 
     public boolean isMagic() {
-        return this.D;
+        return this.isMagic;
     }
 
     public DamageSource setMagic() {
-        this.D = true;
+        this.isMagic = true;
         return this;
     }
 
-    public boolean v() {
+    public boolean z() {
+        return this.isFall;
+    }
+
+    public DamageSource A() {
+        this.isFall = true;
+        return this;
+    }
+
+    public boolean B() {
         Entity entity = this.getEntity();
 
-        return entity instanceof EntityHuman && ((EntityHuman) entity).abilities.canInstantlyBuild;
+        return entity instanceof EntityHuman && ((EntityHuman) entity).getAbilities().instabuild;
     }
 
     @Nullable
-    public Vec3D w() {
+    public Vec3D C() {
         return null;
     }
 }

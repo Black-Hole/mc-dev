@@ -11,9 +11,15 @@ import net.minecraft.world.level.newbiome.context.AreaContextTransformed;
 import net.minecraft.world.level.newbiome.context.WorldGenContextArea;
 import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer2;
 
-public class GenLayers {
+public class GenLayers implements LayerBiomes {
 
-    private static final Int2IntMap a = (Int2IntMap) SystemUtils.a((Object) (new Int2IntOpenHashMap()), (int2intopenhashmap) -> {
+    protected static final int WARM_ID = 1;
+    protected static final int MEDIUM_ID = 2;
+    protected static final int COLD_ID = 3;
+    protected static final int ICE_ID = 4;
+    protected static final int SPECIAL_MASK = 3840;
+    protected static final int SPECIAL_SHIFT = 8;
+    private static final Int2IntMap CATEGORIES = (Int2IntMap) SystemUtils.a((Object) (new Int2IntOpenHashMap()), (int2intopenhashmap) -> {
         a(int2intopenhashmap, GenLayers.Type.BEACH, 16);
         a(int2intopenhashmap, GenLayers.Type.BEACH, 26);
         a(int2intopenhashmap, GenLayers.Type.DESERT, 2);
@@ -83,6 +89,8 @@ public class GenLayers {
         a(int2intopenhashmap, GenLayers.Type.TAIGA, 19);
         a(int2intopenhashmap, GenLayers.Type.TAIGA, 133);
     });
+
+    public GenLayers() {}
 
     private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(long i, AreaTransformer2 areatransformer2, AreaFactory<T> areafactory, int j, LongFunction<C> longfunction) {
         AreaFactory<T> areafactory1 = areafactory;
@@ -162,7 +170,7 @@ public class GenLayers {
     }
 
     public static boolean a(int i, int j) {
-        return i == j ? true : GenLayers.a.get(i) == GenLayers.a.get(j);
+        return i == j ? true : GenLayers.CATEGORIES.get(i) == GenLayers.CATEGORIES.get(j);
     }
 
     private static void a(Int2IntOpenHashMap int2intopenhashmap, GenLayers.Type genlayers_type, int i) {
@@ -177,7 +185,7 @@ public class GenLayers {
         return i == 44 || i == 45 || i == 0 || i == 46 || i == 10;
     }
 
-    static enum Type {
+    private static enum Type {
 
         NONE, TAIGA, EXTREME_HILLS, JUNGLE, MESA, BADLANDS_PLATEAU, PLAINS, SAVANNA, ICY, BEACH, FOREST, OCEAN, DESERT, RIVER, SWAMP, MUSHROOM;
 

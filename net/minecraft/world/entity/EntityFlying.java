@@ -1,6 +1,7 @@
 package net.minecraft.world.entity;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.Vec3D;
@@ -12,7 +13,7 @@ public abstract class EntityFlying extends EntityInsentient {
     }
 
     @Override
-    public boolean b(float f, float f1) {
+    public boolean a(float f, float f1, DamageSource damagesource) {
         return false;
     }
 
@@ -25,7 +26,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.800000011920929D));
-        } else if (this.aQ()) {
+        } else if (this.aX()) {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.5D));
@@ -33,14 +34,14 @@ public abstract class EntityFlying extends EntityInsentient {
             float f = 0.91F;
 
             if (this.onGround) {
-                f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.91F;
+                f = this.level.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.91F;
             }
 
             float f1 = 0.16277137F / (f * f * f);
 
             f = 0.91F;
             if (this.onGround) {
-                f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.91F;
+                f = this.level.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.91F;
             }
 
             this.a(this.onGround ? 0.1F * f1 : 0.02F, vec3d);

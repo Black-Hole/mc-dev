@@ -1,30 +1,30 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInDifficultyLock implements Packet<PacketListenerPlayIn> {
 
-    private boolean a;
+    private final boolean locked;
 
-    public PacketPlayInDifficultyLock() {}
+    public PacketPlayInDifficultyLock(boolean flag) {
+        this.locked = flag;
+    }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readBoolean();
+    public PacketPlayInDifficultyLock(PacketDataSerializer packetdataserializer) {
+        this.locked = packetdataserializer.readBoolean();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeBoolean(this.a);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeBoolean(this.locked);
     }
 
     public boolean b() {
-        return this.a;
+        return this.locked;
     }
 }

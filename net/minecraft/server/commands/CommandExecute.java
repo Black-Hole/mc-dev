@@ -41,7 +41,6 @@ import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
 import net.minecraft.commands.arguments.coordinates.ArgumentRotation;
 import net.minecraft.commands.arguments.coordinates.ArgumentRotationAxis;
 import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
-import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -73,24 +72,27 @@ import net.minecraft.world.scores.ScoreboardScore;
 
 public class CommandExecute {
 
-    private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final int MAX_TEST_AREA = 32768;
+    private static final Dynamic2CommandExceptionType ERROR_AREA_TOO_LARGE = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.execute.blocks.toobig", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail"));
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final SimpleCommandExceptionType ERROR_CONDITIONAL_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail"));
+    private static final DynamicCommandExceptionType ERROR_CONDITIONAL_FAILED_COUNT = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.execute.conditional.fail_count", new Object[]{object});
     });
-    private static final BinaryOperator<ResultConsumer<CommandListenerWrapper>> d = (resultconsumer, resultconsumer1) -> {
+    private static final BinaryOperator<ResultConsumer<CommandListenerWrapper>> CALLBACK_CHAINER = (resultconsumer, resultconsumer1) -> {
         return (commandcontext, flag, i) -> {
             resultconsumer.onCommandComplete(commandcontext, flag, i);
             resultconsumer1.onCommandComplete(commandcontext, flag, i);
         };
     };
-    private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
+    private static final SuggestionProvider<CommandListenerWrapper> SUGGEST_PREDICATE = (commandcontext, suggestionsbuilder) -> {
         LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getLootPredicateManager();
 
         return ICompletionProvider.a((Iterable) lootpredicatemanager.a(), suggestionsbuilder);
     };
+
+    public CommandExecute() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = commanddispatcher.register((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
@@ -117,7 +119,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.bi()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.level).a(entity.getPositionVector()).a(entity.br()));
             }
 
             return list;
@@ -143,7 +145,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bi()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.br()));
             }
 
             return list;
@@ -171,15 +173,15 @@ public class CommandExecute {
     }
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(LiteralCommandNode<CommandListenerWrapper> literalcommandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
-        literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("score").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).redirect(literalcommandnode, (commandcontext) -> {
+        literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("score").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(net.minecraft.commands.CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).redirect(literalcommandnode, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.a(commandcontext, "objective"), flag);
         }))));
-        literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("bossbar").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).then(net.minecraft.commands.CommandDispatcher.a("value").redirect(literalcommandnode, (commandcontext) -> {
+        literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("bossbar").then(((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.SUGGEST_BOSS_BAR).then(net.minecraft.commands.CommandDispatcher.a("value").redirect(literalcommandnode, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), CommandBossBar.a(commandcontext), true, flag);
         }))).then(net.minecraft.commands.CommandDispatcher.a("max").redirect(literalcommandnode, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), CommandBossBar.a(commandcontext), false, flag);
         }))));
-        Iterator iterator = CommandData.b.iterator();
+        Iterator iterator = CommandData.TARGET_PROVIDERS.iterator();
 
         while (iterator.hasNext()) {
             CommandData.c commanddata_c = (CommandData.c) iterator.next();
@@ -230,7 +232,7 @@ public class CommandExecute {
                 scoreboardscore.setScore(j);
             }
 
-        }, CommandExecute.d);
+        }, CommandExecute.CALLBACK_CHAINER);
     }
 
     private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, boolean flag, boolean flag1) {
@@ -243,16 +245,16 @@ public class CommandExecute {
                 bossbattlecustom.b(j);
             }
 
-        }, CommandExecute.d);
+        }, CommandExecute.CALLBACK_CHAINER);
     }
 
-    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h, IntFunction<NBTBase> intfunction, boolean flag) {
+    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.g argumentnbtkey_g, IntFunction<NBTBase> intfunction, boolean flag) {
         return commandlistenerwrapper.a((commandcontext, flag1, i) -> {
             try {
                 NBTTagCompound nbttagcompound = commanddataaccessor.a();
                 int j = flag ? i : (flag1 ? 1 : 0);
 
-                argumentnbtkey_h.b(nbttagcompound, () -> {
+                argumentnbtkey_g.b(nbttagcompound, () -> {
                     return (NBTBase) intfunction.apply(j);
                 });
                 commanddataaccessor.a(nbttagcompound);
@@ -260,27 +262,27 @@ public class CommandExecute {
                 ;
             }
 
-        }, CommandExecute.d);
+        }, CommandExecute.CALLBACK_CHAINER);
     }
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
         ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(net.minecraft.commands.CommandDispatcher.a("block").then(net.minecraft.commands.CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
             return ArgumentBlockPredicate.a(commandcontext, "block").test(new ShapeDetectorBlock(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "pos"), true));
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("score").then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("score").then(net.minecraft.commands.CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(net.minecraft.commands.CommandDispatcher.a("=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, Integer::equals);
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("<").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("<").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
                 return integer < integer1;
             });
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("<=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("<=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
                 return integer <= integer1;
             });
-        }))))).then(net.minecraft.commands.CommandDispatcher.a(">").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a(">").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
                 return integer > integer1;
             });
-        }))))).then(net.minecraft.commands.CommandDispatcher.a(">=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a(">=").then(net.minecraft.commands.CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.SUGGEST_SCORE_HOLDERS).then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
                 return integer >= integer1;
             });
@@ -290,10 +292,10 @@ public class CommandExecute {
             return a(commandcontext, flag, !ArgumentEntity.c(commandcontext, "entities").isEmpty());
         })).executes(a(flag, (commandcontext) -> {
             return ArgumentEntity.c(commandcontext, "entities").size();
-        }))))).then(net.minecraft.commands.CommandDispatcher.a("predicate").then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("predicate", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandExecute.e), flag, (commandcontext) -> {
+        }))))).then(net.minecraft.commands.CommandDispatcher.a("predicate").then(a(commandnode, (ArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("predicate", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandExecute.SUGGEST_PREDICATE), flag, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.c(commandcontext, "predicate"));
         })));
-        Iterator iterator = CommandData.c.iterator();
+        Iterator iterator = CommandData.SOURCE_PROVIDERS.iterator();
 
         while (iterator.hasNext()) {
             CommandData.c commanddata_c = (CommandData.c) iterator.next();
@@ -318,7 +320,7 @@ public class CommandExecute {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[]{i}), false);
                 return i;
             } else {
-                throw CommandExecute.b.create();
+                throw CommandExecute.ERROR_CONDITIONAL_FAILED.create();
             }
         } : (commandcontext) -> {
             int i = commandexecute_a.test(commandcontext);
@@ -327,13 +329,13 @@ public class CommandExecute {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
                 return 1;
             } else {
-                throw CommandExecute.c.create(i);
+                throw CommandExecute.ERROR_CONDITIONAL_FAILED_COUNT.create(i);
             }
         };
     }
 
-    private static int a(CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h) throws CommandSyntaxException {
-        return argumentnbtkey_h.b(commanddataaccessor.a());
+    private static int a(CommandDataAccessor commanddataaccessor, ArgumentNBTKey.g argumentnbtkey_g) throws CommandSyntaxException {
+        return argumentnbtkey_g.b(commanddataaccessor.a());
     }
 
     private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, BiPredicate<Integer, Integer> bipredicate) throws CommandSyntaxException {
@@ -369,7 +371,7 @@ public class CommandExecute {
     }
 
     private static Collection<CommandListenerWrapper> a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag, boolean flag1) {
-        return (Collection) (flag1 == flag ? Collections.singleton(commandcontext.getSource()) : Collections.emptyList());
+        return (Collection) (flag1 == flag ? Collections.singleton((CommandListenerWrapper) commandcontext.getSource()) : Collections.emptyList());
     }
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, boolean flag, CommandExecute.b commandexecute_b) {
@@ -380,7 +382,7 @@ public class CommandExecute {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
                 return 1;
             } else {
-                throw CommandExecute.b.create();
+                throw CommandExecute.ERROR_CONDITIONAL_FAILED.create();
             }
         });
     }
@@ -402,7 +404,7 @@ public class CommandExecute {
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[]{optionalint.getAsInt()}), false);
             return optionalint.getAsInt();
         } else {
-            throw CommandExecute.b.create();
+            throw CommandExecute.ERROR_CONDITIONAL_FAILED.create();
         }
     }
 
@@ -410,7 +412,7 @@ public class CommandExecute {
         OptionalInt optionalint = c(commandcontext, flag);
 
         if (optionalint.isPresent()) {
-            throw CommandExecute.c.create(optionalint.getAsInt());
+            throw CommandExecute.ERROR_CONDITIONAL_FAILED_COUNT.create(optionalint.getAsInt());
         } else {
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
             return 1;
@@ -422,21 +424,21 @@ public class CommandExecute {
     }
 
     private static OptionalInt a(WorldServer worldserver, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, boolean flag) throws CommandSyntaxException {
-        StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
-        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.c()));
-        BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
-        int i = structureboundingbox.d() * structureboundingbox.e() * structureboundingbox.f();
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(blockposition, blockposition1);
+        StructureBoundingBox structureboundingbox1 = StructureBoundingBox.a(blockposition2, blockposition2.f(structureboundingbox.b()));
+        BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.g() - structureboundingbox.g(), structureboundingbox1.h() - structureboundingbox.h(), structureboundingbox1.i() - structureboundingbox.i());
+        int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
         if (i > 32768) {
-            throw CommandExecute.a.create(32768, i);
+            throw CommandExecute.ERROR_AREA_TOO_LARGE.create(32768, i);
         } else {
             int j = 0;
 
-            for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
-                for (int l = structureboundingbox.b; l <= structureboundingbox.e; ++l) {
-                    for (int i1 = structureboundingbox.a; i1 <= structureboundingbox.d; ++i1) {
+            for (int k = structureboundingbox.i(); k <= structureboundingbox.l(); ++k) {
+                for (int l = structureboundingbox.h(); l <= structureboundingbox.k(); ++l) {
+                    for (int i1 = structureboundingbox.g(); i1 <= structureboundingbox.j(); ++i1) {
                         BlockPosition blockposition4 = new BlockPosition(i1, l, k);
-                        BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
+                        BlockPosition blockposition5 = blockposition4.f(blockposition3);
                         IBlockData iblockdata = worldserver.getType(blockposition4);
 
                         if (!flag || !iblockdata.a(Blocks.AIR)) {
@@ -478,14 +480,14 @@ public class CommandExecute {
     }
 
     @FunctionalInterface
-    interface a {
+    private interface b {
 
-        int test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
+        boolean test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
     }
 
     @FunctionalInterface
-    interface b {
+    private interface a {
 
-        boolean test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
+        int test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
     }
 }

@@ -3,13 +3,11 @@ package net.minecraft.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 
 public class NBTTagLong extends NBTNumber {
 
-    public static final NBTTagType<NBTTagLong> a = new NBTTagType<NBTTagLong>() {
+    private static final int SELF_SIZE_IN_BITS = 128;
+    public static final NBTTagType<NBTTagLong> TYPE = new NBTTagType<NBTTagLong>() {
         @Override
         public NBTTagLong b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(128L);
@@ -33,12 +31,12 @@ public class NBTTagLong extends NBTNumber {
     };
     private final long data;
 
-    private NBTTagLong(long i) {
+    NBTTagLong(long i) {
         this.data = i;
     }
 
     public static NBTTagLong a(long i) {
-        return i >= -128L && i <= 1024L ? NBTTagLong.a.a[(int) i + 128] : new NBTTagLong(i);
+        return i >= -128L && i <= 1024L ? NBTTagLong.a.cache[(int) i - -128] : new NBTTagLong(i);
     }
 
     @Override
@@ -53,12 +51,7 @@ public class NBTTagLong extends NBTNumber {
 
     @Override
     public NBTTagType<NBTTagLong> b() {
-        return NBTTagLong.a;
-    }
-
-    @Override
-    public String toString() {
-        return this.data + "L";
+        return NBTTagLong.TYPE;
     }
 
     @Override
@@ -75,10 +68,8 @@ public class NBTTagLong extends NBTNumber {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("L")).a(NBTTagLong.g);
-
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagLong.f);
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     @Override
@@ -116,13 +107,17 @@ public class NBTTagLong extends NBTNumber {
         return this.data;
     }
 
-    static class a {
+    private static class a {
 
-        static final NBTTagLong[] a = new NBTTagLong[1153];
+        private static final int HIGH = 1024;
+        private static final int LOW = -128;
+        static final NBTTagLong[] cache = new NBTTagLong[1153];
+
+        private a() {}
 
         static {
-            for (int i = 0; i < NBTTagLong.a.a.length; ++i) {
-                NBTTagLong.a.a[i] = new NBTTagLong((long) (-128 + i));
+            for (int i = 0; i < NBTTagLong.a.cache.length; ++i) {
+                NBTTagLong.a.cache[i] = new NBTTagLong((long) (-128 + i));
             }
 
         }

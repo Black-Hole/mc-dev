@@ -12,7 +12,7 @@ public class BehaviorVictory extends BehaviorStrollRandom {
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        Raid raid = worldserver.b_(entitycreature.getChunkCoordinates());
+        Raid raid = worldserver.c(entitycreature.getChunkCoordinates());
 
         return raid != null && raid.isVictory() && super.a(worldserver, (EntityLiving) entitycreature);
     }

@@ -17,16 +17,17 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class WorldBorder {
 
-    private final List<IWorldBorderListener> a = Lists.newArrayList();
-    private double b = 0.2D;
-    private double d = 5.0D;
-    private int e = 15;
-    private int f = 5;
-    private double g;
-    private double h;
-    private int i = 29999984;
-    private WorldBorder.a j = new WorldBorder.d(6.0E7D);
-    public static final WorldBorder.c c = new WorldBorder.c(0.0D, 0.0D, 0.2D, 5.0D, 5, 15, 6.0E7D, 0L, 0.0D);
+    public static final double MAX_SIZE = 5.9999968E7D;
+    private final List<IWorldBorderListener> listeners = Lists.newArrayList();
+    private double damagePerBlock = 0.2D;
+    private double damageSafeZone = 5.0D;
+    private int warningTime = 15;
+    private int warningBlocks = 5;
+    private double centerX;
+    private double centerZ;
+    int absoluteMaxSize = 29999984;
+    private WorldBorder.a extent = new WorldBorder.d(5.9999968E7D);
+    public static final WorldBorder.c DEFAULT_SETTINGS = new WorldBorder.c(0.0D, 0.0D, 0.2D, 5.0D, 5, 15, 5.9999968E7D, 0L, 0.0D);
 
     public WorldBorder() {}
 
@@ -38,6 +39,10 @@ public class WorldBorder {
         return (double) chunkcoordintpair.f() > this.e() && (double) chunkcoordintpair.d() < this.g() && (double) chunkcoordintpair.g() > this.f() && (double) chunkcoordintpair.e() < this.h();
     }
 
+    public boolean a(double d0, double d1) {
+        return d0 > this.e() && d0 < this.g() && d1 > this.f() && d1 < this.h();
+    }
+
     public boolean a(AxisAlignedBB axisalignedbb) {
         return axisalignedbb.maxX > this.e() && axisalignedbb.minX < this.g() && axisalignedbb.maxZ > this.f() && axisalignedbb.minZ < this.h();
     }
@@ -47,7 +52,7 @@ public class WorldBorder {
     }
 
     public VoxelShape c() {
-        return this.j.m();
+        return this.extent.m();
     }
 
     public double b(double d0, double d1) {
@@ -61,34 +66,38 @@ public class WorldBorder {
         return Math.min(d6, d3);
     }
 
+    public BorderStatus d() {
+        return this.extent.i();
+    }
+
     public double e() {
-        return this.j.a();
+        return this.extent.a();
     }
 
     public double f() {
-        return this.j.c();
+        return this.extent.c();
     }
 
     public double g() {
-        return this.j.b();
+        return this.extent.b();
     }
 
     public double h() {
-        return this.j.d();
+        return this.extent.d();
     }
 
     public double getCenterX() {
-        return this.g;
+        return this.centerX;
     }
 
     public double getCenterZ() {
-        return this.h;
+        return this.centerZ;
     }
 
     public void setCenter(double d0, double d1) {
-        this.g = d0;
-        this.h = d1;
-        this.j.k();
+        this.centerX = d0;
+        this.centerZ = d1;
+        this.extent.k();
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -100,19 +109,19 @@ public class WorldBorder {
     }
 
     public double getSize() {
-        return this.j.e();
+        return this.extent.e();
     }
 
     public long j() {
-        return this.j.g();
+        return this.extent.g();
     }
 
     public double k() {
-        return this.j.h();
+        return this.extent.h();
     }
 
     public void setSize(double d0) {
-        this.j = new WorldBorder.d(d0);
+        this.extent = new WorldBorder.d(d0);
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -124,7 +133,7 @@ public class WorldBorder {
     }
 
     public void transitionSizeBetween(double d0, double d1, long i) {
-        this.j = (WorldBorder.a) (d0 == d1 ? new WorldBorder.d(d1) : new WorldBorder.b(d0, d1, i));
+        this.extent = (WorldBorder.a) (d0 == d1 ? new WorldBorder.d(d1) : new WorldBorder.b(d0, d1, i));
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -136,28 +145,32 @@ public class WorldBorder {
     }
 
     protected List<IWorldBorderListener> l() {
-        return Lists.newArrayList(this.a);
+        return Lists.newArrayList(this.listeners);
     }
 
     public void a(IWorldBorderListener iworldborderlistener) {
-        this.a.add(iworldborderlistener);
+        this.listeners.add(iworldborderlistener);
+    }
+
+    public void b(IWorldBorderListener iworldborderlistener) {
+        this.listeners.remove(iworldborderlistener);
     }
 
     public void a(int i) {
-        this.i = i;
-        this.j.j();
+        this.absoluteMaxSize = i;
+        this.extent.j();
     }
 
     public int m() {
-        return this.i;
+        return this.absoluteMaxSize;
     }
 
     public double getDamageBuffer() {
-        return this.d;
+        return this.damageSafeZone;
     }
 
     public void setDamageBuffer(double d0) {
-        this.d = d0;
+        this.damageSafeZone = d0;
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -169,11 +182,11 @@ public class WorldBorder {
     }
 
     public double getDamageAmount() {
-        return this.b;
+        return this.damagePerBlock;
     }
 
     public void setDamageAmount(double d0) {
-        this.b = d0;
+        this.damagePerBlock = d0;
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -184,12 +197,16 @@ public class WorldBorder {
 
     }
 
+    public double p() {
+        return this.extent.f();
+    }
+
     public int getWarningTime() {
-        return this.e;
+        return this.warningTime;
     }
 
     public void setWarningTime(int i) {
-        this.e = i;
+        this.warningTime = i;
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -201,11 +218,11 @@ public class WorldBorder {
     }
 
     public int getWarningDistance() {
-        return this.f;
+        return this.warningBlocks;
     }
 
     public void setWarningDistance(int i) {
-        this.f = i;
+        this.warningBlocks = i;
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {
@@ -217,7 +234,7 @@ public class WorldBorder {
     }
 
     public void s() {
-        this.j = this.j.l();
+        this.extent = this.extent.l();
     }
 
     public WorldBorder.c t() {
@@ -238,142 +255,53 @@ public class WorldBorder {
 
     }
 
-    public static class c {
+    private class d implements WorldBorder.a {
 
-        private final double a;
-        private final double b;
-        private final double c;
-        private final double d;
-        private final int e;
-        private final int f;
-        private final double g;
-        private final long h;
-        private final double i;
-
-        private c(double d0, double d1, double d2, double d3, int i, int j, double d4, long k, double d5) {
-            this.a = d0;
-            this.b = d1;
-            this.c = d2;
-            this.d = d3;
-            this.e = i;
-            this.f = j;
-            this.g = d4;
-            this.h = k;
-            this.i = d5;
-        }
-
-        private c(WorldBorder worldborder) {
-            this.a = worldborder.getCenterX();
-            this.b = worldborder.getCenterZ();
-            this.c = worldborder.getDamageAmount();
-            this.d = worldborder.getDamageBuffer();
-            this.e = worldborder.getWarningDistance();
-            this.f = worldborder.getWarningTime();
-            this.g = worldborder.getSize();
-            this.h = worldborder.j();
-            this.i = worldborder.k();
-        }
-
-        public double a() {
-            return this.a;
-        }
-
-        public double b() {
-            return this.b;
-        }
-
-        public double c() {
-            return this.c;
-        }
-
-        public double d() {
-            return this.d;
-        }
-
-        public int e() {
-            return this.e;
-        }
-
-        public int f() {
-            return this.f;
-        }
-
-        public double g() {
-            return this.g;
-        }
-
-        public long h() {
-            return this.h;
-        }
-
-        public double i() {
-            return this.i;
-        }
-
-        public static WorldBorder.c a(DynamicLike<?> dynamiclike, WorldBorder.c worldborder_c) {
-            double d0 = dynamiclike.get("BorderCenterX").asDouble(worldborder_c.a);
-            double d1 = dynamiclike.get("BorderCenterZ").asDouble(worldborder_c.b);
-            double d2 = dynamiclike.get("BorderSize").asDouble(worldborder_c.g);
-            long i = dynamiclike.get("BorderSizeLerpTime").asLong(worldborder_c.h);
-            double d3 = dynamiclike.get("BorderSizeLerpTarget").asDouble(worldborder_c.i);
-            double d4 = dynamiclike.get("BorderSafeZone").asDouble(worldborder_c.d);
-            double d5 = dynamiclike.get("BorderDamagePerBlock").asDouble(worldborder_c.c);
-            int j = dynamiclike.get("BorderWarningBlocks").asInt(worldborder_c.e);
-            int k = dynamiclike.get("BorderWarningTime").asInt(worldborder_c.f);
-
-            return new WorldBorder.c(d0, d1, d5, d4, j, k, d2, i, d3);
-        }
-
-        public void a(NBTTagCompound nbttagcompound) {
-            nbttagcompound.setDouble("BorderCenterX", this.a);
-            nbttagcompound.setDouble("BorderCenterZ", this.b);
-            nbttagcompound.setDouble("BorderSize", this.g);
-            nbttagcompound.setLong("BorderSizeLerpTime", this.h);
-            nbttagcompound.setDouble("BorderSafeZone", this.d);
-            nbttagcompound.setDouble("BorderDamagePerBlock", this.c);
-            nbttagcompound.setDouble("BorderSizeLerpTarget", this.i);
-            nbttagcompound.setDouble("BorderWarningBlocks", (double) this.e);
-            nbttagcompound.setDouble("BorderWarningTime", (double) this.f);
-        }
-    }
-
-    class d implements WorldBorder.a {
-
-        private final double b;
-        private double c;
-        private double d;
-        private double e;
-        private double f;
-        private VoxelShape g;
+        private final double size;
+        private double minX;
+        private double minZ;
+        private double maxX;
+        private double maxZ;
+        private VoxelShape shape;
 
         public d(double d0) {
-            this.b = d0;
+            this.size = d0;
             this.n();
         }
 
         @Override
         public double a() {
-            return this.c;
+            return this.minX;
         }
 
         @Override
         public double b() {
-            return this.e;
+            return this.maxX;
         }
 
         @Override
         public double c() {
-            return this.d;
+            return this.minZ;
         }
 
         @Override
         public double d() {
-            return this.f;
+            return this.maxZ;
         }
 
         @Override
         public double e() {
-            return this.b;
+            return this.size;
+        }
+
+        @Override
+        public BorderStatus i() {
+            return BorderStatus.STATIONARY;
+        }
+
+        @Override
+        public double f() {
+            return 0.0D;
         }
 
         @Override
@@ -383,15 +311,15 @@ public class WorldBorder {
 
         @Override
         public double h() {
-            return this.b;
+            return this.size;
         }
 
         private void n() {
-            this.c = Math.max(WorldBorder.this.getCenterX() - this.b / 2.0D, (double) (-WorldBorder.this.i));
-            this.d = Math.max(WorldBorder.this.getCenterZ() - this.b / 2.0D, (double) (-WorldBorder.this.i));
-            this.e = Math.min(WorldBorder.this.getCenterX() + this.b / 2.0D, (double) WorldBorder.this.i);
-            this.f = Math.min(WorldBorder.this.getCenterZ() + this.b / 2.0D, (double) WorldBorder.this.i);
-            this.g = VoxelShapes.a(VoxelShapes.a, VoxelShapes.create(Math.floor(this.a()), Double.NEGATIVE_INFINITY, Math.floor(this.c()), Math.ceil(this.b()), Double.POSITIVE_INFINITY, Math.ceil(this.d())), OperatorBoolean.ONLY_FIRST);
+            this.minX = MathHelper.a(WorldBorder.this.getCenterX() - this.size / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+            this.minZ = MathHelper.a(WorldBorder.this.getCenterZ() - this.size / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+            this.maxX = MathHelper.a(WorldBorder.this.getCenterX() + this.size / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+            this.maxZ = MathHelper.a(WorldBorder.this.getCenterZ() + this.size / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+            this.shape = VoxelShapes.a(VoxelShapes.INFINITY, VoxelShapes.create(Math.floor(this.a()), Double.NEGATIVE_INFINITY, Math.floor(this.c()), Math.ceil(this.b()), Double.POSITIVE_INFINITY, Math.ceil(this.d())), OperatorBoolean.ONLY_FIRST);
         }
 
         @Override
@@ -411,81 +339,11 @@ public class WorldBorder {
 
         @Override
         public VoxelShape m() {
-            return this.g;
+            return this.shape;
         }
     }
 
-    class b implements WorldBorder.a {
-
-        private final double b;
-        private final double c;
-        private final long d;
-        private final long e;
-        private final double f;
-
-        private b(double d0, double d1, long i) {
-            this.b = d0;
-            this.c = d1;
-            this.f = (double) i;
-            this.e = SystemUtils.getMonotonicMillis();
-            this.d = this.e + i;
-        }
-
-        @Override
-        public double a() {
-            return Math.max(WorldBorder.this.getCenterX() - this.e() / 2.0D, (double) (-WorldBorder.this.i));
-        }
-
-        @Override
-        public double c() {
-            return Math.max(WorldBorder.this.getCenterZ() - this.e() / 2.0D, (double) (-WorldBorder.this.i));
-        }
-
-        @Override
-        public double b() {
-            return Math.min(WorldBorder.this.getCenterX() + this.e() / 2.0D, (double) WorldBorder.this.i);
-        }
-
-        @Override
-        public double d() {
-            return Math.min(WorldBorder.this.getCenterZ() + this.e() / 2.0D, (double) WorldBorder.this.i);
-        }
-
-        @Override
-        public double e() {
-            double d0 = (double) (SystemUtils.getMonotonicMillis() - this.e) / this.f;
-
-            return d0 < 1.0D ? MathHelper.d(d0, this.b, this.c) : this.c;
-        }
-
-        @Override
-        public long g() {
-            return this.d - SystemUtils.getMonotonicMillis();
-        }
-
-        @Override
-        public double h() {
-            return this.c;
-        }
-
-        @Override
-        public void k() {}
-
-        @Override
-        public void j() {}
-
-        @Override
-        public WorldBorder.a l() {
-            return (WorldBorder.a) (this.g() <= 0L ? WorldBorder.this.new d(this.c) : this);
-        }
-
-        @Override
-        public VoxelShape m() {
-            return VoxelShapes.a(VoxelShapes.a, VoxelShapes.create(Math.floor(this.a()), Double.NEGATIVE_INFINITY, Math.floor(this.c()), Math.ceil(this.b()), Double.POSITIVE_INFINITY, Math.ceil(this.d())), OperatorBoolean.ONLY_FIRST);
-        }
-    }
-
-    interface a {
+    private interface a {
 
         double a();
 
@@ -497,9 +355,13 @@ public class WorldBorder {
 
         double e();
 
+        double f();
+
         long g();
 
         double h();
+
+        BorderStatus i();
 
         void j();
 
@@ -508,5 +370,184 @@ public class WorldBorder {
         WorldBorder.a l();
 
         VoxelShape m();
+    }
+
+    private class b implements WorldBorder.a {
+
+        private final double from;
+        private final double to;
+        private final long lerpEnd;
+        private final long lerpBegin;
+        private final double lerpDuration;
+
+        b(double d0, double d1, long i) {
+            this.from = d0;
+            this.to = d1;
+            this.lerpDuration = (double) i;
+            this.lerpBegin = SystemUtils.getMonotonicMillis();
+            this.lerpEnd = this.lerpBegin + i;
+        }
+
+        @Override
+        public double a() {
+            return MathHelper.a(WorldBorder.this.getCenterX() - this.e() / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+        }
+
+        @Override
+        public double c() {
+            return MathHelper.a(WorldBorder.this.getCenterZ() - this.e() / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+        }
+
+        @Override
+        public double b() {
+            return MathHelper.a(WorldBorder.this.getCenterX() + this.e() / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+        }
+
+        @Override
+        public double d() {
+            return MathHelper.a(WorldBorder.this.getCenterZ() + this.e() / 2.0D, (double) (-WorldBorder.this.absoluteMaxSize), (double) WorldBorder.this.absoluteMaxSize);
+        }
+
+        @Override
+        public double e() {
+            double d0 = (double) (SystemUtils.getMonotonicMillis() - this.lerpBegin) / this.lerpDuration;
+
+            return d0 < 1.0D ? MathHelper.d(d0, this.from, this.to) : this.to;
+        }
+
+        @Override
+        public double f() {
+            return Math.abs(this.from - this.to) / (double) (this.lerpEnd - this.lerpBegin);
+        }
+
+        @Override
+        public long g() {
+            return this.lerpEnd - SystemUtils.getMonotonicMillis();
+        }
+
+        @Override
+        public double h() {
+            return this.to;
+        }
+
+        @Override
+        public BorderStatus i() {
+            return this.to < this.from ? BorderStatus.SHRINKING : BorderStatus.GROWING;
+        }
+
+        @Override
+        public void k() {}
+
+        @Override
+        public void j() {}
+
+        @Override
+        public WorldBorder.a l() {
+            return (WorldBorder.a) (this.g() <= 0L ? WorldBorder.this.new d(this.to) : this);
+        }
+
+        @Override
+        public VoxelShape m() {
+            return VoxelShapes.a(VoxelShapes.INFINITY, VoxelShapes.create(Math.floor(this.a()), Double.NEGATIVE_INFINITY, Math.floor(this.c()), Math.ceil(this.b()), Double.POSITIVE_INFINITY, Math.ceil(this.d())), OperatorBoolean.ONLY_FIRST);
+        }
+    }
+
+    public static class c {
+
+        private final double centerX;
+        private final double centerZ;
+        private final double damagePerBlock;
+        private final double safeZone;
+        private final int warningBlocks;
+        private final int warningTime;
+        private final double size;
+        private final long sizeLerpTime;
+        private final double sizeLerpTarget;
+
+        c(double d0, double d1, double d2, double d3, int i, int j, double d4, long k, double d5) {
+            this.centerX = d0;
+            this.centerZ = d1;
+            this.damagePerBlock = d2;
+            this.safeZone = d3;
+            this.warningBlocks = i;
+            this.warningTime = j;
+            this.size = d4;
+            this.sizeLerpTime = k;
+            this.sizeLerpTarget = d5;
+        }
+
+        c(WorldBorder worldborder) {
+            this.centerX = worldborder.getCenterX();
+            this.centerZ = worldborder.getCenterZ();
+            this.damagePerBlock = worldborder.getDamageAmount();
+            this.safeZone = worldborder.getDamageBuffer();
+            this.warningBlocks = worldborder.getWarningDistance();
+            this.warningTime = worldborder.getWarningTime();
+            this.size = worldborder.getSize();
+            this.sizeLerpTime = worldborder.j();
+            this.sizeLerpTarget = worldborder.k();
+        }
+
+        public double a() {
+            return this.centerX;
+        }
+
+        public double b() {
+            return this.centerZ;
+        }
+
+        public double c() {
+            return this.damagePerBlock;
+        }
+
+        public double d() {
+            return this.safeZone;
+        }
+
+        public int e() {
+            return this.warningBlocks;
+        }
+
+        public int f() {
+            return this.warningTime;
+        }
+
+        public double g() {
+            return this.size;
+        }
+
+        public long h() {
+            return this.sizeLerpTime;
+        }
+
+        public double i() {
+            return this.sizeLerpTarget;
+        }
+
+        public static WorldBorder.c a(DynamicLike<?> dynamiclike, WorldBorder.c worldborder_c) {
+            double d0 = dynamiclike.get("BorderCenterX").asDouble(worldborder_c.centerX);
+            double d1 = dynamiclike.get("BorderCenterZ").asDouble(worldborder_c.centerZ);
+            double d2 = dynamiclike.get("BorderSize").asDouble(worldborder_c.size);
+            long i = dynamiclike.get("BorderSizeLerpTime").asLong(worldborder_c.sizeLerpTime);
+            double d3 = dynamiclike.get("BorderSizeLerpTarget").asDouble(worldborder_c.sizeLerpTarget);
+            double d4 = dynamiclike.get("BorderSafeZone").asDouble(worldborder_c.safeZone);
+            double d5 = dynamiclike.get("BorderDamagePerBlock").asDouble(worldborder_c.damagePerBlock);
+            int j = dynamiclike.get("BorderWarningBlocks").asInt(worldborder_c.warningBlocks);
+            int k = dynamiclike.get("BorderWarningTime").asInt(worldborder_c.warningTime);
+
+            return new WorldBorder.c(d0, d1, d5, d4, j, k, d2, i, d3);
+        }
+
+        public void a(NBTTagCompound nbttagcompound) {
+            nbttagcompound.setDouble("BorderCenterX", this.centerX);
+            nbttagcompound.setDouble("BorderCenterZ", this.centerZ);
+            nbttagcompound.setDouble("BorderSize", this.size);
+            nbttagcompound.setLong("BorderSizeLerpTime", this.sizeLerpTime);
+            nbttagcompound.setDouble("BorderSafeZone", this.safeZone);
+            nbttagcompound.setDouble("BorderDamagePerBlock", this.damagePerBlock);
+            nbttagcompound.setDouble("BorderSizeLerpTarget", this.sizeLerpTarget);
+            nbttagcompound.setDouble("BorderWarningBlocks", (double) this.warningBlocks);
+            nbttagcompound.setDouble("BorderWarningTime", (double) this.warningTime);
+        }
     }
 }

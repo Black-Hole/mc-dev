@@ -9,19 +9,19 @@ import net.minecraft.world.level.storage.loot.LootTableInfo;
 
 public class LootItemConditionRandomChance implements LootItemCondition {
 
-    private final float a;
+    final float probability;
 
-    private LootItemConditionRandomChance(float f) {
-        this.a = f;
+    LootItemConditionRandomChance(float f) {
+        this.probability = f;
     }
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.c;
+    public LootItemConditionType a() {
+        return LootItemConditions.RANDOM_CHANCE;
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        return loottableinfo.a().nextFloat() < this.a;
+        return loottableinfo.a().nextFloat() < this.probability;
     }
 
     public static LootItemCondition.a a(float f) {
@@ -35,7 +35,7 @@ public class LootItemConditionRandomChance implements LootItemCondition {
         public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionRandomChance lootitemconditionrandomchance, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("chance", lootitemconditionrandomchance.a);
+            jsonobject.addProperty("chance", lootitemconditionrandomchance.probability);
         }
 
         @Override

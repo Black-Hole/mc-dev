@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportSystemDetails;
 import net.minecraft.SystemUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.DispenserRegistry;
 import net.minecraft.world.level.GameRules;
 import org.apache.logging.log4j.LogManager;
@@ -22,21 +23,23 @@ import org.apache.logging.log4j.Logger;
 public class ThreadWatchdog implements Runnable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final DedicatedServer b;
-    private final long c;
+    private static final long MAX_SHUTDOWN_TIME = 10000L;
+    private static final int SHUTDOWN_STATUS = 1;
+    private final DedicatedServer server;
+    private final long maxTickTime;
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
-        this.b = dedicatedserver;
-        this.c = dedicatedserver.getMaxTickTime();
+        this.server = dedicatedserver;
+        this.maxTickTime = dedicatedserver.getMaxTickTime();
     }
 
     public void run() {
-        while (this.b.isRunning()) {
-            long i = this.b.ay();
+        while (this.server.isRunning()) {
+            long i = this.server.ax();
             long j = SystemUtils.getMonotonicMillis();
             long k = j - i;
 
-            if (k > this.c) {
+            if (k > this.maxTickTime) {
                 ThreadWatchdog.LOGGER.fatal("A single server tick took {} seconds (should be max {})", String.format(Locale.ROOT, "%.2f", (float) k / 1000.0F), String.format(Locale.ROOT, "%.2f", 0.05F));
                 ThreadWatchdog.LOGGER.fatal("Considering it to be crashed, server will forcibly shutdown.");
                 ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
@@ -49,7 +52,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.getThread().getId()) {
+                    if (threadinfo.getThreadId() == this.server.getThread().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 
@@ -59,25 +62,30 @@ public class ThreadWatchdog implements Runnable {
 
                 CrashReport crashreport = new CrashReport("Watching Server", error);
 
-                this.b.b(crashreport);
+                this.server.b(crashreport.g());
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
                 CrashReportSystemDetails crashreportsystemdetails1 = crashreport.a("Performance stats");
 
                 crashreportsystemdetails1.a("Random tick rate", () -> {
-                    return ((GameRules.GameRuleInt) this.b.getSaveData().q().get(GameRules.RANDOM_TICK_SPEED)).toString();
+                    return ((GameRules.GameRuleInt) this.server.getSaveData().q().get(GameRules.RULE_RANDOMTICKING)).toString();
                 });
                 crashreportsystemdetails1.a("Level stats", () -> {
-                    return (String) Streams.stream(this.b.getWorlds()).map((worldserver) -> {
-                        return worldserver.getDimensionKey() + ": " + worldserver.F();
+                    return (String) Streams.stream(this.server.getWorlds()).map((worldserver) -> {
+                        ResourceKey resourcekey = worldserver.getDimensionKey();
+
+                        return resourcekey + ": " + worldserver.H();
                     }).collect(Collectors.joining(",\n"));
                 });
                 DispenserRegistry.a("Crash report:\n" + crashreport.e());
-                File file = new File(new File(this.b.B(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+                File file = new File(this.server.C(), "crash-reports");
+                SimpleDateFormat simpledateformat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+                Date date = new Date();
+                File file1 = new File(file, "crash-" + simpledateformat.format(date) + "-server.txt");
 
-                if (crashreport.a(file)) {
-                    ThreadWatchdog.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
+                if (crashreport.a(file1)) {
+                    ThreadWatchdog.LOGGER.error("This crash report has been saved to: {}", file1.getAbsolutePath());
                 } else {
                     ThreadWatchdog.LOGGER.error("We were unable to save this crash report to disk.");
                 }
@@ -86,7 +94,7 @@ public class ThreadWatchdog implements Runnable {
             }
 
             try {
-                Thread.sleep(i + this.c - j);
+                Thread.sleep(i + this.maxTickTime - j);
             } catch (InterruptedException interruptedexception) {
                 ;
             }

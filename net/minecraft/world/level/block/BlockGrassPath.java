@@ -16,14 +16,14 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockGrassPath extends Block {
 
-    protected static final VoxelShape a = BlockSoil.b;
+    protected static final VoxelShape SHAPE = BlockSoil.SHAPE;
 
     protected BlockGrassPath(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public boolean c_(IBlockData iblockdata) {
+    public boolean g_(IBlockData iblockdata) {
         return true;
     }
 
@@ -54,8 +54,8 @@ public class BlockGrassPath extends Block {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockGrassPath.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockGrassPath.SHAPE;
     }
 
     @Override

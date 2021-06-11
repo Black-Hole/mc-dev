@@ -14,13 +14,14 @@ import org.apache.logging.log4j.Logger;
 public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final ServerConnection b;
+    public static final int FAKE_PROTOCOL_VERSION = 127;
+    private final ServerConnection serverConnectionListener;
 
     public LegacyPingHandler(ServerConnection serverconnection) {
-        this.b = serverconnection;
+        this.serverConnectionListener = serverconnection;
     }
 
-    public void channelRead(ChannelHandlerContext channelhandlercontext, Object object) throws Exception {
+    public void channelRead(ChannelHandlerContext channelhandlercontext, Object object) {
         ByteBuf bytebuf = (ByteBuf) object;
 
         bytebuf.markReaderIndex();
@@ -32,7 +33,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
             }
 
             InetSocketAddress inetsocketaddress = (InetSocketAddress) channelhandlercontext.channel().remoteAddress();
-            MinecraftServer minecraftserver = this.b.d();
+            MinecraftServer minecraftserver = this.serverConnectionListener.d();
             int i = bytebuf.readableBytes();
             String s;
 

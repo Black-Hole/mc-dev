@@ -1,42 +1,42 @@
 package net.minecraft.world.level.levelgen.synth;
 
-import java.util.Random;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.level.levelgen.RandomSource;
 
 public class NoiseGenerator3Handler {
 
-    protected static final int[][] a = new int[][]{{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1}, {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}};
-    private static final double e = Math.sqrt(3.0D);
-    private static final double f = 0.5D * (NoiseGenerator3Handler.e - 1.0D);
-    private static final double g = (3.0D - NoiseGenerator3Handler.e) / 6.0D;
-    private final int[] h = new int[512];
-    public final double b;
-    public final double c;
-    public final double d;
+    protected static final int[][] GRADIENT = new int[][]{{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1}, {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}};
+    private static final double SQRT_3 = Math.sqrt(3.0D);
+    private static final double F2 = 0.5D * (NoiseGenerator3Handler.SQRT_3 - 1.0D);
+    private static final double G2 = (3.0D - NoiseGenerator3Handler.SQRT_3) / 6.0D;
+    private final int[] p = new int[512];
+    public final double xo;
+    public final double yo;
+    public final double zo;
 
-    public NoiseGenerator3Handler(Random random) {
-        this.b = random.nextDouble() * 256.0D;
-        this.c = random.nextDouble() * 256.0D;
-        this.d = random.nextDouble() * 256.0D;
+    public NoiseGenerator3Handler(RandomSource randomsource) {
+        this.xo = randomsource.nextDouble() * 256.0D;
+        this.yo = randomsource.nextDouble() * 256.0D;
+        this.zo = randomsource.nextDouble() * 256.0D;
 
         int i;
 
-        for (i = 0; i < 256; this.h[i] = i++) {
+        for (i = 0; i < 256; this.p[i] = i++) {
             ;
         }
 
         for (i = 0; i < 256; ++i) {
-            int j = random.nextInt(256 - i);
-            int k = this.h[i];
+            int j = randomsource.nextInt(256 - i);
+            int k = this.p[i];
 
-            this.h[i] = this.h[j + i];
-            this.h[j + i] = k;
+            this.p[i] = this.p[j + i];
+            this.p[j + i] = k;
         }
 
     }
 
     private int a(int i) {
-        return this.h[i & 255];
+        return this.p[i & 255];
     }
 
     protected static double a(int[] aint, double d0, double d1, double d2) {
@@ -51,17 +51,17 @@ public class NoiseGenerator3Handler {
             d5 = 0.0D;
         } else {
             d4 *= d4;
-            d5 = d4 * d4 * a(NoiseGenerator3Handler.a[i], d0, d1, d2);
+            d5 = d4 * d4 * a(NoiseGenerator3Handler.GRADIENT[i], d0, d1, d2);
         }
 
         return d5;
     }
 
     public double a(double d0, double d1) {
-        double d2 = (d0 + d1) * NoiseGenerator3Handler.f;
+        double d2 = (d0 + d1) * NoiseGenerator3Handler.F2;
         int i = MathHelper.floor(d0 + d2);
         int j = MathHelper.floor(d1 + d2);
-        double d3 = (double) (i + j) * NoiseGenerator3Handler.g;
+        double d3 = (double) (i + j) * NoiseGenerator3Handler.G2;
         double d4 = (double) i - d3;
         double d5 = (double) j - d3;
         double d6 = d0 - d4;
@@ -77,10 +77,10 @@ public class NoiseGenerator3Handler {
             b1 = 1;
         }
 
-        double d8 = d6 - (double) b0 + NoiseGenerator3Handler.g;
-        double d9 = d7 - (double) b1 + NoiseGenerator3Handler.g;
-        double d10 = d6 - 1.0D + 2.0D * NoiseGenerator3Handler.g;
-        double d11 = d7 - 1.0D + 2.0D * NoiseGenerator3Handler.g;
+        double d8 = d6 - (double) b0 + NoiseGenerator3Handler.G2;
+        double d9 = d7 - (double) b1 + NoiseGenerator3Handler.G2;
+        double d10 = d6 - 1.0D + 2.0D * NoiseGenerator3Handler.G2;
+        double d11 = d7 - 1.0D + 2.0D * NoiseGenerator3Handler.G2;
         int k = i & 255;
         int l = j & 255;
         int i1 = this.a(k + this.a(l)) % 12;

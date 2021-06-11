@@ -1,22 +1,31 @@
 package net.minecraft.world.inventory;
 
+import javax.annotation.Nullable;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsItem;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.InventorySubcontainer;
+import net.minecraft.world.effect.MobEffectList;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 public class ContainerBeacon extends Container {
 
+    private static final int PAYMENT_SLOT = 0;
+    private static final int SLOT_COUNT = 1;
+    private static final int DATA_COUNT = 3;
+    private static final int INV_SLOT_START = 1;
+    private static final int INV_SLOT_END = 28;
+    private static final int USE_ROW_SLOT_START = 28;
+    private static final int USE_ROW_SLOT_END = 37;
     private final IInventory beacon;
-    private final ContainerBeacon.SlotBeacon d;
-    private final ContainerAccess containerAccess;
-    private final IContainerProperties containerProperties;
+    private final ContainerBeacon.SlotBeacon paymentSlot;
+    private final ContainerAccess access;
+    private final IContainerProperties beaconData;
 
     public ContainerBeacon(int i, IInventory iinventory) {
-        this(i, iinventory, new ContainerProperties(3), ContainerAccess.a);
+        this(i, iinventory, new ContainerProperties(3), ContainerAccess.NULL);
     }
 
     public ContainerBeacon(int i, IInventory iinventory, IContainerProperties icontainerproperties, ContainerAccess containeraccess) {
@@ -24,7 +33,7 @@ public class ContainerBeacon extends Container {
         this.beacon = new InventorySubcontainer(1) {
             @Override
             public boolean b(int j, ItemStack itemstack) {
-                return itemstack.getItem().a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
+                return itemstack.a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
             }
 
             @Override
@@ -33,10 +42,10 @@ public class ContainerBeacon extends Container {
             }
         };
         a(icontainerproperties, 3);
-        this.containerProperties = icontainerproperties;
-        this.containerAccess = containeraccess;
-        this.d = new ContainerBeacon.SlotBeacon(this.beacon, 0, 136, 110);
-        this.a((Slot) this.d);
+        this.beaconData = icontainerproperties;
+        this.access = containeraccess;
+        this.paymentSlot = new ContainerBeacon.SlotBeacon(this.beacon, 0, 136, 110);
+        this.a((Slot) this.paymentSlot);
         this.a(icontainerproperties);
         boolean flag = true;
         boolean flag1 = true;
@@ -58,8 +67,8 @@ public class ContainerBeacon extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (!entityhuman.world.isClientSide) {
-            ItemStack itemstack = this.d.a(this.d.getMaxStackSize());
+        if (!entityhuman.level.isClientSide) {
+            ItemStack itemstack = this.paymentSlot.a(this.paymentSlot.getMaxStackSize());
 
             if (!itemstack.isEmpty()) {
                 entityhuman.drop(itemstack, false);
@@ -70,18 +79,18 @@ public class ContainerBeacon extends Container {
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return a(this.containerAccess, entityhuman, Blocks.BEACON);
+        return a(this.access, entityhuman, Blocks.BEACON);
     }
 
     @Override
-    public void a(int i, int j) {
-        super.a(i, j);
-        this.c();
+    public void setContainerData(int i, int j) {
+        super.setContainerData(i, j);
+        this.d();
     }
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -90,34 +99,34 @@ public class ContainerBeacon extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 1, 37, true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.a(itemstack1, itemstack);
-            } else if (!this.d.hasItem() && this.d.isAllowed(itemstack1) && itemstack1.getCount() == 1) {
+            } else if (!this.paymentSlot.hasItem() && this.paymentSlot.isAllowed(itemstack1) && itemstack1.getCount() == 1) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (i >= 1 && i < 28) {
                 if (!this.a(itemstack1, 28, 37, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (i >= 28 && i < 37) {
                 if (!this.a(itemstack1, 1, 28, false)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.a(itemstack1, 1, 37, false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -126,16 +135,34 @@ public class ContainerBeacon extends Container {
         return itemstack;
     }
 
+    public int i() {
+        return this.beaconData.getProperty(0);
+    }
+
+    @Nullable
+    public MobEffectList j() {
+        return MobEffectList.fromId(this.beaconData.getProperty(1));
+    }
+
+    @Nullable
+    public MobEffectList k() {
+        return MobEffectList.fromId(this.beaconData.getProperty(2));
+    }
+
     public void c(int i, int j) {
-        if (this.d.hasItem()) {
-            this.containerProperties.setProperty(1, i);
-            this.containerProperties.setProperty(2, j);
-            this.d.a(1);
+        if (this.paymentSlot.hasItem()) {
+            this.beaconData.setProperty(1, i);
+            this.beaconData.setProperty(2, j);
+            this.paymentSlot.a(1);
         }
 
     }
 
-    class SlotBeacon extends Slot {
+    public boolean l() {
+        return !this.beacon.getItem(0).isEmpty();
+    }
+
+    private class SlotBeacon extends Slot {
 
         public SlotBeacon(IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);
@@ -143,7 +170,7 @@ public class ContainerBeacon extends Container {
 
         @Override
         public boolean isAllowed(ItemStack itemstack) {
-            return itemstack.getItem().a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
+            return itemstack.a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
         }
 
         @Override

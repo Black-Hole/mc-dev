@@ -14,6 +14,8 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
@@ -22,14 +24,14 @@ import net.minecraft.world.level.dimension.end.EnderDragonBattle;
 
 public class EntityEnderCrystal extends Entity {
 
-    private static final DataWatcherObject<Optional<BlockPosition>> c = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.m);
-    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.i);
-    public int b;
+    private static final DataWatcherObject<Optional<BlockPosition>> DATA_BEAM_TARGET = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.OPTIONAL_BLOCK_POS);
+    private static final DataWatcherObject<Boolean> DATA_SHOW_BOTTOM = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.BOOLEAN);
+    public int time;
 
     public EntityEnderCrystal(EntityTypes<? extends EntityEnderCrystal> entitytypes, World world) {
         super(entitytypes, world);
-        this.i = true;
-        this.b = this.random.nextInt(100000);
+        this.blocksBuilding = true;
+        this.time = this.random.nextInt(100000);
     }
 
     public EntityEnderCrystal(World world, double d0, double d1, double d2) {
@@ -38,24 +40,24 @@ public class EntityEnderCrystal extends Entity {
     }
 
     @Override
-    protected boolean playStepSound() {
-        return false;
+    protected Entity.MovementEmission aI() {
+        return Entity.MovementEmission.NONE;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityEnderCrystal.c, Optional.empty());
-        this.getDataWatcher().register(EntityEnderCrystal.d, true);
+        this.getDataWatcher().register(EntityEnderCrystal.DATA_BEAM_TARGET, Optional.empty());
+        this.getDataWatcher().register(EntityEnderCrystal.DATA_SHOW_BOTTOM, true);
     }
 
     @Override
     public void tick() {
-        ++this.b;
-        if (this.world instanceof WorldServer) {
+        ++this.time;
+        if (this.level instanceof WorldServer) {
             BlockPosition blockposition = this.getChunkCoordinates();
 
-            if (((WorldServer) this.world).getDragonBattle() != null && this.world.getType(blockposition).isAir()) {
-                this.world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.world, blockposition));
+            if (((WorldServer) this.level).getDragonBattle() != null && this.level.getType(blockposition).isAir()) {
+                this.level.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.level, blockposition));
             }
         }
 
@@ -94,10 +96,10 @@ public class EntityEnderCrystal extends Entity {
         } else if (damagesource.getEntity() instanceof EntityEnderDragon) {
             return false;
         } else {
-            if (!this.dead && !this.world.isClientSide) {
-                this.die();
+            if (!this.isRemoved() && !this.level.isClientSide) {
+                this.a(Entity.RemovalReason.KILLED);
                 if (!damagesource.isExplosion()) {
-                    this.world.explode((Entity) null, this.locX(), this.locY(), this.locZ(), 6.0F, Explosion.Effect.DESTROY);
+                    this.level.explode((Entity) null, this.locX(), this.locY(), this.locZ(), 6.0F, Explosion.Effect.DESTROY);
                 }
 
                 this.a(damagesource);
@@ -114,8 +116,8 @@ public class EntityEnderCrystal extends Entity {
     }
 
     private void a(DamageSource damagesource) {
-        if (this.world instanceof WorldServer) {
-            EnderDragonBattle enderdragonbattle = ((WorldServer) this.world).getDragonBattle();
+        if (this.level instanceof WorldServer) {
+            EnderDragonBattle enderdragonbattle = ((WorldServer) this.level).getDragonBattle();
 
             if (enderdragonbattle != null) {
                 enderdragonbattle.a(this, damagesource);
@@ -125,24 +127,34 @@ public class EntityEnderCrystal extends Entity {
     }
 
     public void setBeamTarget(@Nullable BlockPosition blockposition) {
-        this.getDataWatcher().set(EntityEnderCrystal.c, Optional.ofNullable(blockposition));
+        this.getDataWatcher().set(EntityEnderCrystal.DATA_BEAM_TARGET, Optional.ofNullable(blockposition));
     }
 
     @Nullable
     public BlockPosition getBeamTarget() {
-        return (BlockPosition) ((Optional) this.getDataWatcher().get(EntityEnderCrystal.c)).orElse((Object) null);
+        return (BlockPosition) ((Optional) this.getDataWatcher().get(EntityEnderCrystal.DATA_BEAM_TARGET)).orElse((Object) null);
     }
 
     public void setShowingBottom(boolean flag) {
-        this.getDataWatcher().set(EntityEnderCrystal.d, flag);
+        this.getDataWatcher().set(EntityEnderCrystal.DATA_SHOW_BOTTOM, flag);
     }
 
     public boolean isShowingBottom() {
-        return (Boolean) this.getDataWatcher().get(EntityEnderCrystal.d);
+        return (Boolean) this.getDataWatcher().get(EntityEnderCrystal.DATA_SHOW_BOTTOM);
     }
 
     @Override
-    public Packet<?> P() {
+    public boolean a(double d0) {
+        return super.a(d0) || this.getBeamTarget() != null;
+    }
+
+    @Override
+    public ItemStack df() {
+        return new ItemStack(Items.END_CRYSTAL);
+    }
+
+    @Override
+    public Packet<?> getPacket() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

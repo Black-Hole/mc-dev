@@ -5,23 +5,36 @@ import net.minecraft.core.BlockPosition;
 
 public class GameTestHarnessAssertionPosition extends GameTestHarnessAssertion {
 
-    private final BlockPosition a;
-    private final BlockPosition b;
-    private final long c;
+    private final BlockPosition absolutePos;
+    private final BlockPosition relativePos;
+    private final long tick;
+
+    public GameTestHarnessAssertionPosition(String s, BlockPosition blockposition, BlockPosition blockposition1, long i) {
+        super(s);
+        this.absolutePos = blockposition;
+        this.relativePos = blockposition1;
+        this.tick = i;
+    }
 
     public String getMessage() {
-        String s = "" + this.a.getX() + "," + this.a.getY() + "," + this.a.getZ() + " (relative: " + this.b.getX() + "," + this.b.getY() + "," + this.b.getZ() + ")";
+        int i = this.absolutePos.getX();
+        String s = i + "," + this.absolutePos.getY() + "," + this.absolutePos.getZ() + " (relative: " + this.relativePos.getX() + "," + this.relativePos.getY() + "," + this.relativePos.getZ() + ")";
 
-        return super.getMessage() + " at " + s + " (t=" + this.c + ")";
+        return super.getMessage() + " at " + s + " (t=" + this.tick + ")";
     }
 
     @Nullable
     public String a() {
-        return super.getMessage() + " here";
+        return super.getMessage();
+    }
+
+    @Nullable
+    public BlockPosition b() {
+        return this.relativePos;
     }
 
     @Nullable
     public BlockPosition c() {
-        return this.a;
+        return this.absolutePos;
     }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.IRegistry;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -10,47 +9,73 @@ import org.apache.commons.lang3.Validate;
 
 public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayOut> {
 
-    private SoundEffect a;
-    private SoundCategory b;
-    private int c;
-    private int d;
-    private int e;
-    private float f;
-    private float g;
-
-    public PacketPlayOutNamedSoundEffect() {}
+    public static final float LOCATION_ACCURACY = 8.0F;
+    private final SoundEffect sound;
+    private final SoundCategory source;
+    private final int x;
+    private final int y;
+    private final int z;
+    private final float volume;
+    private final float pitch;
 
     public PacketPlayOutNamedSoundEffect(SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {
         Validate.notNull(soundeffect, "sound", new Object[0]);
-        this.a = soundeffect;
-        this.b = soundcategory;
-        this.c = (int) (d0 * 8.0D);
-        this.d = (int) (d1 * 8.0D);
-        this.e = (int) (d2 * 8.0D);
-        this.f = f;
-        this.g = f1;
+        this.sound = soundeffect;
+        this.source = soundcategory;
+        this.x = (int) (d0 * 8.0D);
+        this.y = (int) (d1 * 8.0D);
+        this.z = (int) (d2 * 8.0D);
+        this.volume = f;
+        this.pitch = f1;
+    }
+
+    public PacketPlayOutNamedSoundEffect(PacketDataSerializer packetdataserializer) {
+        this.sound = (SoundEffect) IRegistry.SOUND_EVENT.fromId(packetdataserializer.j());
+        this.source = (SoundCategory) packetdataserializer.a(SoundCategory.class);
+        this.x = packetdataserializer.readInt();
+        this.y = packetdataserializer.readInt();
+        this.z = packetdataserializer.readInt();
+        this.volume = packetdataserializer.readFloat();
+        this.pitch = packetdataserializer.readFloat();
     }
 
     @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (SoundEffect) IRegistry.SOUND_EVENT.fromId(packetdataserializer.i());
-        this.b = (SoundCategory) packetdataserializer.a(SoundCategory.class);
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.e = packetdataserializer.readInt();
-        this.f = packetdataserializer.readFloat();
-        this.g = packetdataserializer.readFloat();
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(IRegistry.SOUND_EVENT.getId(this.sound));
+        packetdataserializer.a((Enum) this.source);
+        packetdataserializer.writeInt(this.x);
+        packetdataserializer.writeInt(this.y);
+        packetdataserializer.writeInt(this.z);
+        packetdataserializer.writeFloat(this.volume);
+        packetdataserializer.writeFloat(this.pitch);
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(IRegistry.SOUND_EVENT.a((Object) this.a));
-        packetdataserializer.a((Enum) this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeInt(this.e);
-        packetdataserializer.writeFloat(this.f);
-        packetdataserializer.writeFloat(this.g);
+    public SoundEffect b() {
+        return this.sound;
+    }
+
+    public SoundCategory c() {
+        return this.source;
+    }
+
+    public double d() {
+        return (double) ((float) this.x / 8.0F);
+    }
+
+    public double e() {
+        return (double) ((float) this.y / 8.0F);
+    }
+
+    public double f() {
+        return (double) ((float) this.z / 8.0F);
+    }
+
+    public float g() {
+        return this.volume;
+    }
+
+    public float h() {
+        return this.pitch;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

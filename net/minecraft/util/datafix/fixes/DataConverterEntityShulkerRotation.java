@@ -5,6 +5,7 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class DataConverterEntityShulkerRotation extends DataConverterNamedEntity {
@@ -22,7 +23,7 @@ public class DataConverterEntityShulkerRotation extends DataConverterNamedEntity
             list.set(0, (Double) list.get(0) - 180.0D);
             Stream stream = list.stream();
 
-            dynamic.getClass();
+            Objects.requireNonNull(dynamic);
             return dynamic.set("Rotation", dynamic.createList(stream.map(dynamic::createDouble)));
         } else {
             return dynamic;

@@ -137,7 +137,7 @@ public class DedicatedPlayerList extends PlayerList {
     }
 
     @Override
-    public boolean f(GameProfile gameprofile) {
-        return this.getOPs().b(gameprofile);
+    public boolean d(GameProfile gameprofile) {
+        return this.getOPs().canBypassPlayerLimit(gameprofile);
     }
 }

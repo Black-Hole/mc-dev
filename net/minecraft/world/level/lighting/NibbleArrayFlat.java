@@ -4,13 +4,15 @@ import net.minecraft.world.level.chunk.NibbleArray;
 
 public class NibbleArrayFlat extends NibbleArray {
 
+    public static final int SIZE = 128;
+
     public NibbleArrayFlat() {
         super(128);
     }
 
     public NibbleArrayFlat(NibbleArray nibblearray, int i) {
         super(128);
-        System.arraycopy(nibblearray.asBytes(), i * 128, this.a, 0, 128);
+        System.arraycopy(nibblearray.asBytes(), i * 128, this.data, 0, 128);
     }
 
     @Override
@@ -23,7 +25,7 @@ public class NibbleArrayFlat extends NibbleArray {
         byte[] abyte = new byte[2048];
 
         for (int i = 0; i < 16; ++i) {
-            System.arraycopy(this.a, 0, abyte, i * 128, 128);
+            System.arraycopy(this.data, 0, abyte, i * 128, 128);
         }
 
         return abyte;

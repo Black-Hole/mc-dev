@@ -11,48 +11,48 @@ import net.minecraft.network.PacketDataSerializer;
 
 public class CriterionProgress {
 
-    private static final SimpleDateFormat a = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-    private Date b;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+    private Date obtained;
 
     public CriterionProgress() {}
 
     public boolean a() {
-        return this.b != null;
+        return this.obtained != null;
     }
 
     public void b() {
-        this.b = new Date();
+        this.obtained = new Date();
     }
 
     public void c() {
-        this.b = null;
+        this.obtained = null;
     }
 
     public Date getDate() {
-        return this.b;
+        return this.obtained;
     }
 
     public String toString() {
-        return "CriterionProgress{obtained=" + (this.b == null ? "false" : this.b) + '}';
+        return "CriterionProgress{obtained=" + (this.obtained == null ? "false" : this.obtained) + "}";
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeBoolean(this.b != null);
-        if (this.b != null) {
-            packetdataserializer.a(this.b);
+        packetdataserializer.writeBoolean(this.obtained != null);
+        if (this.obtained != null) {
+            packetdataserializer.a(this.obtained);
         }
 
     }
 
     public JsonElement e() {
-        return (JsonElement) (this.b != null ? new JsonPrimitive(CriterionProgress.a.format(this.b)) : JsonNull.INSTANCE);
+        return (JsonElement) (this.obtained != null ? new JsonPrimitive(CriterionProgress.DATE_FORMAT.format(this.obtained)) : JsonNull.INSTANCE);
     }
 
     public static CriterionProgress b(PacketDataSerializer packetdataserializer) {
         CriterionProgress criterionprogress = new CriterionProgress();
 
         if (packetdataserializer.readBoolean()) {
-            criterionprogress.b = packetdataserializer.q();
+            criterionprogress.obtained = packetdataserializer.r();
         }
 
         return criterionprogress;
@@ -62,7 +62,7 @@ public class CriterionProgress {
         CriterionProgress criterionprogress = new CriterionProgress();
 
         try {
-            criterionprogress.b = CriterionProgress.a.parse(s);
+            criterionprogress.obtained = CriterionProgress.DATE_FORMAT.parse(s);
             return criterionprogress;
         } catch (ParseException parseexception) {
             throw new JsonSyntaxException("Invalid datetime: " + s, parseexception);

@@ -10,20 +10,26 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockStructureVoid extends Block {
 
-    private static final VoxelShape a = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
+    private static final double SIZE = 5.0D;
+    private static final VoxelShape SHAPE = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
     protected BlockStructureVoid(BlockBase.Info blockbase_info) {
         super(blockbase_info);
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockStructureVoid.a;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockStructureVoid.SHAPE;
+    }
+
+    @Override
+    public float b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return 1.0F;
     }
 
     @Override

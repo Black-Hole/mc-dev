@@ -6,18 +6,18 @@ import java.util.OptionalInt;
 
 public class FeatureSizeTwoLayers extends FeatureSize {
 
-    public static final Codec<FeatureSizeTwoLayers> c = RecordCodecBuilder.create((instance) -> {
+    public static final Codec<FeatureSizeTwoLayers> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(Codec.intRange(0, 81).fieldOf("limit").orElse(1).forGetter((featuresizetwolayers) -> {
-            return featuresizetwolayers.d;
+            return featuresizetwolayers.limit;
         }), Codec.intRange(0, 16).fieldOf("lower_size").orElse(0).forGetter((featuresizetwolayers) -> {
-            return featuresizetwolayers.e;
+            return featuresizetwolayers.lowerSize;
         }), Codec.intRange(0, 16).fieldOf("upper_size").orElse(1).forGetter((featuresizetwolayers) -> {
-            return featuresizetwolayers.f;
+            return featuresizetwolayers.upperSize;
         }), a()).apply(instance, FeatureSizeTwoLayers::new);
     });
-    private final int d;
-    private final int e;
-    private final int f;
+    private final int limit;
+    private final int lowerSize;
+    private final int upperSize;
 
     public FeatureSizeTwoLayers(int i, int j, int k) {
         this(i, j, k, OptionalInt.empty());
@@ -25,18 +25,18 @@ public class FeatureSizeTwoLayers extends FeatureSize {
 
     public FeatureSizeTwoLayers(int i, int j, int k, OptionalInt optionalint) {
         super(optionalint);
-        this.d = i;
-        this.e = j;
-        this.f = k;
+        this.limit = i;
+        this.lowerSize = j;
+        this.upperSize = k;
     }
 
     @Override
     protected FeatureSizeType<?> b() {
-        return FeatureSizeType.a;
+        return FeatureSizeType.TWO_LAYERS_FEATURE_SIZE;
     }
 
     @Override
     public int a(int i, int j) {
-        return j < this.d ? this.e : this.f;
+        return j < this.limit ? this.lowerSize : this.upperSize;
     }
 }

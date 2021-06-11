@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block.state.pattern;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -14,60 +15,73 @@ import net.minecraft.world.level.IWorldReader;
 
 public class ShapeDetector {
 
-    private final Predicate<ShapeDetectorBlock>[][][] a;
-    private final int b;
-    private final int c;
-    private final int d;
+    private final Predicate<ShapeDetectorBlock>[][][] pattern;
+    private final int depth;
+    private final int height;
+    private final int width;
 
     public ShapeDetector(Predicate<ShapeDetectorBlock>[][][] apredicate) {
-        this.a = apredicate;
-        this.b = apredicate.length;
-        if (this.b > 0) {
-            this.c = apredicate[0].length;
-            if (this.c > 0) {
-                this.d = apredicate[0][0].length;
+        this.pattern = apredicate;
+        this.depth = apredicate.length;
+        if (this.depth > 0) {
+            this.height = apredicate[0].length;
+            if (this.height > 0) {
+                this.width = apredicate[0][0].length;
             } else {
-                this.d = 0;
+                this.width = 0;
             }
         } else {
-            this.c = 0;
-            this.d = 0;
+            this.height = 0;
+            this.width = 0;
         }
 
     }
 
     public int a() {
-        return this.b;
+        return this.depth;
     }
 
     public int b() {
-        return this.c;
+        return this.height;
     }
 
     public int c() {
-        return this.d;
+        return this.width;
+    }
+
+    @VisibleForTesting
+    public Predicate<ShapeDetectorBlock>[][][] d() {
+        return this.pattern;
+    }
+
+    @Nullable
+    @VisibleForTesting
+    public ShapeDetector.ShapeDetectorCollection a(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1) {
+        LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache = a(iworldreader, false);
+
+        return this.a(blockposition, enumdirection, enumdirection1, loadingcache);
     }
 
     @Nullable
     private ShapeDetector.ShapeDetectorCollection a(BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1, LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache) {
-        for (int i = 0; i < this.d; ++i) {
-            for (int j = 0; j < this.c; ++j) {
-                for (int k = 0; k < this.b; ++k) {
-                    if (!this.a[k][j][i].test(loadingcache.getUnchecked(a(blockposition, enumdirection, enumdirection1, i, j, k)))) {
+        for (int i = 0; i < this.width; ++i) {
+            for (int j = 0; j < this.height; ++j) {
+                for (int k = 0; k < this.depth; ++k) {
+                    if (!this.pattern[k][j][i].test((ShapeDetectorBlock) loadingcache.getUnchecked(a(blockposition, enumdirection, enumdirection1, i, j, k)))) {
                         return null;
                     }
                 }
             }
         }
 
-        return new ShapeDetector.ShapeDetectorCollection(blockposition, enumdirection, enumdirection1, loadingcache, this.d, this.c, this.b);
+        return new ShapeDetector.ShapeDetectorCollection(blockposition, enumdirection, enumdirection1, loadingcache, this.width, this.height, this.depth);
     }
 
     @Nullable
     public ShapeDetector.ShapeDetectorCollection a(IWorldReader iworldreader, BlockPosition blockposition) {
         LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache = a(iworldreader, false);
-        int i = Math.max(Math.max(this.d, this.c), this.b);
-        Iterator iterator = BlockPosition.a(blockposition, blockposition.b(i - 1, i - 1, i - 1)).iterator();
+        int i = Math.max(Math.max(this.width, this.height), this.depth);
+        Iterator iterator = BlockPosition.a(blockposition, blockposition.c(i - 1, i - 1, i - 1)).iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -106,7 +120,7 @@ public class ShapeDetector {
             BaseBlockPosition baseblockposition1 = new BaseBlockPosition(enumdirection1.getAdjacentX(), enumdirection1.getAdjacentY(), enumdirection1.getAdjacentZ());
             BaseBlockPosition baseblockposition2 = baseblockposition.d(baseblockposition1);
 
-            return blockposition.b(baseblockposition1.getX() * -j + baseblockposition2.getX() * i + baseblockposition.getX() * k, baseblockposition1.getY() * -j + baseblockposition2.getY() * i + baseblockposition.getY() * k, baseblockposition1.getZ() * -j + baseblockposition2.getZ() * i + baseblockposition.getZ() * k);
+            return blockposition.c(baseblockposition1.getX() * -j + baseblockposition2.getX() * i + baseblockposition.getX() * k, baseblockposition1.getY() * -j + baseblockposition2.getY() * i + baseblockposition.getY() * k, baseblockposition1.getZ() * -j + baseblockposition2.getZ() * i + baseblockposition.getZ() * k);
         } else {
             throw new IllegalArgumentException("Invalid forwards & up combination");
         }
@@ -114,57 +128,69 @@ public class ShapeDetector {
 
     public static class ShapeDetectorCollection {
 
-        private final BlockPosition a;
-        private final EnumDirection b;
-        private final EnumDirection c;
-        private final LoadingCache<BlockPosition, ShapeDetectorBlock> d;
-        private final int e;
-        private final int f;
-        private final int g;
+        private final BlockPosition frontTopLeft;
+        private final EnumDirection forwards;
+        private final EnumDirection up;
+        private final LoadingCache<BlockPosition, ShapeDetectorBlock> cache;
+        private final int width;
+        private final int height;
+        private final int depth;
 
         public ShapeDetectorCollection(BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1, LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache, int i, int j, int k) {
-            this.a = blockposition;
-            this.b = enumdirection;
-            this.c = enumdirection1;
-            this.d = loadingcache;
-            this.e = i;
-            this.f = j;
-            this.g = k;
+            this.frontTopLeft = blockposition;
+            this.forwards = enumdirection;
+            this.up = enumdirection1;
+            this.cache = loadingcache;
+            this.width = i;
+            this.height = j;
+            this.depth = k;
         }
 
         public BlockPosition a() {
-            return this.a;
+            return this.frontTopLeft;
         }
 
         public EnumDirection getFacing() {
-            return this.b;
+            return this.forwards;
         }
 
         public EnumDirection c() {
-            return this.c;
+            return this.up;
+        }
+
+        public int d() {
+            return this.width;
+        }
+
+        public int e() {
+            return this.height;
+        }
+
+        public int f() {
+            return this.depth;
         }
 
         public ShapeDetectorBlock a(int i, int j, int k) {
-            return (ShapeDetectorBlock) this.d.getUnchecked(ShapeDetector.a(this.a, this.getFacing(), this.c(), i, j, k));
+            return (ShapeDetectorBlock) this.cache.getUnchecked(ShapeDetector.a(this.frontTopLeft, this.getFacing(), this.c(), i, j, k));
         }
 
         public String toString() {
-            return MoreObjects.toStringHelper(this).add("up", this.c).add("forwards", this.b).add("frontTopLeft", this.a).toString();
+            return MoreObjects.toStringHelper(this).add("up", this.up).add("forwards", this.forwards).add("frontTopLeft", this.frontTopLeft).toString();
         }
     }
 
-    static class BlockLoader extends CacheLoader<BlockPosition, ShapeDetectorBlock> {
+    private static class BlockLoader extends CacheLoader<BlockPosition, ShapeDetectorBlock> {
 
-        private final IWorldReader a;
-        private final boolean b;
+        private final IWorldReader level;
+        private final boolean loadChunks;
 
         public BlockLoader(IWorldReader iworldreader, boolean flag) {
-            this.a = iworldreader;
-            this.b = flag;
+            this.level = iworldreader;
+            this.loadChunks = flag;
         }
 
-        public ShapeDetectorBlock load(BlockPosition blockposition) throws Exception {
-            return new ShapeDetectorBlock(this.a, blockposition, this.b);
+        public ShapeDetectorBlock load(BlockPosition blockposition) {
+            return new ShapeDetectorBlock(this.level, blockposition, this.loadChunks);
         }
     }
 }

@@ -13,17 +13,17 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class LootItemConditionSurvivesExplosion implements LootItemCondition {
 
-    private static final LootItemConditionSurvivesExplosion a = new LootItemConditionSurvivesExplosion();
+    static final LootItemConditionSurvivesExplosion INSTANCE = new LootItemConditionSurvivesExplosion();
 
     private LootItemConditionSurvivesExplosion() {}
 
     @Override
-    public LootItemConditionType b() {
-        return LootItemConditions.k;
+    public LootItemConditionType a() {
+        return LootItemConditions.SURVIVES_EXPLOSION;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> b() {
         return ImmutableSet.of(LootContextParameters.EXPLOSION_RADIUS);
     }
 
@@ -42,7 +42,7 @@ public class LootItemConditionSurvivesExplosion implements LootItemCondition {
 
     public static LootItemCondition.a c() {
         return () -> {
-            return LootItemConditionSurvivesExplosion.a;
+            return LootItemConditionSurvivesExplosion.INSTANCE;
         };
     }
 
@@ -54,7 +54,7 @@ public class LootItemConditionSurvivesExplosion implements LootItemCondition {
 
         @Override
         public LootItemConditionSurvivesExplosion a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return LootItemConditionSurvivesExplosion.a;
+            return LootItemConditionSurvivesExplosion.INSTANCE;
         }
     }
 }

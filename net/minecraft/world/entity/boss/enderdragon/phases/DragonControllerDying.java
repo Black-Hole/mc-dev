@@ -11,8 +11,8 @@ import net.minecraft.world.phys.Vec3D;
 
 public class DragonControllerDying extends AbstractDragonController {
 
-    private Vec3D b;
-    private int c;
+    private Vec3D targetLocation;
+    private int time;
 
     public DragonControllerDying(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
@@ -20,39 +20,39 @@ public class DragonControllerDying extends AbstractDragonController {
 
     @Override
     public void b() {
-        if (this.c++ % 10 == 0) {
-            float f = (this.a.getRandom().nextFloat() - 0.5F) * 8.0F;
-            float f1 = (this.a.getRandom().nextFloat() - 0.5F) * 4.0F;
-            float f2 = (this.a.getRandom().nextFloat() - 0.5F) * 8.0F;
+        if (this.time++ % 10 == 0) {
+            float f = (this.dragon.getRandom().nextFloat() - 0.5F) * 8.0F;
+            float f1 = (this.dragon.getRandom().nextFloat() - 0.5F) * 4.0F;
+            float f2 = (this.dragon.getRandom().nextFloat() - 0.5F) * 8.0F;
 
-            this.a.world.addParticle(Particles.EXPLOSION_EMITTER, this.a.locX() + (double) f, this.a.locY() + 2.0D + (double) f1, this.a.locZ() + (double) f2, 0.0D, 0.0D, 0.0D);
+            this.dragon.level.addParticle(Particles.EXPLOSION_EMITTER, this.dragon.locX() + (double) f, this.dragon.locY() + 2.0D + (double) f1, this.dragon.locZ() + (double) f2, 0.0D, 0.0D, 0.0D);
         }
 
     }
 
     @Override
     public void c() {
-        ++this.c;
-        if (this.b == null) {
-            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a);
+        ++this.time;
+        if (this.targetLocation == null) {
+            BlockPosition blockposition = this.dragon.level.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.END_PODIUM_LOCATION);
 
-            this.b = Vec3D.c((BaseBlockPosition) blockposition);
+            this.targetLocation = Vec3D.c((BaseBlockPosition) blockposition);
         }
 
-        double d0 = this.b.c(this.a.locX(), this.a.locY(), this.a.locZ());
+        double d0 = this.targetLocation.c(this.dragon.locX(), this.dragon.locY(), this.dragon.locZ());
 
-        if (d0 >= 100.0D && d0 <= 22500.0D && !this.a.positionChanged && !this.a.v) {
-            this.a.setHealth(1.0F);
+        if (d0 >= 100.0D && d0 <= 22500.0D && !this.dragon.horizontalCollision && !this.dragon.verticalCollision) {
+            this.dragon.setHealth(1.0F);
         } else {
-            this.a.setHealth(0.0F);
+            this.dragon.setHealth(0.0F);
         }
 
     }
 
     @Override
     public void d() {
-        this.b = null;
-        this.c = 0;
+        this.targetLocation = null;
+        this.time = 0;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class DragonControllerDying extends AbstractDragonController {
     @Nullable
     @Override
     public Vec3D g() {
-        return this.b;
+        return this.targetLocation;
     }
 
     @Override

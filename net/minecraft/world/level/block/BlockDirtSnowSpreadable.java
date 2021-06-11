@@ -29,7 +29,7 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
         } else {
             int i = LightEngineLayer.a(iworldreader, iblockdata, blockposition, iblockdata1, blockposition1, EnumDirection.UP, iblockdata1.b((IBlockAccess) iworldreader, blockposition1));
 
-            return i < iworldreader.K();
+            return i < iworldreader.O();
         }
     }
 
@@ -48,10 +48,10 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
                 IBlockData iblockdata1 = this.getBlockData();
 
                 for (int i = 0; i < 4; ++i) {
-                    BlockPosition blockposition1 = blockposition.b(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+                    BlockPosition blockposition1 = blockposition.c(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 
                     if (worldserver.getType(blockposition1).a(Blocks.DIRT) && c(iblockdata1, (IWorldReader) worldserver, blockposition1)) {
-                        worldserver.setTypeUpdate(blockposition1, (IBlockData) iblockdata1.set(BlockDirtSnowSpreadable.a, worldserver.getType(blockposition1.up()).a(Blocks.SNOW)));
+                        worldserver.setTypeUpdate(blockposition1, (IBlockData) iblockdata1.set(BlockDirtSnowSpreadable.SNOWY, worldserver.getType(blockposition1.up()).a(Blocks.SNOW)));
                     }
                 }
             }

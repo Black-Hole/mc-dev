@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block;
 
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.stats.StatisticList;
 import net.minecraft.world.EnumHand;
@@ -8,10 +9,11 @@ import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.EnumColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.IBlockAccess;
 import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBeacon;
+import net.minecraft.world.level.block.entity.TileEntityTypes;
 import net.minecraft.world.level.block.state.BlockBase;
 import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.phys.MovingObjectPositionBlock;
@@ -28,8 +30,14 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityBeacon();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityBeacon(blockposition, iblockdata);
+    }
+
+    @Nullable
+    @Override
+    public <T extends TileEntity> BlockEntityTicker<T> a(World world, IBlockData iblockdata, TileEntityTypes<T> tileentitytypes) {
+        return a(tileentitytypes, TileEntityTypes.BEACON, TileEntityBeacon::a);
     }
 
     @Override
@@ -49,7 +57,7 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
     }
 
     @Override
-    public EnumRenderType b(IBlockData iblockdata) {
+    public EnumRenderType b_(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

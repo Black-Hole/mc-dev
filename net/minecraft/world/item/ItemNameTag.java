@@ -15,7 +15,7 @@ public class ItemNameTag extends Item {
     @Override
     public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (itemstack.hasName() && !(entityliving instanceof EntityHuman)) {
-            if (!entityhuman.world.isClientSide && entityliving.isAlive()) {
+            if (!entityhuman.level.isClientSide && entityliving.isAlive()) {
                 entityliving.setCustomName(itemstack.getName());
                 if (entityliving instanceof EntityInsentient) {
                     ((EntityInsentient) entityliving).setPersistent();
@@ -24,7 +24,7 @@ public class ItemNameTag extends Item {
                 itemstack.subtract(1);
             }
 
-            return EnumInteractionResult.a(entityhuman.world.isClientSide);
+            return EnumInteractionResult.a(entityhuman.level.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }

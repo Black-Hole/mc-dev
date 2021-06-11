@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DataConverterEntity extends DataFix {
 
-    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+    private static final Map<String, String> ID_MAP = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("AreaEffectCloud", "minecraft:area_effect_cloud");
         hashmap.put("ArmorStand", "minecraft:armor_stand");
         hashmap.put("Arrow", "minecraft:arrow");
@@ -102,7 +102,7 @@ public class DataConverterEntity extends DataFix {
         return TypeRewriteRule.seq(this.convertUnchecked("item stack entity name hook converter", type, type1), this.fixTypeEverywhere("EntityIdFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {
                 return pair.mapFirst((s) -> {
-                    return (String) DataConverterEntity.a.getOrDefault(s, s);
+                    return (String) DataConverterEntity.ID_MAP.getOrDefault(s, s);
                 });
             };
         }));

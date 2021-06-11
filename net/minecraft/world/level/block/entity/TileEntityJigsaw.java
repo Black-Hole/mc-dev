@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nullable;
+import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.PacketPlayOutTileEntityData;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.level.WorldServer;
@@ -28,99 +31,117 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 
 public class TileEntityJigsaw extends TileEntity {
 
-    private MinecraftKey a;
-    private MinecraftKey b;
-    private MinecraftKey c;
-    private TileEntityJigsaw.JointType g;
-    private String h;
+    public static final String TARGET = "target";
+    public static final String POOL = "pool";
+    public static final String JOINT = "joint";
+    public static final String NAME = "name";
+    public static final String FINAL_STATE = "final_state";
+    private MinecraftKey name = new MinecraftKey("empty");
+    private MinecraftKey target = new MinecraftKey("empty");
+    private MinecraftKey pool = new MinecraftKey("empty");
+    private TileEntityJigsaw.JointType joint;
+    private String finalState;
 
-    public TileEntityJigsaw(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
-        this.a = new MinecraftKey("empty");
-        this.b = new MinecraftKey("empty");
-        this.c = new MinecraftKey("empty");
-        this.g = TileEntityJigsaw.JointType.ROLLABLE;
-        this.h = "minecraft:air";
+    public TileEntityJigsaw(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.JIGSAW, blockposition, iblockdata);
+        this.joint = TileEntityJigsaw.JointType.ROLLABLE;
+        this.finalState = "minecraft:air";
     }
 
-    public TileEntityJigsaw() {
-        this(TileEntityTypes.JIGSAW);
+    public MinecraftKey d() {
+        return this.name;
+    }
+
+    public MinecraftKey f() {
+        return this.target;
+    }
+
+    public MinecraftKey g() {
+        return this.pool;
+    }
+
+    public String h() {
+        return this.finalState;
+    }
+
+    public TileEntityJigsaw.JointType i() {
+        return this.joint;
     }
 
     public void a(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
+        this.name = minecraftkey;
     }
 
     public void b(MinecraftKey minecraftkey) {
-        this.b = minecraftkey;
+        this.target = minecraftkey;
     }
 
     public void c(MinecraftKey minecraftkey) {
-        this.c = minecraftkey;
+        this.pool = minecraftkey;
     }
 
     public void a(String s) {
-        this.h = s;
+        this.finalState = s;
     }
 
     public void a(TileEntityJigsaw.JointType tileentityjigsaw_jointtype) {
-        this.g = tileentityjigsaw_jointtype;
+        this.joint = tileentityjigsaw_jointtype;
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        nbttagcompound.setString("name", this.a.toString());
-        nbttagcompound.setString("target", this.b.toString());
-        nbttagcompound.setString("pool", this.c.toString());
-        nbttagcompound.setString("final_state", this.h);
-        nbttagcompound.setString("joint", this.g.getName());
+        nbttagcompound.setString("name", this.name.toString());
+        nbttagcompound.setString("target", this.target.toString());
+        nbttagcompound.setString("pool", this.pool.toString());
+        nbttagcompound.setString("final_state", this.finalState);
+        nbttagcompound.setString("joint", this.joint.getName());
         return nbttagcompound;
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
-        this.a = new MinecraftKey(nbttagcompound.getString("name"));
-        this.b = new MinecraftKey(nbttagcompound.getString("target"));
-        this.c = new MinecraftKey(nbttagcompound.getString("pool"));
-        this.h = nbttagcompound.getString("final_state");
-        this.g = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(nbttagcompound.getString("joint")).orElseGet(() -> {
-            return BlockJigsaw.h(iblockdata).n().d() ? TileEntityJigsaw.JointType.ALIGNED : TileEntityJigsaw.JointType.ROLLABLE;
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
+        this.name = new MinecraftKey(nbttagcompound.getString("name"));
+        this.target = new MinecraftKey(nbttagcompound.getString("target"));
+        this.pool = new MinecraftKey(nbttagcompound.getString("pool"));
+        this.finalState = nbttagcompound.getString("final_state");
+        this.joint = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(nbttagcompound.getString("joint")).orElseGet(() -> {
+            return BlockJigsaw.h(this.getBlock()).n().d() ? TileEntityJigsaw.JointType.ALIGNED : TileEntityJigsaw.JointType.ROLLABLE;
         });
     }
 
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 12, this.b());
+        return new PacketPlayOutTileEntityData(this.worldPosition, 12, this.Z_());
     }
 
     @Override
-    public NBTTagCompound b() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
     public void a(WorldServer worldserver, int i, boolean flag) {
         ChunkGenerator chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
-        DefinedStructureManager definedstructuremanager = worldserver.n();
+        DefinedStructureManager definedstructuremanager = worldserver.p();
         StructureManager structuremanager = worldserver.getStructureManager();
         Random random = worldserver.getRandom();
         BlockPosition blockposition = this.getPosition();
         List<WorldGenFeaturePillagerOutpostPoolPiece> list = Lists.newArrayList();
         DefinedStructure definedstructure = new DefinedStructure();
 
-        definedstructure.a(worldserver, blockposition, new BlockPosition(1, 1, 1), false, (Block) null);
+        definedstructure.a(worldserver, blockposition, new BaseBlockPosition(1, 1, 1), false, (Block) null);
         WorldGenFeatureDefinedStructurePoolSingle worldgenfeaturedefinedstructurepoolsingle = new WorldGenFeatureDefinedStructurePoolSingle(definedstructure);
-        WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece = new WorldGenFeaturePillagerOutpostPoolPiece(definedstructuremanager, worldgenfeaturedefinedstructurepoolsingle, blockposition, 1, EnumBlockRotation.NONE, new StructureBoundingBox(blockposition, blockposition));
+        WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece = new WorldGenFeaturePillagerOutpostPoolPiece(definedstructuremanager, worldgenfeaturedefinedstructurepoolsingle, blockposition, 1, EnumBlockRotation.NONE, new StructureBoundingBox(blockposition));
 
-        WorldGenFeatureDefinedStructureJigsawPlacement.a(worldserver.r(), worldgenfeaturepillageroutpostpoolpiece, i, WorldGenFeaturePillagerOutpostPoolPiece::new, chunkgenerator, definedstructuremanager, list, random);
+        WorldGenFeatureDefinedStructureJigsawPlacement.a(worldserver.t(), worldgenfeaturepillageroutpostpoolpiece, i, WorldGenFeaturePillagerOutpostPoolPiece::new, chunkgenerator, definedstructuremanager, list, random, worldserver);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece1 = (WorldGenFeaturePillagerOutpostPoolPiece) iterator.next();
 
-            worldgenfeaturepillageroutpostpoolpiece1.a(worldserver, structuremanager, chunkgenerator, random, StructureBoundingBox.b(), blockposition, flag);
+            worldgenfeaturepillageroutpostpoolpiece1.a(worldserver, structuremanager, chunkgenerator, random, StructureBoundingBox.a(), blockposition, flag);
         }
 
     }
@@ -129,21 +150,25 @@ public class TileEntityJigsaw extends TileEntity {
 
         ROLLABLE("rollable"), ALIGNED("aligned");
 
-        private final String c;
+        private final String name;
 
         private JointType(String s) {
-            this.c = s;
+            this.name = s;
         }
 
         @Override
         public String getName() {
-            return this.c;
+            return this.name;
         }
 
         public static Optional<TileEntityJigsaw.JointType> a(String s) {
             return Arrays.stream(values()).filter((tileentityjigsaw_jointtype) -> {
                 return tileentityjigsaw_jointtype.getName().equals(s);
             }).findFirst();
+        }
+
+        public IChatBaseComponent a() {
+            return new ChatMessage("jigsaw_block.joint." + this.name);
         }
     }
 }

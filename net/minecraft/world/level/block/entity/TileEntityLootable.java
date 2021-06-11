@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.IBlockAccess;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParameterSets;
@@ -24,12 +25,14 @@ import net.minecraft.world.phys.Vec3D;
 
 public abstract class TileEntityLootable extends TileEntityContainer {
 
+    public static final String LOOT_TABLE_TAG = "LootTable";
+    public static final String LOOT_TABLE_SEED_TAG = "LootTableSeed";
     @Nullable
     public MinecraftKey lootTable;
     public long lootTableSeed;
 
-    protected TileEntityLootable(TileEntityTypes<?> tileentitytypes) {
-        super(tileentitytypes);
+    protected TileEntityLootable(TileEntityTypes<?> tileentitytypes, BlockPosition blockposition, IBlockData iblockdata) {
+        super(tileentitytypes, blockposition, iblockdata);
     }
 
     public static void a(IBlockAccess iblockaccess, Random random, BlockPosition blockposition, MinecraftKey minecraftkey) {
@@ -41,7 +44,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     }
 
-    protected boolean b(NBTTagCompound nbttagcompound) {
+    protected boolean c(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.lootTable = new MinecraftKey(nbttagcompound.getString("LootTable"));
             this.lootTableSeed = nbttagcompound.getLong("LootTableSeed");
@@ -51,7 +54,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
         }
     }
 
-    protected boolean c(NBTTagCompound nbttagcompound) {
+    protected boolean d(NBTTagCompound nbttagcompound) {
         if (this.lootTable == null) {
             return false;
         } else {
@@ -64,19 +67,19 @@ public abstract class TileEntityLootable extends TileEntityContainer {
         }
     }
 
-    public void d(@Nullable EntityHuman entityhuman) {
-        if (this.lootTable != null && this.world.getMinecraftServer() != null) {
-            LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(this.lootTable);
+    public void e(@Nullable EntityHuman entityhuman) {
+        if (this.lootTable != null && this.level.getMinecraftServer() != null) {
+            LootTable loottable = this.level.getMinecraftServer().getLootTableRegistry().getLootTable(this.lootTable);
 
             if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.N.a((EntityPlayer) entityhuman, this.lootTable);
+                CriterionTriggers.GENERATE_LOOT.a((EntityPlayer) entityhuman, this.lootTable);
             }
 
             this.lootTable = null;
-            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) this.position)).a(this.lootTableSeed);
+            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.level)).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) this.worldPosition)).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.eU()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.fE()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));
@@ -91,19 +94,19 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     @Override
     public boolean isEmpty() {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         return this.f().stream().allMatch(ItemStack::isEmpty);
     }
 
     @Override
     public ItemStack getItem(int i) {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         return (ItemStack) this.f().get(i);
     }
 
     @Override
     public ItemStack splitStack(int i, int j) {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         ItemStack itemstack = ContainerUtil.a(this.f(), i, j);
 
         if (!itemstack.isEmpty()) {
@@ -115,13 +118,13 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     @Override
     public ItemStack splitWithoutUpdate(int i) {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         return ContainerUtil.a(this.f(), i);
     }
 
     @Override
     public void setItem(int i, ItemStack itemstack) {
-        this.d((EntityHuman) null);
+        this.e((EntityHuman) null);
         this.f().set(i, itemstack);
         if (itemstack.getCount() > this.getMaxStackSize()) {
             itemstack.setCount(this.getMaxStackSize());
@@ -132,7 +135,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.h((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.level.getTileEntity(this.worldPosition) != this ? false : entityhuman.h((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -145,15 +148,15 @@ public abstract class TileEntityLootable extends TileEntityContainer {
     protected abstract void a(NonNullList<ItemStack> nonnulllist);
 
     @Override
-    public boolean e(EntityHuman entityhuman) {
-        return super.e(entityhuman) && (this.lootTable == null || !entityhuman.isSpectator());
+    public boolean d(EntityHuman entityhuman) {
+        return super.d(entityhuman) && (this.lootTable == null || !entityhuman.isSpectator());
     }
 
     @Nullable
     @Override
     public Container createMenu(int i, PlayerInventory playerinventory, EntityHuman entityhuman) {
-        if (this.e(entityhuman)) {
-            this.d(playerinventory.player);
+        if (this.d(entityhuman)) {
+            this.e(playerinventory.player);
             return this.createContainer(i, playerinventory);
         } else {
             return null;

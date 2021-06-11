@@ -6,10 +6,10 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class DefinedStructureTestTrue extends DefinedStructureRuleTest {
 
-    public static final Codec<DefinedStructureTestTrue> a = Codec.unit(() -> {
-        return DefinedStructureTestTrue.b;
+    public static final Codec<DefinedStructureTestTrue> CODEC = Codec.unit(() -> {
+        return DefinedStructureTestTrue.INSTANCE;
     });
-    public static final DefinedStructureTestTrue b = new DefinedStructureTestTrue();
+    public static final DefinedStructureTestTrue INSTANCE = new DefinedStructureTestTrue();
 
     private DefinedStructureTestTrue() {}
 
@@ -20,6 +20,6 @@ public class DefinedStructureTestTrue extends DefinedStructureRuleTest {
 
     @Override
     protected DefinedStructureRuleTestType<?> a() {
-        return DefinedStructureRuleTestType.a;
+        return DefinedStructureRuleTestType.ALWAYS_TRUE_TEST;
     }
 }

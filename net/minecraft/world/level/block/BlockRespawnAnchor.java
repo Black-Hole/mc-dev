@@ -3,11 +3,14 @@ package net.minecraft.world.level.block;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.UnmodifiableIterator;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Stream;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.sounds.SoundCategory;
 import net.minecraft.sounds.SoundEffects;
@@ -40,13 +43,15 @@ import net.minecraft.world.phys.Vec3D;
 
 public class BlockRespawnAnchor extends Block {
 
-    public static final BlockStateInteger a = BlockProperties.aC;
-    private static final ImmutableList<BaseBlockPosition> b = ImmutableList.of(new BaseBlockPosition(0, 0, -1), new BaseBlockPosition(-1, 0, 0), new BaseBlockPosition(0, 0, 1), new BaseBlockPosition(1, 0, 0), new BaseBlockPosition(-1, 0, -1), new BaseBlockPosition(1, 0, -1), new BaseBlockPosition(-1, 0, 1), new BaseBlockPosition(1, 0, 1));
-    private static final ImmutableList<BaseBlockPosition> c = (new Builder()).addAll(BlockRespawnAnchor.b).addAll(BlockRespawnAnchor.b.stream().map(BaseBlockPosition::down).iterator()).addAll(BlockRespawnAnchor.b.stream().map(BaseBlockPosition::up).iterator()).add(new BaseBlockPosition(0, 1, 0)).build();
+    public static final int MIN_CHARGES = 0;
+    public static final int MAX_CHARGES = 4;
+    public static final BlockStateInteger CHARGE = BlockProperties.RESPAWN_ANCHOR_CHARGES;
+    private static final ImmutableList<BaseBlockPosition> RESPAWN_HORIZONTAL_OFFSETS = ImmutableList.of(new BaseBlockPosition(0, 0, -1), new BaseBlockPosition(-1, 0, 0), new BaseBlockPosition(0, 0, 1), new BaseBlockPosition(1, 0, 0), new BaseBlockPosition(-1, 0, -1), new BaseBlockPosition(1, 0, -1), new BaseBlockPosition(-1, 0, 1), new BaseBlockPosition(1, 0, 1));
+    private static final ImmutableList<BaseBlockPosition> RESPAWN_OFFSETS = (new Builder()).addAll(BlockRespawnAnchor.RESPAWN_HORIZONTAL_OFFSETS).addAll(BlockRespawnAnchor.RESPAWN_HORIZONTAL_OFFSETS.stream().map(BaseBlockPosition::down).iterator()).addAll(BlockRespawnAnchor.RESPAWN_HORIZONTAL_OFFSETS.stream().map(BaseBlockPosition::up).iterator()).add(new BaseBlockPosition(0, 1, 0)).build();
 
     public BlockRespawnAnchor(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRespawnAnchor.a, 0));
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockRespawnAnchor.CHARGE, 0));
     }
 
     @Override
@@ -57,12 +62,12 @@ public class BlockRespawnAnchor extends Block {
             return EnumInteractionResult.PASS;
         } else if (a(itemstack) && h(iblockdata)) {
             a(world, blockposition, iblockdata);
-            if (!entityhuman.abilities.canInstantlyBuild) {
+            if (!entityhuman.getAbilities().instabuild) {
                 itemstack.subtract(1);
             }
 
             return EnumInteractionResult.a(world.isClientSide);
-        } else if ((Integer) iblockdata.get(BlockRespawnAnchor.a) == 0) {
+        } else if ((Integer) iblockdata.get(BlockRespawnAnchor.CHARGE) == 0) {
             return EnumInteractionResult.PASS;
         } else if (!a(world)) {
             if (!world.isClientSide) {
@@ -74,9 +79,9 @@ public class BlockRespawnAnchor extends Block {
             if (!world.isClientSide) {
                 EntityPlayer entityplayer = (EntityPlayer) entityhuman;
 
-                if (entityplayer.getSpawnDimension() != world.getDimensionKey() || !entityplayer.getSpawn().equals(blockposition)) {
+                if (entityplayer.getSpawnDimension() != world.getDimensionKey() || !blockposition.equals(entityplayer.getSpawn())) {
                     entityplayer.setRespawnPosition(world.getDimensionKey(), blockposition, 0.0F, false, true);
-                    world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return EnumInteractionResult.SUCCESS;
                 }
             }
@@ -86,11 +91,11 @@ public class BlockRespawnAnchor extends Block {
     }
 
     private static boolean a(ItemStack itemstack) {
-        return itemstack.getItem() == Items.dq;
+        return itemstack.a(Items.GLOWSTONE);
     }
 
     private static boolean h(IBlockData iblockdata) {
-        return (Integer) iblockdata.get(BlockRespawnAnchor.a) < 4;
+        return (Integer) iblockdata.get(BlockRespawnAnchor.CHARGE) < 4;
     }
 
     private static boolean a(BlockPosition blockposition, World world) {
@@ -117,7 +122,7 @@ public class BlockRespawnAnchor extends Block {
         world.a(blockposition, false);
         Stream stream = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
 
-        blockposition.getClass();
+        Objects.requireNonNull(blockposition);
         boolean flag = stream.map(blockposition::shift).anyMatch((blockposition1) -> {
             return a(blockposition1, world);
         });
@@ -137,13 +142,29 @@ public class BlockRespawnAnchor extends Block {
     }
 
     public static void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRespawnAnchor.a, (Integer) iblockdata.get(BlockRespawnAnchor.a) + 1), 3);
-        world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRespawnAnchor.CHARGE, (Integer) iblockdata.get(BlockRespawnAnchor.CHARGE) + 1), 3);
+        world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    }
+
+    @Override
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((Integer) iblockdata.get(BlockRespawnAnchor.CHARGE) != 0) {
+            if (random.nextInt(100) == 0) {
+                world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.RESPAWN_ANCHOR_AMBIENT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            }
+
+            double d0 = (double) blockposition.getX() + 0.5D + (0.5D - random.nextDouble());
+            double d1 = (double) blockposition.getY() + 1.0D;
+            double d2 = (double) blockposition.getZ() + 0.5D + (0.5D - random.nextDouble());
+            double d3 = (double) random.nextFloat() * 0.04D;
+
+            world.addParticle(Particles.REVERSE_PORTAL, d0, d1, d2, 0.0D, d3, 0.0D);
+        }
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockRespawnAnchor.a);
+        blockstatelist_a.a(BlockRespawnAnchor.CHARGE);
     }
 
     @Override
@@ -152,7 +173,7 @@ public class BlockRespawnAnchor extends Block {
     }
 
     public static int a(IBlockData iblockdata, int i) {
-        return MathHelper.d((float) ((Integer) iblockdata.get(BlockRespawnAnchor.a) - 0) / 4.0F * (float) i);
+        return MathHelper.d((float) ((Integer) iblockdata.get(BlockRespawnAnchor.CHARGE) - 0) / 4.0F * (float) i);
     }
 
     @Override
@@ -168,7 +189,7 @@ public class BlockRespawnAnchor extends Block {
 
     private static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, boolean flag) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        UnmodifiableIterator unmodifiableiterator = BlockRespawnAnchor.c.iterator();
+        UnmodifiableIterator unmodifiableiterator = BlockRespawnAnchor.RESPAWN_OFFSETS.iterator();
 
         Vec3D vec3d;
 

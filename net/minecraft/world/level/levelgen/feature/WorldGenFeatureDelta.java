@@ -12,20 +12,25 @@ import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureDeltaConfiguration;
 
 public class WorldGenFeatureDelta extends WorldGenerator<WorldGenFeatureDeltaConfiguration> {
 
-    private static final ImmutableList<Block> a = ImmutableList.of(Blocks.BEDROCK, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.NETHER_WART, Blocks.CHEST, Blocks.SPAWNER);
-    private static final EnumDirection[] ab = EnumDirection.values();
+    private static final ImmutableList<Block> CANNOT_REPLACE = ImmutableList.of(Blocks.BEDROCK, Blocks.NETHER_BRICKS, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.NETHER_WART, Blocks.CHEST, Blocks.SPAWNER);
+    private static final EnumDirection[] DIRECTIONS = EnumDirection.values();
+    private static final double RIM_SPAWN_CHANCE = 0.9D;
 
     public WorldGenFeatureDelta(Codec<WorldGenFeatureDeltaConfiguration> codec) {
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureDeltaConfiguration worldgenfeaturedeltaconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureDeltaConfiguration> featureplacecontext) {
         boolean flag = false;
+        Random random = featureplacecontext.c();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        WorldGenFeatureDeltaConfiguration worldgenfeaturedeltaconfiguration = (WorldGenFeatureDeltaConfiguration) featureplacecontext.e();
+        BlockPosition blockposition = featureplacecontext.d();
         boolean flag1 = random.nextDouble() < 0.9D;
         int i = flag1 ? worldgenfeaturedeltaconfiguration.e().a(random) : 0;
         int j = flag1 ? worldgenfeaturedeltaconfiguration.e().a(random) : 0;
@@ -48,7 +53,7 @@ public class WorldGenFeatureDelta extends WorldGenerator<WorldGenFeatureDeltaCon
                     this.a((IWorldWriter) generatoraccessseed, blockposition1, worldgenfeaturedeltaconfiguration.c());
                 }
 
-                BlockPosition blockposition2 = blockposition1.b(i, 0, j);
+                BlockPosition blockposition2 = blockposition1.c(i, 0, j);
 
                 if (a((GeneratorAccess) generatoraccessseed, blockposition2, worldgenfeaturedeltaconfiguration)) {
                     flag = true;
@@ -65,10 +70,10 @@ public class WorldGenFeatureDelta extends WorldGenerator<WorldGenFeatureDeltaCon
 
         if (iblockdata.a(worldgenfeaturedeltaconfiguration.b().getBlock())) {
             return false;
-        } else if (WorldGenFeatureDelta.a.contains(iblockdata.getBlock())) {
+        } else if (WorldGenFeatureDelta.CANNOT_REPLACE.contains(iblockdata.getBlock())) {
             return false;
         } else {
-            EnumDirection[] aenumdirection = WorldGenFeatureDelta.ab;
+            EnumDirection[] aenumdirection = WorldGenFeatureDelta.DIRECTIONS;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {

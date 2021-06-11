@@ -10,12 +10,12 @@ import org.apache.logging.log4j.Logger;
 public class MobEffect implements Comparable<MobEffect> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final MobEffectList b;
+    private final MobEffectList effect;
     private int duration;
-    private int amplification;
-    private boolean splash;
+    private int amplifier;
     private boolean ambient;
-    private boolean showParticles;
+    private boolean noCounter;
+    private boolean visible;
     private boolean showIcon;
     @Nullable
     private MobEffect hiddenEffect;
@@ -41,36 +41,36 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1, boolean flag2, @Nullable MobEffect mobeffect) {
-        this.b = mobeffectlist;
+        this.effect = mobeffectlist;
         this.duration = i;
-        this.amplification = j;
+        this.amplifier = j;
         this.ambient = flag;
-        this.showParticles = flag1;
+        this.visible = flag1;
         this.showIcon = flag2;
         this.hiddenEffect = mobeffect;
     }
 
     public MobEffect(MobEffect mobeffect) {
-        this.b = mobeffect.b;
+        this.effect = mobeffect.effect;
         this.a(mobeffect);
     }
 
     void a(MobEffect mobeffect) {
         this.duration = mobeffect.duration;
-        this.amplification = mobeffect.amplification;
+        this.amplifier = mobeffect.amplifier;
         this.ambient = mobeffect.ambient;
-        this.showParticles = mobeffect.showParticles;
+        this.visible = mobeffect.visible;
         this.showIcon = mobeffect.showIcon;
     }
 
     public boolean b(MobEffect mobeffect) {
-        if (this.b != mobeffect.b) {
+        if (this.effect != mobeffect.effect) {
             MobEffect.LOGGER.warn("This method should only be called for matching effects!");
         }
 
         boolean flag = false;
 
-        if (mobeffect.amplification > this.amplification) {
+        if (mobeffect.amplifier > this.amplifier) {
             if (mobeffect.duration < this.duration) {
                 MobEffect mobeffect1 = this.hiddenEffect;
 
@@ -78,11 +78,11 @@ public class MobEffect implements Comparable<MobEffect> {
                 this.hiddenEffect.hiddenEffect = mobeffect1;
             }
 
-            this.amplification = mobeffect.amplification;
+            this.amplifier = mobeffect.amplifier;
             this.duration = mobeffect.duration;
             flag = true;
         } else if (mobeffect.duration > this.duration) {
-            if (mobeffect.amplification == this.amplification) {
+            if (mobeffect.amplifier == this.amplifier) {
                 this.duration = mobeffect.duration;
                 flag = true;
             } else if (this.hiddenEffect == null) {
@@ -97,8 +97,8 @@ public class MobEffect implements Comparable<MobEffect> {
             flag = true;
         }
 
-        if (mobeffect.showParticles != this.showParticles) {
-            this.showParticles = mobeffect.showParticles;
+        if (mobeffect.visible != this.visible) {
+            this.visible = mobeffect.visible;
             flag = true;
         }
 
@@ -111,7 +111,7 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public MobEffectList getMobEffect() {
-        return this.b;
+        return this.effect;
     }
 
     public int getDuration() {
@@ -119,7 +119,7 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public int getAmplifier() {
-        return this.amplification;
+        return this.amplifier;
     }
 
     public boolean isAmbient() {
@@ -127,7 +127,7 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public boolean isShowParticles() {
-        return this.showParticles;
+        return this.visible;
     }
 
     public boolean isShowIcon() {
@@ -136,7 +136,7 @@ public class MobEffect implements Comparable<MobEffect> {
 
     public boolean tick(EntityLiving entityliving, Runnable runnable) {
         if (this.duration > 0) {
-            if (this.b.a(this.duration, this.amplification)) {
+            if (this.effect.a(this.duration, this.amplifier)) {
                 this.a(entityliving);
             }
 
@@ -161,37 +161,36 @@ public class MobEffect implements Comparable<MobEffect> {
 
     public void a(EntityLiving entityliving) {
         if (this.duration > 0) {
-            this.b.tick(entityliving, this.amplification);
+            this.effect.tick(entityliving, this.amplifier);
         }
 
     }
 
     public String g() {
-        return this.b.c();
+        return this.effect.c();
     }
 
     public String toString() {
         String s;
+        String s1;
 
-        if (this.amplification > 0) {
-            s = this.g() + " x " + (this.amplification + 1) + ", Duration: " + this.duration;
+        if (this.amplifier > 0) {
+            s = this.g();
+            s1 = s + " x " + (this.amplifier + 1) + ", Duration: " + this.duration;
         } else {
-            s = this.g() + ", Duration: " + this.duration;
+            s = this.g();
+            s1 = s + ", Duration: " + this.duration;
         }
 
-        if (this.splash) {
-            s = s + ", Splash: true";
-        }
-
-        if (!this.showParticles) {
-            s = s + ", Particles: false";
+        if (!this.visible) {
+            s1 = s1 + ", Particles: false";
         }
 
         if (!this.showIcon) {
-            s = s + ", Show Icon: false";
+            s1 = s1 + ", Show Icon: false";
         }
 
-        return s;
+        return s1;
     }
 
     public boolean equals(Object object) {
@@ -202,16 +201,15 @@ public class MobEffect implements Comparable<MobEffect> {
         } else {
             MobEffect mobeffect = (MobEffect) object;
 
-            return this.duration == mobeffect.duration && this.amplification == mobeffect.amplification && this.splash == mobeffect.splash && this.ambient == mobeffect.ambient && this.b.equals(mobeffect.b);
+            return this.duration == mobeffect.duration && this.amplifier == mobeffect.amplifier && this.ambient == mobeffect.ambient && this.effect.equals(mobeffect.effect);
         }
     }
 
     public int hashCode() {
-        int i = this.b.hashCode();
+        int i = this.effect.hashCode();
 
         i = 31 * i + this.duration;
-        i = 31 * i + this.amplification;
-        i = 31 * i + (this.splash ? 1 : 0);
+        i = 31 * i + this.amplifier;
         i = 31 * i + (this.ambient ? 1 : 0);
         return i;
     }
@@ -237,6 +235,7 @@ public class MobEffect implements Comparable<MobEffect> {
 
     }
 
+    @Nullable
     public static MobEffect b(NBTTagCompound nbttagcompound) {
         byte b0 = nbttagcompound.getByte("Id");
         MobEffectList mobeffectlist = MobEffectList.fromId(b0);
@@ -267,6 +266,14 @@ public class MobEffect implements Comparable<MobEffect> {
         }
 
         return new MobEffect(mobeffectlist, i, b0 < 0 ? 0 : b0, flag, flag1, flag2, mobeffect);
+    }
+
+    public void a(boolean flag) {
+        this.noCounter = flag;
+    }
+
+    public boolean h() {
+        return this.noCounter;
     }
 
     public int compareTo(MobEffect mobeffect) {

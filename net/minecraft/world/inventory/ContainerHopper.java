@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class ContainerHopper extends Container {
 
+    public static final int CONTAINER_SIZE = 5;
     private final IInventory hopper;
 
     public ContainerHopper(int i, PlayerInventory playerinventory) {
@@ -46,7 +47,7 @@ public class ContainerHopper extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -55,14 +56,14 @@ public class ContainerHopper extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < this.hopper.getSize()) {
                 if (!this.a(itemstack1, this.hopper.getSize(), this.slots.size(), true)) {
-                    return ItemStack.b;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.a(itemstack1, 0, this.hopper.getSize(), false)) {
-                return ItemStack.b;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.b);
+                slot.set(ItemStack.EMPTY);
             } else {
                 slot.d();
             }

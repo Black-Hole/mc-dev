@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.blocks.ArgumentBlockPredicate;
 import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
-import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.chat.ChatMessage;
@@ -30,14 +29,17 @@ import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class CommandClone {
 
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.clone.overlap"));
-    private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final int MAX_CLONE_AREA = 32768;
+    private static final SimpleCommandExceptionType ERROR_OVERLAP = new SimpleCommandExceptionType(new ChatMessage("commands.clone.overlap"));
+    private static final Dynamic2CommandExceptionType ERROR_AREA_TOO_LARGE = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.clone.toobig", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.clone.failed"));
-    public static final Predicate<ShapeDetectorBlock> a = (shapedetectorblock) -> {
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.clone.failed"));
+    public static final Predicate<ShapeDetectorBlock> FILTER_AIR = (shapedetectorblock) -> {
         return !shapedetectorblock.a().isAir();
     };
+
+    public CommandClone() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("clone").requires((commandlistenerwrapper) -> {
@@ -63,13 +65,13 @@ public class CommandClone {
                 return true;
             }, CommandClone.Mode.NORMAL);
         })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("masked").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.a, CommandClone.Mode.NORMAL);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.FILTER_AIR, CommandClone.Mode.NORMAL);
         })).then(net.minecraft.commands.CommandDispatcher.a("force").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.a, CommandClone.Mode.FORCE);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.FILTER_AIR, CommandClone.Mode.FORCE);
         }))).then(net.minecraft.commands.CommandDispatcher.a("move").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.a, CommandClone.Mode.MOVE);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.FILTER_AIR, CommandClone.Mode.MOVE);
         }))).then(net.minecraft.commands.CommandDispatcher.a("normal").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.a, CommandClone.Mode.NORMAL);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), CommandClone.FILTER_AIR, CommandClone.Mode.NORMAL);
         })))).then(net.minecraft.commands.CommandDispatcher.a("filtered").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("filter", (ArgumentType) ArgumentBlockPredicate.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "begin"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), ArgumentBlockPredicate.a(commandcontext, "filter"), CommandClone.Mode.NORMAL);
         })).then(net.minecraft.commands.CommandDispatcher.a("force").executes((commandcontext) -> {
@@ -82,17 +84,17 @@ public class CommandClone {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, Predicate<ShapeDetectorBlock> predicate, CommandClone.Mode commandclone_mode) throws CommandSyntaxException {
-        StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
-        BlockPosition blockposition3 = blockposition2.a(structureboundingbox.c());
-        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition3);
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(blockposition, blockposition1);
+        BlockPosition blockposition3 = blockposition2.f(structureboundingbox.b());
+        StructureBoundingBox structureboundingbox1 = StructureBoundingBox.a(blockposition2, blockposition3);
 
-        if (!commandclone_mode.a() && structureboundingbox1.b(structureboundingbox)) {
-            throw CommandClone.b.create();
+        if (!commandclone_mode.a() && structureboundingbox1.a(structureboundingbox)) {
+            throw CommandClone.ERROR_OVERLAP.create();
         } else {
-            int i = structureboundingbox.d() * structureboundingbox.e() * structureboundingbox.f();
+            int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
             if (i > 32768) {
-                throw CommandClone.c.create(32768, i);
+                throw CommandClone.ERROR_AREA_TOO_LARGE.create(32768, i);
             } else {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
 
@@ -101,15 +103,15 @@ public class CommandClone {
                     List<CommandClone.CommandCloneStoredTileEntity> list1 = Lists.newArrayList();
                     List<CommandClone.CommandCloneStoredTileEntity> list2 = Lists.newArrayList();
                     Deque<BlockPosition> deque = Lists.newLinkedList();
-                    BlockPosition blockposition4 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
+                    BlockPosition blockposition4 = new BlockPosition(structureboundingbox1.g() - structureboundingbox.g(), structureboundingbox1.h() - structureboundingbox.h(), structureboundingbox1.i() - structureboundingbox.i());
 
                     int j;
 
-                    for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
-                        for (int l = structureboundingbox.b; l <= structureboundingbox.e; ++l) {
-                            for (j = structureboundingbox.a; j <= structureboundingbox.d; ++j) {
+                    for (int k = structureboundingbox.i(); k <= structureboundingbox.l(); ++k) {
+                        for (int l = structureboundingbox.h(); l <= structureboundingbox.k(); ++l) {
+                            for (j = structureboundingbox.g(); j <= structureboundingbox.j(); ++j) {
                                 BlockPosition blockposition5 = new BlockPosition(j, l, k);
-                                BlockPosition blockposition6 = blockposition5.a((BaseBlockPosition) blockposition4);
+                                BlockPosition blockposition6 = blockposition5.f(blockposition4);
                                 ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(worldserver, blockposition5, false);
                                 IBlockData iblockdata = shapedetectorblock.a();
 
@@ -164,10 +166,10 @@ public class CommandClone {
 
                     while (iterator1.hasNext()) {
                         CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
-                        TileEntity tileentity2 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity.a);
+                        TileEntity tileentity2 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity.pos);
 
                         Clearable.a(tileentity2);
-                        worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2);
+                        worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.pos, Blocks.BARRIER.getBlockData(), 2);
                     }
 
                     j = 0;
@@ -177,20 +179,20 @@ public class CommandClone {
 
                     while (iterator2.hasNext()) {
                         commandclone_commandclonestoredtileentity1 = (CommandClone.CommandCloneStoredTileEntity) iterator2.next();
-                        if (worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b, 2)) {
+                        if (worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.pos, commandclone_commandclonestoredtileentity1.state, 2)) {
                             ++j;
                         }
                     }
 
-                    for (iterator2 = list1.iterator(); iterator2.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b, 2)) {
+                    for (iterator2 = list1.iterator(); iterator2.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.pos, commandclone_commandclonestoredtileentity1.state, 2)) {
                         commandclone_commandclonestoredtileentity1 = (CommandClone.CommandCloneStoredTileEntity) iterator2.next();
-                        TileEntity tileentity3 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity1.a);
+                        TileEntity tileentity3 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity1.pos);
 
-                        if (commandclone_commandclonestoredtileentity1.c != null && tileentity3 != null) {
-                            commandclone_commandclonestoredtileentity1.c.setInt("x", commandclone_commandclonestoredtileentity1.a.getX());
-                            commandclone_commandclonestoredtileentity1.c.setInt("y", commandclone_commandclonestoredtileentity1.a.getY());
-                            commandclone_commandclonestoredtileentity1.c.setInt("z", commandclone_commandclonestoredtileentity1.a.getZ());
-                            tileentity3.load(commandclone_commandclonestoredtileentity1.b, commandclone_commandclonestoredtileentity1.c);
+                        if (commandclone_commandclonestoredtileentity1.tag != null && tileentity3 != null) {
+                            commandclone_commandclonestoredtileentity1.tag.setInt("x", commandclone_commandclonestoredtileentity1.pos.getX());
+                            commandclone_commandclonestoredtileentity1.tag.setInt("y", commandclone_commandclonestoredtileentity1.pos.getY());
+                            commandclone_commandclonestoredtileentity1.tag.setInt("z", commandclone_commandclonestoredtileentity1.pos.getZ());
+                            tileentity3.load(commandclone_commandclonestoredtileentity1.tag);
                             tileentity3.update();
                         }
                     }
@@ -199,49 +201,49 @@ public class CommandClone {
 
                     while (iterator2.hasNext()) {
                         commandclone_commandclonestoredtileentity1 = (CommandClone.CommandCloneStoredTileEntity) iterator2.next();
-                        worldserver.update(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b.getBlock());
+                        worldserver.update(commandclone_commandclonestoredtileentity1.pos, commandclone_commandclonestoredtileentity1.state.getBlock());
                     }
 
                     worldserver.getBlockTickList().a(structureboundingbox, blockposition4);
                     if (j == 0) {
-                        throw CommandClone.d.create();
+                        throw CommandClone.ERROR_FAILED.create();
                     } else {
                         commandlistenerwrapper.sendMessage(new ChatMessage("commands.clone.success", new Object[]{j}), true);
                         return j;
                     }
                 } else {
-                    throw ArgumentPosition.a.create();
+                    throw ArgumentPosition.ERROR_NOT_LOADED.create();
                 }
             }
         }
     }
 
-    static class CommandCloneStoredTileEntity {
-
-        public final BlockPosition a;
-        public final IBlockData b;
-        @Nullable
-        public final NBTTagCompound c;
-
-        public CommandCloneStoredTileEntity(BlockPosition blockposition, IBlockData iblockdata, @Nullable NBTTagCompound nbttagcompound) {
-            this.a = blockposition;
-            this.b = iblockdata;
-            this.c = nbttagcompound;
-        }
-    }
-
-    static enum Mode {
+    private static enum Mode {
 
         FORCE(true), MOVE(true), NORMAL(false);
 
-        private final boolean d;
+        private final boolean canOverlap;
 
         private Mode(boolean flag) {
-            this.d = flag;
+            this.canOverlap = flag;
         }
 
         public boolean a() {
-            return this.d;
+            return this.canOverlap;
+        }
+    }
+
+    private static class CommandCloneStoredTileEntity {
+
+        public final BlockPosition pos;
+        public final IBlockData state;
+        @Nullable
+        public final NBTTagCompound tag;
+
+        public CommandCloneStoredTileEntity(BlockPosition blockposition, IBlockData iblockdata, @Nullable NBTTagCompound nbttagcompound) {
+            this.pos = blockposition;
+            this.state = iblockdata;
+            this.tag = nbttagcompound;
         }
     }
 }

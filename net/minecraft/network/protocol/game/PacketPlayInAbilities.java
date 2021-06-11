@@ -1,32 +1,29 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.player.PlayerAbilities;
 
 public class PacketPlayInAbilities implements Packet<PacketListenerPlayIn> {
 
-    private boolean a;
-
-    public PacketPlayInAbilities() {}
+    private static final int FLAG_FLYING = 2;
+    private final boolean isFlying;
 
     public PacketPlayInAbilities(PlayerAbilities playerabilities) {
-        this.a = playerabilities.isFlying;
+        this.isFlying = playerabilities.flying;
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
+    public PacketPlayInAbilities(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
 
-        this.a = (b0 & 2) != 0;
+        this.isFlying = (b0 & 2) != 0;
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
+    public void a(PacketDataSerializer packetdataserializer) {
         byte b0 = 0;
 
-        if (this.a) {
+        if (this.isFlying) {
             b0 = (byte) (b0 | 2);
         }
 
@@ -38,6 +35,6 @@ public class PacketPlayInAbilities implements Packet<PacketListenerPlayIn> {
     }
 
     public boolean isFlying() {
-        return this.a;
+        return this.isFlying;
     }
 }

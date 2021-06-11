@@ -1,27 +1,28 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayInTileNBTQuery implements Packet<PacketListenerPlayIn> {
 
-    private int a;
-    private BlockPosition b;
+    private final int transactionId;
+    private final BlockPosition pos;
 
-    public PacketPlayInTileNBTQuery() {}
+    public PacketPlayInTileNBTQuery(int i, BlockPosition blockposition) {
+        this.transactionId = i;
+        this.pos = blockposition;
+    }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
-        this.b = packetdataserializer.e();
+    public PacketPlayInTileNBTQuery(PacketDataSerializer packetdataserializer) {
+        this.transactionId = packetdataserializer.j();
+        this.pos = packetdataserializer.f();
     }
 
     @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
-        packetdataserializer.a(this.b);
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.d(this.transactionId);
+        packetdataserializer.a(this.pos);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -29,10 +30,10 @@ public class PacketPlayInTileNBTQuery implements Packet<PacketListenerPlayIn> {
     }
 
     public int b() {
-        return this.a;
+        return this.transactionId;
     }
 
     public BlockPosition c() {
-        return this.b;
+        return this.pos;
     }
 }

@@ -9,18 +9,19 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
 
-    public static final SimpleDateFormat a = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-    protected final Date b;
-    protected final String c;
-    protected final Date d;
-    protected final String e;
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+    public static final String EXPIRES_NEVER = "forever";
+    protected final Date created;
+    protected final String source;
+    protected final Date expires;
+    protected final String reason;
 
     public ExpirableListEntry(T t0, @Nullable Date date, @Nullable String s, @Nullable Date date1, @Nullable String s1) {
         super(t0);
-        this.b = date == null ? new Date() : date;
-        this.c = s == null ? "(Unknown)" : s;
-        this.d = date1;
-        this.e = s1 == null ? "Banned by an operator." : s1;
+        this.created = date == null ? new Date() : date;
+        this.source = s == null ? "(Unknown)" : s;
+        this.expires = date1;
+        this.reason = s1 == null ? "Banned by an operator." : s1;
     }
 
     protected ExpirableListEntry(T t0, JsonObject jsonobject) {
@@ -29,50 +30,54 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
         Date date;
 
         try {
-            date = jsonobject.has("created") ? ExpirableListEntry.a.parse(jsonobject.get("created").getAsString()) : new Date();
+            date = jsonobject.has("created") ? ExpirableListEntry.DATE_FORMAT.parse(jsonobject.get("created").getAsString()) : new Date();
         } catch (ParseException parseexception) {
             date = new Date();
         }
 
-        this.b = date;
-        this.c = jsonobject.has("source") ? jsonobject.get("source").getAsString() : "(Unknown)";
+        this.created = date;
+        this.source = jsonobject.has("source") ? jsonobject.get("source").getAsString() : "(Unknown)";
 
         Date date1;
 
         try {
-            date1 = jsonobject.has("expires") ? ExpirableListEntry.a.parse(jsonobject.get("expires").getAsString()) : null;
+            date1 = jsonobject.has("expires") ? ExpirableListEntry.DATE_FORMAT.parse(jsonobject.get("expires").getAsString()) : null;
         } catch (ParseException parseexception1) {
             date1 = null;
         }
 
-        this.d = date1;
-        this.e = jsonobject.has("reason") ? jsonobject.get("reason").getAsString() : "Banned by an operator.";
+        this.expires = date1;
+        this.reason = jsonobject.has("reason") ? jsonobject.get("reason").getAsString() : "Banned by an operator.";
+    }
+
+    public Date getCreated() {
+        return this.created;
     }
 
     public String getSource() {
-        return this.c;
+        return this.source;
     }
 
     public Date getExpires() {
-        return this.d;
+        return this.expires;
     }
 
     public String getReason() {
-        return this.e;
+        return this.reason;
     }
 
     public abstract IChatBaseComponent e();
 
     @Override
     boolean hasExpired() {
-        return this.d == null ? false : this.d.before(new Date());
+        return this.expires == null ? false : this.expires.before(new Date());
     }
 
     @Override
     protected void a(JsonObject jsonobject) {
-        jsonobject.addProperty("created", ExpirableListEntry.a.format(this.b));
-        jsonobject.addProperty("source", this.c);
-        jsonobject.addProperty("expires", this.d == null ? "forever" : ExpirableListEntry.a.format(this.d));
-        jsonobject.addProperty("reason", this.e);
+        jsonobject.addProperty("created", ExpirableListEntry.DATE_FORMAT.format(this.created));
+        jsonobject.addProperty("source", this.source);
+        jsonobject.addProperty("expires", this.expires == null ? "forever" : ExpirableListEntry.DATE_FORMAT.format(this.expires));
+        jsonobject.addProperty("reason", this.reason);
     }
 }

@@ -7,11 +7,11 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenSurfaceBasaltDeltas extends WorldGenSurfaceNetherAbstract {
 
-    private static final IBlockData a = Blocks.BASALT.getBlockData();
-    private static final IBlockData b = Blocks.BLACKSTONE.getBlockData();
-    private static final IBlockData c = Blocks.GRAVEL.getBlockData();
-    private static final ImmutableList<IBlockData> d = ImmutableList.of(WorldGenSurfaceBasaltDeltas.a, WorldGenSurfaceBasaltDeltas.b);
-    private static final ImmutableList<IBlockData> e = ImmutableList.of(WorldGenSurfaceBasaltDeltas.a);
+    private static final IBlockData BASALT = Blocks.BASALT.getBlockData();
+    private static final IBlockData BLACKSTONE = Blocks.BLACKSTONE.getBlockData();
+    private static final IBlockData GRAVEL = Blocks.GRAVEL.getBlockData();
+    private static final ImmutableList<IBlockData> FLOOR_BLOCK_STATES = ImmutableList.of(WorldGenSurfaceBasaltDeltas.BASALT, WorldGenSurfaceBasaltDeltas.BLACKSTONE);
+    private static final ImmutableList<IBlockData> CEILING_BLOCK_STATES = ImmutableList.of(WorldGenSurfaceBasaltDeltas.BASALT);
 
     public WorldGenSurfaceBasaltDeltas(Codec<WorldGenSurfaceConfigurationBase> codec) {
         super(codec);
@@ -19,16 +19,16 @@ public class WorldGenSurfaceBasaltDeltas extends WorldGenSurfaceNetherAbstract {
 
     @Override
     protected ImmutableList<IBlockData> a() {
-        return WorldGenSurfaceBasaltDeltas.d;
+        return WorldGenSurfaceBasaltDeltas.FLOOR_BLOCK_STATES;
     }
 
     @Override
     protected ImmutableList<IBlockData> b() {
-        return WorldGenSurfaceBasaltDeltas.e;
+        return WorldGenSurfaceBasaltDeltas.CEILING_BLOCK_STATES;
     }
 
     @Override
     protected IBlockData c() {
-        return WorldGenSurfaceBasaltDeltas.c;
+        return WorldGenSurfaceBasaltDeltas.GRAVEL;
     }
 }

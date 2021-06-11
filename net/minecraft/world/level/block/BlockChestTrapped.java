@@ -23,12 +23,12 @@ public class BlockChestTrapped extends BlockChest {
     }
 
     @Override
-    public TileEntity createTile(IBlockAccess iblockaccess) {
-        return new TileEntityChestTrapped();
+    public TileEntity createTile(BlockPosition blockposition, IBlockData iblockdata) {
+        return new TileEntityChestTrapped(blockposition, iblockdata);
     }
 
     @Override
-    protected Statistic<MinecraftKey> c() {
+    protected Statistic<MinecraftKey> d() {
         return StatisticList.CUSTOM.b(StatisticList.TRIGGER_TRAPPED_CHEST);
     }
 

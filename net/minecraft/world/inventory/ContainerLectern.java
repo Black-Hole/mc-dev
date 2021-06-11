@@ -7,8 +7,14 @@ import net.minecraft.world.item.ItemStack;
 
 public class ContainerLectern extends Container {
 
-    private final IInventory inventory;
-    private final IContainerProperties containerProperties;
+    private static final int DATA_COUNT = 1;
+    private static final int SLOT_COUNT = 1;
+    public static final int BUTTON_PREV_PAGE = 1;
+    public static final int BUTTON_NEXT_PAGE = 2;
+    public static final int BUTTON_TAKE_BOOK = 3;
+    public static final int BUTTON_PAGE_JUMP_RANGE_START = 100;
+    private final IInventory lectern;
+    private final IContainerProperties lecternData;
 
     public ContainerLectern(int i) {
         this(i, new InventorySubcontainer(1), new ContainerProperties(1));
@@ -18,13 +24,13 @@ public class ContainerLectern extends Container {
         super(Containers.LECTERN, i);
         a(iinventory, 1);
         a(icontainerproperties, 1);
-        this.inventory = iinventory;
-        this.containerProperties = icontainerproperties;
+        this.lectern = iinventory;
+        this.lecternData = icontainerproperties;
         this.a(new Slot(iinventory, 0, 0, 0) {
             @Override
             public void d() {
                 super.d();
-                ContainerLectern.this.a(this.inventory);
+                ContainerLectern.this.a(this.container);
             }
         });
         this.a(icontainerproperties);
@@ -36,27 +42,27 @@ public class ContainerLectern extends Container {
 
         if (i >= 100) {
             j = i - 100;
-            this.a(0, j);
+            this.setContainerData(0, j);
             return true;
         } else {
             switch (i) {
                 case 1:
-                    j = this.containerProperties.getProperty(0);
-                    this.a(0, j - 1);
+                    j = this.lecternData.getProperty(0);
+                    this.setContainerData(0, j - 1);
                     return true;
                 case 2:
-                    j = this.containerProperties.getProperty(0);
-                    this.a(0, j + 1);
+                    j = this.lecternData.getProperty(0);
+                    this.setContainerData(0, j + 1);
                     return true;
                 case 3:
-                    if (!entityhuman.eK()) {
+                    if (!entityhuman.fu()) {
                         return false;
                     }
 
-                    ItemStack itemstack = this.inventory.splitWithoutUpdate(0);
+                    ItemStack itemstack = this.lectern.splitWithoutUpdate(0);
 
-                    this.inventory.update();
-                    if (!entityhuman.inventory.pickup(itemstack)) {
+                    this.lectern.update();
+                    if (!entityhuman.getInventory().pickup(itemstack)) {
                         entityhuman.drop(itemstack, false);
                     }
 
@@ -68,13 +74,21 @@ public class ContainerLectern extends Container {
     }
 
     @Override
-    public void a(int i, int j) {
-        super.a(i, j);
-        this.c();
+    public void setContainerData(int i, int j) {
+        super.setContainerData(i, j);
+        this.d();
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return this.inventory.a(entityhuman);
+        return this.lectern.a(entityhuman);
+    }
+
+    public ItemStack i() {
+        return this.lectern.getItem(0);
+    }
+
+    public int j() {
+        return this.lecternData.getProperty(0);
     }
 }

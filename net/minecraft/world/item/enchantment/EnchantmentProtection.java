@@ -7,21 +7,21 @@ import net.minecraft.world.entity.EnumItemSlot;
 
 public class EnchantmentProtection extends Enchantment {
 
-    public final EnchantmentProtection.DamageType a;
+    public final EnchantmentProtection.DamageType type;
 
     public EnchantmentProtection(Enchantment.Rarity enchantment_rarity, EnchantmentProtection.DamageType enchantmentprotection_damagetype, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, enchantmentprotection_damagetype == EnchantmentProtection.DamageType.FALL ? EnchantmentSlotType.ARMOR_FEET : EnchantmentSlotType.ARMOR, aenumitemslot);
-        this.a = enchantmentprotection_damagetype;
+        this.type = enchantmentprotection_damagetype;
     }
 
     @Override
     public int a(int i) {
-        return this.a.b() + (i - 1) * this.a.c();
+        return this.type.a() + (i - 1) * this.type.b();
     }
 
     @Override
     public int b(int i) {
-        return this.a(i) + this.a.c();
+        return this.a(i) + this.type.b();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class EnchantmentProtection extends Enchantment {
 
     @Override
     public int a(int i, DamageSource damagesource) {
-        return damagesource.ignoresInvulnerability() ? 0 : (this.a == EnchantmentProtection.DamageType.ALL ? i : (this.a == EnchantmentProtection.DamageType.FIRE && damagesource.isFire() ? i * 2 : (this.a == EnchantmentProtection.DamageType.FALL && damagesource == DamageSource.FALL ? i * 3 : (this.a == EnchantmentProtection.DamageType.EXPLOSION && damagesource.isExplosion() ? i * 2 : (this.a == EnchantmentProtection.DamageType.PROJECTILE && damagesource.b() ? i * 2 : 0)))));
+        return damagesource.ignoresInvulnerability() ? 0 : (this.type == EnchantmentProtection.DamageType.ALL ? i : (this.type == EnchantmentProtection.DamageType.FIRE && damagesource.isFire() ? i * 2 : (this.type == EnchantmentProtection.DamageType.FALL && damagesource.z() ? i * 3 : (this.type == EnchantmentProtection.DamageType.EXPLOSION && damagesource.isExplosion() ? i * 2 : (this.type == EnchantmentProtection.DamageType.PROJECTILE && damagesource.b() ? i * 2 : 0)))));
     }
 
     @Override
@@ -39,14 +39,14 @@ public class EnchantmentProtection extends Enchantment {
         if (enchantment instanceof EnchantmentProtection) {
             EnchantmentProtection enchantmentprotection = (EnchantmentProtection) enchantment;
 
-            return this.a == enchantmentprotection.a ? false : this.a == EnchantmentProtection.DamageType.FALL || enchantmentprotection.a == EnchantmentProtection.DamageType.FALL;
+            return this.type == enchantmentprotection.type ? false : this.type == EnchantmentProtection.DamageType.FALL || enchantmentprotection.type == EnchantmentProtection.DamageType.FALL;
         } else {
             return super.a(enchantment);
         }
     }
 
     public static int a(EntityLiving entityliving, int i) {
-        int j = EnchantmentManager.a(Enchantments.PROTECTION_FIRE, entityliving);
+        int j = EnchantmentManager.a(Enchantments.FIRE_PROTECTION, entityliving);
 
         if (j > 0) {
             i -= MathHelper.d((float) i * (float) j * 0.15F);
@@ -56,7 +56,7 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     public static double a(EntityLiving entityliving, double d0) {
-        int i = EnchantmentManager.a(Enchantments.PROTECTION_EXPLOSIONS, entityliving);
+        int i = EnchantmentManager.a(Enchantments.BLAST_PROTECTION, entityliving);
 
         if (i > 0) {
             d0 -= (double) MathHelper.floor(d0 * (double) ((float) i * 0.15F));
@@ -67,24 +67,22 @@ public class EnchantmentProtection extends Enchantment {
 
     public static enum DamageType {
 
-        ALL("all", 1, 11), FIRE("fire", 10, 8), FALL("fall", 5, 6), EXPLOSION("explosion", 5, 8), PROJECTILE("projectile", 3, 6);
+        ALL(1, 11), FIRE(10, 8), FALL(5, 6), EXPLOSION(5, 8), PROJECTILE(3, 6);
 
-        private final String f;
-        private final int g;
-        private final int h;
+        private final int minCost;
+        private final int levelCost;
 
-        private DamageType(String s, int i, int j) {
-            this.f = s;
-            this.g = i;
-            this.h = j;
+        private DamageType(int i, int j) {
+            this.minCost = i;
+            this.levelCost = j;
+        }
+
+        public int a() {
+            return this.minCost;
         }
 
         public int b() {
-            return this.g;
-        }
-
-        public int c() {
-            return this.h;
+            return this.levelCost;
         }
     }
 }

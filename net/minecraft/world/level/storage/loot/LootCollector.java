@@ -14,14 +14,14 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootCollector {
 
-    private final Multimap<String, String> a;
-    private final Supplier<String> b;
-    private final LootContextParameterSet c;
-    private final Function<MinecraftKey, LootItemCondition> d;
-    private final Set<MinecraftKey> e;
-    private final Function<MinecraftKey, LootTable> f;
-    private final Set<MinecraftKey> g;
-    private String h;
+    private final Multimap<String, String> problems;
+    private final Supplier<String> context;
+    private final LootContextParameterSet params;
+    private final Function<MinecraftKey, LootItemCondition> conditionResolver;
+    private final Set<MinecraftKey> visitedConditions;
+    private final Function<MinecraftKey, LootTable> tableResolver;
+    private final Set<MinecraftKey> visitedTables;
+    private String contextCache;
 
     public LootCollector(LootContextParameterSet lootcontextparameterset, Function<MinecraftKey, LootItemCondition> function, Function<MinecraftKey, LootTable> function1) {
         this(HashMultimap.create(), () -> {
@@ -30,76 +30,82 @@ public class LootCollector {
     }
 
     public LootCollector(Multimap<String, String> multimap, Supplier<String> supplier, LootContextParameterSet lootcontextparameterset, Function<MinecraftKey, LootItemCondition> function, Set<MinecraftKey> set, Function<MinecraftKey, LootTable> function1, Set<MinecraftKey> set1) {
-        this.a = multimap;
-        this.b = supplier;
-        this.c = lootcontextparameterset;
-        this.d = function;
-        this.e = set;
-        this.f = function1;
-        this.g = set1;
+        this.problems = multimap;
+        this.context = supplier;
+        this.params = lootcontextparameterset;
+        this.conditionResolver = function;
+        this.visitedConditions = set;
+        this.tableResolver = function1;
+        this.visitedTables = set1;
     }
 
     private String b() {
-        if (this.h == null) {
-            this.h = (String) this.b.get();
+        if (this.contextCache == null) {
+            this.contextCache = (String) this.context.get();
         }
 
-        return this.h;
+        return this.contextCache;
     }
 
     public void a(String s) {
-        this.a.put(this.b(), s);
+        this.problems.put(this.b(), s);
     }
 
     public LootCollector b(String s) {
-        return new LootCollector(this.a, () -> {
-            return this.b() + s;
-        }, this.c, this.d, this.e, this.f, this.g);
+        return new LootCollector(this.problems, () -> {
+            String s1 = this.b();
+
+            return s1 + s;
+        }, this.params, this.conditionResolver, this.visitedConditions, this.tableResolver, this.visitedTables);
     }
 
     public LootCollector a(String s, MinecraftKey minecraftkey) {
-        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.builder().addAll(this.g).add(minecraftkey).build();
+        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.builder().addAll(this.visitedTables).add(minecraftkey).build();
 
-        return new LootCollector(this.a, () -> {
-            return this.b() + s;
-        }, this.c, this.d, this.e, this.f, immutableset);
+        return new LootCollector(this.problems, () -> {
+            String s1 = this.b();
+
+            return s1 + s;
+        }, this.params, this.conditionResolver, this.visitedConditions, this.tableResolver, immutableset);
     }
 
     public LootCollector b(String s, MinecraftKey minecraftkey) {
-        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.builder().addAll(this.e).add(minecraftkey).build();
+        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.builder().addAll(this.visitedConditions).add(minecraftkey).build();
 
-        return new LootCollector(this.a, () -> {
-            return this.b() + s;
-        }, this.c, this.d, immutableset, this.f, this.g);
+        return new LootCollector(this.problems, () -> {
+            String s1 = this.b();
+
+            return s1 + s;
+        }, this.params, this.conditionResolver, immutableset, this.tableResolver, this.visitedTables);
     }
 
     public boolean a(MinecraftKey minecraftkey) {
-        return this.g.contains(minecraftkey);
+        return this.visitedTables.contains(minecraftkey);
     }
 
     public boolean b(MinecraftKey minecraftkey) {
-        return this.e.contains(minecraftkey);
+        return this.visitedConditions.contains(minecraftkey);
     }
 
     public Multimap<String, String> a() {
-        return ImmutableMultimap.copyOf(this.a);
+        return ImmutableMultimap.copyOf(this.problems);
     }
 
     public void a(LootItemUser lootitemuser) {
-        this.c.a(this, lootitemuser);
+        this.params.a(this, lootitemuser);
     }
 
     @Nullable
     public LootTable c(MinecraftKey minecraftkey) {
-        return (LootTable) this.f.apply(minecraftkey);
+        return (LootTable) this.tableResolver.apply(minecraftkey);
     }
 
     @Nullable
     public LootItemCondition d(MinecraftKey minecraftkey) {
-        return (LootItemCondition) this.d.apply(minecraftkey);
+        return (LootItemCondition) this.conditionResolver.apply(minecraftkey);
     }
 
     public LootCollector a(LootContextParameterSet lootcontextparameterset) {
-        return new LootCollector(this.a, this.b, lootcontextparameterset, this.d, this.e, this.f, this.g);
+        return new LootCollector(this.problems, this.context, lootcontextparameterset, this.conditionResolver, this.visitedConditions, this.tableResolver, this.visitedTables);
     }
 }

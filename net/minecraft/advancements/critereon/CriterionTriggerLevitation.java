@@ -7,13 +7,13 @@ import net.minecraft.world.phys.Vec3D;
 
 public class CriterionTriggerLevitation extends CriterionTriggerAbstract<CriterionTriggerLevitation.a> {
 
-    private static final MinecraftKey a = new MinecraftKey("levitation");
+    static final MinecraftKey ID = new MinecraftKey("levitation");
 
     public CriterionTriggerLevitation() {}
 
     @Override
     public MinecraftKey a() {
-        return CriterionTriggerLevitation.a;
+        return CriterionTriggerLevitation.ID;
     }
 
     @Override
@@ -32,29 +32,29 @@ public class CriterionTriggerLevitation extends CriterionTriggerAbstract<Criteri
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionDistance a;
-        private final CriterionConditionValue.IntegerRange b;
+        private final CriterionConditionDistance distance;
+        private final CriterionConditionValue.IntegerRange duration;
 
         public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerLevitation.a, criterionconditionentity_b);
-            this.a = criterionconditiondistance;
-            this.b = criterionconditionvalue_integerrange;
+            super(CriterionTriggerLevitation.ID, criterionconditionentity_b);
+            this.distance = criterionconditiondistance;
+            this.duration = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerLevitation.a a(CriterionConditionDistance criterionconditiondistance) {
-            return new CriterionTriggerLevitation.a(CriterionConditionEntity.b.a, criterionconditiondistance, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerLevitation.a(CriterionConditionEntity.b.ANY, criterionconditiondistance, CriterionConditionValue.IntegerRange.ANY);
         }
 
         public boolean a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
-            return !this.a.a(vec3d.x, vec3d.y, vec3d.z, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ()) ? false : this.b.d(i);
+            return !this.distance.a(vec3d.x, vec3d.y, vec3d.z, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ()) ? false : this.duration.d(i);
         }
 
         @Override
         public JsonObject a(LootSerializationContext lootserializationcontext) {
             JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("distance", this.a.a());
-            jsonobject.add("duration", this.b.d());
+            jsonobject.add("distance", this.distance.a());
+            jsonobject.add("duration", this.duration.d());
             return jsonobject;
         }
     }

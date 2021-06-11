@@ -3,6 +3,7 @@ package net.minecraft.world.entity.ai.sensing;
 import com.google.common.collect.ImmutableSet;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.server.level.WorldServer;
@@ -22,18 +23,18 @@ public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
             return entityliving1 != entityliving && entityliving1.isAlive();
         });
 
-        entityliving.getClass();
-        list.sort(Comparator.comparingDouble(entityliving::h));
+        Objects.requireNonNull(entityliving);
+        list.sort(Comparator.comparingDouble(entityliving::f));
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        behaviorcontroller.setMemory(MemoryModuleType.MOBS, (Object) list);
-        behaviorcontroller.setMemory(MemoryModuleType.VISIBLE_MOBS, list.stream().filter((entityliving1) -> {
-            return a(entityliving, entityliving1);
-        }).collect(Collectors.toList()));
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES, (Object) list);
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, (Object) ((List) list.stream().filter((entityliving1) -> {
+            return b(entityliving, entityliving1);
+        }).collect(Collectors.toList())));
     }
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
     }
 }

@@ -17,9 +17,9 @@ import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.sounds.SoundEffect;
 import net.minecraft.sounds.SoundEffects;
-import net.minecraft.util.IntRange;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.TimeRange;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.EnumHand;
 import net.minecraft.world.EnumInteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,7 +44,6 @@ import net.minecraft.world.entity.ai.goal.target.PathfinderGoalUniversalAngerRes
 import net.minecraft.world.entity.monster.EntityCreeper;
 import net.minecraft.world.entity.monster.IMonster;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.IBlockAccess;
@@ -52,20 +51,23 @@ import net.minecraft.world.level.IWorldReader;
 import net.minecraft.world.level.SpawnerCreature;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidTypes;
+import net.minecraft.world.phys.Vec3D;
 
 public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
 
-    protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
-    private int c;
-    private int d;
-    private static final IntRange bo = TimeRange.a(20, 39);
-    private int bp;
-    private UUID bq;
+    protected static final DataWatcherObject<Byte> DATA_FLAGS_ID = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.BYTE);
+    private static final int IRON_INGOT_HEAL_AMOUNT = 25;
+    private int attackAnimationTick;
+    private int offerFlowerTick;
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeRange.a(20, 39);
+    private int remainingPersistentAngerTime;
+    private UUID persistentAngerTarget;
 
     public EntityIronGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world) {
         super(entitytypes, world);
-        this.G = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -89,51 +91,51 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityIronGolem.b, (byte) 0);
+        this.entityData.register(EntityIronGolem.DATA_FLAGS_ID, (byte) 0);
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 15.0D);
+    public static AttributeProvider.Builder n() {
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 15.0D);
     }
 
     @Override
-    protected int l(int i) {
+    protected int m(int i) {
         return i;
     }
 
     @Override
-    protected void C(Entity entity) {
+    protected void A(Entity entity) {
         if (entity instanceof IMonster && !(entity instanceof EntityCreeper) && this.getRandom().nextInt(20) == 0) {
             this.setGoalTarget((EntityLiving) entity);
         }
 
-        super.C(entity);
+        super.A(entity);
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.c > 0) {
-            --this.c;
+        if (this.attackAnimationTick > 0) {
+            --this.attackAnimationTick;
         }
 
-        if (this.d > 0) {
-            --this.d;
+        if (this.offerFlowerTick > 0) {
+            --this.offerFlowerTick;
         }
 
-        if (c(this.getMot()) > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
+        if (this.getMot().i() > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
             int i = MathHelper.floor(this.locX());
             int j = MathHelper.floor(this.locY() - 0.20000000298023224D);
             int k = MathHelper.floor(this.locZ());
-            IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
+            IBlockData iblockdata = this.level.getType(new BlockPosition(i, j, k));
 
             if (!iblockdata.isAir()) {
-                this.world.addParticle(new ParticleParamBlock(Particles.BLOCK, iblockdata), this.locX() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), this.locY() + 0.1D, this.locZ() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D);
+                this.level.addParticle(new ParticleParamBlock(Particles.BLOCK, iblockdata), this.locX() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), this.locY() + 0.1D, this.locZ() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D);
             }
         }
 
-        if (!this.world.isClientSide) {
-            this.a((WorldServer) this.world, true);
+        if (!this.level.isClientSide) {
+            this.a((WorldServer) this.level, true);
         }
 
     }
@@ -154,43 +156,43 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.setPlayerCreated(nbttagcompound.getBoolean("PlayerCreated"));
-        this.a((WorldServer) this.world, nbttagcompound);
+        this.a(this.level, nbttagcompound);
     }
 
     @Override
     public void anger() {
-        this.setAnger(EntityIronGolem.bo.a(this.random));
+        this.setAnger(EntityIronGolem.PERSISTENT_ANGER_TIME.a(this.random));
     }
 
     @Override
     public void setAnger(int i) {
-        this.bp = i;
+        this.remainingPersistentAngerTime = i;
     }
 
     @Override
     public int getAnger() {
-        return this.bp;
+        return this.remainingPersistentAngerTime;
     }
 
     @Override
     public void setAngerTarget(@Nullable UUID uuid) {
-        this.bq = uuid;
+        this.persistentAngerTarget = uuid;
     }
 
     @Override
     public UUID getAngerTarget() {
-        return this.bq;
+        return this.persistentAngerTarget;
     }
 
-    private float eO() {
+    private float fx() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
     public boolean attackEntity(Entity entity) {
-        this.c = 10;
-        this.world.broadcastEntityEffect(this, (byte) 4);
-        float f = this.eO();
+        this.attackAnimationTick = 10;
+        this.level.broadcastEntityEffect(this, (byte) 4);
+        float f = this.fx();
         float f1 = (int) f > 0 ? f / 2.0F + (float) this.random.nextInt((int) f) : f;
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f1);
 
@@ -199,53 +201,71 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
             this.a((EntityLiving) this, entity);
         }
 
-        this.playSound(SoundEffects.ENTITY_IRON_GOLEM_ATTACK, 1.0F, 1.0F);
+        this.playSound(SoundEffects.IRON_GOLEM_ATTACK, 1.0F, 1.0F);
         return flag;
     }
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.eK();
+        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.p();
         boolean flag = super.damageEntity(damagesource, f);
 
-        if (flag && this.eK() != entityirongolem_cracklevel) {
-            this.playSound(SoundEffects.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
+        if (flag && this.p() != entityirongolem_cracklevel) {
+            this.playSound(SoundEffects.IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
         }
 
         return flag;
     }
 
-    public EntityIronGolem.CrackLevel eK() {
+    public EntityIronGolem.CrackLevel p() {
         return EntityIronGolem.CrackLevel.a(this.getHealth() / this.getMaxHealth());
     }
 
-    public void t(boolean flag) {
-        if (flag) {
-            this.d = 400;
-            this.world.broadcastEntityEffect(this, (byte) 11);
+    @Override
+    public void a(byte b0) {
+        if (b0 == 4) {
+            this.attackAnimationTick = 10;
+            this.playSound(SoundEffects.IRON_GOLEM_ATTACK, 1.0F, 1.0F);
+        } else if (b0 == 11) {
+            this.offerFlowerTick = 400;
+        } else if (b0 == 34) {
+            this.offerFlowerTick = 0;
         } else {
-            this.d = 0;
-            this.world.broadcastEntityEffect(this, (byte) 34);
+            super.a(b0);
+        }
+
+    }
+
+    public int t() {
+        return this.attackAnimationTick;
+    }
+
+    public void v(boolean flag) {
+        if (flag) {
+            this.offerFlowerTick = 400;
+            this.level.broadcastEntityEffect(this, (byte) 11);
+        } else {
+            this.offerFlowerTick = 0;
+            this.level.broadcastEntityEffect(this, (byte) 34);
         }
 
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return SoundEffects.ENTITY_IRON_GOLEM_HURT;
+        return SoundEffects.IRON_GOLEM_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return SoundEffects.ENTITY_IRON_GOLEM_DEATH;
+        return SoundEffects.IRON_GOLEM_DEATH;
     }
 
     @Override
     protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        Item item = itemstack.getItem();
 
-        if (item != Items.IRON_INGOT) {
+        if (!itemstack.a(Items.IRON_INGOT)) {
             return EnumInteractionResult.PASS;
         } else {
             float f = this.getHealth();
@@ -256,32 +276,37 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
             } else {
                 float f1 = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
 
-                this.playSound(SoundEffects.ENTITY_IRON_GOLEM_REPAIR, 1.0F, f1);
-                if (!entityhuman.abilities.canInstantlyBuild) {
+                this.playSound(SoundEffects.IRON_GOLEM_REPAIR, 1.0F, f1);
+                this.a(GameEvent.MOB_INTERACT, this.cT());
+                if (!entityhuman.getAbilities().instabuild) {
                     itemstack.subtract(1);
                 }
 
-                return EnumInteractionResult.a(this.world.isClientSide);
+                return EnumInteractionResult.a(this.level.isClientSide);
             }
         }
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(SoundEffects.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
+        this.playSound(SoundEffects.IRON_GOLEM_STEP, 1.0F, 1.0F);
+    }
+
+    public int fv() {
+        return this.offerFlowerTick;
     }
 
     public boolean isPlayerCreated() {
-        return ((Byte) this.datawatcher.get(EntityIronGolem.b) & 1) != 0;
+        return ((Byte) this.entityData.get(EntityIronGolem.DATA_FLAGS_ID) & 1) != 0;
     }
 
     public void setPlayerCreated(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityIronGolem.b);
+        byte b0 = (Byte) this.entityData.get(EntityIronGolem.DATA_FLAGS_ID);
 
         if (flag) {
-            this.datawatcher.set(EntityIronGolem.b, (byte) (b0 | 1));
+            this.entityData.set(EntityIronGolem.DATA_FLAGS_ID, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityIronGolem.b, (byte) (b0 & -2));
+            this.entityData.set(EntityIronGolem.DATA_FLAGS_ID, (byte) (b0 & -2));
         }
 
     }
@@ -309,25 +334,30 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
                 }
             }
 
-            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h(), EntityTypes.IRON_GOLEM) && iworldreader.j((Entity) this);
+            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h(), EntityTypes.IRON_GOLEM) && iworldreader.f((Entity) this);
         }
+    }
+
+    @Override
+    public Vec3D cu() {
+        return new Vec3D(0.0D, (double) (0.875F * this.getHeadHeight()), (double) (this.getWidth() * 0.4F));
     }
 
     public static enum CrackLevel {
 
         NONE(1.0F), LOW(0.75F), MEDIUM(0.5F), HIGH(0.25F);
 
-        private static final List<EntityIronGolem.CrackLevel> e = (List) Stream.of(values()).sorted(Comparator.comparingDouble((entityirongolem_cracklevel) -> {
-            return (double) entityirongolem_cracklevel.f;
+        private static final List<EntityIronGolem.CrackLevel> BY_DAMAGE = (List) Stream.of(values()).sorted(Comparator.comparingDouble((entityirongolem_cracklevel) -> {
+            return (double) entityirongolem_cracklevel.fraction;
         })).collect(ImmutableList.toImmutableList());
-        private final float f;
+        private final float fraction;
 
         private CrackLevel(float f) {
-            this.f = f;
+            this.fraction = f;
         }
 
         public static EntityIronGolem.CrackLevel a(float f) {
-            Iterator iterator = EntityIronGolem.CrackLevel.e.iterator();
+            Iterator iterator = EntityIronGolem.CrackLevel.BY_DAMAGE.iterator();
 
             EntityIronGolem.CrackLevel entityirongolem_cracklevel;
 
@@ -337,7 +367,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
                 }
 
                 entityirongolem_cracklevel = (EntityIronGolem.CrackLevel) iterator.next();
-            } while (f >= entityirongolem_cracklevel.f);
+            } while (f >= entityirongolem_cracklevel.fraction);
 
             return entityirongolem_cracklevel;
         }

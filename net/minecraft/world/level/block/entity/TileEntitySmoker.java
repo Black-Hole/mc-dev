@@ -1,5 +1,6 @@
 package net.minecraft.world.level.block.entity;
 
+import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.world.entity.player.PlayerInventory;
@@ -7,11 +8,12 @@ import net.minecraft.world.inventory.Container;
 import net.minecraft.world.inventory.ContainerSmoker;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipes;
+import net.minecraft.world.level.block.state.IBlockData;
 
 public class TileEntitySmoker extends TileEntityFurnace {
 
-    public TileEntitySmoker() {
-        super(TileEntityTypes.SMOKER, Recipes.SMOKING);
+    public TileEntitySmoker(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.SMOKER, blockposition, iblockdata, Recipes.SMOKING);
     }
 
     @Override
@@ -26,6 +28,6 @@ public class TileEntitySmoker extends TileEntityFurnace {
 
     @Override
     protected Container createContainer(int i, PlayerInventory playerinventory) {
-        return new ContainerSmoker(i, playerinventory, this, this.b);
+        return new ContainerSmoker(i, playerinventory, this, this.dataAccess);
     }
 }

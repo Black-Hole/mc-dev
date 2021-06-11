@@ -13,15 +13,16 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class BehaviorHide extends Behavior<EntityLiving> {
 
-    private final int b;
-    private final int c;
-    private int d;
+    private static final int HIDE_TIMEOUT = 300;
+    private final int closeEnoughDist;
+    private final int stayHiddenTicks;
+    private int ticksHidden;
 
     public BehaviorHide(int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.HIDING_PLACE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.HEARD_BELL_TIME, MemoryStatus.VALUE_PRESENT));
-        this.c = i * 20;
-        this.d = 0;
-        this.b = j;
+        this.stayHiddenTicks = i * 20;
+        this.ticksHidden = 0;
+        this.closeEnoughDist = j;
     }
 
     @Override
@@ -30,18 +31,18 @@ public class BehaviorHide extends Behavior<EntityLiving> {
         Optional<Long> optional = behaviorcontroller.getMemory(MemoryModuleType.HEARD_BELL_TIME);
         boolean flag = (Long) optional.get() + 300L <= i;
 
-        if (this.d <= this.c && !flag) {
+        if (this.ticksHidden <= this.stayHiddenTicks && !flag) {
             BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.HIDING_PLACE).get()).getBlockPosition();
 
-            if (blockposition.a((BaseBlockPosition) entityliving.getChunkCoordinates(), (double) this.b)) {
-                ++this.d;
+            if (blockposition.a((BaseBlockPosition) entityliving.getChunkCoordinates(), (double) this.closeEnoughDist)) {
+                ++this.ticksHidden;
             }
 
         } else {
             behaviorcontroller.removeMemory(MemoryModuleType.HEARD_BELL_TIME);
             behaviorcontroller.removeMemory(MemoryModuleType.HIDING_PLACE);
             behaviorcontroller.a(worldserver.getDayTime(), worldserver.getTime());
-            this.d = 0;
+            this.ticksHidden = 0;
         }
     }
 }

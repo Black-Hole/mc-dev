@@ -7,10 +7,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.GeneratorAccess;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.IBlockAccess;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.IWorldWriter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureLakeConfiguration;
 import net.minecraft.world.level.material.Material;
 
@@ -20,10 +19,15 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
-        blockposition = new BlockPosition(blockposition.getX(), chunkgenerator.getSeaLevel(), blockposition.getZ());
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureLakeConfiguration> featureplacecontext) {
+        BlockPosition blockposition = featureplacecontext.d();
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+
+        blockposition = new BlockPosition(blockposition.getX(), featureplacecontext.b().getSeaLevel(), blockposition.getZ());
+        Random random = featureplacecontext.c();
         boolean flag = random.nextDouble() > 0.7D;
-        IBlockData iblockdata = worldgenfeaturelakeconfiguration.b;
+        IBlockData iblockdata = ((WorldGenFeatureLakeConfiguration) featureplacecontext.e()).state;
         double d0 = random.nextDouble() * 2.0D * 3.141592653589793D;
         int i = 11 - random.nextInt(5);
         int j = 3 + random.nextInt(3);
@@ -125,14 +129,14 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
                 double d1 = this.a(k1, l1, blockposition1, i1, j1, d0);
 
                 if (d1 < 0.0D) {
-                    BlockPosition blockposition2 = blockposition.b(k1, j, l1);
-                    Block block = generatoraccess.getType(blockposition2).getBlock();
+                    BlockPosition blockposition2 = blockposition.c(k1, j, l1);
+                    IBlockData iblockdata = generatoraccess.getType(blockposition2);
 
-                    if (this.c(block) || block == Blocks.SNOW_BLOCK) {
+                    if (c(iblockdata) || iblockdata.a(Blocks.SNOW_BLOCK)) {
                         if (flag) {
-                            this.a(generatoraccess, blockposition2, Blocks.WATER.getBlockData());
+                            this.a((IWorldWriter) generatoraccess, blockposition2, Blocks.WATER.getBlockData());
                         } else {
-                            this.a(generatoraccess, blockposition2, Blocks.AIR.getBlockData());
+                            this.a((IWorldWriter) generatoraccess, blockposition2, Blocks.AIR.getBlockData());
                             this.a(generatoraccess, blockposition2);
                         }
                     }
@@ -144,7 +148,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (generatoraccess.getType(blockposition.up()).a(Blocks.SNOW)) {
-            this.a(generatoraccess, blockposition.up(), Blocks.AIR.getBlockData());
+            this.a((IWorldWriter) generatoraccess, blockposition.up(), Blocks.AIR.getBlockData());
         }
 
     }
@@ -153,7 +157,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         double d1 = flag ? this.a(j, l, BlockPosition.ZERO, j1, this.a(k, i, k1), d0) : this.a(j, l, BlockPosition.ZERO, i1, random);
 
         if (d1 < 0.0D) {
-            BlockPosition blockposition1 = blockposition.b(j, k, l);
+            BlockPosition blockposition1 = blockposition.c(j, k, l);
             double d2 = flag ? -0.5D : (double) (-6 - random.nextInt(3));
 
             if (d1 > d2 && random.nextDouble() > 0.9D) {
@@ -173,9 +177,9 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
             int k = flag ? 3 : 2;
 
             if (flag1 && !iblockdata1.a(Blocks.WATER) && (double) i <= (double) random.nextInt(Math.max(1, j / k)) + (double) j * 0.6D && flag2) {
-                this.a(generatoraccess, blockposition, Blocks.SNOW_BLOCK.getBlockData());
+                this.a((IWorldWriter) generatoraccess, blockposition, Blocks.SNOW_BLOCK.getBlockData());
             } else {
-                this.a(generatoraccess, blockposition, iblockdata);
+                this.a((IWorldWriter) generatoraccess, blockposition, iblockdata);
             }
         }
 
@@ -228,8 +232,8 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         return MathHelper.f(f1 / 2.0F);
     }
 
-    private boolean c(Block block) {
-        return block == Blocks.PACKED_ICE || block == Blocks.SNOW_BLOCK || block == Blocks.BLUE_ICE;
+    private static boolean c(IBlockData iblockdata) {
+        return iblockdata.a(Blocks.PACKED_ICE) || iblockdata.a(Blocks.SNOW_BLOCK) || iblockdata.a(Blocks.BLUE_ICE);
     }
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -242,29 +246,29 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         for (int i1 = -l; i1 <= l; ++i1) {
             for (int j1 = -l; j1 <= l; ++j1) {
                 for (int k1 = 0; k1 <= j; ++k1) {
-                    BlockPosition blockposition1 = blockposition.b(i1, k1, j1);
-                    Block block = generatoraccess.getType(blockposition1).getBlock();
+                    BlockPosition blockposition1 = blockposition.c(i1, k1, j1);
+                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                    if (this.c(block) || block == Blocks.SNOW) {
+                    if (c(iblockdata) || iblockdata.a(Blocks.SNOW)) {
                         if (this.a((IBlockAccess) generatoraccess, blockposition1)) {
-                            this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
-                            this.a(generatoraccess, blockposition1.up(), Blocks.AIR.getBlockData());
-                        } else if (this.c(block)) {
-                            Block[] ablock = new Block[]{generatoraccess.getType(blockposition1.west()).getBlock(), generatoraccess.getType(blockposition1.east()).getBlock(), generatoraccess.getType(blockposition1.north()).getBlock(), generatoraccess.getType(blockposition1.south()).getBlock()};
+                            this.a((IWorldWriter) generatoraccess, blockposition1, Blocks.AIR.getBlockData());
+                            this.a((IWorldWriter) generatoraccess, blockposition1.up(), Blocks.AIR.getBlockData());
+                        } else if (c(iblockdata)) {
+                            IBlockData[] aiblockdata = new IBlockData[]{generatoraccess.getType(blockposition1.west()), generatoraccess.getType(blockposition1.east()), generatoraccess.getType(blockposition1.north()), generatoraccess.getType(blockposition1.south())};
                             int l1 = 0;
-                            Block[] ablock1 = ablock;
-                            int i2 = ablock.length;
+                            IBlockData[] aiblockdata1 = aiblockdata;
+                            int i2 = aiblockdata.length;
 
                             for (int j2 = 0; j2 < i2; ++j2) {
-                                Block block1 = ablock1[j2];
+                                IBlockData iblockdata1 = aiblockdata1[j2];
 
-                                if (!this.c(block1)) {
+                                if (!c(iblockdata1)) {
                                     ++l1;
                                 }
                             }
 
                             if (l1 >= 3) {
-                                this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
+                                this.a((IWorldWriter) generatoraccess, blockposition1, Blocks.AIR.getBlockData());
                             }
                         }
                     }

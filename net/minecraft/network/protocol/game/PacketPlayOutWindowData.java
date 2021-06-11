@@ -1,38 +1,46 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutWindowData implements Packet<PacketListenerPlayOut> {
 
-    private int a;
-    private int b;
-    private int c;
-
-    public PacketPlayOutWindowData() {}
+    private final int containerId;
+    private final int id;
+    private final int value;
 
     public PacketPlayOutWindowData(int i, int j, int k) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
+        this.containerId = i;
+        this.id = j;
+        this.value = k;
+    }
+
+    public PacketPlayOutWindowData(PacketDataSerializer packetdataserializer) {
+        this.containerId = packetdataserializer.readUnsignedByte();
+        this.id = packetdataserializer.readShort();
+        this.value = packetdataserializer.readShort();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.containerId);
+        packetdataserializer.writeShort(this.id);
+        packetdataserializer.writeShort(this.value);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readUnsignedByte();
-        this.b = packetdataserializer.readShort();
-        this.c = packetdataserializer.readShort();
+    public int b() {
+        return this.containerId;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.writeShort(this.b);
-        packetdataserializer.writeShort(this.c);
+    public int c() {
+        return this.id;
+    }
+
+    public int d() {
+        return this.value;
     }
 }

@@ -14,7 +14,7 @@ public class ItemArrow extends Item {
     public EntityArrow a(World world, ItemStack itemstack, EntityLiving entityliving) {
         EntityTippedArrow entitytippedarrow = new EntityTippedArrow(world, entityliving);
 
-        entitytippedarrow.b(itemstack);
+        entitytippedarrow.a(itemstack);
         return entitytippedarrow;
     }
 }

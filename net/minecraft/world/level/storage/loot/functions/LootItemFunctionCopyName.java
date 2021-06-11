@@ -15,26 +15,26 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootItemFunctionCopyName extends LootItemFunctionConditional {
 
-    private final LootItemFunctionCopyName.Source a;
+    final LootItemFunctionCopyName.Source source;
 
-    private LootItemFunctionCopyName(LootItemCondition[] alootitemcondition, LootItemFunctionCopyName.Source lootitemfunctioncopyname_source) {
+    LootItemFunctionCopyName(LootItemCondition[] alootitemcondition, LootItemFunctionCopyName.Source lootitemfunctioncopyname_source) {
         super(alootitemcondition);
-        this.a = lootitemfunctioncopyname_source;
+        this.source = lootitemfunctioncopyname_source;
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.m;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.COPY_NAME;
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(this.a.f);
+    public Set<LootContextParameter<?>> b() {
+        return ImmutableSet.of(this.source.param);
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        Object object = loottableinfo.getContextParameter(this.a.f);
+        Object object = loottableinfo.getContextParameter(this.source.param);
 
         if (object instanceof INamableTileEntity) {
             INamableTileEntity inamabletileentity = (INamableTileEntity) object;
@@ -53,33 +53,16 @@ public class LootItemFunctionCopyName extends LootItemFunctionConditional {
         });
     }
 
-    public static class b extends LootItemFunctionConditional.c<LootItemFunctionCopyName> {
-
-        public b() {}
-
-        public void a(JsonObject jsonobject, LootItemFunctionCopyName lootitemfunctioncopyname, JsonSerializationContext jsonserializationcontext) {
-            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopyname, jsonserializationcontext);
-            jsonobject.addProperty("source", lootitemfunctioncopyname.a.e);
-        }
-
-        @Override
-        public LootItemFunctionCopyName b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            LootItemFunctionCopyName.Source lootitemfunctioncopyname_source = LootItemFunctionCopyName.Source.a(ChatDeserializer.h(jsonobject, "source"));
-
-            return new LootItemFunctionCopyName(alootitemcondition, lootitemfunctioncopyname_source);
-        }
-    }
-
     public static enum Source {
 
         THIS("this", LootContextParameters.THIS_ENTITY), KILLER("killer", LootContextParameters.KILLER_ENTITY), KILLER_PLAYER("killer_player", LootContextParameters.LAST_DAMAGE_PLAYER), BLOCK_ENTITY("block_entity", LootContextParameters.BLOCK_ENTITY);
 
-        public final String e;
-        public final LootContextParameter<?> f;
+        public final String name;
+        public final LootContextParameter<?> param;
 
         private Source(String s, LootContextParameter lootcontextparameter) {
-            this.e = s;
-            this.f = lootcontextparameter;
+            this.name = s;
+            this.param = lootcontextparameter;
         }
 
         public static LootItemFunctionCopyName.Source a(String s) {
@@ -89,12 +72,29 @@ public class LootItemFunctionCopyName extends LootItemFunctionConditional {
             for (int j = 0; j < i; ++j) {
                 LootItemFunctionCopyName.Source lootitemfunctioncopyname_source = alootitemfunctioncopyname_source[j];
 
-                if (lootitemfunctioncopyname_source.e.equals(s)) {
+                if (lootitemfunctioncopyname_source.name.equals(s)) {
                     return lootitemfunctioncopyname_source;
                 }
             }
 
             throw new IllegalArgumentException("Invalid name source " + s);
+        }
+    }
+
+    public static class b extends LootItemFunctionConditional.c<LootItemFunctionCopyName> {
+
+        public b() {}
+
+        public void a(JsonObject jsonobject, LootItemFunctionCopyName lootitemfunctioncopyname, JsonSerializationContext jsonserializationcontext) {
+            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopyname, jsonserializationcontext);
+            jsonobject.addProperty("source", lootitemfunctioncopyname.source.name);
+        }
+
+        @Override
+        public LootItemFunctionCopyName b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+            LootItemFunctionCopyName.Source lootitemfunctioncopyname_source = LootItemFunctionCopyName.Source.a(ChatDeserializer.h(jsonobject, "source"));
+
+            return new LootItemFunctionCopyName(alootitemcondition, lootitemfunctioncopyname_source);
         }
     }
 }

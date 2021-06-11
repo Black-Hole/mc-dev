@@ -10,13 +10,19 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityCreature;
 import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.ai.util.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.VillagePlace;
 import net.minecraft.world.entity.ai.village.poi.VillagePlaceRecord;
 import net.minecraft.world.entity.npc.EntityVillager;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll {
+
+    private static final int POI_SECTION_SCAN_RADIUS = 2;
+    private static final int VILLAGER_SCAN_RADIUS = 32;
+    private static final int RANDOM_POS_XY_DISTANCE = 10;
+    private static final int RANDOM_POS_Y_DISTANCE = 7;
 
     public PathfinderGoalStrollVillageGolem(EntityCreature entitycreature, double d0) {
         super(entitycreature, d0, 240, false);
@@ -25,9 +31,9 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
     @Nullable
     @Override
     protected Vec3D g() {
-        float f = this.a.world.random.nextFloat();
+        float f = this.mob.level.random.nextFloat();
 
-        if (this.a.world.random.nextFloat() < 0.3F) {
+        if (this.mob.level.random.nextFloat() < 0.3F) {
             return this.j();
         } else {
             Vec3D vec3d;
@@ -50,21 +56,21 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
 
     @Nullable
     private Vec3D j() {
-        return RandomPositionGenerator.b(this.a, 10, 7);
+        return LandRandomPos.a(this.mob, 10, 7);
     }
 
     @Nullable
     private Vec3D k() {
-        WorldServer worldserver = (WorldServer) this.a.world;
-        List<EntityVillager> list = worldserver.a(EntityTypes.VILLAGER, this.a.getBoundingBox().g(32.0D), this::a);
+        WorldServer worldserver = (WorldServer) this.mob.level;
+        List<EntityVillager> list = worldserver.a((EntityTypeTest) EntityTypes.VILLAGER, this.mob.getBoundingBox().g(32.0D), this::a);
 
         if (list.isEmpty()) {
             return null;
         } else {
-            EntityVillager entityvillager = (EntityVillager) list.get(this.a.world.random.nextInt(list.size()));
+            EntityVillager entityvillager = (EntityVillager) list.get(this.mob.level.random.nextInt(list.size()));
             Vec3D vec3d = entityvillager.getPositionVector();
 
-            return RandomPositionGenerator.a(this.a, 10, 7, vec3d);
+            return LandRandomPos.a(this.mob, 10, 7, vec3d);
         }
     }
 
@@ -77,14 +83,14 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
         } else {
             BlockPosition blockposition = this.a(sectionposition);
 
-            return blockposition == null ? null : RandomPositionGenerator.a(this.a, 10, 7, Vec3D.c((BaseBlockPosition) blockposition));
+            return blockposition == null ? null : LandRandomPos.a(this.mob, 10, 7, Vec3D.c((BaseBlockPosition) blockposition));
         }
     }
 
     @Nullable
     private SectionPosition m() {
-        WorldServer worldserver = (WorldServer) this.a.world;
-        List<SectionPosition> list = (List) SectionPosition.a(SectionPosition.a((Entity) this.a), 2).filter((sectionposition) -> {
+        WorldServer worldserver = (WorldServer) this.mob.level;
+        List<SectionPosition> list = (List) SectionPosition.a(SectionPosition.a((Entity) this.mob), 2).filter((sectionposition) -> {
             return worldserver.b(sectionposition) == 0;
         }).collect(Collectors.toList());
 
@@ -93,8 +99,8 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
 
     @Nullable
     private BlockPosition a(SectionPosition sectionposition) {
-        WorldServer worldserver = (WorldServer) this.a.world;
-        VillagePlace villageplace = worldserver.y();
+        WorldServer worldserver = (WorldServer) this.mob.level;
+        VillagePlace villageplace = worldserver.A();
         List<BlockPosition> list = (List) villageplace.c((villageplacetype) -> {
             return true;
         }, sectionposition.q(), 8, VillagePlace.Occupancy.IS_OCCUPIED).map(VillagePlaceRecord::f).collect(Collectors.toList());
@@ -103,6 +109,6 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
     }
 
     private boolean a(EntityVillager entityvillager) {
-        return entityvillager.a(this.a.world.getTime());
+        return entityvillager.a(this.mob.level.getTime());
     }
 }

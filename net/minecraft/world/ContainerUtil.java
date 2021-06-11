@@ -9,12 +9,14 @@ import net.minecraft.world.item.ItemStack;
 
 public class ContainerUtil {
 
+    public ContainerUtil() {}
+
     public static ItemStack a(List<ItemStack> list, int i, int j) {
-        return i >= 0 && i < list.size() && !((ItemStack) list.get(i)).isEmpty() && j > 0 ? ((ItemStack) list.get(i)).cloneAndSubtract(j) : ItemStack.b;
+        return i >= 0 && i < list.size() && !((ItemStack) list.get(i)).isEmpty() && j > 0 ? ((ItemStack) list.get(i)).cloneAndSubtract(j) : ItemStack.EMPTY;
     }
 
     public static ItemStack a(List<ItemStack> list, int i) {
-        return i >= 0 && i < list.size() ? (ItemStack) list.set(i, ItemStack.b) : ItemStack.b;
+        return i >= 0 && i < list.size() ? (ItemStack) list.set(i, ItemStack.EMPTY) : ItemStack.EMPTY;
     }
 
     public static NBTTagCompound a(NBTTagCompound nbttagcompound, NonNullList<ItemStack> nonnulllist) {
@@ -65,7 +67,7 @@ public class ContainerUtil {
             int l = a(itemstack, predicate, i - j, flag);
 
             if (l > 0 && !flag && itemstack.isEmpty()) {
-                iinventory.setItem(k, ItemStack.b);
+                iinventory.setItem(k, ItemStack.EMPTY);
             }
 
             j += l;

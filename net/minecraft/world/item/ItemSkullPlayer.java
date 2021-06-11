@@ -12,13 +12,15 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ItemSkullPlayer extends ItemBlockWallable {
 
+    public static final String TAG_SKULL_OWNER = "SkullOwner";
+
     public ItemSkullPlayer(Block block, Block block1, Item.Info item_info) {
         super(block, block1, item_info);
     }
 
     @Override
-    public IChatBaseComponent h(ItemStack itemstack) {
-        if (itemstack.getItem() == Items.PLAYER_HEAD && itemstack.hasTag()) {
+    public IChatBaseComponent m(ItemStack itemstack) {
+        if (itemstack.a(Items.PLAYER_HEAD) && itemstack.hasTag()) {
             String s = null;
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
@@ -37,20 +39,19 @@ public class ItemSkullPlayer extends ItemBlockWallable {
             }
         }
 
-        return super.h(itemstack);
+        return super.m(itemstack);
     }
 
     @Override
-    public boolean b(NBTTagCompound nbttagcompound) {
+    public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !StringUtils.isBlank(nbttagcompound.getString("SkullOwner"))) {
             GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
 
-            gameprofile = TileEntitySkull.b(gameprofile);
-            nbttagcompound.set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), gameprofile));
-            return true;
-        } else {
-            return false;
+            TileEntitySkull.a(gameprofile, (gameprofile1) -> {
+                nbttagcompound.set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), gameprofile1));
+            });
         }
+
     }
 }

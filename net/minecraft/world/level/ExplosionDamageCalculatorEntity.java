@@ -8,21 +8,21 @@ import net.minecraft.world.level.material.Fluid;
 
 public class ExplosionDamageCalculatorEntity extends ExplosionDamageCalculator {
 
-    private final Entity a;
+    private final Entity source;
 
     public ExplosionDamageCalculatorEntity(Entity entity) {
-        this.a = entity;
+        this.source = entity;
     }
 
     @Override
     public Optional<Float> a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         return super.a(explosion, iblockaccess, blockposition, iblockdata, fluid).map((ofloat) -> {
-            return this.a.a(explosion, iblockaccess, blockposition, iblockdata, fluid, ofloat);
+            return this.source.a(explosion, iblockaccess, blockposition, iblockdata, fluid, ofloat);
         });
     }
 
     @Override
     public boolean a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, float f) {
-        return this.a.a(explosion, iblockaccess, blockposition, iblockdata, f);
+        return this.source.a(explosion, iblockaccess, blockposition, iblockdata, f);
     }
 }

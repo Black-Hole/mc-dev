@@ -13,21 +13,21 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class LootSelectorDynamic extends LootSelectorEntry {
 
-    private final MinecraftKey g;
+    final MinecraftKey name;
 
-    private LootSelectorDynamic(MinecraftKey minecraftkey, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+    LootSelectorDynamic(MinecraftKey minecraftkey, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(i, j, alootitemcondition, alootitemfunction);
-        this.g = minecraftkey;
+        this.name = minecraftkey;
     }
 
     @Override
     public LootEntryType a() {
-        return LootEntries.d;
+        return LootEntries.DYNAMIC;
     }
 
     @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        loottableinfo.a(this.g, consumer);
+        loottableinfo.a(this.name, consumer);
     }
 
     public static LootSelectorEntry.a<?> a(MinecraftKey minecraftkey) {
@@ -42,7 +42,7 @@ public class LootSelectorDynamic extends LootSelectorEntry {
 
         public void a(JsonObject jsonobject, LootSelectorDynamic lootselectordynamic, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootSelectorEntry) lootselectordynamic, jsonserializationcontext);
-            jsonobject.addProperty("name", lootselectordynamic.g.toString());
+            jsonobject.addProperty("name", lootselectordynamic.name.toString());
         }
 
         @Override

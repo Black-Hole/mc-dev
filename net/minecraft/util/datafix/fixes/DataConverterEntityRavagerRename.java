@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class DataConverterEntityRavagerRename extends DataConverterEntityRenameAbstract {
 
-    public static final Map<String, String> a = ImmutableMap.builder().put("minecraft:illager_beast_spawn_egg", "minecraft:ravager_spawn_egg").build();
+    public static final Map<String, String> RENAMED_IDS = ImmutableMap.builder().put("minecraft:illager_beast_spawn_egg", "minecraft:ravager_spawn_egg").build();
 
     public DataConverterEntityRavagerRename(Schema schema, boolean flag) {
         super("EntityRavagerRenameFix", schema, flag);

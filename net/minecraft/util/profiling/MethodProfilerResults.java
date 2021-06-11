@@ -1,10 +1,15 @@
 package net.minecraft.util.profiling;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public interface MethodProfilerResults {
 
-    boolean a(File file);
+    char PATH_SEPARATOR = '\u001e';
+
+    List<MethodProfilerResultsField> a(String s);
+
+    boolean a(Path path);
 
     long a();
 
@@ -21,6 +26,8 @@ public interface MethodProfilerResults {
     default int f() {
         return this.d() - this.b();
     }
+
+    String e();
 
     static String b(String s) {
         return s.replace('\u001e', '.');

@@ -29,11 +29,13 @@ import org.apache.logging.log4j.Logger;
 
 public class NameReferencingFileConverter {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    public static final File a = new File("banned-ips.txt");
-    public static final File b = new File("banned-players.txt");
-    public static final File c = new File("ops.txt");
-    public static final File d = new File("white-list.txt");
+    static final Logger LOGGER = LogManager.getLogger();
+    public static final File OLD_IPBANLIST = new File("banned-ips.txt");
+    public static final File OLD_USERBANLIST = new File("banned-players.txt");
+    public static final File OLD_OPLIST = new File("ops.txt");
+    public static final File OLD_WHITELIST = new File("white-list.txt");
+
+    public NameReferencingFileConverter() {}
 
     static List<String> a(File file, Map<String, String[]> map) throws IOException {
         List<String> list = Files.readLines(file, StandardCharsets.UTF_8);
@@ -78,9 +80,9 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean a(final MinecraftServer minecraftserver) {
-        final GameProfileBanList gameprofilebanlist = new GameProfileBanList(PlayerList.b);
+        final GameProfileBanList gameprofilebanlist = new GameProfileBanList(PlayerList.USERBANLIST_FILE);
 
-        if (NameReferencingFileConverter.b.exists() && NameReferencingFileConverter.b.isFile()) {
+        if (NameReferencingFileConverter.OLD_USERBANLIST.exists() && NameReferencingFileConverter.OLD_USERBANLIST.isFile()) {
             if (gameprofilebanlist.b().exists()) {
                 try {
                     gameprofilebanlist.load();
@@ -92,7 +94,7 @@ public class NameReferencingFileConverter {
             try {
                 final Map<String, String[]> map = Maps.newHashMap();
 
-                a(NameReferencingFileConverter.b, (Map) map);
+                a(NameReferencingFileConverter.OLD_USERBANLIST, (Map) map);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
@@ -102,9 +104,9 @@ public class NameReferencingFileConverter {
                             NameReferencingFileConverter.LOGGER.warn("Could not convert user banlist entry for {}", gameprofile.getName());
                             throw new NameReferencingFileConverter.FileConversionException("Profile not in the conversionlist");
                         } else {
-                            Date date = astring.length > 1 ? NameReferencingFileConverter.b(astring[1], (Date) null) : null;
+                            Date date = astring.length > 1 ? NameReferencingFileConverter.a(astring[1], (Date) null) : null;
                             String s = astring.length > 2 ? astring[2] : null;
-                            Date date1 = astring.length > 3 ? NameReferencingFileConverter.b(astring[3], (Date) null) : null;
+                            Date date1 = astring.length > 3 ? NameReferencingFileConverter.a(astring[3], (Date) null) : null;
                             String s1 = astring.length > 4 ? astring[4] : null;
 
                             gameprofilebanlist.add(new GameProfileBanEntry(gameprofile, date, s, date1, s1));
@@ -121,7 +123,7 @@ public class NameReferencingFileConverter {
 
                 a(minecraftserver, map.keySet(), profilelookupcallback);
                 gameprofilebanlist.save();
-                c(NameReferencingFileConverter.b);
+                b(NameReferencingFileConverter.OLD_USERBANLIST);
                 return true;
             } catch (IOException ioexception1) {
                 NameReferencingFileConverter.LOGGER.warn("Could not read old user banlist to convert it!", ioexception1);
@@ -136,9 +138,9 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean b(MinecraftServer minecraftserver) {
-        IpBanList ipbanlist = new IpBanList(PlayerList.c);
+        IpBanList ipbanlist = new IpBanList(PlayerList.IPBANLIST_FILE);
 
-        if (NameReferencingFileConverter.a.exists() && NameReferencingFileConverter.a.isFile()) {
+        if (NameReferencingFileConverter.OLD_IPBANLIST.exists() && NameReferencingFileConverter.OLD_IPBANLIST.isFile()) {
             if (ipbanlist.b().exists()) {
                 try {
                     ipbanlist.load();
@@ -150,22 +152,22 @@ public class NameReferencingFileConverter {
             try {
                 Map<String, String[]> map = Maps.newHashMap();
 
-                a(NameReferencingFileConverter.a, (Map) map);
+                a(NameReferencingFileConverter.OLD_IPBANLIST, (Map) map);
                 Iterator iterator = map.keySet().iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
                     String[] astring = (String[]) map.get(s);
-                    Date date = astring.length > 1 ? b(astring[1], (Date) null) : null;
+                    Date date = astring.length > 1 ? a(astring[1], (Date) null) : null;
                     String s1 = astring.length > 2 ? astring[2] : null;
-                    Date date1 = astring.length > 3 ? b(astring[3], (Date) null) : null;
+                    Date date1 = astring.length > 3 ? a(astring[3], (Date) null) : null;
                     String s2 = astring.length > 4 ? astring[4] : null;
 
                     ipbanlist.add(new IpBanEntry(s, date, s1, date1, s2));
                 }
 
                 ipbanlist.save();
-                c(NameReferencingFileConverter.a);
+                b(NameReferencingFileConverter.OLD_IPBANLIST);
                 return true;
             } catch (IOException ioexception1) {
                 NameReferencingFileConverter.LOGGER.warn("Could not parse old ip banlist to convert it!", ioexception1);
@@ -177,9 +179,9 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean c(final MinecraftServer minecraftserver) {
-        final OpList oplist = new OpList(PlayerList.d);
+        final OpList oplist = new OpList(PlayerList.OPLIST_FILE);
 
-        if (NameReferencingFileConverter.c.exists() && NameReferencingFileConverter.c.isFile()) {
+        if (NameReferencingFileConverter.OLD_OPLIST.exists() && NameReferencingFileConverter.OLD_OPLIST.isFile()) {
             if (oplist.b().exists()) {
                 try {
                     oplist.load();
@@ -189,11 +191,11 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                List<String> list = Files.readLines(NameReferencingFileConverter.c, StandardCharsets.UTF_8);
+                List<String> list = Files.readLines(NameReferencingFileConverter.OLD_OPLIST, StandardCharsets.UTF_8);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
-                        oplist.add(new OpListEntry(gameprofile, minecraftserver.g(), false));
+                        oplist.add(new OpListEntry(gameprofile, minecraftserver.h(), false));
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
@@ -206,7 +208,7 @@ public class NameReferencingFileConverter {
 
                 a(minecraftserver, list, profilelookupcallback);
                 oplist.save();
-                c(NameReferencingFileConverter.c);
+                b(NameReferencingFileConverter.OLD_OPLIST);
                 return true;
             } catch (IOException ioexception1) {
                 NameReferencingFileConverter.LOGGER.warn("Could not read old oplist to convert it!", ioexception1);
@@ -221,9 +223,9 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean d(final MinecraftServer minecraftserver) {
-        final WhiteList whitelist = new WhiteList(PlayerList.e);
+        final WhiteList whitelist = new WhiteList(PlayerList.WHITELIST_FILE);
 
-        if (NameReferencingFileConverter.d.exists() && NameReferencingFileConverter.d.isFile()) {
+        if (NameReferencingFileConverter.OLD_WHITELIST.exists() && NameReferencingFileConverter.OLD_WHITELIST.isFile()) {
             if (whitelist.b().exists()) {
                 try {
                     whitelist.load();
@@ -233,7 +235,7 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                List<String> list = Files.readLines(NameReferencingFileConverter.d, StandardCharsets.UTF_8);
+                List<String> list = Files.readLines(NameReferencingFileConverter.OLD_WHITELIST, StandardCharsets.UTF_8);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
@@ -250,7 +252,7 @@ public class NameReferencingFileConverter {
 
                 a(minecraftserver, list, profilelookupcallback);
                 whitelist.save();
-                c(NameReferencingFileConverter.d);
+                b(NameReferencingFileConverter.OLD_WHITELIST);
                 return true;
             } catch (IOException ioexception1) {
                 NameReferencingFileConverter.LOGGER.warn("Could not read old whitelist to convert it!", ioexception1);
@@ -351,7 +353,7 @@ public class NameReferencingFileConverter {
                         File file5 = new File(file, s2 + ".dat");
                         File file6 = new File(file4, s3 + ".dat");
 
-                        NameReferencingFileConverter.b(file4);
+                        NameReferencingFileConverter.a(file4);
                         if (!file5.renameTo(file6)) {
                             throw new NameReferencingFileConverter.FileConversionException("Could not convert file for " + s2);
                         }
@@ -390,7 +392,7 @@ public class NameReferencingFileConverter {
         }
     }
 
-    private static void b(File file) {
+    static void a(File file) {
         if (file.exists()) {
             if (!file.isDirectory()) {
                 throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.");
@@ -401,34 +403,34 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean e(MinecraftServer minecraftserver) {
-        boolean flag = b();
+        boolean flag = a();
 
         flag = flag && f(minecraftserver);
         return flag;
     }
 
-    private static boolean b() {
+    private static boolean a() {
         boolean flag = false;
 
-        if (NameReferencingFileConverter.b.exists() && NameReferencingFileConverter.b.isFile()) {
+        if (NameReferencingFileConverter.OLD_USERBANLIST.exists() && NameReferencingFileConverter.OLD_USERBANLIST.isFile()) {
             flag = true;
         }
 
         boolean flag1 = false;
 
-        if (NameReferencingFileConverter.a.exists() && NameReferencingFileConverter.a.isFile()) {
+        if (NameReferencingFileConverter.OLD_IPBANLIST.exists() && NameReferencingFileConverter.OLD_IPBANLIST.isFile()) {
             flag1 = true;
         }
 
         boolean flag2 = false;
 
-        if (NameReferencingFileConverter.c.exists() && NameReferencingFileConverter.c.isFile()) {
+        if (NameReferencingFileConverter.OLD_OPLIST.exists() && NameReferencingFileConverter.OLD_OPLIST.isFile()) {
             flag2 = true;
         }
 
         boolean flag3 = false;
 
-        if (NameReferencingFileConverter.d.exists() && NameReferencingFileConverter.d.isFile()) {
+        if (NameReferencingFileConverter.OLD_WHITELIST.exists() && NameReferencingFileConverter.OLD_WHITELIST.isFile()) {
             flag3 = true;
         }
 
@@ -438,19 +440,19 @@ public class NameReferencingFileConverter {
             NameReferencingFileConverter.LOGGER.warn("**** FAILED TO START THE SERVER AFTER ACCOUNT CONVERSION!");
             NameReferencingFileConverter.LOGGER.warn("** please remove the following files and restart the server:");
             if (flag) {
-                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.b.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.OLD_USERBANLIST.getName());
             }
 
             if (flag1) {
-                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.a.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.OLD_IPBANLIST.getName());
             }
 
             if (flag2) {
-                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.c.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.OLD_OPLIST.getName());
             }
 
             if (flag3) {
-                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.d.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.OLD_WHITELIST.getName());
             }
 
             return false;
@@ -471,20 +473,20 @@ public class NameReferencingFileConverter {
     }
 
     private static File getPlayersFolder(MinecraftServer minecraftserver) {
-        return minecraftserver.a(SavedFile.PLAYERS).toFile();
+        return minecraftserver.a(SavedFile.PLAYER_OLD_DATA_DIR).toFile();
     }
 
-    private static void c(File file) {
+    private static void b(File file) {
         File file1 = new File(file.getName() + ".converted");
 
         file.renameTo(file1);
     }
 
-    private static Date b(String s, Date date) {
+    static Date a(String s, Date date) {
         Date date1;
 
         try {
-            date1 = ExpirableListEntry.a.parse(s);
+            date1 = ExpirableListEntry.DATE_FORMAT.parse(s);
         } catch (ParseException parseexception) {
             date1 = date;
         }
@@ -492,13 +494,13 @@ public class NameReferencingFileConverter {
         return date1;
     }
 
-    static class FileConversionException extends RuntimeException {
+    private static class FileConversionException extends RuntimeException {
 
-        private FileConversionException(String s, Throwable throwable) {
+        FileConversionException(String s, Throwable throwable) {
             super(s, throwable);
         }
 
-        private FileConversionException(String s) {
+        FileConversionException(String s) {
             super(s);
         }
     }

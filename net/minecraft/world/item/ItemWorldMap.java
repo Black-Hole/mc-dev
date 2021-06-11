@@ -4,10 +4,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
+import java.util.List;
 import javax.annotation.Nullable;
+import net.minecraft.EnumChatFormat;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldServer;
@@ -32,6 +36,11 @@ import net.minecraft.world.level.saveddata.maps.WorldMap;
 
 public class ItemWorldMap extends ItemWorldMapBase {
 
+    public static final int IMAGE_WIDTH = 128;
+    public static final int IMAGE_HEIGHT = 128;
+    private static final int DEFAULT_MAP_COLOR = -12173266;
+    private static final String TAG_MAP = "map";
+
     public ItemWorldMap(Item.Info item_info) {
         super(item_info);
     }
@@ -44,35 +53,40 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     @Nullable
-    public static WorldMap a(ItemStack itemstack, World world) {
-        return world.a(a(d(itemstack)));
+    public static WorldMap a(@Nullable Integer integer, World world) {
+        return integer == null ? null : world.a(a(integer));
     }
 
     @Nullable
     public static WorldMap getSavedMap(ItemStack itemstack, World world) {
-        WorldMap worldmap = a(itemstack, world);
+        Integer integer = d(itemstack);
 
-        if (worldmap == null && world instanceof WorldServer) {
-            worldmap = a(itemstack, world, world.getWorldData().a(), world.getWorldData().c(), 3, false, false, world.getDimensionKey());
-        }
-
-        return worldmap;
+        return a(integer, world);
     }
 
-    public static int d(ItemStack itemstack) {
+    @Nullable
+    public static Integer d(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
-        return nbttagcompound != null && nbttagcompound.hasKeyOfType("map", 99) ? nbttagcompound.getInt("map") : 0;
+        return nbttagcompound != null && nbttagcompound.hasKeyOfType("map", 99) ? nbttagcompound.getInt("map") : null;
     }
 
-    private static WorldMap a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
+    private static int a(World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
+        WorldMap worldmap = WorldMap.a((double) i, (double) j, (byte) k, flag, flag1, resourcekey);
         int l = world.getWorldMapCount();
-        WorldMap worldmap = new WorldMap(a(l));
 
-        worldmap.a(i, j, k, flag, flag1, resourcekey);
-        world.a(worldmap);
-        itemstack.getOrCreateTag().setInt("map", l);
-        return worldmap;
+        world.a(a(l), worldmap);
+        return l;
+    }
+
+    private static void a(ItemStack itemstack, int i) {
+        itemstack.getOrCreateTag().setInt("map", i);
+    }
+
+    private static void a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
+        int l = a(world, i, j, k, flag, flag1, resourcekey);
+
+        a(itemstack, l);
     }
 
     public static String a(int i) {
@@ -80,10 +94,10 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     public void a(World world, Entity entity, WorldMap worldmap) {
-        if (world.getDimensionKey() == worldmap.map && entity instanceof EntityHuman) {
+        if (world.getDimensionKey() == worldmap.dimension && entity instanceof EntityHuman) {
             int i = 1 << worldmap.scale;
-            int j = worldmap.centerX;
-            int k = worldmap.centerZ;
+            int j = worldmap.x;
+            int k = worldmap.z;
             int l = MathHelper.floor(entity.locX() - (double) j) / i + 64;
             int i1 = MathHelper.floor(entity.locZ() - (double) k) / i + 64;
             int j1 = 128 / i;
@@ -94,11 +108,11 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
             WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = worldmap.a((EntityHuman) entity);
 
-            ++worldmap_worldmaphumantracker.b;
+            ++worldmap_worldmaphumantracker.step;
             boolean flag = false;
 
             for (int k1 = l - j1 + 1; k1 < l + j1; ++k1) {
-                if ((k1 & 15) == (worldmap_worldmaphumantracker.b & 15) || flag) {
+                if ((k1 & 15) == (worldmap_worldmaphumantracker.step & 15) || flag) {
                     flag = false;
                     double d0 = 0.0D;
 
@@ -139,14 +153,14 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                             int k4 = chunk.getHighestBlock(HeightMap.Type.WORLD_SURFACE, i4 + i3, j4 + j3) + 1;
                                             IBlockData iblockdata;
 
-                                            if (k4 > 1) {
+                                            if (k4 > world.getMinBuildHeight() + 1) {
                                                 do {
                                                     --k4;
                                                     blockposition_mutableblockposition.d(chunkcoordintpair.d() + i4 + i3, k4, chunkcoordintpair.e() + j4 + j3);
                                                     iblockdata = chunk.getType(blockposition_mutableblockposition);
-                                                } while (iblockdata.d(world, blockposition_mutableblockposition) == MaterialMapColor.b && k4 > 0);
+                                                } while (iblockdata.d(world, blockposition_mutableblockposition) == MaterialMapColor.NONE && k4 > world.getMinBuildHeight());
 
-                                                if (k4 > 0 && !iblockdata.getFluid().isEmpty()) {
+                                                if (k4 > world.getMinBuildHeight() && !iblockdata.getFluid().isEmpty()) {
                                                     int l4 = k4 - 1;
 
                                                     blockposition_mutableblockposition1.g(blockposition_mutableblockposition);
@@ -154,10 +168,10 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                     IBlockData iblockdata1;
 
                                                     do {
-                                                        blockposition_mutableblockposition1.p(l4--);
+                                                        blockposition_mutableblockposition1.t(l4--);
                                                         iblockdata1 = chunk.getType(blockposition_mutableblockposition1);
                                                         ++k3;
-                                                    } while (l4 > 0 && !iblockdata1.getFluid().isEmpty());
+                                                    } while (l4 > world.getMinBuildHeight() && !iblockdata1.getFluid().isEmpty());
 
                                                     iblockdata = this.a(world, iblockdata, (BlockPosition) blockposition_mutableblockposition);
                                                 }
@@ -184,9 +198,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                     b0 = 0;
                                 }
 
-                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(multiset), MaterialMapColor.b);
+                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(multiset), MaterialMapColor.NONE);
 
-                                if (materialmapcolor == MaterialMapColor.n) {
+                                if (materialmapcolor == MaterialMapColor.WATER) {
                                     d2 = (double) k3 * 0.1D + (double) (k1 + l1 & 1) * 0.2D;
                                     b0 = 1;
                                     if (d2 < 0.5D) {
@@ -200,14 +214,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
                                 d0 = d1;
                                 if (l1 >= 0 && i2 * i2 + j2 * j2 < j1 * j1 && (!flag1 || (k1 + l1 & 1) != 0)) {
-                                    byte b1 = worldmap.colors[k1 + l1 * 128];
-                                    byte b2 = (byte) (materialmapcolor.aj * 4 + b0);
-
-                                    if (b1 != b2) {
-                                        worldmap.colors[k1 + l1 * 128] = b2;
-                                        worldmap.flagDirty(k1, l1);
-                                        flag = true;
-                                    }
+                                    flag |= worldmap.a(k1, l1, (byte) (materialmapcolor.id * 4 + b0));
                                 }
                             }
                         }
@@ -232,10 +239,10 @@ public class ItemWorldMap extends ItemWorldMapBase {
         WorldMap worldmap = getSavedMap(itemstack, worldserver);
 
         if (worldmap != null) {
-            if (worldserver.getDimensionKey() == worldmap.map) {
+            if (worldserver.getDimensionKey() == worldmap.dimension) {
                 int i = 1 << worldmap.scale;
-                int j = worldmap.centerX;
-                int k = worldmap.centerZ;
+                int j = worldmap.x;
+                int k = worldmap.z;
                 BiomeBase[] abiomebase = new BiomeBase[128 * i * 128 * i];
 
                 int l;
@@ -286,10 +293,10 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             }
 
                             int k1 = 3;
-                            MaterialMapColor materialmapcolor = MaterialMapColor.b;
+                            MaterialMapColor materialmapcolor = MaterialMapColor.NONE;
 
                             if (biomebase.h() < 0.0F) {
-                                materialmapcolor = MaterialMapColor.q;
+                                materialmapcolor = MaterialMapColor.COLOR_ORANGE;
                                 if (j1 > 7 && i1 % 2 == 0) {
                                     k1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
                                     if (k1 == 3) {
@@ -298,7 +305,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                         k1 = 0;
                                     }
                                 } else if (j1 > 7) {
-                                    materialmapcolor = MaterialMapColor.b;
+                                    materialmapcolor = MaterialMapColor.NONE;
                                 } else if (j1 > 5) {
                                     k1 = 1;
                                 } else if (j1 > 3) {
@@ -307,7 +314,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                     k1 = 0;
                                 }
                             } else if (j1 > 0) {
-                                materialmapcolor = MaterialMapColor.B;
+                                materialmapcolor = MaterialMapColor.COLOR_BROWN;
                                 if (j1 > 3) {
                                     k1 = 1;
                                 } else {
@@ -315,9 +322,8 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 }
                             }
 
-                            if (materialmapcolor != MaterialMapColor.b) {
-                                worldmap.colors[l + i1 * 128] = (byte) (materialmapcolor.aj * 4 + k1);
-                                worldmap.flagDirty(l, i1);
+                            if (materialmapcolor != MaterialMapColor.NONE) {
+                                worldmap.b(l, i1, (byte) (materialmapcolor.id * 4 + k1));
                             }
                         }
                     }
@@ -350,7 +356,10 @@ public class ItemWorldMap extends ItemWorldMapBase {
     @Nullable
     @Override
     public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        return getSavedMap(itemstack, world).a(itemstack, world, entityhuman);
+        Integer integer = d(itemstack);
+        WorldMap worldmap = a(integer, world);
+
+        return worldmap != null ? worldmap.a(integer, entityhuman) : null;
     }
 
     @Override
@@ -367,11 +376,14 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
     }
 
-    protected static void a(ItemStack itemstack, World world, int i) {
+    private static void a(ItemStack itemstack, World world, int i) {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {
-            a(itemstack, world, worldmap.centerX, worldmap.centerZ, MathHelper.clamp(worldmap.scale + i, 0, 4), worldmap.track, worldmap.unlimitedTracking, worldmap.map);
+            int j = world.getWorldMapCount();
+
+            world.a(a(j), worldmap.a(i));
+            a(itemstack, j);
         }
 
     }
@@ -380,11 +392,47 @@ public class ItemWorldMap extends ItemWorldMapBase {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {
-            WorldMap worldmap1 = a(itemstack, world, 0, 0, worldmap.scale, worldmap.track, worldmap.unlimitedTracking, worldmap.map);
+            int i = world.getWorldMapCount();
+            String s = a(i);
+            WorldMap worldmap1 = worldmap.a();
 
-            worldmap1.a(worldmap);
+            world.a(s, worldmap1);
+            a(itemstack, i);
         }
 
+    }
+
+    @Override
+    public void a(ItemStack itemstack, @Nullable World world, List<IChatBaseComponent> list, TooltipFlag tooltipflag) {
+        Integer integer = d(itemstack);
+        WorldMap worldmap = world == null ? null : a(integer, world);
+
+        if (worldmap != null && worldmap.locked) {
+            list.add((new ChatMessage("filled_map.locked", new Object[]{integer})).a(EnumChatFormat.GRAY));
+        }
+
+        if (tooltipflag.a()) {
+            if (worldmap != null) {
+                list.add((new ChatMessage("filled_map.id", new Object[]{integer})).a(EnumChatFormat.GRAY));
+                list.add((new ChatMessage("filled_map.scale", new Object[]{1 << worldmap.scale})).a(EnumChatFormat.GRAY));
+                list.add((new ChatMessage("filled_map.level", new Object[]{worldmap.scale, 4})).a(EnumChatFormat.GRAY));
+            } else {
+                list.add((new ChatMessage("filled_map.unknown")).a(EnumChatFormat.GRAY));
+            }
+        }
+
+    }
+
+    public static int k(ItemStack itemstack) {
+        NBTTagCompound nbttagcompound = itemstack.b("display");
+
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("MapColor", 99)) {
+            int i = nbttagcompound.getInt("MapColor");
+
+            return -16777216 | i & 16777215;
+        } else {
+            return -12173266;
+        }
     }
 
     @Override
@@ -395,7 +443,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
             if (!itemactioncontext.getWorld().isClientSide) {
                 WorldMap worldmap = getSavedMap(itemactioncontext.getItemStack(), itemactioncontext.getWorld());
 
-                worldmap.a((GeneratorAccess) itemactioncontext.getWorld(), itemactioncontext.getClickPosition());
+                if (worldmap != null && !worldmap.a((GeneratorAccess) itemactioncontext.getWorld(), itemactioncontext.getClickPosition())) {
+                    return EnumInteractionResult.FAIL;
+                }
             }
 
             return EnumInteractionResult.a(itemactioncontext.getWorld().isClientSide);

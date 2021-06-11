@@ -12,14 +12,14 @@ import net.minecraft.server.MinecraftServer;
 
 public class PacketStatusListener implements PacketStatusInListener {
 
-    private static final IChatBaseComponent a = new ChatMessage("multiplayer.status.request_handled");
-    private final MinecraftServer minecraftServer;
-    private final NetworkManager networkManager;
-    private boolean d;
+    private static final IChatBaseComponent DISCONNECT_REASON = new ChatMessage("multiplayer.status.request_handled");
+    private final MinecraftServer server;
+    private final NetworkManager connection;
+    private boolean hasRequestedStatus;
 
     public PacketStatusListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-        this.minecraftServer = minecraftserver;
-        this.networkManager = networkmanager;
+        this.server = minecraftserver;
+        this.connection = networkmanager;
     }
 
     @Override
@@ -27,22 +27,22 @@ public class PacketStatusListener implements PacketStatusInListener {
 
     @Override
     public NetworkManager a() {
-        return this.networkManager;
+        return this.connection;
     }
 
     @Override
     public void a(PacketStatusInStart packetstatusinstart) {
-        if (this.d) {
-            this.networkManager.close(PacketStatusListener.a);
+        if (this.hasRequestedStatus) {
+            this.connection.close(PacketStatusListener.DISCONNECT_REASON);
         } else {
-            this.d = true;
-            this.networkManager.sendPacket(new PacketStatusOutServerInfo(this.minecraftServer.getServerPing()));
+            this.hasRequestedStatus = true;
+            this.connection.sendPacket(new PacketStatusOutServerInfo(this.server.getServerPing()));
         }
     }
 
     @Override
     public void a(PacketStatusInPing packetstatusinping) {
-        this.networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.b()));
-        this.networkManager.close(PacketStatusListener.a);
+        this.connection.sendPacket(new PacketStatusOutPong(packetstatusinping.b()));
+        this.connection.close(PacketStatusListener.DISCONNECT_REASON);
     }
 }

@@ -6,33 +6,33 @@ import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer8;
 
 public final class AreaLazy implements Area {
 
-    private final AreaTransformer8 a;
-    private final Long2IntLinkedOpenHashMap b;
-    private final int c;
+    private final AreaTransformer8 transformer;
+    private final Long2IntLinkedOpenHashMap cache;
+    private final int maxCache;
 
     public AreaLazy(Long2IntLinkedOpenHashMap long2intlinkedopenhashmap, int i, AreaTransformer8 areatransformer8) {
-        this.b = long2intlinkedopenhashmap;
-        this.c = i;
-        this.a = areatransformer8;
+        this.cache = long2intlinkedopenhashmap;
+        this.maxCache = i;
+        this.transformer = areatransformer8;
     }
 
     @Override
     public int a(int i, int j) {
         long k = ChunkCoordIntPair.pair(i, j);
-        Long2IntLinkedOpenHashMap long2intlinkedopenhashmap = this.b;
+        Long2IntLinkedOpenHashMap long2intlinkedopenhashmap = this.cache;
 
-        synchronized (this.b) {
-            int l = this.b.get(k);
+        synchronized (this.cache) {
+            int l = this.cache.get(k);
 
             if (l != Integer.MIN_VALUE) {
                 return l;
             } else {
-                int i1 = this.a.apply(i, j);
+                int i1 = this.transformer.apply(i, j);
 
-                this.b.put(k, i1);
-                if (this.b.size() > this.c) {
-                    for (int j1 = 0; j1 < this.c / 16; ++j1) {
-                        this.b.removeFirstInt();
+                this.cache.put(k, i1);
+                if (this.cache.size() > this.maxCache) {
+                    for (int j1 = 0; j1 < this.maxCache / 16; ++j1) {
+                        this.cache.removeFirstInt();
                     }
                 }
 
@@ -42,6 +42,6 @@ public final class AreaLazy implements Area {
     }
 
     public int a() {
-        return this.c;
+        return this.maxCache;
     }
 }

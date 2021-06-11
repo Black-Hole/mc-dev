@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.StructureManager;
@@ -15,13 +16,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 
 public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    public static final Codec<WorldGenFeatureDefinedStructurePoolEmpty> a = Codec.unit(() -> {
-        return WorldGenFeatureDefinedStructurePoolEmpty.b;
+    public static final Codec<WorldGenFeatureDefinedStructurePoolEmpty> CODEC = Codec.unit(() -> {
+        return WorldGenFeatureDefinedStructurePoolEmpty.INSTANCE;
     });
-    public static final WorldGenFeatureDefinedStructurePoolEmpty b = new WorldGenFeatureDefinedStructurePoolEmpty();
+    public static final WorldGenFeatureDefinedStructurePoolEmpty INSTANCE = new WorldGenFeatureDefinedStructurePoolEmpty();
 
     private WorldGenFeatureDefinedStructurePoolEmpty() {
         super(WorldGenFeatureDefinedStructurePoolTemplate.Matching.TERRAIN_MATCHING);
+    }
+
+    @Override
+    public BaseBlockPosition a(DefinedStructureManager definedstructuremanager, EnumBlockRotation enumblockrotation) {
+        return BaseBlockPosition.ZERO;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDef
 
     @Override
     public StructureBoundingBox a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation) {
-        return StructureBoundingBox.a();
+        throw new IllegalStateException("Invalid call to EmtyPoolElement.getBoundingBox, filter me!");
     }
 
     @Override
@@ -41,7 +47,7 @@ public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDef
 
     @Override
     public WorldGenFeatureDefinedStructurePools<?> a() {
-        return WorldGenFeatureDefinedStructurePools.d;
+        return WorldGenFeatureDefinedStructurePools.EMPTY;
     }
 
     public String toString() {

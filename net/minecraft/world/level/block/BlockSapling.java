@@ -17,19 +17,20 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockSapling extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger STAGE = BlockProperties.aA;
-    protected static final VoxelShape b = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
-    private final WorldGenTreeProvider c;
+    public static final BlockStateInteger STAGE = BlockProperties.STAGE;
+    protected static final float AABB_OFFSET = 6.0F;
+    protected static final VoxelShape SHAPE = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+    private final WorldGenTreeProvider treeGrower;
 
     protected BlockSapling(WorldGenTreeProvider worldgentreeprovider, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.c = worldgentreeprovider;
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
+        this.treeGrower = worldgentreeprovider;
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockSapling.STAGE, 0));
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockSapling.b;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockSapling.SHAPE;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
         if ((Integer) iblockdata.get(BlockSapling.STAGE) == 0) {
             worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockSapling.STAGE), 4);
         } else {
-            this.c.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), blockposition, iblockdata, random);
+            this.treeGrower.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), blockposition, iblockdata, random);
         }
 
     }

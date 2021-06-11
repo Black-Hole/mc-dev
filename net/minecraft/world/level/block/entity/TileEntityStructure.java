@@ -1,12 +1,10 @@
 package net.minecraft.world.level.block.entity;
 
-import com.google.common.collect.Lists;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.ResourceKeyInvalidException;
 import net.minecraft.SystemUtils;
@@ -20,8 +18,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.UtilColor;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.level.ChunkCoordIntPair;
-import net.minecraft.world.level.WorldAccess;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.BlockStructure;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnumBlockMirror;
@@ -37,14 +34,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 
 public class TileEntityStructure extends TileEntity {
 
+    private static final int SCAN_CORNER_BLOCKS_RANGE = 5;
+    public static final int MAX_OFFSET_PER_AXIS = 48;
+    public static final int MAX_SIZE_PER_AXIS = 48;
+    public static final String AUTHOR_TAG = "author";
     private MinecraftKey structureName;
     public String author = "";
-    public String metadata = "";
-    public BlockPosition relativePosition = new BlockPosition(0, 1, 0);
-    public BlockPosition size;
+    public String metaData = "";
+    public BlockPosition structurePos = new BlockPosition(0, 1, 0);
+    public BaseBlockPosition structureSize;
     public EnumBlockMirror mirror;
     public EnumBlockRotation rotation;
-    public BlockPropertyStructureMode usageMode;
+    public BlockPropertyStructureMode mode;
     public boolean ignoreEntities;
     private boolean powered;
     public boolean showAir;
@@ -52,15 +53,15 @@ public class TileEntityStructure extends TileEntity {
     public float integrity;
     public long seed;
 
-    public TileEntityStructure() {
-        super(TileEntityTypes.STRUCTURE_BLOCK);
-        this.size = BlockPosition.ZERO;
+    public TileEntityStructure(BlockPosition blockposition, IBlockData iblockdata) {
+        super(TileEntityTypes.STRUCTURE_BLOCK, blockposition, iblockdata);
+        this.structureSize = BaseBlockPosition.ZERO;
         this.mirror = EnumBlockMirror.NONE;
         this.rotation = EnumBlockRotation.NONE;
-        this.usageMode = BlockPropertyStructureMode.DATA;
         this.ignoreEntities = true;
         this.showBoundingBox = true;
         this.integrity = 1.0F;
+        this.mode = (BlockPropertyStructureMode) iblockdata.get(BlockStructure.MODE);
     }
 
     @Override
@@ -68,16 +69,16 @@ public class TileEntityStructure extends TileEntity {
         super.save(nbttagcompound);
         nbttagcompound.setString("name", this.getStructureName());
         nbttagcompound.setString("author", this.author);
-        nbttagcompound.setString("metadata", this.metadata);
-        nbttagcompound.setInt("posX", this.relativePosition.getX());
-        nbttagcompound.setInt("posY", this.relativePosition.getY());
-        nbttagcompound.setInt("posZ", this.relativePosition.getZ());
-        nbttagcompound.setInt("sizeX", this.size.getX());
-        nbttagcompound.setInt("sizeY", this.size.getY());
-        nbttagcompound.setInt("sizeZ", this.size.getZ());
+        nbttagcompound.setString("metadata", this.metaData);
+        nbttagcompound.setInt("posX", this.structurePos.getX());
+        nbttagcompound.setInt("posY", this.structurePos.getY());
+        nbttagcompound.setInt("posZ", this.structurePos.getZ());
+        nbttagcompound.setInt("sizeX", this.structureSize.getX());
+        nbttagcompound.setInt("sizeY", this.structureSize.getY());
+        nbttagcompound.setInt("sizeZ", this.structureSize.getZ());
         nbttagcompound.setString("rotation", this.rotation.toString());
         nbttagcompound.setString("mirror", this.mirror.toString());
-        nbttagcompound.setString("mode", this.usageMode.toString());
+        nbttagcompound.setString("mode", this.mode.toString());
         nbttagcompound.setBoolean("ignoreEntities", this.ignoreEntities);
         nbttagcompound.setBoolean("powered", this.powered);
         nbttagcompound.setBoolean("showair", this.showAir);
@@ -88,21 +89,21 @@ public class TileEntityStructure extends TileEntity {
     }
 
     @Override
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        super.load(iblockdata, nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.setStructureName(nbttagcompound.getString("name"));
         this.author = nbttagcompound.getString("author");
-        this.metadata = nbttagcompound.getString("metadata");
+        this.metaData = nbttagcompound.getString("metadata");
         int i = MathHelper.clamp(nbttagcompound.getInt("posX"), -48, 48);
         int j = MathHelper.clamp(nbttagcompound.getInt("posY"), -48, 48);
         int k = MathHelper.clamp(nbttagcompound.getInt("posZ"), -48, 48);
 
-        this.relativePosition = new BlockPosition(i, j, k);
+        this.structurePos = new BlockPosition(i, j, k);
         int l = MathHelper.clamp(nbttagcompound.getInt("sizeX"), 0, 48);
         int i1 = MathHelper.clamp(nbttagcompound.getInt("sizeY"), 0, 48);
         int j1 = MathHelper.clamp(nbttagcompound.getInt("sizeZ"), 0, 48);
 
-        this.size = new BlockPosition(l, i1, j1);
+        this.structureSize = new BaseBlockPosition(l, i1, j1);
 
         try {
             this.rotation = EnumBlockRotation.valueOf(nbttagcompound.getString("rotation"));
@@ -117,9 +118,9 @@ public class TileEntityStructure extends TileEntity {
         }
 
         try {
-            this.usageMode = BlockPropertyStructureMode.valueOf(nbttagcompound.getString("mode"));
+            this.mode = BlockPropertyStructureMode.valueOf(nbttagcompound.getString("mode"));
         } catch (IllegalArgumentException illegalargumentexception2) {
-            this.usageMode = BlockPropertyStructureMode.DATA;
+            this.mode = BlockPropertyStructureMode.DATA;
         }
 
         this.ignoreEntities = nbttagcompound.getBoolean("ignoreEntities");
@@ -133,16 +134,16 @@ public class TileEntityStructure extends TileEntity {
         }
 
         this.seed = nbttagcompound.getLong("seed");
-        this.K();
+        this.F();
     }
 
-    private void K() {
-        if (this.world != null) {
+    private void F() {
+        if (this.level != null) {
             BlockPosition blockposition = this.getPosition();
-            IBlockData iblockdata = this.world.getType(blockposition);
+            IBlockData iblockdata = this.level.getType(blockposition);
 
             if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
-                this.world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStructure.a, this.usageMode), 2);
+                this.level.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStructure.MODE, this.mode), 2);
             }
 
         }
@@ -151,11 +152,11 @@ public class TileEntityStructure extends TileEntity {
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 7, this.b());
+        return new PacketPlayOutTileEntityData(this.worldPosition, 7, this.Z_());
     }
 
     @Override
-    public NBTTagCompound b() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
@@ -195,167 +196,159 @@ public class TileEntityStructure extends TileEntity {
         this.author = entityliving.getDisplayName().getString();
     }
 
-    public void b(BlockPosition blockposition) {
-        this.relativePosition = blockposition;
+    public BlockPosition h() {
+        return this.structurePos;
     }
 
-    public BlockPosition j() {
-        return this.size;
+    public void a(BlockPosition blockposition) {
+        this.structurePos = blockposition;
     }
 
-    public void c(BlockPosition blockposition) {
-        this.size = blockposition;
+    public BaseBlockPosition i() {
+        return this.structureSize;
     }
 
-    public void b(EnumBlockMirror enumblockmirror) {
+    public void a(BaseBlockPosition baseblockposition) {
+        this.structureSize = baseblockposition;
+    }
+
+    public EnumBlockMirror j() {
+        return this.mirror;
+    }
+
+    public void a(EnumBlockMirror enumblockmirror) {
         this.mirror = enumblockmirror;
     }
 
-    public EnumBlockRotation l() {
+    public EnumBlockRotation s() {
         return this.rotation;
     }
 
-    public void b(EnumBlockRotation enumblockrotation) {
+    public void a(EnumBlockRotation enumblockrotation) {
         this.rotation = enumblockrotation;
     }
 
+    public String t() {
+        return this.metaData;
+    }
+
     public void b(String s) {
-        this.metadata = s;
+        this.metaData = s;
     }
 
     public BlockPropertyStructureMode getUsageMode() {
-        return this.usageMode;
+        return this.mode;
     }
 
     public void setUsageMode(BlockPropertyStructureMode blockpropertystructuremode) {
-        this.usageMode = blockpropertystructuremode;
-        IBlockData iblockdata = this.world.getType(this.getPosition());
+        this.mode = blockpropertystructuremode;
+        IBlockData iblockdata = this.level.getType(this.getPosition());
 
         if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
-            this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockStructure.a, blockpropertystructuremode), 2);
+            this.level.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockStructure.MODE, blockpropertystructuremode), 2);
         }
 
+    }
+
+    public boolean v() {
+        return this.ignoreEntities;
     }
 
     public void a(boolean flag) {
         this.ignoreEntities = flag;
     }
 
+    public float w() {
+        return this.integrity;
+    }
+
     public void a(float f) {
         this.integrity = f;
+    }
+
+    public long x() {
+        return this.seed;
     }
 
     public void a(long i) {
         this.seed = i;
     }
 
-    public boolean C() {
-        if (this.usageMode != BlockPropertyStructureMode.SAVE) {
+    public boolean y() {
+        if (this.mode != BlockPropertyStructureMode.SAVE) {
             return false;
         } else {
             BlockPosition blockposition = this.getPosition();
             boolean flag = true;
-            BlockPosition blockposition1 = new BlockPosition(blockposition.getX() - 80, 0, blockposition.getZ() - 80);
-            BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + 80, 255, blockposition.getZ() + 80);
-            List<TileEntityStructure> list = this.a(blockposition1, blockposition2);
-            List<TileEntityStructure> list1 = this.a(list);
+            BlockPosition blockposition1 = new BlockPosition(blockposition.getX() - 80, this.level.getMinBuildHeight(), blockposition.getZ() - 80);
+            BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + 80, this.level.getMaxBuildHeight() - 1, blockposition.getZ() + 80);
+            Stream<BlockPosition> stream = this.a(blockposition1, blockposition2);
 
-            if (list1.size() < 1) {
-                return false;
-            } else {
-                StructureBoundingBox structureboundingbox = this.a(blockposition, list1);
+            return a(blockposition, stream).filter((structureboundingbox) -> {
+                int i = structureboundingbox.j() - structureboundingbox.g();
+                int j = structureboundingbox.k() - structureboundingbox.h();
+                int k = structureboundingbox.l() - structureboundingbox.i();
 
-                if (structureboundingbox.d - structureboundingbox.a > 1 && structureboundingbox.e - structureboundingbox.b > 1 && structureboundingbox.f - structureboundingbox.c > 1) {
-                    this.relativePosition = new BlockPosition(structureboundingbox.a - blockposition.getX() + 1, structureboundingbox.b - blockposition.getY() + 1, structureboundingbox.c - blockposition.getZ() + 1);
-                    this.size = new BlockPosition(structureboundingbox.d - structureboundingbox.a - 1, structureboundingbox.e - structureboundingbox.b - 1, structureboundingbox.f - structureboundingbox.c - 1);
+                if (i > 1 && j > 1 && k > 1) {
+                    this.structurePos = new BlockPosition(structureboundingbox.g() - blockposition.getX() + 1, structureboundingbox.h() - blockposition.getY() + 1, structureboundingbox.i() - blockposition.getZ() + 1);
+                    this.structureSize = new BaseBlockPosition(i - 1, j - 1, k - 1);
                     this.update();
-                    IBlockData iblockdata = this.world.getType(blockposition);
+                    IBlockData iblockdata = this.level.getType(blockposition);
 
-                    this.world.notify(blockposition, iblockdata, iblockdata, 3);
+                    this.level.notify(blockposition, iblockdata, iblockdata, 3);
                     return true;
                 } else {
                     return false;
                 }
-            }
+            }).isPresent();
         }
     }
 
-    private List<TileEntityStructure> a(List<TileEntityStructure> list) {
-        Predicate<TileEntityStructure> predicate = (tileentitystructure) -> {
-            return tileentitystructure.usageMode == BlockPropertyStructureMode.CORNER && Objects.equals(this.structureName, tileentitystructure.structureName);
-        };
+    private Stream<BlockPosition> a(BlockPosition blockposition, BlockPosition blockposition1) {
+        Stream stream = BlockPosition.b(blockposition, blockposition1).filter((blockposition2) -> {
+            return this.level.getType(blockposition2).a(Blocks.STRUCTURE_BLOCK);
+        });
+        World world = this.level;
 
-        return (List) list.stream().filter(predicate).collect(Collectors.toList());
+        Objects.requireNonNull(this.level);
+        return stream.map(world::getTileEntity).filter((tileentity) -> {
+            return tileentity instanceof TileEntityStructure;
+        }).map((tileentity) -> {
+            return (TileEntityStructure) tileentity;
+        }).filter((tileentitystructure) -> {
+            return tileentitystructure.mode == BlockPropertyStructureMode.CORNER && Objects.equals(this.structureName, tileentitystructure.structureName);
+        }).map(TileEntity::getPosition);
     }
 
-    private List<TileEntityStructure> a(BlockPosition blockposition, BlockPosition blockposition1) {
-        List<TileEntityStructure> list = Lists.newArrayList();
-        Iterator iterator = BlockPosition.a(blockposition, blockposition1).iterator();
+    private static Optional<StructureBoundingBox> a(BlockPosition blockposition, Stream<BlockPosition> stream) {
+        Iterator<BlockPosition> iterator = stream.iterator();
 
-        while (iterator.hasNext()) {
-            BlockPosition blockposition2 = (BlockPosition) iterator.next();
-            IBlockData iblockdata = this.world.getType(blockposition2);
-
-            if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
-                TileEntity tileentity = this.world.getTileEntity(blockposition2);
-
-                if (tileentity != null && tileentity instanceof TileEntityStructure) {
-                    list.add((TileEntityStructure) tileentity);
-                }
-            }
-        }
-
-        return list;
-    }
-
-    private StructureBoundingBox a(BlockPosition blockposition, List<TileEntityStructure> list) {
-        StructureBoundingBox structureboundingbox;
-
-        if (list.size() > 1) {
-            BlockPosition blockposition1 = ((TileEntityStructure) list.get(0)).getPosition();
-
-            structureboundingbox = new StructureBoundingBox(blockposition1, blockposition1);
+        if (!iterator.hasNext()) {
+            return Optional.empty();
         } else {
-            structureboundingbox = new StructureBoundingBox(blockposition, blockposition);
+            BlockPosition blockposition1 = (BlockPosition) iterator.next();
+            StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition1);
+
+            if (iterator.hasNext()) {
+                Objects.requireNonNull(structureboundingbox);
+                iterator.forEachRemaining(structureboundingbox::a);
+            } else {
+                structureboundingbox.a(blockposition);
+            }
+
+            return Optional.of(structureboundingbox);
         }
-
-        Iterator iterator = list.iterator();
-
-        while (iterator.hasNext()) {
-            TileEntityStructure tileentitystructure = (TileEntityStructure) iterator.next();
-            BlockPosition blockposition2 = tileentitystructure.getPosition();
-
-            if (blockposition2.getX() < structureboundingbox.a) {
-                structureboundingbox.a = blockposition2.getX();
-            } else if (blockposition2.getX() > structureboundingbox.d) {
-                structureboundingbox.d = blockposition2.getX();
-            }
-
-            if (blockposition2.getY() < structureboundingbox.b) {
-                structureboundingbox.b = blockposition2.getY();
-            } else if (blockposition2.getY() > structureboundingbox.e) {
-                structureboundingbox.e = blockposition2.getY();
-            }
-
-            if (blockposition2.getZ() < structureboundingbox.c) {
-                structureboundingbox.c = blockposition2.getZ();
-            } else if (blockposition2.getZ() > structureboundingbox.f) {
-                structureboundingbox.f = blockposition2.getZ();
-            }
-        }
-
-        return structureboundingbox;
     }
 
-    public boolean D() {
+    public boolean z() {
         return this.b(true);
     }
 
     public boolean b(boolean flag) {
-        if (this.usageMode == BlockPropertyStructureMode.SAVE && !this.world.isClientSide && this.structureName != null) {
-            BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.relativePosition);
-            WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.n();
+        if (this.mode == BlockPropertyStructureMode.SAVE && !this.level.isClientSide && this.structureName != null) {
+            BlockPosition blockposition = this.getPosition().f(this.structurePos);
+            WorldServer worldserver = (WorldServer) this.level;
+            DefinedStructureManager definedstructuremanager = worldserver.p();
 
             DefinedStructure definedstructure;
 
@@ -365,7 +358,7 @@ public class TileEntityStructure extends TileEntity {
                 return false;
             }
 
-            definedstructure.a(this.world, blockposition, this.size, !this.ignoreEntities, Blocks.STRUCTURE_VOID);
+            definedstructure.a(this.level, blockposition, this.structureSize, !this.ignoreEntities, Blocks.STRUCTURE_VOID);
             definedstructure.a(this.author);
             if (flag) {
                 try {
@@ -390,18 +383,18 @@ public class TileEntityStructure extends TileEntity {
     }
 
     public boolean a(WorldServer worldserver, boolean flag) {
-        if (this.usageMode == BlockPropertyStructureMode.LOAD && this.structureName != null) {
-            DefinedStructureManager definedstructuremanager = worldserver.n();
+        if (this.mode == BlockPropertyStructureMode.LOAD && this.structureName != null) {
+            DefinedStructureManager definedstructuremanager = worldserver.p();
 
-            DefinedStructure definedstructure;
+            Optional optional;
 
             try {
-                definedstructure = definedstructuremanager.b(this.structureName);
+                optional = definedstructuremanager.b(this.structureName);
             } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
                 return false;
             }
 
-            return definedstructure == null ? false : this.a(worldserver, flag, definedstructure);
+            return !optional.isPresent() ? false : this.a(worldserver, flag, (DefinedStructure) optional.get());
         } else {
             return false;
         }
@@ -414,11 +407,11 @@ public class TileEntityStructure extends TileEntity {
             this.author = definedstructure.b();
         }
 
-        BlockPosition blockposition1 = definedstructure.a();
-        boolean flag1 = this.size.equals(blockposition1);
+        BaseBlockPosition baseblockposition = definedstructure.a();
+        boolean flag1 = this.structureSize.equals(baseblockposition);
 
         if (!flag1) {
-            this.size = blockposition1;
+            this.structureSize = baseblockposition;
             this.update();
             IBlockData iblockdata = worldserver.getType(blockposition);
 
@@ -428,35 +421,35 @@ public class TileEntityStructure extends TileEntity {
         if (flag && !flag1) {
             return false;
         } else {
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities).a((ChunkCoordIntPair) null);
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities);
 
             if (this.integrity < 1.0F) {
                 definedstructureinfo.b().a((DefinedStructureProcessor) (new DefinedStructureProcessorRotation(MathHelper.a(this.integrity, 0.0F, 1.0F)))).a(b(this.seed));
             }
 
-            BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) this.relativePosition);
+            BlockPosition blockposition1 = blockposition.f(this.structurePos);
 
-            definedstructure.a((WorldAccess) worldserver, blockposition2, definedstructureinfo, b(this.seed));
+            definedstructure.a(worldserver, blockposition1, blockposition1, definedstructureinfo, b(this.seed), 2);
             return true;
         }
     }
 
-    public void E() {
+    public void A() {
         if (this.structureName != null) {
-            WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.n();
+            WorldServer worldserver = (WorldServer) this.level;
+            DefinedStructureManager definedstructuremanager = worldserver.p();
 
             definedstructuremanager.d(this.structureName);
         }
     }
 
-    public boolean F() {
-        if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
-            WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.n();
+    public boolean B() {
+        if (this.mode == BlockPropertyStructureMode.LOAD && !this.level.isClientSide && this.structureName != null) {
+            WorldServer worldserver = (WorldServer) this.level;
+            DefinedStructureManager definedstructuremanager = worldserver.p();
 
             try {
-                return definedstructuremanager.b(this.structureName) != null;
+                return definedstructuremanager.b(this.structureName).isPresent();
             } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
                 return false;
             }
@@ -465,7 +458,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean G() {
+    public boolean C() {
         return this.powered;
     }
 
@@ -473,8 +466,16 @@ public class TileEntityStructure extends TileEntity {
         this.powered = flag;
     }
 
+    public boolean D() {
+        return this.showAir;
+    }
+
     public void d(boolean flag) {
         this.showAir = flag;
+    }
+
+    public boolean E() {
+        return this.showBoundingBox;
     }
 
     public void e(boolean flag) {

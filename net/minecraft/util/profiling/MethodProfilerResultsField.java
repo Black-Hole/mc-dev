@@ -2,19 +2,23 @@ package net.minecraft.util.profiling;
 
 public final class MethodProfilerResultsField implements Comparable<MethodProfilerResultsField> {
 
-    public final double a;
-    public final double b;
-    public final long c;
-    public final String d;
+    public final double percentage;
+    public final double globalPercentage;
+    public final long count;
+    public final String name;
 
     public MethodProfilerResultsField(String s, double d0, double d1, long i) {
-        this.d = s;
-        this.a = d0;
-        this.b = d1;
-        this.c = i;
+        this.name = s;
+        this.percentage = d0;
+        this.globalPercentage = d1;
+        this.count = i;
     }
 
     public int compareTo(MethodProfilerResultsField methodprofilerresultsfield) {
-        return methodprofilerresultsfield.a < this.a ? -1 : (methodprofilerresultsfield.a > this.a ? 1 : methodprofilerresultsfield.d.compareTo(this.d));
+        return methodprofilerresultsfield.percentage < this.percentage ? -1 : (methodprofilerresultsfield.percentage > this.percentage ? 1 : methodprofilerresultsfield.name.compareTo(this.name));
+    }
+
+    public int a() {
+        return (this.name.hashCode() & 11184810) + 4473924;
     }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class BlockStateInteger extends IBlockState<Integer> {
 
-    private final ImmutableSet<Integer> a;
+    private final ImmutableSet<Integer> values;
 
     protected BlockStateInteger(String s, int i, int j) {
         super(s, Integer.class);
@@ -23,13 +23,13 @@ public class BlockStateInteger extends IBlockState<Integer> {
                 set.add(k);
             }
 
-            this.a = ImmutableSet.copyOf(set);
+            this.values = ImmutableSet.copyOf(set);
         }
     }
 
     @Override
     public Collection<Integer> getValues() {
-        return this.a;
+        return this.values;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BlockStateInteger extends IBlockState<Integer> {
         } else if (object instanceof BlockStateInteger && super.equals(object)) {
             BlockStateInteger blockstateinteger = (BlockStateInteger) object;
 
-            return this.a.equals(blockstateinteger.a);
+            return this.values.equals(blockstateinteger.values);
         } else {
             return false;
         }
@@ -47,7 +47,7 @@ public class BlockStateInteger extends IBlockState<Integer> {
 
     @Override
     public int b() {
-        return 31 * super.b() + this.a.hashCode();
+        return 31 * super.b() + this.values.hashCode();
     }
 
     public static BlockStateInteger of(String s, int i, int j) {
@@ -59,7 +59,7 @@ public class BlockStateInteger extends IBlockState<Integer> {
         try {
             Integer integer = Integer.valueOf(s);
 
-            return this.a.contains(integer) ? Optional.of(integer) : Optional.empty();
+            return this.values.contains(integer) ? Optional.of(integer) : Optional.empty();
         } catch (NumberFormatException numberformatexception) {
             return Optional.empty();
         }

@@ -6,36 +6,37 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenSurfaceConfigurationBase implements WorldGenSurfaceConfiguration {
 
-    public static final Codec<WorldGenSurfaceConfigurationBase> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(IBlockData.b.fieldOf("top_material").forGetter((worldgensurfaceconfigurationbase) -> {
-            return worldgensurfaceconfigurationbase.b;
-        }), IBlockData.b.fieldOf("under_material").forGetter((worldgensurfaceconfigurationbase) -> {
-            return worldgensurfaceconfigurationbase.c;
-        }), IBlockData.b.fieldOf("underwater_material").forGetter((worldgensurfaceconfigurationbase) -> {
-            return worldgensurfaceconfigurationbase.d;
+    public static final Codec<WorldGenSurfaceConfigurationBase> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IBlockData.CODEC.fieldOf("top_material").forGetter((worldgensurfaceconfigurationbase) -> {
+            return worldgensurfaceconfigurationbase.topMaterial;
+        }), IBlockData.CODEC.fieldOf("under_material").forGetter((worldgensurfaceconfigurationbase) -> {
+            return worldgensurfaceconfigurationbase.underMaterial;
+        }), IBlockData.CODEC.fieldOf("underwater_material").forGetter((worldgensurfaceconfigurationbase) -> {
+            return worldgensurfaceconfigurationbase.underwaterMaterial;
         })).apply(instance, WorldGenSurfaceConfigurationBase::new);
     });
-    private final IBlockData b;
-    private final IBlockData c;
-    private final IBlockData d;
+    private final IBlockData topMaterial;
+    private final IBlockData underMaterial;
+    private final IBlockData underwaterMaterial;
 
     public WorldGenSurfaceConfigurationBase(IBlockData iblockdata, IBlockData iblockdata1, IBlockData iblockdata2) {
-        this.b = iblockdata;
-        this.c = iblockdata1;
-        this.d = iblockdata2;
+        this.topMaterial = iblockdata;
+        this.underMaterial = iblockdata1;
+        this.underwaterMaterial = iblockdata2;
     }
 
     @Override
     public IBlockData a() {
-        return this.b;
+        return this.topMaterial;
     }
 
     @Override
     public IBlockData b() {
-        return this.c;
+        return this.underMaterial;
     }
 
+    @Override
     public IBlockData c() {
-        return this.d;
+        return this.underwaterMaterial;
     }
 }

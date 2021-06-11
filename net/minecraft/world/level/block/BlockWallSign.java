@@ -24,21 +24,24 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 public class BlockWallSign extends BlockSign {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    private static final Map<EnumDirection, VoxelShape> d = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
+    protected static final float AABB_THICKNESS = 2.0F;
+    protected static final float AABB_BOTTOM = 4.5F;
+    protected static final float AABB_TOP = 12.5F;
+    private static final Map<EnumDirection, VoxelShape> AABBS = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
 
     public BlockWallSign(BlockBase.Info blockbase_info, BlockPropertyWood blockpropertywood) {
         super(blockbase_info, blockpropertywood);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.WATERLOGGED, false));
     }
 
     @Override
-    public String i() {
+    public String h() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (VoxelShape) BlockWallSign.d.get(iblockdata.get(BlockWallSign.FACING));
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (VoxelShape) BlockWallSign.AABBS.get(iblockdata.get(BlockWallSign.FACING));
     }
 
     @Override
@@ -53,7 +56,7 @@ public class BlockWallSign extends BlockSign {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         EnumDirection[] aenumdirection1 = aenumdirection;
         int i = aenumdirection.length;
 
@@ -65,7 +68,7 @@ public class BlockWallSign extends BlockSign {
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);
                 if (iblockdata.canPlace(world, blockposition)) {
-                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.getType() == FluidTypes.WATER);
+                    return (IBlockData) iblockdata.set(BlockWallSign.WATERLOGGED, fluid.getType() == FluidTypes.WATER);
                 }
             }
         }
@@ -90,6 +93,6 @@ public class BlockWallSign extends BlockSign {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockWallSign.FACING, BlockWallSign.a);
+        blockstatelist_a.a(BlockWallSign.FACING, BlockWallSign.WATERLOGGED);
     }
 }

@@ -1,35 +1,39 @@
 package net.minecraft.network.protocol.game;
 
-import java.io.IOException;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.EnumDifficulty;
 
 public class PacketPlayOutServerDifficulty implements Packet<PacketListenerPlayOut> {
 
-    private EnumDifficulty a;
-    private boolean b;
-
-    public PacketPlayOutServerDifficulty() {}
+    private final EnumDifficulty difficulty;
+    private final boolean locked;
 
     public PacketPlayOutServerDifficulty(EnumDifficulty enumdifficulty, boolean flag) {
-        this.a = enumdifficulty;
-        this.b = flag;
+        this.difficulty = enumdifficulty;
+        this.locked = flag;
+    }
+
+    public PacketPlayOutServerDifficulty(PacketDataSerializer packetdataserializer) {
+        this.difficulty = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
+        this.locked = packetdataserializer.readBoolean();
+    }
+
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) {
+        packetdataserializer.writeByte(this.difficulty.a());
+        packetdataserializer.writeBoolean(this.locked);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    @Override
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
-        this.b = packetdataserializer.readBoolean();
+    public boolean b() {
+        return this.locked;
     }
 
-    @Override
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a.a());
-        packetdataserializer.writeBoolean(this.b);
+    public EnumDifficulty c() {
+        return this.difficulty;
     }
 }

@@ -11,11 +11,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DataConverterItemStackEnchantment extends DataFix {
 
-    private static final Int2ObjectMap<String> a = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
+    private static final Int2ObjectMap<String> MAP = (Int2ObjectMap) DataFixUtils.make(new Int2ObjectOpenHashMap(), (int2objectopenhashmap) -> {
         int2objectopenhashmap.put(0, "minecraft:protection");
         int2objectopenhashmap.put(1, "minecraft:fire_protection");
         int2objectopenhashmap.put(2, "minecraft:feather_falling");
@@ -70,11 +71,11 @@ public class DataConverterItemStackEnchantment extends DataFix {
     private Dynamic<?> a(Dynamic<?> dynamic) {
         DataResult dataresult = dynamic.get("ench").asStreamOpt().map((stream) -> {
             return stream.map((dynamic1) -> {
-                return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic1.get("id").asInt(0), "null")));
+                return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.MAP.getOrDefault(dynamic1.get("id").asInt(0), "null")));
             });
         });
 
-        dynamic.getClass();
+        Objects.requireNonNull(dynamic);
         Optional<? extends Dynamic<?>> optional = dataresult.map(dynamic::createList).result();
 
         if (optional.isPresent()) {
@@ -84,11 +85,11 @@ public class DataConverterItemStackEnchantment extends DataFix {
         return dynamic.update("StoredEnchantments", (dynamic1) -> {
             DataResult dataresult1 = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
-                    return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic2.get("id").asInt(0), "null")));
+                    return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.MAP.getOrDefault(dynamic2.get("id").asInt(0), "null")));
                 });
             });
 
-            dynamic1.getClass();
+            Objects.requireNonNull(dynamic1);
             return (Dynamic) DataFixUtils.orElse(dataresult1.map(dynamic1::createList).result(), dynamic1);
         });
     }

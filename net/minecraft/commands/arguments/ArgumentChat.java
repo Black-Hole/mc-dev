@@ -17,7 +17,7 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
 
-    private static final Collection<String> a = Arrays.asList("Hello world!", "foo", "@e", "Hello @p :)");
+    private static final Collection<String> EXAMPLES = Arrays.asList("Hello world!", "foo", "@e", "Hello @p :)");
 
     public ArgumentChat() {}
 
@@ -34,50 +34,32 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentChat.a;
-    }
-
-    public static class b {
-
-        private final int a;
-        private final int b;
-        private final EntitySelector c;
-
-        public b(int i, int j, EntitySelector entityselector) {
-            this.a = i;
-            this.b = j;
-            this.c = entityselector;
-        }
-
-        public int a() {
-            return this.a;
-        }
-
-        public int b() {
-            return this.b;
-        }
-
-        @Nullable
-        public IChatBaseComponent a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-            return EntitySelector.a(this.c.getEntities(commandlistenerwrapper));
-        }
+        return ArgumentChat.EXAMPLES;
     }
 
     public static class a {
 
-        private final String a;
-        private final ArgumentChat.b[] b;
+        private final String text;
+        private final ArgumentChat.b[] parts;
 
         public a(String s, ArgumentChat.b[] aargumentchat_b) {
-            this.a = s;
-            this.b = aargumentchat_b;
+            this.text = s;
+            this.parts = aargumentchat_b;
+        }
+
+        public String a() {
+            return this.text;
+        }
+
+        public ArgumentChat.b[] b() {
+            return this.parts;
         }
 
         public IChatBaseComponent a(CommandListenerWrapper commandlistenerwrapper, boolean flag) throws CommandSyntaxException {
-            if (this.b.length != 0 && flag) {
-                ChatComponentText chatcomponenttext = new ChatComponentText(this.a.substring(0, this.b[0].a()));
-                int i = this.b[0].a();
-                ArgumentChat.b[] aargumentchat_b = this.b;
+            if (this.parts.length != 0 && flag) {
+                ChatComponentText chatcomponenttext = new ChatComponentText(this.text.substring(0, this.parts[0].a()));
+                int i = this.parts[0].a();
+                ArgumentChat.b[] aargumentchat_b = this.parts;
                 int j = aargumentchat_b.length;
 
                 for (int k = 0; k < j; ++k) {
@@ -85,7 +67,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                     IChatBaseComponent ichatbasecomponent = argumentchat_b.a(commandlistenerwrapper);
 
                     if (i < argumentchat_b.a()) {
-                        chatcomponenttext.c(this.a.substring(i, argumentchat_b.a()));
+                        chatcomponenttext.c(this.text.substring(i, argumentchat_b.a()));
                     }
 
                     if (ichatbasecomponent != null) {
@@ -95,13 +77,13 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                     i = argumentchat_b.b();
                 }
 
-                if (i < this.a.length()) {
-                    chatcomponenttext.c(this.a.substring(i, this.a.length()));
+                if (i < this.text.length()) {
+                    chatcomponenttext.c(this.text.substring(i, this.text.length()));
                 }
 
                 return chatcomponenttext;
             } else {
-                return new ChatComponentText(this.a);
+                return new ChatComponentText(this.text);
             }
         }
 
@@ -126,7 +108,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
 
                             entityselector = argumentparserselector.parse();
                         } catch (CommandSyntaxException commandsyntaxexception) {
-                            if (commandsyntaxexception.getType() != ArgumentParserSelector.d && commandsyntaxexception.getType() != ArgumentParserSelector.b) {
+                            if (commandsyntaxexception.getType() != ArgumentParserSelector.ERROR_MISSING_SELECTOR_TYPE && commandsyntaxexception.getType() != ArgumentParserSelector.ERROR_UNKNOWN_SELECTOR_TYPE) {
                                 throw commandsyntaxexception;
                             }
 
@@ -142,6 +124,36 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
 
                 return new ArgumentChat.a(s, (ArgumentChat.b[]) list.toArray(new ArgumentChat.b[list.size()]));
             }
+        }
+    }
+
+    public static class b {
+
+        private final int start;
+        private final int end;
+        private final EntitySelector selector;
+
+        public b(int i, int j, EntitySelector entityselector) {
+            this.start = i;
+            this.end = j;
+            this.selector = entityselector;
+        }
+
+        public int a() {
+            return this.start;
+        }
+
+        public int b() {
+            return this.end;
+        }
+
+        public EntitySelector c() {
+            return this.selector;
+        }
+
+        @Nullable
+        public IChatBaseComponent a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
+            return EntitySelector.a(this.selector.getEntities(commandlistenerwrapper));
         }
     }
 }

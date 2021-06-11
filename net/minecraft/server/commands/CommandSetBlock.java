@@ -22,7 +22,9 @@ import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 
 public class CommandSetBlock {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.setblock.failed"));
+    private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(new ChatMessage("commands.setblock.failed"));
+
+    public CommandSetBlock() {}
 
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("setblock").requires((commandlistenerwrapper) -> {
@@ -44,7 +46,7 @@ public class CommandSetBlock {
         WorldServer worldserver = commandlistenerwrapper.getWorld();
 
         if (predicate != null && !predicate.test(new ShapeDetectorBlock(worldserver, blockposition, true))) {
-            throw CommandSetBlock.a.create();
+            throw CommandSetBlock.ERROR_FAILED.create();
         } else {
             boolean flag;
 
@@ -59,7 +61,7 @@ public class CommandSetBlock {
             }
 
             if (flag && !argumenttilelocation.a(worldserver, blockposition, 2)) {
-                throw CommandSetBlock.a.create();
+                throw CommandSetBlock.ERROR_FAILED.create();
             } else {
                 worldserver.update(blockposition, argumenttilelocation.a().getBlock());
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.setblock.success", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ()}), true);
@@ -68,16 +70,16 @@ public class CommandSetBlock {
         }
     }
 
-    public interface Filter {
-
-        @Nullable
-        ArgumentTileLocation filter(StructureBoundingBox structureboundingbox, BlockPosition blockposition, ArgumentTileLocation argumenttilelocation, WorldServer worldserver);
-    }
-
     public static enum Mode {
 
         REPLACE, DESTROY;
 
         private Mode() {}
+    }
+
+    public interface Filter {
+
+        @Nullable
+        ArgumentTileLocation filter(StructureBoundingBox structureboundingbox, BlockPosition blockposition, ArgumentTileLocation argumenttilelocation, WorldServer worldserver);
     }
 }

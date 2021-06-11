@@ -4,20 +4,20 @@ import net.minecraft.network.chat.IChatBaseComponent;
 
 public class ResourcePackInfo {
 
-    public static final ResourcePackInfoDeserializer a = new ResourcePackInfoDeserializer();
-    private final IChatBaseComponent b;
-    private final int c;
+    public static final ResourcePackInfoDeserializer SERIALIZER = new ResourcePackInfoDeserializer();
+    private final IChatBaseComponent description;
+    private final int packFormat;
 
     public ResourcePackInfo(IChatBaseComponent ichatbasecomponent, int i) {
-        this.b = ichatbasecomponent;
-        this.c = i;
+        this.description = ichatbasecomponent;
+        this.packFormat = i;
     }
 
     public IChatBaseComponent a() {
-        return this.b;
+        return this.description;
     }
 
     public int b() {
-        return this.c;
+        return this.packFormat;
     }
 }

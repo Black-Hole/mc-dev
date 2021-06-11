@@ -6,33 +6,32 @@ import net.minecraft.sounds.SoundEffects;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsFluid;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.EntityDolphin;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3D;
 
 public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
 
-    private static final int[] a = new int[]{0, 1, 4, 5, 6, 7};
-    private final EntityDolphin b;
-    private final int c;
-    private boolean d;
+    private static final int[] STEPS_TO_CHECK = new int[]{0, 1, 4, 5, 6, 7};
+    private final EntityDolphin dolphin;
+    private final int interval;
+    private boolean breached;
 
     public PathfinderGoalWaterJump(EntityDolphin entitydolphin, int i) {
-        this.b = entitydolphin;
-        this.c = i;
+        this.dolphin = entitydolphin;
+        this.interval = i;
     }
 
     @Override
     public boolean a() {
-        if (this.b.getRandom().nextInt(this.c) != 0) {
+        if (this.dolphin.getRandom().nextInt(this.interval) != 0) {
             return false;
         } else {
-            EnumDirection enumdirection = this.b.getAdjustedDirection();
+            EnumDirection enumdirection = this.dolphin.getAdjustedDirection();
             int i = enumdirection.getAdjacentX();
             int j = enumdirection.getAdjacentZ();
-            BlockPosition blockposition = this.b.getChunkCoordinates();
-            int[] aint = PathfinderGoalWaterJump.a;
+            BlockPosition blockposition = this.dolphin.getChunkCoordinates();
+            int[] aint = PathfinderGoalWaterJump.STEPS_TO_CHECK;
             int k = aint.length;
 
             for (int l = 0; l < k; ++l) {
@@ -48,20 +47,20 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
     }
 
     private boolean a(BlockPosition blockposition, int i, int j, int k) {
-        BlockPosition blockposition1 = blockposition.b(i * k, 0, j * k);
+        BlockPosition blockposition1 = blockposition.c(i * k, 0, j * k);
 
-        return this.b.world.getFluid(blockposition1).a((Tag) TagsFluid.WATER) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
+        return this.dolphin.level.getFluid(blockposition1).a((Tag) TagsFluid.WATER) && !this.dolphin.level.getType(blockposition1).getMaterial().isSolid();
     }
 
     private boolean b(BlockPosition blockposition, int i, int j, int k) {
-        return this.b.world.getType(blockposition.b(i * k, 1, j * k)).isAir() && this.b.world.getType(blockposition.b(i * k, 2, j * k)).isAir();
+        return this.dolphin.level.getType(blockposition.c(i * k, 1, j * k)).isAir() && this.dolphin.level.getType(blockposition.c(i * k, 2, j * k)).isAir();
     }
 
     @Override
     public boolean b() {
-        double d0 = this.b.getMot().y;
+        double d0 = this.dolphin.getMot().y;
 
-        return (d0 * d0 >= 0.029999999329447746D || this.b.pitch == 0.0F || Math.abs(this.b.pitch) >= 10.0F || !this.b.isInWater()) && !this.b.isOnGround();
+        return (d0 * d0 >= 0.029999999329447746D || this.dolphin.getXRot() == 0.0F || Math.abs(this.dolphin.getXRot()) >= 10.0F || !this.dolphin.isInWater()) && !this.dolphin.isOnGround();
     }
 
     @Override
@@ -71,40 +70,40 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
 
     @Override
     public void c() {
-        EnumDirection enumdirection = this.b.getAdjustedDirection();
+        EnumDirection enumdirection = this.dolphin.getAdjustedDirection();
 
-        this.b.setMot(this.b.getMot().add((double) enumdirection.getAdjacentX() * 0.6D, 0.7D, (double) enumdirection.getAdjacentZ() * 0.6D));
-        this.b.getNavigation().o();
+        this.dolphin.setMot(this.dolphin.getMot().add((double) enumdirection.getAdjacentX() * 0.6D, 0.7D, (double) enumdirection.getAdjacentZ() * 0.6D));
+        this.dolphin.getNavigation().o();
     }
 
     @Override
     public void d() {
-        this.b.pitch = 0.0F;
+        this.dolphin.setXRot(0.0F);
     }
 
     @Override
     public void e() {
-        boolean flag = this.d;
+        boolean flag = this.breached;
 
         if (!flag) {
-            Fluid fluid = this.b.world.getFluid(this.b.getChunkCoordinates());
+            Fluid fluid = this.dolphin.level.getFluid(this.dolphin.getChunkCoordinates());
 
-            this.d = fluid.a((Tag) TagsFluid.WATER);
+            this.breached = fluid.a((Tag) TagsFluid.WATER);
         }
 
-        if (this.d && !flag) {
-            this.b.playSound(SoundEffects.ENTITY_DOLPHIN_JUMP, 1.0F, 1.0F);
+        if (this.breached && !flag) {
+            this.dolphin.playSound(SoundEffects.DOLPHIN_JUMP, 1.0F, 1.0F);
         }
 
-        Vec3D vec3d = this.b.getMot();
+        Vec3D vec3d = this.dolphin.getMot();
 
-        if (vec3d.y * vec3d.y < 0.029999999329447746D && this.b.pitch != 0.0F) {
-            this.b.pitch = MathHelper.j(this.b.pitch, 0.0F, 0.2F);
-        } else {
-            double d0 = Math.sqrt(Entity.c(vec3d));
-            double d1 = Math.signum(-vec3d.y) * Math.acos(d0 / vec3d.f()) * 57.2957763671875D;
+        if (vec3d.y * vec3d.y < 0.029999999329447746D && this.dolphin.getXRot() != 0.0F) {
+            this.dolphin.setXRot(MathHelper.k(this.dolphin.getXRot(), 0.0F, 0.2F));
+        } else if (vec3d.f() > 9.999999747378752E-6D) {
+            double d0 = vec3d.h();
+            double d1 = Math.atan2(-vec3d.y, d0) * 57.2957763671875D;
 
-            this.b.pitch = (float) d1;
+            this.dolphin.setXRot((float) d1);
         }
 
     }

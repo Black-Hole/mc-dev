@@ -5,14 +5,12 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class NBTTagIntArray extends NBTList<NBTTagInt> {
 
-    public static final NBTTagType<NBTTagIntArray> a = new NBTTagType<NBTTagIntArray>() {
+    private static final int SELF_SIZE_IN_BITS = 192;
+    public static final NBTTagType<NBTTagIntArray> TYPE = new NBTTagType<NBTTagIntArray>() {
         @Override
         public NBTTagIntArray b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(192L);
@@ -81,22 +79,12 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
 
     @Override
     public NBTTagType<NBTTagIntArray> b() {
-        return NBTTagIntArray.a;
+        return NBTTagIntArray.TYPE;
     }
 
     @Override
     public String toString() {
-        StringBuilder stringbuilder = new StringBuilder("[I;");
-
-        for (int i = 0; i < this.data.length; ++i) {
-            if (i != 0) {
-                stringbuilder.append(',');
-            }
-
-            stringbuilder.append(this.data[i]);
-        }
-
-        return stringbuilder.append(']').toString();
+        return this.asString();
     }
 
     @Override
@@ -120,19 +108,8 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
     }
 
     @Override
-    public IChatBaseComponent a(String s, int i) {
-        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("I")).a(NBTTagIntArray.g);
-        IChatMutableComponent ichatmutablecomponent1 = (new ChatComponentText("[")).addSibling(ichatmutablecomponent).c(";");
-
-        for (int j = 0; j < this.data.length; ++j) {
-            ichatmutablecomponent1.c(" ").addSibling((new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagIntArray.f));
-            if (j != this.data.length - 1) {
-                ichatmutablecomponent1.c(",");
-            }
-        }
-
-        ichatmutablecomponent1.c("]");
-        return ichatmutablecomponent1;
+    public void a(TagVisitor tagvisitor) {
+        tagvisitor.a(this);
     }
 
     public int size() {
@@ -183,7 +160,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
     }
 
     @Override
-    public byte d_() {
+    public byte e() {
         return 3;
     }
 

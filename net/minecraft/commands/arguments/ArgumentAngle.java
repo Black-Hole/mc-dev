@@ -14,8 +14,9 @@ import net.minecraft.util.MathHelper;
 
 public class ArgumentAngle implements ArgumentType<ArgumentAngle.a> {
 
-    private static final Collection<String> b = Arrays.asList("0", "~", "~-5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.angle.incomplete"));
+    private static final Collection<String> EXAMPLES = Arrays.asList("0", "~", "~-5");
+    public static final SimpleCommandExceptionType ERROR_NOT_COMPLETE = new SimpleCommandExceptionType(new ChatMessage("argument.angle.incomplete"));
+    public static final SimpleCommandExceptionType ERROR_INVALID_ANGLE = new SimpleCommandExceptionType(new ChatMessage("argument.angle.invalid"));
 
     public ArgumentAngle() {}
 
@@ -29,31 +30,35 @@ public class ArgumentAngle implements ArgumentType<ArgumentAngle.a> {
 
     public ArgumentAngle.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (!stringreader.canRead()) {
-            throw ArgumentAngle.a.createWithContext(stringreader);
+            throw ArgumentAngle.ERROR_NOT_COMPLETE.createWithContext(stringreader);
         } else {
             boolean flag = ArgumentParserPosition.b(stringreader);
             float f = stringreader.canRead() && stringreader.peek() != ' ' ? stringreader.readFloat() : 0.0F;
 
-            return new ArgumentAngle.a(f, flag);
+            if (!Float.isNaN(f) && !Float.isInfinite(f)) {
+                return new ArgumentAngle.a(f, flag);
+            } else {
+                throw ArgumentAngle.ERROR_INVALID_ANGLE.createWithContext(stringreader);
+            }
         }
     }
 
     public Collection<String> getExamples() {
-        return ArgumentAngle.b;
+        return ArgumentAngle.EXAMPLES;
     }
 
     public static final class a {
 
-        private final float a;
-        private final boolean b;
+        private final float angle;
+        private final boolean isRelative;
 
-        private a(float f, boolean flag) {
-            this.a = f;
-            this.b = flag;
+        a(float f, boolean flag) {
+            this.angle = f;
+            this.isRelative = flag;
         }
 
         public float a(CommandListenerWrapper commandlistenerwrapper) {
-            return MathHelper.g(this.b ? this.a + commandlistenerwrapper.i().j : this.a);
+            return MathHelper.g(this.isRelative ? this.angle + commandlistenerwrapper.i().y : this.angle);
         }
     }
 }

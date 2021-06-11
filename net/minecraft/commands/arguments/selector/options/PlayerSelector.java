@@ -52,32 +52,34 @@ import net.minecraft.world.scores.ScoreboardTeamBase;
 
 public class PlayerSelector {
 
-    private static final Map<String, PlayerSelector.b> i = Maps.newHashMap();
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Map<String, PlayerSelector.b> OPTIONS = Maps.newHashMap();
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_OPTION = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.unknown", new Object[]{object});
     });
-    public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    public static final DynamicCommandExceptionType ERROR_INAPPLICABLE_OPTION = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.inapplicable", new Object[]{object});
     });
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative"));
-    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative"));
-    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall"));
-    public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
+    public static final SimpleCommandExceptionType ERROR_RANGE_NEGATIVE = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative"));
+    public static final SimpleCommandExceptionType ERROR_LEVEL_NEGATIVE = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative"));
+    public static final SimpleCommandExceptionType ERROR_LIMIT_TOO_SMALL = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall"));
+    public static final DynamicCommandExceptionType ERROR_SORT_UNKNOWN = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.sort.irreversible", new Object[]{object});
     });
-    public static final DynamicCommandExceptionType g = new DynamicCommandExceptionType((object) -> {
+    public static final DynamicCommandExceptionType ERROR_GAME_MODE_INVALID = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.mode.invalid", new Object[]{object});
     });
-    public static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
+    public static final DynamicCommandExceptionType ERROR_ENTITY_TYPE_INVALID = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.type.invalid", new Object[]{object});
     });
 
+    public PlayerSelector() {}
+
     private static void a(String s, PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
-        PlayerSelector.i.put(s, new PlayerSelector.b(playerselector_a, predicate, ichatbasecomponent));
+        PlayerSelector.OPTIONS.put(s, new PlayerSelector.b(playerselector_a, predicate, ichatbasecomponent));
     }
 
     public static void a() {
-        if (PlayerSelector.i.isEmpty()) {
+        if (PlayerSelector.OPTIONS.isEmpty()) {
             a("name", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
                 boolean flag = argumentparserselector.e();
@@ -85,7 +87,7 @@ public class PlayerSelector {
 
                 if (argumentparserselector.w() && !flag) {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "name");
+                    throw PlayerSelector.ERROR_INAPPLICABLE_OPTION.createWithContext(argumentparserselector.g(), "name");
                 } else {
                     if (flag) {
                         argumentparserselector.c(true);
@@ -102,14 +104,14 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.name.description"));
             a("distance", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
-                CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(argumentparserselector.g());
+                CriterionConditionValue.DoubleRange criterionconditionvalue_doublerange = CriterionConditionValue.DoubleRange.a(argumentparserselector.g());
 
-                if ((criterionconditionvalue_floatrange.a() == null || (Float) criterionconditionvalue_floatrange.a() >= 0.0F) && (criterionconditionvalue_floatrange.b() == null || (Float) criterionconditionvalue_floatrange.b() >= 0.0F)) {
-                    argumentparserselector.a(criterionconditionvalue_floatrange);
+                if ((criterionconditionvalue_doublerange.a() == null || (Double) criterionconditionvalue_doublerange.a() >= 0.0D) && (criterionconditionvalue_doublerange.b() == null || (Double) criterionconditionvalue_doublerange.b() >= 0.0D)) {
+                    argumentparserselector.a(criterionconditionvalue_doublerange);
                     argumentparserselector.h();
                 } else {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.c.createWithContext(argumentparserselector.g());
+                    throw PlayerSelector.ERROR_RANGE_NEGATIVE.createWithContext(argumentparserselector.g());
                 }
             }, (argumentparserselector) -> {
                 return argumentparserselector.i().c();
@@ -123,7 +125,7 @@ public class PlayerSelector {
                     argumentparserselector.a(false);
                 } else {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.d.createWithContext(argumentparserselector.g());
+                    throw PlayerSelector.ERROR_LEVEL_NEGATIVE.createWithContext(argumentparserselector.g());
                 }
             }, (argumentparserselector) -> {
                 return argumentparserselector.j().c();
@@ -167,12 +169,12 @@ public class PlayerSelector {
             a("x_rotation", (argumentparserselector) -> {
                 argumentparserselector.a(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
             }, (argumentparserselector) -> {
-                return argumentparserselector.k() == CriterionConditionRange.a;
+                return argumentparserselector.k() == CriterionConditionRange.ANY;
             }, new ChatMessage("argument.entity.options.x_rotation.description"));
             a("y_rotation", (argumentparserselector) -> {
                 argumentparserselector.b(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
             }, (argumentparserselector) -> {
-                return argumentparserselector.l() == CriterionConditionRange.a;
+                return argumentparserselector.l() == CriterionConditionRange.ANY;
             }, new ChatMessage("argument.entity.options.y_rotation.description"));
             a("limit", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
@@ -180,7 +182,7 @@ public class PlayerSelector {
 
                 if (j < 1) {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.e.createWithContext(argumentparserselector.g());
+                    throw PlayerSelector.ERROR_LIMIT_TOO_SMALL.createWithContext(argumentparserselector.g());
                 } else {
                     argumentparserselector.a(j);
                     argumentparserselector.d(true);
@@ -223,20 +225,20 @@ public class PlayerSelector {
 
                 switch (b0) {
                     case 0:
-                        biconsumer = ArgumentParserSelector.h;
+                        biconsumer = ArgumentParserSelector.ORDER_NEAREST;
                         break;
                     case 1:
-                        biconsumer = ArgumentParserSelector.i;
+                        biconsumer = ArgumentParserSelector.ORDER_FURTHEST;
                         break;
                     case 2:
-                        biconsumer = ArgumentParserSelector.j;
+                        biconsumer = ArgumentParserSelector.ORDER_RANDOM;
                         break;
                     case 3:
-                        biconsumer = ArgumentParserSelector.g;
+                        biconsumer = ArgumentParserSelector.ORDER_ARBITRARY;
                         break;
                     default:
                         argumentparserselector.g().setCursor(i);
-                        throw PlayerSelector.f.createWithContext(argumentparserselector.g(), s);
+                        throw PlayerSelector.ERROR_SORT_UNKNOWN.createWithContext(argumentparserselector.g(), s);
                 }
 
                 argumentparserselector.a(biconsumer);
@@ -265,9 +267,9 @@ public class PlayerSelector {
                     for (int j = 0; j < i; ++j) {
                         EnumGamemode enumgamemode = aenumgamemode[j];
 
-                        if (enumgamemode != EnumGamemode.NOT_SET && enumgamemode.b().toLowerCase(Locale.ROOT).startsWith(s)) {
+                        if (enumgamemode.b().toLowerCase(Locale.ROOT).startsWith(s)) {
                             if (flag1) {
-                                suggestionsbuilder.suggest('!' + enumgamemode.b());
+                                suggestionsbuilder.suggest("!" + enumgamemode.b());
                             }
 
                             if (flag) {
@@ -283,21 +285,21 @@ public class PlayerSelector {
 
                 if (argumentparserselector.A() && !flag) {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "gamemode");
+                    throw PlayerSelector.ERROR_INAPPLICABLE_OPTION.createWithContext(argumentparserselector.g(), "gamemode");
                 } else {
                     String s = argumentparserselector.g().readUnquotedString();
-                    EnumGamemode enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
+                    EnumGamemode enumgamemode = EnumGamemode.a(s, (EnumGamemode) null);
 
-                    if (enumgamemode == EnumGamemode.NOT_SET) {
+                    if (enumgamemode == null) {
                         argumentparserselector.g().setCursor(i);
-                        throw PlayerSelector.g.createWithContext(argumentparserselector.g(), s);
+                        throw PlayerSelector.ERROR_GAME_MODE_INVALID.createWithContext(argumentparserselector.g(), s);
                     } else {
                         argumentparserselector.a(false);
                         argumentparserselector.a((entity) -> {
                             if (!(entity instanceof EntityPlayer)) {
                                 return false;
                             } else {
-                                EnumGamemode enumgamemode1 = ((EntityPlayer) entity).playerInteractManager.getGameMode();
+                                EnumGamemode enumgamemode1 = ((EntityPlayer) entity).gameMode.getGameMode();
 
                                 return flag ? enumgamemode1 != enumgamemode : enumgamemode1 == enumgamemode;
                             }
@@ -352,7 +354,7 @@ public class PlayerSelector {
 
                 if (argumentparserselector.F() && !flag) {
                     argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "type");
+                    throw PlayerSelector.ERROR_INAPPLICABLE_OPTION.createWithContext(argumentparserselector.g(), "type");
                 } else {
                     if (flag) {
                         argumentparserselector.D();
@@ -363,13 +365,13 @@ public class PlayerSelector {
                     if (argumentparserselector.f()) {
                         minecraftkey = MinecraftKey.a(argumentparserselector.g());
                         argumentparserselector.a((entity) -> {
-                            return entity.getMinecraftServer().getTagRegistry().getEntityTags().b(minecraftkey).isTagged(entity.getEntityType()) != flag;
+                            return entity.getEntityType().a(entity.getMinecraftServer().getTagRegistry().a(IRegistry.ENTITY_TYPE_REGISTRY).b(minecraftkey)) != flag;
                         });
                     } else {
                         minecraftkey = MinecraftKey.a(argumentparserselector.g());
                         EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
                             argumentparserselector.g().setCursor(i);
-                            return PlayerSelector.h.createWithContext(argumentparserselector.g(), minecraftkey.toString());
+                            return PlayerSelector.ERROR_ENTITY_TYPE_INVALID.createWithContext(argumentparserselector.g(), minecraftkey.toString());
                         });
 
                         if (Objects.equals(EntityTypes.PLAYER, entitytypes) && !flag) {
@@ -406,7 +408,7 @@ public class PlayerSelector {
                     NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
 
                     if (entity instanceof EntityPlayer) {
-                        ItemStack itemstack = ((EntityPlayer) entity).inventory.getItemInHand();
+                        ItemStack itemstack = ((EntityPlayer) entity).getInventory().getItemInHand();
 
                         if (!itemstack.isEmpty()) {
                             nbttagcompound1.set("SelectedItem", itemstack.save(new NBTTagCompound()));
@@ -591,10 +593,10 @@ public class PlayerSelector {
                 MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.g());
 
                 argumentparserselector.a((entity) -> {
-                    if (!(entity.world instanceof WorldServer)) {
+                    if (!(entity.level instanceof WorldServer)) {
                         return false;
                     } else {
-                        WorldServer worldserver = (WorldServer) entity.world;
+                        WorldServer worldserver = (WorldServer) entity.level;
                         LootItemCondition lootitemcondition = worldserver.getMinecraftServer().getLootPredicateManager().a(minecraftkey);
 
                         if (lootitemcondition == null) {
@@ -613,44 +615,44 @@ public class PlayerSelector {
     }
 
     public static PlayerSelector.a a(ArgumentParserSelector argumentparserselector, String s, int i) throws CommandSyntaxException {
-        PlayerSelector.b playerselector_b = (PlayerSelector.b) PlayerSelector.i.get(s);
+        PlayerSelector.b playerselector_b = (PlayerSelector.b) PlayerSelector.OPTIONS.get(s);
 
         if (playerselector_b != null) {
-            if (playerselector_b.b.test(argumentparserselector)) {
-                return playerselector_b.a;
+            if (playerselector_b.predicate.test(argumentparserselector)) {
+                return playerselector_b.modifier;
             } else {
-                throw PlayerSelector.b.createWithContext(argumentparserselector.g(), s);
+                throw PlayerSelector.ERROR_INAPPLICABLE_OPTION.createWithContext(argumentparserselector.g(), s);
             }
         } else {
             argumentparserselector.g().setCursor(i);
-            throw PlayerSelector.a.createWithContext(argumentparserselector.g(), s);
+            throw PlayerSelector.ERROR_UNKNOWN_OPTION.createWithContext(argumentparserselector.g(), s);
         }
     }
 
     public static void a(ArgumentParserSelector argumentparserselector, SuggestionsBuilder suggestionsbuilder) {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
-        Iterator iterator = PlayerSelector.i.entrySet().iterator();
+        Iterator iterator = PlayerSelector.OPTIONS.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry<String, PlayerSelector.b> entry = (Entry) iterator.next();
 
-            if (((PlayerSelector.b) entry.getValue()).b.test(argumentparserselector) && ((String) entry.getKey()).toLowerCase(Locale.ROOT).startsWith(s)) {
-                suggestionsbuilder.suggest((String) entry.getKey() + '=', ((PlayerSelector.b) entry.getValue()).c);
+            if (((PlayerSelector.b) entry.getValue()).predicate.test(argumentparserselector) && ((String) entry.getKey()).toLowerCase(Locale.ROOT).startsWith(s)) {
+                suggestionsbuilder.suggest((String) entry.getKey() + "=", ((PlayerSelector.b) entry.getValue()).description);
             }
         }
 
     }
 
-    static class b {
+    private static class b {
 
-        public final PlayerSelector.a a;
-        public final Predicate<ArgumentParserSelector> b;
-        public final IChatBaseComponent c;
+        public final PlayerSelector.a modifier;
+        public final Predicate<ArgumentParserSelector> predicate;
+        public final IChatBaseComponent description;
 
-        private b(PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
-            this.a = playerselector_a;
-            this.b = predicate;
-            this.c = ichatbasecomponent;
+        b(PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
+            this.modifier = playerselector_a;
+            this.predicate = predicate;
+            this.description = ichatbasecomponent;
         }
     }
 

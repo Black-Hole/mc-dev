@@ -12,18 +12,17 @@ import org.apache.logging.log4j.Logger;
 public class EULA {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Path b;
-    private final boolean c;
+    private final Path file;
+    private final boolean agreed;
 
     public EULA(Path path) {
-        this.b = path;
-        this.c = SharedConstants.d || this.b();
+        this.file = path;
+        this.agreed = SharedConstants.IS_RUNNING_IN_IDE || this.b();
     }
 
     private boolean b() {
         try {
-            InputStream inputstream = Files.newInputStream(this.b);
-            Throwable throwable = null;
+            InputStream inputstream = Files.newInputStream(this.file);
 
             boolean flag;
 
@@ -32,66 +31,61 @@ public class EULA {
 
                 properties.load(inputstream);
                 flag = Boolean.parseBoolean(properties.getProperty("eula", "false"));
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
+            } catch (Throwable throwable) {
                 if (inputstream != null) {
-                    if (throwable != null) {
-                        try {
-                            inputstream.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
+                    try {
                         inputstream.close();
+                    } catch (Throwable throwable1) {
+                        throwable.addSuppressed(throwable1);
                     }
                 }
 
+                throw throwable;
+            }
+
+            if (inputstream != null) {
+                inputstream.close();
             }
 
             return flag;
         } catch (Exception exception) {
-            EULA.LOGGER.warn("Failed to load {}", this.b);
+            EULA.LOGGER.warn("Failed to load {}", this.file);
             this.c();
             return false;
         }
     }
 
     public boolean a() {
-        return this.c;
+        return this.agreed;
     }
 
     private void c() {
-        if (!SharedConstants.d) {
+        if (!SharedConstants.IS_RUNNING_IN_IDE) {
             try {
-                OutputStream outputstream = Files.newOutputStream(this.b);
-                Throwable throwable = null;
+                OutputStream outputstream = Files.newOutputStream(this.file);
 
                 try {
                     Properties properties = new Properties();
 
                     properties.setProperty("eula", "false");
                     properties.store(outputstream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
-                } catch (Throwable throwable1) {
-                    throwable = throwable1;
-                    throw throwable1;
-                } finally {
+                } catch (Throwable throwable) {
                     if (outputstream != null) {
-                        if (throwable != null) {
-                            try {
-                                outputstream.close();
-                            } catch (Throwable throwable2) {
-                                throwable.addSuppressed(throwable2);
-                            }
-                        } else {
+                        try {
                             outputstream.close();
+                        } catch (Throwable throwable1) {
+                            throwable.addSuppressed(throwable1);
                         }
                     }
 
+                    throw throwable;
+                }
+
+                if (outputstream != null) {
+                    outputstream.close();
                 }
             } catch (Exception exception) {
-                EULA.LOGGER.warn("Failed to save {}", this.b, exception);
+                EULA.LOGGER.warn("Failed to save {}", this.file, exception);
             }
 
         }

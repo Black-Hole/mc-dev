@@ -4,16 +4,16 @@ import net.minecraft.core.ISourceBlock;
 
 public abstract class DispenseBehaviorMaybe extends DispenseBehaviorItem {
 
-    private boolean dispensed = true;
+    private boolean success = true;
 
     public DispenseBehaviorMaybe() {}
 
     public boolean a() {
-        return this.dispensed;
+        return this.success;
     }
 
     public void a(boolean flag) {
-        this.dispensed = flag;
+        this.success = flag;
     }
 
     @Override

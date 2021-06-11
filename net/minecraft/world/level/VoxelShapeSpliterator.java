@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.CursorPosition;
+import net.minecraft.core.SectionPosition;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
@@ -21,15 +22,15 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
 
     @Nullable
-    private final Entity a;
-    private final AxisAlignedBB b;
-    private final VoxelShapeCollision c;
-    private final CursorPosition d;
-    private final BlockPosition.MutableBlockPosition e;
-    private final VoxelShape f;
-    private final ICollisionAccess g;
-    private boolean h;
-    private final BiPredicate<IBlockData, BlockPosition> i;
+    private final Entity source;
+    private final AxisAlignedBB box;
+    private final VoxelShapeCollision context;
+    private final CursorPosition cursor;
+    private final BlockPosition.MutableBlockPosition pos;
+    private final VoxelShape entityShape;
+    private final ICollisionAccess collisionGetter;
+    private boolean needsBorderCheck;
+    private final BiPredicate<IBlockData, BlockPosition> predicate;
 
     public VoxelShapeSpliterator(ICollisionAccess icollisionaccess, @Nullable Entity entity, AxisAlignedBB axisalignedbb) {
         this(icollisionaccess, entity, axisalignedbb, (iblockdata, blockposition) -> {
@@ -39,14 +40,14 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
 
     public VoxelShapeSpliterator(ICollisionAccess icollisionaccess, @Nullable Entity entity, AxisAlignedBB axisalignedbb, BiPredicate<IBlockData, BlockPosition> bipredicate) {
         super(Long.MAX_VALUE, 1280);
-        this.c = entity == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a(entity);
-        this.e = new BlockPosition.MutableBlockPosition();
-        this.f = VoxelShapes.a(axisalignedbb);
-        this.g = icollisionaccess;
-        this.h = entity != null;
-        this.a = entity;
-        this.b = axisalignedbb;
-        this.i = bipredicate;
+        this.context = entity == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a(entity);
+        this.pos = new BlockPosition.MutableBlockPosition();
+        this.entityShape = VoxelShapes.a(axisalignedbb);
+        this.collisionGetter = icollisionaccess;
+        this.needsBorderCheck = entity != null;
+        this.source = entity;
+        this.box = axisalignedbb;
+        this.predicate = bipredicate;
         int i = MathHelper.floor(axisalignedbb.minX - 1.0E-7D) - 1;
         int j = MathHelper.floor(axisalignedbb.maxX + 1.0E-7D) + 1;
         int k = MathHelper.floor(axisalignedbb.minY - 1.0E-7D) - 1;
@@ -54,20 +55,20 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
         int i1 = MathHelper.floor(axisalignedbb.minZ - 1.0E-7D) - 1;
         int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0E-7D) + 1;
 
-        this.d = new CursorPosition(i, k, i1, j, l, j1);
+        this.cursor = new CursorPosition(i, k, i1, j, l, j1);
     }
 
     public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {
-        return this.h && this.b(consumer) || this.a(consumer);
+        return this.needsBorderCheck && this.b(consumer) || this.a(consumer);
     }
 
     boolean a(Consumer<? super VoxelShape> consumer) {
         while (true) {
-            if (this.d.a()) {
-                int i = this.d.b();
-                int j = this.d.c();
-                int k = this.d.d();
-                int l = this.d.e();
+            if (this.cursor.a()) {
+                int i = this.cursor.b();
+                int j = this.cursor.c();
+                int k = this.cursor.d();
+                int l = this.cursor.e();
 
                 if (l == 3) {
                     continue;
@@ -79,17 +80,17 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
                     continue;
                 }
 
-                this.e.d(i, j, k);
-                IBlockData iblockdata = iblockaccess.getType(this.e);
+                this.pos.d(i, j, k);
+                IBlockData iblockdata = iblockaccess.getType(this.pos);
 
-                if (!this.i.test(iblockdata, this.e) || l == 1 && !iblockdata.d() || l == 2 && !iblockdata.a(Blocks.MOVING_PISTON)) {
+                if (!this.predicate.test(iblockdata, this.pos) || l == 1 && !iblockdata.d() || l == 2 && !iblockdata.a(Blocks.MOVING_PISTON)) {
                     continue;
                 }
 
-                VoxelShape voxelshape = iblockdata.b((IBlockAccess) this.g, this.e, this.c);
+                VoxelShape voxelshape = iblockdata.b((IBlockAccess) this.collisionGetter, this.pos, this.context);
 
                 if (voxelshape == VoxelShapes.b()) {
-                    if (!this.b.a((double) i, (double) j, (double) k, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D)) {
+                    if (!this.box.a((double) i, (double) j, (double) k, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D)) {
                         continue;
                     }
 
@@ -99,7 +100,7 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
 
                 VoxelShape voxelshape1 = voxelshape.a((double) i, (double) j, (double) k);
 
-                if (!VoxelShapes.c(voxelshape1, this.f, OperatorBoolean.AND)) {
+                if (!VoxelShapes.c(voxelshape1, this.entityShape, OperatorBoolean.AND)) {
                     continue;
                 }
 
@@ -113,17 +114,17 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
 
     @Nullable
     private IBlockAccess a(int i, int j) {
-        int k = i >> 4;
-        int l = j >> 4;
+        int k = SectionPosition.a(i);
+        int l = SectionPosition.a(j);
 
-        return this.g.c(k, l);
+        return this.collisionGetter.c(k, l);
     }
 
     boolean b(Consumer<? super VoxelShape> consumer) {
-        Objects.requireNonNull(this.a);
-        this.h = false;
-        WorldBorder worldborder = this.g.getWorldBorder();
-        AxisAlignedBB axisalignedbb = this.a.getBoundingBox();
+        Objects.requireNonNull(this.source);
+        this.needsBorderCheck = false;
+        WorldBorder worldborder = this.collisionGetter.getWorldBorder();
+        AxisAlignedBB axisalignedbb = this.source.getBoundingBox();
 
         if (!a(worldborder, axisalignedbb)) {
             VoxelShape voxelshape = worldborder.c();
@@ -148,8 +149,8 @@ public class VoxelShapeSpliterator extends AbstractSpliterator<VoxelShape> {
     public static boolean a(WorldBorder worldborder, AxisAlignedBB axisalignedbb) {
         double d0 = (double) MathHelper.floor(worldborder.e());
         double d1 = (double) MathHelper.floor(worldborder.f());
-        double d2 = (double) MathHelper.f(worldborder.g());
-        double d3 = (double) MathHelper.f(worldborder.h());
+        double d2 = (double) MathHelper.e(worldborder.g());
+        double d3 = (double) MathHelper.e(worldborder.h());
 
         return axisalignedbb.minX > d0 && axisalignedbb.minX < d2 && axisalignedbb.minZ > d1 && axisalignedbb.minZ < d3 && axisalignedbb.maxX > d0 && axisalignedbb.maxX < d2 && axisalignedbb.maxZ > d1 && axisalignedbb.maxZ < d3;
     }

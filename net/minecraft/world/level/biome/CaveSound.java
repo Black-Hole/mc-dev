@@ -6,18 +6,26 @@ import net.minecraft.sounds.SoundEffect;
 
 public class CaveSound {
 
-    public static final Codec<CaveSound> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(SoundEffect.a.fieldOf("sound").forGetter((cavesound) -> {
-            return cavesound.b;
+    public static final Codec<CaveSound> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(SoundEffect.CODEC.fieldOf("sound").forGetter((cavesound) -> {
+            return cavesound.soundEvent;
         }), Codec.DOUBLE.fieldOf("tick_chance").forGetter((cavesound) -> {
-            return cavesound.c;
+            return cavesound.tickChance;
         })).apply(instance, CaveSound::new);
     });
-    private SoundEffect b;
-    private double c;
+    private final SoundEffect soundEvent;
+    private final double tickChance;
 
     public CaveSound(SoundEffect soundeffect, double d0) {
-        this.b = soundeffect;
-        this.c = d0;
+        this.soundEvent = soundeffect;
+        this.tickChance = d0;
+    }
+
+    public SoundEffect a() {
+        return this.soundEvent;
+    }
+
+    public double b() {
+        return this.tickChance;
     }
 }

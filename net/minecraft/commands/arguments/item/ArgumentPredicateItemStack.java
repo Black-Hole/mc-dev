@@ -13,45 +13,45 @@ import net.minecraft.world.item.ItemStack;
 
 public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
 
-    private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
+    private static final Dynamic2CommandExceptionType ERROR_STACK_TOO_BIG = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("arguments.item.overstacked", new Object[]{object, object1});
     });
-    private final Item b;
+    private final Item item;
     @Nullable
-    private final NBTTagCompound c;
+    private final NBTTagCompound tag;
 
     public ArgumentPredicateItemStack(Item item, @Nullable NBTTagCompound nbttagcompound) {
-        this.b = item;
-        this.c = nbttagcompound;
+        this.item = item;
+        this.tag = nbttagcompound;
     }
 
     public Item a() {
-        return this.b;
+        return this.item;
     }
 
     public boolean test(ItemStack itemstack) {
-        return itemstack.getItem() == this.b && GameProfileSerializer.a(this.c, itemstack.getTag(), true);
+        return itemstack.a(this.item) && GameProfileSerializer.a(this.tag, itemstack.getTag(), true);
     }
 
     public ItemStack a(int i, boolean flag) throws CommandSyntaxException {
-        ItemStack itemstack = new ItemStack(this.b, i);
+        ItemStack itemstack = new ItemStack(this.item, i);
 
-        if (this.c != null) {
-            itemstack.setTag(this.c);
+        if (this.tag != null) {
+            itemstack.setTag(this.tag);
         }
 
         if (flag && i > itemstack.getMaxStackSize()) {
-            throw ArgumentPredicateItemStack.a.create(IRegistry.ITEM.getKey(this.b), itemstack.getMaxStackSize());
+            throw ArgumentPredicateItemStack.ERROR_STACK_TOO_BIG.create(IRegistry.ITEM.getKey(this.item), itemstack.getMaxStackSize());
         } else {
             return itemstack;
         }
     }
 
-    public String c() {
-        StringBuilder stringbuilder = new StringBuilder(IRegistry.ITEM.a((Object) this.b));
+    public String b() {
+        StringBuilder stringbuilder = new StringBuilder(IRegistry.ITEM.getId(this.item));
 
-        if (this.c != null) {
-            stringbuilder.append(this.c);
+        if (this.tag != null) {
+            stringbuilder.append(this.tag);
         }
 
         return stringbuilder.toString();

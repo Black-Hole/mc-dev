@@ -37,6 +37,9 @@ import org.apache.logging.log4j.Logger;
 public class WorldUpgraderIterator {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String MCREGION_EXTENSION = ".mcr";
+
+    public WorldUpgraderIterator() {}
 
     static boolean a(Convertable.ConversionSession convertable_conversionsession, IProgressUpdate iprogressupdate) {
         iprogressupdate.a(0);
@@ -44,8 +47,8 @@ public class WorldUpgraderIterator {
         List<File> list1 = Lists.newArrayList();
         List<File> list2 = Lists.newArrayList();
         File file = convertable_conversionsession.a(World.OVERWORLD);
-        File file1 = convertable_conversionsession.a(World.THE_NETHER);
-        File file2 = convertable_conversionsession.a(World.THE_END);
+        File file1 = convertable_conversionsession.a(World.NETHER);
+        File file2 = convertable_conversionsession.a(World.END);
 
         WorldUpgraderIterator.LOGGER.info("Scanning folders...");
         a(file, (Collection) list);
@@ -60,11 +63,11 @@ public class WorldUpgraderIterator {
         int i = list.size() + list1.size() + list2.size();
 
         WorldUpgraderIterator.LOGGER.info("Total conversion count is {}", i);
-        IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
-        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, (IResourceManager) IResourceManager.Empty.INSTANCE, iregistrycustom_dimension);
-        SaveData savedata = convertable_conversionsession.a((DynamicOps) registryreadops, DataPackConfiguration.a);
+        IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.a();
+        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.INSTANCE, (IResourceManager) IResourceManager.Empty.INSTANCE, (IRegistryCustom) iregistrycustom_dimension);
+        SaveData savedata = convertable_conversionsession.a((DynamicOps) registryreadops, DataPackConfiguration.DEFAULT);
         long j = savedata != null ? savedata.getGeneratorSettings().getSeed() : 0L;
-        IRegistry<BiomeBase> iregistry = iregistrycustom_dimension.b(IRegistry.ay);
+        IRegistry<BiomeBase> iregistry = iregistrycustom_dimension.d(IRegistry.BIOME_REGISTRY);
         Object object;
 
         if (savedata != null && savedata.getGeneratorSettings().isFlatWorld()) {
@@ -82,7 +85,7 @@ public class WorldUpgraderIterator {
     }
 
     private static void a(Convertable.ConversionSession convertable_conversionsession) {
-        File file = convertable_conversionsession.getWorldFolder(SavedFile.LEVEL_DAT).toFile();
+        File file = convertable_conversionsession.getWorldFolder(SavedFile.LEVEL_DATA_FILE).toFile();
 
         if (!file.exists()) {
             WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
@@ -116,11 +119,10 @@ public class WorldUpgraderIterator {
 
         try {
             RegionFile regionfile = new RegionFile(file1, file, true);
-            Throwable throwable = null;
 
             try {
-                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"), file, true);
-                Throwable throwable1 = null;
+                String s1 = s.substring(0, s.length() - ".mcr".length());
+                RegionFile regionfile1 = new RegionFile(new File(file, s1 + ".mca"), file, true);
 
                 try {
                     for (int k = 0; k < 32; ++k) {
@@ -134,31 +136,36 @@ public class WorldUpgraderIterator {
 
                                 try {
                                     DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
-                                    Throwable throwable2 = null;
 
-                                    try {
-                                        if (datainputstream == null) {
+                                    label108:
+                                    {
+                                        try {
+                                            if (datainputstream != null) {
+                                                nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
+                                                break label108;
+                                            }
+
                                             WorldUpgraderIterator.LOGGER.warn("Failed to fetch input stream for chunk {}", chunkcoordintpair);
-                                            continue;
-                                        }
-
-                                        nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
-                                    } catch (Throwable throwable3) {
-                                        throwable2 = throwable3;
-                                        throw throwable3;
-                                    } finally {
-                                        if (datainputstream != null) {
-                                            if (throwable2 != null) {
+                                        } catch (Throwable throwable) {
+                                            if (datainputstream != null) {
                                                 try {
                                                     datainputstream.close();
-                                                } catch (Throwable throwable4) {
-                                                    throwable2.addSuppressed(throwable4);
+                                                } catch (Throwable throwable1) {
+                                                    throwable.addSuppressed(throwable1);
                                                 }
-                                            } else {
-                                                datainputstream.close();
                                             }
+
+                                            throw throwable;
                                         }
 
+                                        if (datainputstream != null) {
+                                            datainputstream.close();
+                                        }
+                                        continue;
+                                    }
+
+                                    if (datainputstream != null) {
+                                        datainputstream.close();
                                     }
                                 } catch (IOException ioexception) {
                                     WorldUpgraderIterator.LOGGER.warn("Failed to read data for chunk {}", chunkcoordintpair, ioexception);
@@ -173,26 +180,23 @@ public class WorldUpgraderIterator {
                                 nbttagcompound2.set("Level", nbttagcompound3);
                                 OldChunkLoader.a(iregistrycustom_dimension, oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
                                 DataOutputStream dataoutputstream = regionfile1.c(chunkcoordintpair);
-                                Throwable throwable5 = null;
 
                                 try {
                                     NBTCompressedStreamTools.a(nbttagcompound2, (DataOutput) dataoutputstream);
-                                } catch (Throwable throwable6) {
-                                    throwable5 = throwable6;
-                                    throw throwable6;
-                                } finally {
+                                } catch (Throwable throwable2) {
                                     if (dataoutputstream != null) {
-                                        if (throwable5 != null) {
-                                            try {
-                                                dataoutputstream.close();
-                                            } catch (Throwable throwable7) {
-                                                throwable5.addSuppressed(throwable7);
-                                            }
-                                        } else {
+                                        try {
                                             dataoutputstream.close();
+                                        } catch (Throwable throwable3) {
+                                            throwable2.addSuppressed(throwable3);
                                         }
                                     }
 
+                                    throw throwable2;
+                                }
+
+                                if (dataoutputstream != null) {
+                                    dataoutputstream.close();
                                 }
                             }
                         }
@@ -204,40 +208,28 @@ public class WorldUpgraderIterator {
                             iprogressupdate.a(i1);
                         }
                     }
-                } catch (Throwable throwable8) {
-                    throwable1 = throwable8;
-                    throw throwable8;
-                } finally {
-                    if (regionfile1 != null) {
-                        if (throwable1 != null) {
-                            try {
-                                regionfile1.close();
-                            } catch (Throwable throwable9) {
-                                throwable1.addSuppressed(throwable9);
-                            }
-                        } else {
-                            regionfile1.close();
-                        }
+                } catch (Throwable throwable4) {
+                    try {
+                        regionfile1.close();
+                    } catch (Throwable throwable5) {
+                        throwable4.addSuppressed(throwable5);
                     }
 
-                }
-            } catch (Throwable throwable10) {
-                throwable = throwable10;
-                throw throwable10;
-            } finally {
-                if (regionfile != null) {
-                    if (throwable != null) {
-                        try {
-                            regionfile.close();
-                        } catch (Throwable throwable11) {
-                            throwable.addSuppressed(throwable11);
-                        }
-                    } else {
-                        regionfile.close();
-                    }
+                    throw throwable4;
                 }
 
+                regionfile1.close();
+            } catch (Throwable throwable6) {
+                try {
+                    regionfile.close();
+                } catch (Throwable throwable7) {
+                    throwable6.addSuppressed(throwable7);
+                }
+
+                throw throwable6;
             }
+
+            regionfile.close();
         } catch (IOException ioexception1) {
             WorldUpgraderIterator.LOGGER.error("Failed to upgrade region file {}", file1, ioexception1);
         }

@@ -18,10 +18,12 @@ import net.minecraft.world.level.pathfinder.PathEntity;
 
 public class BehaviorMakeLove extends Behavior<EntityVillager> {
 
-    private long b;
+    private static final int INTERACT_DIST_SQR = 5;
+    private static final float SPEED_MODIFIER = 0.5F;
+    private long birthTimestamp;
 
     public BehaviorMakeLove() {
-        super(ImmutableMap.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT), 350, 350);
+        super(ImmutableMap.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT), 350, 350);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -29,7 +31,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return i <= this.b && this.a(entityvillager);
+        return i <= this.birthTimestamp && this.a(entityvillager);
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -40,17 +42,17 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
         worldserver.broadcastEntityEffect(entityvillager, (byte) 18);
         int j = 275 + entityvillager.getRandom().nextInt(50);
 
-        this.b = i + (long) j;
+        this.birthTimestamp = i + (long) j;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.BREED_TARGET).get();
 
-        if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
+        if (entityvillager.f((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a(entityvillager, entityvillager1, 0.5F);
-            if (i >= this.b) {
-                entityvillager.ff();
-                entityvillager1.ff();
+            if (i >= this.birthTimestamp) {
+                entityvillager.fO();
+                entityvillager1.fO();
                 this.a(worldserver, entityvillager, entityvillager1);
             } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);
@@ -72,7 +74,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
             if (optional1.isPresent()) {
                 this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
             } else {
-                worldserver.y().b((BlockPosition) optional.get());
+                worldserver.A().b((BlockPosition) optional.get());
                 PacketDebug.c(worldserver, (BlockPosition) optional.get());
             }
         }
@@ -93,13 +95,13 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityVillager entityvillager) {
-        return worldserver.y().a(VillagePlaceType.r.c(), (blockposition) -> {
+        return worldserver.A().a(VillagePlaceType.HOME.c(), (blockposition) -> {
             return this.a(entityvillager, blockposition);
         }, entityvillager.getChunkCoordinates(), 48);
     }
 
     private boolean a(EntityVillager entityvillager, BlockPosition blockposition) {
-        PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.r.d());
+        PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.HOME.d());
 
         return pathentity != null && pathentity.j();
     }

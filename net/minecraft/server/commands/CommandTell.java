@@ -20,6 +20,8 @@ import net.minecraft.world.entity.Entity;
 
 public class CommandTell {
 
+    public CommandTell() {}
+
     public static void a(CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = commanddispatcher.register((LiteralArgumentBuilder) net.minecraft.commands.CommandDispatcher.a("msg").then(net.minecraft.commands.CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(net.minecraft.commands.CommandDispatcher.a("message", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChat.a(commandcontext, "message"));
@@ -30,7 +32,7 @@ public class CommandTell {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent) {
-        UUID uuid = commandlistenerwrapper.getEntity() == null ? SystemUtils.b : commandlistenerwrapper.getEntity().getUniqueID();
+        UUID uuid = commandlistenerwrapper.getEntity() == null ? SystemUtils.NIL_UUID : commandlistenerwrapper.getEntity().getUniqueID();
         Entity entity = commandlistenerwrapper.getEntity();
         Consumer consumer;
 

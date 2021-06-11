@@ -9,20 +9,20 @@ import net.minecraft.world.level.block.state.IBlockData;
 
 public class WorldGenBlockPlacerDoublePlant extends WorldGenBlockPlacer {
 
-    public static final Codec<WorldGenBlockPlacerDoublePlant> b = Codec.unit(() -> {
-        return WorldGenBlockPlacerDoublePlant.c;
+    public static final Codec<WorldGenBlockPlacerDoublePlant> CODEC = Codec.unit(() -> {
+        return WorldGenBlockPlacerDoublePlant.INSTANCE;
     });
-    public static final WorldGenBlockPlacerDoublePlant c = new WorldGenBlockPlacerDoublePlant();
+    public static final WorldGenBlockPlacerDoublePlant INSTANCE = new WorldGenBlockPlacerDoublePlant();
 
     public WorldGenBlockPlacerDoublePlant() {}
 
     @Override
     protected WorldGenBlockPlacers<?> a() {
-        return WorldGenBlockPlacers.b;
+        return WorldGenBlockPlacers.DOUBLE_PLANT_PLACER;
     }
 
     @Override
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        ((BlockTallPlant) iblockdata.getBlock()).a(generatoraccess, blockposition, 2);
+        ((BlockTallPlant) iblockdata.getBlock()).a(generatoraccess, iblockdata, blockposition, 2);
     }
 }

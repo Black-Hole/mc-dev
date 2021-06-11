@@ -6,6 +6,7 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
+import java.util.Objects;
 
 public class DataConverterIglooMetadataRemoval extends DataFix {
 
@@ -35,7 +36,7 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
             });
         });
 
-        dynamic.getClass();
+        Objects.requireNonNull(dynamic);
         return (Dynamic) dataresult.map(dynamic::createList).result().orElse(dynamic);
     }
 

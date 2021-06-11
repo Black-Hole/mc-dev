@@ -8,112 +8,111 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.game.PacketPlayOutTileEntityData;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.level.World;
-import net.minecraft.world.level.block.EnumBlockMirror;
-import net.minecraft.world.level.block.EnumBlockRotation;
 import net.minecraft.world.level.block.state.IBlockData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Supplier;
 
 public abstract class TileEntity {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final TileEntityTypes<?> tileType;
+    private final TileEntityTypes<?> type;
     @Nullable
-    protected World world;
-    protected BlockPosition position;
-    protected boolean f;
-    @Nullable
-    private IBlockData c;
-    private boolean g;
+    protected World level;
+    protected final BlockPosition worldPosition;
+    protected boolean remove;
+    private IBlockData blockState;
 
-    public TileEntity(TileEntityTypes<?> tileentitytypes) {
-        this.position = BlockPosition.ZERO;
-        this.tileType = tileentitytypes;
+    public TileEntity(TileEntityTypes<?> tileentitytypes, BlockPosition blockposition, IBlockData iblockdata) {
+        this.type = tileentitytypes;
+        this.worldPosition = blockposition.immutableCopy();
+        this.blockState = iblockdata;
     }
 
     @Nullable
     public World getWorld() {
-        return this.world;
+        return this.level;
     }
 
-    public void setLocation(World world, BlockPosition blockposition) {
-        this.world = world;
-        this.position = blockposition.immutableCopy();
+    public void setWorld(World world) {
+        this.level = world;
     }
 
     public boolean hasWorld() {
-        return this.world != null;
+        return this.level != null;
     }
 
-    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
-        this.position = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
-    }
+    public void load(NBTTagCompound nbttagcompound) {}
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
-        return this.b(nbttagcompound);
+        return this.c(nbttagcompound);
     }
 
-    private NBTTagCompound b(NBTTagCompound nbttagcompound) {
+    private NBTTagCompound c(NBTTagCompound nbttagcompound) {
         MinecraftKey minecraftkey = TileEntityTypes.a(this.getTileType());
 
         if (minecraftkey == null) {
             throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
         } else {
             nbttagcompound.setString("id", minecraftkey.toString());
-            nbttagcompound.setInt("x", this.position.getX());
-            nbttagcompound.setInt("y", this.position.getY());
-            nbttagcompound.setInt("z", this.position.getZ());
+            nbttagcompound.setInt("x", this.worldPosition.getX());
+            nbttagcompound.setInt("y", this.worldPosition.getY());
+            nbttagcompound.setInt("z", this.worldPosition.getZ());
             return nbttagcompound;
         }
     }
 
     @Nullable
-    public static TileEntity create(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+    public static TileEntity create(BlockPosition blockposition, IBlockData iblockdata, NBTTagCompound nbttagcompound) {
         String s = nbttagcompound.getString("id");
+        MinecraftKey minecraftkey = MinecraftKey.a(s);
 
-        return (TileEntity) IRegistry.BLOCK_ENTITY_TYPE.getOptional(new MinecraftKey(s)).map((tileentitytypes) -> {
-            try {
-                return tileentitytypes.a();
-            } catch (Throwable throwable) {
-                TileEntity.LOGGER.error("Failed to create block entity {}", s, throwable);
-                return null;
-            }
-        }).map((tileentity) -> {
-            try {
-                tileentity.load(iblockdata, nbttagcompound);
-                return tileentity;
-            } catch (Throwable throwable) {
-                TileEntity.LOGGER.error("Failed to load data for block entity {}", s, throwable);
-                return null;
-            }
-        }).orElseGet(() -> {
-            TileEntity.LOGGER.warn("Skipping BlockEntity with id {}", s);
+        if (minecraftkey == null) {
+            TileEntity.LOGGER.error("Block entity has invalid type: {}", s);
             return null;
-        });
+        } else {
+            return (TileEntity) IRegistry.BLOCK_ENTITY_TYPE.getOptional(minecraftkey).map((tileentitytypes) -> {
+                try {
+                    return tileentitytypes.a(blockposition, iblockdata);
+                } catch (Throwable throwable) {
+                    TileEntity.LOGGER.error("Failed to create block entity {}", s, throwable);
+                    return null;
+                }
+            }).map((tileentity) -> {
+                try {
+                    tileentity.load(nbttagcompound);
+                    return tileentity;
+                } catch (Throwable throwable) {
+                    TileEntity.LOGGER.error("Failed to load data for block entity {}", s, throwable);
+                    return null;
+                }
+            }).orElseGet(() -> {
+                TileEntity.LOGGER.warn("Skipping BlockEntity with id {}", s);
+                return null;
+            });
+        }
     }
 
     public void update() {
-        if (this.world != null) {
-            this.c = this.world.getType(this.position);
-            this.world.b(this.position, this);
-            if (!this.c.isAir()) {
-                this.world.updateAdjacentComparators(this.position, this.c.getBlock());
-            }
+        if (this.level != null) {
+            a(this.level, this.worldPosition, this.blockState);
+        }
+
+    }
+
+    protected static void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        world.p(blockposition);
+        if (!iblockdata.isAir()) {
+            world.updateAdjacentComparators(blockposition, iblockdata.getBlock());
         }
 
     }
 
     public BlockPosition getPosition() {
-        return this.position;
+        return this.worldPosition;
     }
 
     public IBlockData getBlock() {
-        if (this.c == null) {
-            this.c = this.world.getType(this.position);
-        }
-
-        return this.c;
+        return this.blockState;
     }
 
     @Nullable
@@ -121,62 +120,48 @@ public abstract class TileEntity {
         return null;
     }
 
-    public NBTTagCompound b() {
-        return this.b(new NBTTagCompound());
+    public NBTTagCompound Z_() {
+        return this.c(new NBTTagCompound());
     }
 
     public boolean isRemoved() {
-        return this.f;
+        return this.remove;
     }
 
-    public void al_() {
-        this.f = true;
+    public void aa_() {
+        this.remove = true;
     }
 
-    public void r() {
-        this.f = false;
+    public void p() {
+        this.remove = false;
     }
 
     public boolean setProperty(int i, int j) {
         return false;
     }
 
-    public void invalidateBlockCache() {
-        this.c = null;
-    }
-
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
         crashreportsystemdetails.a("Name", () -> {
-            return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.getTileType()) + " // " + this.getClass().getCanonicalName();
-        });
-        if (this.world != null) {
-            CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.getBlock());
-            CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.world.getType(this.position));
-        }
-    }
+            MinecraftKey minecraftkey = IRegistry.BLOCK_ENTITY_TYPE.getKey(this.getTileType());
 
-    public void setPosition(BlockPosition blockposition) {
-        this.position = blockposition.immutableCopy();
+            return minecraftkey + " // " + this.getClass().getCanonicalName();
+        });
+        if (this.level != null) {
+            CrashReportSystemDetails.a(crashreportsystemdetails, this.level, this.worldPosition, this.getBlock());
+            CrashReportSystemDetails.a(crashreportsystemdetails, this.level, this.worldPosition, this.level.getType(this.worldPosition));
+        }
     }
 
     public boolean isFilteredNBT() {
         return false;
     }
 
-    public void a(EnumBlockRotation enumblockrotation) {}
-
-    public void a(EnumBlockMirror enumblockmirror) {}
-
     public TileEntityTypes<?> getTileType() {
-        return this.tileType;
+        return this.type;
     }
 
-    public void w() {
-        if (!this.g) {
-            this.g = true;
-            TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[]{() -> {
-                        return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.getTileType());
-                    }, this::getPosition});
-        }
+    @Deprecated
+    public void b(IBlockData iblockdata) {
+        this.blockState = iblockdata;
     }
 }

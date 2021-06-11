@@ -15,15 +15,15 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
 
     protected final RecipeItemStack ingredient;
     protected final ItemStack result;
-    private final Recipes<?> e;
-    private final RecipeSerializer<?> f;
-    protected final MinecraftKey key;
+    private final Recipes<?> type;
+    private final RecipeSerializer<?> serializer;
+    protected final MinecraftKey id;
     protected final String group;
 
     public RecipeSingleItem(Recipes<?> recipes, RecipeSerializer<?> recipeserializer, MinecraftKey minecraftkey, String s, RecipeItemStack recipeitemstack, ItemStack itemstack) {
-        this.e = recipes;
-        this.f = recipeserializer;
-        this.key = minecraftkey;
+        this.type = recipes;
+        this.serializer = recipeserializer;
+        this.id = minecraftkey;
         this.group = s;
         this.ingredient = recipeitemstack;
         this.result = itemstack;
@@ -31,17 +31,22 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
 
     @Override
     public Recipes<?> g() {
-        return this.e;
+        return this.type;
     }
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return this.f;
+        return this.serializer;
     }
 
     @Override
     public MinecraftKey getKey() {
-        return this.key;
+        return this.id;
+    }
+
+    @Override
+    public String d() {
+        return this.group;
     }
 
     @Override
@@ -58,16 +63,21 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
     }
 
     @Override
+    public boolean a(int i, int j) {
+        return true;
+    }
+
+    @Override
     public ItemStack a(IInventory iinventory) {
         return this.result.cloneItemStack();
     }
 
     public static class a<T extends RecipeSingleItem> implements RecipeSerializer<T> {
 
-        final RecipeSingleItem.a.a<T> v;
+        final RecipeSingleItem.a.a<T> factory;
 
         protected a(RecipeSingleItem.a.a<T> recipesingleitem_a_a) {
-            this.v = recipesingleitem_a_a;
+            this.factory = recipesingleitem_a_a;
         }
 
         @Override
@@ -85,16 +95,16 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
             int i = ChatDeserializer.n(jsonobject, "count");
             ItemStack itemstack = new ItemStack((IMaterial) IRegistry.ITEM.get(new MinecraftKey(s1)), i);
 
-            return this.v.create(minecraftkey, s, recipeitemstack, itemstack);
+            return this.factory.create(minecraftkey, s, recipeitemstack, itemstack);
         }
 
         @Override
         public T a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-            String s = packetdataserializer.e(32767);
+            String s = packetdataserializer.p();
             RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
-            ItemStack itemstack = packetdataserializer.n();
+            ItemStack itemstack = packetdataserializer.o();
 
-            return this.v.create(minecraftkey, s, recipeitemstack, itemstack);
+            return this.factory.create(minecraftkey, s, recipeitemstack, itemstack);
         }
 
         public void a(PacketDataSerializer packetdataserializer, T t0) {

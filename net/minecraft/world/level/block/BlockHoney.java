@@ -2,8 +2,11 @@ package net.minecraft.world.level.block;
 
 import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.particles.ParticleParamBlock;
+import net.minecraft.core.particles.Particles;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.sounds.SoundEffects;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
@@ -19,7 +22,11 @@ import net.minecraft.world.phys.shapes.VoxelShapeCollision;
 
 public class BlockHoney extends BlockHalfTransparent {
 
-    protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
+    private static final double SLIDE_STARTS_WHEN_VERTICAL_SPEED_IS_AT_LEAST = 0.13D;
+    private static final double MIN_FALL_SPEED_TO_BE_CONSIDERED_SLIDING = 0.08D;
+    private static final double THROTTLE_SLIDE_SPEED_TO = 0.05D;
+    private static final int SLIDE_ADVANCEMENT_CHECK_INTERVAL = 20;
+    protected static final VoxelShape SHAPE = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 
     public BlockHoney(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -31,18 +38,18 @@ public class BlockHoney extends BlockHalfTransparent {
 
     @Override
     public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockHoney.a;
+        return BlockHoney.SHAPE;
     }
 
     @Override
-    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        entity.playSound(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+    public void fallOn(World world, IBlockData iblockdata, BlockPosition blockposition, Entity entity, float f) {
+        entity.playSound(SoundEffects.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (!world.isClientSide) {
             world.broadcastEntityEffect(entity, (byte) 54);
         }
 
-        if (entity.b(f, 0.2F)) {
-            entity.playSound(this.stepSound.getFallSound(), this.stepSound.getVolume() * 0.5F, this.stepSound.getPitch() * 0.75F);
+        if (entity.a(f, 0.2F, DamageSource.FALL)) {
+            entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
         }
 
     }
@@ -75,8 +82,8 @@ public class BlockHoney extends BlockHalfTransparent {
     }
 
     private void a(Entity entity, BlockPosition blockposition) {
-        if (entity instanceof EntityPlayer && entity.world.getTime() % 20L == 0L) {
-            CriterionTriggers.J.a((EntityPlayer) entity, entity.world.getType(blockposition));
+        if (entity instanceof EntityPlayer && entity.level.getTime() % 20L == 0L) {
+            CriterionTriggers.HONEY_BLOCK_SLIDE.a((EntityPlayer) entity, entity.level.getType(blockposition));
         }
 
     }
@@ -98,7 +105,7 @@ public class BlockHoney extends BlockHalfTransparent {
     private void a(World world, Entity entity) {
         if (c(entity)) {
             if (world.random.nextInt(5) == 0) {
-                entity.playSound(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+                entity.playSound(SoundEffects.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
             }
 
             if (!world.isClientSide && world.random.nextInt(5) == 0) {
@@ -106,5 +113,24 @@ public class BlockHoney extends BlockHalfTransparent {
             }
         }
 
+    }
+
+    public static void a(Entity entity) {
+        a(entity, 5);
+    }
+
+    public static void b(Entity entity) {
+        a(entity, 10);
+    }
+
+    private static void a(Entity entity, int i) {
+        if (entity.level.isClientSide) {
+            IBlockData iblockdata = Blocks.HONEY_BLOCK.getBlockData();
+
+            for (int j = 0; j < i; ++j) {
+                entity.level.addParticle(new ParticleParamBlock(Particles.BLOCK, iblockdata), entity.locX(), entity.locY(), entity.locZ(), 0.0D, 0.0D, 0.0D);
+            }
+
+        }
     }
 }

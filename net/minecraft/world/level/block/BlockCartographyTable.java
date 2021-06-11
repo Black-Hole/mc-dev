@@ -19,7 +19,7 @@ import net.minecraft.world.phys.MovingObjectPositionBlock;
 
 public class BlockCartographyTable extends Block {
 
-    private static final IChatBaseComponent a = new ChatMessage("container.cartography_table");
+    private static final IChatBaseComponent CONTAINER_TITLE = new ChatMessage("container.cartography_table");
 
     protected BlockCartographyTable(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -41,6 +41,6 @@ public class BlockCartographyTable extends Block {
     public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return new TileInventory((i, playerinventory, entityhuman) -> {
             return new ContainerCartography(i, playerinventory, ContainerAccess.at(world, blockposition));
-        }, BlockCartographyTable.a);
+        }, BlockCartographyTable.CONTAINER_TITLE);
     }
 }

@@ -27,30 +27,30 @@ import net.minecraft.world.phys.Vec3D;
 
 public class PersistentRaid extends PersistentBase {
 
-    public final Map<Integer, Raid> raids = Maps.newHashMap();
-    private final WorldServer b;
-    private int c;
-    private int d;
+    private static final String RAID_FILE_ID = "raids";
+    public final Map<Integer, Raid> raidMap = Maps.newHashMap();
+    private final WorldServer level;
+    private int nextAvailableID;
+    private int tick;
 
     public PersistentRaid(WorldServer worldserver) {
-        super(a(worldserver.getDimensionManager()));
-        this.b = worldserver;
-        this.c = 1;
+        this.level = worldserver;
+        this.nextAvailableID = 1;
         this.b();
     }
 
     public Raid a(int i) {
-        return (Raid) this.raids.get(i);
+        return (Raid) this.raidMap.get(i);
     }
 
     public void a() {
-        ++this.d;
-        Iterator iterator = this.raids.values().iterator();
+        ++this.tick;
+        Iterator iterator = this.raidMap.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid = (Raid) iterator.next();
 
-            if (this.b.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
+            if (this.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
                 raid.stop();
             }
 
@@ -62,33 +62,33 @@ public class PersistentRaid extends PersistentBase {
             }
         }
 
-        if (this.d % 200 == 0) {
+        if (this.tick % 200 == 0) {
             this.b();
         }
 
-        PacketDebug.a(this.b, this.raids.values());
+        PacketDebug.a(this.level, this.raidMap.values());
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
-        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.dd() <= 2400 && entityraider.world.getDimensionManager() == raid.getWorld().getDimensionManager() : false;
+        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.dK() <= 2400 && entityraider.level.getDimensionManager() == raid.getWorld().getDimensionManager() : false;
     }
 
     @Nullable
     public Raid a(EntityPlayer entityplayer) {
         if (entityplayer.isSpectator()) {
             return null;
-        } else if (this.b.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
+        } else if (this.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
             return null;
         } else {
-            DimensionManager dimensionmanager = entityplayer.world.getDimensionManager();
+            DimensionManager dimensionmanager = entityplayer.level.getDimensionManager();
 
             if (!dimensionmanager.hasRaids()) {
                 return null;
             } else {
                 BlockPosition blockposition = entityplayer.getChunkCoordinates();
-                List<VillagePlaceRecord> list = (List) this.b.y().c(VillagePlaceType.b, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
+                List<VillagePlaceRecord> list = (List) this.level.A().c(VillagePlaceType.ALL, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
                 int i = 0;
-                Vec3D vec3d = Vec3D.ORIGIN;
+                Vec3D vec3d = Vec3D.ZERO;
 
                 for (Iterator iterator = list.iterator(); iterator.hasNext(); ++i) {
                     VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) iterator.next();
@@ -110,8 +110,8 @@ public class PersistentRaid extends PersistentBase {
                 boolean flag = false;
 
                 if (!raid.isStarted()) {
-                    if (!this.raids.containsKey(raid.getId())) {
-                        this.raids.put(raid.getId(), raid);
+                    if (!this.raidMap.containsKey(raid.getId())) {
+                        this.raidMap.put(raid.getId(), raid);
                     }
 
                     flag = true;
@@ -119,15 +119,15 @@ public class PersistentRaid extends PersistentBase {
                     flag = true;
                 } else {
                     entityplayer.removeEffect(MobEffects.BAD_OMEN);
-                    entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, (byte) 43));
+                    entityplayer.connection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, (byte) 43));
                 }
 
                 if (flag) {
                     raid.a((EntityHuman) entityplayer);
-                    entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, (byte) 43));
+                    entityplayer.connection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, (byte) 43));
                     if (!raid.c()) {
                         entityplayer.a(StatisticList.RAID_TRIGGER);
-                        CriterionTriggers.I.a(entityplayer);
+                        CriterionTriggers.BAD_OMEN.a(entityplayer);
                     }
                 }
 
@@ -138,32 +138,34 @@ public class PersistentRaid extends PersistentBase {
     }
 
     private Raid a(WorldServer worldserver, BlockPosition blockposition) {
-        Raid raid = worldserver.b_(blockposition);
+        Raid raid = worldserver.c(blockposition);
 
-        return raid != null ? raid : new Raid(this.e(), worldserver, blockposition);
+        return raid != null ? raid : new Raid(this.d(), worldserver, blockposition);
     }
 
-    @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        this.c = nbttagcompound.getInt("NextAvailableID");
-        this.d = nbttagcompound.getInt("Tick");
+    public static PersistentRaid a(WorldServer worldserver, NBTTagCompound nbttagcompound) {
+        PersistentRaid persistentraid = new PersistentRaid(worldserver);
+
+        persistentraid.nextAvailableID = nbttagcompound.getInt("NextAvailableID");
+        persistentraid.tick = nbttagcompound.getInt("Tick");
         NBTTagList nbttaglist = nbttagcompound.getList("Raids", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
-            Raid raid = new Raid(this.b, nbttagcompound1);
+            Raid raid = new Raid(worldserver, nbttagcompound1);
 
-            this.raids.put(raid.getId(), raid);
+            persistentraid.raidMap.put(raid.getId(), raid);
         }
 
+        return persistentraid;
     }
 
     @Override
-    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setInt("NextAvailableID", this.c);
-        nbttagcompound.setInt("Tick", this.d);
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+        nbttagcompound.setInt("NextAvailableID", this.nextAvailableID);
+        nbttagcompound.setInt("Tick", this.tick);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.raids.values().iterator();
+        Iterator iterator = this.raidMap.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid = (Raid) iterator.next();
@@ -181,15 +183,15 @@ public class PersistentRaid extends PersistentBase {
         return "raids" + dimensionmanager.getSuffix();
     }
 
-    private int e() {
-        return ++this.c;
+    private int d() {
+        return ++this.nextAvailableID;
     }
 
     @Nullable
     public Raid getNearbyRaid(BlockPosition blockposition, int i) {
         Raid raid = null;
         double d0 = (double) i;
-        Iterator iterator = this.raids.values().iterator();
+        Iterator iterator = this.raidMap.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid1 = (Raid) iterator.next();

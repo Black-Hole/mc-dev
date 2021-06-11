@@ -30,24 +30,29 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 
 public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
-    private static final Map<VillagerProfession, MinecraftKey> b = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put(VillagerProfession.ARMORER, LootTables.al);
-        hashmap.put(VillagerProfession.BUTCHER, LootTables.am);
-        hashmap.put(VillagerProfession.CARTOGRAPHER, LootTables.an);
-        hashmap.put(VillagerProfession.CLERIC, LootTables.ao);
-        hashmap.put(VillagerProfession.FARMER, LootTables.ap);
-        hashmap.put(VillagerProfession.FISHERMAN, LootTables.aq);
-        hashmap.put(VillagerProfession.FLETCHER, LootTables.ar);
-        hashmap.put(VillagerProfession.LEATHERWORKER, LootTables.as);
-        hashmap.put(VillagerProfession.LIBRARIAN, LootTables.at);
-        hashmap.put(VillagerProfession.MASON, LootTables.au);
-        hashmap.put(VillagerProfession.SHEPHERD, LootTables.av);
-        hashmap.put(VillagerProfession.TOOLSMITH, LootTables.aw);
-        hashmap.put(VillagerProfession.WEAPONSMITH, LootTables.ax);
+    private static final int THROW_GIFT_AT_DISTANCE = 5;
+    private static final int MIN_TIME_BETWEEN_GIFTS = 600;
+    private static final int MAX_TIME_BETWEEN_GIFTS = 6600;
+    private static final int TIME_TO_DELAY_FOR_HEAD_TO_FINISH_TURNING = 20;
+    private static final Map<VillagerProfession, MinecraftKey> GIFTS = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        hashmap.put(VillagerProfession.ARMORER, LootTables.ARMORER_GIFT);
+        hashmap.put(VillagerProfession.BUTCHER, LootTables.BUTCHER_GIFT);
+        hashmap.put(VillagerProfession.CARTOGRAPHER, LootTables.CARTOGRAPHER_GIFT);
+        hashmap.put(VillagerProfession.CLERIC, LootTables.CLERIC_GIFT);
+        hashmap.put(VillagerProfession.FARMER, LootTables.FARMER_GIFT);
+        hashmap.put(VillagerProfession.FISHERMAN, LootTables.FISHERMAN_GIFT);
+        hashmap.put(VillagerProfession.FLETCHER, LootTables.FLETCHER_GIFT);
+        hashmap.put(VillagerProfession.LEATHERWORKER, LootTables.LEATHERWORKER_GIFT);
+        hashmap.put(VillagerProfession.LIBRARIAN, LootTables.LIBRARIAN_GIFT);
+        hashmap.put(VillagerProfession.MASON, LootTables.MASON_GIFT);
+        hashmap.put(VillagerProfession.SHEPHERD, LootTables.SHEPHERD_GIFT);
+        hashmap.put(VillagerProfession.TOOLSMITH, LootTables.TOOLSMITH_GIFT);
+        hashmap.put(VillagerProfession.WEAPONSMITH, LootTables.WEAPONSMITH_GIFT);
     });
-    private int c = 600;
-    private boolean d;
-    private long e;
+    private static final float SPEED_MODIFIER = 0.5F;
+    private int timeUntilNextGift = 600;
+    private boolean giftGivenDuringThisRun;
+    private long timeSinceStart;
 
     public BehaviorVillageHeroGift(int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT), i);
@@ -56,8 +61,8 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         if (!this.b(entityvillager)) {
             return false;
-        } else if (this.c > 0) {
-            --this.c;
+        } else if (this.timeUntilNextGift > 0) {
+            --this.timeUntilNextGift;
             return false;
         } else {
             return true;
@@ -65,8 +70,8 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.d = false;
-        this.e = i;
+        this.giftGivenDuringThisRun = false;
+        this.timeSinceStart = i;
         EntityHuman entityhuman = (EntityHuman) this.c(entityvillager).get();
 
         entityvillager.getBehaviorController().setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityhuman);
@@ -74,7 +79,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.b(entityvillager) && !this.d;
+        return this.b(entityvillager) && !this.giftGivenDuringThisRun;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -82,9 +87,9 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
         BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityhuman);
         if (this.a(entityvillager, entityhuman)) {
-            if (i - this.e > 20L) {
+            if (i - this.timeSinceStart > 20L) {
                 this.a(entityvillager, (EntityLiving) entityhuman);
-                this.d = true;
+                this.giftGivenDuringThisRun = true;
             }
         } else {
             BehaviorUtil.a(entityvillager, (Entity) entityhuman, 0.5F, 5);
@@ -93,7 +98,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.c = a(worldserver);
+        this.timeUntilNextGift = a(worldserver);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
@@ -113,13 +118,13 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
     private List<ItemStack> a(EntityVillager entityvillager) {
         if (entityvillager.isBaby()) {
-            return ImmutableList.of(new ItemStack(Items.bi));
+            return ImmutableList.of(new ItemStack(Items.POPPY));
         } else {
             VillagerProfession villagerprofession = entityvillager.getVillagerData().getProfession();
 
-            if (BehaviorVillageHeroGift.b.containsKey(villagerprofession)) {
-                LootTable loottable = entityvillager.world.getMinecraftServer().getLootTableRegistry().getLootTable((MinecraftKey) BehaviorVillageHeroGift.b.get(villagerprofession));
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.world)).set(LootContextParameters.ORIGIN, entityvillager.getPositionVector()).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
+            if (BehaviorVillageHeroGift.GIFTS.containsKey(villagerprofession)) {
+                LootTable loottable = entityvillager.level.getMinecraftServer().getLootTableRegistry().getLootTable((MinecraftKey) BehaviorVillageHeroGift.GIFTS.get(villagerprofession));
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.level)).set(LootContextParameters.ORIGIN, entityvillager.getPositionVector()).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
 
                 return loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.GIFT));
             } else {

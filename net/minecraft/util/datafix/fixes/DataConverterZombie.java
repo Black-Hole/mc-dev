@@ -8,7 +8,8 @@ import java.util.Random;
 
 public class DataConverterZombie extends DataConverterNamedEntity {
 
-    private static final Random a = new Random();
+    private static final int PROFESSION_MAX = 6;
+    private static final Random RANDOM = new Random();
 
     public DataConverterZombie(Schema schema, boolean flag) {
         super(schema, flag, "EntityZombieVillagerTypeFix", DataConverterTypes.ENTITY, "Zombie");
@@ -20,7 +21,7 @@ public class DataConverterZombie extends DataConverterNamedEntity {
                 int i = this.a(dynamic.get("VillagerProfession").asInt(-1));
 
                 if (i == -1) {
-                    i = this.a(DataConverterZombie.a.nextInt(6));
+                    i = this.a(DataConverterZombie.RANDOM.nextInt(6));
                 }
 
                 dynamic = dynamic.set("ZombieType", dynamic.createInt(i));

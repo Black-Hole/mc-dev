@@ -24,8 +24,8 @@ public class EntityCaveSpider extends EntitySpider {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder m() {
-        return EntitySpider.eK().a(GenericAttributes.MAX_HEALTH, 12.0D);
+    public static AttributeProvider.Builder n() {
+        return EntitySpider.p().a(GenericAttributes.MAX_HEALTH, 12.0D);
     }
 
     @Override
@@ -34,14 +34,14 @@ public class EntityCaveSpider extends EntitySpider {
             if (entity instanceof EntityLiving) {
                 byte b0 = 0;
 
-                if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+                if (this.level.getDifficulty() == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+                } else if (this.level.getDifficulty() == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
                 if (b0 > 0) {
-                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.POISON, b0 * 20, 0));
+                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.POISON, b0 * 20, 0), this);
                 }
             }
 

@@ -6,22 +6,22 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.WorldGenFeature
 
 public class WorldGenFeatureMushroomConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureMushroomConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureStateProvider.a.fieldOf("cap_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
-            return worldgenfeaturemushroomconfiguration.b;
-        }), WorldGenFeatureStateProvider.a.fieldOf("stem_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
-            return worldgenfeaturemushroomconfiguration.c;
+    public static final Codec<WorldGenFeatureMushroomConfiguration> CODEC = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureStateProvider.CODEC.fieldOf("cap_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
+            return worldgenfeaturemushroomconfiguration.capProvider;
+        }), WorldGenFeatureStateProvider.CODEC.fieldOf("stem_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
+            return worldgenfeaturemushroomconfiguration.stemProvider;
         }), Codec.INT.fieldOf("foliage_radius").orElse(2).forGetter((worldgenfeaturemushroomconfiguration) -> {
-            return worldgenfeaturemushroomconfiguration.d;
+            return worldgenfeaturemushroomconfiguration.foliageRadius;
         })).apply(instance, WorldGenFeatureMushroomConfiguration::new);
     });
-    public final WorldGenFeatureStateProvider b;
-    public final WorldGenFeatureStateProvider c;
-    public final int d;
+    public final WorldGenFeatureStateProvider capProvider;
+    public final WorldGenFeatureStateProvider stemProvider;
+    public final int foliageRadius;
 
     public WorldGenFeatureMushroomConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1, int i) {
-        this.b = worldgenfeaturestateprovider;
-        this.c = worldgenfeaturestateprovider1;
-        this.d = i;
+        this.capProvider = worldgenfeaturestateprovider;
+        this.stemProvider = worldgenfeaturestateprovider1;
+        this.foliageRadius = i;
     }
 }

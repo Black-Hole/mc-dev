@@ -17,33 +17,33 @@ import net.minecraft.world.level.World;
 
 public class PathfinderGoalHorseTrap extends PathfinderGoal {
 
-    private final EntityHorseSkeleton a;
+    private final EntityHorseSkeleton horse;
 
     public PathfinderGoalHorseTrap(EntityHorseSkeleton entityhorseskeleton) {
-        this.a = entityhorseskeleton;
+        this.horse = entityhorseskeleton;
     }
 
     @Override
     public boolean a() {
-        return this.a.world.isPlayerNearby(this.a.locX(), this.a.locY(), this.a.locZ(), 10.0D);
+        return this.horse.level.isPlayerNearby(this.horse.locX(), this.horse.locY(), this.horse.locZ(), 10.0D);
     }
 
     @Override
     public void e() {
-        WorldServer worldserver = (WorldServer) this.a.world;
-        DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(this.a.getChunkCoordinates());
+        WorldServer worldserver = (WorldServer) this.horse.level;
+        DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(this.horse.getChunkCoordinates());
 
-        this.a.t(false);
-        this.a.setTamed(true);
-        this.a.setAgeRaw(0);
+        this.horse.v(false);
+        this.horse.setTamed(true);
+        this.horse.setAgeRaw(0);
         EntityLightning entitylightning = (EntityLightning) EntityTypes.LIGHTNING_BOLT.a((World) worldserver);
 
-        entitylightning.teleportAndSync(this.a.locX(), this.a.locY(), this.a.locZ());
+        entitylightning.teleportAndSync(this.horse.locX(), this.horse.locY(), this.horse.locZ());
         entitylightning.setEffect(true);
         worldserver.addEntity(entitylightning);
-        EntitySkeleton entityskeleton = this.a(difficultydamagescaler, this.a);
+        EntitySkeleton entityskeleton = this.a(difficultydamagescaler, this.horse);
 
-        entityskeleton.startRiding(this.a);
+        entityskeleton.startRiding(this.horse);
         worldserver.addAllEntities(entityskeleton);
 
         for (int i = 0; i < 3; ++i) {
@@ -51,18 +51,18 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
             EntitySkeleton entityskeleton1 = this.a(difficultydamagescaler, entityhorseabstract);
 
             entityskeleton1.startRiding(entityhorseabstract);
-            entityhorseabstract.i(this.a.getRandom().nextGaussian() * 0.5D, 0.0D, this.a.getRandom().nextGaussian() * 0.5D);
+            entityhorseabstract.i(this.horse.getRandom().nextGaussian() * 0.5D, 0.0D, this.horse.getRandom().nextGaussian() * 0.5D);
             worldserver.addAllEntities(entityhorseabstract);
         }
 
     }
 
     private EntityHorseAbstract a(DifficultyDamageScaler difficultydamagescaler) {
-        EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a(this.a.world);
+        EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a(this.horse.level);
 
-        entityhorseskeleton.prepare((WorldServer) this.a.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
-        entityhorseskeleton.setPosition(this.a.locX(), this.a.locY(), this.a.locZ());
-        entityhorseskeleton.noDamageTicks = 60;
+        entityhorseskeleton.prepare((WorldServer) this.horse.level, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
+        entityhorseskeleton.setPosition(this.horse.locX(), this.horse.locY(), this.horse.locZ());
+        entityhorseskeleton.invulnerableTime = 60;
         entityhorseskeleton.setPersistent();
         entityhorseskeleton.setTamed(true);
         entityhorseskeleton.setAgeRaw(0);
@@ -70,11 +70,11 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     }
 
     private EntitySkeleton a(DifficultyDamageScaler difficultydamagescaler, EntityHorseAbstract entityhorseabstract) {
-        EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(entityhorseabstract.world);
+        EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(entityhorseabstract.level);
 
-        entityskeleton.prepare((WorldServer) entityhorseabstract.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
+        entityskeleton.prepare((WorldServer) entityhorseabstract.level, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
         entityskeleton.setPosition(entityhorseabstract.locX(), entityhorseabstract.locY(), entityhorseabstract.locZ());
-        entityskeleton.noDamageTicks = 60;
+        entityskeleton.invulnerableTime = 60;
         entityskeleton.setPersistent();
         if (entityskeleton.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             entityskeleton.setSlot(EnumItemSlot.HEAD, new ItemStack(Items.IRON_HELMET));

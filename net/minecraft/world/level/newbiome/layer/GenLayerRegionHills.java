@@ -15,7 +15,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
     INSTANCE;
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Int2IntMap c = (Int2IntMap) SystemUtils.a((Object) (new Int2IntOpenHashMap()), (int2intopenhashmap) -> {
+    private static final Int2IntMap MUTATIONS = (Int2IntMap) SystemUtils.a((Object) (new Int2IntOpenHashMap()), (int2intopenhashmap) -> {
         int2intopenhashmap.put(1, 129);
         int2intopenhashmap.put(2, 130);
         int2intopenhashmap.put(3, 131);
@@ -53,7 +53,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         int i1 = (l - 2) % 29;
 
         if (!GenLayers.b(k) && l >= 2 && i1 == 1) {
-            return GenLayerRegionHills.c.getOrDefault(k, k);
+            return GenLayerRegionHills.MUTATIONS.getOrDefault(k, k);
         } else {
             if (worldgencontext.a(3) == 0 || i1 == 0) {
                 int j1 = k;
@@ -99,7 +99,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
                 }
 
                 if (i1 == 0 && j1 != k) {
-                    j1 = GenLayerRegionHills.c.getOrDefault(j1, k);
+                    j1 = GenLayerRegionHills.MUTATIONS.getOrDefault(j1, k);
                 }
 
                 if (j1 != k) {

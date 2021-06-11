@@ -15,35 +15,35 @@ import net.minecraft.world.item.ItemStack;
 
 public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
-    private final int a;
+    private final int size;
     public final NonNullList<ItemStack> items;
-    private List<IInventoryListener> c;
+    private List<IInventoryListener> listeners;
 
     public InventorySubcontainer(int i) {
-        this.a = i;
-        this.items = NonNullList.a(i, ItemStack.b);
+        this.size = i;
+        this.items = NonNullList.a(i, ItemStack.EMPTY);
     }
 
     public InventorySubcontainer(ItemStack... aitemstack) {
-        this.a = aitemstack.length;
-        this.items = NonNullList.a(ItemStack.b, aitemstack);
+        this.size = aitemstack.length;
+        this.items = NonNullList.a(ItemStack.EMPTY, aitemstack);
     }
 
     public void a(IInventoryListener iinventorylistener) {
-        if (this.c == null) {
-            this.c = Lists.newArrayList();
+        if (this.listeners == null) {
+            this.listeners = Lists.newArrayList();
         }
 
-        this.c.add(iinventorylistener);
+        this.listeners.add(iinventorylistener);
     }
 
     public void b(IInventoryListener iinventorylistener) {
-        this.c.remove(iinventorylistener);
+        this.listeners.remove(iinventorylistener);
     }
 
     @Override
     public ItemStack getItem(int i) {
-        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.b;
+        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.EMPTY;
     }
 
     public List<ItemStack> f() {
@@ -69,7 +69,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
     public ItemStack a(Item item, int i) {
         ItemStack itemstack = new ItemStack(item, 0);
 
-        for (int j = this.a - 1; j >= 0; --j) {
+        for (int j = this.size - 1; j >= 0; --j) {
             ItemStack itemstack1 = this.getItem(j);
 
             if (itemstack1.getItem().equals(item)) {
@@ -95,10 +95,10 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
         this.d(itemstack1);
         if (itemstack1.isEmpty()) {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         } else {
             this.c(itemstack1);
-            return itemstack1.isEmpty() ? ItemStack.b : itemstack1;
+            return itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1;
         }
     }
 
@@ -109,7 +109,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         while (iterator.hasNext()) {
             ItemStack itemstack1 = (ItemStack) iterator.next();
 
-            if (itemstack1.isEmpty() || this.a(itemstack1, itemstack) && itemstack1.getCount() < itemstack1.getMaxStackSize()) {
+            if (itemstack1.isEmpty() || ItemStack.e(itemstack1, itemstack) && itemstack1.getCount() < itemstack1.getMaxStackSize()) {
                 flag = true;
                 break;
             }
@@ -123,9 +123,9 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         ItemStack itemstack = (ItemStack) this.items.get(i);
 
         if (itemstack.isEmpty()) {
-            return ItemStack.b;
+            return ItemStack.EMPTY;
         } else {
-            this.items.set(i, ItemStack.b);
+            this.items.set(i, ItemStack.EMPTY);
             return itemstack;
         }
     }
@@ -142,7 +142,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
     @Override
     public int getSize() {
-        return this.a;
+        return this.size;
     }
 
     @Override
@@ -164,8 +164,8 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
     @Override
     public void update() {
-        if (this.c != null) {
-            Iterator iterator = this.c.iterator();
+        if (this.listeners != null) {
+            Iterator iterator = this.listeners.iterator();
 
             while (iterator.hasNext()) {
                 IInventoryListener iinventorylistener = (IInventoryListener) iterator.next();
@@ -206,7 +206,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
     }
 
     private void c(ItemStack itemstack) {
-        for (int i = 0; i < this.a; ++i) {
+        for (int i = 0; i < this.size; ++i) {
             ItemStack itemstack1 = this.getItem(i);
 
             if (itemstack1.isEmpty()) {
@@ -219,11 +219,11 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
     }
 
     private void d(ItemStack itemstack) {
-        for (int i = 0; i < this.a; ++i) {
+        for (int i = 0; i < this.size; ++i) {
             ItemStack itemstack1 = this.getItem(i);
 
-            if (this.a(itemstack1, itemstack)) {
-                this.b(itemstack, itemstack1);
+            if (ItemStack.e(itemstack1, itemstack)) {
+                this.a(itemstack, itemstack1);
                 if (itemstack.isEmpty()) {
                     return;
                 }
@@ -232,11 +232,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
     }
 
-    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack.getItem() == itemstack1.getItem() && ItemStack.equals(itemstack, itemstack1);
-    }
-
-    private void b(ItemStack itemstack, ItemStack itemstack1) {
+    private void a(ItemStack itemstack, ItemStack itemstack1) {
         int i = Math.min(this.getMaxStackSize(), itemstack1.getMaxStackSize());
         int j = Math.min(itemstack.getCount(), i - itemstack1.getCount());
 

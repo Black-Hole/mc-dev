@@ -25,70 +25,76 @@ import net.minecraft.world.phys.shapes.VoxelShapes;
 
 public class BlockVine extends Block {
 
-    public static final BlockStateBoolean UP = BlockSprawling.e;
-    public static final BlockStateBoolean NORTH = BlockSprawling.a;
-    public static final BlockStateBoolean EAST = BlockSprawling.b;
-    public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.d;
-    public static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean UP = BlockSprawling.UP;
+    public static final BlockStateBoolean NORTH = BlockSprawling.NORTH;
+    public static final BlockStateBoolean EAST = BlockSprawling.EAST;
+    public static final BlockStateBoolean SOUTH = BlockSprawling.SOUTH;
+    public static final BlockStateBoolean WEST = BlockSprawling.WEST;
+    public static final Map<EnumDirection, BlockStateBoolean> PROPERTY_BY_DIRECTION = (Map) BlockSprawling.PROPERTY_BY_DIRECTION.entrySet().stream().filter((entry) -> {
         return entry.getKey() != EnumDirection.DOWN;
     }).collect(SystemUtils.a());
-    private static final VoxelShape g = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape h = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
-    private static final VoxelShape i = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape j = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
-    private static final VoxelShape k = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
-    private final Map<IBlockData, VoxelShape> o;
+    protected static final float AABB_OFFSET = 1.0F;
+    private static final VoxelShape UP_AABB = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape WEST_AABB = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
+    private static final VoxelShape EAST_AABB = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape NORTH_AABB = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
+    private static final VoxelShape SOUTH_AABB = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    private final Map<IBlockData, VoxelShape> shapesCache;
 
     public BlockVine(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
-        this.o = ImmutableMap.copyOf((Map) this.blockStateList.a().stream().collect(Collectors.toMap(Function.identity(), BlockVine::h)));
+        this.k((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
+        this.shapesCache = ImmutableMap.copyOf((Map) this.stateDefinition.a().stream().collect(Collectors.toMap(Function.identity(), BlockVine::h)));
     }
 
     private static VoxelShape h(IBlockData iblockdata) {
         VoxelShape voxelshape = VoxelShapes.a();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
-            voxelshape = BlockVine.g;
+            voxelshape = BlockVine.UP_AABB;
         }
 
         if ((Boolean) iblockdata.get(BlockVine.NORTH)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.j);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.NORTH_AABB);
         }
 
         if ((Boolean) iblockdata.get(BlockVine.SOUTH)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.k);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.SOUTH_AABB);
         }
 
         if ((Boolean) iblockdata.get(BlockVine.EAST)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.i);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.EAST_AABB);
         }
 
         if ((Boolean) iblockdata.get(BlockVine.WEST)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.h);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.WEST_AABB);
         }
 
-        return voxelshape;
+        return voxelshape.isEmpty() ? VoxelShapes.b() : voxelshape;
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (VoxelShape) this.o.get(iblockdata);
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (VoxelShape) this.shapesCache.get(iblockdata);
+    }
+
+    @Override
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
     }
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.l(this.g(iblockdata, iworldreader, blockposition));
+        return this.n(this.h(iblockdata, iworldreader, blockposition));
     }
 
-    private boolean l(IBlockData iblockdata) {
-        return this.m(iblockdata) > 0;
+    private boolean n(IBlockData iblockdata) {
+        return this.o(iblockdata) > 0;
     }
 
-    private int m(IBlockData iblockdata) {
+    private int o(IBlockData iblockdata) {
         int i = 0;
-        Iterator iterator = BlockVine.f.values().iterator();
+        Iterator iterator = BlockVine.PROPERTY_BY_DIRECTION.values().iterator();
 
         while (iterator.hasNext()) {
             BlockStateBoolean blockstateboolean = (BlockStateBoolean) iterator.next();
@@ -112,7 +118,7 @@ public class BlockVine extends Block {
             } else if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
                 return false;
             } else {
-                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.f.get(enumdirection);
+                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.PROPERTY_BY_DIRECTION.get(enumdirection);
                 IBlockData iblockdata = iblockaccess.getType(blockposition.up());
 
                 return iblockdata.a((Block) this) && (Boolean) iblockdata.get(blockstateboolean);
@@ -126,7 +132,7 @@ public class BlockVine extends Block {
         return Block.a(iblockdata.getCollisionShape(iblockaccess, blockposition), enumdirection.opposite());
     }
 
-    private IBlockData g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private IBlockData h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
@@ -163,15 +169,15 @@ public class BlockVine extends Block {
         if (enumdirection == EnumDirection.DOWN) {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            IBlockData iblockdata2 = this.g(iblockdata, generatoraccess, blockposition);
+            IBlockData iblockdata2 = this.h(iblockdata, generatoraccess, blockposition);
 
-            return !this.l(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
+            return !this.n(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
         }
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (worldserver.random.nextInt(4) == 0) {
+        if (random.nextInt(4) == 0) {
             EnumDirection enumdirection = EnumDirection.a(random);
             BlockPosition blockposition1 = blockposition.up();
             BlockPosition blockposition2;
@@ -201,7 +207,7 @@ public class BlockVine extends Block {
                                 worldserver.setTypeAndData(blockposition3, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
                             } else if (flag1 && worldserver.isEmpty(blockposition4) && a((IBlockAccess) worldserver, blockposition.shift(enumdirection2), enumdirection3)) {
                                 worldserver.setTypeAndData(blockposition4, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
-                            } else if ((double) worldserver.random.nextFloat() < 0.05D && a((IBlockAccess) worldserver, blockposition2.up(), EnumDirection.UP)) {
+                            } else if ((double) random.nextFloat() < 0.05D && a((IBlockAccess) worldserver, blockposition2.up(), EnumDirection.UP)) {
                                 worldserver.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(BlockVine.UP, true), 2);
                             }
                         }
@@ -211,7 +217,7 @@ public class BlockVine extends Block {
 
                 }
             } else {
-                if (enumdirection == EnumDirection.UP && blockposition.getY() < 255) {
+                if (enumdirection == EnumDirection.UP && blockposition.getY() < worldserver.getMaxBuildHeight() - 1) {
                     if (this.b((IBlockAccess) worldserver, blockposition, enumdirection)) {
                         worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockVine.UP, true), 2);
                         return;
@@ -227,7 +233,7 @@ public class BlockVine extends Block {
 
                         while (iterator.hasNext()) {
                             enumdirection1 = (EnumDirection) iterator.next();
-                            if (random.nextBoolean() || !a((IBlockAccess) worldserver, blockposition1.shift(enumdirection1), EnumDirection.UP)) {
+                            if (random.nextBoolean() || !a((IBlockAccess) worldserver, blockposition1.shift(enumdirection1), enumdirection1)) {
                                 iblockdata2 = (IBlockData) iblockdata2.set(getDirection(enumdirection1), false);
                             }
                         }
@@ -240,7 +246,7 @@ public class BlockVine extends Block {
                     }
                 }
 
-                if (blockposition.getY() > 0) {
+                if (blockposition.getY() > worldserver.getMinBuildHeight()) {
                     blockposition2 = blockposition.down();
                     iblockdata1 = worldserver.getType(blockposition2);
                     if (iblockdata1.isAir() || iblockdata1.a((Block) this)) {
@@ -303,7 +309,7 @@ public class BlockVine extends Block {
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata1.a((Block) this) ? this.m(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
+        return iblockdata1.a((Block) this) ? this.o(iblockdata1) < BlockVine.PROPERTY_BY_DIRECTION.size() : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
@@ -312,7 +318,7 @@ public class BlockVine extends Block {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
         boolean flag = iblockdata.a((Block) this);
         IBlockData iblockdata1 = flag ? iblockdata : this.getBlockData();
-        EnumDirection[] aenumdirection = blockactioncontext.e();
+        EnumDirection[] aenumdirection = blockactioncontext.f();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -340,11 +346,11 @@ public class BlockVine extends Block {
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
             case CLOCKWISE_180:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, (Boolean) iblockdata.get(BlockVine.SOUTH))).set(BlockVine.EAST, (Boolean) iblockdata.get(BlockVine.WEST))).set(BlockVine.SOUTH, (Boolean) iblockdata.get(BlockVine.NORTH))).set(BlockVine.WEST, (Boolean) iblockdata.get(BlockVine.EAST));
             case COUNTERCLOCKWISE_90:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.EAST, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.NORTH));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, (Boolean) iblockdata.get(BlockVine.EAST))).set(BlockVine.EAST, (Boolean) iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, (Boolean) iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, (Boolean) iblockdata.get(BlockVine.NORTH));
             case CLOCKWISE_90:
-                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.EAST, iblockdata.get(BlockVine.NORTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.WEST, iblockdata.get(BlockVine.SOUTH));
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, (Boolean) iblockdata.get(BlockVine.WEST))).set(BlockVine.EAST, (Boolean) iblockdata.get(BlockVine.NORTH))).set(BlockVine.SOUTH, (Boolean) iblockdata.get(BlockVine.EAST))).set(BlockVine.WEST, (Boolean) iblockdata.get(BlockVine.SOUTH));
             default:
                 return iblockdata;
         }
@@ -354,15 +360,15 @@ public class BlockVine extends Block {
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
             case LEFT_RIGHT:
-                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH));
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, (Boolean) iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, (Boolean) iblockdata.get(BlockVine.NORTH));
             case FRONT_BACK:
-                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.EAST, (Boolean) iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, (Boolean) iblockdata.get(BlockVine.EAST));
             default:
                 return super.a(iblockdata, enumblockmirror);
         }
     }
 
     public static BlockStateBoolean getDirection(EnumDirection enumdirection) {
-        return (BlockStateBoolean) BlockVine.f.get(enumdirection);
+        return (BlockStateBoolean) BlockVine.PROPERTY_BY_DIRECTION.get(enumdirection);
     }
 }

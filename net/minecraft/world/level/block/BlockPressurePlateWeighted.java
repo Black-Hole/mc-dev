@@ -16,21 +16,21 @@ import net.minecraft.world.level.block.state.properties.BlockStateInteger;
 
 public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
-    public static final BlockStateInteger POWER = BlockProperties.az;
-    private final int weight;
+    public static final BlockStateInteger POWER = BlockProperties.POWER;
+    private final int maxWeight;
 
     protected BlockPressurePlateWeighted(int i, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, 0));
-        this.weight = i;
+        this.k((IBlockData) ((IBlockData) this.stateDefinition.getBlockData()).set(BlockPressurePlateWeighted.POWER, 0));
+        this.maxWeight = i;
     }
 
     @Override
     protected int b(World world, BlockPosition blockposition) {
-        int i = Math.min(world.a(Entity.class, BlockPressurePlateWeighted.c.a(blockposition)).size(), this.weight);
+        int i = Math.min(world.a(Entity.class, BlockPressurePlateWeighted.TOUCH_AABB.a(blockposition)).size(), this.maxWeight);
 
         if (i > 0) {
-            float f = (float) Math.min(this.weight, i) / (float) this.weight;
+            float f = (float) Math.min(this.maxWeight, i) / (float) this.maxWeight;
 
             return MathHelper.f(f * 15.0F);
         } else {
@@ -40,12 +40,12 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
     @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
     }
 
     @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
+        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
     }
 
     @Override

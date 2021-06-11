@@ -17,8 +17,8 @@ import net.minecraft.world.scores.Scoreboard;
 
 public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
 
-    private static final Collection<String> b = Arrays.asList("sidebar", "foo.bar");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("sidebar", "foo.bar");
+    public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.scoreboardDisplaySlot.invalid", new Object[]{object});
     });
 
@@ -37,7 +37,7 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
         int i = Scoreboard.getSlotForName(s);
 
         if (i == -1) {
-            throw ArgumentScoreboardSlot.a.create(s);
+            throw ArgumentScoreboardSlot.ERROR_INVALID_VALUE.create(s);
         } else {
             return i;
         }
@@ -48,6 +48,6 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
     }
 
     public Collection<String> getExamples() {
-        return ArgumentScoreboardSlot.b;
+        return ArgumentScoreboardSlot.EXAMPLES;
     }
 }

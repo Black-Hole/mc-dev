@@ -16,17 +16,17 @@ import net.minecraft.world.level.material.Fluid;
 
 public class BlockCoral extends Block {
 
-    private final Block a;
+    private final Block deadBlock;
 
     public BlockCoral(Block block, BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.a = block;
+        this.deadBlock = block;
     }
 
     @Override
     public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!this.a((IBlockAccess) worldserver, blockposition)) {
-            worldserver.setTypeAndData(blockposition, this.a.getBlockData(), 2);
+            worldserver.setTypeAndData(blockposition, this.deadBlock.getBlockData(), 2);
         }
 
     }

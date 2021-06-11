@@ -1,7 +1,6 @@
 package net.minecraft.world.level.storage.loot.functions;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -13,44 +12,39 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import net.minecraft.advancements.critereon.CriterionConditionNBT;
+import java.util.stream.Stream;
 import net.minecraft.commands.arguments.ArgumentNBTKey;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatDeserializer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.storage.loot.LootTableInfo;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParameter;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParameters;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
 
 public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
 
-    private final LootItemFunctionCopyNBT.Source a;
-    private final List<LootItemFunctionCopyNBT.b> b;
-    private static final Function<Entity, NBTBase> d = CriterionConditionNBT::b;
-    private static final Function<TileEntity, NBTBase> e = (tileentity) -> {
-        return tileentity.save(new NBTTagCompound());
-    };
+    final NbtProvider source;
+    final List<LootItemFunctionCopyNBT.b> operations;
 
-    private LootItemFunctionCopyNBT(LootItemCondition[] alootitemcondition, LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source, List<LootItemFunctionCopyNBT.b> list) {
+    LootItemFunctionCopyNBT(LootItemCondition[] alootitemcondition, NbtProvider nbtprovider, List<LootItemFunctionCopyNBT.b> list) {
         super(alootitemcondition);
-        this.a = lootitemfunctioncopynbt_source;
-        this.b = ImmutableList.copyOf(list);
+        this.source = nbtprovider;
+        this.operations = ImmutableList.copyOf(list);
     }
 
     @Override
-    public LootItemFunctionType b() {
-        return LootItemFunctions.u;
+    public LootItemFunctionType a() {
+        return LootItemFunctions.COPY_NBT;
     }
 
-    private static ArgumentNBTKey.h b(String s) {
+    static ArgumentNBTKey.g a(String s) {
         try {
             return (new ArgumentNBTKey()).parse(new StringReader(s));
         } catch (CommandSyntaxException commandsyntaxexception) {
@@ -59,16 +53,17 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
     }
 
     @Override
-    public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(this.a.f);
+    public Set<LootContextParameter<?>> b() {
+        return this.source.b();
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        NBTBase nbtbase = (NBTBase) this.a.g.apply(loottableinfo);
+        NBTBase nbtbase = this.source.a(loottableinfo);
 
         if (nbtbase != null) {
-            this.b.forEach((lootitemfunctioncopynbt_b) -> {
+            this.operations.forEach((lootitemfunctioncopynbt_b) -> {
+                Objects.requireNonNull(itemstack);
                 lootitemfunctioncopynbt_b.a(itemstack::getOrCreateTag, nbtbase);
             });
         }
@@ -76,26 +71,108 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
         return itemstack;
     }
 
-    public static LootItemFunctionCopyNBT.a a(LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source) {
-        return new LootItemFunctionCopyNBT.a(lootitemfunctioncopynbt_source);
+    public static LootItemFunctionCopyNBT.a a(NbtProvider nbtprovider) {
+        return new LootItemFunctionCopyNBT.a(nbtprovider);
     }
 
-    public static class e extends LootItemFunctionConditional.c<LootItemFunctionCopyNBT> {
+    public static LootItemFunctionCopyNBT.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        return new LootItemFunctionCopyNBT.a(ContextNbtProvider.a(loottableinfo_entitytarget));
+    }
 
-        public e() {}
+    public static class a extends LootItemFunctionConditional.a<LootItemFunctionCopyNBT.a> {
+
+        private final NbtProvider source;
+        private final List<LootItemFunctionCopyNBT.b> ops = Lists.newArrayList();
+
+        a(NbtProvider nbtprovider) {
+            this.source = nbtprovider;
+        }
+
+        public LootItemFunctionCopyNBT.a a(String s, String s1, LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action) {
+            this.ops.add(new LootItemFunctionCopyNBT.b(s, s1, lootitemfunctioncopynbt_action));
+            return this;
+        }
+
+        public LootItemFunctionCopyNBT.a a(String s, String s1) {
+            return this.a(s, s1, LootItemFunctionCopyNBT.Action.REPLACE);
+        }
+
+        @Override
+        protected LootItemFunctionCopyNBT.a d() {
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootItemFunctionCopyNBT(this.g(), this.source, this.ops);
+        }
+    }
+
+    private static class b {
+
+        private final String sourcePathText;
+        private final ArgumentNBTKey.g sourcePath;
+        private final String targetPathText;
+        private final ArgumentNBTKey.g targetPath;
+        private final LootItemFunctionCopyNBT.Action op;
+
+        b(String s, String s1, LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action) {
+            this.sourcePathText = s;
+            this.sourcePath = LootItemFunctionCopyNBT.a(s);
+            this.targetPathText = s1;
+            this.targetPath = LootItemFunctionCopyNBT.a(s1);
+            this.op = lootitemfunctioncopynbt_action;
+        }
+
+        public void a(Supplier<NBTBase> supplier, NBTBase nbtbase) {
+            try {
+                List<NBTBase> list = this.sourcePath.a(nbtbase);
+
+                if (!list.isEmpty()) {
+                    this.op.a((NBTBase) supplier.get(), this.targetPath, list);
+                }
+            } catch (CommandSyntaxException commandsyntaxexception) {
+                ;
+            }
+
+        }
+
+        public JsonObject a() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.addProperty("source", this.sourcePathText);
+            jsonobject.addProperty("target", this.targetPathText);
+            jsonobject.addProperty("op", this.op.name);
+            return jsonobject;
+        }
+
+        public static LootItemFunctionCopyNBT.b a(JsonObject jsonobject) {
+            String s = ChatDeserializer.h(jsonobject, "source");
+            String s1 = ChatDeserializer.h(jsonobject, "target");
+            LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action = LootItemFunctionCopyNBT.Action.a(ChatDeserializer.h(jsonobject, "op"));
+
+            return new LootItemFunctionCopyNBT.b(s, s1, lootitemfunctioncopynbt_action);
+        }
+    }
+
+    public static class d extends LootItemFunctionConditional.c<LootItemFunctionCopyNBT> {
+
+        public d() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionCopyNBT lootitemfunctioncopynbt, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopynbt, jsonserializationcontext);
-            jsonobject.addProperty("source", lootitemfunctioncopynbt.a.e);
+            jsonobject.add("source", jsonserializationcontext.serialize(lootitemfunctioncopynbt.source));
             JsonArray jsonarray = new JsonArray();
+            Stream stream = lootitemfunctioncopynbt.operations.stream().map(LootItemFunctionCopyNBT.b::a);
 
-            lootitemfunctioncopynbt.b.stream().map(LootItemFunctionCopyNBT.b::a).forEach(jsonarray::add);
+            Objects.requireNonNull(jsonarray);
+            stream.forEach(jsonarray::add);
             jsonobject.add("ops", jsonarray);
         }
 
         @Override
         public LootItemFunctionCopyNBT b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source = LootItemFunctionCopyNBT.Source.a(ChatDeserializer.h(jsonobject, "source"));
+            NbtProvider nbtprovider = (NbtProvider) ChatDeserializer.a(jsonobject, "source", jsondeserializationcontext, NbtProvider.class);
             List<LootItemFunctionCopyNBT.b> list = Lists.newArrayList();
             JsonArray jsonarray = ChatDeserializer.u(jsonobject, "ops");
             Iterator iterator = jsonarray.iterator();
@@ -107,41 +184,7 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
                 list.add(LootItemFunctionCopyNBT.b.a(jsonobject1));
             }
 
-            return new LootItemFunctionCopyNBT(alootitemcondition, lootitemfunctioncopynbt_source, list);
-        }
-    }
-
-    public static enum Source {
-
-        THIS("this", LootContextParameters.THIS_ENTITY, LootItemFunctionCopyNBT.d), KILLER("killer", LootContextParameters.KILLER_ENTITY, LootItemFunctionCopyNBT.d), KILLER_PLAYER("killer_player", LootContextParameters.LAST_DAMAGE_PLAYER, LootItemFunctionCopyNBT.d), BLOCK_ENTITY("block_entity", LootContextParameters.BLOCK_ENTITY, LootItemFunctionCopyNBT.e);
-
-        public final String e;
-        public final LootContextParameter<?> f;
-        public final Function<LootTableInfo, NBTBase> g;
-
-        private <T> Source(String s, LootContextParameter<T> lootcontextparameter, Function<? super T, NBTBase> function) {
-            this.e = s;
-            this.f = lootcontextparameter;
-            this.g = (loottableinfo) -> {
-                T t0 = loottableinfo.getContextParameter(lootcontextparameter);
-
-                return t0 != null ? (NBTBase) function.apply(t0) : null;
-            };
-        }
-
-        public static LootItemFunctionCopyNBT.Source a(String s) {
-            LootItemFunctionCopyNBT.Source[] alootitemfunctioncopynbt_source = values();
-            int i = alootitemfunctioncopynbt_source.length;
-
-            for (int j = 0; j < i; ++j) {
-                LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source = alootitemfunctioncopynbt_source[j];
-
-                if (lootitemfunctioncopynbt_source.e.equals(s)) {
-                    return lootitemfunctioncopynbt_source;
-                }
-            }
-
-            throw new IllegalArgumentException("Invalid tag source " + s);
+            return new LootItemFunctionCopyNBT(alootitemcondition, nbtprovider, list);
         }
     }
 
@@ -149,16 +192,17 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
 
         REPLACE("replace") {
             @Override
-            public void a(NBTBase nbtbase, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException {
+            public void a(NBTBase nbtbase, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException {
                 NBTBase nbtbase1 = (NBTBase) Iterables.getLast(list);
 
-                argumentnbtkey_h.b(nbtbase, nbtbase1::clone);
+                Objects.requireNonNull(nbtbase1);
+                argumentnbtkey_g.b(nbtbase, nbtbase1::clone);
             }
         },
         APPEND("append") {
             @Override
-            public void a(NBTBase nbtbase, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException {
-                List<NBTBase> list1 = argumentnbtkey_h.a(nbtbase, NBTTagList::new);
+            public void a(NBTBase nbtbase, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException {
+                List<NBTBase> list1 = argumentnbtkey_g.a(nbtbase, NBTTagList::new);
 
                 list1.forEach((nbtbase1) -> {
                     if (nbtbase1 instanceof NBTTagList) {
@@ -172,8 +216,8 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
         },
         MERGE("merge") {
             @Override
-            public void a(NBTBase nbtbase, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException {
-                List<NBTBase> list1 = argumentnbtkey_h.a(nbtbase, NBTTagCompound::new);
+            public void a(NBTBase nbtbase, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException {
+                List<NBTBase> list1 = argumentnbtkey_g.a(nbtbase, NBTTagCompound::new);
 
                 list1.forEach((nbtbase1) -> {
                     if (nbtbase1 instanceof NBTTagCompound) {
@@ -189,12 +233,12 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
             }
         };
 
-        private final String d;
+        final String name;
 
-        public abstract void a(NBTBase nbtbase, ArgumentNBTKey.h argumentnbtkey_h, List<NBTBase> list) throws CommandSyntaxException;
+        public abstract void a(NBTBase nbtbase, ArgumentNBTKey.g argumentnbtkey_g, List<NBTBase> list) throws CommandSyntaxException;
 
-        private Action(String s) {
-            this.d = s;
+        Action(String s) {
+            this.name = s;
         }
 
         public static LootItemFunctionCopyNBT.Action a(String s) {
@@ -204,89 +248,12 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
             for (int j = 0; j < i; ++j) {
                 LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action = alootitemfunctioncopynbt_action[j];
 
-                if (lootitemfunctioncopynbt_action.d.equals(s)) {
+                if (lootitemfunctioncopynbt_action.name.equals(s)) {
                     return lootitemfunctioncopynbt_action;
                 }
             }
 
             throw new IllegalArgumentException("Invalid merge strategy" + s);
-        }
-    }
-
-    public static class a extends LootItemFunctionConditional.a<LootItemFunctionCopyNBT.a> {
-
-        private final LootItemFunctionCopyNBT.Source a;
-        private final List<LootItemFunctionCopyNBT.b> b;
-
-        private a(LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source) {
-            this.b = Lists.newArrayList();
-            this.a = lootitemfunctioncopynbt_source;
-        }
-
-        public LootItemFunctionCopyNBT.a a(String s, String s1, LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action) {
-            this.b.add(new LootItemFunctionCopyNBT.b(s, s1, lootitemfunctioncopynbt_action));
-            return this;
-        }
-
-        public LootItemFunctionCopyNBT.a a(String s, String s1) {
-            return this.a(s, s1, LootItemFunctionCopyNBT.Action.REPLACE);
-        }
-
-        @Override
-        protected LootItemFunctionCopyNBT.a d() {
-            return this;
-        }
-
-        @Override
-        public LootItemFunction b() {
-            return new LootItemFunctionCopyNBT(this.g(), this.a, this.b);
-        }
-    }
-
-    static class b {
-
-        private final String a;
-        private final ArgumentNBTKey.h b;
-        private final String c;
-        private final ArgumentNBTKey.h d;
-        private final LootItemFunctionCopyNBT.Action e;
-
-        private b(String s, String s1, LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action) {
-            this.a = s;
-            this.b = LootItemFunctionCopyNBT.b(s);
-            this.c = s1;
-            this.d = LootItemFunctionCopyNBT.b(s1);
-            this.e = lootitemfunctioncopynbt_action;
-        }
-
-        public void a(Supplier<NBTBase> supplier, NBTBase nbtbase) {
-            try {
-                List<NBTBase> list = this.b.a(nbtbase);
-
-                if (!list.isEmpty()) {
-                    this.e.a((NBTBase) supplier.get(), this.d, list);
-                }
-            } catch (CommandSyntaxException commandsyntaxexception) {
-                ;
-            }
-
-        }
-
-        public JsonObject a() {
-            JsonObject jsonobject = new JsonObject();
-
-            jsonobject.addProperty("source", this.a);
-            jsonobject.addProperty("target", this.c);
-            jsonobject.addProperty("op", this.e.d);
-            return jsonobject;
-        }
-
-        public static LootItemFunctionCopyNBT.b a(JsonObject jsonobject) {
-            String s = ChatDeserializer.h(jsonobject, "source");
-            String s1 = ChatDeserializer.h(jsonobject, "target");
-            LootItemFunctionCopyNBT.Action lootitemfunctioncopynbt_action = LootItemFunctionCopyNBT.Action.a(ChatDeserializer.h(jsonobject, "op"));
-
-            return new LootItemFunctionCopyNBT.b(s, s1, lootitemfunctioncopynbt_action);
         }
     }
 }

@@ -8,20 +8,20 @@ import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 
 public class DataConverterAddChoices extends DataFix {
 
-    private final String a;
-    private final TypeReference b;
+    private final String name;
+    private final TypeReference type;
 
     public DataConverterAddChoices(Schema schema, String s, TypeReference typereference) {
         super(schema, true);
-        this.a = s;
-        this.b = typereference;
+        this.name = s;
+        this.type = typereference;
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType<?> taggedchoicetype = this.getInputSchema().findChoiceType(this.b);
-        TaggedChoiceType<?> taggedchoicetype1 = this.getOutputSchema().findChoiceType(this.b);
+        TaggedChoiceType<?> taggedchoicetype = this.getInputSchema().findChoiceType(this.type);
+        TaggedChoiceType<?> taggedchoicetype1 = this.getOutputSchema().findChoiceType(this.type);
 
-        return this.a(this.a, taggedchoicetype, taggedchoicetype1);
+        return this.a(this.name, taggedchoicetype, taggedchoicetype1);
     }
 
     protected final <K> TypeRewriteRule a(String s, TaggedChoiceType<K> taggedchoicetype, TaggedChoiceType<?> taggedchoicetype1) {
@@ -31,7 +31,7 @@ public class DataConverterAddChoices extends DataFix {
             return this.fixTypeEverywhere(s, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
                 return (pair) -> {
                     if (!taggedchoicetype1.hasType(pair.getFirst())) {
-                        throw new IllegalArgumentException(String.format("Unknown type %s in %s ", pair.getFirst(), this.b));
+                        throw new IllegalArgumentException(String.format("Unknown type %s in %s ", pair.getFirst(), this.type));
                     } else {
                         return pair;
                     }
