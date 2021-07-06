@@ -84,7 +84,7 @@ public interface ICollisionAccess extends IBlockAccess {
         } else {
             AxisAlignedBB axisalignedbb = voxelshape.getBoundingBox().grow(d0, d1, d2);
             VoxelShape voxelshape1 = (VoxelShape) this.b(entity, axisalignedbb).flatMap((voxelshape2) -> {
-                return voxelshape2.d().stream();
+                return voxelshape2.toList().stream();
             }).map((axisalignedbb1) -> {
                 return axisalignedbb1.grow(d0 / 2.0D, d1 / 2.0D, d2 / 2.0D);
             }).map(VoxelShapes::a).reduce(VoxelShapes.a(), VoxelShapes::a);

@@ -77,7 +77,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
 
             inventorycraftresult.setItem(0, itemstack);
             container.a(0, itemstack);
-            entityplayer.connection.sendPacket(new PacketPlayOutSetSlot(container.containerId, 0, itemstack));
+            entityplayer.connection.sendPacket(new PacketPlayOutSetSlot(container.containerId, container.incrementStateId(), 0, itemstack));
         }
     }
 
@@ -94,7 +94,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
     }
 
     @Override
-    public void i() {
+    public void l() {
         this.craftSlots.clear();
         this.resultSlots.clear();
     }
@@ -174,32 +174,32 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
     }
 
     @Override
-    public int j() {
+    public int m() {
         return 0;
     }
 
     @Override
-    public int k() {
+    public int n() {
         return this.craftSlots.g();
     }
 
     @Override
-    public int l() {
+    public int o() {
         return this.craftSlots.f();
     }
 
     @Override
-    public int m() {
+    public int p() {
         return 10;
     }
 
     @Override
-    public RecipeBookType q() {
+    public RecipeBookType t() {
         return RecipeBookType.CRAFTING;
     }
 
     @Override
     public boolean d(int i) {
-        return i != this.j();
+        return i != this.m();
     }
 }

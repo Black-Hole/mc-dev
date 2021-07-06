@@ -31,7 +31,7 @@ public class EntityGuardianElder extends EntityGuardian {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityGuardian.fv().a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 8.0D).a(GenericAttributes.MAX_HEALTH, 80.0D);
+        return EntityGuardian.fw().a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 8.0D).a(GenericAttributes.MAX_HEALTH, 80.0D);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.fk()) {
+        if (!this.fl()) {
             this.a(this.getChunkCoordinates(), 16);
         }
 

@@ -18,7 +18,7 @@ public class PathfinderGoalPerch extends PathfinderGoal {
         EntityPlayer entityplayer = (EntityPlayer) this.entity.getOwner();
         boolean flag = entityplayer != null && !entityplayer.isSpectator() && !entityplayer.getAbilities().flying && !entityplayer.isInWater() && !entityplayer.isInPowderSnow;
 
-        return !this.entity.isWillSit() && flag && this.entity.fG();
+        return !this.entity.isWillSit() && flag && this.entity.fH();
     }
 
     @Override

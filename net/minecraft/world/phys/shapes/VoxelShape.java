@@ -84,7 +84,7 @@ public abstract class VoxelShape {
         }, true);
     }
 
-    public List<AxisAlignedBB> d() {
+    public List<AxisAlignedBB> toList() {
         List<AxisAlignedBB> list = Lists.newArrayList();
 
         this.b((d0, d1, d2, d3, d4, d5) -> {
@@ -131,7 +131,7 @@ public abstract class VoxelShape {
             } else {
                 Vec3D vec3d3 = vec3d.e(vec3d2.a(0.001D));
 
-                return this.shape.d(this.a(EnumDirection.EnumAxis.X, vec3d3.x - (double) blockposition.getX()), this.a(EnumDirection.EnumAxis.Y, vec3d3.y - (double) blockposition.getY()), this.a(EnumDirection.EnumAxis.Z, vec3d3.z - (double) blockposition.getZ())) ? new MovingObjectPositionBlock(vec3d3, EnumDirection.a(vec3d2.x, vec3d2.y, vec3d2.z).opposite(), blockposition, true) : AxisAlignedBB.a(this.d(), vec3d, vec3d1, blockposition);
+                return this.shape.d(this.a(EnumDirection.EnumAxis.X, vec3d3.x - (double) blockposition.getX()), this.a(EnumDirection.EnumAxis.Y, vec3d3.y - (double) blockposition.getY()), this.a(EnumDirection.EnumAxis.Z, vec3d3.z - (double) blockposition.getZ())) ? new MovingObjectPositionBlock(vec3d3, EnumDirection.a(vec3d2.x, vec3d2.y, vec3d2.z).opposite(), blockposition, true) : AxisAlignedBB.a(this.toList(), vec3d, vec3d1, blockposition);
             }
         }
     }

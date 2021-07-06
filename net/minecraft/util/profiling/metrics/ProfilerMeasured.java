@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface ProfilerMeasured {
 
-    List<MetricSampler> bl();
+    List<MetricSampler> bk();
 }

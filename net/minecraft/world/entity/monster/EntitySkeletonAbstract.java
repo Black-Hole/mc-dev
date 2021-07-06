@@ -82,7 +82,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
@@ -99,7 +99,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void movementTick() {
-        boolean flag = this.fr();
+        boolean flag = this.fs();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -233,7 +233,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return -0.6D;
     }
 
-    public boolean fv() {
+    public boolean fw() {
         return this.isFullyFrozen();
     }
 }

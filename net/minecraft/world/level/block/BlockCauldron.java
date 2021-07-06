@@ -13,6 +13,9 @@ import net.minecraft.world.level.material.FluidTypes;
 
 public class BlockCauldron extends AbstractCauldronBlock {
 
+    private static final float RAIN_FILL_CHANCE = 0.05F;
+    private static final float POWDER_SNOW_FILL_CHANCE = 0.1F;
+
     public BlockCauldron(BlockBase.Info blockbase_info) {
         super(blockbase_info, CauldronInteraction.EMPTY);
     }
@@ -22,13 +25,13 @@ public class BlockCauldron extends AbstractCauldronBlock {
         return false;
     }
 
-    protected static boolean a(World world) {
-        return world.random.nextInt(20) == 1;
+    protected static boolean a(World world, BiomeBase.Precipitation biomebase_precipitation) {
+        return biomebase_precipitation == BiomeBase.Precipitation.RAIN ? world.getRandom().nextFloat() < 0.05F : (biomebase_precipitation == BiomeBase.Precipitation.SNOW ? world.getRandom().nextFloat() < 0.1F : false);
     }
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, BiomeBase.Precipitation biomebase_precipitation) {
-        if (a(world)) {
+        if (a(world, biomebase_precipitation)) {
             if (biomebase_precipitation == BiomeBase.Precipitation.RAIN) {
                 world.setTypeUpdate(blockposition, Blocks.WATER_CAULDRON.getBlockData());
                 world.a((Entity) null, GameEvent.FLUID_PLACE, blockposition);

@@ -50,7 +50,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
     }
 
     protected void a(boolean flag) {
-        for (int i = 0; i < this.menu.m(); ++i) {
+        for (int i = 0; i < this.menu.p(); ++i) {
             if (this.menu.d(i)) {
                 ItemStack itemstack = this.menu.getSlot(i).getItem().cloneItemStack();
 
@@ -59,7 +59,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
             }
         }
 
-        this.menu.i();
+        this.menu.l();
     }
 
     protected void a(IRecipe<C> irecipe, boolean flag) {
@@ -68,8 +68,8 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         int j;
 
         if (flag1) {
-            for (j = 0; j < this.menu.l() * this.menu.k() + 1; ++j) {
-                if (j != this.menu.j()) {
+            for (j = 0; j < this.menu.o() * this.menu.n() + 1; ++j) {
+                if (j != this.menu.m()) {
                     ItemStack itemstack = this.menu.getSlot(j).getItem();
 
                     if (!itemstack.isEmpty() && Math.min(i, itemstack.getMaxStackSize()) < itemstack.getCount() + 1) {
@@ -97,7 +97,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
 
             if (this.stackedContents.a(irecipe, intarraylist, k)) {
                 this.a(false);
-                this.a(this.menu.k(), this.menu.l(), this.menu.j(), irecipe, intarraylist.iterator(), k);
+                this.a(this.menu.n(), this.menu.o(), this.menu.m(), irecipe, intarraylist.iterator(), k);
             }
         }
 
@@ -124,8 +124,8 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         } else if (flag1) {
             j = 64;
 
-            for (int k = 0; k < this.menu.k() * this.menu.l() + 1; ++k) {
-                if (k != this.menu.j()) {
+            for (int k = 0; k < this.menu.n() * this.menu.o() + 1; ++k) {
+                if (k != this.menu.m()) {
                     ItemStack itemstack = this.menu.getSlot(k).getItem();
 
                     if (!itemstack.isEmpty() && j > itemstack.getCount()) {
@@ -170,8 +170,8 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
         List<ItemStack> list = Lists.newArrayList();
         int i = this.b();
 
-        for (int j = 0; j < this.menu.k() * this.menu.l() + 1; ++j) {
-            if (j != this.menu.j()) {
+        for (int j = 0; j < this.menu.n() * this.menu.o() + 1; ++j) {
+            if (j != this.menu.m()) {
                 ItemStack itemstack = this.menu.getSlot(j).getItem().cloneItemStack();
 
                 if (!itemstack.isEmpty()) {

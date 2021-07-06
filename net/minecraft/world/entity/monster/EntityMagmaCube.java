@@ -30,7 +30,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     public static boolean b(EntityTypes<EntityMagmaCube> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -60,7 +60,7 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.fz() ? LootTables.EMPTY : this.getEntityType().j();
+        return this.fA() ? LootTables.EMPTY : this.getEntityType().j();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected void ft() {
+    protected void fu() {
         this.targetSquish *= 0.9F;
     }
 
@@ -105,28 +105,28 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected boolean fu() {
+    protected boolean fv() {
         return this.doAITick();
     }
 
     @Override
-    protected float fv() {
-        return super.fv() + 2.0F;
+    protected float fw() {
+        return super.fw() + 2.0F;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.fz() ? SoundEffects.MAGMA_CUBE_HURT_SMALL : SoundEffects.MAGMA_CUBE_HURT;
+        return this.fA() ? SoundEffects.MAGMA_CUBE_HURT_SMALL : SoundEffects.MAGMA_CUBE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.fz() ? SoundEffects.MAGMA_CUBE_DEATH_SMALL : SoundEffects.MAGMA_CUBE_DEATH;
+        return this.fA() ? SoundEffects.MAGMA_CUBE_DEATH_SMALL : SoundEffects.MAGMA_CUBE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSquish() {
-        return this.fz() ? SoundEffects.MAGMA_CUBE_SQUISH_SMALL : SoundEffects.MAGMA_CUBE_SQUISH;
+        return this.fA() ? SoundEffects.MAGMA_CUBE_SQUISH_SMALL : SoundEffects.MAGMA_CUBE_SQUISH;
     }
 
     @Override

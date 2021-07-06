@@ -25,7 +25,7 @@ public class PathfinderGoalNearestHealableRaider<T extends EntityLiving> extends
     @Override
     public boolean a() {
         if (this.cooldown <= 0 && this.mob.getRandom().nextBoolean()) {
-            if (!((EntityRaider) this.mob).fK()) {
+            if (!((EntityRaider) this.mob).fL()) {
                 return false;
             } else {
                 this.g();

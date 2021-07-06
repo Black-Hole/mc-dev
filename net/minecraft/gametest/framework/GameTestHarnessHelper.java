@@ -116,7 +116,7 @@ public class GameTestHarnessHelper {
     public <E extends EntityInsentient> E b(EntityTypes<E> entitytypes, BlockPosition blockposition) {
         E e0 = (EntityInsentient) this.a(entitytypes, blockposition);
 
-        e0.fs();
+        e0.ft();
         return e0;
     }
 
@@ -127,7 +127,7 @@ public class GameTestHarnessHelper {
     public <E extends EntityInsentient> E b(EntityTypes<E> entitytypes, Vec3D vec3d) {
         E e0 = (EntityInsentient) this.a(entitytypes, vec3d);
 
-        e0.fs();
+        e0.ft();
         return e0;
     }
 

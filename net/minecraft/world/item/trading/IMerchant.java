@@ -35,7 +35,7 @@ public interface IMerchant {
 
     SoundEffect getTradeSound();
 
-    default boolean fJ() {
+    default boolean fK() {
         return false;
     }
 
@@ -48,7 +48,7 @@ public interface IMerchant {
             MerchantRecipeList merchantrecipelist = this.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.isRegularVillager(), this.fJ());
+                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.isRegularVillager(), this.fK());
             }
         }
 

@@ -73,7 +73,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         super(entitytypes, world);
     }
 
-    public boolean gd() {
+    public boolean ge() {
         return false;
     }
 
@@ -81,7 +81,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         this.entityData.set(EntityLlama.DATA_STRENGTH_ID, Math.max(1, Math.min(5, i)));
     }
 
-    private void gn() {
+    private void go() {
         int i = this.random.nextFloat() < 0.04F ? 5 : 3;
 
         this.setStrength(1 + this.random.nextInt(i));
@@ -111,7 +111,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             this.inventory.setItem(1, ItemStack.a(nbttagcompound.getCompound("DecorItem")));
         }
 
-        this.fN();
+        this.fO();
     }
 
     @Override
@@ -130,7 +130,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         this.targetSelector.a(2, new EntityLlama.a(this));
     }
 
-    public static AttributeProvider.Builder gf() {
+    public static AttributeProvider.Builder gg() {
         return t().a(GenericAttributes.FOLLOW_RANGE, 40.0D);
     }
 
@@ -152,7 +152,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Override
     protected int getChestSlots() {
-        return this.isCarryingChest() ? 2 + 3 * this.fD() : super.getChestSlots();
+        return this.isCarryingChest() ? 2 + 3 * this.fE() : super.getChestSlots();
     }
 
     @Override
@@ -172,12 +172,12 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     @Override
-    public boolean fc() {
+    public boolean fd() {
         return false;
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityLlama.FOOD_ITEMS.test(itemstack);
     }
 
@@ -196,7 +196,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             b0 = 90;
             b1 = 6;
             f = 10.0F;
-            if (this.isTamed() && this.getAge() == 0 && this.fy()) {
+            if (this.isTamed() && this.getAge() == 0 && this.fz()) {
                 flag = true;
                 this.g(entityhuman);
             }
@@ -226,10 +226,10 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         if (flag) {
             this.a(GameEvent.MOB_INTERACT, this.cT());
             if (!this.isSilent()) {
-                SoundEffect soundeffect = this.fP();
+                SoundEffect soundeffect = this.fQ();
 
                 if (soundeffect != null) {
-                    this.level.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), this.fP(), this.getSoundCategory(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+                    this.level.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), this.fQ(), this.getSoundCategory(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
                 }
             }
         }
@@ -239,13 +239,13 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Override
     protected boolean isFrozen() {
-        return this.dV() || this.fI();
+        return this.dV() || this.fJ();
     }
 
     @Nullable
     @Override
     public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.gn();
+        this.go();
         int i;
 
         if (groupdataentity instanceof EntityLlama.b) {
@@ -281,7 +281,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Nullable
     @Override
-    protected SoundEffect fP() {
+    protected SoundEffect fQ() {
         return SoundEffects.LLAMA_EAT;
     }
 
@@ -291,12 +291,12 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     @Override
-    protected void fx() {
+    protected void fy() {
         this.playSound(SoundEffects.LLAMA_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
     @Override
-    public void fV() {
+    public void fW() {
         SoundEffect soundeffect = this.getSoundAngry();
 
         if (soundeffect != null) {
@@ -306,17 +306,17 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     @Override
-    public int fD() {
+    public int fE() {
         return this.getStrength();
     }
 
     @Override
-    public boolean gb() {
+    public boolean gc() {
         return true;
     }
 
     @Override
-    public boolean gc() {
+    public boolean gd() {
         return !this.inventory.getItem(1).isEmpty();
     }
 
@@ -332,10 +332,10 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Override
     public void a(IInventory iinventory) {
-        EnumColor enumcolor = this.gh();
+        EnumColor enumcolor = this.gi();
 
         super.a(iinventory);
-        EnumColor enumcolor1 = this.gh();
+        EnumColor enumcolor1 = this.gi();
 
         if (this.tickCount > 20 && enumcolor1 != null && enumcolor1 != enumcolor) {
             this.playSound(SoundEffects.LLAMA_SWAG, 0.5F, 1.0F);
@@ -344,9 +344,9 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     @Override
-    protected void fN() {
+    protected void fO() {
         if (!this.level.isClientSide) {
-            super.fN();
+            super.fO();
             this.a(o(this.inventory.getItem(1)));
         }
     }
@@ -363,7 +363,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     @Nullable
-    public EnumColor gh() {
+    public EnumColor gi() {
         int i = (Integer) this.entityData.get(EntityLlama.DATA_SWAG_ID);
 
         return i == -1 ? null : EnumColor.fromColorIndex(i);
@@ -376,12 +376,12 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal != this && entityanimal instanceof EntityLlama && this.fX() && ((EntityLlama) entityanimal).fX();
+        return entityanimal != this && entityanimal instanceof EntityLlama && this.fY() && ((EntityLlama) entityanimal).fY();
     }
 
     @Override
     public EntityLlama createChild(WorldServer worldserver, EntityAgeable entityageable) {
-        EntityLlama entityllama = this.gi();
+        EntityLlama entityllama = this.gj();
 
         this.a(entityageable, (EntityHorseAbstract) entityllama);
         EntityLlama entityllama1 = (EntityLlama) entityageable;
@@ -396,7 +396,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         return entityllama;
     }
 
-    protected EntityLlama gi() {
+    protected EntityLlama gj() {
         return (EntityLlama) EntityTypes.LLAMA.a(this.level);
     }
 
@@ -445,7 +445,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         }
     }
 
-    public void gj() {
+    public void gk() {
         if (this.caravanHead != null) {
             this.caravanHead.caravanTail = null;
         }
@@ -458,34 +458,34 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         this.caravanHead.caravanTail = this;
     }
 
-    public boolean gk() {
+    public boolean gl() {
         return this.caravanTail != null;
     }
 
-    public boolean gl() {
+    public boolean gm() {
         return this.caravanHead != null;
     }
 
     @Nullable
-    public EntityLlama gm() {
+    public EntityLlama gn() {
         return this.caravanHead;
     }
 
     @Override
-    protected double fu() {
+    protected double fv() {
         return 2.0D;
     }
 
     @Override
-    protected void fT() {
-        if (!this.gl() && this.isBaby()) {
-            super.fT();
+    protected void fU() {
+        if (!this.gm() && this.isBaby()) {
+            super.fU();
         }
 
     }
 
     @Override
-    public boolean fU() {
+    public boolean fV() {
         return false;
     }
 

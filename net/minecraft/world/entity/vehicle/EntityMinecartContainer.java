@@ -217,7 +217,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.level)).set(LootContextParameters.ORIGIN, this.getPositionVector()).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.fE()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.fF()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));

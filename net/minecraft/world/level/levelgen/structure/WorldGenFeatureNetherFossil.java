@@ -34,21 +34,11 @@ public class WorldGenFeatureNetherFossil extends StructureGenerator<WorldGenFeat
             super(structuregenerator, chunkcoordintpair, i, j);
         }
 
-        public void a(IRegistryCustom iregistrycustom, final ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, LevelHeightAccessor levelheightaccessor) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, LevelHeightAccessor levelheightaccessor) {
             int i = chunkcoordintpair.d() + this.random.nextInt(16);
             int j = chunkcoordintpair.e() + this.random.nextInt(16);
             int k = chunkgenerator.getSeaLevel();
-            WorldGenerationContext worldgenerationcontext = new WorldGenerationContext() {
-                @Override
-                public int a() {
-                    return chunkgenerator.getMinY();
-                }
-
-                @Override
-                public int b() {
-                    return chunkgenerator.getGenerationDepth();
-                }
-            };
+            WorldGenerationContext worldgenerationcontext = new WorldGenerationContext(chunkgenerator, levelheightaccessor);
             int l = worldgenfeaturechancedecoratorrangeconfiguration.height.a(this.random, worldgenerationcontext);
             BlockColumn blockcolumn = chunkgenerator.getBaseColumn(i, j, levelheightaccessor);
 

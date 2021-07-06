@@ -504,17 +504,23 @@ public class ChunkRegionLoader {
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
+            String s1 = s.toLowerCase(Locale.ROOT);
+            StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.STRUCTURES_REGISTRY.get(s1);
 
-            map.put((StructureGenerator) StructureGenerator.STRUCTURES_REGISTRY.get(s.toLowerCase(Locale.ROOT)), new LongOpenHashSet(Arrays.stream(nbttagcompound1.getLongArray(s)).filter((i) -> {
-                ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i);
+            if (structuregenerator == null) {
+                ChunkRegionLoader.LOGGER.warn("Found reference to unknown structure '{}' in chunk {}, discarding", s1, chunkcoordintpair);
+            } else {
+                map.put(structuregenerator, new LongOpenHashSet(Arrays.stream(nbttagcompound1.getLongArray(s)).filter((i) -> {
+                    ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i);
 
-                if (chunkcoordintpair1.a(chunkcoordintpair) > 8) {
-                    ChunkRegionLoader.LOGGER.warn("Found invalid structure reference [ {} @ {} ] for chunk {}.", s, chunkcoordintpair1, chunkcoordintpair);
-                    return false;
-                } else {
-                    return true;
-                }
-            }).toArray()));
+                    if (chunkcoordintpair1.a(chunkcoordintpair) > 8) {
+                        ChunkRegionLoader.LOGGER.warn("Found invalid structure reference [ {} @ {} ] for chunk {}.", s1, chunkcoordintpair1, chunkcoordintpair);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }).toArray()));
+            }
         }
 
         return map;

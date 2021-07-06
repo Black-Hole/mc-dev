@@ -112,7 +112,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
         this.targetSelector.a(8, new PathfinderGoalUniversalAngerReset<>(this, true));
     }
 
-    public static AttributeProvider.Builder fD() {
+    public static AttributeProvider.Builder fE() {
         return EntityInsentient.w().a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
     }
 
@@ -169,7 +169,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.level.isClientSide && this.isWet && !this.isShaking && !this.ft() && this.onGround) {
+        if (!this.level.isClientSide && this.isWet && !this.isShaking && !this.fu() && this.onGround) {
             this.isShaking = true;
             this.shakeAnim = 0.0F;
             this.shakeAnimO = 0.0F;
@@ -187,7 +187,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
         super.tick();
         if (this.isAlive()) {
             this.interestedAngleO = this.interestedAngle;
-            if (this.fH()) {
+            if (this.fI()) {
                 this.interestedAngle += (1.0F - this.interestedAngle) * 0.4F;
             } else {
                 this.interestedAngle += (0.0F - this.interestedAngle) * 0.4F;
@@ -197,7 +197,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
                 this.isWet = true;
                 if (this.isShaking && !this.level.isClientSide) {
                     this.level.broadcastEntityEffect(this, (byte) 56);
-                    this.fI();
+                    this.fJ();
                 }
             } else if ((this.isWet || this.isShaking) && this.isShaking) {
                 if (this.shakeAnim == 0.0F) {
@@ -231,7 +231,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
         }
     }
 
-    private void fI() {
+    private void fJ() {
         this.isShaking = false;
         this.shakeAnim = 0.0F;
         this.shakeAnimO = 0.0F;
@@ -246,7 +246,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
         super.die(damagesource);
     }
 
-    public boolean fE() {
+    public boolean fF() {
         return this.isWet;
     }
 
@@ -276,8 +276,8 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
     }
 
     @Override
-    public int eY() {
-        return this.isSitting() ? 20 : super.eY();
+    public int eZ() {
+        return this.isSitting() ? 20 : super.eZ();
     }
 
     @Override
@@ -331,7 +331,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
             return flag ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS;
         } else {
             if (this.isTamed()) {
-                if (this.n(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                if (this.isBreedItem(itemstack) && this.getHealth() < this.getMaxHealth()) {
                     if (!entityhuman.getAbilities().instabuild) {
                         itemstack.subtract(1);
                     }
@@ -394,19 +394,19 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
             this.shakeAnim = 0.0F;
             this.shakeAnimO = 0.0F;
         } else if (b0 == 56) {
-            this.fI();
+            this.fJ();
         } else {
             super.a(b0);
         }
 
     }
 
-    public float fF() {
+    public float fG() {
         return this.isAngry() ? 1.5393804F : (this.isTamed() ? (0.55F - (this.getMaxHealth() - this.getHealth()) * 0.02F) * 3.1415927F : 0.62831855F);
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         Item item = itemstack.getItem();
 
         return item.isFood() && item.getFoodInfo().c();
@@ -483,7 +483,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
         }
     }
 
-    public boolean fH() {
+    public boolean fI() {
         return (Boolean) this.entityData.get(EntityWolf.DATA_INTERESTED_ID);
     }
 

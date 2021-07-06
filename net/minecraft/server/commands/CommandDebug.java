@@ -58,10 +58,10 @@ public class CommandDebug {
     private static int a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver.bc()) {
+        if (minecraftserver.bb()) {
             throw CommandDebug.ERROR_ALREADY_RUNNING.create();
         } else {
-            minecraftserver.bd();
+            minecraftserver.bc();
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started"), true);
             return 0;
         }
@@ -70,10 +70,10 @@ public class CommandDebug {
     private static int b(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (!minecraftserver.bc()) {
+        if (!minecraftserver.bb()) {
             throw CommandDebug.ERROR_NOT_RUNNING.create();
         } else {
-            MethodProfilerResults methodprofilerresults = minecraftserver.be();
+            MethodProfilerResults methodprofilerresults = minecraftserver.bd();
             double d0 = (double) methodprofilerresults.g() / (double) TimeRange.NANOSECONDS_PER_SECOND;
             double d1 = (double) methodprofilerresults.f() / d0;
 

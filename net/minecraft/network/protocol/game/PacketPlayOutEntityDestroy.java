@@ -1,30 +1,36 @@
 package net.minecraft.network.protocol.game;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 
 public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut> {
 
-    private final int entityId;
+    private final IntList entityIds;
 
-    public PacketPlayOutEntityDestroy(int i) {
-        this.entityId = i;
+    public PacketPlayOutEntityDestroy(IntList intlist) {
+        this.entityIds = new IntArrayList(intlist);
+    }
+
+    public PacketPlayOutEntityDestroy(int... aint) {
+        this.entityIds = new IntArrayList(aint);
     }
 
     public PacketPlayOutEntityDestroy(PacketDataSerializer packetdataserializer) {
-        this.entityId = packetdataserializer.j();
+        this.entityIds = packetdataserializer.a();
     }
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.d(this.entityId);
+        packetdataserializer.a(this.entityIds);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
-    public int b() {
-        return this.entityId;
+    public IntList b() {
+        return this.entityIds;
     }
 }

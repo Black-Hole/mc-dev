@@ -33,7 +33,7 @@ public class RootSystemConfiguration implements WorldGenFeatureConfiguration {
         }), Codec.intRange(1, 256).fieldOf("hanging_root_placement_attempts").forGetter((rootsystemconfiguration) -> {
             return rootsystemconfiguration.hangingRootPlacementAttempts;
         }), Codec.intRange(1, 64).fieldOf("allowed_vertical_water_for_tree").forGetter((rootsystemconfiguration) -> {
-            return rootsystemconfiguration.requiredVerticalSpaceForTree;
+            return rootsystemconfiguration.allowedVerticalWaterForTree;
         })).apply(instance, RootSystemConfiguration::new);
     });
     public final Supplier<WorldGenFeatureConfigured<?, ?>> treeFeature;

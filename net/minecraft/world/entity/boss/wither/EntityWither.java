@@ -71,7 +71,7 @@ public class EntityWither extends EntityMonster implements PowerableMob, IRanged
     private int destroyBlocksTick;
     public final BossBattleServer bossEvent;
     private static final Predicate<EntityLiving> LIVING_ENTITY_SELECTOR = (entityliving) -> {
-        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.eQ();
+        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.eR();
     };
     private static final PathfinderTargetCondition TARGETING_CONDITIONS = PathfinderTargetCondition.a().a(20.0D).a(EntityWither.LIVING_ENTITY_SELECTOR);
 
@@ -501,12 +501,12 @@ public class EntityWither extends EntityMonster implements PowerableMob, IRanged
     }
 
     @Override
-    public boolean addEffect(MobEffect mobeffect) {
+    public boolean addEffect(MobEffect mobeffect, @Nullable Entity entity) {
         return false;
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 300.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.6000000238418579D).a(GenericAttributes.FOLLOW_RANGE, 40.0D).a(GenericAttributes.ARMOR, 4.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 300.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.6000000238418579D).a(GenericAttributes.FOLLOW_RANGE, 40.0D).a(GenericAttributes.ARMOR, 4.0D);
     }
 
     public float a(int i) {

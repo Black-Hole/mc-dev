@@ -14,7 +14,7 @@ public class PathfinderGoalLookAtTradingPlayer extends PathfinderGoalLookAtPlaye
 
     @Override
     public boolean a() {
-        if (this.villager.fw()) {
+        if (this.villager.fx()) {
             this.lookAt = this.villager.getTrader();
             return true;
         } else {

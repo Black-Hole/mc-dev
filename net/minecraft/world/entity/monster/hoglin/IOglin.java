@@ -10,7 +10,7 @@ public interface IOglin {
 
     int ATTACK_ANIMATION_DURATION = 10;
 
-    int fv();
+    int fw();
 
     static boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
         float f = (float) entityliving.b(GenericAttributes.ATTACK_DAMAGE);

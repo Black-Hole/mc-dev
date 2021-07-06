@@ -77,7 +77,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 18.0D).a(GenericAttributes.MAX_HEALTH, 32.0D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 18.0D).a(GenericAttributes.MAX_HEALTH, 32.0D);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
 
     @Override
     public EntityIllagerAbstract.a n() {
-        return this.fF() ? EntityIllagerAbstract.a.SPELLCASTING : (this.isAggressive() ? EntityIllagerAbstract.a.BOW_AND_ARROW : EntityIllagerAbstract.a.CROSSED);
+        return this.fG() ? EntityIllagerAbstract.a.SPELLCASTING : (this.isAggressive() ? EntityIllagerAbstract.a.BOW_AND_ARROW : EntityIllagerAbstract.a.CROSSED);
     }
 
     private class b extends EntityIllagerWizard.PathfinderGoalCastSpell {

@@ -108,7 +108,7 @@ public class PiglinBruteAI {
     private static Optional<? extends EntityLiving> a(EntityPiglinAbstract entitypiglinabstract) {
         Optional<EntityLiving> optional = BehaviorUtil.a((EntityLiving) entitypiglinabstract, MemoryModuleType.ANGRY_AT);
 
-        if (optional.isPresent() && Sensor.c(entitypiglinabstract, (EntityLiving) optional.get())) {
+        if (optional.isPresent() && Sensor.d(entitypiglinabstract, (EntityLiving) optional.get())) {
             return optional;
         } else {
             Optional<? extends EntityLiving> optional1 = a(entitypiglinabstract, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER);
@@ -144,7 +144,7 @@ public class PiglinBruteAI {
     private static void d(EntityPiglinBrute entitypiglinbrute) {
         entitypiglinbrute.getBehaviorController().f().ifPresent((activity) -> {
             if (activity == Activity.FIGHT) {
-                entitypiglinbrute.fC();
+                entitypiglinbrute.fD();
             }
 
         });

@@ -25,12 +25,12 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     public static AttributeProvider.Builder t() {
-        return fR().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+        return fS().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
     protected void p() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.ga());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
             return super.b(entityhuman, enumhand);
-        } else if (entityhuman.eY()) {
+        } else if (entityhuman.eZ()) {
             this.f(entityhuman);
             return EnumInteractionResult.a(this.level.isClientSide);
         } else if (this.isVehicle()) {
@@ -95,5 +95,5 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fE() {}
+    protected void fF() {}
 }

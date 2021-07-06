@@ -11,28 +11,17 @@ import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.levelgen.WorldGenStage;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 
-public class WorldGenDecoratorContext implements WorldGenerationContext {
+public class WorldGenDecoratorContext extends WorldGenerationContext {
 
     private final GeneratorAccessSeed level;
-    private final ChunkGenerator generator;
 
     public WorldGenDecoratorContext(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator) {
+        super(chunkgenerator, generatoraccessseed);
         this.level = generatoraccessseed;
-        this.generator = chunkgenerator;
     }
 
     public int a(HeightMap.Type heightmap_type, int i, int j) {
         return this.level.a(heightmap_type, i, j);
-    }
-
-    @Override
-    public int a() {
-        return this.generator.getMinY();
-    }
-
-    @Override
-    public int b() {
-        return this.generator.getGenerationDepth();
     }
 
     public BitSet a(ChunkCoordIntPair chunkcoordintpair, WorldGenStage.Features worldgenstage_features) {

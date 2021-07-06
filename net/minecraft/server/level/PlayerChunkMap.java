@@ -122,7 +122,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
     public final PlayerChunkMap.a distanceManager;
     private final AtomicInteger tickingGenerated;
     private final DefinedStructureManager structureManager;
-    private final File storageFolder;
+    private final String storageName;
     private final PlayerMap playerMap;
     public final Int2ObjectMap<PlayerChunkMap.EntityTracker> entityMap;
     private final Long2ByteMap chunkTypeCache;
@@ -141,7 +141,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
         this.chunkTypeCache = new Long2ByteOpenHashMap();
         this.unloadQueue = Queues.newConcurrentLinkedQueue();
         this.structureManager = definedstructuremanager;
-        this.storageFolder = convertable_conversionsession.a(worldserver.getDimensionKey());
+        File file = convertable_conversionsession.a(worldserver.getDimensionKey());
+
+        this.storageName = file.getName();
         this.level = worldserver;
         this.generator = chunkgenerator;
         this.mainThreadExecutor = iasynctaskhandler;
@@ -160,7 +162,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
         this.lightEngine = new LightEngineThreaded(ilightaccess, this, this.level.getDimensionManager().hasSkyLight(), threadedmailbox1, this.queueSorter.a(threadedmailbox1, false));
         this.distanceManager = new PlayerChunkMap.a(executor, iasynctaskhandler);
         this.overworldDataStorage = supplier;
-        this.poiManager = new VillagePlace(new File(this.storageFolder, "poi"), datafixer, flag, worldserver);
+        this.poiManager = new VillagePlace(new File(file, "poi"), datafixer, flag, worldserver);
         this.setViewDistance(i);
     }
 
@@ -385,8 +387,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
             this.b(() -> {
                 return true;
             });
-            this.i();
-            PlayerChunkMap.LOGGER.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", this.storageFolder.getName());
+            this.j();
         } else {
             this.visibleChunkMap.values().stream().filter(PlayerChunk::hasBeenLoaded).forEach((playerchunk) -> {
                 IChunkAccess ichunkaccess = (IChunkAccess) playerchunk.getChunkSave().getNow((Object) null);
@@ -492,7 +493,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
             return this.f(chunkcoordintpair);
         } else {
             if (chunkstatus == ChunkStatus.LIGHT) {
-                this.distanceManager.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
+                this.distanceManager.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.LIGHT), chunkcoordintpair);
             }
 
             Optional<IChunkAccess> optional = ((Either) playerchunk.a(chunkstatus.e(), this).getNow(PlayerChunk.UNLOADED_CHUNK)).left();
@@ -595,7 +596,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
 
     protected void c(ChunkCoordIntPair chunkcoordintpair) {
         this.mainThreadExecutor.a(SystemUtils.a(() -> {
-            this.distanceManager.b(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
+            this.distanceManager.b(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.LIGHT), chunkcoordintpair);
         }, () -> {
             return "release light ticket " + chunkcoordintpair;
         }));
@@ -1188,6 +1189,10 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.e {
 
     protected VillagePlace h() {
         return this.poiManager;
+    }
+
+    public String i() {
+        return this.storageName;
     }
 
     public CompletableFuture<Void> a(Chunk chunk) {

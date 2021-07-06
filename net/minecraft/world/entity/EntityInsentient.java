@@ -84,6 +84,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public static final float MAX_ENCHANTED_WEAPON_CHANCE = 0.25F;
     public static final String LEASH_TAG = "Leash";
     private static final int PICKUP_REACH = 1;
+    public static final float DEFAULT_EQUIPMENT_DROP_CHANCE = 0.085F;
     public int ambientSoundTime;
     protected int xpReward;
     protected ControllerLook lookControl;
@@ -325,7 +326,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-            this.fl();
+            this.fm();
             if (this.tickCount % 5 == 0) {
                 this.M();
             }
@@ -750,15 +751,15 @@ public abstract class EntityInsentient extends EntityLiving {
 
     protected void mobTick() {}
 
-    public int eY() {
+    public int eZ() {
         return 40;
     }
 
-    public int eZ() {
+    public int fa() {
         return 75;
     }
 
-    public int fa() {
+    public int fb() {
         return 10;
     }
 
@@ -1057,7 +1058,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return groupdataentity;
     }
 
-    public boolean fc() {
+    public boolean fd() {
         return false;
     }
 
@@ -1154,7 +1155,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return EnumInteractionResult.PASS;
     }
 
-    public boolean fg() {
+    public boolean fh() {
         return this.a(this.getChunkCoordinates());
     }
 
@@ -1167,19 +1168,19 @@ public abstract class EntityInsentient extends EntityLiving {
         this.restrictRadius = (float) i;
     }
 
-    public BlockPosition fh() {
+    public BlockPosition fi() {
         return this.restrictCenter;
     }
 
-    public float fi() {
+    public float fj() {
         return this.restrictRadius;
     }
 
-    public void fj() {
+    public void fk() {
         this.restrictRadius = -1.0F;
     }
 
-    public boolean fk() {
+    public boolean fl() {
         return this.restrictRadius != -1.0F;
     }
 
@@ -1233,9 +1234,9 @@ public abstract class EntityInsentient extends EntityLiving {
         }
     }
 
-    protected void fl() {
+    protected void fm() {
         if (this.leashInfoTag != null) {
-            this.ft();
+            this.fu();
         }
 
         if (this.leashHolder != null) {
@@ -1307,7 +1308,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag1;
     }
 
-    private void ft() {
+    private void fu() {
         if (this.leashInfoTag != null && this.level instanceof WorldServer) {
             if (this.leashInfoTag.b("UUID")) {
                 UUID uuid = this.leashInfoTag.a("UUID");
@@ -1334,7 +1335,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     @Override
     public boolean cH() {
-        return this.fc() && super.cH();
+        return this.fd() && super.cH();
     }
 
     @Override
@@ -1432,7 +1433,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     }
 
-    protected boolean fr() {
+    protected boolean fs() {
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.aY();
             BlockPosition blockposition = new BlockPosition(this.locX(), this.getHeadY(), this.locZ());
@@ -1456,7 +1457,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     }
 
-    public void fs() {
+    public void ft() {
         this.goalSelector.a();
         this.getBehaviorController().g();
     }

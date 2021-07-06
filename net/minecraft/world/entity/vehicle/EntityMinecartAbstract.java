@@ -154,7 +154,7 @@ public abstract class EntityMinecartAbstract extends Entity {
             int[][] aint = DismountUtil.a(enumdirection);
             BlockPosition blockposition = this.getChunkCoordinates();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            ImmutableList<EntityPose> immutablelist = entityliving.eR();
+            ImmutableList<EntityPose> immutablelist = entityliving.eS();
             UnmodifiableIterator unmodifiableiterator = immutablelist.iterator();
 
             while (unmodifiableiterator.hasNext()) {

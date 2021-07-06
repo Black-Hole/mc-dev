@@ -67,8 +67,8 @@ public class IChunkLoader implements AutoCloseable {
 
     }
 
-    public void i() {
-        this.worker.a().join();
+    public void j() {
+        this.worker.a(true).join();
     }
 
     public void close() throws IOException {

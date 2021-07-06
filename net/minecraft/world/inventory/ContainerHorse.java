@@ -42,7 +42,7 @@ public class ContainerHorse extends Container {
 
             @Override
             public boolean b() {
-                return entityhorseabstract.gb();
+                return entityhorseabstract.gc();
             }
 
             @Override
@@ -55,8 +55,8 @@ public class ContainerHorse extends Container {
 
         if (this.a(entityhorseabstract)) {
             for (j = 0; j < 3; ++j) {
-                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).fD(); ++k) {
-                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).fD(), 80 + k * 18, 18 + j * 18));
+                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).fE(); ++k) {
+                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).fE(), 80 + k * 18, 18 + j * 18));
                 }
             }
         }

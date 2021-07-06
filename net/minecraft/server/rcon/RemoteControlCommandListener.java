@@ -32,7 +32,7 @@ public class RemoteControlCommandListener implements ICommandListener {
     }
 
     public CommandListenerWrapper getWrapper() {
-        WorldServer worldserver = this.server.F();
+        WorldServer worldserver = this.server.E();
 
         return new CommandListenerWrapper(this, Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.ZERO, worldserver, 4, "Rcon", RemoteControlCommandListener.RCON_COMPONENT, this.server, (Entity) null);
     }

@@ -42,8 +42,8 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
         this.xpReward = 20;
     }
 
-    public static AttributeProvider.Builder fB() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 50.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D);
+    public static AttributeProvider.Builder fC() {
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 50.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D);
     }
 
     @Nullable
@@ -95,8 +95,8 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
     }
 
     @Override
-    public EntityPiglinArmPose fw() {
-        return this.isAggressive() && this.fx() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : EntityPiglinArmPose.DEFAULT;
+    public EntityPiglinArmPose fx() {
+        return this.isAggressive() && this.fy() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : EntityPiglinArmPose.DEFAULT;
     }
 
     @Override
@@ -134,12 +134,12 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
         this.playSound(SoundEffects.PIGLIN_BRUTE_STEP, 0.15F, 1.0F);
     }
 
-    protected void fC() {
+    protected void fD() {
         this.playSound(SoundEffects.PIGLIN_BRUTE_ANGRY, 1.0F, this.ep());
     }
 
     @Override
-    protected void fy() {
+    protected void fz() {
         this.playSound(SoundEffects.PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED, 1.0F, this.ep());
     }
 }

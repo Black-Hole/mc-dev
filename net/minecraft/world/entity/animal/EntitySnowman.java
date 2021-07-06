@@ -87,7 +87,7 @@ public class EntitySnowman extends EntityGolem implements IShearable, IRangedEnt
     }
 
     @Override
-    public boolean ew() {
+    public boolean ex() {
         return true;
     }
 

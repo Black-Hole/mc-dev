@@ -71,7 +71,7 @@ public class ContainerStonecutter extends Container {
                 ItemStack itemstack1 = ContainerStonecutter.this.inputSlot.a(1);
 
                 if (!itemstack1.isEmpty()) {
-                    ContainerStonecutter.this.m();
+                    ContainerStonecutter.this.p();
                 }
 
                 containeraccess.a((world, blockposition) -> {
@@ -102,19 +102,19 @@ public class ContainerStonecutter extends Container {
         this.a(this.selectedRecipeIndex);
     }
 
-    public int i() {
+    public int l() {
         return this.selectedRecipeIndex.get();
     }
 
-    public List<RecipeStonecutting> j() {
+    public List<RecipeStonecutting> m() {
         return this.recipes;
     }
 
-    public int k() {
+    public int n() {
         return this.recipes.size();
     }
 
-    public boolean l() {
+    public boolean o() {
         return this.inputSlot.hasItem() && !this.recipes.isEmpty();
     }
 
@@ -127,7 +127,7 @@ public class ContainerStonecutter extends Container {
     public boolean a(EntityHuman entityhuman, int i) {
         if (this.d(i)) {
             this.selectedRecipeIndex.set(i);
-            this.m();
+            this.p();
         }
 
         return true;
@@ -158,7 +158,7 @@ public class ContainerStonecutter extends Container {
 
     }
 
-    void m() {
+    void p() {
         if (!this.recipes.isEmpty() && this.d(this.selectedRecipeIndex.get())) {
             RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.recipes.get(this.selectedRecipeIndex.get());
 

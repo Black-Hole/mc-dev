@@ -20,7 +20,7 @@ public class PathfinderGoalUtil {
     }
 
     public static boolean a(EntityCreature entitycreature, int i) {
-        return entitycreature.fk() && entitycreature.fh().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.fi() + (float) i) + 1.0D);
+        return entitycreature.fl() && entitycreature.fi().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.fj() + (float) i) + 1.0D);
     }
 
     public static boolean a(BlockPosition blockposition, EntityCreature entitycreature) {

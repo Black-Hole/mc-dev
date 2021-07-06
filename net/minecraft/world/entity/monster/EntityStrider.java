@@ -192,7 +192,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public boolean fc() {
+    public boolean fd() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -246,7 +246,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
                 if (DismountUtil.a(d3)) {
                     Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) blockposition, d3);
-                    UnmodifiableIterator unmodifiableiterator = entityliving.eR().iterator();
+                    UnmodifiableIterator unmodifiableiterator = entityliving.eS().iterator();
 
                     while (unmodifiableiterator.hasNext()) {
                         EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
@@ -311,9 +311,9 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public void tick() {
-        if (this.fx() && this.random.nextInt(140) == 0) {
+        if (this.fy() && this.random.nextInt(140) == 0) {
             this.playSound(SoundEffects.STRIDER_HAPPY, 1.0F, this.ep());
-        } else if (this.fw() && this.random.nextInt(60) == 0) {
+        } else if (this.fx() && this.random.nextInt(60) == 0) {
             this.playSound(SoundEffects.STRIDER_RETREAT, 1.0F, this.ep());
         }
 
@@ -323,15 +323,15 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
         this.setShivering(!flag);
         super.tick();
-        this.fD();
+        this.fE();
         this.checkBlockCollisions();
     }
 
-    private boolean fw() {
+    private boolean fx() {
         return this.panicGoal != null && this.panicGoal.h();
     }
 
-    private boolean fx() {
+    private boolean fy() {
         return this.temptGoal != null && this.temptGoal.h();
     }
 
@@ -340,7 +340,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         return true;
     }
 
-    private void fD() {
+    private void fE() {
         if (this.aX()) {
             VoxelShapeCollision voxelshapecollision = VoxelShapeCollision.a((Entity) this);
 
@@ -353,13 +353,13 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     }
 
-    public static AttributeProvider.Builder fv() {
+    public static AttributeProvider.Builder fw() {
         return EntityInsentient.w().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.FOLLOW_RANGE, 16.0D);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return !this.fw() && !this.fx() ? SoundEffects.STRIDER_AMBIENT : null;
+        return !this.fx() && !this.fy() ? SoundEffects.STRIDER_AMBIENT : null;
     }
 
     @Override
@@ -378,7 +378,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public boolean ew() {
+    public boolean ex() {
         return true;
     }
 
@@ -403,7 +403,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityStrider.FOOD_ITEMS.test(itemstack);
     }
 
@@ -418,9 +418,9 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
-        boolean flag = this.n(entityhuman.b(enumhand));
+        boolean flag = this.isBreedItem(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eY()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eZ()) {
             if (!this.level.isClientSide) {
                 entityhuman.startRiding(this);
             }

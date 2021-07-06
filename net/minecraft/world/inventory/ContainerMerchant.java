@@ -76,11 +76,11 @@ public class ContainerMerchant extends Container {
         return this.trader.getTrader() == entityhuman;
     }
 
-    public int i() {
+    public int l() {
         return this.trader.getExperience();
     }
 
-    public int j() {
+    public int m() {
         return this.tradeContainer.h();
     }
 
@@ -88,7 +88,7 @@ public class ContainerMerchant extends Container {
         this.trader.setForcedExperience(i);
     }
 
-    public int k() {
+    public int n() {
         return this.merchantLevel;
     }
 
@@ -100,7 +100,7 @@ public class ContainerMerchant extends Container {
         this.canRestock = flag;
     }
 
-    public boolean l() {
+    public boolean o() {
         return this.canRestock;
     }
 
@@ -124,7 +124,7 @@ public class ContainerMerchant extends Container {
                 }
 
                 slot.a(itemstack1, itemstack);
-                this.o();
+                this.r();
             } else if (i != 0 && i != 1) {
                 if (i >= 3 && i < 30) {
                     if (!this.a(itemstack1, 30, 39, false)) {
@@ -153,7 +153,7 @@ public class ContainerMerchant extends Container {
         return itemstack;
     }
 
-    private void o() {
+    private void r() {
         if (!this.trader.getWorld().isClientSide) {
             Entity entity = (Entity) this.trader;
 
@@ -189,7 +189,7 @@ public class ContainerMerchant extends Container {
     }
 
     public void g(int i) {
-        if (this.m().size() > i) {
+        if (this.p().size() > i) {
             ItemStack itemstack = this.tradeContainer.getItem(0);
 
             if (!itemstack.isEmpty()) {
@@ -211,10 +211,10 @@ public class ContainerMerchant extends Container {
             }
 
             if (this.tradeContainer.getItem(0).isEmpty() && this.tradeContainer.getItem(1).isEmpty()) {
-                ItemStack itemstack2 = ((MerchantRecipe) this.m().get(i)).getBuyItem1();
+                ItemStack itemstack2 = ((MerchantRecipe) this.p().get(i)).getBuyItem1();
 
                 this.c(0, itemstack2);
-                ItemStack itemstack3 = ((MerchantRecipe) this.m().get(i)).getBuyItem2();
+                ItemStack itemstack3 = ((MerchantRecipe) this.p().get(i)).getBuyItem2();
 
                 this.c(1, itemstack3);
             }
@@ -250,11 +250,11 @@ public class ContainerMerchant extends Container {
         this.trader.a(merchantrecipelist);
     }
 
-    public MerchantRecipeList m() {
+    public MerchantRecipeList p() {
         return this.trader.getOffers();
     }
 
-    public boolean n() {
+    public boolean q() {
         return this.showProgressBar;
     }
 }

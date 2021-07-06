@@ -130,7 +130,6 @@ import net.minecraft.world.inventory.ContainerMerchant;
 import net.minecraft.world.inventory.ContainerRecipeBook;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemBlock;
-import net.minecraft.world.item.ItemBookAndQuill;
 import net.minecraft.world.item.ItemBucket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -583,8 +582,8 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
     public void a(PacketPlayInPickItem packetplayinpickitem) {
         PlayerConnectionUtils.ensureMainThread(packetplayinpickitem, this, this.player.getWorldServer());
         this.player.getInventory().c(packetplayinpickitem.b());
-        this.player.connection.sendPacket(new PacketPlayOutSetSlot(-2, this.player.getInventory().selected, this.player.getInventory().getItem(this.player.getInventory().selected)));
-        this.player.connection.sendPacket(new PacketPlayOutSetSlot(-2, packetplayinpickitem.b(), this.player.getInventory().getItem(packetplayinpickitem.b())));
+        this.player.connection.sendPacket(new PacketPlayOutSetSlot(-2, 0, this.player.getInventory().selected, this.player.getInventory().getItem(this.player.getInventory().selected)));
+        this.player.connection.sendPacket(new PacketPlayOutSetSlot(-2, 0, packetplayinpickitem.b(), this.player.getInventory().getItem(packetplayinpickitem.b())));
         this.player.connection.sendPacket(new PacketPlayOutHeldItemSlot(this.player.getInventory().selected));
     }
 
@@ -728,32 +727,20 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
         int i = packetplayinbedit.d();
 
         if (PlayerInventory.d(i) || i == 40) {
-            ItemStack itemstack = packetplayinbedit.b();
+            List<String> list = Lists.newArrayList();
+            Optional<String> optional = packetplayinbedit.c();
 
-            if (itemstack.a(Items.WRITABLE_BOOK)) {
-                NBTTagCompound nbttagcompound = itemstack.getTag();
+            Objects.requireNonNull(list);
+            optional.ifPresent(list::add);
+            Stream stream = packetplayinbedit.b().stream().limit(100L);
 
-                if (ItemBookAndQuill.a(nbttagcompound)) {
-                    List<String> list = Lists.newArrayList();
-                    boolean flag = packetplayinbedit.c();
-
-                    if (flag) {
-                        list.add(nbttagcompound.getString("title"));
-                    }
-
-                    NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
-
-                    for (int j = 0; j < nbttaglist.size(); ++j) {
-                        list.add(nbttaglist.getString(j));
-                    }
-
-                    this.a((List) list, flag ? (list1) -> {
-                        this.a((ITextFilter.a) list1.get(0), list1.subList(1, list1.size()), i);
-                    } : (list1) -> {
-                        this.a(list1, i);
-                    });
-                }
-            }
+            Objects.requireNonNull(list);
+            stream.forEach(list::add);
+            this.a((List) list, optional.isPresent() ? (list1) -> {
+                this.a((ITextFilter.a) list1.get(0), list1.subList(1, list1.size()), i);
+            } : (list1) -> {
+                this.a(list1, i);
+            });
         }
     }
 
@@ -1138,7 +1125,7 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
     @Override
     public void a(PacketPlayInResourcePackStatus packetplayinresourcepackstatus) {
         PlayerConnectionUtils.ensureMainThread(packetplayinresourcepackstatus, this, this.player.getWorldServer());
-        if (packetplayinresourcepackstatus.b() == PacketPlayInResourcePackStatus.EnumResourcePackStatus.DECLINED && this.server.aY()) {
+        if (packetplayinresourcepackstatus.b() == PacketPlayInResourcePackStatus.EnumResourcePackStatus.DECLINED && this.server.aX()) {
             PlayerConnection.LOGGER.info("Disconnecting {} due to resource pack rejection", this.player.getDisplayName());
             this.disconnect(new ChatMessage("multiplayer.requiredTexturePrompt.disconnect"));
         }
@@ -1313,7 +1300,7 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
                 }
                 break;
             case START_FALL_FLYING:
-                if (!this.player.fn()) {
+                if (!this.player.fo()) {
                     this.player.stopGliding();
                 }
                 break;
@@ -1420,19 +1407,25 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
             if (this.player.isSpectator()) {
                 this.player.containerMenu.updateInventory();
             } else {
-                this.player.containerMenu.g();
+                boolean flag = packetplayinwindowclick.h() != this.player.containerMenu.getStateId();
+
+                this.player.containerMenu.h();
                 this.player.containerMenu.a(packetplayinwindowclick.c(), packetplayinwindowclick.d(), packetplayinwindowclick.g(), this.player);
                 ObjectIterator objectiterator = Int2ObjectMaps.fastIterable(packetplayinwindowclick.f()).iterator();
 
                 while (objectiterator.hasNext()) {
                     Entry<ItemStack> entry = (Entry) objectiterator.next();
 
-                    this.player.containerMenu.a(entry.getIntKey(), (ItemStack) entry.getValue());
+                    this.player.containerMenu.b(entry.getIntKey(), (ItemStack) entry.getValue());
                 }
 
                 this.player.containerMenu.a(packetplayinwindowclick.e());
-                this.player.containerMenu.h();
-                this.player.containerMenu.d();
+                this.player.containerMenu.i();
+                if (flag) {
+                    this.player.containerMenu.e();
+                } else {
+                    this.player.containerMenu.d();
+                }
             }
         }
 
@@ -1486,12 +1479,7 @@ public class PlayerConnection implements ServerPlayerConnection, PacketListenerP
             boolean flag2 = itemstack.isEmpty() || itemstack.getDamage() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty();
 
             if (flag1 && flag2) {
-                if (itemstack.isEmpty()) {
-                    this.player.inventoryMenu.setItem(packetplayinsetcreativeslot.b(), ItemStack.EMPTY);
-                } else {
-                    this.player.inventoryMenu.setItem(packetplayinsetcreativeslot.b(), itemstack);
-                }
-
+                this.player.inventoryMenu.getSlot(packetplayinsetcreativeslot.b()).set(itemstack);
                 this.player.inventoryMenu.d();
             } else if (flag && flag2 && this.dropSpamTickCount < 200) {
                 this.dropSpamTickCount += 20;

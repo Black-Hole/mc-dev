@@ -168,7 +168,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements Bucketable
         return SoundEffects.BUCKET_FILL_FISH;
     }
 
-    protected boolean fv() {
+    protected boolean fw() {
         return true;
     }
 
@@ -200,7 +200,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements Bucketable
             if (this.operation == ControllerMove.Operation.MOVE_TO && !this.fish.getNavigation().m()) {
                 float f = (float) (this.speedModifier * this.fish.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.fish.r(MathHelper.h(0.125F, this.fish.ev(), f));
+                this.fish.r(MathHelper.h(0.125F, this.fish.ew(), f));
                 double d0 = this.wantedX - this.fish.locX();
                 double d1 = this.wantedY - this.fish.locY();
                 double d2 = this.wantedZ - this.fish.locZ();
@@ -208,7 +208,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements Bucketable
                 if (d1 != 0.0D) {
                     double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                    this.fish.setMot(this.fish.getMot().add(0.0D, (double) this.fish.ev() * (d1 / d3) * 0.1D, 0.0D));
+                    this.fish.setMot(this.fish.getMot().add(0.0D, (double) this.fish.ew() * (d1 / d3) * 0.1D, 0.0D));
                 }
 
                 if (d0 != 0.0D || d2 != 0.0D) {
@@ -235,7 +235,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements Bucketable
 
         @Override
         public boolean a() {
-            return this.fish.fv() && super.a();
+            return this.fish.fw() && super.a();
         }
     }
 }

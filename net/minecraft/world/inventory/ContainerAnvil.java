@@ -85,7 +85,6 @@ public class ContainerAnvil extends ContainerAnvilAbstract {
                 if (iblockdata1 == null) {
                     world.a(blockposition, false);
                     world.triggerEffect(1029, blockposition, 0);
-                    entityhuman.getInventory().f(itemstack);
                 } else {
                     world.setTypeAndData(blockposition, iblockdata1, 2);
                     world.triggerEffect(1030, blockposition, 0);
@@ -98,7 +97,7 @@ public class ContainerAnvil extends ContainerAnvilAbstract {
     }
 
     @Override
-    public void i() {
+    public void l() {
         ItemStack itemstack = this.inputSlots.getItem(0);
 
         this.cost.set(1);
@@ -298,10 +297,10 @@ public class ContainerAnvil extends ContainerAnvilAbstract {
             }
         }
 
-        this.i();
+        this.l();
     }
 
-    public int j() {
+    public int m() {
         return this.cost.get();
     }
 }

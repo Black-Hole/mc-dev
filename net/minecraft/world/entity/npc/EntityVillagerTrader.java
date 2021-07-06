@@ -97,7 +97,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!itemstack.a(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.fw() && !this.isBaby()) {
+        if (!itemstack.a(Items.VILLAGER_SPAWN_EGG) && this.isAlive() && !this.fx() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
@@ -118,7 +118,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected void fE() {
+    protected void fF() {
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.WANDERING_TRADER_TRADES.get(1);
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption1 = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.WANDERING_TRADER_TRADES.get(2);
 
@@ -178,7 +178,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.fw() ? SoundEffects.WANDERING_TRADER_TRADE : SoundEffects.WANDERING_TRADER_AMBIENT;
+        return this.fx() ? SoundEffects.WANDERING_TRADER_TRADE : SoundEffects.WANDERING_TRADER_AMBIENT;
     }
 
     @Override
@@ -218,13 +218,13 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public void movementTick() {
         super.movementTick();
         if (!this.level.isClientSide) {
-            this.fH();
+            this.fI();
         }
 
     }
 
-    private void fH() {
-        if (this.despawnDelay > 0 && !this.fw() && --this.despawnDelay == 0) {
+    private void fI() {
+        if (this.despawnDelay > 0 && !this.fx() && --this.despawnDelay == 0) {
             this.die();
         }
 
@@ -235,7 +235,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Nullable
-    BlockPosition fI() {
+    BlockPosition fJ() {
         return this.wanderTarget;
     }
 
@@ -260,14 +260,14 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
         @Override
         public boolean a() {
-            BlockPosition blockposition = this.trader.fI();
+            BlockPosition blockposition = this.trader.fJ();
 
             return blockposition != null && this.a(blockposition, this.stopDistance);
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.trader.fI();
+            BlockPosition blockposition = this.trader.fJ();
 
             if (blockposition != null && EntityVillagerTrader.this.navigation.m()) {
                 if (this.a(blockposition, 10.0D)) {

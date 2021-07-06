@@ -82,7 +82,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
         return itemprojectileweapon == Items.CROSSBOW;
     }
 
-    public boolean fv() {
+    public boolean fw() {
         return (Boolean) this.entityData.get(EntityPillager.IS_CHARGING_CROSSBOW);
     }
 
@@ -128,7 +128,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
 
     @Override
     public EntityIllagerAbstract.a n() {
-        return this.fv() ? EntityIllagerAbstract.a.CROSSBOW_CHARGE : (this.a(Items.CROSSBOW) ? EntityIllagerAbstract.a.CROSSBOW_HOLD : (this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : EntityIllagerAbstract.a.NEUTRAL));
+        return this.fw() ? EntityIllagerAbstract.a.CROSSBOW_CHARGE : (this.a(Items.CROSSBOW) ? EntityIllagerAbstract.a.CROSSBOW_HOLD : (this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : EntityIllagerAbstract.a.NEUTRAL));
     }
 
     @Override
@@ -244,7 +244,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     private boolean m(ItemStack itemstack) {
-        return this.fK() && itemstack.a(Items.WHITE_BANNER);
+        return this.fL() && itemstack.a(Items.WHITE_BANNER);
     }
 
     @Override
@@ -256,7 +256,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
 
     @Override
     public void a(int i, boolean flag) {
-        Raid raid = this.fJ();
+        Raid raid = this.fK();
         boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {

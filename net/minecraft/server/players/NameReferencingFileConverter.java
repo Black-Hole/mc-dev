@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.server.MinecraftServer;
@@ -269,20 +270,20 @@ public class NameReferencingFileConverter {
     @Nullable
     public static UUID a(final MinecraftServer minecraftserver, String s) {
         if (!UtilColor.b(s) && s.length() <= 16) {
-            GameProfile gameprofile = minecraftserver.getUserCache().getProfile(s);
+            Optional<UUID> optional = minecraftserver.getUserCache().getProfile(s).map(GameProfile::getId);
 
-            if (gameprofile != null && gameprofile.getId() != null) {
-                return gameprofile.getId();
+            if (optional.isPresent()) {
+                return (UUID) optional.get();
             } else if (!minecraftserver.isEmbeddedServer() && minecraftserver.getOnlineMode()) {
                 final List<GameProfile> list = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
-                    public void onProfileLookupSucceeded(GameProfile gameprofile1) {
-                        minecraftserver.getUserCache().a(gameprofile1);
-                        list.add(gameprofile1);
+                    public void onProfileLookupSucceeded(GameProfile gameprofile) {
+                        minecraftserver.getUserCache().a(gameprofile);
+                        list.add(gameprofile);
                     }
 
-                    public void onProfileLookupFailed(GameProfile gameprofile1, Exception exception) {
-                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user whitelist entry for {}", gameprofile1.getName(), exception);
+                    public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user whitelist entry for {}", gameprofile.getName(), exception);
                     }
                 };
 

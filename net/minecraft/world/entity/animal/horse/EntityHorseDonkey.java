@@ -36,7 +36,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     @Nullable
     @Override
-    protected SoundEffect fP() {
+    protected SoundEffect fQ() {
         return SoundEffects.DONKEY_EAT;
     }
 
@@ -48,7 +48,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fX() && ((EntityHorseAbstract) entityanimal).fX());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fY() && ((EntityHorseAbstract) entityanimal).fY());
     }
 
     @Override

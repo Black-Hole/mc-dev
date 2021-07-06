@@ -51,8 +51,8 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
         if (entityvillager.f((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a(entityvillager, entityvillager1, 0.5F);
             if (i >= this.birthTimestamp) {
-                entityvillager.fO();
-                entityvillager1.fO();
+                entityvillager.fP();
+                entityvillager1.fP();
                 this.a(worldserver, entityvillager, entityvillager1);
             } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);

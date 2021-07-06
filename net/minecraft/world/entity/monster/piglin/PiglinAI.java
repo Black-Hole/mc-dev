@@ -139,7 +139,7 @@ public class PiglinAI {
     }
 
     private static void b(BehaviorController<EntityPiglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorLookTarget(PiglinAI::b, 14.0F), new BehaviorAttackTargetSet<>(EntityPiglinAbstract::fv, PiglinAI::k), new BehaviorRunIf<>(EntityPiglin::n, new BehaviorHuntHoglin<>()), c(), f(), a(), b(), new BehaviorLookInteract(EntityTypes.PLAYER, 4)));
+        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorLookTarget(PiglinAI::b, 14.0F), new BehaviorAttackTargetSet<>(EntityPiglinAbstract::fw, PiglinAI::k), new BehaviorRunIf<>(EntityPiglin::n, new BehaviorHuntHoglin<>()), c(), f(), a(), b(), new BehaviorLookInteract(EntityTypes.PLAYER, 4)));
     }
 
     private static void b(EntityPiglin entitypiglin, BehaviorController<EntityPiglin> behaviorcontroller) {
@@ -149,9 +149,9 @@ public class PiglinAI {
     }
 
     private static void c(BehaviorController<EntityPiglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.CELEBRATE, 10, ImmutableList.of(c(), new BehaviorLookTarget(PiglinAI::b, 14.0F), new BehaviorAttackTargetSet<>(EntityPiglinAbstract::fv, PiglinAI::k), new BehaviorRunIf<>((entitypiglin) -> {
-            return !entitypiglin.fC();
-        }, new BehaviorCelebrateLocation<>(2, 1.0F)), new BehaviorRunIf<>(EntityPiglin::fC, new BehaviorCelebrateLocation<>(4, 0.6F)), new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorLookTarget(EntityTypes.PIGLIN, 8.0F), 1), Pair.of(new BehaviorStrollRandomUnconstrained(0.6F, 2, 1), 1), Pair.of(new BehaviorNop(10, 20), 1)))), MemoryModuleType.CELEBRATE_LOCATION);
+        behaviorcontroller.a(Activity.CELEBRATE, 10, ImmutableList.of(c(), new BehaviorLookTarget(PiglinAI::b, 14.0F), new BehaviorAttackTargetSet<>(EntityPiglinAbstract::fw, PiglinAI::k), new BehaviorRunIf<>((entitypiglin) -> {
+            return !entitypiglin.fD();
+        }, new BehaviorCelebrateLocation<>(2, 1.0F)), new BehaviorRunIf<>(EntityPiglin::fD, new BehaviorCelebrateLocation<>(4, 0.6F)), new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorLookTarget(EntityTypes.PIGLIN, 8.0F), 1), Pair.of(new BehaviorStrollRandomUnconstrained(0.6F, 2, 1), 1), Pair.of(new BehaviorNop(10, 20), 1)))), MemoryModuleType.CELEBRATE_LOCATION);
     }
 
     private static void d(BehaviorController<EntityPiglin> behaviorcontroller) {
@@ -277,7 +277,7 @@ public class PiglinAI {
         entitypiglin.a(EnumHand.OFF_HAND, ItemStack.EMPTY);
         boolean flag1;
 
-        if (entitypiglin.fv()) {
+        if (entitypiglin.fw()) {
             flag1 = b(itemstack);
             if (flag && flag1) {
                 a(entitypiglin, i(entitypiglin));
@@ -419,7 +419,7 @@ public class PiglinAI {
         } else {
             Optional<EntityLiving> optional = BehaviorUtil.a((EntityLiving) entitypiglin, MemoryModuleType.ANGRY_AT);
 
-            if (optional.isPresent() && Sensor.c(entitypiglin, (EntityLiving) optional.get())) {
+            if (optional.isPresent() && Sensor.d(entitypiglin, (EntityLiving) optional.get())) {
                 return optional;
             } else {
                 Optional optional1;
@@ -474,7 +474,7 @@ public class PiglinAI {
     }
 
     protected static boolean b(EntityPiglin entitypiglin, ItemStack itemstack) {
-        return !x(entitypiglin) && !v(entitypiglin) && entitypiglin.fv() && b(itemstack);
+        return !x(entitypiglin) && !v(entitypiglin) && entitypiglin.fw() && b(itemstack);
     }
 
     protected static void a(EntityPiglin entitypiglin, EntityLiving entityliving) {
@@ -500,7 +500,7 @@ public class PiglinAI {
             });
             if (entitypiglin.isBaby()) {
                 behaviorcontroller.a(MemoryModuleType.AVOID_TARGET, entityliving, 100L);
-                if (Sensor.c(entitypiglin, entityliving)) {
+                if (Sensor.d(entitypiglin, entityliving)) {
                     b((EntityPiglinAbstract) entitypiglin, entityliving);
                 }
 
@@ -515,7 +515,7 @@ public class PiglinAI {
 
     protected static void a(EntityPiglinAbstract entitypiglinabstract, EntityLiving entityliving) {
         if (!entitypiglinabstract.getBehaviorController().c(Activity.AVOID)) {
-            if (Sensor.c(entitypiglinabstract, entityliving)) {
+            if (Sensor.d(entitypiglinabstract, entityliving)) {
                 if (!BehaviorUtil.a(entitypiglinabstract, entityliving, 4.0D)) {
                     if (entityliving.getEntityType() == EntityTypes.PLAYER && entitypiglinabstract.level.getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
                         d(entitypiglinabstract, entityliving);
@@ -590,7 +590,7 @@ public class PiglinAI {
 
     protected static void b(EntityPiglinAbstract entitypiglinabstract, EntityLiving entityliving) {
         e(entitypiglinabstract).forEach((entitypiglinabstract1) -> {
-            if (entityliving.getEntityType() != EntityTypes.HOGLIN || entitypiglinabstract1.n() && ((EntityHoglin) entityliving).fx()) {
+            if (entityliving.getEntityType() != EntityTypes.HOGLIN || entitypiglinabstract1.n() && ((EntityHoglin) entityliving).fy()) {
                 e(entitypiglinabstract1, entityliving);
             }
         });
@@ -609,7 +609,7 @@ public class PiglinAI {
     }
 
     protected static void c(EntityPiglinAbstract entitypiglinabstract, EntityLiving entityliving) {
-        if (Sensor.c(entitypiglinabstract, entityliving)) {
+        if (Sensor.d(entitypiglinabstract, entityliving)) {
             entitypiglinabstract.getBehaviorController().removeMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
             entitypiglinabstract.getBehaviorController().a(MemoryModuleType.ANGRY_AT, entityliving.getUniqueID(), 600L);
             if (entityliving.getEntityType() == EntityTypes.HOGLIN && entitypiglinabstract.n()) {

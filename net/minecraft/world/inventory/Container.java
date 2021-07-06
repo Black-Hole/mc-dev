@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
@@ -43,9 +44,10 @@ public abstract class Container {
     public NonNullList<Slot> slots = NonNullList.a();
     private final List<ContainerProperty> dataSlots = Lists.newArrayList();
     private ItemStack carried;
-    private final NonNullList<ItemStack> remoteSlots;
+    public NonNullList<ItemStack> remoteSlots;
     private final IntList remoteDataSlots;
     private ItemStack remoteCarried;
+    private int stateId;
     @Nullable
     private final Containers<?> menuType;
     public final int containerId;
@@ -180,27 +182,53 @@ public abstract class Container {
             Objects.requireNonNull(itemstack);
             Supplier<ItemStack> supplier = Suppliers.memoize(itemstack::cloneItemStack);
 
-            this.a(i, itemstack, supplier);
+            this.a(i, itemstack, (Supplier) supplier);
             this.b(i, itemstack, supplier);
         }
 
-        this.i();
+        this.l();
 
         for (i = 0; i < this.dataSlots.size(); ++i) {
             ContainerProperty containerproperty = (ContainerProperty) this.dataSlots.get(i);
             int j = containerproperty.get();
 
             if (containerproperty.c()) {
-                Iterator iterator = this.containerListeners.iterator();
-
-                while (iterator.hasNext()) {
-                    ICrafting icrafting = (ICrafting) iterator.next();
-
-                    icrafting.setContainerData(this, i, j);
-                }
+                this.c(i, j);
             }
 
-            this.c(i, j);
+            this.d(i, j);
+        }
+
+    }
+
+    public void e() {
+        int i;
+
+        for (i = 0; i < this.slots.size(); ++i) {
+            ItemStack itemstack = ((Slot) this.slots.get(i)).getItem();
+
+            Objects.requireNonNull(itemstack);
+            this.a(i, itemstack, itemstack::cloneItemStack);
+        }
+
+        for (i = 0; i < this.dataSlots.size(); ++i) {
+            ContainerProperty containerproperty = (ContainerProperty) this.dataSlots.get(i);
+
+            if (containerproperty.c()) {
+                this.c(i, containerproperty.get());
+            }
+        }
+
+        this.updateInventory();
+    }
+
+    private void c(int i, int j) {
+        Iterator iterator = this.containerListeners.iterator();
+
+        while (iterator.hasNext()) {
+            ICrafting icrafting = (ICrafting) iterator.next();
+
+            icrafting.setContainerData(this, i, j);
         }
 
     }
@@ -239,7 +267,7 @@ public abstract class Container {
         }
     }
 
-    private void c(int i, int j) {
+    private void d(int i, int j) {
         if (!this.suppressRemoteUpdates) {
             int k = this.remoteDataSlots.getInt(i);
 
@@ -253,7 +281,7 @@ public abstract class Container {
         }
     }
 
-    private void i() {
+    private void l() {
         if (!this.suppressRemoteUpdates) {
             if (!ItemStack.matches(this.getCarried(), this.remoteCarried)) {
                 this.remoteCarried = this.getCarried().cloneItemStack();
@@ -266,6 +294,10 @@ public abstract class Container {
     }
 
     public void a(int i, ItemStack itemstack) {
+        this.remoteSlots.set(i, itemstack.cloneItemStack());
+    }
+
+    public void b(int i, ItemStack itemstack) {
         this.remoteSlots.set(i, itemstack);
     }
 
@@ -319,16 +351,16 @@ public abstract class Container {
 
             this.quickcraftStatus = c(j);
             if ((i1 != 1 || this.quickcraftStatus != 2) && i1 != this.quickcraftStatus) {
-                this.e();
+                this.f();
             } else if (this.getCarried().isEmpty()) {
-                this.e();
+                this.f();
             } else if (this.quickcraftStatus == 0) {
                 this.quickcraftType = b(j);
                 if (a(this.quickcraftType, entityhuman)) {
                     this.quickcraftStatus = 1;
                     this.quickcraftSlots.clear();
                 } else {
-                    this.e();
+                    this.f();
                 }
             } else if (this.quickcraftStatus == 1) {
                 slot = (Slot) this.slots.get(i);
@@ -340,7 +372,7 @@ public abstract class Container {
                 if (!this.quickcraftSlots.isEmpty()) {
                     if (this.quickcraftSlots.size() == 1) {
                         k = ((Slot) this.quickcraftSlots.iterator().next()).index;
-                        this.e();
+                        this.f();
                         this.b(k, this.quickcraftType, InventoryClickType.PICKUP, entityhuman);
                         return;
                     }
@@ -373,12 +405,12 @@ public abstract class Container {
                     this.setCarried(itemstack1);
                 }
 
-                this.e();
+                this.f();
             } else {
-                this.e();
+                this.f();
             }
         } else if (this.quickcraftStatus != 0) {
-            this.e();
+            this.f();
         } else {
             int l1;
 
@@ -417,7 +449,7 @@ public abstract class Container {
                     ItemStack itemstack4 = this.getCarried();
 
                     entityhuman.a(itemstack4, slot.getItem(), clickaction);
-                    if (!itemstack4.a(slot, clickaction, entityhuman) && !itemstack.a(itemstack4, slot, clickaction, entityhuman, this.j())) {
+                    if (!itemstack4.a(slot, clickaction, entityhuman) && !itemstack.a(itemstack4, slot, clickaction, entityhuman, this.m())) {
                         if (itemstack.isEmpty()) {
                             if (!itemstack4.isEmpty()) {
                                 l1 = clickaction == ClickAction.PRIMARY ? itemstack4.getCount() : 1;
@@ -535,7 +567,7 @@ public abstract class Container {
 
     }
 
-    private SlotAccess j() {
+    private SlotAccess m() {
         return new SlotAccess() {
             @Override
             public ItemStack a() {
@@ -555,9 +587,18 @@ public abstract class Container {
     }
 
     public void b(EntityHuman entityhuman) {
-        if (!this.getCarried().isEmpty()) {
-            entityhuman.drop(this.getCarried(), false);
-            this.setCarried(ItemStack.EMPTY);
+        if (entityhuman instanceof EntityPlayer) {
+            ItemStack itemstack = this.getCarried();
+
+            if (!itemstack.isEmpty()) {
+                if (entityhuman.isAlive() && !((EntityPlayer) entityhuman).q()) {
+                    entityhuman.getInventory().f(itemstack);
+                } else {
+                    entityhuman.drop(itemstack, false);
+                }
+
+                this.setCarried(ItemStack.EMPTY);
+            }
         }
 
     }
@@ -586,15 +627,18 @@ public abstract class Container {
         this.d();
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, int j, ItemStack itemstack) {
         this.getSlot(i).set(itemstack);
+        this.stateId = j;
     }
 
-    public void a(List<ItemStack> list) {
-        for (int i = 0; i < list.size(); ++i) {
-            this.getSlot(i).set((ItemStack) list.get(i));
+    public void a(int i, List<ItemStack> list, ItemStack itemstack) {
+        for (int j = 0; j < list.size(); ++j) {
+            this.getSlot(j).set((ItemStack) list.get(j));
         }
 
+        this.carried = itemstack;
+        this.stateId = i;
     }
 
     public void setContainerData(int i, int j) {
@@ -707,7 +751,7 @@ public abstract class Container {
         return i == 0 ? true : (i == 1 ? true : i == 2 && entityhuman.getAbilities().instabuild);
     }
 
-    protected void e() {
+    protected void f() {
         this.quickcraftStatus = 0;
         this.quickcraftSlots.clear();
     }
@@ -770,11 +814,11 @@ public abstract class Container {
         return this.carried;
     }
 
-    public void g() {
+    public void h() {
         this.suppressRemoteUpdates = true;
     }
 
-    public void h() {
+    public void i() {
         this.suppressRemoteUpdates = false;
     }
 
@@ -799,5 +843,26 @@ public abstract class Container {
             }
         }
 
+    }
+
+    public OptionalInt b(IInventory iinventory, int i) {
+        for (int j = 0; j < this.slots.size(); ++j) {
+            Slot slot = (Slot) this.slots.get(j);
+
+            if (slot.container == iinventory && i == slot.g()) {
+                return OptionalInt.of(j);
+            }
+        }
+
+        return OptionalInt.empty();
+    }
+
+    public int getStateId() {
+        return this.stateId;
+    }
+
+    public int incrementStateId() {
+        this.stateId = this.stateId + 1 & 32767;
+        return this.stateId;
     }
 }

@@ -118,7 +118,7 @@ public class ContainerLoom extends Container {
         this.a(this.selectedBannerPatternIndex);
     }
 
-    public int i() {
+    public int l() {
         return this.selectedBannerPatternIndex.get();
     }
 
@@ -131,7 +131,7 @@ public class ContainerLoom extends Container {
     public boolean a(EntityHuman entityhuman, int i) {
         if (i > 0 && i <= EnumBannerPatternType.AVAILABLE_PATTERNS) {
             this.selectedBannerPatternIndex.set(i);
-            this.n();
+            this.q();
             return true;
         } else {
             return false;
@@ -159,7 +159,7 @@ public class ContainerLoom extends Container {
             }
         }
 
-        this.n();
+        this.q();
         this.d();
     }
 
@@ -230,7 +230,7 @@ public class ContainerLoom extends Container {
         });
     }
 
-    private void n() {
+    private void q() {
         if (this.selectedBannerPatternIndex.get() > 0) {
             ItemStack itemstack = this.bannerSlot.getItem();
             ItemStack itemstack1 = this.dyeSlot.getItem();
@@ -265,19 +265,19 @@ public class ContainerLoom extends Container {
 
     }
 
-    public Slot j() {
+    public Slot m() {
         return this.bannerSlot;
     }
 
-    public Slot k() {
+    public Slot n() {
         return this.dyeSlot;
     }
 
-    public Slot l() {
+    public Slot o() {
         return this.patternSlot;
     }
 
-    public Slot m() {
+    public Slot p() {
         return this.resultSlot;
     }
 }

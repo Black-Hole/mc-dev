@@ -82,7 +82,7 @@ public class ContainerEnchantTable extends Container {
         this.a(ContainerProperty.a(this.costs, 0));
         this.a(ContainerProperty.a(this.costs, 1));
         this.a(ContainerProperty.a(this.costs, 2));
-        this.a(this.enchantmentSeed).set(playerinventory.player.fq());
+        this.a(this.enchantmentSeed).set(playerinventory.player.fr());
         this.a(ContainerProperty.a(this.enchantClue, 0));
         this.a(ContainerProperty.a(this.enchantClue, 1));
         this.a(ContainerProperty.a(this.enchantClue, 2));
@@ -222,7 +222,7 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     this.enchantSlots.update();
-                    this.enchantmentSeed.set(entityhuman.fq());
+                    this.enchantmentSeed.set(entityhuman.fr());
                     this.a(this.enchantSlots);
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
@@ -245,13 +245,13 @@ public class ContainerEnchantTable extends Container {
         return list;
     }
 
-    public int i() {
+    public int l() {
         ItemStack itemstack = this.enchantSlots.getItem(1);
 
         return itemstack.isEmpty() ? 0 : itemstack.getCount();
     }
 
-    public int j() {
+    public int m() {
         return this.enchantmentSeed.get();
     }
 

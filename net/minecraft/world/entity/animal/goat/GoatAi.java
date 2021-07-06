@@ -56,8 +56,6 @@ public class GoatAi {
     });
     private static final float SPEED_MULTIPLIER_WHEN_RAMMING = 3.0F;
     public static final int RAM_MIN_DISTANCE = 4;
-    private static final int ADULT_RAM_DAMAGE = 2;
-    private static final int BABY_RAM_DAMAGE = 1;
     public static final float ADULT_RAM_KNOCKBACK_FORCE = 2.5F;
     public static final float BABY_RAM_KNOCKBACK_FORCE = 1.0F;
 
@@ -98,9 +96,7 @@ public class GoatAi {
     private static void e(BehaviorController<Goat> behaviorcontroller) {
         behaviorcontroller.a(Activity.RAM, ImmutableList.of(Pair.of(0, new RamTarget<>((goat) -> {
             return goat.isScreamingGoat() ? GoatAi.TIME_BETWEEN_RAMS_SCREAMER : GoatAi.TIME_BETWEEN_RAMS;
-        }, GoatAi.RAM_TARGET_CONDITIONS, (goat) -> {
-            return goat.isBaby() ? 1 : 2;
-        }, 3.0F, (goat) -> {
+        }, GoatAi.RAM_TARGET_CONDITIONS, 3.0F, (goat) -> {
             return goat.isBaby() ? 1.0D : 2.5D;
         }, (goat) -> {
             return goat.isScreamingGoat() ? SoundEffects.GOAT_SCREAMING_RAM_IMPACT : SoundEffects.GOAT_RAM_IMPACT;

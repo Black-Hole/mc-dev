@@ -90,7 +90,7 @@ public class EntitySpider extends EntityMonster {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
     }
 
     @Override

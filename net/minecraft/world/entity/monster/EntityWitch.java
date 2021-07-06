@@ -61,7 +61,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     protected void initPathfinder() {
         super.initPathfinder();
         this.healRaidersGoal = new PathfinderGoalNearestHealableRaider<>(this, EntityRaider.class, true, (entityliving) -> {
-            return entityliving != null && this.fK() && entityliving.getEntityType() != EntityTypes.WITCH;
+            return entityliving != null && this.fL() && entityliving.getEntityType() != EntityTypes.WITCH;
         });
         this.attackPlayersGoal = new PathfinderGoalNearestAttackableTargetWitch<>(this, EntityHuman.class, 10, true, false, (Predicate) null);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
@@ -104,7 +104,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 26.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 26.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
@@ -254,7 +254,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     public void a(int i, boolean flag) {}
 
     @Override
-    public boolean fw() {
+    public boolean fx() {
         return false;
     }
 }

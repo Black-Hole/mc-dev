@@ -218,7 +218,7 @@ public class Items {
     public static final Item MOSS_BLOCK = a(Blocks.MOSS_BLOCK, CreativeModeTab.TAB_DECORATIONS);
     public static final Item HANGING_ROOTS = a(Blocks.HANGING_ROOTS, CreativeModeTab.TAB_DECORATIONS);
     public static final Item BIG_DRIPLEAF = a(Blocks.BIG_DRIPLEAF, CreativeModeTab.TAB_DECORATIONS);
-    public static final Item SMALL_DRIPLEAF = a(Blocks.SMALL_DRIPLEAF, CreativeModeTab.TAB_DECORATIONS);
+    public static final Item SMALL_DRIPLEAF = a((ItemBlock) (new ItemBisected(Blocks.SMALL_DRIPLEAF, (new Item.Info()).a(CreativeModeTab.TAB_DECORATIONS))));
     public static final Item BAMBOO = a(Blocks.BAMBOO, CreativeModeTab.TAB_DECORATIONS);
     public static final Item OAK_SLAB = a(Blocks.OAK_SLAB, CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final Item SPRUCE_SLAB = a(Blocks.SPRUCE_SLAB, CreativeModeTab.TAB_BUILDING_BLOCKS);

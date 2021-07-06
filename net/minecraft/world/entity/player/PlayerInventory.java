@@ -337,7 +337,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
                     int j = itemstack.getMaxStackSize() - this.getItem(i).getCount();
 
                     if (this.c(i, itemstack.cloneAndSubtract(j)) && flag && this.player instanceof EntityPlayer) {
-                        ((EntityPlayer) this.player).connection.sendPacket(new PacketPlayOutSetSlot(-2, i, this.getItem(i)));
+                        ((EntityPlayer) this.player).connection.sendPacket(new PacketPlayOutSetSlot(-2, 0, i, this.getItem(i)));
                     }
                     continue;
                 }
@@ -678,5 +678,11 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             autorecipestackmanager.a(itemstack);
         }
 
+    }
+
+    public ItemStack a(boolean flag) {
+        ItemStack itemstack = this.getItemInHand();
+
+        return itemstack.isEmpty() ? ItemStack.EMPTY : this.splitStack(this.selected, flag ? itemstack.getCount() : 1);
     }
 }

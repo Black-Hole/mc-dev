@@ -68,14 +68,14 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return -0.45D;
     }
 
-    public boolean fw() {
+    public boolean fx() {
         return true;
     }
 
     @Nullable
     @Override
     public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.fw()) {
+        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.fx()) {
             this.patrolLeader = true;
         }
 
@@ -109,7 +109,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolTarget;
     }
 
-    public boolean fy() {
+    public boolean fz() {
         return this.patrolTarget != null;
     }
 
@@ -122,11 +122,11 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolLeader;
     }
 
-    public boolean fC() {
+    public boolean fD() {
         return true;
     }
 
-    public void fD() {
+    public void fE() {
         this.patrolTarget = this.getChunkCoordinates().c(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
         this.patrolling = true;
     }
@@ -159,7 +159,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         public boolean a() {
             boolean flag = this.mob.level.getTime() < this.cooldownUntil;
 
-            return this.mob.isPatrolling() && this.mob.getGoalTarget() == null && !this.mob.isVehicle() && this.mob.fy() && !flag;
+            return this.mob.isPatrolling() && this.mob.getGoalTarget() == null && !this.mob.isVehicle() && this.mob.fz() && !flag;
         }
 
         @Override
@@ -179,7 +179,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
                 if (this.mob.isPatrolling() && list.isEmpty()) {
                     this.mob.w(false);
                 } else if (flag && this.mob.getPatrolTarget().a((IPosition) this.mob.getPositionVector(), 10.0D)) {
-                    this.mob.fD();
+                    this.mob.fE();
                 } else {
                     Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.mob.getPatrolTarget());
                     Vec3D vec3d1 = this.mob.getPositionVector();
@@ -209,7 +209,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
         private List<EntityMonsterPatrolling> g() {
             return this.mob.level.a(EntityMonsterPatrolling.class, this.mob.getBoundingBox().g(16.0D), (entitymonsterpatrolling) -> {
-                return entitymonsterpatrolling.fC() && !entitymonsterpatrolling.q(this.mob);
+                return entitymonsterpatrolling.fD() && !entitymonsterpatrolling.q(this.mob);
             });
         }
 

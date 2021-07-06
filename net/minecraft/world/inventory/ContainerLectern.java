@@ -55,7 +55,7 @@ public class ContainerLectern extends Container {
                     this.setContainerData(0, j + 1);
                     return true;
                 case 3:
-                    if (!entityhuman.fu()) {
+                    if (!entityhuman.fv()) {
                         return false;
                     }
 
@@ -84,11 +84,11 @@ public class ContainerLectern extends Container {
         return this.lectern.a(entityhuman);
     }
 
-    public ItemStack i() {
+    public ItemStack l() {
         return this.lectern.getItem(0);
     }
 
-    public int j() {
+    public int m() {
         return this.lecternData.getProperty(0);
     }
 }

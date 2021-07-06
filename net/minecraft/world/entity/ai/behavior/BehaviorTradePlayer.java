@@ -50,20 +50,20 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
 
     public void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         super.a(worldserver, entityvillager, i);
-        this.c(entityvillager);
+        this.d(entityvillager);
         this.cycleCounter = 0;
         this.displayIndex = 0;
         this.lookTime = 40;
     }
 
     public void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        EntityLiving entityliving = this.c(entityvillager);
+        EntityLiving entityliving = this.d(entityvillager);
 
         this.a(entityliving, entityvillager);
         if (!this.displayItems.isEmpty()) {
-            this.d(entityvillager);
+            this.e(entityvillager);
         } else {
-            entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+            c(entityvillager);
             this.lookTime = Math.min(this.lookTime, 40);
         }
 
@@ -73,7 +73,7 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
     public void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         super.c(worldserver, entityvillager, i);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
-        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+        c(entityvillager);
         this.playerItemStack = null;
     }
 
@@ -98,7 +98,7 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
     }
 
     private void a(EntityVillager entityvillager) {
-        entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.displayItems.get(0));
+        a(entityvillager, (ItemStack) this.displayItems.get(0));
     }
 
     private void b(EntityVillager entityvillager) {
@@ -118,7 +118,17 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
         return ItemStack.c(this.playerItemStack, merchantrecipe.getBuyItem1()) || ItemStack.c(this.playerItemStack, merchantrecipe.getBuyItem2());
     }
 
-    private EntityLiving c(EntityVillager entityvillager) {
+    private static void c(EntityVillager entityvillager) {
+        entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.EMPTY);
+        entityvillager.a(EnumItemSlot.MAINHAND, 0.085F);
+    }
+
+    private static void a(EntityVillager entityvillager, ItemStack itemstack) {
+        entityvillager.setSlot(EnumItemSlot.MAINHAND, itemstack);
+        entityvillager.a(EnumItemSlot.MAINHAND, 0.0F);
+    }
+
+    private EntityLiving d(EntityVillager entityvillager) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
         EntityLiving entityliving = (EntityLiving) behaviorcontroller.getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
@@ -126,7 +136,7 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
         return entityliving;
     }
 
-    private void d(EntityVillager entityvillager) {
+    private void e(EntityVillager entityvillager) {
         if (this.displayItems.size() >= 2 && ++this.cycleCounter >= 40) {
             ++this.displayIndex;
             this.cycleCounter = 0;
@@ -134,7 +144,7 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
                 this.displayIndex = 0;
             }
 
-            entityvillager.setSlot(EnumItemSlot.MAINHAND, (ItemStack) this.displayItems.get(this.displayIndex));
+            a(entityvillager, (ItemStack) this.displayItems.get(this.displayIndex));
         }
 
     }

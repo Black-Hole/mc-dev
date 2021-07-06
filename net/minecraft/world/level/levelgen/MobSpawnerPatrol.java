@@ -114,7 +114,7 @@ public class MobSpawnerPatrol implements MobSpawner {
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.fD();
+                    entitymonsterpatrolling.fE();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());

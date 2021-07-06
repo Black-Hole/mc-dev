@@ -121,11 +121,11 @@ public class ContainerBrewingStand extends Container {
         return itemstack;
     }
 
-    public int i() {
+    public int l() {
         return this.brewingStandData.getProperty(1);
     }
 
-    public int j() {
+    public int m() {
         return this.brewingStandData.getProperty(0);
     }
 

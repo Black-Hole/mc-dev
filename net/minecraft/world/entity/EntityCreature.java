@@ -26,13 +26,13 @@ public abstract class EntityCreature extends EntityInsentient {
         return this.a(this.getChunkCoordinates(), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean ft() {
+    public boolean fu() {
         return !this.getNavigation().m();
     }
 
     @Override
-    protected void fl() {
-        super.fl();
+    protected void fm() {
+        super.fm();
         Entity entity = this.getLeashHolder();
 
         if (entity != null && entity.level == this.level) {
@@ -62,13 +62,13 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX() - this.locX(), entity.locY() - this.locY(), entity.locZ() - this.locZ())).d().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.fu());
+                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.fv());
             }
         }
 
     }
 
-    protected double fu() {
+    protected double fv() {
         return 1.0D;
     }
 

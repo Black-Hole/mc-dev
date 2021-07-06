@@ -85,7 +85,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.tamable.getControllerLook().a(this.owner, 10.0F, (float) this.tamable.eY());
+        this.tamable.getControllerLook().a(this.owner, 10.0F, (float) this.tamable.eZ());
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
             if (!this.tamable.isLeashed() && !this.tamable.isPassenger()) {

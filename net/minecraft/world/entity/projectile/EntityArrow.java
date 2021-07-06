@@ -152,7 +152,7 @@ public abstract class EntityArrow extends IProjectile {
 
             if (!voxelshape.isEmpty()) {
                 vec3d1 = this.getPositionVector();
-                Iterator iterator = voxelshape.d().iterator();
+                Iterator iterator = voxelshape.toList().iterator();
 
                 while (iterator.hasNext()) {
                     AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();

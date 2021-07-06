@@ -23,6 +23,6 @@ public class WorldGenBlockPlacerDoublePlant extends WorldGenBlockPlacer {
 
     @Override
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        ((BlockTallPlant) iblockdata.getBlock()).a(generatoraccess, iblockdata, blockposition, 2);
+        BlockTallPlant.a(generatoraccess, iblockdata, blockposition, 2);
     }
 }

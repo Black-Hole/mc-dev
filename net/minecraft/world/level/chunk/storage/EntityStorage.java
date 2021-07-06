@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.util.thread.ThreadedMailbox;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.ChunkCoordIntPair;
@@ -34,40 +36,49 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
     private final WorldServer level;
     private final IOWorker worker;
     private final LongSet emptyChunks = new LongOpenHashSet();
-    private final Executor mainThreadExecutor;
+    private final ThreadedMailbox<Runnable> entityDeserializerQueue;
     protected final DataFixer fixerUpper;
 
     public EntityStorage(WorldServer worldserver, File file, DataFixer datafixer, boolean flag, Executor executor) {
         this.level = worldserver;
         this.fixerUpper = datafixer;
-        this.mainThreadExecutor = executor;
+        this.entityDeserializerQueue = ThreadedMailbox.a(executor, "entity-deserializer");
         this.worker = new IOWorker(file, flag, "entities");
     }
 
     @Override
     public CompletableFuture<ChunkEntities<Entity>> a(ChunkCoordIntPair chunkcoordintpair) {
-        return this.emptyChunks.contains(chunkcoordintpair.pair()) ? CompletableFuture.completedFuture(b(chunkcoordintpair)) : this.worker.b(chunkcoordintpair).thenApplyAsync((nbttagcompound) -> {
-            if (nbttagcompound == null) {
-                this.emptyChunks.add(chunkcoordintpair.pair());
-                return b(chunkcoordintpair);
-            } else {
-                try {
-                    ChunkCoordIntPair chunkcoordintpair1 = b(nbttagcompound);
+        if (this.emptyChunks.contains(chunkcoordintpair.pair())) {
+            return CompletableFuture.completedFuture(b(chunkcoordintpair));
+        } else {
+            CompletableFuture completablefuture = this.worker.b(chunkcoordintpair);
+            Function function = (nbttagcompound) -> {
+                if (nbttagcompound == null) {
+                    this.emptyChunks.add(chunkcoordintpair.pair());
+                    return b(chunkcoordintpair);
+                } else {
+                    try {
+                        ChunkCoordIntPair chunkcoordintpair1 = b(nbttagcompound);
 
-                    if (!Objects.equals(chunkcoordintpair, chunkcoordintpair1)) {
-                        EntityStorage.LOGGER.error("Chunk file at {} is in the wrong location. (Expected {}, got {})", chunkcoordintpair, chunkcoordintpair, chunkcoordintpair1);
+                        if (!Objects.equals(chunkcoordintpair, chunkcoordintpair1)) {
+                            EntityStorage.LOGGER.error("Chunk file at {} is in the wrong location. (Expected {}, got {})", chunkcoordintpair, chunkcoordintpair, chunkcoordintpair1);
+                        }
+                    } catch (Exception exception) {
+                        EntityStorage.LOGGER.warn("Failed to parse chunk {} position info", chunkcoordintpair, exception);
                     }
-                } catch (Exception exception) {
-                    EntityStorage.LOGGER.warn("Failed to parse chunk {} position info", chunkcoordintpair, exception);
+
+                    NBTTagCompound nbttagcompound1 = this.c(nbttagcompound);
+                    NBTTagList nbttaglist = nbttagcompound1.getList("Entities", 10);
+                    List<Entity> list = (List) EntityTypes.a((List) nbttaglist, (World) this.level).collect(ImmutableList.toImmutableList());
+
+                    return new ChunkEntities<>(chunkcoordintpair, list);
                 }
+            };
+            ThreadedMailbox threadedmailbox = this.entityDeserializerQueue;
 
-                NBTTagCompound nbttagcompound1 = this.c(nbttagcompound);
-                NBTTagList nbttaglist = nbttagcompound1.getList("Entities", 10);
-                List<Entity> list = (List) EntityTypes.a((List) nbttaglist, (World) this.level).collect(ImmutableList.toImmutableList());
-
-                return new ChunkEntities<>(chunkcoordintpair, list);
-            }
-        }, this.mainThreadExecutor);
+            Objects.requireNonNull(this.entityDeserializerQueue);
+            return completablefuture.thenApplyAsync(function, threadedmailbox::a);
+        }
     }
 
     private static ChunkCoordIntPair b(NBTTagCompound nbttagcompound) {
@@ -118,8 +129,9 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
     }
 
     @Override
-    public void a() {
-        this.worker.a().join();
+    public void a(boolean flag) {
+        this.worker.a(flag).join();
+        this.entityDeserializerQueue.a();
     }
 
     private NBTTagCompound c(NBTTagCompound nbttagcompound) {

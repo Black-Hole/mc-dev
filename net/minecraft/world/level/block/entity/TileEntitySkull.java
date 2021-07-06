@@ -5,8 +5,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
+import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.GameProfileSerializer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +26,8 @@ public class TileEntitySkull extends TileEntity {
     @Nullable
     private static MinecraftSessionService sessionService;
     @Nullable
+    private static Executor mainThreadExecutor;
+    @Nullable
     public GameProfile owner;
     private int mouthTickCount;
     private boolean isMovingMouth;
@@ -38,6 +42,10 @@ public class TileEntitySkull extends TileEntity {
 
     public static void a(MinecraftSessionService minecraftsessionservice) {
         TileEntitySkull.sessionService = minecraftsessionservice;
+    }
+
+    public static void a(Executor executor) {
+        TileEntitySkull.mainThreadExecutor = executor;
     }
 
     @Override
@@ -115,15 +123,25 @@ public class TileEntitySkull extends TileEntity {
 
     public static void a(@Nullable GameProfile gameprofile, Consumer<GameProfile> consumer) {
         if (gameprofile != null && !UtilColor.b(gameprofile.getName()) && (!gameprofile.isComplete() || !gameprofile.getProperties().containsKey("textures")) && TileEntitySkull.profileCache != null && TileEntitySkull.sessionService != null) {
-            TileEntitySkull.profileCache.a(gameprofile.getName(), (gameprofile1) -> {
-                Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
+            TileEntitySkull.profileCache.a(gameprofile.getName(), (optional) -> {
+                SystemUtils.f().execute(() -> {
+                    SystemUtils.a(optional, (gameprofile1) -> {
+                        Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
 
-                if (property == null) {
-                    gameprofile1 = TileEntitySkull.sessionService.fillProfileProperties(gameprofile1, true);
-                }
+                        if (property == null) {
+                            gameprofile1 = TileEntitySkull.sessionService.fillProfileProperties(gameprofile1, true);
+                        }
 
-                TileEntitySkull.profileCache.a(gameprofile1);
-                consumer.accept(gameprofile1);
+                        TileEntitySkull.mainThreadExecutor.execute(() -> {
+                            TileEntitySkull.profileCache.a(gameprofile1);
+                            consumer.accept(gameprofile1);
+                        });
+                    }, () -> {
+                        TileEntitySkull.mainThreadExecutor.execute(() -> {
+                            consumer.accept(gameprofile);
+                        });
+                    });
+                });
             });
         } else {
             consumer.accept(gameprofile);

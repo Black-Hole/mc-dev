@@ -64,7 +64,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
                     optional2 = Optional.of(entityhoglin);
                 } else if (entityhoglin.t()) {
                     ++i;
-                    if (!optional1.isPresent() && entityhoglin.fx()) {
+                    if (!optional1.isPresent() && entityhoglin.fy()) {
                         optional1 = Optional.of(entityhoglin);
                     }
                 }
@@ -75,7 +75,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
                 if (entitypiglin.isBaby() && !optional3.isPresent()) {
                     optional3 = Optional.of(entitypiglin);
-                } else if (entitypiglin.fv()) {
+                } else if (entitypiglin.fw()) {
                     list.add(entitypiglin);
                 }
             } else if (entityliving1 instanceof EntityHuman) {
@@ -101,7 +101,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
         while (iterator1.hasNext()) {
             EntityLiving entityliving2 = (EntityLiving) iterator1.next();
 
-            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fv()) {
+            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fw()) {
                 list1.add((EntityPiglinAbstract) entityliving2);
             }
         }

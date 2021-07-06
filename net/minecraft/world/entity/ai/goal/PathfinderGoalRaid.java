@@ -26,24 +26,24 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.mob.getGoalTarget() == null && !this.mob.isVehicle() && this.mob.fK() && !this.mob.fJ().a() && !((WorldServer) this.mob.level).b(this.mob.getChunkCoordinates());
+        return this.mob.getGoalTarget() == null && !this.mob.isVehicle() && this.mob.fL() && !this.mob.fK().a() && !((WorldServer) this.mob.level).b(this.mob.getChunkCoordinates());
     }
 
     @Override
     public boolean b() {
-        return this.mob.fK() && !this.mob.fJ().a() && this.mob.level instanceof WorldServer && !((WorldServer) this.mob.level).b(this.mob.getChunkCoordinates());
+        return this.mob.fL() && !this.mob.fK().a() && this.mob.level instanceof WorldServer && !((WorldServer) this.mob.level).b(this.mob.getChunkCoordinates());
     }
 
     @Override
     public void e() {
-        if (this.mob.fK()) {
-            Raid raid = this.mob.fJ();
+        if (this.mob.fL()) {
+            Raid raid = this.mob.fK();
 
             if (this.mob.tickCount % 20 == 0) {
                 this.a(raid);
             }
 
-            if (!this.mob.ft()) {
+            if (!this.mob.fu()) {
                 Vec3D vec3d = DefaultRandomPos.a(this.mob, 15, 4, Vec3D.c((BaseBlockPosition) raid.getCenter()), 1.5707963705062866D);
 
                 if (vec3d != null) {
@@ -58,7 +58,7 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
         if (raid.v()) {
             Set<EntityRaider> set = Sets.newHashSet();
             List<EntityRaider> list = this.mob.level.a(EntityRaider.class, this.mob.getBoundingBox().g(16.0D), (entityraider) -> {
-                return !entityraider.fK() && PersistentRaid.a(entityraider, raid);
+                return !entityraider.fL() && PersistentRaid.a(entityraider, raid);
             });
 
             set.addAll(list);

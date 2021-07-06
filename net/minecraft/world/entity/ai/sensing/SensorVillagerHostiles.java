@@ -14,10 +14,10 @@ public class SensorVillagerHostiles extends NearestVisibleLivingEntitySensor {
 
     @Override
     protected boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
-        return this.b(entityliving1) && this.d(entityliving, entityliving1);
+        return this.b(entityliving1) && this.e(entityliving, entityliving1);
     }
 
-    private boolean d(EntityLiving entityliving, EntityLiving entityliving1) {
+    private boolean e(EntityLiving entityliving, EntityLiving entityliving1) {
         float f = (Float) SensorVillagerHostiles.ACCEPTABLE_DISTANCE_FROM_HOSTILES.get(entityliving1.getEntityType());
 
         return entityliving1.f((Entity) entityliving) <= (double) (f * f);

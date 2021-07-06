@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentManager;
 import net.minecraft.world.item.enchantment.WeightedRandomEnchant;
 import net.minecraft.world.level.World;
 
@@ -46,15 +47,15 @@ public class ItemEnchantedBook extends Item {
     public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
         NBTTagList nbttaglist = d(itemstack);
         boolean flag = true;
-        MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(weightedrandomenchant.enchantment);
+        MinecraftKey minecraftkey = EnchantmentManager.a(weightedrandomenchant.enchantment);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
-            MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+            MinecraftKey minecraftkey1 = EnchantmentManager.b(nbttagcompound);
 
             if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) {
-                if (nbttagcompound.getInt("lvl") < weightedrandomenchant.level) {
-                    nbttagcompound.setShort("lvl", (short) weightedrandomenchant.level);
+                if (EnchantmentManager.a(nbttagcompound) < weightedrandomenchant.level) {
+                    EnchantmentManager.a(nbttagcompound, weightedrandomenchant.level);
                 }
 
                 flag = false;
@@ -63,11 +64,7 @@ public class ItemEnchantedBook extends Item {
         }
 
         if (flag) {
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-            nbttagcompound1.setString("id", String.valueOf(minecraftkey));
-            nbttagcompound1.setShort("lvl", (short) weightedrandomenchant.level);
-            nbttaglist.add(nbttagcompound1);
+            nbttaglist.add(EnchantmentManager.a(minecraftkey, weightedrandomenchant.level));
         }
 
         itemstack.getOrCreateTag().set("StoredEnchantments", nbttaglist);

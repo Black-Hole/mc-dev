@@ -135,17 +135,17 @@ public class ContainerBeacon extends Container {
         return itemstack;
     }
 
-    public int i() {
+    public int l() {
         return this.beaconData.getProperty(0);
     }
 
     @Nullable
-    public MobEffectList j() {
+    public MobEffectList m() {
         return MobEffectList.fromId(this.beaconData.getProperty(1));
     }
 
     @Nullable
-    public MobEffectList k() {
+    public MobEffectList n() {
         return MobEffectList.fromId(this.beaconData.getProperty(2));
     }
 
@@ -158,7 +158,7 @@ public class ContainerBeacon extends Container {
 
     }
 
-    public boolean l() {
+    public boolean o() {
         return !this.beacon.getItem(0).isEmpty();
     }
 

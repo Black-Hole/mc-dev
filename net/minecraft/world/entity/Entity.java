@@ -1105,7 +1105,7 @@ public abstract class Entity implements INamableTileEntity, EntityAccess, IComma
         if (this.isSwimming()) {
             this.setSwimming(this.isSprinting() && this.isInWater() && !this.isPassenger());
         } else {
-            this.setSwimming(this.isSprinting() && this.aP() && !this.isPassenger());
+            this.setSwimming(this.isSprinting() && this.aP() && !this.isPassenger() && this.level.getFluid(this.blockPosition).a((Tag) TagsFluid.WATER));
         }
 
     }
@@ -1619,7 +1619,7 @@ public abstract class Entity implements INamableTileEntity, EntityAccess, IComma
             double d2 = nbttaglist1.h(2);
 
             this.setMot(Math.abs(d0) > 10.0D ? 0.0D : d0, Math.abs(d1) > 10.0D ? 0.0D : d1, Math.abs(d2) > 10.0D ? 0.0D : d2);
-            this.setPositionRaw(nbttaglist.h(0), nbttaglist.h(1), nbttaglist.h(2));
+            this.setPositionRaw(nbttaglist.h(0), MathHelper.a(nbttaglist.h(1), -2.0E7D, 2.0E7D), nbttaglist.h(2));
             this.setYRot(nbttaglist2.i(0));
             this.setXRot(nbttaglist2.i(1));
             this.aZ();
@@ -2830,7 +2830,7 @@ public abstract class Entity implements INamableTileEntity, EntityAccess, IComma
     public boolean cH() {
         Entity entity = this.getRidingPassenger();
 
-        return entity instanceof EntityHuman ? ((EntityHuman) entity).fh() : !this.level.isClientSide;
+        return entity instanceof EntityHuman ? ((EntityHuman) entity).fi() : !this.level.isClientSide;
     }
 
     protected static Vec3D a(double d0, double d1, float f) {

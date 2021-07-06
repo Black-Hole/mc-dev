@@ -35,21 +35,50 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 public class EnchantmentManager {
 
+    private static final String TAG_ENCH_ID = "id";
+    private static final String TAG_ENCH_LEVEL = "lvl";
+
     public EnchantmentManager() {}
+
+    public static NBTTagCompound a(@Nullable MinecraftKey minecraftkey, int i) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        nbttagcompound.setString("id", String.valueOf(minecraftkey));
+        nbttagcompound.setShort("lvl", (short) i);
+        return nbttagcompound;
+    }
+
+    public static void a(NBTTagCompound nbttagcompound, int i) {
+        nbttagcompound.setShort("lvl", (short) i);
+    }
+
+    public static int a(NBTTagCompound nbttagcompound) {
+        return MathHelper.clamp(nbttagcompound.getInt("lvl"), 0, 255);
+    }
+
+    @Nullable
+    public static MinecraftKey b(NBTTagCompound nbttagcompound) {
+        return MinecraftKey.a(nbttagcompound.getString("id"));
+    }
+
+    @Nullable
+    public static MinecraftKey a(Enchantment enchantment) {
+        return IRegistry.ENCHANTMENT.getKey(enchantment);
+    }
 
     public static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemstack) {
         if (itemstack.isEmpty()) {
             return 0;
         } else {
-            MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(enchantment);
+            MinecraftKey minecraftkey = a(enchantment);
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
-                MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+                MinecraftKey minecraftkey1 = b(nbttagcompound);
 
                 if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) {
-                    return MathHelper.clamp(nbttagcompound.getInt("lvl"), 0, 255);
+                    return a(nbttagcompound);
                 }
             }
 
@@ -69,8 +98,8 @@ public class EnchantmentManager {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
 
-            IRegistry.ENCHANTMENT.getOptional(MinecraftKey.a(nbttagcompound.getString("id"))).ifPresent((enchantment) -> {
-                map.put(enchantment, nbttagcompound.getInt("lvl"));
+            IRegistry.ENCHANTMENT.getOptional(b(nbttagcompound)).ifPresent((enchantment) -> {
+                map.put(enchantment, a(nbttagcompound));
             });
         }
 
@@ -87,11 +116,8 @@ public class EnchantmentManager {
 
             if (enchantment != null) {
                 int i = (Integer) entry.getValue();
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
-                nbttagcompound.setShort("lvl", (short) i);
-                nbttaglist.add(nbttagcompound);
+                nbttaglist.add(a(a(enchantment), i));
                 if (itemstack.a(Items.ENCHANTED_BOOK)) {
                     ItemEnchantedBook.a(itemstack, new WeightedRandomEnchant(enchantment, i));
                 }
@@ -111,11 +137,10 @@ public class EnchantmentManager {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                String s = nbttaglist.getCompound(i).getString("id");
-                int j = nbttaglist.getCompound(i).getInt("lvl");
+                NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
 
-                IRegistry.ENCHANTMENT.getOptional(MinecraftKey.a(s)).ifPresent((enchantment) -> {
-                    enchantmentmanager_a.accept(enchantment, j);
+                IRegistry.ENCHANTMENT.getOptional(b(nbttagcompound)).ifPresent((enchantment) -> {
+                    enchantmentmanager_a.accept(enchantment, a(nbttagcompound));
                 });
             }
 

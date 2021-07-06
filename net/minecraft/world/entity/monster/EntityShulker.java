@@ -117,7 +117,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
     @Override
     public void K() {
-        if (!this.fz()) {
+        if (!this.fA()) {
             super.K();
         }
 
@@ -130,7 +130,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.fz() ? SoundEffects.SHULKER_HURT_CLOSED : SoundEffects.SHULKER_HURT;
+        return this.fA() ? SoundEffects.SHULKER_HURT_CLOSED : SoundEffects.SHULKER_HURT;
     }
 
     @Override
@@ -173,11 +173,11 @@ public class EntityShulker extends EntityGolem implements IMonster {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide && !this.isPassenger() && !this.a(this.getChunkCoordinates(), this.getAttachFace())) {
-            this.fw();
+            this.fx();
         }
 
-        if (this.fx()) {
-            this.fy();
+        if (this.fy()) {
+            this.fz();
         }
 
         if (this.level.isClientSide) {
@@ -190,7 +190,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
     }
 
-    private void fw() {
+    private void fx() {
         EnumDirection enumdirection = this.g(this.getChunkCoordinates());
 
         if (enumdirection != null) {
@@ -214,7 +214,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         return 0.5F - MathHelper.sin((0.5F + f) * 3.1415927F) * 0.5F;
     }
 
-    private boolean fx() {
+    private boolean fy() {
         this.currentPeekAmountO = this.currentPeekAmount;
         float f = (float) this.getPeek() * 0.01F;
 
@@ -231,7 +231,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    private void fy() {
+    private void fz() {
         this.ah();
         float f = B(this.currentPeekAmount);
         float f1 = B(this.currentPeekAmountO);
@@ -433,7 +433,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     public boolean damageEntity(DamageSource damagesource, float f) {
         Entity entity;
 
-        if (this.fz()) {
+        if (this.fA()) {
             entity = damagesource.k();
             if (entity instanceof EntityArrow) {
                 return false;
@@ -448,7 +448,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
             } else if (damagesource.b()) {
                 entity = damagesource.k();
                 if (entity != null && entity.getEntityType() == EntityTypes.SHULKER_BULLET) {
-                    this.fA();
+                    this.fB();
                 }
             }
 
@@ -456,21 +456,21 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    private boolean fz() {
+    private boolean fA() {
         return this.getPeek() == 0;
     }
 
-    private void fA() {
+    private void fB() {
         Vec3D vec3d = this.getPositionVector();
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
-        if (!this.fz() && this.p()) {
+        if (!this.fA() && this.p()) {
             int i = this.level.a((EntityTypeTest) EntityTypes.SHULKER, axisalignedbb.g(8.0D), Entity::isAlive).size();
             float f = (float) (i - 1) / 5.0F;
 
             if (this.level.random.nextFloat() >= f) {
                 EntityShulker entityshulker = (EntityShulker) EntityTypes.SHULKER.a(this.level);
-                EnumColor enumcolor = this.fv();
+                EnumColor enumcolor = this.fw();
 
                 if (enumcolor != null) {
                     entityshulker.a(enumcolor);
@@ -540,12 +540,12 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     @Override
-    public int eY() {
+    public int eZ() {
         return 180;
     }
 
     @Override
-    public int eZ() {
+    public int fa() {
         return 180;
     }
 
@@ -578,7 +578,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     @Nullable
-    public EnumColor fv() {
+    public EnumColor fw() {
         byte b0 = (Byte) this.entityData.get(EntityShulker.DATA_COLOR_ID);
 
         return b0 != 16 && b0 <= 15 ? EnumColor.fromColorIndex(b0) : null;

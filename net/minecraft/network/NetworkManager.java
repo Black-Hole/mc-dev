@@ -355,12 +355,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         this.channel.config().setAutoRead(false);
     }
 
-    public void setCompressionLevel(int i) {
+    public void setCompressionLevel(int i, boolean flag) {
         if (i >= 0) {
             if (this.channel.pipeline().get("decompress") instanceof PacketDecompressor) {
-                ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(i);
+                ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(i, flag);
             } else {
-                this.channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(i));
+                this.channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(i, flag));
             }
 
             if (this.channel.pipeline().get("compress") instanceof PacketCompressor) {

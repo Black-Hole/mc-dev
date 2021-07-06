@@ -184,7 +184,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
         return this.persistentAngerTarget;
     }
 
-    private float fx() {
+    private float fy() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
@@ -192,7 +192,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     public boolean attackEntity(Entity entity) {
         this.attackAnimationTick = 10;
         this.level.broadcastEntityEffect(this, (byte) 4);
-        float f = this.fx();
+        float f = this.fy();
         float f1 = (int) f > 0 ? f / 2.0F + (float) this.random.nextInt((int) f) : f;
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f1);
 
@@ -292,7 +292,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
         this.playSound(SoundEffects.IRON_GOLEM_STEP, 1.0F, 1.0F);
     }
 
-    public int fv() {
+    public int fw() {
         return this.offerFlowerTick;
     }
 

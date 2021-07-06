@@ -88,7 +88,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     @Override
     public EntityIllagerAbstract.a n() {
-        return this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : (this.fM() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
+        return this.isAggressive() ? EntityIllagerAbstract.a.ATTACKING : (this.fN() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.fJ() == null) {
+        if (this.fK() == null) {
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
 
@@ -170,7 +170,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     @Override
     public void a(int i, boolean flag) {
         ItemStack itemstack = new ItemStack(Items.IRON_AXE);
-        Raid raid = this.fJ();
+        Raid raid = this.fK();
         byte b0 = 1;
 
         if (i > raid.a(EnumDifficulty.NORMAL)) {
@@ -200,14 +200,14 @@ public class EntityVindicator extends EntityIllagerAbstract {
         public boolean b() {
             EntityVindicator entityvindicator = (EntityVindicator) this.mob;
 
-            return entityvindicator.fK() && super.b();
+            return entityvindicator.fL() && super.b();
         }
 
         @Override
         public boolean a() {
             EntityVindicator entityvindicator = (EntityVindicator) this.mob;
 
-            return entityvindicator.fK() && entityvindicator.random.nextInt(10) == 0 && super.a();
+            return entityvindicator.fL() && entityvindicator.random.nextInt(10) == 0 && super.a();
         }
 
         @Override
@@ -238,7 +238,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     private static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::eQ);
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::eR);
         }
 
         @Override

@@ -53,6 +53,8 @@ import net.minecraft.world.level.pathfinder.PathfinderNormal;
 public class Goat extends EntityAnimal {
 
     public static final EntitySize LONG_JUMPING_DIMENSIONS = EntitySize.b(0.9F, 1.3F).a(0.7F);
+    private static final int ADULT_ATTACK_DAMAGE = 2;
+    private static final int BABY_ATTACK_DAMAGE = 1;
     protected static final ImmutableList<SensorType<? extends Sensor<? super Goat>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_ADULT, SensorType.HURT_BY, SensorType.GOAT_TEMPTATIONS);
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATE_RECENTLY, MemoryModuleType.BREED_TARGET, MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS, MemoryModuleType.LONG_JUMP_MID_JUMP, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, new MemoryModuleType[]{MemoryModuleType.IS_TEMPTED, MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryModuleType.RAM_TARGET});
     public static final int GOAT_FALL_DAMAGE_REDUCTION = 10;
@@ -77,7 +79,17 @@ public class Goat extends EntityAnimal {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
+        return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
+    }
+
+    @Override
+    protected void n() {
+        if (this.isBaby()) {
+            this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+        } else {
+            this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(2.0D);
+        }
+
     }
 
     @Override
@@ -111,14 +123,16 @@ public class Goat extends EntityAnimal {
 
     @Override
     public Goat createChild(WorldServer worldserver, EntityAgeable entityageable) {
-        Goat goat = (Goat) entityageable;
-        Goat goat1 = (Goat) EntityTypes.GOAT.a((World) worldserver);
+        Goat goat = (Goat) EntityTypes.GOAT.a((World) worldserver);
 
-        if (goat1 != null && goat.isScreamingGoat()) {
-            goat1.setScreamingGoat(true);
+        if (goat != null) {
+            GoatAi.a(goat);
+            boolean flag = entityageable instanceof Goat && ((Goat) entityageable).isScreamingGoat();
+
+            goat.setScreamingGoat(flag || worldserver.getRandom().nextDouble() < 0.02D);
         }
 
-        return goat1;
+        return goat;
     }
 
     @Override
@@ -138,13 +152,13 @@ public class Goat extends EntityAnimal {
     }
 
     @Override
-    public int eZ() {
+    public int fa() {
         return 15;
     }
 
     @Override
     public void setHeadRotation(float f) {
-        int i = this.eZ();
+        int i = this.fa();
         float f1 = MathHelper.c(this.yBodyRot, f);
         float f2 = MathHelper.a(f1, (float) (-i), (float) i);
 
@@ -169,7 +183,7 @@ public class Goat extends EntityAnimal {
         } else {
             EnumInteractionResult enuminteractionresult = super.b(entityhuman, enumhand);
 
-            if (enuminteractionresult.a() && this.n(itemstack)) {
+            if (enuminteractionresult.a() && this.isBreedItem(itemstack)) {
                 this.level.playSound((EntityHuman) null, (Entity) this, this.e(itemstack), SoundCategory.NEUTRAL, 1.0F, MathHelper.b(this.level.random, 0.8F, 1.2F));
             }
 
@@ -245,7 +259,7 @@ public class Goat extends EntityAnimal {
         this.entityData.set(Goat.DATA_IS_SCREAMING_GOAT, flag);
     }
 
-    public float fw() {
+    public float fx() {
         return (float) this.lowerHeadTick / 20.0F * 30.0F * 0.017453292F;
     }
 

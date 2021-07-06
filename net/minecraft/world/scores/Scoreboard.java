@@ -202,6 +202,7 @@ public class Scoreboard {
         return this.displayObjectives[i];
     }
 
+    @Nullable
     public ScoreboardTeam getTeam(String s) {
         return (ScoreboardTeam) this.teamsByName.get(s);
     }

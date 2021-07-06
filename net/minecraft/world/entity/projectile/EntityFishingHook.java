@@ -448,7 +448,7 @@ public class EntityFishingHook extends IProjectile {
                 this.level.broadcastEntityEffect(this, (byte) 31);
                 i = this.hookedIn instanceof EntityItem ? 3 : 5;
             } else if (this.nibble > 0) {
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.level)).set(LootContextParameters.ORIGIN, this.getPositionVector()).set(LootContextParameters.TOOL, itemstack).set(LootContextParameters.THIS_ENTITY, this).a(this.random).a((float) this.luck + entityhuman.fE());
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.level)).set(LootContextParameters.ORIGIN, this.getPositionVector()).set(LootContextParameters.TOOL, itemstack).set(LootContextParameters.THIS_ENTITY, this).a(this.random).a((float) this.luck + entityhuman.fF());
                 LootTable loottable = this.level.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.FISHING);
                 List<ItemStack> list = loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.FISHING));
 
@@ -487,7 +487,7 @@ public class EntityFishingHook extends IProjectile {
 
     @Override
     public void a(byte b0) {
-        if (b0 == 31 && this.level.isClientSide && this.hookedIn instanceof EntityHuman && ((EntityHuman) this.hookedIn).fh()) {
+        if (b0 == 31 && this.level.isClientSide && this.hookedIn instanceof EntityHuman && ((EntityHuman) this.hookedIn).fi()) {
             this.reel(this.hookedIn);
         }
 

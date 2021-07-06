@@ -59,7 +59,7 @@ public class EntitySquid extends EntityWaterAnimal {
         this.goalSelector.a(1, new EntitySquid.a());
     }
 
-    public static AttributeProvider.Builder fv() {
+    public static AttributeProvider.Builder fw() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D);
     }
 
@@ -229,7 +229,7 @@ public class EntitySquid extends EntityWaterAnimal {
         this.tz = f2;
     }
 
-    public boolean fw() {
+    public boolean fx() {
         return this.tx != 0.0F || this.ty != 0.0F || this.tz != 0.0F;
     }
 
@@ -252,7 +252,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
             if (i > 100) {
                 this.squid.a(0.0F, 0.0F, 0.0F);
-            } else if (this.squid.getRandom().nextInt(50) == 0 || !this.squid.wasTouchingWater || !this.squid.fw()) {
+            } else if (this.squid.getRandom().nextInt(50) == 0 || !this.squid.wasTouchingWater || !this.squid.fx()) {
                 float f = this.squid.getRandom().nextFloat() * 6.2831855F;
                 float f1 = MathHelper.cos(f) * 0.2F;
                 float f2 = -0.1F + this.squid.getRandom().nextFloat() * 0.2F;

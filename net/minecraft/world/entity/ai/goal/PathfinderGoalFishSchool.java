@@ -23,9 +23,9 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (this.mob.fB()) {
+        if (this.mob.fC()) {
             return false;
-        } else if (this.mob.fy()) {
+        } else if (this.mob.fz()) {
             return true;
         } else if (this.nextStartTick > 0) {
             --this.nextStartTick;
@@ -33,21 +33,21 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
         } else {
             this.nextStartTick = this.a(this.mob);
             Predicate<EntityFishSchool> predicate = (entityfishschool) -> {
-                return entityfishschool.fA() || !entityfishschool.fy();
+                return entityfishschool.fB() || !entityfishschool.fz();
             };
             List<? extends EntityFishSchool> list = this.mob.level.a(this.mob.getClass(), this.mob.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
-            EntityFishSchool entityfishschool = (EntityFishSchool) DataFixUtils.orElse(list.stream().filter(EntityFishSchool::fA).findAny(), this.mob);
+            EntityFishSchool entityfishschool = (EntityFishSchool) DataFixUtils.orElse(list.stream().filter(EntityFishSchool::fB).findAny(), this.mob);
 
             entityfishschool.a(list.stream().filter((entityfishschool1) -> {
-                return !entityfishschool1.fy();
+                return !entityfishschool1.fz();
             }));
-            return this.mob.fy();
+            return this.mob.fz();
         }
     }
 
     @Override
     public boolean b() {
-        return this.mob.fy() && this.mob.fC();
+        return this.mob.fz() && this.mob.fD();
     }
 
     @Override
@@ -57,14 +57,14 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
 
     @Override
     public void d() {
-        this.mob.fz();
+        this.mob.fA();
     }
 
     @Override
     public void e() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
-            this.mob.fD();
+            this.mob.fE();
         }
     }
 }

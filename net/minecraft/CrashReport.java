@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletionException;
+import net.minecraft.util.MemoryReserve;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -246,6 +247,7 @@ public class CrashReport {
     }
 
     public static void h() {
+        MemoryReserve.a();
         (new CrashReport("Don't panic!", new Throwable())).e();
     }
 }

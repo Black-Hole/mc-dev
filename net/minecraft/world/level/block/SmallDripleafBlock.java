@@ -54,21 +54,16 @@ public class SmallDripleafBlock extends BlockTallPlant implements IBlockFragileP
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = super.getPlacedState(blockactioncontext);
 
-        if (iblockdata != null) {
-            Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
-
-            return (IBlockData) ((IBlockData) iblockdata.set(SmallDripleafBlock.WATERLOGGED, fluid.getType() == FluidTypes.WATER)).set(SmallDripleafBlock.FACING, blockactioncontext.g().opposite());
-        } else {
-            return null;
-        }
+        return iblockdata != null ? a((IWorldReader) blockactioncontext.getWorld(), blockactioncontext.getClickPosition(), (IBlockData) iblockdata.set(SmallDripleafBlock.FACING, blockactioncontext.g().opposite())) : null;
     }
 
     @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         if (!world.isClientSide()) {
-            EnumDirection enumdirection = (EnumDirection) iblockdata.get(SmallDripleafBlock.FACING);
+            BlockPosition blockposition1 = blockposition.up();
+            IBlockData iblockdata1 = BlockTallPlant.a((IWorldReader) world, blockposition1, (IBlockData) ((IBlockData) this.getBlockData().set(SmallDripleafBlock.HALF, BlockPropertyDoubleBlockHalf.UPPER)).set(SmallDripleafBlock.FACING, (EnumDirection) iblockdata.get(SmallDripleafBlock.FACING)));
 
-            world.setTypeAndData(blockposition.up(), (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(SmallDripleafBlock.HALF, BlockPropertyDoubleBlockHalf.UPPER)).set(SmallDripleafBlock.WATERLOGGED, world.B(blockposition.up()))).set(SmallDripleafBlock.FACING, enumdirection), 3);
+            world.setTypeAndData(blockposition1, iblockdata1, 3);
         }
 
     }

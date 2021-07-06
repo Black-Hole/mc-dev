@@ -179,7 +179,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[]{EntityGuardian.class})).a());
     }
 
-    public static AttributeProvider.Builder fv() {
+    public static AttributeProvider.Builder fw() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 1.2000000476837158D).a(GenericAttributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -216,12 +216,12 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int eY() {
+    public int eZ() {
         return 1;
     }
 
     @Override
-    public int eZ() {
+    public int fa() {
         return 1;
     }
 
@@ -368,7 +368,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return SoundEffects.DOLPHIN_SWIM;
     }
 
-    protected boolean fw() {
+    protected boolean fx() {
         BlockPosition blockposition = this.getNavigation().h();
 
         return blockposition != null ? blockposition.a((IPosition) this.getPositionVector(), 12.0D) : false;
@@ -377,7 +377,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     @Override
     public void g(Vec3D vec3d) {
         if (this.doAITick() && this.isInWater()) {
-            this.a(this.ev(), vec3d);
+            this.a(this.ew(), vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
             if (this.getGoalTarget() == null) {
@@ -464,7 +464,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         public void e() {
             World world = this.dolphin.level;
 
-            if (this.dolphin.fw() || this.dolphin.getNavigation().m()) {
+            if (this.dolphin.fx() || this.dolphin.getNavigation().m()) {
                 Vec3D vec3d = Vec3D.a((BaseBlockPosition) this.dolphin.getTreasurePos());
                 Vec3D vec3d1 = DefaultRandomPos.a(this.dolphin, 16, 1, vec3d, 0.39269909262657166D);
 
@@ -485,7 +485,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                     return;
                 }
 
-                this.dolphin.getControllerLook().a(vec3d1.x, vec3d1.y, vec3d1.z, (float) (this.dolphin.eZ() + 20), (float) this.dolphin.eY());
+                this.dolphin.getControllerLook().a(vec3d1.x, vec3d1.y, vec3d1.z, (float) (this.dolphin.fa() + 20), (float) this.dolphin.eZ());
                 this.dolphin.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z, 1.3D);
                 if (world.random.nextInt(80) == 0) {
                     world.broadcastEntityEffect(this.dolphin, (byte) 38);
@@ -531,7 +531,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            this.dolphin.getControllerLook().a(this.player, (float) (this.dolphin.eZ() + 20), (float) this.dolphin.eY());
+            this.dolphin.getControllerLook().a(this.player, (float) (this.dolphin.fa() + 20), (float) this.dolphin.eZ());
             if (this.dolphin.f((Entity) this.player) < 6.25D) {
                 this.dolphin.getNavigation().o();
             } else {

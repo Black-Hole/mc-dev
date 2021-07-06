@@ -33,7 +33,7 @@ public class ChunkTaskQueueSorter implements PlayerChunk.d, AutoCloseable {
 
     public ChunkTaskQueueSorter(List<Mailbox<?>> list, Executor executor, int i) {
         this.queues = (Map) list.stream().collect(Collectors.toMap(Function.identity(), (mailbox) -> {
-            return new ChunkTaskQueue<>(mailbox.bo() + "_queue", i);
+            return new ChunkTaskQueue<>(mailbox.bn() + "_queue", i);
         }));
         this.sleeping = Sets.newHashSet(list);
         this.mailbox = new ThreadedMailbox<>(new PairedQueue.a(4), executor, "sorter");
@@ -74,7 +74,7 @@ public class ChunkTaskQueueSorter implements PlayerChunk.d, AutoCloseable {
         return (Mailbox) this.mailbox.b((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
                 this.b(mailbox);
-                mailbox1.a(Mailbox.a("chunk priority sorter around " + mailbox.bo(), (chunktaskqueuesorter_a) -> {
+                mailbox1.a(Mailbox.a("chunk priority sorter around " + mailbox.bn(), (chunktaskqueuesorter_a) -> {
                     this.a(mailbox, chunktaskqueuesorter_a.task, chunktaskqueuesorter_a.pos, chunktaskqueuesorter_a.level, flag);
                 }));
             });
@@ -84,7 +84,7 @@ public class ChunkTaskQueueSorter implements PlayerChunk.d, AutoCloseable {
     public Mailbox<ChunkTaskQueueSorter.b> a(Mailbox<Runnable> mailbox) {
         return (Mailbox) this.mailbox.b((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
-                mailbox1.a(Mailbox.a("chunk priority sorter around " + mailbox.bo(), (chunktaskqueuesorter_b) -> {
+                mailbox1.a(Mailbox.a("chunk priority sorter around " + mailbox.bn(), (chunktaskqueuesorter_b) -> {
                     this.a(mailbox, chunktaskqueuesorter_b.pos, chunktaskqueuesorter_b.task, chunktaskqueuesorter_b.clearQueue);
                 }));
             });
@@ -167,7 +167,7 @@ public class ChunkTaskQueueSorter implements PlayerChunk.d, AutoCloseable {
     @VisibleForTesting
     public String a() {
         String s = (String) this.queues.entrySet().stream().map((entry) -> {
-            String s1 = ((Mailbox) entry.getKey()).bo();
+            String s1 = ((Mailbox) entry.getKey()).bn();
 
             return s1 + "=[" + (String) ((ChunkTaskQueue) entry.getValue()).b().stream().map((olong) -> {
                 return olong + ":" + new ChunkCoordIntPair(olong);

@@ -56,7 +56,7 @@ public final class MinecraftServerBeans implements DynamicMBean {
     }
 
     private float a() {
-        return this.server.aO();
+        return this.server.aN();
     }
 
     private long[] b() {

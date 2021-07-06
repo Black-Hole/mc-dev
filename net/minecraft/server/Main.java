@@ -191,7 +191,7 @@ public class Main {
                 boolean flag1 = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
                 if (flag1 && !GraphicsEnvironment.isHeadless()) {
-                    dedicatedserver1.bi();
+                    dedicatedserver1.bh();
                 }
 
                 return dedicatedserver1;

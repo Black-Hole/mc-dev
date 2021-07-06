@@ -79,12 +79,12 @@ public class ItemDebugStick extends Item {
                         iblockstate = (IBlockState) collection.iterator().next();
                     }
 
-                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.eY());
+                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.eZ());
 
                     generatoraccess.setTypeAndData(blockposition, iblockdata1, 18);
                     a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".update", new Object[]{iblockstate.getName(), a(iblockdata1, iblockstate)})));
                 } else {
-                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.eY());
+                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.eZ());
                     String s2 = iblockstate.getName();
 
                     nbttagcompound.setString(s, s2);

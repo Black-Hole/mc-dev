@@ -55,7 +55,7 @@ public class CommandClear {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            j += entityplayer.getInventory().a(predicate, i, entityplayer.inventoryMenu.n());
+            j += entityplayer.getInventory().a(predicate, i, entityplayer.inventoryMenu.q());
             entityplayer.containerMenu.d();
             entityplayer.inventoryMenu.a((IInventory) entityplayer.getInventory());
         }

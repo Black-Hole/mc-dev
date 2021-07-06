@@ -57,7 +57,7 @@ public class ContainerSmithing extends ContainerAnvilAbstract {
     }
 
     @Override
-    public void i() {
+    public void l() {
         List<RecipeSmithing> list = this.level.getCraftingManager().b(Recipes.SMITHING, this.inputSlots, this.level);
 
         if (list.isEmpty()) {

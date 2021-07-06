@@ -40,17 +40,17 @@ public class EntityAIBodyControl implements Control {
     }
 
     private void b() {
-        this.mob.yBodyRot = MathHelper.c(this.mob.yBodyRot, this.mob.yHeadRot, (float) this.mob.eZ());
+        this.mob.yBodyRot = MathHelper.c(this.mob.yBodyRot, this.mob.yHeadRot, (float) this.mob.fa());
     }
 
     private void c() {
-        this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.eZ());
+        this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.fa());
     }
 
     private void d() {
         int i = this.headStableTime - 10;
         float f = MathHelper.a((float) i / 10.0F, 0.0F, 1.0F);
-        float f1 = (float) this.mob.eZ() * (1.0F - f);
+        float f1 = (float) this.mob.fa() * (1.0F - f);
 
         this.mob.yBodyRot = MathHelper.c(this.mob.yBodyRot, this.mob.yHeadRot, f1);
     }

@@ -173,7 +173,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
             this.level.addParticle(Particles.EXPLOSION, this.locX() + (double) f1, this.locY() + 2.0D + (double) f, this.locZ() + (double) f2, 0.0D, 0.0D, 0.0D);
         } else {
-            this.fw();
+            this.fx();
             Vec3D vec3d = this.getMot();
 
             f = 0.2F / ((float) vec3d.h() * 10.0F + 1.0F);
@@ -304,7 +304,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
                 float f13 = MathHelper.sin(this.getYRot() * 0.017453292F - this.yRotA * 0.01F);
                 float f14 = MathHelper.cos(this.getYRot() * 0.017453292F - this.yRotA * 0.01F);
-                float f15 = this.fv();
+                float f15 = this.fw();
 
                 this.a(this.head, (double) (f13 * 6.5F * f8), (double) (f15 + f9 * 6.5F), (double) (-f14 * 6.5F * f8));
                 this.a(this.neck, (double) (f13 * 5.5F * f8), (double) (f15 + f9 * 5.5F), (double) (-f14 * 5.5F * f8));
@@ -362,7 +362,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         entitycomplexpart.setPosition(this.locX() + d0, this.locY() + d1, this.locZ() + d2);
     }
 
-    private float fv() {
+    private float fw() {
         if (this.phaseManager.a().a()) {
             return -1.0F;
         } else {
@@ -373,7 +373,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         }
     }
 
-    private void fw() {
+    private void fx() {
         if (this.nearestCrystal != null) {
             if (this.nearestCrystal.isRemoved()) {
                 this.nearestCrystal = null;
@@ -932,7 +932,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     }
 
     @Override
-    public boolean addEffect(MobEffect mobeffect) {
+    public boolean addEffect(MobEffect mobeffect, @Nullable Entity entity) {
         return false;
     }
 

@@ -13,10 +13,10 @@ public class AxolotlAttackablesSensor extends NearestVisibleLivingEntitySensor {
 
     @Override
     protected boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
-        return Sensor.c(entityliving, entityliving1) && (this.b(entityliving1) || this.d(entityliving, entityliving1)) ? this.e(entityliving, entityliving1) && entityliving1.aO() : false;
+        return Sensor.c(entityliving, entityliving1) && (this.b(entityliving1) || this.e(entityliving, entityliving1)) ? this.f(entityliving, entityliving1) && entityliving1.aO() : false;
     }
 
-    private boolean d(EntityLiving entityliving, EntityLiving entityliving1) {
+    private boolean e(EntityLiving entityliving, EntityLiving entityliving1) {
         return !entityliving.getBehaviorController().hasMemory(MemoryModuleType.HAS_HUNTING_COOLDOWN) && TagsEntity.AXOLOTL_HUNT_TARGETS.isTagged(entityliving1.getEntityType());
     }
 
@@ -24,7 +24,7 @@ public class AxolotlAttackablesSensor extends NearestVisibleLivingEntitySensor {
         return TagsEntity.AXOLOTL_ALWAYS_HOSTILES.isTagged(entityliving.getEntityType());
     }
 
-    private boolean e(EntityLiving entityliving, EntityLiving entityliving1) {
+    private boolean f(EntityLiving entityliving, EntityLiving entityliving1) {
         return entityliving1.f((Entity) entityliving) <= 64.0D;
     }
 

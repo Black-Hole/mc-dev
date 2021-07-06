@@ -34,16 +34,16 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     public static AttributeProvider.Builder t() {
-        return fR().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+        return fS().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
     protected void p() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.ga());
     }
 
     @Override
-    protected void fE() {}
+    protected void fF() {}
 
     @Override
     protected SoundEffect getSoundAmbient() {
@@ -94,11 +94,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fW() {
+    protected void fX() {
         if (this.isInWater()) {
             this.playSound(SoundEffects.SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
         } else {
-            super.fW();
+            super.fX();
         }
 
     }
@@ -116,7 +116,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.fv() && this.trapTime++ >= 18000) {
+        if (this.fw() && this.trapTime++ >= 18000) {
             this.die();
         }
 
@@ -125,7 +125,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.fv());
+        nbttagcompound.setBoolean("SkeletonTrap", this.fw());
         nbttagcompound.setInt("SkeletonTrapTime", this.trapTime);
     }
 
@@ -142,11 +142,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    protected float eu() {
+    protected float ev() {
         return 0.96F;
     }
 
-    public boolean fv() {
+    public boolean fw() {
         return this.isTrap;
     }
 
@@ -176,7 +176,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
             return super.b(entityhuman, enumhand);
-        } else if (entityhuman.eY()) {
+        } else if (entityhuman.eZ()) {
             this.f(entityhuman);
             return EnumInteractionResult.a(this.level.isClientSide);
         } else if (this.isVehicle()) {

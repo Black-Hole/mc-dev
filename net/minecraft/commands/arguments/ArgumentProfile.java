@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.ICompletionProvider;
@@ -57,13 +59,11 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
             String s = stringreader.getString().substring(i, stringreader.getCursor());
 
             return (commandlistenerwrapper) -> {
-                GameProfile gameprofile = commandlistenerwrapper.getServer().getUserCache().getProfile(s);
+                Optional<GameProfile> optional = commandlistenerwrapper.getServer().getUserCache().getProfile(s);
+                SimpleCommandExceptionType simplecommandexceptiontype = ArgumentProfile.ERROR_UNKNOWN_PLAYER;
 
-                if (gameprofile == null) {
-                    throw ArgumentProfile.ERROR_UNKNOWN_PLAYER.create();
-                } else {
-                    return Collections.singleton(gameprofile);
-                }
+                Objects.requireNonNull(simplecommandexceptiontype);
+                return Collections.singleton((GameProfile) optional.orElseThrow(simplecommandexceptiontype::create));
             };
         }
     }

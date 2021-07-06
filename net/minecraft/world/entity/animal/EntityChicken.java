@@ -141,7 +141,7 @@ public class EntityChicken extends EntityAnimal {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityChicken.FOOD_ITEMS.test(itemstack);
     }
 

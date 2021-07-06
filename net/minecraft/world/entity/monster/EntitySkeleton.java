@@ -16,10 +16,10 @@ import net.minecraft.world.level.World;
 
 public class EntitySkeleton extends EntitySkeletonAbstract {
 
-    private static final DataWatcherObject<Boolean> DATA_STRAY_CONVERSION_ID = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.BOOLEAN);
+    public static final DataWatcherObject<Boolean> DATA_STRAY_CONVERSION_ID = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.BOOLEAN);
     public static final String CONVERSION_TAG = "StrayConversionTime";
     private int inPowderSnowTime;
-    private int conversionTime;
+    public int conversionTime;
 
     public EntitySkeleton(EntityTypes<? extends EntitySkeleton> entitytypes, World world) {
         super(entitytypes, world);
@@ -31,7 +31,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
         this.getDataWatcher().register(EntitySkeleton.DATA_STRAY_CONVERSION_ID, false);
     }
 
-    public boolean fw() {
+    public boolean isStrayConverting() {
         return (Boolean) this.getDataWatcher().get(EntitySkeleton.DATA_STRAY_CONVERSION_ID);
     }
 
@@ -40,22 +40,22 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
     }
 
     @Override
-    public boolean fv() {
-        return this.fw();
+    public boolean fw() {
+        return this.isStrayConverting();
     }
 
     @Override
     public void tick() {
         if (!this.level.isClientSide && this.isAlive() && !this.isNoAI()) {
-            if (this.fw()) {
+            if (this.isStrayConverting()) {
                 --this.conversionTime;
                 if (this.conversionTime < 0) {
-                    this.fx();
+                    this.fy();
                 }
             } else if (this.isInPowderSnow) {
                 ++this.inPowderSnowTime;
                 if (this.inPowderSnowTime >= 140) {
-                    this.a((int) 300);
+                    this.startStrayConversion(300);
                 }
             } else {
                 this.inPowderSnowTime = -1;
@@ -68,24 +68,24 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("StrayConversionTime", this.fw() ? this.conversionTime : -1);
+        nbttagcompound.setInt("StrayConversionTime", this.isStrayConverting() ? this.conversionTime : -1);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("StrayConversionTime", 99) && nbttagcompound.getInt("StrayConversionTime") > -1) {
-            this.a(nbttagcompound.getInt("StrayConversionTime"));
+            this.startStrayConversion(nbttagcompound.getInt("StrayConversionTime"));
         }
 
     }
 
-    private void a(int i) {
+    public void startStrayConversion(int i) {
         this.conversionTime = i;
         this.entityData.set(EntitySkeleton.DATA_STRAY_CONVERSION_ID, true);
     }
 
-    protected void fx() {
+    protected void fy() {
         this.a(EntityTypes.STRAY, true);
         if (!this.isSilent()) {
             this.level.a((EntityHuman) null, 1048, this.getChunkCoordinates(), 0);

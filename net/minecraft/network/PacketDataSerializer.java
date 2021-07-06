@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -110,6 +111,16 @@ public class PacketDataSerializer extends ByteBuf {
         this.a((NBTTagCompound) dataresult.result().get());
     }
 
+    public static <T> IntFunction<T> a(IntFunction<T> intfunction, int i) {
+        return (j) -> {
+            if (j > i) {
+                throw new DecoderException("Value " + j + " is larger than limit " + i);
+            } else {
+                return intfunction.apply(j);
+            }
+        };
+    }
+
     public <T, C extends Collection<T>> C a(IntFunction<C> intfunction, Function<PacketDataSerializer, T> function) {
         int i = this.j();
         C c0 = (Collection) intfunction.apply(i);
@@ -186,6 +197,20 @@ public class PacketDataSerializer extends ByteBuf {
             consumer.accept(this);
         }
 
+    }
+
+    public <T> void a(Optional<T> optional, BiConsumer<PacketDataSerializer, T> biconsumer) {
+        if (optional.isPresent()) {
+            this.writeBoolean(true);
+            biconsumer.accept(this, optional.get());
+        } else {
+            this.writeBoolean(false);
+        }
+
+    }
+
+    public <T> Optional<T> b(Function<PacketDataSerializer, T> function) {
+        return this.readBoolean() ? Optional.of(function.apply(this)) : Optional.empty();
     }
 
     public byte[] b() {

@@ -75,7 +75,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public int fv() {
+    public int fw() {
         return this.attackAnimationRemainingTicks;
     }
 
@@ -244,7 +244,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return itemstack.a(Items.CRIMSON_FUNGUS);
     }
 
@@ -296,7 +296,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
         this.cannotBeHunted = flag;
     }
 
-    public boolean fx() {
+    public boolean fy() {
         return this.t() && !this.cannotBeHunted;
     }
 
@@ -313,8 +313,8 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public boolean fy() {
-        return !HoglinAI.c(this) && super.fy();
+    public boolean fz() {
+        return !HoglinAI.c(this) && super.fz();
     }
 
     @Override

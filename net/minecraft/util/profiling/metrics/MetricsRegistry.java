@@ -21,7 +21,7 @@ public class MetricsRegistry {
 
     public List<MetricSampler> a() {
         Map<String, List<MetricSampler>> map = (Map) this.measuredInstances.keySet().stream().flatMap((profilermeasured) -> {
-            return profilermeasured.bl().stream();
+            return profilermeasured.bk().stream();
         }).collect(Collectors.groupingBy(MetricSampler::d));
 
         return a(map);

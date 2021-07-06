@@ -53,7 +53,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
+        return EntityMonster.fB().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Override
-    public boolean ew() {
+    public boolean ex() {
         return true;
     }
 

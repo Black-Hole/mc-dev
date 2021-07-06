@@ -40,11 +40,11 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     @Override
     public void movementTick() {
         this.ei();
-        this.fz();
+        this.fA();
         super.movementTick();
     }
 
-    protected void fz() {
+    protected void fA() {
         float f = this.aY();
 
         if (f > 0.5F) {
@@ -106,7 +106,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
-    public static AttributeProvider.Builder fA() {
+    public static AttributeProvider.Builder fB() {
         return EntityInsentient.w().a(GenericAttributes.ATTACK_DAMAGE);
     }
 

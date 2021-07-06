@@ -48,7 +48,7 @@ public class TileEntityBarrel extends TileEntityLootable {
             @Override
             protected boolean a(EntityHuman entityhuman) {
                 if (entityhuman.containerMenu instanceof ContainerChest) {
-                    IInventory iinventory = ((ContainerChest) entityhuman.containerMenu).i();
+                    IInventory iinventory = ((ContainerChest) entityhuman.containerMenu).l();
 
                     return iinventory == TileEntityBarrel.this;
                 } else {

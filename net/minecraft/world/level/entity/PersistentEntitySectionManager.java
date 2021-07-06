@@ -271,7 +271,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
 
     }
 
-    public void a() {
+    public void tick() {
         this.g();
         this.f();
     }
@@ -309,7 +309,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
         LongSet longset = this.h();
 
         while (!longset.isEmpty()) {
-            this.permanentStorage.a();
+            this.permanentStorage.a(false);
             this.g();
             longset.removeIf((i) -> {
                 boolean flag = this.chunkVisibility.get(i) == Visibility.HIDDEN;
@@ -319,6 +319,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
             });
         }
 
+        this.permanentStorage.a(true);
     }
 
     public void close() throws IOException {

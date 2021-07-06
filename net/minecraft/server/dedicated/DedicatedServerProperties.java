@@ -62,7 +62,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Integer> playerIdleTimeout;
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Boolean> whiteList;
     @Nullable
-    public GeneratorSettings worldGenSettings;
+    private GeneratorSettings worldGenSettings;
 
     public DedicatedServerProperties(Properties properties) {
         super(properties);

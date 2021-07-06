@@ -325,7 +325,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
         return (IWorldInventory) (i == 8 ? new BlockComposter.ContainerOutput(iblockdata, generatoraccess, blockposition, new ItemStack(Items.BONE_MEAL)) : (i < 7 ? new BlockComposter.ContainerInput(iblockdata, generatoraccess, blockposition) : new BlockComposter.ContainerEmpty()));
     }
 
-    private static class ContainerOutput extends InventorySubcontainer implements IWorldInventory {
+    public static class ContainerOutput extends InventorySubcontainer implements IWorldInventory {
 
         private final IBlockData state;
         private final GeneratorAccess level;
@@ -366,7 +366,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
         }
     }
 
-    private static class ContainerInput extends InventorySubcontainer implements IWorldInventory {
+    public static class ContainerInput extends InventorySubcontainer implements IWorldInventory {
 
         private final IBlockData state;
         private final GeneratorAccess level;
@@ -415,7 +415,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
         }
     }
 
-    private static class ContainerEmpty extends InventorySubcontainer implements IWorldInventory {
+    public static class ContainerEmpty extends InventorySubcontainer implements IWorldInventory {
 
         public ContainerEmpty() {
             super(0);

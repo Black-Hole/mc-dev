@@ -121,7 +121,7 @@ public class EntityCat extends EntityTameableAnimal {
         super(entitytypes, world);
     }
 
-    public MinecraftKey fD() {
+    public MinecraftKey fE() {
         return (MinecraftKey) EntityCat.TEXTURE_BY_TYPE.getOrDefault(this.getCatType(), (MinecraftKey) EntityCat.TEXTURE_BY_TYPE.get(0));
     }
 
@@ -160,7 +160,7 @@ public class EntityCat extends EntityTameableAnimal {
         this.entityData.set(EntityCat.IS_LYING, flag);
     }
 
-    public boolean fF() {
+    public boolean fG() {
         return (Boolean) this.entityData.get(EntityCat.IS_LYING);
     }
 
@@ -168,7 +168,7 @@ public class EntityCat extends EntityTameableAnimal {
         this.entityData.set(EntityCat.RELAX_STATE_ONE, flag);
     }
 
-    public boolean fG() {
+    public boolean fH() {
         return (Boolean) this.entityData.get(EntityCat.RELAX_STATE_ONE);
     }
 
@@ -239,7 +239,7 @@ public class EntityCat extends EntityTameableAnimal {
         return 120;
     }
 
-    public void fI() {
+    public void fJ() {
         this.playSound(SoundEffects.CAT_HISS, this.getSoundVolume(), this.ep());
     }
 
@@ -253,7 +253,7 @@ public class EntityCat extends EntityTameableAnimal {
         return SoundEffects.CAT_DEATH;
     }
 
-    public static AttributeProvider.Builder fJ() {
+    public static AttributeProvider.Builder fK() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -264,20 +264,20 @@ public class EntityCat extends EntityTameableAnimal {
 
     @Override
     protected void a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
-        if (this.n(itemstack)) {
+        if (this.isBreedItem(itemstack)) {
             this.playSound(SoundEffects.CAT_EAT, 1.0F, 1.0F);
         }
 
         super.a(entityhuman, enumhand, itemstack);
     }
 
-    private float fK() {
+    private float fL() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
     public boolean attackEntity(Entity entity) {
-        return entity.damageEntity(DamageSource.mobAttack(this), this.fK());
+        return entity.damageEntity(DamageSource.mobAttack(this), this.fL());
     }
 
     @Override
@@ -287,22 +287,22 @@ public class EntityCat extends EntityTameableAnimal {
             this.playSound(SoundEffects.CAT_BEG_FOR_FOOD, 1.0F, 1.0F);
         }
 
-        this.fL();
-    }
-
-    private void fL() {
-        if ((this.fF() || this.fG()) && this.tickCount % 5 == 0) {
-            this.playSound(SoundEffects.CAT_PURR, 0.6F + 0.4F * (this.random.nextFloat() - this.random.nextFloat()), 1.0F);
-        }
-
         this.fM();
-        this.fN();
     }
 
     private void fM() {
+        if ((this.fG() || this.fH()) && this.tickCount % 5 == 0) {
+            this.playSound(SoundEffects.CAT_PURR, 0.6F + 0.4F * (this.random.nextFloat() - this.random.nextFloat()), 1.0F);
+        }
+
+        this.fN();
+        this.fO();
+    }
+
+    private void fN() {
         this.lieDownAmountO = this.lieDownAmount;
         this.lieDownAmountOTail = this.lieDownAmountTail;
-        if (this.fF()) {
+        if (this.fG()) {
             this.lieDownAmount = Math.min(1.0F, this.lieDownAmount + 0.15F);
             this.lieDownAmountTail = Math.min(1.0F, this.lieDownAmountTail + 0.08F);
         } else {
@@ -312,9 +312,9 @@ public class EntityCat extends EntityTameableAnimal {
 
     }
 
-    private void fN() {
+    private void fO() {
         this.relaxStateOneAmountO = this.relaxStateOneAmount;
-        if (this.fG()) {
+        if (this.fH()) {
             this.relaxStateOneAmount = Math.min(1.0F, this.relaxStateOneAmount + 0.1F);
         } else {
             this.relaxStateOneAmount = Math.max(0.0F, this.relaxStateOneAmount - 0.13F);
@@ -398,14 +398,14 @@ public class EntityCat extends EntityTameableAnimal {
         Item item = itemstack.getItem();
 
         if (this.level.isClientSide) {
-            return this.isTamed() && this.j((EntityLiving) entityhuman) ? EnumInteractionResult.SUCCESS : (this.n(itemstack) && (this.getHealth() < this.getMaxHealth() || !this.isTamed()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS);
+            return this.isTamed() && this.j((EntityLiving) entityhuman) ? EnumInteractionResult.SUCCESS : (this.isBreedItem(itemstack) && (this.getHealth() < this.getMaxHealth() || !this.isTamed()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS);
         } else {
             EnumInteractionResult enuminteractionresult;
 
             if (this.isTamed()) {
                 if (this.j((EntityLiving) entityhuman)) {
                     if (!(item instanceof ItemDye)) {
-                        if (item.isFood() && this.n(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                        if (item.isFood() && this.isBreedItem(itemstack) && this.getHealth() < this.getMaxHealth()) {
                             this.a(entityhuman, enumhand, itemstack);
                             this.heal((float) item.getFoodInfo().getNutrition());
                             return EnumInteractionResult.CONSUME;
@@ -431,7 +431,7 @@ public class EntityCat extends EntityTameableAnimal {
                         return EnumInteractionResult.CONSUME;
                     }
                 }
-            } else if (this.n(itemstack)) {
+            } else if (this.isBreedItem(itemstack)) {
                 this.a(entityhuman, enumhand, itemstack);
                 if (this.random.nextInt(3) == 0) {
                     this.tame(entityhuman);
@@ -455,7 +455,7 @@ public class EntityCat extends EntityTameableAnimal {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityCat.TEMPT_INGREDIENT.test(itemstack);
     }
 
@@ -581,7 +581,7 @@ public class EntityCat extends EntityTameableAnimal {
 
                     entitycat = (EntityCat) iterator.next();
                 } while (entitycat == this.cat);
-            } while (!entitycat.fF() && !entitycat.fG());
+            } while (!entitycat.fG() && !entitycat.fH());
 
             return true;
         }
@@ -605,7 +605,7 @@ public class EntityCat extends EntityTameableAnimal {
             this.cat.z(false);
             float f = this.cat.level.f(1.0F);
 
-            if (this.ownerPlayer.fm() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.cat.level.getRandom().nextFloat() < 0.7D) {
+            if (this.ownerPlayer.fn() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.cat.level.getRandom().nextFloat() < 0.7D) {
                 this.h();
             }
 

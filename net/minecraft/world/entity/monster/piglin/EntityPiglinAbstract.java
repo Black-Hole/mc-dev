@@ -29,12 +29,12 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
     public EntityPiglinAbstract(EntityTypes<? extends EntityPiglinAbstract> entitytypes, World world) {
         super(entitytypes, world);
         this.setCanPickupLoot(true);
-        this.fB();
+        this.fC();
         this.a(PathType.DANGER_FIRE, 16.0F);
         this.a(PathType.DAMAGE_FIRE, -1.0F);
     }
 
-    private void fB() {
+    private void fC() {
         if (PathfinderGoalUtil.a(this)) {
             ((Navigation) this.getNavigation()).a(true);
         }
@@ -89,7 +89,7 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
         }
 
         if (this.timeInOverworld > 300) {
-            this.fy();
+            this.fz();
             this.c((WorldServer) this.level);
         }
 
@@ -108,11 +108,11 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
 
     }
 
-    public boolean fv() {
+    public boolean fw() {
         return !this.isBaby();
     }
 
-    public abstract EntityPiglinArmPose fw();
+    public abstract EntityPiglinArmPose fx();
 
     @Nullable
     @Override
@@ -120,7 +120,7 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
         return (EntityLiving) this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse((Object) null);
     }
 
-    protected boolean fx() {
+    protected boolean fy() {
         return this.getItemInMainHand().getItem() instanceof ItemToolMaterial;
     }
 
@@ -138,5 +138,5 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
         PacketDebug.a((EntityLiving) this);
     }
 
-    protected abstract void fy();
+    protected abstract void fz();
 }

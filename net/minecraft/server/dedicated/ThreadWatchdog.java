@@ -35,7 +35,7 @@ public class ThreadWatchdog implements Runnable {
 
     public void run() {
         while (this.server.isRunning()) {
-            long i = this.server.ax();
+            long i = this.server.aw();
             long j = SystemUtils.getMonotonicMillis();
             long k = j - i;
 
@@ -79,7 +79,7 @@ public class ThreadWatchdog implements Runnable {
                     }).collect(Collectors.joining(",\n"));
                 });
                 DispenserRegistry.a("Crash report:\n" + crashreport.e());
-                File file = new File(this.server.C(), "crash-reports");
+                File file = new File(this.server.B(), "crash-reports");
                 SimpleDateFormat simpledateformat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
                 Date date = new Date();
                 File file1 = new File(file, "crash-" + simpledateformat.format(date) + "-server.txt");

@@ -104,12 +104,6 @@ public class EntityTropicalFish extends EntityFishSchool {
     }
 
     @Override
-    public void c(NBTTagCompound nbttagcompound) {
-        super.c(nbttagcompound);
-        this.setVariant(nbttagcompound.getInt("BucketVariantTag"));
-    }
-
-    @Override
     public ItemStack getBucketItem() {
         return new ItemStack(Items.TROPICAL_FISH_BUCKET);
     }
@@ -138,7 +132,7 @@ public class EntityTropicalFish extends EntityFishSchool {
         return (i & 16711680) >> 16;
     }
 
-    public float[] fF() {
+    public float[] fG() {
         return EnumColor.fromColorIndex(y(this.getVariant())).getColor();
     }
 
@@ -146,7 +140,7 @@ public class EntityTropicalFish extends EntityFishSchool {
         return (i & -16777216) >> 24;
     }
 
-    public float[] fG() {
+    public float[] fH() {
         return EnumColor.fromColorIndex(z(this.getVariant())).getColor();
     }
 
@@ -154,7 +148,7 @@ public class EntityTropicalFish extends EntityFishSchool {
         return Math.min(i & 255, 1);
     }
 
-    public int fH() {
+    public int fI() {
         return x(this.getVariant());
     }
 
@@ -162,11 +156,11 @@ public class EntityTropicalFish extends EntityFishSchool {
         return Math.min((i & '\uff00') >> 8, 5);
     }
 
-    public MinecraftKey fI() {
+    public MinecraftKey fJ() {
         return x(this.getVariant()) == 0 ? EntityTropicalFish.PATTERN_A_TEXTURE_LOCATIONS[A(this.getVariant())] : EntityTropicalFish.PATTERN_B_TEXTURE_LOCATIONS[A(this.getVariant())];
     }
 
-    public MinecraftKey fJ() {
+    public MinecraftKey fK() {
         return EntityTropicalFish.BASE_TEXTURE_LOCATIONS[x(this.getVariant())];
     }
 
@@ -175,7 +169,8 @@ public class EntityTropicalFish extends EntityFishSchool {
     public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         Object object = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
-        if (enummobspawn == EnumMobSpawn.BUCKET) {
+        if (enummobspawn == EnumMobSpawn.BUCKET && nbttagcompound != null && nbttagcompound.hasKeyOfType("BucketVariantTag", 3)) {
+            this.setVariant(nbttagcompound.getInt("BucketVariantTag"));
             return (GroupDataEntity) object;
         } else {
             int i;

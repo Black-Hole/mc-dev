@@ -145,7 +145,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     @Override
     public void movementTick() {
-        if (this.isAlive() && this.fr()) {
+        if (this.isAlive() && this.fs()) {
             this.setOnFire(8);
         }
 
@@ -398,7 +398,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                         while (iterator.hasNext()) {
                             EntityCat entitycat = (EntityCat) iterator.next();
 
-                            entitycat.fI();
+                            entitycat.fJ();
                         }
 
                         return false;

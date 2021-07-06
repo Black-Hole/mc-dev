@@ -270,7 +270,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public Set<ResourceKey<World>> p() {
-        return this.server.G();
+        return this.server.F();
     }
 
     @Override

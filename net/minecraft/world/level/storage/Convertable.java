@@ -46,6 +46,7 @@ import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.MemoryReserve;
 import net.minecraft.util.SessionLock;
 import net.minecraft.util.datafix.DataConverterRegistry;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -166,10 +167,17 @@ public class Convertable {
                         continue;
                     }
 
-                    WorldInfo worldinfo = (WorldInfo) this.a(file, this.a(file, flag));
+                    try {
+                        WorldInfo worldinfo = (WorldInfo) this.a(file, this.a(file, flag));
 
-                    if (worldinfo != null) {
-                        list.add(worldinfo);
+                        if (worldinfo != null) {
+                            list.add(worldinfo);
+                        }
+                    } catch (OutOfMemoryError outofmemoryerror) {
+                        MemoryReserve.b();
+                        System.gc();
+                        Convertable.LOGGER.fatal("Ran out of memory trying to read summary of {}", file);
+                        throw outofmemoryerror;
                     }
                 }
             }
@@ -390,9 +398,8 @@ public class Convertable {
 
         }
 
-        public File f() {
-            this.checkSession();
-            return this.levelPath.resolve("icon.png").toFile();
+        public Optional<Path> f() {
+            return !this.lock.a() ? Optional.empty() : Optional.of(this.levelPath.resolve("icon.png"));
         }
 
         public void g() throws IOException {

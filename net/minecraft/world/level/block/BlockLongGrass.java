@@ -39,7 +39,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
         BlockTallPlant blocktallplant = (BlockTallPlant) (iblockdata.a(Blocks.FERN) ? Blocks.LARGE_FERN : Blocks.TALL_GRASS);
 
         if (blocktallplant.getBlockData().canPlace(worldserver, blockposition) && worldserver.isEmpty(blockposition.up())) {
-            blocktallplant.a(worldserver, blocktallplant.getBlockData(), blockposition, 2);
+            BlockTallPlant.a(worldserver, blocktallplant.getBlockData(), blockposition, 2);
         }
 
     }

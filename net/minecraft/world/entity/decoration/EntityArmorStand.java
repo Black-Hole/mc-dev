@@ -809,7 +809,7 @@ public class EntityArmorStand extends EntityLiving {
     public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {}
 
     @Override
-    public boolean eP() {
+    public boolean eQ() {
         return false;
     }
 
@@ -824,7 +824,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public boolean eQ() {
+    public boolean eR() {
         return false;
     }
 

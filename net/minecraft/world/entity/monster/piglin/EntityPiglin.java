@@ -141,8 +141,8 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
 
     }
 
-    public static AttributeProvider.Builder fB() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+    public static AttributeProvider.Builder fC() {
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     public static boolean b(EntityTypes<EntityPiglin> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -155,8 +155,8 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
         if (enummobspawn != EnumMobSpawn.STRUCTURE) {
             if (worldaccess.getRandom().nextFloat() < 0.2F) {
                 this.setBaby(true);
-            } else if (this.fv()) {
-                this.setSlot(EnumItemSlot.MAINHAND, this.fD());
+            } else if (this.fw()) {
+                this.setSlot(EnumItemSlot.MAINHAND, this.fE());
             }
         }
 
@@ -178,7 +178,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.fv()) {
+        if (this.fw()) {
             this.c(EnumItemSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
             this.c(EnumItemSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
             this.c(EnumItemSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
@@ -218,7 +218,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
         } else if (!this.level.isClientSide) {
             return PiglinAI.a(this, entityhuman, enumhand);
         } else {
-            boolean flag = PiglinAI.b(this, entityhuman.b(enumhand)) && this.fw() != EntityPiglinArmPose.ADMIRING_ITEM;
+            boolean flag = PiglinAI.b(this, entityhuman.b(enumhand)) && this.fx() != EntityPiglinArmPose.ADMIRING_ITEM;
 
             return flag ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS;
         }
@@ -283,11 +283,11 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
         super.c(worldserver);
     }
 
-    private ItemStack fD() {
+    private ItemStack fE() {
         return (double) this.random.nextFloat() < 0.5D ? new ItemStack(Items.CROSSBOW) : new ItemStack(Items.GOLDEN_SWORD);
     }
 
-    private boolean fE() {
+    private boolean fF() {
         return (Boolean) this.entityData.get(EntityPiglin.DATA_IS_CHARGING_CROSSBOW);
     }
 
@@ -302,11 +302,11 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
     }
 
     @Override
-    public EntityPiglinArmPose fw() {
-        return this.fC() ? EntityPiglinArmPose.DANCING : (PiglinAI.a(this.getItemInOffHand()) ? EntityPiglinArmPose.ADMIRING_ITEM : (this.isAggressive() && this.fx() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : (this.fE() ? EntityPiglinArmPose.CROSSBOW_CHARGE : (this.isAggressive() && this.a(Items.CROSSBOW) ? EntityPiglinArmPose.CROSSBOW_HOLD : EntityPiglinArmPose.DEFAULT))));
+    public EntityPiglinArmPose fx() {
+        return this.fD() ? EntityPiglinArmPose.DANCING : (PiglinAI.a(this.getItemInOffHand()) ? EntityPiglinArmPose.ADMIRING_ITEM : (this.isAggressive() && this.fy() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : (this.fF() ? EntityPiglinArmPose.CROSSBOW_CHARGE : (this.isAggressive() && this.a(Items.CROSSBOW) ? EntityPiglinArmPose.CROSSBOW_HOLD : EntityPiglinArmPose.DEFAULT))));
     }
 
-    public boolean fC() {
+    public boolean fD() {
         return (Boolean) this.entityData.get(EntityPiglin.DATA_IS_DANCING);
     }
 
@@ -378,7 +378,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
             boolean flag = PiglinAI.a(itemstack) || itemstack.a(Items.CROSSBOW);
             boolean flag1 = PiglinAI.a(itemstack1) || itemstack1.a(Items.CROSSBOW);
 
-            return flag && !flag1 ? true : (!flag && flag1 ? false : (this.fv() && !itemstack.a(Items.CROSSBOW) && itemstack1.a(Items.CROSSBOW) ? false : super.a(itemstack, itemstack1)));
+            return flag && !flag1 ? true : (!flag && flag1 ? false : (this.fw() && !itemstack.a(Items.CROSSBOW) && itemstack1.a(Items.CROSSBOW) ? false : super.a(itemstack, itemstack1)));
         }
     }
 
@@ -428,7 +428,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow, Inv
     }
 
     @Override
-    protected void fy() {
+    protected void fz() {
         this.a(SoundEffects.PIGLIN_CONVERTED_TO_ZOMBIFIED);
     }
 }

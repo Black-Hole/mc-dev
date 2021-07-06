@@ -199,7 +199,7 @@ public class TileEntityBeehive extends TileEntity {
                             }
 
                             if (tileentitybeehive_releasestatus == TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED) {
-                                entitybee.fK();
+                                entitybee.fL();
                                 if (iblockdata.a((Tag) TagsBlock.BEEHIVES)) {
                                     int i = a(iblockdata);
 
@@ -259,7 +259,7 @@ public class TileEntityBeehive extends TileEntity {
             entitybee.setAgeRaw(Math.max(0, j - i));
         }
 
-        entitybee.setLoveTicks(Math.max(0, entitybee.fz() - i));
+        entitybee.setLoveTicks(Math.max(0, entitybee.fA() - i));
     }
 
     private boolean s() {

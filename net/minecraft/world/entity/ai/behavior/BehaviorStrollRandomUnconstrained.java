@@ -18,16 +18,30 @@ public class BehaviorStrollRandomUnconstrained extends Behavior<EntityCreature> 
     private final float speedModifier;
     protected final int maxHorizontalDistance;
     protected final int maxVerticalDistance;
+    private final boolean mayStrollFromWater;
 
     public BehaviorStrollRandomUnconstrained(float f) {
-        this(f, 10, 7);
+        this(f, true);
+    }
+
+    public BehaviorStrollRandomUnconstrained(float f, boolean flag) {
+        this(f, 10, 7, flag);
     }
 
     public BehaviorStrollRandomUnconstrained(float f, int i, int j) {
+        this(f, i, j, true);
+    }
+
+    public BehaviorStrollRandomUnconstrained(float f, int i, int j, boolean flag) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.speedModifier = f;
         this.maxHorizontalDistance = i;
         this.maxVerticalDistance = j;
+        this.mayStrollFromWater = flag;
+    }
+
+    protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
+        return this.mayStrollFromWater || !entitycreature.aO();
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {

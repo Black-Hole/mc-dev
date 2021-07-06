@@ -29,6 +29,7 @@ public interface Bucketable {
 
     SoundEffect t();
 
+    @Deprecated
     static void a(EntityInsentient entityinsentient, ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getOrCreateTag();
 
@@ -59,6 +60,7 @@ public interface Bucketable {
         nbttagcompound.setFloat("Health", entityinsentient.getHealth());
     }
 
+    @Deprecated
     static void a(EntityInsentient entityinsentient, NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKey("NoAI")) {
             entityinsentient.setNoAI(nbttagcompound.getBoolean("NoAI"));

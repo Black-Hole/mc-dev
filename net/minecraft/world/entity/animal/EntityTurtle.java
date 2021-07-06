@@ -122,7 +122,7 @@ public class EntityTurtle extends EntityAnimal {
         this.entityData.set(EntityTurtle.LAYING_EGG, flag);
     }
 
-    boolean fD() {
+    boolean fE() {
         return (Boolean) this.entityData.get(EntityTurtle.GOING_HOME);
     }
 
@@ -130,7 +130,7 @@ public class EntityTurtle extends EntityAnimal {
         this.entityData.set(EntityTurtle.GOING_HOME, flag);
     }
 
-    boolean fE() {
+    boolean fF() {
         return (Boolean) this.entityData.get(EntityTurtle.TRAVELLING);
     }
 
@@ -202,7 +202,7 @@ public class EntityTurtle extends EntityAnimal {
         this.goalSelector.a(9, new EntityTurtle.h(this, 1.0D, 100));
     }
 
-    public static AttributeProvider.Builder fv() {
+    public static AttributeProvider.Builder fw() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 30.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
@@ -262,8 +262,8 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Override
-    public boolean fy() {
-        return super.fy() && !this.hasEgg();
+    public boolean fz() {
+        return super.fz() && !this.hasEgg();
     }
 
     @Override
@@ -288,13 +288,13 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return itemstack.a(Blocks.SEAGRASS.getItem());
     }
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return !this.fD() && iworldreader.getFluid(blockposition).a((Tag) TagsFluid.WATER) ? 10.0F : (BlockTurtleEgg.a((IBlockAccess) iworldreader, blockposition) ? 10.0F : iworldreader.z(blockposition) - 0.5F);
+        return !this.fE() && iworldreader.getFluid(blockposition).a((Tag) TagsFluid.WATER) ? 10.0F : (BlockTurtleEgg.a((IBlockAccess) iworldreader, blockposition) ? 10.0F : iworldreader.z(blockposition) - 0.5F);
     }
 
     @Override
@@ -325,7 +325,7 @@ public class EntityTurtle extends EntityAnimal {
             this.a(0.1F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
-            if (this.getGoalTarget() == null && (!this.fD() || !this.getHomePos().a((IPosition) this.getPositionVector(), 20.0D))) {
+            if (this.getGoalTarget() == null && (!this.fE() || !this.getHomePos().a((IPosition) this.getPositionVector(), 20.0D))) {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
@@ -357,14 +357,14 @@ public class EntityTurtle extends EntityAnimal {
             if (this.turtle.isInWater()) {
                 this.turtle.setMot(this.turtle.getMot().add(0.0D, 0.005D, 0.0D));
                 if (!this.turtle.getHomePos().a((IPosition) this.turtle.getPositionVector(), 16.0D)) {
-                    this.turtle.r(Math.max(this.turtle.ev() / 2.0F, 0.08F));
+                    this.turtle.r(Math.max(this.turtle.ew() / 2.0F, 0.08F));
                 }
 
                 if (this.turtle.isBaby()) {
-                    this.turtle.r(Math.max(this.turtle.ev() / 3.0F, 0.06F));
+                    this.turtle.r(Math.max(this.turtle.ew() / 3.0F, 0.06F));
                 }
             } else if (this.turtle.onGround) {
-                this.turtle.r(Math.max(this.turtle.ev() / 2.0F, 0.06F));
+                this.turtle.r(Math.max(this.turtle.ew() / 2.0F, 0.06F));
             }
 
         }
@@ -385,8 +385,8 @@ public class EntityTurtle extends EntityAnimal {
                 this.turtle.yBodyRot = this.turtle.getYRot();
                 float f1 = (float) (this.speedModifier * this.turtle.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.turtle.r(MathHelper.h(0.125F, this.turtle.ev(), f1));
-                this.turtle.setMot(this.turtle.getMot().add(0.0D, (double) this.turtle.ev() * d1 * 0.1D, 0.0D));
+                this.turtle.r(MathHelper.h(0.125F, this.turtle.ew(), f1));
+                this.turtle.setMot(this.turtle.getMot().add(0.0D, (double) this.turtle.ew() * d1 * 0.1D, 0.0D));
             } else {
                 this.turtle.r(0.0F);
             }
@@ -525,7 +525,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return this.turtle.isBaby() && !this.turtle.isInWater() ? super.a() : (!this.turtle.fD() && !this.turtle.isInWater() && !this.turtle.hasEgg() ? super.a() : false);
+            return this.turtle.isBaby() && !this.turtle.isInWater() ? super.a() : (!this.turtle.fE() && !this.turtle.isInWater() && !this.turtle.hasEgg() ? super.a() : false);
         }
 
         @Override
@@ -619,7 +619,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !this.turtle.fD() && !this.turtle.hasEgg() && this.turtle.isInWater();
+            return !this.turtle.fE() && !this.turtle.hasEgg() && this.turtle.isInWater();
         }
 
         @Override
@@ -674,7 +674,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean b() {
-            return !this.turtle.getNavigation().m() && !this.stuck && !this.turtle.fD() && !this.turtle.isInLove() && !this.turtle.hasEgg();
+            return !this.turtle.getNavigation().m() && !this.stuck && !this.turtle.fE() && !this.turtle.isInLove() && !this.turtle.hasEgg();
         }
 
         @Override
@@ -695,7 +695,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !this.mob.isInWater() && !this.turtle.fD() && !this.turtle.hasEgg() ? super.a() : false;
+            return !this.mob.isInWater() && !this.turtle.fE() && !this.turtle.hasEgg() ? super.a() : false;
         }
     }
 
@@ -723,7 +723,7 @@ public class EntityTurtle extends EntityAnimal {
             if (this.mob instanceof EntityTurtle) {
                 EntityTurtle entityturtle = (EntityTurtle) this.mob;
 
-                if (entityturtle.fE()) {
+                if (entityturtle.fF()) {
                     return this.level.getType(blockposition).a(Blocks.WATER);
                 }
             }

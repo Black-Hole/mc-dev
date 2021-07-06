@@ -31,7 +31,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
     @Override
     protected void p() {
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fY());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fZ());
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     public static AttributeProvider.Builder t() {
-        return fR().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
+        return fS().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
     }
 
     public boolean isCarryingChest() {
@@ -117,7 +117,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.fN();
+        this.fO();
     }
 
     @Override
@@ -156,7 +156,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.eY()) {
+            if (this.isTamed() && entityhuman.eZ()) {
                 this.f(entityhuman);
                 return EnumInteractionResult.a(this.level.isClientSide);
             }
@@ -167,18 +167,18 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
 
         if (!itemstack.isEmpty()) {
-            if (this.n(itemstack)) {
+            if (this.isBreedItem(itemstack)) {
                 return this.a(entityhuman, itemstack);
             }
 
             if (!this.isTamed()) {
-                this.fV();
+                this.fW();
                 return EnumInteractionResult.a(this.level.isClientSide);
             }
 
             if (!this.isCarryingChest() && itemstack.a(Blocks.CHEST.getItem())) {
                 this.setCarryingChest(true);
-                this.fx();
+                this.fy();
                 if (!entityhuman.getAbilities().instabuild) {
                     itemstack.subtract(1);
                 }
@@ -201,11 +201,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void fx() {
+    protected void fy() {
         this.playSound(SoundEffects.DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int fD() {
+    public int fE() {
         return 5;
     }
 }

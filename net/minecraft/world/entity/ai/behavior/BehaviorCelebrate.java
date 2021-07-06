@@ -47,7 +47,7 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.fA();
+            entityvillager.fB();
         }
 
         if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, entityvillager.getChunkCoordinates())) {

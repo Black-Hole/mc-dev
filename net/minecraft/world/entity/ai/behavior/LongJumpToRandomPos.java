@@ -102,7 +102,11 @@ public class LongJumpToRandomPos<E extends EntityInsentient> extends Behavior<E>
             if (i - this.prepareJumpStart >= 40L) {
                 e0.setYRot(e0.yBodyRot);
                 e0.p(true);
-                e0.setMot(((LongJumpToRandomPos.a) this.chosenJump.get()).b());
+                Vec3D vec3d = ((LongJumpToRandomPos.a) this.chosenJump.get()).b();
+                double d0 = vec3d.f();
+                double d1 = d0 + e0.es();
+
+                e0.setMot(vec3d.a(d1 / d0));
                 e0.getBehaviorController().setMemory(MemoryModuleType.LONG_JUMP_MID_JUMP, (Object) true);
                 worldserver.playSound((EntityHuman) null, (Entity) e0, (SoundEffect) this.getJumpSound.apply(e0), SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }

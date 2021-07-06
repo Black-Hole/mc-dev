@@ -45,7 +45,7 @@ public abstract class IProjectile extends Entity {
 
     @Nullable
     public Entity getShooter() {
-        if (this.cachedOwner != null) {
+        if (this.cachedOwner != null && !this.cachedOwner.isRemoved()) {
             return this.cachedOwner;
         } else if (this.ownerUUID != null && this.level instanceof WorldServer) {
             this.cachedOwner = ((WorldServer) this.level).getEntity(this.ownerUUID);

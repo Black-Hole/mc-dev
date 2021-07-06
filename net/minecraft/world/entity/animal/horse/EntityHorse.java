@@ -43,9 +43,9 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     protected void p() {
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fY());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.ga());
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fZ());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fZ());
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.gb());
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.ga());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class EntityHorse extends EntityHorseAbstract {
             }
         }
 
-        this.fN();
+        this.fO();
     }
 
     private void setVariantRaw(int i) {
@@ -109,9 +109,9 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fN() {
+    protected void fO() {
         if (!this.level.isClientSide) {
-            super.fN();
+            super.fO();
             this.p(this.inventory.getItem(1));
             this.a(EnumItemSlot.CHEST, 0.0F);
         }
@@ -168,7 +168,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Nullable
     @Override
-    protected SoundEffect fP() {
+    protected SoundEffect fQ() {
         return SoundEffects.HORSE_EAT;
     }
 
@@ -189,7 +189,7 @@ public class EntityHorse extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.eY()) {
+            if (this.isTamed() && entityhuman.eZ()) {
                 this.f(entityhuman);
                 return EnumInteractionResult.a(this.level.isClientSide);
             }
@@ -200,7 +200,7 @@ public class EntityHorse extends EntityHorseAbstract {
         }
 
         if (!itemstack.isEmpty()) {
-            if (this.n(itemstack)) {
+            if (this.isBreedItem(itemstack)) {
                 return this.a(entityhuman, itemstack);
             }
 
@@ -211,7 +211,7 @@ public class EntityHorse extends EntityHorseAbstract {
             }
 
             if (!this.isTamed()) {
-                this.fV();
+                this.fW();
                 return EnumInteractionResult.a(this.level.isClientSide);
             }
 
@@ -233,7 +233,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fX() && ((EntityHorseAbstract) entityanimal).fX());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fY() && ((EntityHorseAbstract) entityanimal).fY());
     }
 
     @Override
@@ -276,7 +276,7 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean gb() {
+    public boolean gc() {
         return true;
     }
 

@@ -77,7 +77,7 @@ public class RecipeBook {
     }
 
     public boolean a(ContainerRecipeBook<?> containerrecipebook) {
-        return this.b(containerrecipebook.q());
+        return this.b(containerrecipebook.t());
     }
 
     public boolean b(RecipeBookType recipebooktype) {

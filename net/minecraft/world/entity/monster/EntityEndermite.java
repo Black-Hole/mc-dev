@@ -54,7 +54,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
     }
 
     @Override

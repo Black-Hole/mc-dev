@@ -71,7 +71,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("map", 99) ? nbttagcompound.getInt("map") : null;
     }
 
-    private static int a(World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
+    public static int createNewSavedData(World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
         WorldMap worldmap = WorldMap.a((double) i, (double) j, (byte) k, flag, flag1, resourcekey);
         int l = world.getWorldMapCount();
 
@@ -84,7 +84,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     private static void a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
-        int l = a(world, i, j, k, flag, flag1, resourcekey);
+        int l = createNewSavedData(world, i, j, k, flag, flag1, resourcekey);
 
         a(itemstack, l);
     }

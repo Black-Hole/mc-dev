@@ -79,7 +79,7 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
 
     public static LootItemFunction d(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        ItemModifierManager itemmodifiermanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aK();
+        ItemModifierManager itemmodifiermanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aJ();
         LootItemFunction lootitemfunction = itemmodifiermanager.a(minecraftkey);
 
         if (lootitemfunction == null) {

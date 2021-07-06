@@ -60,7 +60,7 @@ public class ItemCommands {
         return new ChatMessage("commands.item.target.no_changed.known_item", new Object[]{object, object1});
     });
     private static final SuggestionProvider<CommandListenerWrapper> SUGGEST_MODIFIER = (commandcontext, suggestionsbuilder) -> {
-        ItemModifierManager itemmodifiermanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aK();
+        ItemModifierManager itemmodifiermanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aJ();
 
         return ICompletionProvider.a((Iterable) itemmodifiermanager.a(), suggestionsbuilder);
     };

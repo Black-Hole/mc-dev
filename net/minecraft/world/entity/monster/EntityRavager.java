@@ -96,7 +96,7 @@ public class EntityRavager extends EntityRaider {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.75D).a(GenericAttributes.ATTACK_DAMAGE, 12.0D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.5D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.75D).a(GenericAttributes.ATTACK_DAMAGE, 12.0D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.5D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class EntityRavager extends EntityRaider {
     }
 
     @Override
-    public int eZ() {
+    public int fa() {
         return 45;
     }
 
@@ -136,7 +136,7 @@ public class EntityRavager extends EntityRaider {
     }
 
     @Override
-    public boolean fc() {
+    public boolean fd() {
         return !this.isNoAI() && this.getRidingPassenger() instanceof EntityLiving;
     }
 
@@ -182,7 +182,7 @@ public class EntityRavager extends EntityRaider {
             if (this.roarTick > 0) {
                 --this.roarTick;
                 if (this.roarTick == 10) {
-                    this.fH();
+                    this.fI();
                 }
             }
 
@@ -192,7 +192,7 @@ public class EntityRavager extends EntityRaider {
 
             if (this.stunnedTick > 0) {
                 --this.stunnedTick;
-                this.fG();
+                this.fH();
                 if (this.stunnedTick == 0) {
                     this.playSound(SoundEffects.RAVAGER_ROAR, 1.0F, 1.0F);
                     this.roarTick = 20;
@@ -202,7 +202,7 @@ public class EntityRavager extends EntityRaider {
         }
     }
 
-    private void fG() {
+    private void fH() {
         if (this.random.nextInt(6) == 0) {
             double d0 = this.locX() - (double) this.getWidth() * Math.sin((double) (this.yBodyRot * 0.017453292F)) + (this.random.nextDouble() * 0.6D - 0.3D);
             double d1 = this.locY() + (double) this.getHeight() - 0.3D;
@@ -240,7 +240,7 @@ public class EntityRavager extends EntityRaider {
 
     }
 
-    private void fH() {
+    private void fI() {
         if (this.isAlive()) {
             List<? extends EntityLiving> list = this.level.a(EntityLiving.class, this.getBoundingBox().g(4.0D), EntityRavager.NO_RAVAGER_AND_ALIVE);
 
@@ -292,11 +292,11 @@ public class EntityRavager extends EntityRaider {
         return this.attackTick;
     }
 
-    public int fv() {
+    public int fw() {
         return this.stunnedTick;
     }
 
-    public int fF() {
+    public int fG() {
         return this.roarTick;
     }
 
@@ -338,7 +338,7 @@ public class EntityRavager extends EntityRaider {
     public void a(int i, boolean flag) {}
 
     @Override
-    public boolean fw() {
+    public boolean fx() {
         return false;
     }
 

@@ -55,7 +55,7 @@ public class TileEntityChest extends TileEntityLootable implements LidBlockEntit
                 if (!(entityhuman.containerMenu instanceof ContainerChest)) {
                     return false;
                 } else {
-                    IInventory iinventory = ((ContainerChest) entityhuman.containerMenu).i();
+                    IInventory iinventory = ((ContainerChest) entityhuman.containerMenu).l();
 
                     return iinventory == TileEntityChest.this || iinventory instanceof InventoryLargeChest && ((InventoryLargeChest) iinventory).a((IInventory) TileEntityChest.this);
                 }

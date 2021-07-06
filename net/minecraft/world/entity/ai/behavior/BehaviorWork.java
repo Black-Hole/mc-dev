@@ -40,10 +40,10 @@ public class BehaviorWork extends Behavior<EntityVillager> {
         behaviorcontroller.getMemory(MemoryModuleType.JOB_SITE).ifPresent((globalpos) -> {
             behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.getBlockPosition())));
         });
-        entityvillager.fM();
+        entityvillager.fN();
         this.doWork(worldserver, entityvillager);
-        if (entityvillager.fL()) {
-            entityvillager.fK();
+        if (entityvillager.fM()) {
+            entityvillager.fL();
         }
 
     }

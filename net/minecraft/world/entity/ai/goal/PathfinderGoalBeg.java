@@ -53,7 +53,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.wolf.getControllerLook().a(this.player.locX(), this.player.getHeadY(), this.player.locZ(), 10.0F, (float) this.wolf.eY());
+        this.wolf.getControllerLook().a(this.player.locX(), this.player.getHeadY(), this.player.locZ(), 10.0F, (float) this.wolf.eZ());
         --this.lookTime;
     }
 
@@ -69,7 +69,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
                 return true;
             }
 
-            if (this.wolf.n(itemstack)) {
+            if (this.wolf.isBreedItem(itemstack)) {
                 return true;
             }
         }

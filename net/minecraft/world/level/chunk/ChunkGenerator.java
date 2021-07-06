@@ -153,7 +153,7 @@ public abstract class ChunkGenerator {
         SeededRandom seededrandom = new SeededRandom();
         boolean flag = true;
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-        CarvingContext carvingcontext = new CarvingContext(this);
+        CarvingContext carvingcontext = new CarvingContext(this, ichunkaccess);
         Aquifer aquifer = this.a(ichunkaccess);
         BitSet bitset = ((ProtoChunk) ichunkaccess).b(worldgenstage_features);
 

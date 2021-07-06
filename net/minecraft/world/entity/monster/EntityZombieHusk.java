@@ -65,12 +65,12 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected boolean fw() {
+    protected boolean fx() {
         return true;
     }
 
     @Override
-    protected void fy() {
+    protected void fz() {
         this.b(EntityTypes.ZOMBIE);
         if (!this.isSilent()) {
             this.level.a((EntityHuman) null, 1041, this.getChunkCoordinates(), 0);
@@ -79,7 +79,7 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected ItemStack fv() {
+    protected ItemStack fw() {
         return ItemStack.EMPTY;
     }
 }

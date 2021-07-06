@@ -28,9 +28,7 @@ public class WorldGenFeatureBlock extends WorldGenerator<WorldGenFeatureBlockCon
                         return false;
                     }
 
-                    BlockTallPlant blocktallplant = (BlockTallPlant) iblockdata.getBlock();
-
-                    blocktallplant.a(generatoraccessseed, iblockdata, blockposition, 2);
+                    BlockTallPlant.a(generatoraccessseed, iblockdata, blockposition, 2);
                 } else {
                     generatoraccessseed.setTypeAndData(blockposition, iblockdata, 2);
                 }

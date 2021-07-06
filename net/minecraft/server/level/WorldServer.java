@@ -162,7 +162,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     private final MinecraftServer server;
     public final IWorldDataServer serverLevelData;
     final EntityTickList entityTickList;
-    private final PersistentEntitySectionManager<Entity> entityManager;
+    public final PersistentEntitySectionManager<Entity> entityManager;
     public boolean noSave;
     private final SleepStatus sleepStatus;
     private int emptyTime;
@@ -216,12 +216,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         Objects.requireNonNull(this.entityManager);
         this.chunkSource = new ChunkProviderServer(this, convertable_conversionsession, datafixer, definedstructuremanager, executor, chunkgenerator, j, flag2, worldloadlistener, persistententitysectionmanager::a, () -> {
-            return minecraftserver.F().getWorldPersistentData();
+            return minecraftserver.E().getWorldPersistentData();
         });
         this.portalForcer = new PortalTravelAgent(this);
         this.S();
         this.T();
-        this.getWorldBorder().a(minecraftserver.at());
+        this.getWorldBorder().a(minecraftserver.as());
         this.raids = (PersistentRaid) this.getWorldPersistentData().a((nbttagcompound) -> {
             return PersistentRaid.a(this, nbttagcompound);
         }, () -> {
@@ -366,8 +366,6 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         this.S();
         this.b();
-        gameprofilerfiller.exitEnter("chunkSource");
-        this.getChunkProvider().tick(booleansupplier);
         gameprofilerfiller.exitEnter("tickPending");
         if (!this.isDebugWorld()) {
             this.blockTicks.b();
@@ -376,6 +374,8 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         gameprofilerfiller.exitEnter("raid");
         this.raids.a();
+        gameprofilerfiller.exitEnter("chunkSource");
+        this.getChunkProvider().tick(booleansupplier);
         gameprofilerfiller.exitEnter("blockEvents");
         this.aq();
         this.handlingTick = false;
@@ -423,7 +423,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         }
 
         gameprofilerfiller.enter("entityManagement");
-        this.entityManager.a();
+        this.entityManager.tick();
         gameprofilerfiller.exit();
     }
 
@@ -1116,17 +1116,17 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Nullable
     @Override
     public WorldMap a(String s) {
-        return (WorldMap) this.getMinecraftServer().F().getWorldPersistentData().a(WorldMap::b, s);
+        return (WorldMap) this.getMinecraftServer().E().getWorldPersistentData().a(WorldMap::b, s);
     }
 
     @Override
     public void a(String s, WorldMap worldmap) {
-        this.getMinecraftServer().F().getWorldPersistentData().a(s, (PersistentBase) worldmap);
+        this.getMinecraftServer().E().getWorldPersistentData().a(s, (PersistentBase) worldmap);
     }
 
     @Override
     public int getWorldMapCount() {
-        return ((PersistentIdCounts) this.getMinecraftServer().F().getWorldPersistentData().a(PersistentIdCounts::b, PersistentIdCounts::new, "idcounts")).a();
+        return ((PersistentIdCounts) this.getMinecraftServer().E().getWorldPersistentData().a(PersistentIdCounts::b, PersistentIdCounts::new, "idcounts")).a();
     }
 
     public void a(BlockPosition blockposition, float f) {

@@ -73,6 +73,7 @@ public class DataConverterSchemaV704 extends Schema {
         map.put("minecraft:pink_banner", "minecraft:banner");
         map.put("minecraft:gray_banner", "minecraft:banner");
         map.put("minecraft:silver_banner", "minecraft:banner");
+        map.put("minecraft:light_gray_banner", "minecraft:banner");
         map.put("minecraft:cyan_banner", "minecraft:banner");
         map.put("minecraft:purple_banner", "minecraft:banner");
         map.put("minecraft:blue_banner", "minecraft:banner");
@@ -102,6 +103,7 @@ public class DataConverterSchemaV704 extends Schema {
         map.put("minecraft:pink_bed", "minecraft:bed");
         map.put("minecraft:gray_bed", "minecraft:bed");
         map.put("minecraft:silver_bed", "minecraft:bed");
+        map.put("minecraft:light_gray_bed", "minecraft:bed");
         map.put("minecraft:cyan_bed", "minecraft:bed");
         map.put("minecraft:purple_bed", "minecraft:bed");
         map.put("minecraft:blue_bed", "minecraft:bed");

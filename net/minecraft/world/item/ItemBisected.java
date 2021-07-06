@@ -1,6 +1,8 @@
 package net.minecraft.world.item;
 
+import net.minecraft.core.BlockPosition;
 import net.minecraft.world.item.context.BlockActionContext;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -13,7 +15,11 @@ public class ItemBisected extends ItemBlock {
 
     @Override
     protected boolean a(BlockActionContext blockactioncontext, IBlockData iblockdata) {
-        blockactioncontext.getWorld().setTypeAndData(blockactioncontext.getClickPosition().up(), Blocks.AIR.getBlockData(), 27);
+        World world = blockactioncontext.getWorld();
+        BlockPosition blockposition = blockactioncontext.getClickPosition().up();
+        IBlockData iblockdata1 = world.B(blockposition) ? Blocks.WATER.getBlockData() : Blocks.AIR.getBlockData();
+
+        world.setTypeAndData(blockposition, iblockdata1, 27);
         return super.a(blockactioncontext, iblockdata);
     }
 }

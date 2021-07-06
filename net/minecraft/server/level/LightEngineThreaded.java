@@ -44,12 +44,12 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
 
     @Override
     public int a(int i, boolean flag, boolean flag1) {
-        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Ran authomatically on a different thread!")));
+        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Ran automatically on a different thread!")));
     }
 
     @Override
     public void a(BlockPosition blockposition, int i) {
-        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Ran authomatically on a different thread!")));
+        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Ran automatically on a different thread!")));
     }
 
     @Override
@@ -166,13 +166,13 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
                 });
             }
 
-            this.chunkMap.c(chunkcoordintpair);
         }, () -> {
             return "lightChunk " + chunkcoordintpair + " " + flag;
         }));
         return CompletableFuture.supplyAsync(() -> {
             ichunkaccess.b(true);
             super.b(chunkcoordintpair, false);
+            this.chunkMap.c(chunkcoordintpair);
             return ichunkaccess;
         }, (runnable) -> {
             this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.POST_UPDATE, runnable);

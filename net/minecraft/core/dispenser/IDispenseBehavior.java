@@ -267,7 +267,7 @@ public interface IDispenseBehavior {
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 List<EntityHorseAbstract> list = isourceblock.getWorld().a(EntityHorseAbstract.class, new AxisAlignedBB(blockposition), (entityhorseabstract) -> {
-                    return entityhorseabstract.isAlive() && entityhorseabstract.gb();
+                    return entityhorseabstract.isAlive() && entityhorseabstract.gc();
                 });
                 Iterator iterator1 = list.iterator();
 
@@ -279,7 +279,7 @@ public interface IDispenseBehavior {
                     }
 
                     entityhorseabstract = (EntityHorseAbstract) iterator1.next();
-                } while (!entityhorseabstract.m(itemstack) || entityhorseabstract.gc() || !entityhorseabstract.isTamed());
+                } while (!entityhorseabstract.m(itemstack) || entityhorseabstract.gd() || !entityhorseabstract.isTamed());
 
                 entityhorseabstract.k(401).a(itemstack.cloneAndSubtract(1));
                 this.a(true);

@@ -125,7 +125,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         return 1 + this.level.random.nextInt(3);
     }
 
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return itemstack.a(Items.WHEAT);
     }
 
@@ -133,10 +133,10 @@ public abstract class EntityAnimal extends EntityAgeable {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (this.n(itemstack)) {
+        if (this.isBreedItem(itemstack)) {
             int i = this.getAge();
 
-            if (!this.level.isClientSide && i == 0 && this.fy()) {
+            if (!this.level.isClientSide && i == 0 && this.fz()) {
                 this.a(entityhuman, enumhand, itemstack);
                 this.g(entityhuman);
                 this.a(GameEvent.MOB_INTERACT, this.cT());
@@ -165,7 +165,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     }
 
-    public boolean fy() {
+    public boolean fz() {
         return this.inLove <= 0;
     }
 
@@ -182,7 +182,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         this.inLove = i;
     }
 
-    public int fz() {
+    public int fA() {
         return this.inLove;
     }
 

@@ -155,7 +155,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         this.goalSelector.a(3, new PathfinderGoalFollowEntity(this, 1.0D, 3.0F, 7.0F));
     }
 
-    public static AttributeProvider.Builder fD() {
+    public static AttributeProvider.Builder fE() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 6.0D).a(GenericAttributes.FLYING_SPEED, 0.4000000059604645D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
@@ -186,7 +186,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         }
 
         super.movementTick();
-        this.fH();
+        this.fI();
     }
 
     @Override
@@ -195,11 +195,11 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         this.partyParrot = flag;
     }
 
-    public boolean fE() {
+    public boolean fF() {
         return this.partyParrot;
     }
 
-    private void fH() {
+    private void fI() {
         this.oFlap = this.flap;
         this.oFlapSpeed = this.flapSpeed;
         this.flapSpeed = (float) ((double) this.flapSpeed + (double) (!this.onGround && !this.isPassenger() ? 4 : -1) * 0.3D);
@@ -273,7 +273,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             return EnumInteractionResult.a(this.level.isClientSide);
-        } else if (!this.fJ() && this.isTamed() && this.j((EntityLiving) entityhuman)) {
+        } else if (!this.fK() && this.isTamed() && this.j((EntityLiving) entityhuman)) {
             if (!this.level.isClientSide) {
                 this.setWillSit(!this.isWillSit());
             }
@@ -285,7 +285,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return false;
     }
 
@@ -428,7 +428,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Override
-    public boolean fJ() {
+    public boolean fK() {
         return !this.onGround;
     }
 

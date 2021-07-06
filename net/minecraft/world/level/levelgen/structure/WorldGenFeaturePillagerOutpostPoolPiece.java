@@ -52,7 +52,7 @@ public class WorldGenFeaturePillagerOutpostPoolPiece extends StructurePiece {
         this.structureManager = worldserver.p();
         this.position = new BlockPosition(nbttagcompound.getInt("PosX"), nbttagcompound.getInt("PosY"), nbttagcompound.getInt("PosZ"));
         this.groundLevelDelta = nbttagcompound.getInt("ground_level_delta");
-        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.b(DynamicOpsNBT.INSTANCE, worldserver.getMinecraftServer().ba(), worldserver.getMinecraftServer().getCustomRegistry());
+        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.b(DynamicOpsNBT.INSTANCE, worldserver.getMinecraftServer().aZ(), worldserver.getMinecraftServer().getCustomRegistry());
         DataResult dataresult = WorldGenFeatureDefinedStructurePoolStructure.CODEC.parse(registryreadops, nbttagcompound.getCompound("pool_element"));
         Logger logger = WorldGenFeaturePillagerOutpostPoolPiece.LOGGER;
 

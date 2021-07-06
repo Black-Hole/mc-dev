@@ -76,12 +76,12 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         this.targetSelector.a(3, new PathfinderGoalUniversalAngerReset<>(this, true));
     }
 
-    public static AttributeProvider.Builder fF() {
-        return EntityZombie.fB().a(GenericAttributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+    public static AttributeProvider.Builder fG() {
+        return EntityZombie.fC().a(GenericAttributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override
-    protected boolean fw() {
+    protected boolean fx() {
         return false;
     }
 
@@ -94,14 +94,14 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
                 attributemodifiable.b(EntityPigZombie.SPEED_MODIFIER_ATTACKING);
             }
 
-            this.fG();
+            this.fH();
         } else if (attributemodifiable.a(EntityPigZombie.SPEED_MODIFIER_ATTACKING)) {
             attributemodifiable.removeModifier(EntityPigZombie.SPEED_MODIFIER_ATTACKING);
         }
 
         this.a((WorldServer) this.level, true);
         if (this.getGoalTarget() != null) {
-            this.fH();
+            this.fI();
         }
 
         if (this.isAngry()) {
@@ -111,29 +111,29 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         super.mobTick();
     }
 
-    private void fG() {
+    private void fH() {
         if (this.playFirstAngerSoundIn > 0) {
             --this.playFirstAngerSoundIn;
             if (this.playFirstAngerSoundIn == 0) {
-                this.fJ();
+                this.fK();
             }
         }
 
     }
 
-    private void fH() {
+    private void fI() {
         if (this.ticksUntilNextAlert > 0) {
             --this.ticksUntilNextAlert;
         } else {
             if (this.getEntitySenses().a(this.getGoalTarget())) {
-                this.fI();
+                this.fJ();
             }
 
             this.ticksUntilNextAlert = EntityPigZombie.ALERT_INTERVAL.a(this.random);
         }
     }
 
-    private void fI() {
+    private void fJ() {
         double d0 = this.b(GenericAttributes.FOLLOW_RANGE);
         AxisAlignedBB axisalignedbb = AxisAlignedBB.a(this.getPositionVector()).grow(d0, 10.0D, d0);
 
@@ -148,7 +148,7 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         });
     }
 
-    private void fJ() {
+    private void fK() {
         this.playSound(SoundEffects.ZOMBIFIED_PIGLIN_ANGRY, this.getSoundVolume() * 2.0F, this.ep() * 1.8F);
     }
 
@@ -223,12 +223,12 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     }
 
     @Override
-    protected ItemStack fv() {
+    protected ItemStack fw() {
         return ItemStack.EMPTY;
     }
 
     @Override
-    protected void fE() {
+    protected void fF() {
         this.getAttributeInstance(GenericAttributes.SPAWN_REINFORCEMENTS_CHANCE).setValue(0.0D);
     }
 
@@ -240,5 +240,10 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     @Override
     public boolean f(EntityHuman entityhuman) {
         return this.a_((EntityLiving) entityhuman);
+    }
+
+    @Override
+    public boolean l(ItemStack itemstack) {
+        return this.canPickup(itemstack);
     }
 }

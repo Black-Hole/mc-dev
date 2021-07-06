@@ -169,7 +169,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected boolean fw() {
+    protected boolean fx() {
         return false;
     }
 
@@ -305,7 +305,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected ItemStack fv() {
+    protected ItemStack fw() {
         return ItemStack.EMPTY;
     }
 
@@ -340,7 +340,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         return (VillagerData) this.entityData.get(EntityZombieVillager.DATA_VILLAGER_DATA);
     }
 
-    public int fH() {
+    public int fI() {
         return this.villagerXp;
     }
 

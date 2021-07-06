@@ -147,7 +147,7 @@ public class CriterionConditionEntity {
                         }
                     }
 
-                    return this.catType == null || entity instanceof EntityCat && ((EntityCat) entity).fD().equals(this.catType);
+                    return this.catType == null || entity instanceof EntityCat && ((EntityCat) entity).fE().equals(this.catType);
                 }
             }
         }

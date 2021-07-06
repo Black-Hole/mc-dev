@@ -56,7 +56,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.eY());
+        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.eZ());
         this.animal.getNavigation().a((Entity) this.partner, this.speedModifier);
         ++this.loveTime;
         if (this.loveTime >= 60 && this.animal.f((Entity) this.partner) < 9.0D) {

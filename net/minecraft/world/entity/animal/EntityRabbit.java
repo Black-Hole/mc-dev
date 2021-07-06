@@ -187,7 +187,7 @@ public class EntityRabbit extends EntityAnimal {
         if (this.onGround) {
             if (!this.wasOnGround) {
                 this.setJumping(false);
-                this.fF();
+                this.fG();
             }
 
             if (this.getRabbitType() == 99 && this.jumpDelayTicks == 0) {
@@ -216,7 +216,7 @@ public class EntityRabbit extends EntityAnimal {
                     this.p();
                 }
             } else if (!entityrabbit_controllerjumprabbit.d()) {
-                this.fx();
+                this.fy();
             }
         }
 
@@ -232,15 +232,15 @@ public class EntityRabbit extends EntityAnimal {
         this.setYRot((float) (MathHelper.d(d1 - this.locZ(), d0 - this.locX()) * 57.2957763671875D) - 90.0F);
     }
 
-    private void fx() {
+    private void fy() {
         ((EntityRabbit.ControllerJumpRabbit) this.jumpControl).a(true);
     }
 
-    private void fD() {
+    private void fE() {
         ((EntityRabbit.ControllerJumpRabbit) this.jumpControl).a(false);
     }
 
-    private void fE() {
+    private void fF() {
         if (this.moveControl.c() < 2.2D) {
             this.jumpDelayTicks = 10;
         } else {
@@ -249,9 +249,9 @@ public class EntityRabbit extends EntityAnimal {
 
     }
 
-    private void fF() {
+    private void fG() {
+        this.fF();
         this.fE();
-        this.fD();
     }
 
     @Override
@@ -341,7 +341,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return m(itemstack);
     }
 
@@ -392,7 +392,7 @@ public class EntityRabbit extends EntityAnimal {
         return (iblockdata.a(Blocks.GRASS_BLOCK) || iblockdata.a(Blocks.SNOW) || iblockdata.a(Blocks.SAND)) && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
-    boolean fG() {
+    boolean fH() {
         return this.moreCarrotTicks == 0;
     }
 
@@ -530,7 +530,7 @@ public class EntityRabbit extends EntityAnimal {
                 }
 
                 this.canRaid = false;
-                this.wantsToRaid = this.rabbit.fG();
+                this.wantsToRaid = this.rabbit.fH();
                 this.wantsToRaid = true;
             }
 
@@ -545,7 +545,7 @@ public class EntityRabbit extends EntityAnimal {
         @Override
         public void e() {
             super.e();
-            this.rabbit.getControllerLook().a((double) this.blockPos.getX() + 0.5D, (double) (this.blockPos.getY() + 1), (double) this.blockPos.getZ() + 0.5D, 10.0F, (float) this.rabbit.eY());
+            this.rabbit.getControllerLook().a((double) this.blockPos.getX() + 0.5D, (double) (this.blockPos.getY() + 1), (double) this.blockPos.getZ() + 0.5D, 10.0F, (float) this.rabbit.eZ());
             if (this.l()) {
                 World world = this.rabbit.level;
                 BlockPosition blockposition = this.blockPos.up();

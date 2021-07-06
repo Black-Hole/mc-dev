@@ -292,7 +292,7 @@ public abstract class NavigationAbstract {
                 this.timeoutCachedNode = blockposition;
                 double d0 = vec3d.f(Vec3D.c(this.timeoutCachedNode));
 
-                this.timeoutLimit = this.mob.ev() > 0.0F ? d0 / (double) this.mob.ev() * 1000.0D : 0.0D;
+                this.timeoutLimit = this.mob.ew() > 0.0F ? d0 / (double) this.mob.ew() * 1000.0D : 0.0D;
             }
 
             if (this.timeoutLimit > 0.0D && (double) this.timeoutTimer > this.timeoutLimit * 3.0D) {

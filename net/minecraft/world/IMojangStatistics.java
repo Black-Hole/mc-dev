@@ -6,5 +6,5 @@ public interface IMojangStatistics {
 
     void b(MojangStatisticsGenerator mojangstatisticsgenerator);
 
-    boolean V();
+    boolean U();
 }

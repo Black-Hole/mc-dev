@@ -81,7 +81,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     @Override
     public void e() {
         if (this.followingMob != null && !this.mob.isLeashed()) {
-            this.mob.getControllerLook().a(this.followingMob, 10.0F, (float) this.mob.eY());
+            this.mob.getControllerLook().a(this.followingMob, 10.0F, (float) this.mob.eZ());
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
                 double d0 = this.mob.locX() - this.followingMob.locX();

@@ -342,7 +342,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper {
     }
 
     public static List<EntityItem> b(World world, IHopper ihopper) {
-        return (List) ihopper.K_().d().stream().flatMap((axisalignedbb) -> {
+        return (List) ihopper.K_().toList().stream().flatMap((axisalignedbb) -> {
             return world.a(EntityItem.class, axisalignedbb.d(ihopper.x() - 0.5D, ihopper.z() - 0.5D, ihopper.A() - 0.5D), IEntitySelector.ENTITY_STILL_ALIVE).stream();
         }).collect(Collectors.toList());
     }

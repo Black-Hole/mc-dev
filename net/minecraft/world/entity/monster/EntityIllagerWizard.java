@@ -45,10 +45,10 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     @Override
     public EntityIllagerAbstract.a n() {
-        return this.fF() ? EntityIllagerAbstract.a.SPELLCASTING : (this.fM() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
+        return this.fG() ? EntityIllagerAbstract.a.SPELLCASTING : (this.fN() ? EntityIllagerAbstract.a.CELEBRATING : EntityIllagerAbstract.a.CROSSED);
     }
 
-    public boolean fF() {
+    public boolean fG() {
         return this.level.isClientSide ? (Byte) this.entityData.get(EntityIllagerWizard.DATA_SPELL_CASTING_ID) > 0 : this.spellCastingTickCount > 0;
     }
 
@@ -73,7 +73,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.fF()) {
+        if (this.level.isClientSide && this.fG()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.spellColor[0];
             double d1 = entityillagerwizard_spell.spellColor[1];
@@ -88,7 +88,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     }
 
-    protected int fH() {
+    protected int fI() {
         return this.spellCastingTickCount;
     }
 
@@ -133,7 +133,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         public boolean a() {
             EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.fF() ? false : EntityIllagerWizard.this.tickCount >= this.nextAttackTickCount) : false;
+            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.fG() ? false : EntityIllagerWizard.this.tickCount >= this.nextAttackTickCount) : false;
         }
 
         @Override
@@ -191,7 +191,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         @Override
         public boolean a() {
-            return EntityIllagerWizard.this.fH() > 0;
+            return EntityIllagerWizard.this.fI() > 0;
         }
 
         @Override
@@ -209,7 +209,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.eZ(), (float) EntityIllagerWizard.this.eY());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.fa(), (float) EntityIllagerWizard.this.eZ());
             }
 
         }

@@ -484,10 +484,10 @@ public class Raid {
                         }
 
                         if (!this.level.b(blockposition) && entityraider.dK() > 2400) {
-                            entityraider.b(entityraider.fN() + 1);
+                            entityraider.b(entityraider.fO() + 1);
                         }
 
-                        if (entityraider.fN() >= 30) {
+                        if (entityraider.fO() >= 30) {
                             hashset.add(entityraider);
                         }
                     }
@@ -546,7 +546,7 @@ public class Raid {
             for (int j1 = 0; j1 < l; ++j1) {
                 EntityRaider entityraider = (EntityRaider) raid_wave.entityType.a((World) this.level);
 
-                if (!flag && entityraider.fw()) {
+                if (!flag && entityraider.fx()) {
                     entityraider.setPatrolLeader(true);
                     this.a(i, entityraider);
                     flag = true;
@@ -631,7 +631,7 @@ public class Raid {
     }
 
     public void a(EntityRaider entityraider, boolean flag) {
-        Set<EntityRaider> set = (Set) this.groupRaiderMap.get(entityraider.fL());
+        Set<EntityRaider> set = (Set) this.groupRaiderMap.get(entityraider.fM());
 
         if (set != null) {
             boolean flag1 = set.remove(entityraider);

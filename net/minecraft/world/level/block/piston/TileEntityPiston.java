@@ -110,7 +110,7 @@ public class TileEntityPiston extends TileEntity {
             List<Entity> list = world.getEntities((Entity) null, PistonUtil.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
 
             if (!list.isEmpty()) {
-                List<AxisAlignedBB> list1 = voxelshape.d();
+                List<AxisAlignedBB> list1 = voxelshape.toList();
                 boolean flag = tileentitypiston.movedState.a(Blocks.SLIME_BLOCK);
                 Iterator iterator = list.iterator();
 

@@ -18,7 +18,7 @@ public interface ISteerable {
         } else {
             Entity entity = entityinsentient.cB();
 
-            if (entityinsentient.isVehicle() && entityinsentient.fc() && entity instanceof EntityHuman) {
+            if (entityinsentient.isVehicle() && entityinsentient.fd() && entity instanceof EntityHuman) {
                 entityinsentient.setYRot(entity.getYRot());
                 entityinsentient.yRotO = entityinsentient.getYRot();
                 entityinsentient.setXRot(entity.getXRot() * 0.5F);
@@ -26,7 +26,7 @@ public interface ISteerable {
                 entityinsentient.yBodyRot = entityinsentient.getYRot();
                 entityinsentient.yHeadRot = entityinsentient.getYRot();
                 entityinsentient.maxUpStep = 1.0F;
-                entityinsentient.flyingSpeed = entityinsentient.ev() * 0.1F;
+                entityinsentient.flyingSpeed = entityinsentient.ew() * 0.1F;
                 if (saddlestorage.boosting && saddlestorage.boostTime++ > saddlestorage.boostTimeTotal) {
                     saddlestorage.boosting = false;
                 }

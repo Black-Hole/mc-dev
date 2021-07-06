@@ -71,7 +71,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.horse.ejectPassengers();
-            this.horse.fV();
+            this.horse.fW();
             this.horse.level.broadcastEntityEffect(this.horse, (byte) 6);
         }
 

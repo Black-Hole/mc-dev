@@ -93,8 +93,6 @@ public final class ItemStack {
         decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
     });
     public static final String TAG_ENCH = "Enchantments";
-    public static final String TAG_ENCH_ID = "id";
-    public static final String TAG_ENCH_LEVEL = "lvl";
     public static final String TAG_DISPLAY = "display";
     public static final String TAG_DISPLAY_NAME = "Name";
     public static final String TAG_LORE = "Lore";
@@ -753,8 +751,8 @@ public final class ItemStack {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
 
-            IRegistry.ENCHANTMENT.getOptional(MinecraftKey.a(nbttagcompound.getString("id"))).ifPresent((enchantment) -> {
-                list.add(enchantment.d(nbttagcompound.getInt("lvl")));
+            IRegistry.ENCHANTMENT.getOptional(EnchantmentManager.b(nbttagcompound)).ifPresent((enchantment) -> {
+                list.add(enchantment.d(EnchantmentManager.a(nbttagcompound)));
             });
         }
 
@@ -811,11 +809,8 @@ public final class ItemStack {
         }
 
         NBTTagList nbttaglist = this.tag.getList("Enchantments", 10);
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
-        nbttagcompound.setShort("lvl", (short) ((byte) i));
-        nbttaglist.add(nbttagcompound);
+        nbttaglist.add(EnchantmentManager.a(EnchantmentManager.a(enchantment), (byte) i));
     }
 
     public boolean hasEnchantments() {

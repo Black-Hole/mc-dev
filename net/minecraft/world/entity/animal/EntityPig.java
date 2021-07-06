@@ -86,7 +86,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     }
 
     @Override
-    public boolean fc() {
+    public boolean fd() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -148,9 +148,9 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
 
     @Override
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
-        boolean flag = this.n(entityhuman.b(enumhand));
+        boolean flag = this.isBreedItem(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eY()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eZ()) {
             if (!this.level.isClientSide) {
                 entityhuman.startRiding(this);
             }
@@ -207,7 +207,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
             int[][] aint = DismountUtil.a(enumdirection);
             BlockPosition blockposition = this.getChunkCoordinates();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            UnmodifiableIterator unmodifiableiterator = entityliving.eR().iterator();
+            UnmodifiableIterator unmodifiableiterator = entityliving.eS().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
@@ -285,7 +285,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityPig.FOOD_ITEMS.test(itemstack);
     }
 

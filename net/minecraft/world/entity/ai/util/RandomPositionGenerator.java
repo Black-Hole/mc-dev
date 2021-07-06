@@ -117,8 +117,8 @@ public class RandomPositionGenerator {
         int j = blockposition.getX();
         int k = blockposition.getZ();
 
-        if (entitycreature.fk() && i > 1) {
-            BlockPosition blockposition1 = entitycreature.fh();
+        if (entitycreature.fl() && i > 1) {
+            BlockPosition blockposition1 = entitycreature.fi();
 
             if (entitycreature.locX() > (double) blockposition1.getX()) {
                 j -= random.nextInt(i / 2);

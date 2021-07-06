@@ -36,7 +36,7 @@ public class CommandGamemodeDefault {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
         minecraftserver.a(enumgamemode);
-        EnumGamemode enumgamemode1 = minecraftserver.aZ();
+        EnumGamemode enumgamemode1 = minecraftserver.aY();
 
         if (enumgamemode1 != null) {
             Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();

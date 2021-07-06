@@ -941,7 +941,7 @@ public abstract class EntityLiving extends Entity {
         return (MobEffect) this.activeEffects.get(mobeffectlist);
     }
 
-    public boolean addEffect(MobEffect mobeffect) {
+    public final boolean addEffect(MobEffect mobeffect) {
         return this.addEffect(mobeffect, (Entity) null);
     }
 
@@ -1340,6 +1340,10 @@ public abstract class EntityLiving extends Entity {
                 this.entityWakeup();
             }
 
+            if (!this.level.isClientSide && this.hasCustomName()) {
+                EntityLiving.LOGGER.info("Named entity {} died: {}", this, this.getCombatTracker().getDeathMessage().getString());
+            }
+
             this.dead = true;
             this.getCombatTracker().g();
             if (this.level instanceof WorldServer) {
@@ -1429,7 +1433,7 @@ public abstract class EntityLiving extends Entity {
         LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.level)).a(this.random).set(LootContextParameters.THIS_ENTITY, this).set(LootContextParameters.ORIGIN, this.getPositionVector()).set(LootContextParameters.DAMAGE_SOURCE, damagesource).setOptional(LootContextParameters.KILLER_ENTITY, damagesource.getEntity()).setOptional(LootContextParameters.DIRECT_KILLER_ENTITY, damagesource.k());
 
         if (flag && this.lastHurtByPlayer != null) {
-            loottableinfo_builder = loottableinfo_builder.set(LootContextParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).a(this.lastHurtByPlayer.fE());
+            loottableinfo_builder = loottableinfo_builder.set(LootContextParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).a(this.lastHurtByPlayer.fF());
         }
 
         return loottableinfo_builder;
@@ -2046,26 +2050,25 @@ public abstract class EntityLiving extends Entity {
         return 0.42F * this.getBlockJumpFactor();
     }
 
+    public double es() {
+        return this.hasEffect(MobEffects.JUMP) ? (double) (0.1F * (float) (this.getEffect(MobEffects.JUMP).getAmplifier() + 1)) : 0.0D;
+    }
+
     protected void jump() {
-        float f = this.er();
-
-        if (this.hasEffect(MobEffects.JUMP)) {
-            f += 0.1F * (float) (this.getEffect(MobEffects.JUMP).getAmplifier() + 1);
-        }
-
+        double d0 = (double) this.er() + this.es();
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) f, vec3d.z);
+        this.setMot(vec3d.x, d0, vec3d.z);
         if (this.isSprinting()) {
-            float f1 = this.getYRot() * 0.017453292F;
+            float f = this.getYRot() * 0.017453292F;
 
-            this.setMot(this.getMot().add((double) (-MathHelper.sin(f1) * 0.2F), 0.0D, (double) (MathHelper.cos(f1) * 0.2F)));
+            this.setMot(this.getMot().add((double) (-MathHelper.sin(f) * 0.2F), 0.0D, (double) (MathHelper.cos(f) * 0.2F)));
         }
 
         this.hasImpulse = true;
     }
 
-    protected void et() {
+    protected void eu() {
         this.setMot(this.getMot().add(0.0D, -0.03999999910593033D, 0.0D));
     }
 
@@ -2073,7 +2076,7 @@ public abstract class EntityLiving extends Entity {
         this.setMot(this.getMot().add(0.0D, 0.03999999910593033D, 0.0D));
     }
 
-    protected float eu() {
+    protected float ev() {
         return 0.8F;
     }
 
@@ -2097,7 +2100,7 @@ public abstract class EntityLiving extends Entity {
 
             if (this.isInWater() && this.dA() && !this.a(fluid.getType())) {
                 d1 = this.locY();
-                f = this.isSprinting() ? 0.9F : this.eu();
+                f = this.isSprinting() ? 0.9F : this.ev();
                 float f1 = 0.02F;
                 float f2 = (float) EnchantmentManager.e(this);
 
@@ -2111,7 +2114,7 @@ public abstract class EntityLiving extends Entity {
 
                 if (f2 > 0.0F) {
                     f += (0.54600006F - f) * f2 / 3.0F;
-                    f1 += (this.ev() - f1) * f2 / 3.0F;
+                    f1 += (this.ew() - f1) * f2 / 3.0F;
                 }
 
                 if (this.hasEffect(MobEffects.DOLPHINS_GRACE)) {
@@ -2288,7 +2291,7 @@ public abstract class EntityLiving extends Entity {
             double d1 = MathHelper.a(vec3d.z, -0.15000000596046448D, 0.15000000596046448D);
             double d2 = Math.max(vec3d.y, -0.15000000596046448D);
 
-            if (d2 < 0.0D && !this.cS().a(Blocks.SCAFFOLDING) && this.eM() && this instanceof EntityHuman) {
+            if (d2 < 0.0D && !this.cS().a(Blocks.SCAFFOLDING) && this.eN() && this instanceof EntityHuman) {
                 d2 = 0.0D;
             }
 
@@ -2299,10 +2302,10 @@ public abstract class EntityLiving extends Entity {
     }
 
     private float u(float f) {
-        return this.onGround ? this.ev() * (0.21600002F / (f * f * f)) : this.flyingSpeed;
+        return this.onGround ? this.ew() * (0.21600002F / (f * f * f)) : this.flyingSpeed;
     }
 
-    public float ev() {
+    public float ew() {
         return this.speed;
     }
 
@@ -2693,13 +2696,13 @@ public abstract class EntityLiving extends Entity {
 
         this.collideNearby();
         this.level.getMethodProfiler().exit();
-        if (!this.level.isClientSide && this.ew() && this.aN()) {
+        if (!this.level.isClientSide && this.ex() && this.aN()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
     }
 
-    public boolean ew() {
+    public boolean ex() {
         return false;
     }
 
@@ -2952,7 +2955,7 @@ public abstract class EntityLiving extends Entity {
 
     public void exitCombat() {}
 
-    protected void eC() {
+    protected void eD() {
         this.effectsDirty = true;
     }
 
@@ -2979,7 +2982,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     protected void a(ItemStack itemstack) {
-        itemstack.b(this.level, this, this.eH());
+        itemstack.b(this.level, this, this.eI());
         if (this.D()) {
             this.b(itemstack, 5);
         }
@@ -2991,7 +2994,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     private boolean D() {
-        int i = this.eH();
+        int i = this.eI();
         FoodInfo foodinfo = this.useItem.getItem().getFoodInfo();
         boolean flag = foodinfo != null && foodinfo.e();
 
@@ -3120,17 +3123,17 @@ public abstract class EntityLiving extends Entity {
         return this.useItem;
     }
 
-    public int eH() {
+    public int eI() {
         return this.useItemRemaining;
     }
 
-    public int eI() {
-        return this.isHandRaised() ? this.useItem.o() - this.eH() : 0;
+    public int eJ() {
+        return this.isHandRaised() ? this.useItem.o() - this.eI() : 0;
     }
 
     public void releaseActiveItem() {
         if (!this.useItem.isEmpty()) {
-            this.useItem.a(this.level, this, this.eH());
+            this.useItem.a(this.level, this, this.eI());
             if (this.useItem.q()) {
                 this.B();
             }
@@ -3158,7 +3161,7 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public boolean eM() {
+    public boolean eN() {
         return this.isSneaking();
     }
 
@@ -3171,7 +3174,7 @@ public abstract class EntityLiving extends Entity {
         return super.bL() || !this.isGliding() && this.getPose() == EntityPose.FALL_FLYING;
     }
 
-    public int eO() {
+    public int eP() {
         return this.fallFlyTicks;
     }
 
@@ -3223,11 +3226,11 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public boolean eP() {
+    public boolean eQ() {
         return true;
     }
 
-    public boolean eQ() {
+    public boolean eR() {
         return true;
     }
 
@@ -3247,7 +3250,7 @@ public abstract class EntityLiving extends Entity {
         return entitypose == EntityPose.SLEEPING ? EntityLiving.SLEEPING_DIMENSIONS : super.a(entitypose).a(this.dz());
     }
 
-    public ImmutableList<EntityPose> eR() {
+    public ImmutableList<EntityPose> eS() {
         return ImmutableList.of(EntityPose.STANDING);
     }
 
@@ -3265,7 +3268,7 @@ public abstract class EntityLiving extends Entity {
         this.entityData.set(EntityLiving.SLEEPING_POS_ID, Optional.of(blockposition));
     }
 
-    public void eT() {
+    public void eU() {
         this.entityData.set(EntityLiving.SLEEPING_POS_ID, Optional.empty());
     }
 
@@ -3329,11 +3332,11 @@ public abstract class EntityLiving extends Entity {
 
         this.setPose(EntityPose.STANDING);
         this.setPosition(vec3d.x, vec3d.y, vec3d.z);
-        this.eT();
+        this.eU();
     }
 
     @Nullable
-    public EnumDirection eW() {
+    public EnumDirection eX() {
         BlockPosition blockposition = (BlockPosition) this.getBedPosition().orElse((Object) null);
 
         return blockposition != null ? BlockBed.a((IBlockAccess) this.level, blockposition) : null;

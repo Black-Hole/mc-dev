@@ -5,13 +5,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 
 public class WorldGenFeatureRandomChoiceConfigurationWeight {
 
     public static final Codec<WorldGenFeatureRandomChoiceConfigurationWeight> CODEC = RecordCodecBuilder.create((instance) -> {
-        return instance.group(WorldGenFeatureConfigured.CODEC.fieldOf("feature").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
+        return instance.group(WorldGenFeatureConfigured.CODEC.fieldOf("feature").flatXmap(ExtraCodecs.c(), ExtraCodecs.c()).forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
             return worldgenfeaturerandomchoiceconfigurationweight.feature;
         }), Codec.floatRange(0.0F, 1.0F).fieldOf("chance").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
             return worldgenfeaturerandomchoiceconfigurationweight.chance;

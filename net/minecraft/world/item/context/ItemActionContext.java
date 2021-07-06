@@ -73,7 +73,7 @@ public class ItemActionContext {
     }
 
     public boolean isSneaking() {
-        return this.player != null && this.player.eY();
+        return this.player != null && this.player.eZ();
     }
 
     public float i() {

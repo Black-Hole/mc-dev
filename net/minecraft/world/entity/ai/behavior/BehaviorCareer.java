@@ -22,7 +22,7 @@ public class BehaviorCareer extends Behavior<EntityVillager> {
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         BlockPosition blockposition = ((GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get()).getBlockPosition();
 
-        return blockposition.a((IPosition) entityvillager.getPositionVector(), 2.0D) || entityvillager.fI();
+        return blockposition.a((IPosition) entityvillager.getPositionVector(), 2.0D) || entityvillager.fJ();
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {

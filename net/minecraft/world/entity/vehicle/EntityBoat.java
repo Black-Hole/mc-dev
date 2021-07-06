@@ -735,7 +735,7 @@ public class EntityBoat extends Entity {
                 list.add(new Vec3D(d0, (double) blockposition1.getY() + d3, d1));
             }
 
-            UnmodifiableIterator unmodifiableiterator = entityliving.eR().iterator();
+            UnmodifiableIterator unmodifiableiterator = entityliving.eS().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
@@ -785,7 +785,7 @@ public class EntityBoat extends Entity {
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
-        return entityhuman.eY() ? EnumInteractionResult.PASS : (this.outOfControlTicks < 60.0F ? (!this.level.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS) : EnumInteractionResult.PASS);
+        return entityhuman.eZ() ? EnumInteractionResult.PASS : (this.outOfControlTicks < 60.0F ? (!this.level.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS) : EnumInteractionResult.PASS);
     }
 
     @Override

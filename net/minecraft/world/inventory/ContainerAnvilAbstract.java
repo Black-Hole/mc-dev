@@ -71,13 +71,13 @@ public abstract class ContainerAnvilAbstract extends Container {
 
     }
 
-    public abstract void i();
+    public abstract void l();
 
     @Override
     public void a(IInventory iinventory) {
         super.a(iinventory);
         if (iinventory == this.inputSlots) {
-            this.i();
+            this.l();
         }
 
     }

@@ -45,7 +45,7 @@ public class PerfCommand {
     private static int a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver.aR()) {
+        if (minecraftserver.aQ()) {
             throw PerfCommand.ERROR_ALREADY_RUNNING.create();
         } else {
             Consumer<MethodProfilerResults> consumer = (methodprofilerresults) -> {
@@ -64,10 +64,10 @@ public class PerfCommand {
     private static int b(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (!minecraftserver.aR()) {
+        if (!minecraftserver.aQ()) {
             throw PerfCommand.ERROR_NOT_RUNNING.create();
         } else {
-            minecraftserver.aT();
+            minecraftserver.aS();
             return 0;
         }
     }

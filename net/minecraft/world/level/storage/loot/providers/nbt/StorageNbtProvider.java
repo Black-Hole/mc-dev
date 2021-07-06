@@ -29,7 +29,7 @@ public class StorageNbtProvider implements NbtProvider {
     @Nullable
     @Override
     public NBTBase a(LootTableInfo loottableinfo) {
-        return loottableinfo.getWorld().getMinecraftServer().aH().a(this.id);
+        return loottableinfo.getWorld().getMinecraftServer().aG().a(this.id);
     }
 
     @Override

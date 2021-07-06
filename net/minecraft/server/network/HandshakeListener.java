@@ -43,7 +43,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
                 }
                 break;
             case STATUS:
-                if (this.server.al()) {
+                if (this.server.ak()) {
                     this.connection.setProtocol(EnumProtocol.STATUS);
                     this.connection.setPacketListener(new PacketStatusListener(this.server, this.connection));
                 } else {

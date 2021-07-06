@@ -36,7 +36,7 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
         MetricsRegistry.INSTANCE.a((ProfilerMeasured) this);
     }
 
-    private boolean b() {
+    private boolean c() {
         int i;
 
         do {
@@ -49,7 +49,7 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
         return true;
     }
 
-    private void c() {
+    private void d() {
         int i;
 
         do {
@@ -58,7 +58,7 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
 
     }
 
-    private boolean d() {
+    private boolean e() {
         return (this.status.get() & 1) != 0 ? false : !this.queue.b();
     }
 
@@ -72,12 +72,12 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
 
     }
 
-    private boolean e() {
+    private boolean f() {
         return (this.status.get() & 2) != 0;
     }
 
-    private boolean f() {
-        if (!this.e()) {
+    private boolean g() {
+        if (!this.f()) {
             return false;
         } else {
             Runnable runnable = (Runnable) this.queue.a();
@@ -97,8 +97,20 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
                 return i == 0;
             });
         } finally {
-            this.c();
-            this.g();
+            this.d();
+            this.h();
+        }
+
+    }
+
+    public void a() {
+        try {
+            this.a((i) -> {
+                return true;
+            });
+        } finally {
+            this.d();
+            this.h();
         }
 
     }
@@ -106,11 +118,11 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
     @Override
     public void a(T t0) {
         this.queue.a(t0);
-        this.g();
+        this.h();
     }
 
-    private void g() {
-        if (this.d() && this.b()) {
+    private void h() {
+        if (this.e() && this.c()) {
             try {
                 this.dispatcher.execute(this);
             } catch (RejectedExecutionException rejectedexecutionexception) {
@@ -127,14 +139,14 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
     private int a(Int2BooleanFunction int2booleanfunction) {
         int i;
 
-        for (i = 0; int2booleanfunction.get(i) && this.f(); ++i) {
+        for (i = 0; int2booleanfunction.get(i) && this.g(); ++i) {
             ;
         }
 
         return i;
     }
 
-    public int a() {
+    public int b() {
         return this.queue.c();
     }
 
@@ -143,12 +155,12 @@ public class ThreadedMailbox<T> implements ProfilerMeasured, Mailbox<T>, AutoClo
     }
 
     @Override
-    public String bo() {
+    public String bn() {
         return this.name;
     }
 
     @Override
-    public List<MetricSampler> bl() {
-        return ImmutableList.of(MetricSampler.a(this.name + "-queue-size", MetricCategory.MAIL_BOXES, this::a));
+    public List<MetricSampler> bk() {
+        return ImmutableList.of(MetricSampler.a(this.name + "-queue-size", MetricCategory.MAIL_BOXES, this::b));
     }
 }

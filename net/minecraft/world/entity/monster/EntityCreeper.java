@@ -74,7 +74,7 @@ public class EntityCreeper extends EntityMonster implements PowerableMob {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override

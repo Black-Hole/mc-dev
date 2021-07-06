@@ -1,7 +1,8 @@
 package net.minecraft.server.packs;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +12,8 @@ import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -42,40 +44,62 @@ public class ResourcePackVanilla implements IResourcePack, ResourceProvider {
     public static Path generatedDir;
     private static final Logger LOGGER = LogManager.getLogger();
     public static Class<?> clientObject;
-    private static final Map<EnumResourcePackType, FileSystem> JAR_FILESYSTEM_BY_TYPE = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Map<EnumResourcePackType, Path> ROOT_DIR_BY_TYPE = (Map) SystemUtils.a(() -> {
         Class oclass = ResourcePackVanilla.class;
 
         synchronized (ResourcePackVanilla.class) {
+            Builder<EnumResourcePackType, Path> builder = ImmutableMap.builder();
             EnumResourcePackType[] aenumresourcepacktype = EnumResourcePackType.values();
             int i = aenumresourcepacktype.length;
 
             for (int j = 0; j < i; ++j) {
                 EnumResourcePackType enumresourcepacktype = aenumresourcepacktype[j];
-                URL url = ResourcePackVanilla.class.getResource("/" + enumresourcepacktype.a() + "/.mcassetsroot");
+                String s = "/" + enumresourcepacktype.a() + "/.mcassetsroot";
+                URL url = ResourcePackVanilla.class.getResource(s);
 
-                try {
-                    URI uri = url.toURI();
+                if (url == null) {
+                    ResourcePackVanilla.LOGGER.error("File {} does not exist in classpath", s);
+                } else {
+                    try {
+                        URI uri = url.toURI();
+                        String s1 = uri.getScheme();
 
-                    if ("jar".equals(uri.getScheme())) {
-                        FileSystem filesystem;
-
-                        try {
-                            filesystem = FileSystems.getFileSystem(uri);
-                        } catch (Exception exception) {
-                            filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+                        if (!"jar".equals(s1) && !"file".equals(s1)) {
+                            ResourcePackVanilla.LOGGER.warn("Assets URL '{}' uses unexpected schema", uri);
                         }
 
-                        hashmap.put(enumresourcepacktype, filesystem);
+                        Path path = a(uri);
+
+                        builder.put(enumresourcepacktype, path.getParent());
+                    } catch (Exception exception) {
+                        ResourcePackVanilla.LOGGER.error("Couldn't resolve path to vanilla assets", exception);
                     }
-                } catch (IOException | URISyntaxException urisyntaxexception) {
-                    ResourcePackVanilla.LOGGER.error("Couldn't get a list of all vanilla resources", urisyntaxexception);
                 }
             }
 
+            return builder.build();
         }
     });
     public final ResourcePackInfo packMetadata;
     public final Set<String> namespaces;
+
+    private static Path a(URI uri) throws IOException {
+        try {
+            return Paths.get(uri);
+        } catch (FileSystemNotFoundException filesystemnotfoundexception) {
+            ;
+        } catch (Throwable throwable) {
+            ResourcePackVanilla.LOGGER.warn("Unable to get path for: {}", uri, throwable);
+        }
+
+        try {
+            FileSystems.newFileSystem(uri, Collections.emptyMap());
+        } catch (FileSystemAlreadyExistsException filesystemalreadyexistsexception) {
+            ;
+        }
+
+        return Paths.get(uri);
+    }
 
     public ResourcePackVanilla(ResourcePackInfo resourcepackinfo, String... astring) {
         this.packMetadata = resourcepackinfo;
@@ -113,7 +137,6 @@ public class ResourcePackVanilla implements IResourcePack, ResourceProvider {
     @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {
         Set<MinecraftKey> set = Sets.newHashSet();
-        URI uri;
 
         if (ResourcePackVanilla.generatedDir != null) {
             try {
@@ -133,7 +156,8 @@ public class ResourcePackVanilla implements IResourcePack, ResourceProvider {
 
                 while (enumeration != null && enumeration.hasMoreElements()) {
                     try {
-                        uri = ((URL) enumeration.nextElement()).toURI();
+                        URI uri = ((URL) enumeration.nextElement()).toURI();
+
                         if ("file".equals(uri.getScheme())) {
                             a(set, i, s, Paths.get(uri), s1, predicate);
                         }
@@ -145,30 +169,17 @@ public class ResourcePackVanilla implements IResourcePack, ResourceProvider {
         }
 
         try {
-            URL url = ResourcePackVanilla.class.getResource("/" + enumresourcepacktype.a() + "/.mcassetsroot");
+            Path path = (Path) ResourcePackVanilla.ROOT_DIR_BY_TYPE.get(enumresourcepacktype);
 
-            if (url == null) {
-                ResourcePackVanilla.LOGGER.error("Couldn't find .mcassetsroot, cannot load vanilla resources");
-                return set;
-            }
-
-            uri = url.toURI();
-            if ("file".equals(uri.getScheme())) {
-                URL url1 = new URL(url.toString().substring(0, url.toString().length() - ".mcassetsroot".length()));
-                Path path = Paths.get(url1.toURI());
-
+            if (path != null) {
                 a(set, i, s, path, s1, predicate);
-            } else if ("jar".equals(uri.getScheme())) {
-                Path path1 = ((FileSystem) ResourcePackVanilla.JAR_FILESYSTEM_BY_TYPE.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a());
-
-                a(set, i, "minecraft", path1, s1, predicate);
             } else {
-                ResourcePackVanilla.LOGGER.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
+                ResourcePackVanilla.LOGGER.error("Can't access assets root for type: {}", enumresourcepacktype);
             }
         } catch (NoSuchFileException | FileNotFoundException filenotfoundexception) {
             ;
-        } catch (IOException | URISyntaxException urisyntaxexception1) {
-            ResourcePackVanilla.LOGGER.error("Couldn't get a list of all vanilla resources", urisyntaxexception1);
+        } catch (IOException ioexception2) {
+            ResourcePackVanilla.LOGGER.error("Couldn't get a list of all vanilla resources", ioexception2);
         }
 
         return set;

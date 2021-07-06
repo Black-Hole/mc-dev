@@ -76,7 +76,7 @@ public class LayeredCauldronBlock extends AbstractCauldronBlock {
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, BiomeBase.Precipitation biomebase_precipitation) {
-        if (BlockCauldron.a(world) && (Integer) iblockdata.get(LayeredCauldronBlock.LEVEL) != 3 && this.fillPredicate.test(biomebase_precipitation)) {
+        if (BlockCauldron.a(world, biomebase_precipitation) && (Integer) iblockdata.get(LayeredCauldronBlock.LEVEL) != 3 && this.fillPredicate.test(biomebase_precipitation)) {
             world.setTypeUpdate(blockposition, (IBlockData) iblockdata.a((IBlockState) LayeredCauldronBlock.LEVEL));
         }
     }

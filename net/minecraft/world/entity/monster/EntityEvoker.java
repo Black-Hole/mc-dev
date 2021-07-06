@@ -66,7 +66,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     public static AttributeProvider.Builder p() {
-        return EntityMonster.fA().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
+        return EntityMonster.fB().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Nullable
-    EntitySheep fO() {
+    EntitySheep fP() {
         return this.wololoTarget;
     }
 
@@ -140,9 +140,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.eZ(), (float) EntityEvoker.this.eY());
-            } else if (EntityEvoker.this.fO() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fO(), (float) EntityEvoker.this.eZ(), (float) EntityEvoker.this.eY());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.fa(), (float) EntityEvoker.this.eZ());
+            } else if (EntityEvoker.this.fP() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fP(), (float) EntityEvoker.this.fa(), (float) EntityEvoker.this.eZ());
             }
 
         }
@@ -310,7 +310,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.fF()) {
+            } else if (EntityEvoker.this.fG()) {
                 return false;
             } else if (EntityEvoker.this.tickCount < this.nextAttackTickCount) {
                 return false;
@@ -330,7 +330,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         public boolean b() {
-            return EntityEvoker.this.fO() != null && this.attackWarmupDelay > 0;
+            return EntityEvoker.this.fP() != null && this.attackWarmupDelay > 0;
         }
 
         @Override
@@ -341,7 +341,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.fO();
+            EntitySheep entitysheep = EntityEvoker.this.fP();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);

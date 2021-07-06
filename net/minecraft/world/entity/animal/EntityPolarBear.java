@@ -75,7 +75,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return false;
     }
 
@@ -186,7 +186,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
             }
 
             this.clientSideStandAnimationO = this.clientSideStandAnimation;
-            if (this.fv()) {
+            if (this.fw()) {
                 this.clientSideStandAnimation = MathHelper.a(this.clientSideStandAnimation + 1.0F, 0.0F, 6.0F);
             } else {
                 this.clientSideStandAnimation = MathHelper.a(this.clientSideStandAnimation - 1.0F, 0.0F, 6.0F);
@@ -226,7 +226,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
         return flag;
     }
 
-    public boolean fv() {
+    public boolean fw() {
         return (Boolean) this.entityData.get(EntityPolarBear.DATA_STANDING_ID);
     }
 
@@ -239,7 +239,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     }
 
     @Override
-    protected float eu() {
+    protected float ev() {
         return 0.98F;
     }
 

@@ -94,14 +94,14 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     private static void b(BehaviorController<EntityZoglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorAttackTargetSet<>(EntityZoglin::fx), new BehaviorRunSometimes<>(new BehaviorLookTarget(8.0F), UniformInt.a(30, 60)), new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorStrollRandomUnconstrained(0.4F), 2), Pair.of(new BehaviorLookWalk(0.4F, 3), 2), Pair.of(new BehaviorNop(30, 60), 1)))));
+        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorAttackTargetSet<>(EntityZoglin::fy), new BehaviorRunSometimes<>(new BehaviorLookTarget(8.0F), UniformInt.a(30, 60)), new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorStrollRandomUnconstrained(0.4F), 2), Pair.of(new BehaviorLookWalk(0.4F, 3), 2), Pair.of(new BehaviorNop(30, 60), 1)))));
     }
 
     private static void c(BehaviorController<EntityZoglin> behaviorcontroller) {
         behaviorcontroller.a(Activity.FIGHT, 10, ImmutableList.of(new BehaviorWalkAwayOutOfRange(1.0F), new BehaviorRunIf<>(EntityZoglin::p, new BehaviorAttack(40)), new BehaviorRunIf<>(EntityZoglin::isBaby, new BehaviorAttack(15)), new BehaviorAttackTargetForget<>()), MemoryModuleType.ATTACK_TARGET);
     }
 
-    private Optional<? extends EntityLiving> fx() {
+    private Optional<? extends EntityLiving> fy() {
         return ((List) this.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(ImmutableList.of())).stream().filter(this::j).findFirst();
     }
 
@@ -127,7 +127,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 0.6000000238418579D).a(GenericAttributes.ATTACK_KNOCKBACK, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 6.0D);
     }
 
     public boolean p() {
@@ -200,7 +200,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
         Activity activity1 = (Activity) this.brain.f().orElse((Object) null);
 
         if (activity1 == Activity.FIGHT && activity != Activity.FIGHT) {
-            this.fw();
+            this.fx();
         }
 
         this.setAggressive(this.brain.hasMemory(MemoryModuleType.ATTACK_TARGET));
@@ -249,7 +249,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     @Override
-    public int fv() {
+    public int fw() {
         return this.attackAnimationRemainingTicks;
     }
 
@@ -273,7 +273,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
         this.playSound(SoundEffects.ZOGLIN_STEP, 0.15F, 1.0F);
     }
 
-    protected void fw() {
+    protected void fx() {
         this.playSound(SoundEffects.ZOGLIN_ANGRY, 1.0F, this.ep());
     }
 

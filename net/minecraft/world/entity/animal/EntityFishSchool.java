@@ -30,49 +30,49 @@ public abstract class EntityFishSchool extends EntityFish {
 
     @Override
     public int getMaxSpawnGroup() {
-        return this.fx();
+        return this.fy();
     }
 
-    public int fx() {
+    public int fy() {
         return super.getMaxSpawnGroup();
     }
 
     @Override
-    protected boolean fv() {
-        return !this.fy();
+    protected boolean fw() {
+        return !this.fz();
     }
 
-    public boolean fy() {
+    public boolean fz() {
         return this.leader != null && this.leader.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
         this.leader = entityfishschool;
-        entityfishschool.fE();
+        entityfishschool.fF();
         return entityfishschool;
     }
 
-    public void fz() {
-        this.leader.fF();
+    public void fA() {
+        this.leader.fG();
         this.leader = null;
     }
 
-    private void fE() {
+    private void fF() {
         ++this.schoolSize;
     }
 
-    private void fF() {
+    private void fG() {
         --this.schoolSize;
     }
 
-    public boolean fA() {
-        return this.fB() && this.schoolSize < this.fx();
+    public boolean fB() {
+        return this.fC() && this.schoolSize < this.fy();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.fB() && this.level.random.nextInt(200) == 1) {
+        if (this.fC() && this.level.random.nextInt(200) == 1) {
             List<? extends EntityFish> list = this.level.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
@@ -82,23 +82,23 @@ public abstract class EntityFishSchool extends EntityFish {
 
     }
 
-    public boolean fB() {
+    public boolean fC() {
         return this.schoolSize > 1;
     }
 
-    public boolean fC() {
+    public boolean fD() {
         return this.f((Entity) this.leader) <= 121.0D;
     }
 
-    public void fD() {
-        if (this.fy()) {
+    public void fE() {
+        if (this.fz()) {
             this.getNavigation().a((Entity) this.leader, 1.0D);
         }
 
     }
 
     public void a(Stream<? extends EntityFishSchool> stream) {
-        stream.limit((long) (this.fx() - this.schoolSize)).filter((entityfishschool) -> {
+        stream.limit((long) (this.fy() - this.schoolSize)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);

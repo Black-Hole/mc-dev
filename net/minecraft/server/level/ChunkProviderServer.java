@@ -374,11 +374,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 Optional<Chunk> optional = ((Either) playerchunk.a().getNow(PlayerChunk.UNLOADED_LEVEL_CHUNK)).left();
 
                 if (optional.isPresent()) {
-                    this.level.getMethodProfiler().enter("broadcast");
                     Chunk chunk = (Chunk) optional.get();
-
-                    playerchunk.a(chunk);
-                    this.level.getMethodProfiler().exit();
                     ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
 
                     if (this.level.a(chunkcoordintpair) && !this.chunkMap.isOutsideOfRange(chunkcoordintpair)) {
@@ -396,6 +392,13 @@ public class ChunkProviderServer extends IChunkProvider {
                 this.level.doMobSpawning(this.spawnEnemies, this.spawnFriendlies);
             }
 
+            this.level.getMethodProfiler().exitEnter("broadcast");
+            list.forEach((playerchunk) -> {
+                Optional optional = ((Either) playerchunk.a().getNow(PlayerChunk.UNLOADED_LEVEL_CHUNK)).left();
+
+                Objects.requireNonNull(playerchunk);
+                optional.ifPresent(playerchunk::a);
+            });
             this.level.getMethodProfiler().exit();
             this.level.getMethodProfiler().exit();
         }
@@ -419,7 +422,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.mainThreadProcessor.bn();
+        return this.mainThreadProcessor.bm();
     }
 
     public ChunkGenerator getChunkGenerator() {

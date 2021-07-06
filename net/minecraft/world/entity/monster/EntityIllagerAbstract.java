@@ -41,7 +41,7 @@ public abstract class EntityIllagerAbstract extends EntityRaider {
 
         @Override
         public boolean a() {
-            return super.a() && EntityIllagerAbstract.this.fK();
+            return super.a() && EntityIllagerAbstract.this.fL();
         }
     }
 }

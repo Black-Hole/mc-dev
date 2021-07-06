@@ -10,12 +10,15 @@ import java.util.zip.Inflater;
 
 public class PacketDecompressor extends ByteToMessageDecoder {
 
-    public static final int MAXIMUM_DECOMPRESSED_LENGTH = 2097152;
+    public static final int MAXIMUM_COMPRESSED_LENGTH = 2097152;
+    public static final int MAXIMUM_UNCOMPRESSED_LENGTH = 8388608;
     private final Inflater inflater;
     private int threshold;
+    private boolean validateDecompressed;
 
-    public PacketDecompressor(int i) {
+    public PacketDecompressor(int i, boolean flag) {
         this.threshold = i;
+        this.validateDecompressed = flag;
         this.inflater = new Inflater();
     }
 
@@ -27,12 +30,14 @@ public class PacketDecompressor extends ByteToMessageDecoder {
             if (i == 0) {
                 list.add(packetdataserializer.readBytes(packetdataserializer.readableBytes()));
             } else {
-                if (i < this.threshold) {
-                    throw new DecoderException("Badly compressed packet - size of " + i + " is below server threshold of " + this.threshold);
-                }
+                if (this.validateDecompressed) {
+                    if (i < this.threshold) {
+                        throw new DecoderException("Badly compressed packet - size of " + i + " is below server threshold of " + this.threshold);
+                    }
 
-                if (i > 2097152) {
-                    throw new DecoderException("Badly compressed packet - size of " + i + " is larger than protocol maximum of 2097152");
+                    if (i > 8388608) {
+                        throw new DecoderException("Badly compressed packet - size of " + i + " is larger than protocol maximum of 8388608");
+                    }
                 }
 
                 byte[] abyte = new byte[packetdataserializer.readableBytes()];
@@ -45,15 +50,11 @@ public class PacketDecompressor extends ByteToMessageDecoder {
                 list.add(Unpooled.wrappedBuffer(abyte1));
                 this.inflater.reset();
             }
-
         }
     }
 
-    public int a() {
-        return this.threshold;
-    }
-
-    public void a(int i) {
+    public void a(int i, boolean flag) {
         this.threshold = i;
+        this.validateDecompressed = flag;
     }
 }

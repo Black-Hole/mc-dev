@@ -9,17 +9,20 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
     public static final int CARRIED_ITEM = -1;
     public static final int PLAYER_INVENTORY = -2;
     private final int containerId;
+    private final int stateId;
     private final int slot;
     private final ItemStack itemStack;
 
-    public PacketPlayOutSetSlot(int i, int j, ItemStack itemstack) {
+    public PacketPlayOutSetSlot(int i, int j, int k, ItemStack itemstack) {
         this.containerId = i;
-        this.slot = j;
+        this.stateId = j;
+        this.slot = k;
         this.itemStack = itemstack.cloneItemStack();
     }
 
     public PacketPlayOutSetSlot(PacketDataSerializer packetdataserializer) {
         this.containerId = packetdataserializer.readByte();
+        this.stateId = packetdataserializer.j();
         this.slot = packetdataserializer.readShort();
         this.itemStack = packetdataserializer.o();
     }
@@ -27,6 +30,7 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) {
         packetdataserializer.writeByte(this.containerId);
+        packetdataserializer.d(this.stateId);
         packetdataserializer.writeShort(this.slot);
         packetdataserializer.a(this.itemStack);
     }
@@ -45,5 +49,9 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
 
     public ItemStack d() {
         return this.itemStack;
+    }
+
+    public int e() {
+        return this.stateId;
     }
 }

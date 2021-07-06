@@ -108,7 +108,7 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
                     this.crossbowState = PathfinderGoalCrossbowAttack.State.UNCHARGED;
                 }
 
-                int i = this.mob.eI();
+                int i = this.mob.eJ();
                 ItemStack itemstack = this.mob.getActiveItem();
 
                 if (i >= ItemCrossbow.k(itemstack)) {

@@ -34,7 +34,7 @@ public abstract class EntityPerchable extends EntityTameableAnimal {
         super.tick();
     }
 
-    public boolean fG() {
+    public boolean fH() {
         return this.rideCooldownCounter > 100;
     }
 }

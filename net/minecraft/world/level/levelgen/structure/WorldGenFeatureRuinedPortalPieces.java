@@ -134,10 +134,12 @@ public class WorldGenFeatureRuinedPortalPieces extends DefinedStructurePiece {
 
     @Override
     public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
-        if (!structureboundingbox.b((BaseBlockPosition) this.templatePosition)) {
+        StructureBoundingBox structureboundingbox1 = this.template.b(this.placeSettings, this.templatePosition);
+
+        if (!structureboundingbox.b((BaseBlockPosition) structureboundingbox1.f())) {
             return true;
         } else {
-            structureboundingbox.b(this.template.b(this.placeSettings, this.templatePosition));
+            structureboundingbox.b(structureboundingbox1);
             boolean flag = super.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, chunkcoordintpair, blockposition);
 
             this.b(random, generatoraccessseed);

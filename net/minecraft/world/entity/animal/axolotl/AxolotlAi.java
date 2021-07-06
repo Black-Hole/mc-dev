@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagsItem;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorLookTarget;
 import net.minecraft.world.entity.ai.behavior.BehaviorLookWalk;
 import net.minecraft.world.entity.ai.behavior.BehaviorMakeLoveAnimal;
 import net.minecraft.world.entity.ai.behavior.BehaviorNop;
+import net.minecraft.world.entity.ai.behavior.BehaviorPosition;
 import net.minecraft.world.entity.ai.behavior.BehaviorRemoveMemory;
 import net.minecraft.world.entity.ai.behavior.BehaviorRunIf;
 import net.minecraft.world.entity.ai.behavior.BehaviorRunSometimes;
@@ -39,6 +41,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.crafting.RecipeItemStack;
+import net.minecraft.world.level.World;
 
 public class AxolotlAi {
 
@@ -67,7 +70,7 @@ public class AxolotlAi {
     }
 
     private static void c(BehaviorController<Axolotl> behaviorcontroller) {
-        behaviorcontroller.a(Activity.FIGHT, 0, ImmutableList.of(new BehaviorAttackTargetForget<>(Axolotl::a), new BehaviorWalkAwayOutOfRange(AxolotlAi::a), new BehaviorAttack(20), new BehaviorRemoveMemory<>(AxolotlAi::c, MemoryModuleType.ATTACK_TARGET)), MemoryModuleType.ATTACK_TARGET);
+        behaviorcontroller.a(Activity.FIGHT, 0, ImmutableList.of(new BehaviorAttackTargetForget<>(Axolotl::a), new BehaviorWalkAwayOutOfRange(AxolotlAi::b), new BehaviorAttack(20), new BehaviorRemoveMemory<>(AxolotlAi::c, MemoryModuleType.ATTACK_TARGET)), MemoryModuleType.ATTACK_TARGET);
     }
 
     private static void d(BehaviorController<Axolotl> behaviorcontroller) {
@@ -75,7 +78,20 @@ public class AxolotlAi {
     }
 
     private static void e(BehaviorController<Axolotl> behaviorcontroller) {
-        behaviorcontroller.a(Activity.IDLE, ImmutableList.of(Pair.of(0, new BehaviorRunSometimes<>(new BehaviorLookTarget(EntityTypes.PLAYER, 6.0F), UniformInt.a(30, 60))), Pair.of(1, new BehaviorMakeLoveAnimal(EntityTypes.AXOLOTL, 0.2F)), Pair.of(2, new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::c), 1), Pair.of(new BehaviorFollowAdult<>(AxolotlAi.ADULT_FOLLOW_RANGE, AxolotlAi::b), 1)))), Pair.of(3, new BehaviorAttackTargetSet<>(AxolotlAi::b)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new BehaviorGate<>(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), BehaviorGate.Order.ORDERED, BehaviorGate.Execution.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new BehaviorStrollRandomUnconstrained(0.15F), 2), Pair.of(new BehaviorLookWalk(AxolotlAi::c, 3), 3), Pair.of(new BehaviorRunIf<>(Entity::aO, new BehaviorNop(30, 60)), 5), Pair.of(new BehaviorRunIf<>(Entity::isOnGround, new BehaviorNop(200, 400)), 5))))));
+        behaviorcontroller.a(Activity.IDLE, ImmutableList.of(Pair.of(0, new BehaviorRunSometimes<>(new BehaviorLookTarget(EntityTypes.PLAYER, 6.0F), UniformInt.a(30, 60))), Pair.of(1, new BehaviorMakeLoveAnimal(EntityTypes.AXOLOTL, 0.2F)), Pair.of(2, new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new FollowTemptation(AxolotlAi::d), 1), Pair.of(new BehaviorFollowAdult<>(AxolotlAi.ADULT_FOLLOW_RANGE, AxolotlAi::c), 1)))), Pair.of(3, new BehaviorAttackTargetSet<>(AxolotlAi::b)), Pair.of(3, new TryFindWater(6, 0.15F)), Pair.of(4, new BehaviorGate<>(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), ImmutableSet.of(), BehaviorGate.Order.ORDERED, BehaviorGate.Execution.TRY_ALL, ImmutableList.of(Pair.of(new RandomSwim(0.5F), 2), Pair.of(new BehaviorStrollRandomUnconstrained(0.15F, false), 2), Pair.of(new BehaviorLookWalk(AxolotlAi::a, AxolotlAi::d, 3), 3), Pair.of(new BehaviorRunIf<>(Entity::aO, new BehaviorNop(30, 60)), 5), Pair.of(new BehaviorRunIf<>(Entity::isOnGround, new BehaviorNop(200, 400)), 5))))));
+    }
+
+    private static boolean a(EntityLiving entityliving) {
+        World world = entityliving.level;
+        Optional<BehaviorPosition> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.LOOK_TARGET);
+
+        if (optional.isPresent()) {
+            BlockPosition blockposition = ((BehaviorPosition) optional.get()).b();
+
+            return world.B(blockposition) == entityliving.aO();
+        } else {
+            return false;
+        }
     }
 
     public static void a(Axolotl axolotl) {
@@ -91,15 +107,15 @@ public class AxolotlAi {
 
     }
 
-    private static float a(EntityLiving entityliving) {
-        return entityliving.aO() ? 0.6F : 0.15F;
-    }
-
     private static float b(EntityLiving entityliving) {
         return entityliving.aO() ? 0.6F : 0.15F;
     }
 
     private static float c(EntityLiving entityliving) {
+        return entityliving.aO() ? 0.6F : 0.15F;
+    }
+
+    private static float d(EntityLiving entityliving) {
         return entityliving.aO() ? 0.5F : 0.15F;
     }
 

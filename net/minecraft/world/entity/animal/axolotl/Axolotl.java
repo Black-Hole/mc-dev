@@ -176,14 +176,10 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
 
     }
 
-    public void fv() {
+    public void fw() {
         int i = this.getAirTicks() + 1800;
 
         this.setAirTicks(Math.min(i, this.bS()));
-    }
-
-    public boolean fw() {
-        return this.getAirTicks() < this.bS();
     }
 
     @Override
@@ -199,7 +195,7 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
         this.entityData.set(Axolotl.DATA_VARIANT, axolotl_variant.a());
     }
 
-    static boolean a(Random random) {
+    private static boolean a(Random random) {
         return random.nextInt(1200) == 0;
     }
 
@@ -268,7 +264,7 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return TagsItem.AXOLOTL_TEMPT_ITEMS.isTagged(itemstack.getItem());
     }
 
@@ -331,12 +327,12 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
     }
 
     @Override
-    public int eY() {
+    public int eZ() {
         return 1;
     }
 
     @Override
-    public int eZ() {
+    public int fa() {
         return 1;
     }
 
@@ -484,7 +480,7 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
     @Override
     public void g(Vec3D vec3d) {
         if (this.doAITick() && this.isInWater()) {
-            this.a(this.ev(), vec3d);
+            this.a(this.ew(), vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
         } else {
@@ -595,7 +591,7 @@ public class Axolotl extends EntityAnimal implements LerpingModel, Bucketable {
         }
 
         public Axolotl.Variant a(Random random) {
-            return Axolotl.a(random) ? Axolotl.Variant.b(random) : this.types[random.nextInt(this.types.length)];
+            return this.types[random.nextInt(this.types.length)];
         }
     }
 

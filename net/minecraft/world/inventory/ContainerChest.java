@@ -115,11 +115,11 @@ public class ContainerChest extends Container {
         this.container.closeContainer(entityhuman);
     }
 
-    public IInventory i() {
+    public IInventory l() {
         return this.container;
     }
 
-    public int j() {
+    public int m() {
         return this.containerRows;
     }
 }

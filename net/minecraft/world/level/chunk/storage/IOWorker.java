@@ -80,7 +80,7 @@ public class IOWorker implements AutoCloseable {
         });
     }
 
-    public CompletableFuture<Void> a() {
+    public CompletableFuture<Void> a(boolean flag) {
         CompletableFuture<Void> completablefuture = this.a(() -> {
             return Either.left(CompletableFuture.allOf((CompletableFuture[]) this.pendingWrites.values().stream().map((ioworker_a) -> {
                 return ioworker_a.result;
@@ -89,15 +89,19 @@ public class IOWorker implements AutoCloseable {
             })));
         }).thenCompose(Function.identity());
 
-        return completablefuture.thenCompose((ovoid) -> {
+        return flag ? completablefuture.thenCompose((ovoid) -> {
             return this.a(() -> {
                 try {
                     this.storage.a();
                     return Either.left((Object) null);
                 } catch (Exception exception) {
-                    IOWorker.LOGGER.warn("Failed to synchronized chunks", exception);
+                    IOWorker.LOGGER.warn("Failed to synchronize chunks", exception);
                     return Either.right(exception);
                 }
+            });
+        }) : completablefuture.thenCompose((ovoid) -> {
+            return this.a(() -> {
+                return Either.left((Object) null);
             });
         });
     }
@@ -109,24 +113,24 @@ public class IOWorker implements AutoCloseable {
                     mailbox.a((Either) supplier.get());
                 }
 
-                this.c();
+                this.b();
             });
         });
     }
 
-    private void b() {
+    private void a() {
         if (!this.pendingWrites.isEmpty()) {
             Iterator<Entry<ChunkCoordIntPair, IOWorker.a>> iterator = this.pendingWrites.entrySet().iterator();
             Entry<ChunkCoordIntPair, IOWorker.a> entry = (Entry) iterator.next();
 
             iterator.remove();
             this.a((ChunkCoordIntPair) entry.getKey(), (IOWorker.a) entry.getValue());
-            this.c();
+            this.b();
         }
     }
 
-    private void c() {
-        this.mailbox.a((Object) (new PairedQueue.b(IOWorker.Priority.BACKGROUND.ordinal(), this::b)));
+    private void b() {
+        this.mailbox.a((Object) (new PairedQueue.b(IOWorker.Priority.BACKGROUND.ordinal(), this::a)));
     }
 
     private void a(ChunkCoordIntPair chunkcoordintpair, IOWorker.a ioworker_a) {

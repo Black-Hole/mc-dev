@@ -70,7 +70,7 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
     }
 
     @Override
-    public void i() {
+    public void l() {
         this.getSlot(0).set(ItemStack.EMPTY);
         this.getSlot(2).set(ItemStack.EMPTY);
     }
@@ -81,22 +81,22 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
     }
 
     @Override
-    public int j() {
+    public int m() {
         return 2;
     }
 
     @Override
-    public int k() {
+    public int n() {
         return 1;
     }
 
     @Override
-    public int l() {
+    public int o() {
         return 1;
     }
 
     @Override
-    public int m() {
+    public int p() {
         return 3;
     }
 
@@ -164,14 +164,14 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
         return TileEntityFurnace.isFuel(itemstack);
     }
 
-    public int n() {
+    public int q() {
         int i = this.data.getProperty(2);
         int j = this.data.getProperty(3);
 
         return j != 0 && i != 0 ? i * 24 / j : 0;
     }
 
-    public int o() {
+    public int r() {
         int i = this.data.getProperty(1);
 
         if (i == 0) {
@@ -181,12 +181,12 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
         return this.data.getProperty(0) * 13 / i;
     }
 
-    public boolean p() {
+    public boolean s() {
         return this.data.getProperty(0) > 0;
     }
 
     @Override
-    public RecipeBookType q() {
+    public RecipeBookType t() {
         return this.recipeBookType;
     }
 

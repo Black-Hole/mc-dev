@@ -322,7 +322,7 @@ public class PlayerInteractManager {
             }
         } else {
             boolean flag = !entityplayer.getItemInMainHand().isEmpty() || !entityplayer.getItemInOffHand().isEmpty();
-            boolean flag1 = entityplayer.eY() && flag;
+            boolean flag1 = entityplayer.eZ() && flag;
             ItemStack itemstack1 = itemstack.cloneItemStack();
 
             if (!flag1) {

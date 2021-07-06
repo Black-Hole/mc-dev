@@ -97,7 +97,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements In
         return this.tradingPlayer;
     }
 
-    public boolean fw() {
+    public boolean fx() {
         return this.tradingPlayer != null;
     }
 
@@ -105,7 +105,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements In
     public MerchantRecipeList getOffers() {
         if (this.offers == null) {
             this.offers = new MerchantRecipeList();
-            this.fE();
+            this.fF();
         }
 
         return this.offers;
@@ -153,7 +153,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements In
         return flag ? SoundEffects.VILLAGER_YES : SoundEffects.VILLAGER_NO;
     }
 
-    public void fA() {
+    public void fB() {
         this.playSound(SoundEffects.VILLAGER_CELEBRATE, this.getSoundVolume(), this.ep());
     }
 
@@ -182,18 +182,18 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements In
     @Nullable
     @Override
     public Entity b(WorldServer worldserver) {
-        this.fB();
+        this.fC();
         return super.b(worldserver);
     }
 
-    protected void fB() {
+    protected void fC() {
         this.setTradingPlayer((EntityHuman) null);
     }
 
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.fB();
+        this.fC();
     }
 
     protected void a(ParticleParam particleparam) {
@@ -229,7 +229,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements In
         return this.level;
     }
 
-    protected abstract void fE();
+    protected abstract void fF();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();

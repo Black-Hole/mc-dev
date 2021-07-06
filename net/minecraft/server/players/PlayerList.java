@@ -9,6 +9,7 @@ import com.mojang.serialization.Dynamic;
 import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.net.SocketAddress;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import net.minecraft.EnumChatFormat;
+import net.minecraft.FileUtils;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
@@ -136,8 +138,8 @@ public abstract class PlayerList {
     public void a(NetworkManager networkmanager, EntityPlayer entityplayer) {
         GameProfile gameprofile = entityplayer.getProfile();
         UserCache usercache = this.server.getUserCache();
-        GameProfile gameprofile1 = usercache.getProfile(gameprofile.getId());
-        String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
+        Optional<GameProfile> optional = usercache.getProfile(gameprofile.getId());
+        String s = (String) optional.map(GameProfile::getName).orElse(gameprofile.getName());
 
         usercache.a(gameprofile);
         NBTTagCompound nbttagcompound = this.a(entityplayer);
@@ -159,7 +161,7 @@ public abstract class PlayerList {
 
         if (worldserver == null) {
             PlayerList.LOGGER.warn("Unknown respawn dimension {}, defaulting to overworld", resourcekey1);
-            worldserver1 = this.server.F();
+            worldserver1 = this.server.E();
         } else {
             worldserver1 = worldserver;
         }
@@ -180,7 +182,7 @@ public abstract class PlayerList {
         boolean flag = gamerules.getBoolean(GameRules.RULE_DO_IMMEDIATE_RESPAWN);
         boolean flag1 = gamerules.getBoolean(GameRules.RULE_REDUCEDDEBUGINFO);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.gameMode.getGameMode(), entityplayer.gameMode.c(), BiomeManager.a(worldserver1.getSeed()), worlddata.isHardcore(), this.server.G(), this.registryHolder, worldserver1.getDimensionManager(), worldserver1.getDimensionKey(), this.getMaxPlayers(), this.viewDistance, flag1, !flag, worldserver1.isDebugWorld(), worldserver1.isFlatWorld()));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.gameMode.getGameMode(), entityplayer.gameMode.c(), BiomeManager.a(worldserver1.getSeed()), worlddata.isHardcore(), this.server.F(), this.registryHolder, worldserver1.getDimensionManager(), worldserver1.getDimensionKey(), this.getMaxPlayers(), this.viewDistance, flag1, !flag, worldserver1.isDebugWorld(), worldserver1.isFlatWorld()));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload(PacketPlayOutCustomPayload.BRAND, (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.getAbilities()));
@@ -214,7 +216,7 @@ public abstract class PlayerList {
         this.server.getBossBattleCustomData().a(entityplayer);
         this.a(entityplayer, worldserver1);
         if (!this.server.getResourcePack().isEmpty()) {
-            entityplayer.setResourcePack(this.server.getResourcePack(), this.server.getResourcePackHash(), this.server.aY(), this.server.bb());
+            entityplayer.setResourcePack(this.server.getResourcePack(), this.server.getResourcePackHash(), this.server.aX(), this.server.ba());
         }
 
         Iterator iterator = entityplayer.getEffects().iterator();
@@ -458,7 +460,7 @@ public abstract class PlayerList {
             entityplayer2.connection.disconnect(new ChatMessage("multiplayer.disconnect.duplicate_login"));
         }
 
-        return new EntityPlayer(this.server, this.server.F(), gameprofile);
+        return new EntityPlayer(this.server, this.server.E(), gameprofile);
     }
 
     public EntityPlayer moveToWorld(EntityPlayer entityplayer, boolean flag) {
@@ -476,7 +478,7 @@ public abstract class PlayerList {
             optional = Optional.empty();
         }
 
-        WorldServer worldserver1 = worldserver != null && optional.isPresent() ? worldserver : this.server.F();
+        WorldServer worldserver1 = worldserver != null && optional.isPresent() ? worldserver : this.server.E();
         EntityPlayer entityplayer1 = new EntityPlayer(this.server, worldserver1, entityplayer.getProfile());
 
         entityplayer1.connection = entityplayer.connection;
@@ -738,7 +740,7 @@ public abstract class PlayerList {
     public void reloadWhitelist() {}
 
     public void a(EntityPlayer entityplayer, WorldServer worldserver) {
-        WorldBorder worldborder = this.server.F().getWorldBorder();
+        WorldBorder worldborder = this.server.E().getWorldBorder();
 
         entityplayer.connection.sendPacket(new ClientboundInitializeBorderPacket(worldborder));
         entityplayer.connection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
@@ -848,8 +850,9 @@ public abstract class PlayerList {
 
             if (!file1.exists()) {
                 File file2 = new File(file, entityhuman.getDisplayName().getString() + ".json");
+                Path path = file2.toPath();
 
-                if (file2.exists() && file2.isFile()) {
+                if (FileUtils.a(path) && FileUtils.b(path) && path.startsWith(file.getPath()) && file2.isFile()) {
                     file2.renameTo(file1);
                 }
             }

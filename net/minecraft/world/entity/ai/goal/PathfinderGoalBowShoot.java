@@ -118,7 +118,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
                 if (!flag && this.seeTime < -60) {
                     this.mob.clearActiveItem();
                 } else if (flag) {
-                    int i = this.mob.eI();
+                    int i = this.mob.eJ();
 
                     if (i >= 20) {
                         this.mob.clearActiveItem();

@@ -46,7 +46,9 @@ public class BlockTallPlant extends BlockPlant {
 
     @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        world.setTypeAndData(blockposition.up(), (IBlockData) this.getBlockData().set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER), 3);
+        BlockPosition blockposition1 = blockposition.up();
+
+        world.setTypeAndData(blockposition1, a((IWorldReader) world, blockposition1, (IBlockData) this.getBlockData().set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER)), 3);
     }
 
     @Override
@@ -60,9 +62,15 @@ public class BlockTallPlant extends BlockPlant {
         }
     }
 
-    public void a(GeneratorAccess generatoraccess, IBlockData iblockdata, BlockPosition blockposition, int i) {
-        generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER), i);
-        generatoraccess.setTypeAndData(blockposition.up(), (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER), i);
+    public static void a(GeneratorAccess generatoraccess, IBlockData iblockdata, BlockPosition blockposition, int i) {
+        BlockPosition blockposition1 = blockposition.up();
+
+        generatoraccess.setTypeAndData(blockposition, a((IWorldReader) generatoraccess, blockposition, (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.LOWER)), i);
+        generatoraccess.setTypeAndData(blockposition1, a((IWorldReader) generatoraccess, blockposition1, (IBlockData) iblockdata.set(BlockTallPlant.HALF, BlockPropertyDoubleBlockHalf.UPPER)), i);
+    }
+
+    public static IBlockData a(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata) {
+        return iblockdata.b(BlockProperties.WATERLOGGED) ? (IBlockData) iblockdata.set(BlockProperties.WATERLOGGED, iworldreader.B(blockposition)) : iblockdata;
     }
 
     @Override

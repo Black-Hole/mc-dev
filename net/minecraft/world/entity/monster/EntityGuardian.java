@@ -85,8 +85,8 @@ public class EntityGuardian extends EntityMonster {
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
     }
 
-    public static AttributeProvider.Builder fv() {
-        return EntityMonster.fA().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 16.0D).a(GenericAttributes.MAX_HEALTH, 30.0D);
+    public static AttributeProvider.Builder fw() {
+        return EntityMonster.fB().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 16.0D).a(GenericAttributes.MAX_HEALTH, 30.0D);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class EntityGuardian extends EntityMonster {
         return EnumMonsterType.WATER;
     }
 
-    public boolean fw() {
+    public boolean fx() {
         return (Boolean) this.entityData.get(EntityGuardian.DATA_ID_MOVING);
     }
 
@@ -127,13 +127,13 @@ public class EntityGuardian extends EntityMonster {
         this.entityData.set(EntityGuardian.DATA_ID_ATTACK_TARGET, i);
     }
 
-    public boolean fx() {
+    public boolean fy() {
         return (Integer) this.entityData.get(EntityGuardian.DATA_ID_ATTACK_TARGET) != 0;
     }
 
     @Nullable
-    public EntityLiving fy() {
-        if (!this.fx()) {
+    public EntityLiving fz() {
+        if (!this.fy()) {
             return null;
         } else if (this.level.isClientSide) {
             if (this.clientSideCachedAttackTarget != null) {
@@ -213,7 +213,7 @@ public class EntityGuardian extends EntityMonster {
                     }
 
                     this.clientSideTouchedGround = vec3d.y < 0.0D && this.level.a(this.getChunkCoordinates().down(), (Entity) this);
-                } else if (this.fw()) {
+                } else if (this.fx()) {
                     if (this.clientSideTailAnimationSpeed < 0.5F) {
                         this.clientSideTailAnimationSpeed = 4.0F;
                     } else {
@@ -227,13 +227,13 @@ public class EntityGuardian extends EntityMonster {
                 this.clientSideSpikesAnimationO = this.clientSideSpikesAnimation;
                 if (!this.aO()) {
                     this.clientSideSpikesAnimation = this.random.nextFloat();
-                } else if (this.fw()) {
+                } else if (this.fx()) {
                     this.clientSideSpikesAnimation += (0.0F - this.clientSideSpikesAnimation) * 0.25F;
                 } else {
                     this.clientSideSpikesAnimation += (1.0F - this.clientSideSpikesAnimation) * 0.06F;
                 }
 
-                if (this.fw() && this.isInWater()) {
+                if (this.fx() && this.isInWater()) {
                     vec3d = this.e(0.0F);
 
                     for (int i = 0; i < 2; ++i) {
@@ -241,12 +241,12 @@ public class EntityGuardian extends EntityMonster {
                     }
                 }
 
-                if (this.fx()) {
+                if (this.fy()) {
                     if (this.clientSideAttackTime < this.p()) {
                         ++this.clientSideAttackTime;
                     }
 
-                    EntityLiving entityliving = this.fy();
+                    EntityLiving entityliving = this.fz();
 
                     if (entityliving != null) {
                         this.getControllerLook().a(entityliving, 90.0F, 90.0F);
@@ -279,7 +279,7 @@ public class EntityGuardian extends EntityMonster {
                 this.hasImpulse = true;
             }
 
-            if (this.fx()) {
+            if (this.fy()) {
                 this.setYRot(this.yHeadRot);
             }
         }
@@ -314,7 +314,7 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.fw() && !damagesource.isMagic() && damagesource.k() instanceof EntityLiving) {
+        if (!this.fx() && !damagesource.isMagic() && damagesource.k() instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) damagesource.k();
 
             if (!damagesource.isExplosion()) {
@@ -330,7 +330,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     @Override
-    public int eY() {
+    public int eZ() {
         return 180;
     }
 
@@ -340,7 +340,7 @@ public class EntityGuardian extends EntityMonster {
             this.a(0.1F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
-            if (!this.fw() && this.getGoalTarget() == null) {
+            if (!this.fx() && this.getGoalTarget() == null) {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
@@ -371,7 +371,7 @@ public class EntityGuardian extends EntityMonster {
                 this.guardian.setYRot(this.a(this.guardian.getYRot(), f, 90.0F));
                 this.guardian.yBodyRot = this.guardian.getYRot();
                 float f1 = (float) (this.speedModifier * this.guardian.b(GenericAttributes.MOVEMENT_SPEED));
-                float f2 = MathHelper.h(0.125F, this.guardian.ev(), f1);
+                float f2 = MathHelper.h(0.125F, this.guardian.ew(), f1);
 
                 this.guardian.r(f2);
                 double d4 = Math.sin((double) (this.guardian.tickCount + this.guardian.getId()) * 0.5D) * 0.05D;

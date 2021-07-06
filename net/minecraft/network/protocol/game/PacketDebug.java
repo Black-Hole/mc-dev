@@ -182,7 +182,7 @@ public class PacketDebug {
         }
 
         if (entityliving instanceof EntityVillager) {
-            Map<UUID, Object2IntMap<ReputationType>> map = ((EntityVillager) entityliving).fS().a();
+            Map<UUID, Object2IntMap<ReputationType>> map = ((EntityVillager) entityliving).fT().a();
             List<String> list = Lists.newArrayList();
 
             map.forEach((uuid, object2intmap) -> {

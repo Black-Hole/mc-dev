@@ -131,12 +131,12 @@ public class ContainerGrindstone extends Container {
     public void a(IInventory iinventory) {
         super.a(iinventory);
         if (iinventory == this.repairSlots) {
-            this.i();
+            this.l();
         }
 
     }
 
-    private void i() {
+    private void l() {
         ItemStack itemstack = this.repairSlots.getItem(0);
         ItemStack itemstack1 = this.repairSlots.getItem(1);
         boolean flag = !itemstack.isEmpty() || !itemstack1.isEmpty();

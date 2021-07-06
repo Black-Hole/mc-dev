@@ -34,7 +34,7 @@ public class ControllerLook implements Control {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a(d0, d1, d2, (float) this.mob.fa(), (float) this.mob.eY());
+        this.a(d0, d1, d2, (float) this.mob.fb(), (float) this.mob.eZ());
     }
 
     public void a(double d0, double d1, double d2, float f, float f1) {
@@ -68,7 +68,7 @@ public class ControllerLook implements Control {
 
     protected void b() {
         if (!this.mob.getNavigation().m()) {
-            this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.eZ());
+            this.mob.yHeadRot = MathHelper.c(this.mob.yHeadRot, this.mob.yBodyRot, (float) this.mob.fa());
         }
 
     }

@@ -48,7 +48,7 @@ public class SensorPiglinBruteSpecific extends Sensor<EntityLiving> {
         while (iterator1.hasNext()) {
             EntityLiving entityliving2 = (EntityLiving) iterator1.next();
 
-            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fv()) {
+            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).fw()) {
                 list.add((EntityPiglinAbstract) entityliving2);
             }
         }

@@ -264,7 +264,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             }
         }
 
-        this.fN();
+        this.fO();
     }
 
     private void a(World world, double d0, double d1, double d2, double d3, double d4, ParticleParam particleparam) {
@@ -314,12 +314,12 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     }
 
     @VisibleForDebug
-    public int fv() {
+    public int fw() {
         return Math.max(this.goToHiveGoal.travellingTicks, this.goToKnownFlowerGoal.travellingTicks);
     }
 
     @VisibleForDebug
-    public List<BlockPosition> fw() {
+    public List<BlockPosition> fx() {
         return this.goToHiveGoal.blacklistedTargets;
     }
 
@@ -327,11 +327,11 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         return this.ticksWithoutNectarSinceExitingHive > 3600;
     }
 
-    boolean fM() {
+    boolean fN() {
         if (this.stayOutOfHiveCountdown <= 0 && !this.beePollinateGoal.k() && !this.hasStung() && this.getGoalTarget() == null) {
             boolean flag = this.canPollinate() || this.level.isRaining() || this.level.isNight() || this.hasNectar();
 
-            return flag && !this.fO();
+            return flag && !this.fP();
         } else {
             return false;
         }
@@ -345,9 +345,9 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         return MathHelper.h(f, this.rollAmountO, this.rollAmount);
     }
 
-    private void fN() {
+    private void fO() {
         this.rollAmountO = this.rollAmount;
-        if (this.fT()) {
+        if (this.fU()) {
             this.rollAmount = Math.min(1.0F, this.rollAmount + 0.2F);
         } else {
             this.rollAmount = Math.max(0.0F, this.rollAmount - 0.24F);
@@ -386,11 +386,11 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     }
 
-    public void fx() {
+    public void fy() {
         this.ticksWithoutNectarSinceExitingHive = 0;
     }
 
-    private boolean fO() {
+    private boolean fP() {
         if (this.hivePos == null) {
             return false;
         } else {
@@ -443,7 +443,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     }
 
     @VisibleForDebug
-    public PathfinderGoalSelector fF() {
+    public PathfinderGoalSelector fG() {
         return this.goalSelector;
     }
 
@@ -457,11 +457,11 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         return this.numCropsGrownSincePollination;
     }
 
-    private void fQ() {
+    private void fR() {
         this.numCropsGrownSincePollination = 0;
     }
 
-    void fR() {
+    void fS() {
         ++this.numCropsGrownSincePollination;
     }
 
@@ -484,14 +484,14 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             boolean flag = this.isAngry() && !this.hasStung() && this.getGoalTarget() != null && this.getGoalTarget().f((Entity) this) < 4.0D;
 
             this.x(flag);
-            if (this.tickCount % 20 == 0 && !this.fS()) {
+            if (this.tickCount % 20 == 0 && !this.fT()) {
                 this.hivePos = null;
             }
         }
 
     }
 
-    boolean fS() {
+    boolean fT() {
         if (!this.hasHivePos()) {
             return false;
         } else {
@@ -507,7 +507,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     public void setHasNectar(boolean flag) {
         if (flag) {
-            this.fx();
+            this.fy();
         }
 
         this.d(8, flag);
@@ -521,7 +521,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         this.d(4, flag);
     }
 
-    private boolean fT() {
+    private boolean fU() {
         return this.v(2);
     }
 
@@ -546,7 +546,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         return ((Byte) this.entityData.get(EntityBee.DATA_FLAGS_ID) & i) != 0;
     }
 
-    public static AttributeProvider.Builder fI() {
+    public static AttributeProvider.Builder fJ() {
         return EntityInsentient.w().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FLYING_SPEED, 0.6000000238418579D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
     }
 
@@ -573,7 +573,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return itemstack.a((Tag) TagsItem.FLOWERS);
     }
 
@@ -624,17 +624,17 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
     @Override
     public boolean aF() {
-        return this.fJ() && this.tickCount % EntityBee.TICKS_PER_FLAP == 0;
+        return this.fK() && this.tickCount % EntityBee.TICKS_PER_FLAP == 0;
     }
 
     @Override
-    public boolean fJ() {
+    public boolean fK() {
         return !this.onGround;
     }
 
-    public void fK() {
+    public void fL() {
         this.setHasNectar(false);
-        this.fQ();
+        this.fR();
     }
 
     @Override
@@ -752,7 +752,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
             this.pollinatingTicks = 0;
             this.lastSoundPlayedTick = 0;
             this.pollinating = true;
-            EntityBee.this.fx();
+            EntityBee.this.fy();
         }
 
         @Override
@@ -893,7 +893,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public boolean g() {
-            if (EntityBee.this.hasHivePos() && EntityBee.this.fM() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
+            if (EntityBee.this.hasHivePos() && EntityBee.this.fN() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
                 TileEntity tileentity = EntityBee.this.level.getTileEntity(EntityBee.this.hivePos);
 
                 if (tileentity instanceof TileEntityBeehive) {
@@ -936,7 +936,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public boolean g() {
-            return EntityBee.this.remainingCooldownBeforeLocatingNewHive == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.fM();
+            return EntityBee.this.remainingCooldownBeforeLocatingNewHive == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.fN();
         }
 
         @Override
@@ -1002,7 +1002,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public boolean g() {
-            return EntityBee.this.hivePos != null && !EntityBee.this.fk() && EntityBee.this.fM() && !this.d(EntityBee.this.hivePos) && EntityBee.this.level.getType(EntityBee.this.hivePos).a((Tag) TagsBlock.BEEHIVES);
+            return EntityBee.this.hivePos != null && !EntityBee.this.fl() && EntityBee.this.fN() && !this.d(EntityBee.this.hivePos) && EntityBee.this.level.getType(EntityBee.this.hivePos).a((Tag) TagsBlock.BEEHIVES);
         }
 
         @Override
@@ -1118,7 +1118,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public boolean g() {
-            return EntityBee.this.savedFlowerPos != null && !EntityBee.this.fk() && this.j() && EntityBee.this.k(EntityBee.this.savedFlowerPos) && !EntityBee.this.b(EntityBee.this.savedFlowerPos, 2);
+            return EntityBee.this.savedFlowerPos != null && !EntityBee.this.fl() && this.j() && EntityBee.this.k(EntityBee.this.savedFlowerPos) && !EntityBee.this.b(EntityBee.this.savedFlowerPos, 2);
         }
 
         @Override
@@ -1170,7 +1170,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
 
         @Override
         public boolean g() {
-            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.fS());
+            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.fT());
         }
 
         @Override
@@ -1219,7 +1219,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
                         if (flag) {
                             EntityBee.this.level.triggerEffect(2005, blockposition, 0);
                             EntityBee.this.level.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(blockstateinteger, (Integer) iblockdata.get(blockstateinteger) + 1));
-                            EntityBee.this.fR();
+                            EntityBee.this.fS();
                         }
                     }
                 }
@@ -1260,7 +1260,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         private Vec3D g() {
             Vec3D vec3d;
 
-            if (EntityBee.this.fS() && !EntityBee.this.b(EntityBee.this.hivePos, 22)) {
+            if (EntityBee.this.fT() && !EntityBee.this.b(EntityBee.this.hivePos, 22)) {
                 Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) EntityBee.this.hivePos);
 
                 vec3d = vec3d1.d(EntityBee.this.getPositionVector()).d();

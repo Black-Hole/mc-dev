@@ -95,7 +95,7 @@ public class EntityVex extends EntityMonster {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override

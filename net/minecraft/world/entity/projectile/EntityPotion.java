@@ -38,7 +38,7 @@ public class EntityPotion extends EntityProjectileThrowable implements ItemSuppl
 
     public static final double SPLASH_RANGE = 4.0D;
     private static final double SPLASH_RANGE_SQ = 16.0D;
-    public static final Predicate<EntityLiving> WATER_SENSITIVE = EntityLiving::ew;
+    public static final Predicate<EntityLiving> WATER_SENSITIVE = EntityLiving::ex;
 
     public EntityPotion(EntityTypes<? extends EntityPotion> entitytypes, World world) {
         super(entitytypes, world);
@@ -126,7 +126,7 @@ public class EntityPotion extends EntityProjectileThrowable implements ItemSuppl
                 EntityLiving entityliving = (EntityLiving) iterator.next();
                 double d0 = this.f(entityliving);
 
-                if (d0 < 16.0D && entityliving.ew()) {
+                if (d0 < 16.0D && entityliving.ex()) {
                     entityliving.damageEntity(DamageSource.c(entityliving, this.getShooter()), 1.0F);
                 }
             }
@@ -138,7 +138,7 @@ public class EntityPotion extends EntityProjectileThrowable implements ItemSuppl
         while (iterator1.hasNext()) {
             Axolotl axolotl = (Axolotl) iterator1.next();
 
-            axolotl.fv();
+            axolotl.fw();
         }
 
     }
@@ -154,7 +154,7 @@ public class EntityPotion extends EntityProjectileThrowable implements ItemSuppl
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.eP()) {
+                if (entityliving.eQ()) {
                     double d0 = this.f(entityliving);
 
                     if (d0 < 16.0D) {

@@ -68,11 +68,11 @@ public class EntityOcelot extends EntityAnimal {
         this.t();
     }
 
-    boolean isTrusting() {
+    public boolean isTrusting() {
         return (Boolean) this.entityData.get(EntityOcelot.DATA_TRUSTING);
     }
 
-    private void setTrusting(boolean flag) {
+    public void setTrusting(boolean flag) {
         this.entityData.set(EntityOcelot.DATA_TRUSTING, flag);
         this.t();
     }
@@ -166,20 +166,20 @@ public class EntityOcelot extends EntityAnimal {
         return SoundEffects.OCELOT_DEATH;
     }
 
-    private float fw() {
+    private float fx() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
     public boolean attackEntity(Entity entity) {
-        return entity.damageEntity(DamageSource.mobAttack(this), this.fw());
+        return entity.damageEntity(DamageSource.mobAttack(this), this.fx());
     }
 
     @Override
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if ((this.temptGoal == null || this.temptGoal.h()) && !this.isTrusting() && this.n(itemstack) && entityhuman.f((Entity) this) < 9.0D) {
+        if ((this.temptGoal == null || this.temptGoal.h()) && !this.isTrusting() && this.isBreedItem(itemstack) && entityhuman.f((Entity) this) < 9.0D) {
             this.a(entityhuman, enumhand, itemstack);
             if (!this.level.isClientSide) {
                 if (this.random.nextInt(3) == 0) {
@@ -245,7 +245,7 @@ public class EntityOcelot extends EntityAnimal {
     }
 
     @Override
-    public boolean n(ItemStack itemstack) {
+    public boolean isBreedItem(ItemStack itemstack) {
         return EntityOcelot.TEMPT_INGREDIENT.test(itemstack);
     }
 

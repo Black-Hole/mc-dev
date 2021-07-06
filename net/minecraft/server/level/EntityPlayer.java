@@ -102,6 +102,7 @@ import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.monster.EntityMonster;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.EnumChatVisibility;
+import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.entity.projectile.EntityArrow;
 import net.minecraft.world.inventory.Container;
 import net.minecraft.world.inventory.ContainerHorse;
@@ -198,8 +199,7 @@ public class EntityPlayer extends EntityHuman {
         this.containerSynchronizer = new ContainerSynchronizer() {
             @Override
             public void sendInitialData(Container container, NonNullList<ItemStack> nonnulllist, ItemStack itemstack, int[] aint) {
-                EntityPlayer.this.connection.sendPacket(new PacketPlayOutWindowItems(container.containerId, nonnulllist));
-                this.a(itemstack);
+                EntityPlayer.this.connection.sendPacket(new PacketPlayOutWindowItems(container.containerId, container.incrementStateId(), nonnulllist, itemstack));
 
                 for (int i = 0; i < aint.length; ++i) {
                     this.b(container, i, aint[i]);
@@ -209,12 +209,12 @@ public class EntityPlayer extends EntityHuman {
 
             @Override
             public void sendSlotChange(Container container, int i, ItemStack itemstack) {
-                EntityPlayer.this.connection.sendPacket(new PacketPlayOutSetSlot(container.containerId, i, itemstack));
+                EntityPlayer.this.connection.sendPacket(new PacketPlayOutSetSlot(container.containerId, container.incrementStateId(), i, itemstack));
             }
 
             @Override
             public void sendCarriedChange(Container container, ItemStack itemstack) {
-                this.a(itemstack);
+                EntityPlayer.this.connection.sendPacket(new PacketPlayOutSetSlot(-1, container.incrementStateId(), -1, itemstack));
             }
 
             @Override
@@ -224,10 +224,6 @@ public class EntityPlayer extends EntityHuman {
 
             private void b(Container container, int i, int j) {
                 EntityPlayer.this.connection.sendPacket(new PacketPlayOutWindowData(container.containerId, i, j));
-            }
-
-            private void a(ItemStack itemstack) {
-                EntityPlayer.this.connection.sendPacket(new PacketPlayOutSetSlot(-1, -1, itemstack));
             }
         };
         this.containerListener = new ICrafting() {
@@ -458,7 +454,7 @@ public class EntityPlayer extends EntityHuman {
             if (entity.isAlive()) {
                 this.setLocation(entity.locX(), entity.locY(), entity.locZ(), entity.getYRot(), entity.getXRot());
                 this.getWorldServer().getChunkProvider().movePlayer(this);
-                if (this.eZ()) {
+                if (this.fa()) {
                     this.setSpectatorTarget(this);
                 }
             } else {
@@ -590,7 +586,7 @@ public class EntityPlayer extends EntityHuman {
 
         this.releaseShoulderEntities();
         if (this.level.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS)) {
-            this.fH();
+            this.fI();
         }
 
         if (!this.isSpectator()) {
@@ -616,7 +612,7 @@ public class EntityPlayer extends EntityHuman {
         this.getCombatTracker().g();
     }
 
-    private void fH() {
+    private void fI() {
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.getChunkCoordinates())).grow(32.0D, 10.0D, 32.0D);
 
         this.level.a(EntityInsentient.class, axisalignedbb, IEntitySelector.NO_SPECTATORS).stream().filter((entityinsentient) -> {
@@ -1298,7 +1294,7 @@ public class EntityPlayer extends EntityHuman {
             }
 
             this.updateAbilities();
-            this.eC();
+            this.eD();
             return true;
         }
     }
@@ -1591,7 +1587,7 @@ public class EntityPlayer extends EntityHuman {
     }
 
     private EnumGamemode b(@Nullable EnumGamemode enumgamemode) {
-        EnumGamemode enumgamemode1 = this.server.aZ();
+        EnumGamemode enumgamemode1 = this.server.aY();
 
         return enumgamemode1 != null ? enumgamemode1 : (enumgamemode != null ? enumgamemode : this.server.getGamemode());
     }
@@ -1627,5 +1623,15 @@ public class EntityPlayer extends EntityHuman {
     protected void a(ItemStack itemstack) {
         CriterionTriggers.USING_ITEM.a(this, itemstack);
         super.a(itemstack);
+    }
+
+    public boolean dropItem(boolean flag) {
+        PlayerInventory playerinventory = this.getInventory();
+        ItemStack itemstack = playerinventory.a(flag);
+
+        this.containerMenu.b(playerinventory, playerinventory.selected).ifPresent((i) -> {
+            this.containerMenu.a(i, playerinventory.getItemInHand());
+        });
+        return this.a(itemstack, false, true) != null;
     }
 }

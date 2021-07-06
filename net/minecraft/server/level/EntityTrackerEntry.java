@@ -211,7 +211,7 @@ public class EntityTrackerEntry {
 
     public void a(EntityPlayer entityplayer) {
         this.entity.d(entityplayer);
-        entityplayer.connection.sendPacket(new PacketPlayOutEntityDestroy(this.entity.getId()));
+        entityplayer.connection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{this.entity.getId()}));
     }
 
     public void b(EntityPlayer entityplayer) {

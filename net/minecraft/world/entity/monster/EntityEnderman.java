@@ -100,7 +100,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
     }
 
     public static AttributeProvider.Builder n() {
-        return EntityMonster.fA().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D).a(GenericAttributes.FOLLOW_RANGE, 64.0D);
+        return EntityMonster.fB().a(GenericAttributes.MAX_HEALTH, 40.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 7.0D).a(GenericAttributes.FOLLOW_RANGE, 64.0D);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.DATA_CREEPY.equals(datawatcherobject) && this.fx() && this.level.isClientSide) {
+        if (EntityEnderman.DATA_CREEPY.equals(datawatcherobject) && this.fy() && this.level.isClientSide) {
             this.p();
         }
 
@@ -242,7 +242,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
     }
 
     @Override
-    public boolean ew() {
+    public boolean ex() {
         return true;
     }
 
@@ -311,7 +311,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.fw() ? SoundEffects.ENDERMAN_SCREAM : SoundEffects.ENDERMAN_AMBIENT;
+        return this.fx() ? SoundEffects.ENDERMAN_SCREAM : SoundEffects.ENDERMAN_AMBIENT;
     }
 
     @Override
@@ -367,15 +367,15 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
         }
     }
 
-    public boolean fw() {
+    public boolean fx() {
         return (Boolean) this.entityData.get(EntityEnderman.DATA_CREEPY);
     }
 
-    public boolean fx() {
+    public boolean fy() {
         return (Boolean) this.entityData.get(EntityEnderman.DATA_STARED_AT);
     }
 
-    public void fy() {
+    public void fz() {
         this.entityData.set(EntityEnderman.DATA_STARED_AT, true);
     }
 
@@ -522,7 +522,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
         public void c() {
             this.aggroTime = 5;
             this.teleportTime = 0;
-            this.enderman.fy();
+            this.enderman.fz();
         }
 
         @Override

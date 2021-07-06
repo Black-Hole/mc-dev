@@ -109,7 +109,7 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
     }
 
     @Override
-    public void i() {
+    public void l() {
         this.resultSlots.clear();
         this.craftSlots.clear();
     }
@@ -210,36 +210,36 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
     }
 
     @Override
-    public int j() {
+    public int m() {
         return 0;
     }
 
     @Override
-    public int k() {
+    public int n() {
         return this.craftSlots.g();
     }
 
     @Override
-    public int l() {
+    public int o() {
         return this.craftSlots.f();
     }
 
     @Override
-    public int m() {
+    public int p() {
         return 5;
     }
 
-    public InventoryCrafting n() {
+    public InventoryCrafting q() {
         return this.craftSlots;
     }
 
     @Override
-    public RecipeBookType q() {
+    public RecipeBookType t() {
         return RecipeBookType.CRAFTING;
     }
 
     @Override
     public boolean d(int i) {
-        return i != this.j();
+        return i != this.m();
     }
 }

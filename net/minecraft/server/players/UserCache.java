@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -51,7 +53,7 @@ public class UserCache {
     private static boolean usesAuthentication;
     private final Map<String, UserCache.UserCacheEntry> profilesByName = Maps.newConcurrentMap();
     private final Map<UUID, UserCache.UserCacheEntry> profilesByUUID = Maps.newConcurrentMap();
-    private final Map<String, CompletableFuture<GameProfile>> requests = Maps.newConcurrentMap();
+    private final Map<String, CompletableFuture<Optional<GameProfile>>> requests = Maps.newConcurrentMap();
     private final GameProfileRepository profileRepository;
     private final Gson gson = (new GsonBuilder()).create();
     private final File file;
@@ -83,8 +85,7 @@ public class UserCache {
 
     }
 
-    @Nullable
-    private static GameProfile a(GameProfileRepository gameprofilerepository, String s) {
+    private static Optional<GameProfile> a(GameProfileRepository gameprofilerepository, String s) {
         final AtomicReference<GameProfile> atomicreference = new AtomicReference();
         ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
             public void onProfileLookupSucceeded(GameProfile gameprofile) {
@@ -102,10 +103,10 @@ public class UserCache {
         if (!c() && gameprofile == null) {
             UUID uuid = EntityHuman.a(new GameProfile((UUID) null, s));
 
-            gameprofile = new GameProfile(uuid, s);
+            return Optional.of(new GameProfile(uuid, s));
+        } else {
+            return Optional.ofNullable(gameprofile);
         }
-
-        return gameprofile;
     }
 
     public static void a(boolean flag) {
@@ -132,8 +133,7 @@ public class UserCache {
         return this.operationCount.incrementAndGet();
     }
 
-    @Nullable
-    public GameProfile getProfile(String s) {
+    public Optional<GameProfile> getProfile(String s) {
         String s1 = s.toLowerCase(Locale.ROOT);
         UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.profilesByName.get(s1);
         boolean flag = false;
@@ -145,15 +145,15 @@ public class UserCache {
             usercache_usercacheentry = null;
         }
 
-        GameProfile gameprofile;
+        Optional optional;
 
         if (usercache_usercacheentry != null) {
             usercache_usercacheentry.a(this.d());
-            gameprofile = usercache_usercacheentry.a();
+            optional = Optional.of(usercache_usercacheentry.a());
         } else {
-            gameprofile = a(this.profileRepository, s1);
-            if (gameprofile != null) {
-                this.a(gameprofile);
+            optional = a(this.profileRepository, s1);
+            if (optional.isPresent()) {
+                this.a((GameProfile) optional.get());
                 flag = false;
             }
         }
@@ -162,41 +162,40 @@ public class UserCache {
             this.b();
         }
 
-        return gameprofile;
+        return optional;
     }
 
-    public void a(String s, Consumer<GameProfile> consumer) {
+    public void a(String s, Consumer<Optional<GameProfile>> consumer) {
         if (this.executor == null) {
             throw new IllegalStateException("No executor");
         } else {
-            CompletableFuture<GameProfile> completablefuture = (CompletableFuture) this.requests.get(s);
+            CompletableFuture<Optional<GameProfile>> completablefuture = (CompletableFuture) this.requests.get(s);
 
             if (completablefuture != null) {
-                this.requests.put(s, completablefuture.whenCompleteAsync((gameprofile, throwable) -> {
-                    consumer.accept(gameprofile);
+                this.requests.put(s, completablefuture.whenCompleteAsync((optional, throwable) -> {
+                    consumer.accept(optional);
                 }, this.executor));
             } else {
                 this.requests.put(s, CompletableFuture.supplyAsync(() -> {
                     return this.getProfile(s);
-                }, SystemUtils.f()).whenCompleteAsync((gameprofile, throwable) -> {
+                }, SystemUtils.f()).whenCompleteAsync((optional, throwable) -> {
                     this.requests.remove(s);
-                }, this.executor).whenCompleteAsync((gameprofile, throwable) -> {
-                    consumer.accept(gameprofile);
+                }, this.executor).whenCompleteAsync((optional, throwable) -> {
+                    consumer.accept(optional);
                 }, this.executor));
             }
 
         }
     }
 
-    @Nullable
-    public GameProfile getProfile(UUID uuid) {
+    public Optional<GameProfile> getProfile(UUID uuid) {
         UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.profilesByUUID.get(uuid);
 
         if (usercache_usercacheentry == null) {
-            return null;
+            return Optional.empty();
         } else {
             usercache_usercacheentry.a(this.d());
-            return usercache_usercacheentry.a();
+            return Optional.of(usercache_usercacheentry.a());
         }
     }
 
@@ -225,12 +224,10 @@ public class UserCache {
                         DateFormat dateformat = e();
 
                         jsonarray.forEach((jsonelement) -> {
-                            UserCache.UserCacheEntry usercache_usercacheentry = a(jsonelement, dateformat);
+                            Optional optional = a(jsonelement, dateformat);
 
-                            if (usercache_usercacheentry != null) {
-                                arraylist.add(usercache_usercacheentry);
-                            }
-
+                            Objects.requireNonNull(arraylist);
+                            optional.ifPresent(arraylist::add);
                         });
                         break label54;
                     }
@@ -317,8 +314,7 @@ public class UserCache {
         return jsonobject;
     }
 
-    @Nullable
-    private static UserCache.UserCacheEntry a(JsonElement jsonelement, DateFormat dateformat) {
+    private static Optional<UserCache.UserCacheEntry> a(JsonElement jsonelement, DateFormat dateformat) {
         if (jsonelement.isJsonObject()) {
             JsonObject jsonobject = jsonelement.getAsJsonObject();
             JsonElement jsonelement1 = jsonobject.get("name");
@@ -344,18 +340,18 @@ public class UserCache {
                     try {
                         uuid = UUID.fromString(s);
                     } catch (Throwable throwable) {
-                        return null;
+                        return Optional.empty();
                     }
 
-                    return new UserCache.UserCacheEntry(new GameProfile(uuid, s1), date);
+                    return Optional.of(new UserCache.UserCacheEntry(new GameProfile(uuid, s1), date));
                 } else {
-                    return null;
+                    return Optional.empty();
                 }
             } else {
-                return null;
+                return Optional.empty();
             }
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 

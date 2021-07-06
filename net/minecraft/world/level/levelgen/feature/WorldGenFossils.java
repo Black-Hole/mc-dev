@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.core.BaseBlockPosition;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.resources.MinecraftKey;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.Blocks;
@@ -53,7 +52,7 @@ public class WorldGenFossils extends WorldGenerator<FossilFeatureConfiguration> 
             }
         }
 
-        i1 = MathHelper.clamp(blockposition.getY(), generatoraccessseed.getMinBuildHeight(), l - 15);
+        i1 = Math.max(l - 15 - random.nextInt(10), generatoraccessseed.getMinBuildHeight() + 10);
         BlockPosition blockposition1 = definedstructure.a(blockposition.c(j, 0, k).h(i1), EnumBlockMirror.NONE, enumblockrotation);
 
         if (a(generatoraccessseed, definedstructure.b(definedstructureinfo, blockposition1)) > fossilfeatureconfiguration.maxEmptyCornersAllowed) {
